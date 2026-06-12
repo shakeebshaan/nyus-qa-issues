@@ -230,8 +230,14 @@
       "imageCommits": [
         "e7531f92f0926f24a7d06ca0ce6196b8df9c2094"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the deferred kcal auto-fit only ran after coach build-all; a single accepted coach meal could leave the day over target until a manual Hit-targets tap. Fix: handlePickSuggestion queues the same auto-fit (clamped 0.5-1.6 linear scale), so coach-sourced meals land the day on target automatically; manual ingredient edits keep the manual button. Verified live: day was 2476/2224 kcal with the over-ceiling gate blocking Continue; accepting a coach idea auto-scaled it to 2226/2224 (On target, Continue enabled) with zero manual taps.",
+        "imagePath": "images/i-20260612-6dc6-fix.png",
+        "imageCommit": "48da82378180d7c29fe50d395adcb25d75175bc3",
+        "fixedAt": "2026-06-12T12:25:12.997Z",
+        "appCommit": "dd0c6474"
+      },
       "history": []
     },
     {
