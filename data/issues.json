@@ -241,8 +241,14 @@
       "imageCommits": [
         "4d50155b6bd358c6f2c2883f9e373eaf192579aa"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: MealSlotCard's header scrolled away with the card, so long ingredient lists had no meal context mid-scroll. Fix: the header row (slot chip + name + actions) is now sticky top-0 within the diet builder's scroll region, with the card surface and top rounding sliding over the rows and a hairline marking the pinned edge. Evidence: scrolled deep into Lunch's ingredients with the Lunch header pinned under the page bar; pinning is also geometry-asserted (header top == scroller top while rows scroll).",
+        "imagePath": "images/i-20260612-aabf-fix.png",
+        "imageCommit": "9c6873b370ab821fe3e99260a037508274bb8565",
+        "fixedAt": "2026-06-12T11:31:53.556Z",
+        "appCommit": "18d0002d"
+      },
       "history": []
     },
     {
