@@ -14,8 +14,14 @@
       "imageCommits": [
         "555c929417f13e290ac02f1fb2f2a9530f7d339b"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: ActivityTargetCard rendered its full stepper + NEAT-wins editor inline in CustomWorkoutBuilder, dominating the first screen of Build your workout. Fix: the card is now always a compact one-line summary (tap anywhere to open) and the editor moved into ActivityTargetSheet, a bottom sheet using the same chrome as the browse-exercises picker (ExercisePickerSheet) with steppers, NEAT chips and a Done button.",
+        "imagePath": "images/i-20260612-76e7-fix.png",
+        "imageCommit": "9276414db03c3ad536b395f1470c27eaf8d44cbb",
+        "fixedAt": "2026-06-12T08:00:52.094Z",
+        "appCommit": "36907604"
+      },
       "history": []
     },
     {
