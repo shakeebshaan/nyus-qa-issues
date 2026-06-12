@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#faf8f4" />
+<title>NYUS QA</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%2326bd8c'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --accent: hsl(166 70% 47%);
+    --accent-soft: hsl(166 60% 94%);
+    --accent-ink: hsl(166 80% 24%);
+    --amber: hsl(36 90% 50%);
+    --amber-soft: hsl(36 90% 94%);
+    --amber-ink: hsl(30 80% 30%);
+    --bg: hsl(40 30% 97%);
+    --card: #ffffff;
+    --ink: hsl(200 15% 15%);
+    --muted: hsl(200 10% 45%);
+    --line: hsl(40 15% 90%);
+    --danger: hsl(0 70% 50%);
+    --shadow: 0 1px 2px rgb(20 24 28 / .04), 0 8px 24px rgb(20 24 28 / .06);
+    --radius: 1rem;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── Header ─────────────────────────────────────────── */
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding-top: env(safe-area-inset-top);
+  }
+  .bar { display: flex; align-items: center; gap: 10px; padding: 14px 0; }
+  .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; letter-spacing: -.01em; }
+  .logo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  .chips { display: flex; gap: 6px; margin-left: auto; align-items: center; }
+  .chip {
+    font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    border: 1px solid transparent; white-space: nowrap;
+  }
+  .chip.open  { background: var(--amber-soft); color: var(--amber-ink); }
+  .chip.fixed { background: var(--accent-soft); color: var(--accent-ink); }
+  .chip.conn  {
+    background: var(--card); border-color: var(--line); color: var(--muted);
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+    min-height: 28px;
+  }
+  .chip.conn .st { width: 7px; height: 7px; border-radius: 50%; background: hsl(0 0% 75%); }
+  .chip.conn.on .st { background: var(--accent); }
+  .iconbtn {
+    border: 1px solid var(--line); background: var(--card); color: var(--muted);
+    border-radius: 10px; width: 34px; height: 34px; display: grid; place-items: center;
+    cursor: pointer; font-size: 15px;
+  }
+  .iconbtn:active { transform: scale(.96); }
+
+  /* ── Banners / toast ────────────────────────────────── */
+  .banner {
+    margin: 14px 0 0; padding: 12px 14px; border-radius: 12px; font-size: 13.5px;
+    display: none; align-items: center; gap: 10px; justify-content: space-between;
+  }
+  .banner.show { display: flex; }
+  .banner.error { background: hsl(0 80% 96%); color: hsl(0 60% 35%); border: 1px solid hsl(0 60% 88%); }
+  .banner button {
+    border: 0; background: transparent; color: inherit; font: inherit; font-weight: 700;
+    cursor: pointer; padding: 6px 8px; min-height: 32px;
+  }
+  #toast {
+    position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom));
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: #fff; font-size: 13.5px; font-weight: 600;
+    padding: 10px 18px; border-radius: 999px; opacity: 0; pointer-events: none;
+    transition: opacity .25s ease, transform .25s cubic-bezier(.16,1,.3,1);
+    max-width: 86vw; text-align: center; z-index: 60;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Issue cards ────────────────────────────────────── */
+  main { padding-top: 18px; }
+  .empty {
+    text-align: center; color: var(--muted); padding: 56px 20px; font-size: 14.5px;
+  }
+  .empty b { color: var(--ink); display: block; font-size: 16px; margin-bottom: 6px; }
+  .card {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 18px; overflow: hidden; border: 1px solid var(--line);
+  }
+  .card-head {
+    display: flex; align-items: center; gap: 8px; padding: 12px 16px 0; flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 999px;
+  }
+  .badge.open  { background: var(--amber-soft); color: var(--amber-ink); }
+  .badge.fixed { background: var(--accent-soft); color: var(--accent-ink); }
+  .badge.reopened { background: hsl(0 80% 95%); color: hsl(0 55% 40%); }
+  .meta { font-size: 12.5px; color: var(--muted); }
+  .route-pill {
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--line);
+    padding: 2px 8px; border-radius: 999px; font-family: ui-monospace, monospace;
+  }
+  .iid { margin-left: auto; font-size: 11px; color: hsl(200 10% 70%); font-family: ui-monospace, monospace; }
+  .sides { display: grid; grid-template-columns: 1fr; }
+  @media (min-width: 720px) {
+    .sides { grid-template-columns: 1fr 1fr; }
+    .side + .side { border-left: 1px solid var(--line); border-top: 0 !important; }
+  }
+  .side { padding: 14px 16px 18px; }
+  .side + .side { border-top: 1px solid var(--line); }
+  .side h3 {
+    margin: 0 0 10px; font-size: 12px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .side h3 .when { float: right; font-weight: 500; letter-spacing: 0; text-transform: none; }
+  .shot {
+    width: 100%; height: clamp(260px, 58vw, 400px); border-radius: 12px;
+    background: hsl(40 20% 94%); border: 1px solid var(--line);
+    display: grid; place-items: center; overflow: hidden; cursor: zoom-in; padding: 0;
+  }
+  .shot img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .desc { margin: 10px 2px 0; font-size: 14.5px; white-space: pre-wrap; word-break: break-word; }
+  .await {
+    height: clamp(260px, 58vw, 400px); border: 1.5px dashed var(--line); border-radius: 12px;
+    display: grid; place-items: center; color: var(--muted); font-size: 13.5px;
+    background: hsl(40 25% 97.5%); text-align: center; padding: 16px;
+  }
+  .await .w { font-size: 26px; display: block; margin-bottom: 8px; opacity: .55; }
+  .reopen-note { margin: 0 0 10px; font-size: 13px; color: hsl(0 55% 40%); background: hsl(0 80% 96%); border-radius: 10px; padding: 8px 12px; }
+
+  /* ── Add form ───────────────────────────────────────── */
+  #add {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 18px 16px; margin: 26px 0 10px;
+  }
+  #add h2 { margin: 0 0 14px; font-size: 16px; letter-spacing: -.01em; }
+  .pick {
+    display: block; border: 1.5px dashed hsl(166 35% 75%); border-radius: 12px;
+    background: var(--accent-soft); color: var(--accent-ink);
+    text-align: center; padding: 26px 16px; cursor: pointer; font-weight: 600; font-size: 14px;
+  }
+  .pick.has { padding: 10px; background: var(--bg); border-style: solid; border-color: var(--line); }
+  .pick img { max-width: 100%; max-height: 300px; border-radius: 8px; display: block; margin: 0 auto; }
+  .pick .hint { display: block; font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 8px; }
+  .field { margin-top: 12px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+  input[type="text"], textarea {
+    width: 100%; border: 1px solid var(--line); border-radius: 10px; background: var(--bg);
+    font: inherit; font-size: 14.5px; padding: 11px 12px; color: var(--ink); outline: none;
+  }
+  input[type="text"]:focus, textarea:focus { border-color: var(--accent); background: #fff; }
+  textarea { min-height: 96px; resize: vertical; }
+  .submit {
+    margin-top: 14px; width: 100%; border: 0; border-radius: 12px; min-height: 48px;
+    background: var(--accent); color: #fff; font: inherit; font-size: 15px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .submit:disabled { opacity: .45; cursor: not-allowed; }
+  .submit:not(:disabled):active { transform: scale(.99); }
+  .spin {
+    width: 16px; height: 16px; border: 2.5px solid rgb(255 255 255 / .35); border-top-color: #fff;
+    border-radius: 50%; animation: rot .7s linear infinite; display: none;
+  }
+  .submit.busy .spin { display: block; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+
+  /* ── Settings sheet ─────────────────────────────────── */
+  dialog {
+    border: 0; border-radius: 18px 18px 0 0; padding: 0; width: 100%; max-width: 560px;
+    margin: auto auto 0; background: var(--card); color: var(--ink);
+  }
+  @media (min-width: 720px) { dialog { border-radius: 18px; margin: auto; } }
+  dialog::backdrop { background: rgb(15 18 20 / .45); }
+  .sheet { padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); }
+  .sheet h2 { margin: 0 0 4px; font-size: 17px; }
+  .sheet p { margin: 0 0 14px; font-size: 13px; color: var(--muted); }
+  .sheet .row { display: flex; gap: 8px; margin-top: 14px; }
+  .btn {
+    flex: 1; border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    border-radius: 11px; min-height: 44px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer;
+  }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.danger { color: var(--danger); }
+  .tok-state { margin-top: 12px; font-size: 13px; min-height: 18px; color: var(--muted); }
+  .tok-state.ok { color: var(--accent-ink); font-weight: 600; }
+  .tok-state.bad { color: var(--danger); font-weight: 600; }
+
+  /* ── Lightbox ───────────────────────────────────────── */
+  #lightbox { background: transparent; max-width: none; width: 100vw; height: 100dvh; margin: 0; border-radius: 0; }
+  #lightbox::backdrop { background: rgb(10 12 14 / .92); }
+  #lightbox img { width: 100vw; height: 100dvh; object-fit: contain; cursor: zoom-out; }
+
+  /* ── Skeletons ──────────────────────────────────────── */
+  .skel { border-radius: var(--radius); border: 1px solid var(--line); background: var(--card); margin-bottom: 18px; padding: 16px; }
+  .sh { background: linear-gradient(90deg, hsl(40 20% 94%), hsl(40 25% 90%), hsl(40 20% 94%)); background-size: 200% 100%; animation: shm 1.2s linear infinite; border-radius: 10px; }
+  @keyframes shm { to { background-position: -200% 0; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo"><span class="dot"></span>NYUS QA</div>
+    <div class="chips">
+      <span class="chip open" id="chip-open">– open</span>
+      <span class="chip fixed" id="chip-fixed">– fixed</span>
+      <button class="chip conn" id="chip-conn" type="button"><span class="st"></span><span id="conn-label">connect</span></button>
+      <button class="iconbtn" id="btn-refresh" type="button" title="Refresh" aria-label="Refresh">⟳</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="banner error" id="banner">
+    <span id="banner-msg"></span>
+    <button type="button" id="banner-retry">Retry</button>
+  </div>
+
+  <main id="list" aria-live="polite"></main>
+
+  <section id="add">
+    <h2>Add new issue</h2>
+    <form id="form">
+      <label class="pick" id="pick">
+        <input type="file" id="file" accept="image/*" hidden />
+        <span id="pick-inner">📷 &nbsp;Upload screenshot<span class="hint">tap to pick from gallery</span></span>
+      </label>
+      <div class="field">
+        <label for="route">Screen / route <span style="font-weight:400">(optional — e.g. /nutrition)</span></label>
+        <input type="text" id="route" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="/dashboard" />
+      </div>
+      <div class="field">
+        <label for="desc">What's wrong?</label>
+        <textarea id="desc" placeholder="Describe the issue…" required></textarea>
+      </div>
+      <button class="submit" id="submit" type="submit" disabled>
+        <span class="spin"></span><span id="submit-label">Submit issue</span>
+      </button>
+    </form>
+  </section>
+</div>
+
+<dialog id="settings">
+  <div class="sheet">
+    <h2>GitHub connection</h2>
+    <p>Paste a token with <b>Contents: read &amp; write</b> on <b>shakeebshaan/nyus-qa-issues</b>. Stored only in this browser.</p>
+    <input type="text" id="token" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_… / gho_…" />
+    <div class="tok-state" id="tok-state"></div>
+    <div class="row">
+      <button class="btn danger" type="button" id="tok-forget">Forget</button>
+      <button class="btn" type="button" id="tok-close">Close</button>
+      <button class="btn primary" type="button" id="tok-save">Save &amp; test</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="lightbox"><img id="lightbox-img" alt="screenshot" /></dialog>
+<div id="toast" role="status"></div>
+
+<script>
+"use strict";
+const OWNER = "shakeebshaan", REPO = "nyus-qa-issues", BRANCH = "main";
+const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+const $ = (id) => document.getElementById(id);
+
+let db = null;          // parsed issues.json
+let token = localStorage.getItem("qaToken") || "";
+let lastLoad = 0;
+
+/* ── utils ─────────────────────────────────────────────── */
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function b64encodeUtf8(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+function b64decodeUtf8(b64) {
+  const bin = atob(b64.replace(/\s/g, ""));
+  const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+const fmtDate = (iso) => {
+  if (!iso) return "";
+  const d = new Date(iso), now = Date.now(), diff = now - d.getTime();
+  if (diff < 60e3) return "just now";
+  if (diff < 3600e3) return Math.floor(diff / 60e3) + "m ago";
+  if (diff < 86400e3) return Math.floor(diff / 3600e3) + "h ago";
+  if (diff < 7 * 86400e3) return Math.floor(diff / 86400e3) + "d ago";
+  return d.toLocaleDateString(undefined, { day: "numeric", month: "short" });
+};
+const rawUrl = (path, commit) =>
+  `https://raw.githubusercontent.com/${OWNER}/${REPO}/${commit || BRANCH}/${path}`;
+function toast(msg, ms = 2600) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._h);
+  toast._h = setTimeout(() => t.classList.remove("show"), ms);
+}
+function headers(extra) {
+  const h = { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", ...extra };
+  if (token) h.Authorization = "Bearer " + token;
+  return h;
+}
+
+/* ── data load ─────────────────────────────────────────── */
+async function loadDb() {
+  const r = await fetch(`${API}/contents/data/issues.json?ref=${BRANCH}&t=${Date.now()}`, {
+    headers: headers(), cache: "no-store",
+  });
+  if (r.status === 403 && r.headers.get("x-ratelimit-remaining") === "0") {
+    throw new Error(token ? "GitHub rate limit hit — try again later." : "Rate limit hit — add a token in settings to raise it.");
+  }
+  if (r.status === 401) { connState(false); throw new Error("Token rejected (401) — update it in settings."); }
+  if (!r.ok) throw new Error("GitHub API error " + r.status);
+  const j = await r.json();
+  return { db: JSON.parse(b64decodeUtf8(j.content)), sha: j.sha };
+}
+async function refresh(silent) {
+  if (!silent) renderSkeleton();
+  $("banner").classList.remove("show");
+  try {
+    const res = await loadDb();
+    db = res.db;
+    lastLoad = Date.now();
+    render();
+  } catch (e) {
+    if (db) { toast(e.message); return; }
+    $("list").innerHTML = "";
+    $("banner-msg").textContent = e.message;
+    $("banner").classList.add("show");
+  }
+}
+
+/* ── render ────────────────────────────────────────────── */
+function renderSkeleton() {
+  $("list").innerHTML = Array.from({ length: 2 }, () =>
+    `<div class="skel"><div class="sh" style="height:18px;width:40%"></div><div class="sh" style="height:280px;margin-top:12px"></div></div>`
+  ).join("");
+}
+function shotHtml(path, commit, alt) {
+  const u = rawUrl(path, commit);
+  return `<button class="shot" type="button" data-full="${esc(u)}" aria-label="Enlarge ${esc(alt)}"><img loading="lazy" src="${esc(u)}" alt="${esc(alt)}" /></button>`;
+}
+function cardHtml(it) {
+  const reopened = it.status === "open" && (it.history || []).some((h) => h.event === "reopened");
+  const lastReopen = reopened ? it.history.filter((h) => h.event === "reopened").slice(-1)[0] : null;
+  const badge = it.status === "fixed"
+    ? `<span class="badge fixed">Fixed</span>`
+    : reopened ? `<span class="badge reopened">Reopened</span>` : `<span class="badge open">Open</span>`;
+  const right = it.status === "fixed" && it.fix
+    ? `${shotHtml(it.fix.imagePath, it.fix.imageCommit, "fixed screenshot")}
+       <p class="desc">${esc(it.fix.description)}</p>`
+    : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
+       <div class="await"><span><span class="w">🔧</span>Awaiting fix<br><span style="font-size:12px;opacity:.7">Claude will post the fixed screenshot here</span></span></div>`;
+  return `<article class="card" id="${esc(it.id)}">
+    <div class="card-head">
+      ${badge}
+      ${it.route ? `<span class="route-pill">${esc(it.route)}</span>` : ""}
+      <span class="meta">${fmtDate(it.createdAt)}</span>
+      <span class="iid">${esc(it.id)}</span>
+    </div>
+    <div class="sides">
+      <div class="side">
+        <h3>Issue</h3>
+        ${shotHtml(it.imagePath, it.imageCommit, "issue screenshot")}
+        <p class="desc">${esc(it.description)}</p>
+      </div>
+      <div class="side">
+        <h3>Fix ${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
+        ${right}
+      </div>
+    </div>
+  </article>`;
+}
+function render() {
+  const issues = [...(db?.issues || [])].sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+  const open = issues.filter((i) => i.status === "open").length;
+  $("chip-open").textContent = `${open} open`;
+  $("chip-fixed").textContent = `${issues.length - open} fixed`;
+  $("list").innerHTML = issues.length
+    ? issues.map(cardHtml).join("")
+    : `<div class="empty"><b>No issues yet</b>File the first one below — it shows up here with an “awaiting fix” slot.</div>`;
+}
+
+/* ── image compression ─────────────────────────────────── */
+function loadViaImg(file) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); res(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("Couldn't read that image — try a PNG/JPG screenshot.")); };
+    img.src = url;
+  });
+}
+async function compress(file, maxW = 1200, q = 0.8) {
+  let src;
+  try { src = await createImageBitmap(file); }
+  catch { src = await loadViaImg(file); }
+  const w = src.width || src.naturalWidth, h = src.height || src.naturalHeight;
+  const s = Math.min(1, maxW / w);
+  const c = document.createElement("canvas");
+  c.width = Math.max(1, Math.round(w * s));
+  c.height = Math.max(1, Math.round(h * s));
+  c.getContext("2d").drawImage(src, 0, 0, c.width, c.height);
+  const blob = await new Promise((res) => c.toBlob(res, "image/jpeg", q));
+  if (!blob) throw new Error("Image compression failed.");
+  return blob;
+}
+const blobToB64 = (blob) => new Promise((res, rej) => {
+  const fr = new FileReader();
+  fr.onload = () => res(String(fr.result).split(",")[1]);
+  fr.onerror = () => rej(new Error("Couldn't read image data."));
+  fr.readAsDataURL(blob);
+});
+
+/* ── writes ────────────────────────────────────────────── */
+async function putFile(path, b64, message, sha) {
+  const body = { message, content: b64, branch: BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(`${API}/contents/${path}`, {
+    method: "PUT", headers: headers({ "Content-Type": "application/json" }), body: JSON.stringify(body),
+  });
+  if (r.status === 401) { connState(false); throw new Error("Token rejected — update it in settings."); }
+  if (r.status === 409 || r.status === 422) { const e = new Error("conflict"); e.conflict = true; throw e; }
+  if (!r.ok) throw new Error("Upload failed (" + r.status + ")");
+  return r.json();
+}
+async function mutateIssues(message, mutator) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const { db: fresh, sha } = await loadDb();
+    mutator(fresh);
+    try {
+      await putFile("data/issues.json", b64encodeUtf8(JSON.stringify(fresh, null, 2)), message, sha);
+      db = fresh;
+      return;
+    } catch (e) {
+      if (!e.conflict || attempt === 3) throw e.conflict ? new Error("Sync conflict — try again.") : e;
+      await new Promise((r) => setTimeout(r, 800 * attempt));
+    }
+  }
+}
+
+/* ── submit flow ───────────────────────────────────────── */
+let picked = null;
+function updateSubmit() {
+  $("submit").disabled = !(picked && $("desc").value.trim().length > 2);
+}
+$("file").addEventListener("change", async () => {
+  const f = $("file").files[0];
+  if (!f) return;
+  picked = f;
+  const url = URL.createObjectURL(f);
+  $("pick").classList.add("has");
+  $("pick-inner").innerHTML = `<img src="${url}" alt="preview" /><span class="hint">tap to change</span>`;
+  updateSubmit();
+});
+$("desc").addEventListener("input", updateSubmit);
+
+$("form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  if (!token) { openSettings("A token is needed to submit."); return; }
+  const btn = $("submit");
+  btn.disabled = true; btn.classList.add("busy");
+  $("submit-label").textContent = "Uploading…";
+  try {
+    const id = "i-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + "-" +
+      Array.from(crypto.getRandomValues(new Uint8Array(2)), (b) => b.toString(16).padStart(2, "0")).join("");
+    const blob = await compress(picked);
+    const b64 = await blobToB64(blob);
+    if (b64.length > 5_000_000) throw new Error("Image too large even after compression.");
+    $("submit-label").textContent = "Uploading image…";
+    const imgRes = await putFile(`images/${id}.jpg`, b64, `issue ${id}: original screenshot`);
+    const imageCommit = imgRes.commit?.sha || "";
+    let route = $("route").value.trim();
+    if (route && !route.startsWith("/")) route = "/" + route;
+    $("submit-label").textContent = "Saving issue…";
+    await mutateIssues(`issue ${id}: add`, (d) => {
+      if (d.issues.some((i) => i.id === id)) return;
+      d.issues.push({
+        id, createdAt: new Date().toISOString(), route: route || null,
+        description: $("desc").value.trim(),
+        imagePath: `images/${id}.jpg`, imageCommit,
+        status: "open", fix: null, history: [],
+      });
+    });
+    render();
+    $("form").reset(); picked = null;
+    $("pick").classList.remove("has");
+    $("pick-inner").innerHTML = `📷 &nbsp;Upload screenshot<span class="hint">tap to pick from gallery</span>`;
+    toast("Issue filed ✓ synced to GitHub");
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  } catch (e) {
+    toast(e.message || "Something went wrong.", 4200);
+  } finally {
+    btn.classList.remove("busy");
+    $("submit-label").textContent = "Submit issue";
+    updateSubmit();
+  }
+});
+
+/* ── settings / token ──────────────────────────────────── */
+function connState(ok, login) {
+  const chip = $("chip-conn");
+  chip.classList.toggle("on", !!ok);
+  $("conn-label").textContent = ok ? login : (token ? "token?" : "connect");
+}
+async function testToken(t) {
+  const r = await fetch("https://api.github.com/user", {
+    headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + t },
+  });
+  if (!r.ok) throw new Error("Token rejected (" + r.status + ")");
+  return (await r.json()).login;
+}
+function openSettings(msg) {
+  $("token").value = token;
+  $("tok-state").textContent = msg || "";
+  $("tok-state").className = "tok-state" + (msg ? " bad" : "");
+  $("settings").showModal();
+}
+$("chip-conn").addEventListener("click", () => openSettings());
+$("tok-close").addEventListener("click", () => $("settings").close());
+$("tok-forget").addEventListener("click", () => {
+  token = ""; localStorage.removeItem("qaToken");
+  connState(false); $("token").value = "";
+  $("tok-state").textContent = "Token forgotten."; $("tok-state").className = "tok-state";
+});
+$("tok-save").addEventListener("click", async () => {
+  const t = $("token").value.trim();
+  if (!t) { $("tok-state").textContent = "Paste a token first."; $("tok-state").className = "tok-state bad"; return; }
+  $("tok-state").textContent = "Testing…"; $("tok-state").className = "tok-state";
+  try {
+    const login = await testToken(t);
+    token = t; localStorage.setItem("qaToken", t);
+    connState(true, login);
+    $("tok-state").textContent = "Connected as " + login + " ✓";
+    $("tok-state").className = "tok-state ok";
+    setTimeout(() => $("settings").close(), 700);
+    refresh(true);
+  } catch (e) {
+    $("tok-state").textContent = e.message;
+    $("tok-state").className = "tok-state bad";
+  }
+});
+
+/* ── lightbox ──────────────────────────────────────────── */
+document.addEventListener("click", (ev) => {
+  const b = ev.target.closest(".shot");
+  if (b) {
+    $("lightbox-img").src = b.dataset.full;
+    $("lightbox").showModal();
+  }
+});
+$("lightbox").addEventListener("click", () => $("lightbox").close());
+
+/* ── refresh wiring ────────────────────────────────────── */
+$("btn-refresh").addEventListener("click", () => refresh());
+$("banner-retry").addEventListener("click", () => refresh());
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && Date.now() - lastLoad > 30_000) refresh(true);
+});
+
+/* ── boot ──────────────────────────────────────────────── */
+(async () => {
+  if (token) {
+    testToken(token).then((l) => connState(true, l)).catch(() => connState(false));
+  } else connState(false);
+  refresh();
+})();
+</script>
+</body>
+</html>
