@@ -111,6 +111,25 @@
   .badge.open  { background: var(--amber-soft); color: var(--amber-ink); }
   .badge.fixed { background: var(--accent-soft); color: var(--accent-ink); }
   .badge.reopened { background: hsl(0 80% 95%); color: hsl(0 55% 40%); }
+  .badge.archived { background: hsl(40 15% 92%); color: var(--muted); }
+  .archbtn {
+    border: 1px solid var(--line); background: transparent; color: var(--muted);
+    font: inherit; font-size: 12px; font-weight: 600; border-radius: 999px;
+    padding: 3px 10px; min-height: 26px; cursor: pointer;
+  }
+  .archbtn:active { transform: scale(.96); }
+  .archbtn[disabled] { opacity: .5; cursor: wait; }
+  .linkbtn {
+    display: block; margin: 4px auto 0; border: 0; background: transparent;
+    color: var(--muted); font: inherit; font-size: 13.5px; font-weight: 600;
+    cursor: pointer; padding: 10px 16px; min-height: 44px;
+  }
+  .linkbtn:active { opacity: .6; }
+  #arch h2 {
+    font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); margin: 18px 2px 12px;
+  }
+  #arch .card { opacity: .92; }
   .meta { font-size: 12.5px; color: var(--muted); }
   .route-pill {
     font-size: 12px; font-weight: 600; color: var(--muted);
@@ -235,6 +254,12 @@
 
   <main id="list" aria-live="polite"></main>
 
+  <button class="linkbtn" id="arch-toggle" type="button">View archived</button>
+  <section id="arch" hidden>
+    <h2>Archived</h2>
+    <div id="arch-list"></div>
+  </section>
+
   <section id="add">
     <h2>Add new issue</h2>
     <form id="form">
@@ -322,17 +347,23 @@ function headers(extra) {
 }
 
 /* ── data load ─────────────────────────────────────────── */
-async function loadDb() {
-  const r = await fetch(`${API}/contents/data/issues.json?ref=${BRANCH}&t=${Date.now()}`, {
+async function loadJson(path) {
+  const r = await fetch(`${API}/contents/${path}?ref=${BRANCH}&t=${Date.now()}`, {
     headers: headers(), cache: "no-store",
   });
+  if (r.status === 404) return { data: null, sha: null, missing: true };
   if (r.status === 403 && r.headers.get("x-ratelimit-remaining") === "0") {
     throw new Error(token ? "GitHub rate limit hit — try again later." : "Rate limit hit — add a token in settings to raise it.");
   }
   if (r.status === 401) { connState(false); throw new Error("Token rejected (401) — update it in settings."); }
   if (!r.ok) throw new Error("GitHub API error " + r.status);
   const j = await r.json();
-  return { db: JSON.parse(b64decodeUtf8(j.content)), sha: j.sha };
+  return { data: JSON.parse(b64decodeUtf8(j.content)), sha: j.sha, missing: false };
+}
+async function loadDb() {
+  const { data, sha, missing } = await loadJson("data/issues.json");
+  if (missing) throw new Error("issues.json missing from the repo.");
+  return { db: data, sha };
 }
 async function refresh(silent) {
   if (!silent) renderSkeleton();
@@ -360,22 +391,27 @@ function shotHtml(path, commit, alt) {
   const u = rawUrl(path, commit);
   return `<button class="shot" type="button" data-full="${esc(u)}" aria-label="Enlarge ${esc(alt)}"><img loading="lazy" src="${esc(u)}" alt="${esc(alt)}" /></button>`;
 }
-function cardHtml(it) {
+function cardHtml(it, archived) {
   const reopened = it.status === "open" && (it.history || []).some((h) => h.event === "reopened");
   const lastReopen = reopened ? it.history.filter((h) => h.event === "reopened").slice(-1)[0] : null;
-  const badge = it.status === "fixed"
-    ? `<span class="badge fixed">Fixed</span>`
-    : reopened ? `<span class="badge reopened">Reopened</span>` : `<span class="badge open">Open</span>`;
+  const badge = archived
+    ? `<span class="badge archived">Archived</span>`
+    : it.status === "fixed"
+      ? `<span class="badge fixed">Fixed</span>`
+      : reopened ? `<span class="badge reopened">Reopened</span>` : `<span class="badge open">Open</span>`;
   const right = it.status === "fixed" && it.fix
     ? `${shotHtml(it.fix.imagePath, it.fix.imageCommit, "fixed screenshot")}
        <p class="desc">${esc(it.fix.description)}</p>`
     : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
        <div class="await"><span><span class="w">🔧</span>Awaiting fix<br><span style="font-size:12px;opacity:.7">Claude will post the fixed screenshot here</span></span></div>`;
+  const archBtn = !archived && it.status === "fixed"
+    ? `<button class="archbtn" type="button" data-arch="${esc(it.id)}">Archive</button>` : "";
   return `<article class="card" id="${esc(it.id)}">
     <div class="card-head">
       ${badge}
       ${it.route ? `<span class="route-pill">${esc(it.route)}</span>` : ""}
-      <span class="meta">${fmtDate(it.createdAt)}</span>
+      <span class="meta">${archived ? "archived " + fmtDate(it.archivedAt) : fmtDate(it.createdAt)}</span>
+      ${archBtn}
       <span class="iid">${esc(it.id)}</span>
     </div>
     <div class="sides">
@@ -444,19 +480,23 @@ async function putFile(path, b64, message, sha) {
   if (!r.ok) throw new Error("Upload failed (" + r.status + ")");
   return r.json();
 }
-async function mutateIssues(message, mutator) {
+async function mutateJson(path, message, mutator, init) {
   for (let attempt = 1; attempt <= 3; attempt++) {
-    const { db: fresh, sha } = await loadDb();
-    mutator(fresh);
+    const { data, sha, missing } = await loadJson(path);
+    const obj = missing ? JSON.parse(JSON.stringify(init || null)) : data;
+    if (!obj) throw new Error("Missing " + path);
+    mutator(obj);
     try {
-      await putFile("data/issues.json", b64encodeUtf8(JSON.stringify(fresh, null, 2)), message, sha);
-      db = fresh;
-      return;
+      await putFile(path, b64encodeUtf8(JSON.stringify(obj, null, 2)), message, sha || undefined);
+      return obj;
     } catch (e) {
       if (!e.conflict || attempt === 3) throw e.conflict ? new Error("Sync conflict — try again.") : e;
       await new Promise((r) => setTimeout(r, 800 * attempt));
     }
   }
+}
+async function mutateIssues(message, mutator) {
+  db = await mutateJson("data/issues.json", message, mutator);
 }
 
 /* ── submit flow ───────────────────────────────────────── */
@@ -570,6 +610,65 @@ document.addEventListener("click", (ev) => {
   }
 });
 $("lightbox").addEventListener("click", () => $("lightbox").close());
+
+/* ── archive ───────────────────────────────────────────── */
+let archCache = null;
+async function archiveIssue(id, btn) {
+  const it = (db?.issues || []).find((i) => i.id === id);
+  if (!it || it.status !== "fixed") return;
+  if (!token) { openSettings("A token is needed to archive."); return; }
+  if (!confirm("Archive this fixed issue? It moves off the board into the archive.")) return;
+  btn.disabled = true;
+  try {
+    const snap = JSON.parse(JSON.stringify(it));
+    snap.archivedAt = new Date().toISOString();
+    const path = `data/archive-${new Date().getFullYear()}.json`;
+    await mutateJson(path, `issue ${id}: archive`, (a) => {
+      a.issues = a.issues || [];
+      if (!a.issues.some((x) => x.id === id)) a.issues.push(snap);
+    }, { version: 1, issues: [] });
+    await mutateIssues(`issue ${id}: remove from active (archived)`, (d) => {
+      d.issues = d.issues.filter((x) => x.id !== id);
+    });
+    archCache = null;
+    render();
+    if (!$("arch").hidden) { $("arch").hidden = true; $("arch-toggle").textContent = "View archived"; }
+    toast("Archived ✓");
+  } catch (e) {
+    btn.disabled = false;
+    toast(e.message || "Archive failed.", 4200);
+  }
+}
+document.addEventListener("click", (ev) => {
+  const b = ev.target.closest(".archbtn");
+  if (b && b.dataset.arch) archiveIssue(b.dataset.arch, b);
+});
+$("arch-toggle").addEventListener("click", async () => {
+  const sec = $("arch"), t = $("arch-toggle");
+  if (!sec.hidden) { sec.hidden = true; t.textContent = "View archived"; return; }
+  t.textContent = "Loading…";
+  try {
+    if (!archCache) {
+      const r = await fetch(`${API}/contents/data?ref=${BRANCH}&t=${Date.now()}`, { headers: headers(), cache: "no-store" });
+      if (!r.ok) throw new Error("Couldn't list archives (" + r.status + ")");
+      const files = (await r.json()).filter((f) => /^archive-\d{4}\.json$/.test(f.name));
+      const all = [];
+      for (const f of files) {
+        const { data } = await loadJson("data/" + f.name);
+        if (data?.issues) all.push(...data.issues);
+      }
+      archCache = all.sort((a, b) => (b.archivedAt || "").localeCompare(a.archivedAt || ""));
+    }
+    $("arch-list").innerHTML = archCache.length
+      ? archCache.map((i) => cardHtml(i, true)).join("")
+      : `<div class="empty">Nothing archived yet.</div>`;
+    sec.hidden = false;
+    t.textContent = "Hide archived";
+  } catch (e) {
+    toast(e.message || "Couldn't load archive.", 4000);
+    t.textContent = "View archived";
+  }
+});
 
 /* ── refresh wiring ────────────────────────────────────── */
 $("btn-refresh").addEventListener("click", () => refresh());

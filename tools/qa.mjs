@@ -111,8 +111,35 @@ try {
     git("commit", "-m", `issue ${id}: reopened`);
     gitPush();
     console.log(`Reopened ${id}`);
+  } else if (cmd === "archive") {
+    const all = process.argv.includes("--all-fixed");
+    if (!all && !idArg) throw new Error("Usage: archive <id> | archive --all-fixed");
+    git("pull", "--rebase");
+    const db = loadDb();
+    const targets = all
+      ? db.issues.filter((i) => i.status === "fixed")
+      : db.issues.filter((i) => i.id === idArg);
+    if (!all && !targets.length) throw new Error("No such issue: " + idArg);
+    if (!all && targets[0].status !== "fixed") throw new Error(idArg + " is not fixed — only fixed issues archive.");
+    if (!targets.length) { console.log("No fixed issues to archive."); process.exit(0); }
+
+    const year = new Date().getFullYear();
+    const archPath = join(ROOT, "data", `archive-${year}.json`);
+    const arch = existsSync(archPath) ? JSON.parse(readFileSync(archPath, "utf8")) : { version: 1, issues: [] };
+    const now = new Date().toISOString();
+    for (const t of targets) {
+      if (!arch.issues.some((a) => a.id === t.id)) arch.issues.push({ ...t, archivedAt: now });
+    }
+    const ids = new Set(targets.map((t) => t.id));
+    db.issues = db.issues.filter((i) => !ids.has(i.id));
+    writeFileSync(archPath, JSON.stringify(arch, null, 2) + "\n");
+    saveDb(db);
+    git("add", "data");
+    git("commit", "-m", all ? `archive: ${targets.length} fixed issue(s)` : `issue ${idArg}: archived`);
+    gitPush();
+    console.log(`Archived ${targets.length} → data/archive-${year}.json`);
   } else {
-    console.log("Commands: list [--all] | pull | resolve <id> --image <p> --desc <t> [--app-commit <sha>] | reopen <id> --note <t>");
+    console.log("Commands: list [--all] | pull | resolve <id> --image <p> --desc <t> [--app-commit <sha>] | reopen <id> --note <t> | archive <id> | archive --all-fixed");
     process.exit(cmd ? 1 : 0);
   }
 } catch (e) {
