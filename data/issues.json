@@ -340,8 +340,14 @@
       "imageCommits": [
         "9cc497f1c4024ba1d1ce313702c20aa489cf2817"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: coach-built and swapped meals rendered the full inline per-ingredient stepper editor, so a meal that arrives complete became a wall of steppers. Fix: BuilderMealSlot now has a source flag - coach meals show a compact card (ingredient count + names + Adjust) and tap to open a bottom-sheet modal with the same full editor (steppers, unit toggles, add ingredient, describe, Done); manually built meals keep the inline editor. Per your choice the meal stays a card after editing in the modal. Verified live: coach build-all produced compact cards with zero inline steppers, and opening Adjust + bumping Turkey Breast 125 to 135g wrote through while the meal stayed a card. Evidence: the Adjust modal for Turkey Oats Bowl.",
+        "imagePath": "images/i-20260612-ebf8-fix.png",
+        "imageCommit": "af3a498958a4d6edd2978cfcf393b22fdcba7a4a",
+        "fixedAt": "2026-06-12T14:20:56.265Z",
+        "appCommit": "ad7dc5c7"
+      },
       "history": []
     },
     {
