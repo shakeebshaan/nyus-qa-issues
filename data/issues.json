@@ -373,8 +373,14 @@
       "imageCommits": [
         "ed705074b9ebe69ec49a5ca8e2f88c1b09576832"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: useCoachIntake gated the 'coach wants to know you better' quiz on visit count only - a fresh signup's second dashboard visit (minutes after onboarding asked similar questions) fired it on day one. Fix: a nyus_dash_first_seen stamp is written on the first-ever dashboard visit and the drip stays silent that entire day; pinned by a new unit test (suite 10/10). Verified live with a control: first-seen=today + 5 visits + unanswered pool = no card (evidence shot); flipping first-seen to yesterday makes the card appear - the day-1 gate is precisely what suppresses it.",
+        "imagePath": "images/i-20260612-f34e-fix.png",
+        "imageCommit": "83d5177f21dfdd695c9e0c474ed799e63f99734c",
+        "fixedAt": "2026-06-12T12:29:06.616Z",
+        "appCommit": "c9bc661f"
+      },
       "history": []
     },
     {
