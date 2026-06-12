@@ -175,9 +175,27 @@
     background: var(--accent-soft); color: var(--accent-ink);
     text-align: center; padding: 26px 16px; cursor: pointer; font-weight: 600; font-size: 14px;
   }
-  .pick.has { padding: 10px; background: var(--bg); border-style: solid; border-color: var(--line); }
-  .pick img { max-width: 100%; max-height: 300px; border-radius: 8px; display: block; margin: 0 auto; }
+  .pick.add-more { padding: 12px 16px; font-size: 13px; }
   .pick .hint { display: block; font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 8px; }
+  #pick-thumbs { margin-bottom: 8px; }
+  .thumb-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .thumb { position: relative; }
+  .thumb img { width: 76px; height: 76px; object-fit: cover; border-radius: 8px; display: block; border: 1px solid var(--line); }
+  .rm-img {
+    position: absolute; top: -7px; right: -7px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: hsl(0 70% 50%); color: #fff; border: 2px solid var(--card);
+    font-size: 10px; font-weight: 800; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .rm-img:hover { background: hsl(0 80% 40%); }
+  .thumbs-footer { display: flex; justify-content: flex-end; margin-top: 6px; }
+  .clear-all-btn {
+    border: 0; background: transparent; color: var(--danger);
+    font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 4px 2px; min-height: 32px;
+  }
+  .shots-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .shots-grid .shot { height: clamp(120px, 28vw, 200px); }
   .field { margin-top: 12px; }
   .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
   input[type="text"], textarea {
@@ -263,9 +281,13 @@
   <section id="add">
     <h2>Add new issue</h2>
     <form id="form">
+      <div id="pick-thumbs" hidden>
+        <div class="thumb-grid" id="thumb-grid"></div>
+        <div class="thumbs-footer"><button type="button" class="clear-all-btn" id="clear-all">Remove all</button></div>
+      </div>
       <label class="pick" id="pick">
-        <input type="file" id="file" accept="image/*" hidden />
-        <span id="pick-inner">📷 &nbsp;Upload screenshot<span class="hint">tap to pick · or paste (Ctrl+V)</span></span>
+        <input type="file" id="file" accept="image/*" multiple hidden />
+        <span id="pick-inner">📷 &nbsp;Upload screenshots<span class="hint">tap to pick · or paste (Ctrl+V)</span></span>
       </label>
       <div class="field">
         <label for="route">Screen / route <span style="font-weight:400">(optional — e.g. /nutrition)</span></label>
@@ -391,6 +413,11 @@ function shotHtml(path, commit, alt) {
   const u = rawUrl(path, commit);
   return `<button class="shot" type="button" data-full="${esc(u)}" aria-label="Enlarge ${esc(alt)}"><img loading="lazy" src="${esc(u)}" alt="${esc(alt)}" /></button>`;
 }
+function shotsHtml(paths, commits, altBase) {
+  if (!paths || paths.length === 0) return "";
+  if (paths.length === 1) return shotHtml(paths[0], commits?.[0], altBase);
+  return `<div class="shots-grid">${paths.map((p, i) => shotHtml(p, commits?.[i] ?? commits?.[0], `${altBase} ${i + 1}`)).join("")}</div>`;
+}
 function cardHtml(it, archived) {
   const reopened = it.status === "open" && (it.history || []).some((h) => h.event === "reopened");
   const lastReopen = reopened ? it.history.filter((h) => h.event === "reopened").slice(-1)[0] : null;
@@ -417,7 +444,7 @@ function cardHtml(it, archived) {
     <div class="sides">
       <div class="side">
         <h3>Issue</h3>
-        ${shotHtml(it.imagePath, it.imageCommit, "issue screenshot")}
+        ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot")}
         <p class="desc">${esc(it.description)}</p>
       </div>
       <div class="side">
@@ -500,26 +527,62 @@ async function mutateIssues(message, mutator) {
 }
 
 /* ── submit flow ───────────────────────────────────────── */
-let picked = null;
-function updateSubmit() {
-  $("submit").disabled = !(picked && $("desc").value.trim().length > 2);
-}
-$("desc").addEventListener("input", updateSubmit);
+let pickedFiles = [];
 
-function applyPickedFile(f) {
+function updateSubmit() {
+  $("submit").disabled = !(pickedFiles.length > 0 && $("desc").value.trim().length > 2);
+}
+
+function renderPickZone() {
+  const hasPicks = pickedFiles.length > 0;
+  $("pick-thumbs").hidden = !hasPicks;
+  if (hasPicks) {
+    $("thumb-grid").innerHTML = pickedFiles.map((f, i) => {
+      const url = URL.createObjectURL(f);
+      return `<div class="thumb"><img src="${url}" alt="preview ${i + 1}" /><button class="rm-img" type="button" data-idx="${i}" aria-label="Remove image ${i + 1}">✕</button></div>`;
+    }).join("");
+    $("pick").classList.add("add-more");
+    $("pick-inner").innerHTML = `➕ &nbsp;Add more screenshots<span class="hint">tap · paste (Ctrl+V)</span>`;
+  } else {
+    $("pick").classList.remove("add-more");
+    $("pick-inner").innerHTML = `📷 &nbsp;Upload screenshots<span class="hint">tap to pick · or paste (Ctrl+V)</span>`;
+  }
+}
+
+function addPickedFile(f) {
   if (!f || !f.type.startsWith("image/")) return;
-  picked = f;
-  const url = URL.createObjectURL(f);
-  $("pick").classList.add("has");
-  $("pick-inner").innerHTML = `<img src="${url}" alt="preview" /><span class="hint">tap to change</span>`;
+  pickedFiles.push(f);
+  renderPickZone();
   updateSubmit();
 }
-$("file").addEventListener("change", () => applyPickedFile($("file").files[0]));
-document.addEventListener("paste", (ev) => {
-  const item = [...(ev.clipboardData?.items || [])].find((i) => i.type.startsWith("image/"));
-  if (!item) return;
-  applyPickedFile(item.getAsFile());
+
+$("file").addEventListener("change", () => {
+  for (const f of $("file").files) addPickedFile(f);
+  $("file").value = "";
 });
+
+document.addEventListener("paste", (ev) => {
+  for (const item of (ev.clipboardData?.items || [])) {
+    if (item.type.startsWith("image/")) addPickedFile(item.getAsFile());
+  }
+});
+
+$("thumb-grid").addEventListener("click", (ev) => {
+  const btn = ev.target.closest(".rm-img");
+  if (!btn) return;
+  ev.preventDefault();
+  pickedFiles.splice(parseInt(btn.dataset.idx, 10), 1);
+  renderPickZone();
+  updateSubmit();
+});
+
+$("clear-all").addEventListener("click", () => {
+  pickedFiles = [];
+  renderPickZone();
+  updateSubmit();
+});
+
+$("desc").addEventListener("input", updateSubmit);
 
 $("form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
@@ -530,12 +593,17 @@ $("form").addEventListener("submit", async (ev) => {
   try {
     const id = "i-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + "-" +
       Array.from(crypto.getRandomValues(new Uint8Array(2)), (b) => b.toString(16).padStart(2, "0")).join("");
-    const blob = await compress(picked);
-    const b64 = await blobToB64(blob);
-    if (b64.length > 5_000_000) throw new Error("Image too large even after compression.");
-    $("submit-label").textContent = "Uploading image…";
-    const imgRes = await putFile(`images/${id}.jpg`, b64, `issue ${id}: original screenshot`);
-    const imageCommit = imgRes.commit?.sha || "";
+    const imagePaths = [], imageCommits = [];
+    for (let i = 0; i < pickedFiles.length; i++) {
+      $("submit-label").textContent = `Uploading image ${i + 1} of ${pickedFiles.length}…`;
+      const blob = await compress(pickedFiles[i]);
+      const b64 = await blobToB64(blob);
+      if (b64.length > 5_000_000) throw new Error(`Image ${i + 1} too large even after compression.`);
+      const suffix = pickedFiles.length > 1 ? `-${i}` : "";
+      const imgRes = await putFile(`images/${id}${suffix}.jpg`, b64, `issue ${id}: screenshot ${i + 1}`);
+      imagePaths.push(`images/${id}${suffix}.jpg`);
+      imageCommits.push(imgRes.commit?.sha || "");
+    }
     let route = $("route").value.trim();
     if (route && !route.startsWith("/")) route = "/" + route;
     $("submit-label").textContent = "Saving issue…";
@@ -544,14 +612,14 @@ $("form").addEventListener("submit", async (ev) => {
       d.issues.push({
         id, createdAt: new Date().toISOString(), route: route || null,
         description: $("desc").value.trim(),
-        imagePath: `images/${id}.jpg`, imageCommit,
+        imagePath: imagePaths[0], imageCommit: imageCommits[0],
+        imagePaths, imageCommits,
         status: "open", fix: null, history: [],
       });
     });
     render();
-    $("form").reset(); picked = null;
-    $("pick").classList.remove("has");
-    $("pick-inner").innerHTML = `📷 &nbsp;Upload screenshot<span class="hint">tap to pick from gallery</span>`;
+    $("form").reset(); pickedFiles = [];
+    renderPickZone();
     toast("Issue filed ✓ synced to GitHub");
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
   } catch (e) {
