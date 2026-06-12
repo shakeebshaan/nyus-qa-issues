@@ -185,8 +185,14 @@
       "imageCommits": [
         "da237c01fb4b4fc365928889d7144d88de0d87fb"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: every open of the meal-idea swiper fetched a fresh LLM deck - a 6-8 second 'Cooking up ideas' wait per tap, and trying another idea meant waiting again. Fix: session-scoped deck cache keyed by slot + calorie bucket + diet/goal/allergies; the diet builder preloads every slot's deck in the background right after mount, the swiper serves from the cached deck (only 'More ideas' forces a fresh fetch), and accepting a card drains it from the deck so reopening starts on the next fresh idea. Verified live: tap-to-cards 51ms with the loading spinner never appearing (was seconds), accept then reopen 45ms with the deck consumed 6 to 5 and the next idea up first - swap as many times as you like without waiting.",
+        "imagePath": "images/i-20260612-0b73-fix.png",
+        "imageCommit": "dd0719c585327d34960484e21e89a6d6349266fd",
+        "fixedAt": "2026-06-12T13:08:15.824Z",
+        "appCommit": "d2d4a0c2"
+      },
       "history": []
     },
     {
