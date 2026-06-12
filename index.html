@@ -265,7 +265,7 @@
     <form id="form">
       <label class="pick" id="pick">
         <input type="file" id="file" accept="image/*" hidden />
-        <span id="pick-inner">📷 &nbsp;Upload screenshot<span class="hint">tap to pick from gallery</span></span>
+        <span id="pick-inner">📷 &nbsp;Upload screenshot<span class="hint">tap to pick · or paste (Ctrl+V)</span></span>
       </label>
       <div class="field">
         <label for="route">Screen / route <span style="font-weight:400">(optional — e.g. /nutrition)</span></label>
@@ -504,16 +504,22 @@ let picked = null;
 function updateSubmit() {
   $("submit").disabled = !(picked && $("desc").value.trim().length > 2);
 }
-$("file").addEventListener("change", async () => {
-  const f = $("file").files[0];
-  if (!f) return;
+$("desc").addEventListener("input", updateSubmit);
+
+function applyPickedFile(f) {
+  if (!f || !f.type.startsWith("image/")) return;
   picked = f;
   const url = URL.createObjectURL(f);
   $("pick").classList.add("has");
   $("pick-inner").innerHTML = `<img src="${url}" alt="preview" /><span class="hint">tap to change</span>`;
   updateSubmit();
+}
+$("file").addEventListener("change", () => applyPickedFile($("file").files[0]));
+document.addEventListener("paste", (ev) => {
+  const item = [...(ev.clipboardData?.items || [])].find((i) => i.type.startsWith("image/"));
+  if (!item) return;
+  applyPickedFile(item.getAsFile());
 });
-$("desc").addEventListener("input", updateSubmit);
 
 $("form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
