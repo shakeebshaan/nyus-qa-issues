@@ -431,6 +431,35 @@
       "history": [],
       "resolvedAt": "2026-06-13T15:08:30.325Z",
       "archivedAt": "2026-06-13T15:08:30.325Z"
+    },
+    {
+      "id": "i-20260612-46b2",
+      "createdAt": "2026-06-12T07:43:54.404Z",
+      "route": null,
+      "description": "I right skipped 2 meals here and now everything is combined",
+      "imagePath": "images/i-20260612-46b2-0.jpg",
+      "imageCommit": "f49e10f5f22ed4650c2a7dce6258c02597b8348a",
+      "imagePaths": [
+        "images/i-20260612-46b2-0.jpg",
+        "images/i-20260612-46b2-1.jpg",
+        "images/i-20260612-46b2-2.jpg"
+      ],
+      "imageCommits": [
+        "f49e10f5f22ed4650c2a7dce6258c02597b8348a",
+        "04ef7e86a08c0b89d531b7761249ccd7acca39cc",
+        "e1ca5273abd57dfbcbed10ee85f57edf4a7b7797"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: accepting a meal idea in the swiper APPENDED the card's full ingredient list onto whatever the slot already held, and right-swipe means accept - two accepts stacked three meals' ingredients into one Breakfast. Fix: a suggestion card is a complete macro-sized meal, so accepting now REPLACES the slot's ingredients and adopts the idea's title; the drag overlay reads USE and the accept button's label spells out the replace. Verified live: a Breakfast holding 6 ingredients was replaced wholesale by the accepted Egg Oat Yogurt Bowl (its exact 5 ingredients, renamed header, nothing merged).",
+        "imagePath": "images/i-20260612-46b2-fix.png",
+        "imageCommit": "1637bcf01cd53561c6c2a8e09123129b8bd947fc",
+        "fixedAt": "2026-06-12T12:25:07.429Z",
+        "appCommit": "b8623c1c"
+      },
+      "history": [],
+      "resolvedAt": "2026-06-13T15:08:38.694Z",
+      "archivedAt": "2026-06-13T15:08:38.694Z"
     }
   ]
 }
