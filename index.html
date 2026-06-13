@@ -148,6 +148,7 @@
   .vbtn[disabled] { opacity: .5; cursor: wait; }
   .vbtn.resolve { background: var(--accent-soft); color: var(--accent-ink); }
   .vbtn.reject  { background: var(--amber-soft); color: var(--amber-ink); }
+  .vbtn.respond { background: hsl(263 60% 95%); color: hsl(263 50% 42%); }
   /* Previous-fix dropdown (accumulates across not-fixed → re-fix cycles) */
   details.prevfix { margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 8px; }
   details.prevfix > summary {
@@ -517,7 +518,13 @@ function cardHtml(it, archived) {
          <button class="vbtn reject" type="button" data-notfixed="${esc(it.id)}">✗ Not fixed</button>
        </div>`}`
     : needsReview
-      ? `<p class="review-note"><b>Needs your review.</b> ${esc(it.reviewReason || "Blocked — see notes.")}</p>${prevHtml}`
+      ? `<p class="review-note"><b>Needs your review.</b> ${esc(it.reviewReason || "Blocked — see notes.")}</p>
+         ${it.reviewReply ? `<p class="reopen-note">↳ you: ${esc(it.reviewReply)}</p>` : ""}
+         ${prevHtml}
+         ${archived ? "" : `<div class="verdict">
+           <button class="vbtn respond" type="button" data-respond="${esc(it.id)}">↩ Respond</button>
+           <button class="vbtn resolve" type="button" data-resolve="${esc(it.id)}">✓ Resolve</button>
+         </div>`}`
       : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
        <div class="await"><span><span class="w">🔧</span>${reopened ? "Awaiting re-fix" : "Awaiting fix"}<br><span style="font-size:12px;opacity:.7">Claude will post the ${reopened ? "re-" : ""}fixed screenshot here</span></span></div>
        ${prevHtml}`;
@@ -802,9 +809,10 @@ $("lightbox").addEventListener("click", () => $("lightbox").close());
 let archCache = null;
 async function resolveIssue(id, btn) {
   const it = (db?.issues || []).find((i) => i.id === id);
-  if (!it || it.status !== "fixed") return;
+  // Resolvable when it's an in-review fix OR a user-review item being closed.
+  if (!it || !(it.status === "fixed" || (it.status === "open" && it.needsReview))) return;
   if (!token) { openSettings("A token is needed to resolve."); return; }
-  if (!confirm("Mark this fix as resolved? It moves off the board into Resolved.")) return;
+  if (!confirm("Mark this resolved? It moves off the board into Resolved.")) return;
   btn.disabled = true;
   try {
     const snap = JSON.parse(JSON.stringify(it));
@@ -852,11 +860,37 @@ async function markNotFixed(id, btn) {
     toast(e.message || "Couldn't send back.", 4200);
   }
 }
+// Owner answers a user-review item: records the reply, clears the review flag
+// so the next loop tick acts on it with the reply as direction/context.
+async function respondReview(id, btn) {
+  const it = (db?.issues || []).find((i) => i.id === id);
+  if (!it || !it.needsReview) return;
+  if (!token) { openSettings("A token is needed to respond."); return; }
+  const reply = (prompt("Your response — decision or what you've provided (Claude reads this and proceeds):", it.reviewReply || "") || "").trim();
+  if (!reply) return;
+  btn.disabled = true;
+  try {
+    await mutateIssues(`issue ${id}: owner responded to review`, (d) => {
+      const x = d.issues.find((i) => i.id === id);
+      if (!x) return;
+      x.reviewReply = reply;
+      x.reviewRepliedAt = new Date().toISOString();
+      x.needsReview = false; // unblocked — back in the fix queue with the reply
+    });
+    render();
+    toast("Response saved — back to Claude ✓");
+  } catch (e) {
+    btn.disabled = false;
+    toast(e.message || "Couldn't save response.", 4200);
+  }
+}
 document.addEventListener("click", (ev) => {
   const r = ev.target.closest("[data-resolve]");
   if (r) { resolveIssue(r.dataset.resolve, r); return; }
   const n = ev.target.closest("[data-notfixed]");
   if (n) { markNotFixed(n.dataset.notfixed, n); return; }
+  const p = ev.target.closest("[data-respond]");
+  if (p) { respondReview(p.dataset.respond, p); return; }
 });
 // Tag filter chips — toggle the active tag and re-render (data-tag="" = All).
 $("tagbar").addEventListener("click", (ev) => {

@@ -63,6 +63,7 @@ try {
         reopenNote: (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0]?.note || null,
         needsReview: !!i.needsReview,
         reviewReason: i.reviewReason || null,
+        reviewReply: i.reviewReply || null,
         tags: i.tags || null,
       }));
     console.log(JSON.stringify({ open, count: open.length }, null, 2));
