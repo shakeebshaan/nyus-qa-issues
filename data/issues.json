@@ -25,29 +25,6 @@
       "history": []
     },
     {
-      "id": "i-20260612-6920",
-      "createdAt": "2026-06-12T07:42:25.218Z",
-      "route": null,
-      "description": "Move that button infront of the scheme and when we click it will only decide the progression scheme not the entire plan, it has the entire plan based on the previous user questions but it will only give the progression scheme here",
-      "imagePath": "images/i-20260612-6920.jpg",
-      "imageCommit": "99cdc5a26a7469c81ea35bace69e3ca9d8521dca",
-      "imagePaths": [
-        "images/i-20260612-6920.jpg"
-      ],
-      "imageCommits": [
-        "99cdc5a26a7469c81ea35bace69e3ca9d8521dca"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Training-days 'Coach decides' button (CustomWorkoutBuilder.handleCoachDecideDays) ran the full coach build - day-count reshape, exercises for every empty day, activity targets AND the scheme. Fix: button moved onto the Progression scheme header and rescoped to handleCoachPickProgression - it now applies only the coach's scheme pick (backend progression_recommended, intensity-tier fallback) using the plan context it already has; days, exercises and activity are untouched. Full builds remain on the 'Let Coach build it all' button.",
-        "imagePath": "images/i-20260612-6920-fix.png",
-        "imageCommit": "c96b7c11df796c3f5e0c3758865cce899f906443",
-        "fixedAt": "2026-06-12T08:19:39.215Z",
-        "appCommit": "62db2ffe"
-      },
-      "history": []
-    },
-    {
       "id": "i-20260612-18cf",
       "createdAt": "2026-06-12T07:42:36.706Z",
       "route": null,
