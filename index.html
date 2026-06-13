@@ -270,14 +270,8 @@
     <button type="button" id="banner-retry">Retry</button>
   </div>
 
-  <main id="list" aria-live="polite"></main>
-
-  <button class="linkbtn" id="arch-toggle" type="button">View archived</button>
-  <section id="arch" hidden>
-    <h2>Archived</h2>
-    <div id="arch-list"></div>
-  </section>
-
+  <!-- Add-new-issue form pinned to the top so filing from a phone doesn't
+       require scrolling past the whole issue list (owner request 2026-06-13). -->
   <section id="add">
     <h2>Add new issue</h2>
     <form id="form">
@@ -301,6 +295,14 @@
         <span class="spin"></span><span id="submit-label">Submit issue</span>
       </button>
     </form>
+  </section>
+
+  <main id="list" aria-live="polite"></main>
+
+  <button class="linkbtn" id="arch-toggle" type="button">View archived</button>
+  <section id="arch" hidden>
+    <h2>Archived</h2>
+    <div id="arch-list"></div>
   </section>
 </div>
 
