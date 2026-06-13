@@ -57,15 +57,22 @@
       "imageCommits": [
         "9e4533c8482083e63bf5139c53fd12c98872af96"
       ],
-      "status": "fixed",
-      "fix": {
-        "description": "Owner said 'plan and do it'. PHASE 1 of 3 shipped + verified: app/services/weekly_adaptation.py — a pure decision engine (taper at each week's projected weight via the existing macro_calculator; +75 kcal on-track bonus when adherence >=80% AND weight on pace, capped below TDEE; HOLD at last week's target when off-track or no logs, never a punitive cut; BMR x1.1 floor; maintenance at goal) + 15 rule tests, all passing on prod venv (sample: week 4 on-track 2491 -> 2566 kcal). It is INERT (no DB writes, no scheduler) = zero production effect yet. Investigation also corrected the plan's baseline: the LIVE daily target is UserHealthProfile.target_kcal (static since onboarding) — that's now the resolved write target (WeeklyMacroTarget is display-only). STAGED next: Phase 2 = weekly dry-run scheduler that Discord-logs would-be changes (still no writes); Phase 3 = live weekly write behind FEATURE_WEEKLY_ADAPTATION + FE read. Phased deliberately because going live changes every athlete's calorie target. Resolve to greenlight Phase 2, or mark not-fixed if you want it fully wired now. Plan: docs/WEEKLY_ADAPTATION_PLAN.md",
-        "imagePath": "images/i-20260612-a923-fix.png",
-        "imageCommit": "1e7438cea4246aced2aa6aa2923daad17acad75c",
-        "fixedAt": "2026-06-13T17:44:59.310Z",
-        "appCommit": "5ebbd9e"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-13T18:01:44.151Z",
+          "event": "reopened",
+          "note": "this is not accurate",
+          "previousFix": {
+            "description": "Owner said 'plan and do it'. PHASE 1 of 3 shipped + verified: app/services/weekly_adaptation.py — a pure decision engine (taper at each week's projected weight via the existing macro_calculator; +75 kcal on-track bonus when adherence >=80% AND weight on pace, capped below TDEE; HOLD at last week's target when off-track or no logs, never a punitive cut; BMR x1.1 floor; maintenance at goal) + 15 rule tests, all passing on prod venv (sample: week 4 on-track 2491 -> 2566 kcal). It is INERT (no DB writes, no scheduler) = zero production effect yet. Investigation also corrected the plan's baseline: the LIVE daily target is UserHealthProfile.target_kcal (static since onboarding) — that's now the resolved write target (WeeklyMacroTarget is display-only). STAGED next: Phase 2 = weekly dry-run scheduler that Discord-logs would-be changes (still no writes); Phase 3 = live weekly write behind FEATURE_WEEKLY_ADAPTATION + FE read. Phased deliberately because going live changes every athlete's calorie target. Resolve to greenlight Phase 2, or mark not-fixed if you want it fully wired now. Plan: docs/WEEKLY_ADAPTATION_PLAN.md",
+            "imagePath": "images/i-20260612-a923-fix.png",
+            "imageCommit": "1e7438cea4246aced2aa6aa2923daad17acad75c",
+            "fixedAt": "2026-06-13T17:44:59.310Z",
+            "appCommit": "5ebbd9e"
+          }
+        }
+      ],
       "needsReview": false,
       "tags": [
         "activity",
