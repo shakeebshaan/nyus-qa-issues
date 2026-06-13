@@ -460,6 +460,31 @@
       "history": [],
       "resolvedAt": "2026-06-13T15:08:38.694Z",
       "archivedAt": "2026-06-13T15:08:38.694Z"
+    },
+    {
+      "id": "i-20260612-141f",
+      "createdAt": "2026-06-12T07:45:13.295Z",
+      "route": null,
+      "description": "Show recipes here",
+      "imagePath": "images/i-20260612-141f.jpg",
+      "imageCommit": "08eb9bbeb80400c421ed6974a9f7d45b3d8689d7",
+      "imagePaths": [
+        "images/i-20260612-141f.jpg"
+      ],
+      "imageCommits": [
+        "08eb9bbeb80400c421ed6974a9f7d45b3d8689d7"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: recipes existed only as a transient 'Make recipe' dialog that vanished on close - the meal card itself never showed a recipe. Fix: BuilderMealSlot now carries a recipe field; accepting a suggestion persists its steps onto the meal, and 'Make recipe' writes its result onto the meal too, so MealSlotCard renders a persistent numbered Recipe block. Verified live: after accepting the Egg Oat Yogurt Bowl idea, the meal card shows a Recipe section with all four numbered steps below the macro total and action buttons.",
+        "imagePath": "images/i-20260612-141f-fix.png",
+        "imageCommit": "e010d357de56cafc79f78408d71f1d3d67729260",
+        "fixedAt": "2026-06-12T13:43:01.934Z",
+        "appCommit": "f50e6886"
+      },
+      "history": [],
+      "resolvedAt": "2026-06-13T15:08:52.417Z",
+      "archivedAt": "2026-06-13T15:08:52.417Z"
     }
   ]
 }
