@@ -225,6 +225,31 @@
       "history": [],
       "resolvedAt": "2026-06-13T15:06:14.854Z",
       "archivedAt": "2026-06-13T15:06:14.854Z"
+    },
+    {
+      "id": "i-20260612-717c",
+      "createdAt": "2026-06-12T07:44:04.109Z",
+      "route": null,
+      "description": "Fix this button text and color",
+      "imagePath": "images/i-20260612-717c.jpg",
+      "imageCommit": "c62f62e8a44449b4501ff2e0159394acd75a9f46",
+      "imagePaths": [
+        "images/i-20260612-717c.jpg"
+      ],
+      "imageCommits": [
+        "c62f62e8a44449b4501ff2e0159394acd75a9f46"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: MealSlotCard's describe-meal Add button combined dark:bg-d-pink-500 with disabled:bg-muted - equal CSS specificity, and the dark variant wins on cascade order, so in dark mode the DISABLED button stayed full pink with white text and looked tappable while doing nothing. Fix: explicit dark:disabled:bg-muted + dark:disabled:text-muted-foreground compound variants. Verified at 390x844 dark mode via computed styles: disabled now renders muted gray (rgb 29,40,58) with muted text; typing into the field flips it to pink/white (enabled).",
+        "imagePath": "images/i-20260612-717c-fix.png",
+        "imageCommit": "b1056555d93c2c1f018309249f5345e2c22bca17",
+        "fixedAt": "2026-06-12T10:07:51.566Z",
+        "appCommit": "85540830"
+      },
+      "history": [],
+      "resolvedAt": "2026-06-13T15:06:20.802Z",
+      "archivedAt": "2026-06-13T15:06:20.802Z"
     }
   ]
 }
