@@ -250,6 +250,37 @@
       "history": [],
       "resolvedAt": "2026-06-13T15:06:20.802Z",
       "archivedAt": "2026-06-13T15:06:20.802Z"
+    },
+    {
+      "id": "i-20260612-2421",
+      "createdAt": "2026-06-12T07:43:06.159Z",
+      "route": null,
+      "description": "The workout is same for all these days it should be unique per day fun and scientific plan this fix",
+      "imagePath": "images/i-20260612-2421-0.jpg",
+      "imageCommit": "9cf4346c60caeb55ab0c059fb798841d41a8253f",
+      "imagePaths": [
+        "images/i-20260612-2421-0.jpg",
+        "images/i-20260612-2421-1.jpg",
+        "images/i-20260612-2421-2.jpg",
+        "images/i-20260612-2421-3.jpg"
+      ],
+      "imageCommits": [
+        "9cf4346c60caeb55ab0c059fb798841d41a8253f",
+        "2afe40769bb7da9bfeeafc96f2cdcdfab67d8e00",
+        "ed3fc1f39c28522266db408d81ff0587c33a8901",
+        "6ef7683fbc8a7630cdba5c55058fbf2a8da9e1a3"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the algorithmic exercise selector ranks curated>compound>difficulty with rand() only breaking ties, and the 2-worker build-all sent zero sibling context - so every day of the week got the same top-ranked picks (Floor Press + Pike Push-Up on all 9 days). Fix: /ai/suggest-workout-day now accepts exclude_exercise_ids and seeds the selector's dedupe set with them (with a <3-picks fallback so thin pools never starve a day); the builder builds days sequentially, accumulating each built day's ids, and 'More ideas' excludes the whole board for fresh re-suggests. Verified with a live 7-day coach build: 36 exercise slots, zero cross-day duplicates (Day1 Upper: Floor Press/Diamond Push-Up/Chin-Up/Pull-Up/Pike Push-Up/Spider Curl; Day2 Lower: Plank Jack/Frog Pump/Cable Glute Kickback/Glute Bridge/Calf Raise; Day5 Legs: Bulgarian Split Squat/RDL/Leg Curl/Hip Thrust; Day7 Conditioning: Turkish Get-Up/Lunge Jump/Cossack Squat/Woodchop/Bear Crawl/Hanging Knee Raise).",
+        "imagePath": "images/i-20260612-2421-fix.png",
+        "imageCommit": "11fff274036b378962a2515e60becec2c0ee9d80",
+        "fixedAt": "2026-06-12T08:48:23.803Z",
+        "appCommit": "b74880e6"
+      },
+      "history": [],
+      "resolvedAt": "2026-06-13T15:06:37.356Z",
+      "archivedAt": "2026-06-13T15:06:37.356Z"
     }
   ]
 }
