@@ -61,6 +61,9 @@ try {
         description: i.description,
         image: join(ROOT, i.imagePath),
         reopenNote: (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0]?.note || null,
+        needsReview: !!i.needsReview,
+        reviewReason: i.reviewReason || null,
+        tags: i.tags || null,
       }));
     console.log(JSON.stringify({ open, count: open.length }, null, 2));
   } else if (cmd === "resolve") {
@@ -88,6 +91,10 @@ try {
       ...(appCommit ? { appCommit } : {}),
     };
     issue.status = "fixed";
+    // A fix clears any pending user-review flag.
+    issue.needsReview = false;
+    delete issue.reviewReason;
+    delete issue.reviewedAt;
     saveDb(db);
     git("add", "data/issues.json");
     git("commit", "-m", `issue ${id}: resolved`);
@@ -111,6 +118,43 @@ try {
     git("commit", "-m", `issue ${id}: reopened`);
     gitPush();
     console.log(`Reopened ${id}`);
+  } else if (cmd === "review") {
+    // Flag an open issue as needing the owner's review (couldn't auto-fix, or
+    // blocked on a decision/assets). Surfaces at the TOP of the board with a
+    // "User review" badge + the reason. Optional comma-separated --tags.
+    const id = idArg, reason = flag("reason"), tagsRaw = flag("tags");
+    if (!id || !reason) throw new Error('Usage: review <id> --reason "<what it needs / why not fixed>" [--tags a,b,c]');
+    git("pull", "--rebase");
+    const db = loadDb();
+    const issue = db.issues.find((i) => i.id === id);
+    if (!issue) throw new Error("No such issue: " + id);
+    issue.needsReview = true;
+    issue.reviewReason = reason;
+    issue.reviewedAt = new Date().toISOString();
+    if (tagsRaw) {
+      issue.tags = tagsRaw.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
+    }
+    saveDb(db);
+    git("add", "data/issues.json");
+    git("commit", "-m", `issue ${id}: flagged for user review`);
+    gitPush();
+    console.log(`Flagged ${id} for user review`);
+  } else if (cmd === "unreview") {
+    // Clear the user-review flag (the blocker is resolved / no longer needed).
+    const id = idArg;
+    if (!id) throw new Error("Usage: unreview <id>");
+    git("pull", "--rebase");
+    const db = loadDb();
+    const issue = db.issues.find((i) => i.id === id);
+    if (!issue) throw new Error("No such issue: " + id);
+    issue.needsReview = false;
+    delete issue.reviewReason;
+    delete issue.reviewedAt;
+    saveDb(db);
+    git("add", "data/issues.json");
+    git("commit", "-m", `issue ${id}: cleared user-review flag`);
+    gitPush();
+    console.log(`Cleared user-review flag on ${id}`);
   } else if (cmd === "archive") {
     const all = process.argv.includes("--all-fixed");
     if (!all && !idArg) throw new Error("Usage: archive <id> | archive --all-fixed");
@@ -139,7 +183,7 @@ try {
     gitPush();
     console.log(`Archived ${targets.length} → data/archive-${year}.json`);
   } else {
-    console.log("Commands: list [--all] | pull | resolve <id> --image <p> --desc <t> [--app-commit <sha>] | reopen <id> --note <t> | archive <id> | archive --all-fixed");
+    console.log("Commands: list [--all] | pull | resolve <id> --image <p> --desc <t> [--app-commit <sha>] | review <id> --reason <t> [--tags a,b] | unreview <id> | reopen <id> --note <t> | archive <id> | archive --all-fixed");
     process.exit(cmd ? 1 : 0);
   }
 } catch (e) {

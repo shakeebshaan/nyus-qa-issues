@@ -112,6 +112,25 @@
   .badge.fixed { background: var(--accent-soft); color: var(--accent-ink); }
   .badge.reopened { background: hsl(0 80% 95%); color: hsl(0 55% 40%); }
   .badge.archived { background: hsl(40 15% 92%); color: var(--muted); }
+  .badge.review { background: hsl(263 60% 95%); color: hsl(263 50% 42%); }
+  /* "Needs your review" banner on a flagged card */
+  .review-note {
+    margin: 10px 0 0; padding: 10px 12px; border-radius: 10px;
+    background: hsl(263 60% 96%); border: 1px solid hsl(263 50% 88%);
+    color: hsl(263 40% 32%); font-size: 13px; line-height: 1.45;
+  }
+  .review-note b { color: hsl(263 50% 38%); }
+  /* Tag filter bar + per-card tag chips */
+  #tagbar { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+  #tagbar:empty { display: none; }
+  .tagchip {
+    font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--line); background: transparent; color: var(--muted);
+    border-radius: 999px; padding: 4px 11px; min-height: 30px;
+  }
+  .tagchip.active { background: var(--accent-soft); color: var(--accent-ink); border-color: transparent; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .card-tag { font-size: 11px; font-weight: 600; color: var(--muted); background: hsl(40 15% 94%); border-radius: 999px; padding: 2px 8px; }
   .archbtn {
     border: 1px solid var(--line); background: transparent; color: var(--muted);
     font: inherit; font-size: 12px; font-weight: 600; border-radius: 999px;
@@ -297,6 +316,7 @@
     </form>
   </section>
 
+  <div id="tagbar" role="group" aria-label="Filter by tag"></div>
   <main id="list" aria-live="polite"></main>
 
   <button class="linkbtn" id="arch-toggle" type="button">View archived</button>
@@ -420,21 +440,55 @@ function shotsHtml(paths, commits, altBase) {
   if (paths.length === 1) return shotHtml(paths[0], commits?.[0], altBase);
   return `<div class="shots-grid">${paths.map((p, i) => shotHtml(p, commits?.[i] ?? commits?.[0], `${altBase} ${i + 1}`)).join("")}</div>`;
 }
+let activeTag = null;  // current tag filter (null = all)
+
+/* Tags for an issue: explicit `tags` if set, else keyword-derived from the
+   route + description so the filter is useful even before issues are tagged. */
+const TAG_RULES = [
+  [/water|hydrat/, "water"],
+  [/meal|diet|nutrition|recipe|ingredient|food/, "diet"],
+  [/workout|exercise|cardio|activity|steps|training/, "workout"],
+  [/builder|build your|plan-builder|progression/, "builder"],
+  [/coach|nisha|rohan|atlas|character/, "coach"],
+  [/dashboard|home screen/, "dashboard"],
+  [/onboard|sign ?up|first day|welcome/, "onboarding"],
+  [/profile|settings/, "profile"],
+  [/social|friend|partner|leaderboard/, "social"],
+  [/image|photo|picture|icon/, "image"],
+  [/text|label|copy|wording|color|colour|button/, "ui"],
+];
+function tagsFor(it) {
+  if (Array.isArray(it.tags) && it.tags.length) return it.tags.map((t) => String(t).toLowerCase());
+  const hay = `${it.route || ""} ${it.description || ""}`.toLowerCase();
+  const out = [];
+  for (const [re, tag] of TAG_RULES) if (re.test(hay) && !out.includes(tag)) out.push(tag);
+  return out;
+}
+
 function cardHtml(it, archived) {
   const reopened = it.status === "open" && (it.history || []).some((h) => h.event === "reopened");
   const lastReopen = reopened ? it.history.filter((h) => h.event === "reopened").slice(-1)[0] : null;
+  const needsReview = it.status === "open" && it.needsReview;
   const badge = archived
     ? `<span class="badge archived">Archived</span>`
     : it.status === "fixed"
       ? `<span class="badge fixed">Fixed</span>`
-      : reopened ? `<span class="badge reopened">Reopened</span>` : `<span class="badge open">Open</span>`;
+      : needsReview ? `<span class="badge review">User review</span>`
+        : reopened ? `<span class="badge reopened">Reopened</span>` : `<span class="badge open">Open</span>`;
+  // A flagged issue shows WHY it needs you (what it needs / why not auto-fixed)
+  // in place of the "awaiting fix" slot.
   const right = it.status === "fixed" && it.fix
     ? `${shotHtml(it.fix.imagePath, it.fix.imageCommit, "fixed screenshot")}
        <p class="desc">${esc(it.fix.description)}</p>`
-    : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
+    : needsReview
+      ? `<p class="review-note"><b>Needs your review.</b> ${esc(it.reviewReason || "Blocked — see notes.")}</p>`
+      : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
        <div class="await"><span><span class="w">🔧</span>Awaiting fix<br><span style="font-size:12px;opacity:.7">Claude will post the fixed screenshot here</span></span></div>`;
   const archBtn = !archived && it.status === "fixed"
     ? `<button class="archbtn" type="button" data-arch="${esc(it.id)}">Archive</button>` : "";
+  const tags = tagsFor(it);
+  const tagsHtml = tags.length
+    ? `<div class="card-tags">${tags.map((t) => `<span class="card-tag">${esc(t)}</span>`).join("")}</div>` : "";
   return `<article class="card" id="${esc(it.id)}">
     <div class="card-head">
       ${badge}
@@ -448,22 +502,44 @@ function cardHtml(it, archived) {
         <h3>Issue</h3>
         ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot")}
         <p class="desc">${esc(it.description)}</p>
+        ${tagsHtml}
       </div>
       <div class="side">
-        <h3>Fix ${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
+        <h3>${needsReview ? "Status" : "Fix"} ${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
         ${right}
       </div>
     </div>
   </article>`;
 }
+function renderTagbar(issues) {
+  const counts = new Map();
+  for (const it of issues) for (const t of tagsFor(it)) counts.set(t, (counts.get(t) || 0) + 1);
+  const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  if (!tags.length) { $("tagbar").innerHTML = ""; return; }
+  const chip = (label, tag, active) =>
+    `<button class="tagchip${active ? " active" : ""}" type="button" data-tag="${esc(tag)}">${esc(label)}</button>`;
+  $("tagbar").innerHTML =
+    chip(`All (${issues.length})`, "", activeTag === null) +
+    tags.map(([t, n]) => chip(`${t} (${n})`, t, activeTag === t)).join("");
+}
 function render() {
-  const issues = [...(db?.issues || [])].sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
-  const open = issues.filter((i) => i.status === "open").length;
-  $("chip-open").textContent = `${open} open`;
-  $("chip-fixed").textContent = `${issues.length - open} fixed`;
-  $("list").innerHTML = issues.length
-    ? issues.map(cardHtml).join("")
-    : `<div class="empty"><b>No issues yet</b>File the first one below — it shows up here with an “awaiting fix” slot.</div>`;
+  const all = db?.issues || [];
+  // Order: needs-review first, then other open, then fixed; newest within each.
+  const rank = (i) => (i.status === "open" && i.needsReview ? 0 : i.status === "open" ? 1 : 2);
+  const sorted = [...all].sort(
+    (a, b) => rank(a) - rank(b) || (b.createdAt || "").localeCompare(a.createdAt || ""),
+  );
+  const open = all.filter((i) => i.status === "open").length;
+  const review = all.filter((i) => i.status === "open" && i.needsReview).length;
+  $("chip-open").textContent = review ? `${open} open · ${review} review` : `${open} open`;
+  $("chip-fixed").textContent = `${all.length - open} fixed`;
+  renderTagbar(sorted);
+  const visible = activeTag ? sorted.filter((it) => tagsFor(it).includes(activeTag)) : sorted;
+  $("list").innerHTML = visible.length
+    ? visible.map((it) => cardHtml(it)).join("")
+    : all.length
+      ? `<div class="empty"><b>No issues with “${esc(activeTag)}”</b>Clear the filter to see all.</div>`
+      : `<div class="empty"><b>No issues yet</b>File the first one above — it shows up here with an “awaiting fix” slot.</div>`;
 }
 
 /* ── image compression ─────────────────────────────────── */
@@ -718,6 +794,13 @@ async function archiveIssue(id, btn) {
 document.addEventListener("click", (ev) => {
   const b = ev.target.closest(".archbtn");
   if (b && b.dataset.arch) archiveIssue(b.dataset.arch, b);
+});
+// Tag filter chips — toggle the active tag and re-render (data-tag="" = All).
+$("tagbar").addEventListener("click", (ev) => {
+  const c = ev.target.closest(".tagchip");
+  if (!c) return;
+  activeTag = c.dataset.tag || null;
+  render();
 });
 $("arch-toggle").addEventListener("click", async () => {
   const sec = $("arch"), t = $("arch-toggle");
