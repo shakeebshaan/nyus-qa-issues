@@ -14,8 +14,14 @@
       "imageCommits": [
         "5aa2e8b0025b2438b624dbde17d658f2cae02855"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the suggest-meal route hard-coded image_url=None (Pollinations dead; transient meal ideas have no meal_id to enqueue a generated file against), so the swiper cards showed a glyph placeholder. Fix: the route now attaches a hotlinkable food-image URL per idea -> TheMealDB dish thumb first, Openverse food photo on miss (new food_preview_url, URL-only, fetched in parallel; BE dd935c0). No FE change needed - the swiper already rendered the field. Verified live in the diet builder: Suggest on 'Chicken Rice Plate' -> card 'Chicken Rice Bowl' shows a real chicken-rice photo (700x700), 0 console errors.",
+        "imagePath": "images/i-20260612-8e72-fix.png",
+        "imageCommit": "18ae1db2ec9c0a0337de3b8a41cfd452f060f451",
+        "fixedAt": "2026-06-13T16:47:32.498Z",
+        "appCommit": "50414d67"
+      },
       "history": [
         {
           "at": "2026-06-13T15:06:01.389Z",
@@ -29,7 +35,8 @@
             "appCommit": "f50e6886"
           }
         }
-      ]
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260612-cd61",
