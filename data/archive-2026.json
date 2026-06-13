@@ -50,6 +50,31 @@
       "history": [],
       "resolvedAt": "2026-06-13T15:03:15.293Z",
       "archivedAt": "2026-06-13T15:03:15.293Z"
+    },
+    {
+      "id": "i-20260613-553c",
+      "createdAt": "2026-06-13T05:42:45.764Z",
+      "route": null,
+      "description": "We need option to select glass, bottle and the quality in ml adjusted from profile etc",
+      "imagePath": "images/i-20260613-553c.jpg",
+      "imageCommit": "54c376b1ca9e28c7a8c15663902844b3abd18960",
+      "imagePaths": [
+        "images/i-20260613-553c.jpg"
+      ],
+      "imageCommits": [
+        "54c376b1ca9e28c7a8c15663902844b3abd18960"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the water tracker logged in fixed 250 ml glasses with no way to pick a container or adjust the goal. Fix (full-stack, profile-backed per your choice): the tracker is now ml-based with a container selector - Glass 250, Bottle 500, Large 750, plus whatever default you set - driving a one-tap Add N ml. Daily goal and default container live on your profile (new preferred_water_container_ml column + existing target_water_liters) and round-trip server-side, so a new Profile > Hydration control (goal stepper 1-5 L + container picker) drives what the Nutrition tracker shows. Verified live: picking Bottle then Add moved 1.5 to 2.0 L; setting 3 L + Large in Profile persisted (confirmed via the API) and flowed back to the tracker as 2/3 L with Large pre-selected; zero console errors.",
+        "imagePath": "images/i-20260613-553c-fix.png",
+        "imageCommit": "eebf205889da645d186ecc27285846ae6f82a6f1",
+        "fixedAt": "2026-06-13T12:31:09.867Z",
+        "appCommit": "58d487e0"
+      },
+      "history": [],
+      "resolvedAt": "2026-06-13T15:03:52.571Z",
+      "archivedAt": "2026-06-13T15:03:52.571Z"
     }
   ]
 }
