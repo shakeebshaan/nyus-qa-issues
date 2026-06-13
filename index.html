@@ -138,6 +138,27 @@
   }
   .archbtn:active { transform: scale(.96); }
   .archbtn[disabled] { opacity: .5; cursor: wait; }
+  /* User verdict buttons on an in-review card */
+  .verdict { display: flex; gap: 8px; margin-top: 10px; }
+  .vbtn {
+    flex: 1; font: inherit; font-size: 13px; font-weight: 700; border-radius: 10px;
+    padding: 8px 10px; min-height: 40px; cursor: pointer; border: 1px solid transparent;
+  }
+  .vbtn:active { transform: scale(.98); }
+  .vbtn[disabled] { opacity: .5; cursor: wait; }
+  .vbtn.resolve { background: var(--accent-soft); color: var(--accent-ink); }
+  .vbtn.reject  { background: var(--amber-soft); color: var(--amber-ink); }
+  /* Previous-fix dropdown (accumulates across not-fixed → re-fix cycles) */
+  details.prevfix { margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 8px; }
+  details.prevfix > summary {
+    cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted);
+    list-style: none; padding: 4px 0; min-height: 30px; display: flex; align-items: center; gap: 6px;
+  }
+  details.prevfix > summary::-webkit-details-marker { display: none; }
+  details.prevfix > summary::before { content: "▸"; transition: transform .15s; }
+  details.prevfix[open] > summary::before { transform: rotate(90deg); }
+  .pf-sep { border: 0; border-top: 1px solid var(--line); margin: 10px 0; }
+  .pf-when { font-size: 11px; color: var(--muted); font-weight: 500; }
   .linkbtn {
     display: block; margin: 4px auto 0; border: 0; background: transparent;
     color: var(--muted); font: inherit; font-size: 13.5px; font-weight: 600;
@@ -319,9 +340,9 @@
   <div id="tagbar" role="group" aria-label="Filter by tag"></div>
   <main id="list" aria-live="polite"></main>
 
-  <button class="linkbtn" id="arch-toggle" type="button">View archived</button>
+  <button class="linkbtn" id="arch-toggle" type="button">View resolved</button>
   <section id="arch" hidden>
-    <h2>Archived</h2>
+    <h2>Resolved</h2>
     <div id="arch-list"></div>
   </section>
 </div>
@@ -469,23 +490,37 @@ function cardHtml(it, archived) {
   const reopened = it.status === "open" && (it.history || []).some((h) => h.event === "reopened");
   const lastReopen = reopened ? it.history.filter((h) => h.event === "reopened").slice(-1)[0] : null;
   const needsReview = it.status === "open" && it.needsReview;
+  // Lifecycle labels (QA flow 2026-06-13): Submitted → In review → Resolved,
+  // with Re-fix when the user sends a fix back as "not fixed".
   const badge = archived
-    ? `<span class="badge archived">Archived</span>`
+    ? `<span class="badge fixed">Resolved</span>`
     : it.status === "fixed"
-      ? `<span class="badge fixed">Fixed</span>`
+      ? `<span class="badge review">In review</span>`
       : needsReview ? `<span class="badge review">User review</span>`
-        : reopened ? `<span class="badge reopened">Reopened</span>` : `<span class="badge open">Open</span>`;
-  // A flagged issue shows WHY it needs you (what it needs / why not auto-fixed)
-  // in place of the "awaiting fix" slot.
+        : reopened ? `<span class="badge reopened">Re-fix</span>` : `<span class="badge open">Submitted</span>`;
+
+  // Previous fixes accumulate as the user rejects ("not fixed") and Claude
+  // re-fixes — surfaced as a collapsed dropdown so the current fix stays primary.
+  const prevFixes = (it.history || []).filter((h) => h.event === "reopened" && h.previousFix).map((h) => h.previousFix);
+  const prevHtml = prevFixes.length
+    ? `<details class="prevfix"><summary>Previous fix${prevFixes.length > 1 ? "es" : ""} (${prevFixes.length})</summary>${
+        prevFixes.map((pf, i) => `${i ? '<hr class="pf-sep">' : ""}${pf.fixedAt ? `<div class="pf-when">${fmtDate(pf.fixedAt)}</div>` : ""}${shotHtml(pf.imagePath, pf.imageCommit, "previous fix")}<p class="desc">${esc(pf.description || "")}</p>`).join("")
+      }</details>`
+    : "";
+
   const right = it.status === "fixed" && it.fix
-    ? `${shotHtml(it.fix.imagePath, it.fix.imageCommit, "fixed screenshot")}
-       <p class="desc">${esc(it.fix.description)}</p>`
+    ? `${shotHtml(it.fix.imagePath, it.fix.imageCommit, "fix screenshot")}
+       <p class="desc">${esc(it.fix.description)}</p>
+       ${prevHtml}
+       ${archived ? "" : `<div class="verdict">
+         <button class="vbtn resolve" type="button" data-resolve="${esc(it.id)}">✓ Resolve</button>
+         <button class="vbtn reject" type="button" data-notfixed="${esc(it.id)}">✗ Not fixed</button>
+       </div>`}`
     : needsReview
-      ? `<p class="review-note"><b>Needs your review.</b> ${esc(it.reviewReason || "Blocked — see notes.")}</p>`
+      ? `<p class="review-note"><b>Needs your review.</b> ${esc(it.reviewReason || "Blocked — see notes.")}</p>${prevHtml}`
       : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
-       <div class="await"><span><span class="w">🔧</span>Awaiting fix<br><span style="font-size:12px;opacity:.7">Claude will post the fixed screenshot here</span></span></div>`;
-  const archBtn = !archived && it.status === "fixed"
-    ? `<button class="archbtn" type="button" data-arch="${esc(it.id)}">Archive</button>` : "";
+       <div class="await"><span><span class="w">🔧</span>${reopened ? "Awaiting re-fix" : "Awaiting fix"}<br><span style="font-size:12px;opacity:.7">Claude will post the ${reopened ? "re-" : ""}fixed screenshot here</span></span></div>
+       ${prevHtml}`;
   const tags = tagsFor(it);
   const tagsHtml = tags.length
     ? `<div class="card-tags">${tags.map((t) => `<span class="card-tag">${esc(t)}</span>`).join("")}</div>` : "";
@@ -493,8 +528,7 @@ function cardHtml(it, archived) {
     <div class="card-head">
       ${badge}
       ${it.route ? `<span class="route-pill">${esc(it.route)}</span>` : ""}
-      <span class="meta">${archived ? "archived " + fmtDate(it.archivedAt) : fmtDate(it.createdAt)}</span>
-      ${archBtn}
+      <span class="meta">${archived ? "resolved " + fmtDate(it.archivedAt) : fmtDate(it.createdAt)}</span>
       <span class="iid">${esc(it.id)}</span>
     </div>
     <div class="sides">
@@ -505,7 +539,7 @@ function cardHtml(it, archived) {
         ${tagsHtml}
       </div>
       <div class="side">
-        <h3>${needsReview ? "Status" : "Fix"} ${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
+        <h3>${needsReview ? "Status" : it.status === "fixed" ? "Proposed fix" : "Fix"} ${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
         ${right}
       </div>
     </div>
@@ -531,8 +565,9 @@ function render() {
   );
   const open = all.filter((i) => i.status === "open").length;
   const review = all.filter((i) => i.status === "open" && i.needsReview).length;
-  $("chip-open").textContent = review ? `${open} open · ${review} review` : `${open} open`;
-  $("chip-fixed").textContent = `${all.length - open} fixed`;
+  const inReview = all.length - open;
+  $("chip-open").textContent = review ? `${open} to fix · ${review} review` : `${open} to fix`;
+  $("chip-fixed").textContent = `${inReview} in review`;
   renderTagbar(sorted);
   const visible = activeTag ? sorted.filter((it) => tagsFor(it).includes(activeTag)) : sorted;
   $("list").innerHTML = visible.length
@@ -763,37 +798,65 @@ document.addEventListener("click", (ev) => {
 });
 $("lightbox").addEventListener("click", () => $("lightbox").close());
 
-/* ── archive ───────────────────────────────────────────── */
+/* ── resolve (user accepts a fix → off-board store) ────── */
 let archCache = null;
-async function archiveIssue(id, btn) {
+async function resolveIssue(id, btn) {
   const it = (db?.issues || []).find((i) => i.id === id);
   if (!it || it.status !== "fixed") return;
-  if (!token) { openSettings("A token is needed to archive."); return; }
-  if (!confirm("Archive this fixed issue? It moves off the board into the archive.")) return;
+  if (!token) { openSettings("A token is needed to resolve."); return; }
+  if (!confirm("Mark this fix as resolved? It moves off the board into Resolved.")) return;
   btn.disabled = true;
   try {
     const snap = JSON.parse(JSON.stringify(it));
-    snap.archivedAt = new Date().toISOString();
+    snap.status = "resolved";
+    snap.resolvedAt = new Date().toISOString();
+    snap.archivedAt = snap.resolvedAt; // back-compat with the archive store/sort
     const path = `data/archive-${new Date().getFullYear()}.json`;
-    await mutateJson(path, `issue ${id}: archive`, (a) => {
+    await mutateJson(path, `issue ${id}: resolved`, (a) => {
       a.issues = a.issues || [];
       if (!a.issues.some((x) => x.id === id)) a.issues.push(snap);
     }, { version: 1, issues: [] });
-    await mutateIssues(`issue ${id}: remove from active (archived)`, (d) => {
+    await mutateIssues(`issue ${id}: remove from active (resolved)`, (d) => {
       d.issues = d.issues.filter((x) => x.id !== id);
     });
     archCache = null;
     render();
-    if (!$("arch").hidden) { $("arch").hidden = true; $("arch-toggle").textContent = "View archived"; }
-    toast("Archived ✓");
+    if (!$("arch").hidden) { $("arch").hidden = true; $("arch-toggle").textContent = "View resolved"; }
+    toast("Resolved ✓");
   } catch (e) {
     btn.disabled = false;
-    toast(e.message || "Archive failed.", 4200);
+    toast(e.message || "Resolve failed.", 4200);
+  }
+}
+// User rejects a fix → back to Claude for a re-fix, with an optional comment.
+// Mirrors the CLI `reopen`: previous fix is preserved in history (→ dropdown).
+async function markNotFixed(id, btn) {
+  const it = (db?.issues || []).find((i) => i.id === id);
+  if (!it || it.status !== "fixed") return;
+  if (!token) { openSettings("A token is needed to send it back."); return; }
+  const note = (prompt("What's still wrong? (optional — Claude reads this and re-fixes)") || "").trim();
+  btn.disabled = true;
+  try {
+    await mutateIssues(`issue ${id}: not fixed → re-fix`, (d) => {
+      const x = d.issues.find((i) => i.id === id);
+      if (!x) return;
+      x.history = x.history || [];
+      x.history.push({ at: new Date().toISOString(), event: "reopened", note: note || null, previousFix: x.fix });
+      x.fix = null;
+      x.status = "open";
+    });
+    render();
+    toast(note ? "Sent back with your note ✓" : "Sent back for re-fix ✓");
+  } catch (e) {
+    btn.disabled = false;
+    toast(e.message || "Couldn't send back.", 4200);
   }
 }
 document.addEventListener("click", (ev) => {
-  const b = ev.target.closest(".archbtn");
-  if (b && b.dataset.arch) archiveIssue(b.dataset.arch, b);
+  const r = ev.target.closest("[data-resolve]");
+  if (r) { resolveIssue(r.dataset.resolve, r); return; }
+  const n = ev.target.closest("[data-notfixed]");
+  if (n) { markNotFixed(n.dataset.notfixed, n); return; }
 });
 // Tag filter chips — toggle the active tag and re-render (data-tag="" = All).
 $("tagbar").addEventListener("click", (ev) => {
@@ -804,7 +867,7 @@ $("tagbar").addEventListener("click", (ev) => {
 });
 $("arch-toggle").addEventListener("click", async () => {
   const sec = $("arch"), t = $("arch-toggle");
-  if (!sec.hidden) { sec.hidden = true; t.textContent = "View archived"; return; }
+  if (!sec.hidden) { sec.hidden = true; t.textContent = "View resolved"; return; }
   t.textContent = "Loading…";
   try {
     if (!archCache) {
@@ -820,12 +883,12 @@ $("arch-toggle").addEventListener("click", async () => {
     }
     $("arch-list").innerHTML = archCache.length
       ? archCache.map((i) => cardHtml(i, true)).join("")
-      : `<div class="empty">Nothing archived yet.</div>`;
+      : `<div class="empty">Nothing resolved yet.</div>`;
     sec.hidden = false;
-    t.textContent = "Hide archived";
+    t.textContent = "Hide resolved";
   } catch (e) {
-    toast(e.message || "Couldn't load archive.", 4000);
-    t.textContent = "View archived";
+    toast(e.message || "Couldn't load resolved.", 4000);
+    t.textContent = "View resolved";
   }
 });
 
