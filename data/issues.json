@@ -52,29 +52,6 @@
       "history": []
     },
     {
-      "id": "i-20260612-9f48",
-      "createdAt": "2026-06-12T07:44:16.151Z",
-      "route": null,
-      "description": "Swap not working nicely",
-      "imagePath": "images/i-20260612-9f48.jpg",
-      "imageCommit": "e0db9d51f00011c744e202e8fd041f26bd7cf9c4",
-      "imagePaths": [
-        "images/i-20260612-9f48.jpg"
-      ],
-      "imageCommits": [
-        "e0db9d51f00011c744e202e8fd041f26bd7cf9c4"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: swipe decisions committed with a hard snap - skip reset x to 0 while the card remounted, accept blinked the whole overlay closed, and drag constraints (left/right 0 with 0.6 elastic) rubber-banded the card against the finger so reaching the swipe threshold took ~183px of travel. Fix: the card now follows the finger 1:1, a threshold release animates it off-screen in the decision's direction (220ms with the rotation riding the same motion value) before the commit lands, sub-threshold releases settle home on the system deceleration curve, and an in-flight guard prevents double-fires; reduced-motion keeps instant commits. Verified numerically: mid-flight the card is 93px out and rotated -4.6 degrees at 90ms, and the counter advances cleanly after landing.",
-        "imagePath": "images/i-20260612-9f48-fix.png",
-        "imageCommit": "3142d8336159c7729564c96bfdfc08cd9832fbbc",
-        "fixedAt": "2026-06-12T12:38:57.091Z",
-        "appCommit": "da6bf440"
-      },
-      "history": []
-    },
-    {
       "id": "i-20260612-8e72",
       "createdAt": "2026-06-12T07:44:51.416Z",
       "route": null,
