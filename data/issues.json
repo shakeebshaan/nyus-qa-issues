@@ -543,29 +543,6 @@
         "appCommit": "fa7c161e"
       },
       "history": []
-    },
-    {
-      "id": "i-20260613-88b5",
-      "createdAt": "2026-06-13T12:06:24.552Z",
-      "route": null,
-      "description": "This should be cardio daily minutes not weekly",
-      "imagePath": "images/i-20260613-88b5.jpg",
-      "imageCommit": "37f143c718de33fd3be523b36162ed5cd4cc386a",
-      "imagePaths": [
-        "images/i-20260613-88b5.jpg"
-      ],
-      "imageCommits": [
-        "37f143c718de33fd3be523b36162ed5cd4cc386a"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the cardio-minutes stepper showed a weekly total ('min / week', e.g. 180). Fix: it now edits and displays minutes PER DAY ('min / day') = weekly total divided by sessions; changes write back the weekly total as sessions x per-day, so the stored field (used by the plan generator and weekly review) stays correct with no schema change. The sessions stepper preserves the per-day value, and the collapsed summary + plan overview also read min/day. Verified live: cardio shows 35 min/day (120/4); bumping +5 stored weekly 140 = 4 x 35.",
-        "imagePath": "images/i-20260613-88b5-fix.png",
-        "imageCommit": "92180cae0222e7a3ff48722bd9fc912ce3cfe07e",
-        "fixedAt": "2026-06-13T12:39:34.656Z",
-        "appCommit": "fa7c161e"
-      },
-      "history": []
     }
   ]
 }
