@@ -489,8 +489,14 @@
       "imageCommits": [
         "e4189a4bc627a47f4571821031a94ab579f0546c"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: meal cards whose image was still being generated showed a bare first-letter avatar (the pink L on Lunch). The AsyncImage component already subscribes to the backend image_ready event and fades the real photo in when ready; the gap was only the placeholder shown until then. Fix: a new keyword map turns a dish name into the closest lucide food icon (chicken to a drumstick, salad to a salad bowl, soup, egg, sandwich, smoothie to a cup, generic to utensils) and DefaultImagePlaceholder renders it on a soft food-pink tile for meals/recipes. Verified live by forcing cards to the fallback: the snack shows a cookie and breakfast a utensils tile - no bare letters - and real images still swap in on generation.",
+        "imagePath": "images/i-20260613-522a-fix.png",
+        "imageCommit": "81ec43d717122957e00f2cad37a0bc2a59c3a030",
+        "fixedAt": "2026-06-13T06:09:13.389Z",
+        "appCommit": "b41ff1a0"
+      },
       "history": []
     }
   ]
