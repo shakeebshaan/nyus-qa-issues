@@ -103,12 +103,16 @@
       "imageCommits": [
         "8afda5109acc33c03f922b082a922244f779477d"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Owner: 'plan and do 3 options and you choose best one'. The coach chat had no character (just a name + 'Personal Coach' = the robot feeling). I prototyped 3 styles on the dark chat at header+FAB sizes -> (A) illustrated bust, (B) calm mascot blob, (C) monogram aura -> and CHOSE A: a drawn human coach (warm, no robot, readable at 40px and 120px); the mascot reads as a generic app blob and the monogram is just a letter. Built CoachAvatar (inline SVG, no external assets): a head-and-shoulders coach drawn deterministically per coach name (skin/hair/accent/hairstyle/optional beard, so every roster coach is a distinct person), with calm idle animation (slow breathing + occasional blink) that respects reduced-motion. Wired into the chat header. Verified live on light AND dark; 'Atlas' vs 'Rohan' render as different people; 0 console errors. Remaining surfaces (quick follow-ups): message name-chip, floating coach button, CoachPreview. If you'd rather use hand-drawn Lottie art per coach, CoachAvatar is the drop-in swap point (spec: docs/COACH_CHARACTER_ASSET_SPEC.md).",
+        "imagePath": "images/i-20260612-206f-fix.png",
+        "imageCommit": "7ad4101e2db01fadaef1d696ef4fbe0027e21ce4",
+        "fixedAt": "2026-06-13T19:09:29.739Z",
+        "appCommit": "bfac8fa6"
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Drawn coach characters (no robot feel) with animation. Supply Lottie assets per docs/COACH_CHARACTER_ASSET_SPEC.md (12 coaches, idle+greet loops, 512px, <=150KB) and I wire the avatar component.",
-      "reviewedAt": "2026-06-13T13:01:05.809Z",
       "tags": [
         "coach",
         "design",
