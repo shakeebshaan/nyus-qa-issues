@@ -128,8 +128,14 @@
       "imageCommits": [
         "e4189a4bc627a47f4571821031a94ab579f0546c"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the squirrel/non-food images were already-saved Openverse rows (a literal squirrel on Mid-Morning Snack); switching to TheMealDB only affected NEW meals. And TheMealDB-miss meals fell to Openverse with the bare name -> random CC results. Fix: the stock fallback now searches the dish's salient food noun (edamame/pistachio/almond/...) so every miss lands a real food photo (BE 75bb471), plus re-enqueued 17,282 active-plan meal images to regenerate food-first (draining in background). Verified live on /nutrition: all 6 displayed meals show food, the squirrel is gone.",
+        "imagePath": "images/i-20260613-522a-fix.png",
+        "imageCommit": "d7743a44c4a3c5e8f7bf21e3f6ebf8fcba8632e5",
+        "fixedAt": "2026-06-13T16:37:03.772Z",
+        "appCommit": "e9444a91"
+      },
       "history": [
         {
           "at": "2026-06-13T15:03:47.727Z",
