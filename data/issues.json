@@ -518,8 +518,14 @@
       "imageCommits": [
         "6437e4276533cf84676c854e9521f06df766388b"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Daily-activity stepper labels were truncated with CSS (truncate), clipping to 'Daily steps g...', 'Cardio sessi...', 'Cardio minu...'. Fix: removed the truncate on the label and unit lines - they are short and now render fully ('Daily steps goal', 'Cardio sessions', 'Cardio minutes'). Verified live in the activity sheet.",
+        "imagePath": "images/i-20260613-27c6-fix.png",
+        "imageCommit": "20842c9527def470bd75a857bc163493d6f679e5",
+        "fixedAt": "2026-06-13T12:39:29.652Z",
+        "appCommit": "fa7c161e"
+      },
       "history": []
     },
     {
