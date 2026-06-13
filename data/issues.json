@@ -51,8 +51,14 @@
       "imageCommits": [
         "6bceabd6d870a5e02026a381e92637aecac72e45"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the weekly-progression meals block rendered m.name, which for slot-named meals is just 'Breakfast'/'Lunch'/'Dinner' (the prior fix's verification literally showed 'Breakfast ~233 / Lunch ~248'). Fix: new mealDisplayName() shows the real dish name when a meal has one, else derives a name from its biggest ingredients by kcal impact (e.g. 'Chicken Breast & Rice', or 'A, B +N' for 3+); used in BOTH the weekly-progression block and the Plan Details day preview. FE-only, tsc clean. Verified live in /dev/plan-builder?stage=overview: meals now read 'Oats ~233 / Chicken Breast ~248' instead of 'Breakfast / Lunch', 0 console errors.",
+        "imagePath": "images/i-20260612-cd61-fix.png",
+        "imageCommit": "8663d208e067e9f9fc0f3895c27de3d2edf6ab17",
+        "fixedAt": "2026-06-13T17:09:25.055Z",
+        "appCommit": "7c1c9143"
+      },
       "history": [
         {
           "at": "2026-06-13T15:09:11.075Z",
@@ -66,7 +72,8 @@
             "appCommit": "57543e2d"
           }
         }
-      ]
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260612-a923",
