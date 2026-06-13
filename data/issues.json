@@ -359,29 +359,6 @@
       "history": []
     },
     {
-      "id": "i-20260612-a675",
-      "createdAt": "2026-06-12T07:46:30.826Z",
-      "route": null,
-      "description": "Add a little margin here so that the camera cutout and time is visible on Android device",
-      "imagePath": "images/i-20260612-a675.jpg",
-      "imageCommit": "c5da31884a0b16449e3ea3791d931ffcf165a23c",
-      "imagePaths": [
-        "images/i-20260612-a675.jpg"
-      ],
-      "imageCommits": [
-        "c5da31884a0b16449e3ea3791d931ffcf165a23c"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Your-plan-is-ready screen (PlanReadyOverview) passed topInset=false to MobilePage, dropping the page-root class that carries the native top safe-area rule, and its DomainHeroHeader has no safe-area padding of its own - so the title rendered under the Android status bar and camera cutout. Fix: topInset turned back on, matching the sibling builder screens; the global cap-native rule now reserves the status-bar clearance (env safe-area-inset-top with a 34px Android fallback) above the hero. Verified with a simulated native shell: page root computes 34px top padding.",
-        "imagePath": "images/i-20260612-a675-fix.png",
-        "imageCommit": "808eea8fbb89bdc6b4ea169c09195a6b80e84321",
-        "fixedAt": "2026-06-12T10:39:42.442Z",
-        "appCommit": "51ec780f"
-      },
-      "history": []
-    },
-    {
       "id": "i-20260612-206f",
       "createdAt": "2026-06-12T07:47:15.788Z",
       "route": null,
