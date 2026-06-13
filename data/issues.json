@@ -128,8 +128,14 @@
       "imageCommits": [
         "e4189a4bc627a47f4571821031a94ab579f0546c"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Re-fix for 'wrong images and meals missing images'. Root cause: the image worker fetched meal photos from Openverse (generic Creative-Commons images) which were often unrelated to the dish. Switched meals/recipes to TheMealDB first - a food-specific, keyless dish-photo API - with Openverse then placeholder as fallback, and added a keyword retry so an AI name that misses on the full string still matches its main food (server-verified: 'Grilled Chicken Bowl' returns Chicken Handi, 'Paneer Curry' returns Matar Paneer, 'Salmon Salad' returns a salmon dish). Deployed to prod. Known residual: meals named only by their slot ('Lunch', 'Afternoon Snack') have no food word to match, so they can't get a dish photo until they carry real dish names - tracked under i-20260612-cd61 (show meal names), which I'm doing next.",
+        "imagePath": "images/i-20260613-522a-fix.png",
+        "imageCommit": "531a36efa8cf0f6e40000350f19f35deb42011cf",
+        "fixedAt": "2026-06-13T15:41:44.462Z",
+        "appCommit": "ec42849"
+      },
       "history": [
         {
           "at": "2026-06-13T15:03:47.727Z",
@@ -143,7 +149,8 @@
             "appCommit": "b41ff1a0"
           }
         }
-      ]
+      ],
+      "needsReview": false
     }
   ]
 }
