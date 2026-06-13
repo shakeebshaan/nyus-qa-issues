@@ -2,29 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260612-18cf",
-      "createdAt": "2026-06-12T07:42:36.706Z",
-      "route": null,
-      "description": "Make sure we have the different coaches not only nisha",
-      "imagePath": "images/i-20260612-18cf.jpg",
-      "imageCommit": "95ac0028640403213d1350d79e60b58c95a356eb",
-      "imagePaths": [
-        "images/i-20260612-18cf.jpg"
-      ],
-      "imageCommits": [
-        "95ac0028640403213d1350d79e60b58c95a356eb"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the 12-coach roster + deterministic assignment already exist backend-side, but the frontend coach-name cache (nyus_coach_name) was only seeded by /coach/history (chat) and /profile (dashboard) - both AFTER onboarding - so every onboarding surface fell back to the default 'Nisha'. Fix: OnboardingFlow now seeds the cache from /onboarding/generate-profile's coach_name response field at the moment the roster assignment happens, so the builders show the user's real coach. Evidence: builder rendering Coach Rohan (the QA account's assigned coach) on every coach surface.",
-        "imagePath": "images/i-20260612-18cf-fix.png",
-        "imageCommit": "d1482066c2561d0675b7db079ac52562063befdd",
-        "fixedAt": "2026-06-12T08:25:50.107Z",
-        "appCommit": "edeb1c56"
-      },
-      "history": []
-    },
-    {
       "id": "i-20260612-46b2",
       "createdAt": "2026-06-12T07:43:54.404Z",
       "route": null,
