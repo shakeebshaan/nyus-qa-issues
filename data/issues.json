@@ -132,55 +132,6 @@
       ],
       "reviewReply": "plan and do 3 options and you choose it best one",
       "reviewRepliedAt": "2026-06-13T15:10:35.435Z"
-    },
-    {
-      "id": "i-20260613-522a",
-      "createdAt": "2026-06-13T05:45:13.961Z",
-      "route": null,
-      "description": "All meals and meals cards etc should have a image if it's being generated in backend them show the closest resembles temporary image until generated",
-      "imagePath": "images/i-20260613-522a.jpg",
-      "imageCommit": "e4189a4bc627a47f4571821031a94ab579f0546c",
-      "imagePaths": [
-        "images/i-20260613-522a.jpg"
-      ],
-      "imageCommits": [
-        "e4189a4bc627a47f4571821031a94ab579f0546c"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the squirrel/non-food images were already-saved Openverse rows (a literal squirrel on Mid-Morning Snack); switching to TheMealDB only affected NEW meals. And TheMealDB-miss meals fell to Openverse with the bare name -> random CC results. Fix: the stock fallback now searches the dish's salient food noun (edamame/pistachio/almond/...) so every miss lands a real food photo (BE 75bb471), plus re-enqueued 17,282 active-plan meal images to regenerate food-first (draining in background). Verified live on /nutrition: all 6 displayed meals show food, the squirrel is gone.",
-        "imagePath": "images/i-20260613-522a-fix.png",
-        "imageCommit": "d7743a44c4a3c5e8f7bf21e3f6ebf8fcba8632e5",
-        "fixedAt": "2026-06-13T16:37:03.772Z",
-        "appCommit": "e9444a91"
-      },
-      "history": [
-        {
-          "at": "2026-06-13T15:03:47.727Z",
-          "event": "reopened",
-          "note": "wrong images and the meals missing images",
-          "previousFix": {
-            "description": "Root cause: meal cards whose image was still being generated showed a bare first-letter avatar (the pink L on Lunch). The AsyncImage component already subscribes to the backend image_ready event and fades the real photo in when ready; the gap was only the placeholder shown until then. Fix: a new keyword map turns a dish name into the closest lucide food icon (chicken to a drumstick, salad to a salad bowl, soup, egg, sandwich, smoothie to a cup, generic to utensils) and DefaultImagePlaceholder renders it on a soft food-pink tile for meals/recipes. Verified live by forcing cards to the fallback: the snack shows a cookie and breakfast a utensils tile - no bare letters - and real images still swap in on generation.",
-            "imagePath": "images/i-20260613-522a-fix.png",
-            "imageCommit": "81ec43d717122957e00f2cad37a0bc2a59c3a030",
-            "fixedAt": "2026-06-13T06:09:13.389Z",
-            "appCommit": "b41ff1a0"
-          }
-        },
-        {
-          "at": "2026-06-13T15:52:52.631Z",
-          "event": "reopened",
-          "note": "images should be of meals not squierrel or people diting like you have there, search web and populate the images now and make sure we have the meals images moving forward",
-          "previousFix": {
-            "description": "Re-fix for 'wrong images and meals missing images'. Root cause: the image worker fetched meal photos from Openverse (generic Creative-Commons images) which were often unrelated to the dish. Switched meals/recipes to TheMealDB first - a food-specific, keyless dish-photo API - with Openverse then placeholder as fallback, and added a keyword retry so an AI name that misses on the full string still matches its main food (server-verified: 'Grilled Chicken Bowl' returns Chicken Handi, 'Paneer Curry' returns Matar Paneer, 'Salmon Salad' returns a salmon dish). Deployed to prod. Known residual: meals named only by their slot ('Lunch', 'Afternoon Snack') have no food word to match, so they can't get a dish photo until they carry real dish names - tracked under i-20260612-cd61 (show meal names), which I'm doing next.",
-            "imagePath": "images/i-20260613-522a-fix.png",
-            "imageCommit": "531a36efa8cf0f6e40000350f19f35deb42011cf",
-            "fixedAt": "2026-06-13T15:41:44.462Z",
-            "appCommit": "ec42849"
-          }
-        }
-      ],
-      "needsReview": false
     }
   ]
 }
