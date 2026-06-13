@@ -382,29 +382,6 @@
       "history": []
     },
     {
-      "id": "i-20260612-cce1",
-      "createdAt": "2026-06-12T07:46:43.615Z",
-      "route": null,
-      "description": "Don't show this if not exist for first week",
-      "imagePath": "images/i-20260612-cce1.jpg",
-      "imageCommit": "a512e15943b72e8b5d6e56b6993d141d4cdd085e",
-      "imagePaths": [
-        "images/i-20260612-cce1.jpg"
-      ],
-      "imageCommits": [
-        "a512e15943b72e8b5d6e56b6993d141d4cdd085e"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Yesterday's-rewards chip showed whenever the status fetch settled, even when yesterday minted zero reward rows - a day-1 user opened it to 'Nothing earned yesterday'. Fix: the chip now requires rewards.length > 0 from the already-fetched status; zero-row days surface no chip at all. Verified live: GET /rewards/daily/2026-06-11 returns 0 rows for this account, seen-marker cleared, plan active - and the dashboard renders no chip (evidence shot; old code would have shown the empty reveal).",
-        "imagePath": "images/i-20260612-cce1-fix.png",
-        "imageCommit": "b26a1170e4cde2535d838e8d37501716610ef98c",
-        "fixedAt": "2026-06-12T12:29:12.231Z",
-        "appCommit": "c9bc661f"
-      },
-      "history": []
-    },
-    {
       "id": "i-20260612-206f",
       "createdAt": "2026-06-12T07:47:15.788Z",
       "route": null,
