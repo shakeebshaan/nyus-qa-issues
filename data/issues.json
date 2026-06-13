@@ -2,43 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260612-8e72",
-      "createdAt": "2026-06-12T07:44:51.416Z",
-      "route": null,
-      "description": "Also show recipes here",
-      "imagePath": "images/i-20260612-8e72.jpg",
-      "imageCommit": "5aa2e8b0025b2438b624dbde17d658f2cae02855",
-      "imagePaths": [
-        "images/i-20260612-8e72.jpg"
-      ],
-      "imageCommits": [
-        "5aa2e8b0025b2438b624dbde17d658f2cae02855"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the suggest-meal route hard-coded image_url=None (Pollinations dead; transient meal ideas have no meal_id to enqueue a generated file against), so the swiper cards showed a glyph placeholder. Fix: the route now attaches a hotlinkable food-image URL per idea -> TheMealDB dish thumb first, Openverse food photo on miss (new food_preview_url, URL-only, fetched in parallel; BE dd935c0). No FE change needed - the swiper already rendered the field. Verified live in the diet builder: Suggest on 'Chicken Rice Plate' -> card 'Chicken Rice Bowl' shows a real chicken-rice photo (700x700), 0 console errors.",
-        "imagePath": "images/i-20260612-8e72-fix.png",
-        "imageCommit": "18ae1db2ec9c0a0337de3b8a41cfd452f060f451",
-        "fixedAt": "2026-06-13T16:47:32.498Z",
-        "appCommit": "50414d67"
-      },
-      "history": [
-        {
-          "at": "2026-06-13T15:06:01.389Z",
-          "event": "reopened",
-          "note": "show image",
-          "previousFix": {
-            "description": "Root cause: meal suggestion cards showed only an ingredient list - no sense of how the meal is actually made. Fix: the suggest-meal prompt now asks for 2-4 short cooking steps per idea (backend passes them through sanitized, token budget raised so a full deck never truncates), and the swiper card renders them as a numbered list under the ingredients. Verified live against deployed prod: the 'Egg Oat Yogurt Bowl' card shows Boil the eggs / Cook oats with water / Top oats with yogurt and banana / Serve eggs with peanut butter.",
-            "imagePath": "images/i-20260612-8e72-fix.png",
-            "imageCommit": "947e919129e53b29b1a675466d8aa768b6185ccb",
-            "fixedAt": "2026-06-12T13:42:56.367Z",
-            "appCommit": "f50e6886"
-          }
-        }
-      ],
-      "needsReview": false
-    },
-    {
       "id": "i-20260612-cd61",
       "createdAt": "2026-06-12T07:45:55.156Z",
       "route": null,
