@@ -63,8 +63,14 @@
       "imageCommits": [
         "9e4533c8482083e63bf5139c53fd12c98872af96"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "You chose (B): keep the date, show an honest note. Confirmed cause: at an aggressive goal pace the calorie taper is BMR-floored (can't safely eat little enough to lose that fast), so the SAFE weight projection ends short of the goal while the goal card implies it's reached — that mismatch is the 'not accurate'. WeeklyTrajectory now shows a calm note when the curve doesn't reach goal within the horizon: 'At a safe pace you'll reach ~X kg by week N - about M weeks to reach your G kg goal. Going faster would mean eating below a healthy minimum.' No note when the projection DOES reach goal (no false positive). Your date is kept. Verified live: a goal-reaching plan (78->72) shows no note; an aggressive 78->55 plan shows '~66.9 kg by week 13 - about 28 weeks to reach your 55 kg goal', goal line correctly below the curve. tsc clean. (The Phase-1 weekly-adaptation engine from the earlier tick stands; the dry-run scheduler + live target writes remain staged.)",
+        "imagePath": "images/i-20260612-a923-fix.png",
+        "imageCommit": "a8f436046daba097a7629988b43427ae5c68bf0e",
+        "fixedAt": "2026-06-14T00:35:58.016Z",
+        "appCommit": "1183f971"
+      },
       "history": [
         {
           "at": "2026-06-13T18:01:44.151Z",
@@ -86,9 +92,7 @@
         "planning"
       ],
       "reviewReply": "(B)",
-      "reviewRepliedAt": "2026-06-14T00:29:17.240Z",
-      "reviewReason": "a923 'this is not accurate' — need your numbers to fix it right (the calc feeds onboarding, so I won't guess). VERIFIED: in a clean build (78->72kg, 0.46kg/wk, 13wk) the projection graph + week chips are consistent and the curve reaches the goal line exactly — no bug there. Your screenshot (~94.5kg start, curve ending ~84, goal ~73) suggests the projection does NOT reach your goal by the end date. Most likely cause: at an aggressive pace the daily target hits the BMR floor (can't safely eat low enough to lose that fast), so the safe projection undershoots — i.e. the goal-card pace and the safe trajectory disagree. Which do you want? (A) cap the goal pace to a safe, reachable rate (honest; may push the date out); (B) keep the date but show a 'at a safe pace you'll reach ~X kg by week N' note; (C) it's a different inaccuracy — if so reply with your current weight + goal weight + target date and I'll reproduce exactly. (Phase-1 adaptation engine from the prior tick stands regardless.)",
-      "reviewedAt": "2026-06-13T18:37:35.489Z"
+      "reviewRepliedAt": "2026-06-14T00:29:17.240Z"
     },
     {
       "id": "i-20260612-206f",
