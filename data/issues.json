@@ -213,8 +213,17 @@
       "imageCommits": [
         "5e2629fb54cba6f31f2c571ca3fb141c644d47bd"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "You said 'show skeleton not loader' — done. The plan-build choice loading state is now a SKELETON of the next page (header bar + title + three card placeholders shimmering with animate-pulse) instead of the centered spinner, so the moment you tap a build option it reads as the next screen loading in. Status is still announced to screen readers via an sr-only live region. Verified on /dev/plan-choice: tapping 'I'll build it myself' swaps straight to the skeleton (16 pulse placeholders, zero spinner).",
+        "imagePath": "images/i-20260614-0ece-fix.png",
+        "imagePaths": [
+          "images/i-20260614-0ece-fix.png"
+        ],
+        "imageCommit": "b06b5d940f650a2bb7513836996a9f63d1b61fea",
+        "fixedAt": "2026-06-14T10:36:17.787Z",
+        "appCommit": "730badaf"
+      },
       "history": [
         {
           "at": "2026-06-14T10:07:37.488Z",
