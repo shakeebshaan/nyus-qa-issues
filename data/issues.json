@@ -391,35 +391,6 @@
       "history": []
     },
     {
-      "id": "i-20260614-5f68",
-      "createdAt": "2026-06-14T03:01:31.423Z",
-      "route": null,
-      "description": "There is some issue with the temp coach name which says nisha and on the previous page it was Rohan fix it",
-      "imagePath": "images/i-20260614-5f68-0.jpg",
-      "imageCommit": "2711150d9b2f0e320532155e0bf68d2963a1d186",
-      "imagePaths": [
-        "images/i-20260614-5f68-0.jpg",
-        "images/i-20260614-5f68-1.jpg"
-      ],
-      "imageCommits": [
-        "2711150d9b2f0e320532155e0bf68d2963a1d186",
-        "0db47c4edbc078883d32e6ebe489f620deeb8ff3"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: getCoachName() was read once (useMemo at mount), so a screen that mounted before generate-profile's ASYNC coach-name seed (Meet Your Coach) stuck on the 'Nisha' fallback while the next screen showed the real 'Rohan'. Fix: new reactive useCoachName() hook re-reads when the name lands (same-tab change event + storage + short re-checks); setCoachName() (used by the generate-profile seed AND the chat-history cache) dispatches that event. Screen9_CoachPreview + PlanReadyOverview now use it. Verified live: the displayed name updates the instant the seed fires (Rohan->Kabir in a test) — no longer sticks on Nisha. FE-only; ships on the next app release.",
-        "imagePath": "images/i-20260614-5f68-fix.png",
-        "imagePaths": [
-          "images/i-20260614-5f68-fix.png"
-        ],
-        "imageCommit": "3239029a380159b786bcd9c1316eba89016edacd",
-        "fixedAt": "2026-06-14T03:40:59.116Z",
-        "appCommit": "aeabedad"
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260614-1bc5",
       "createdAt": "2026-06-14T03:07:28.506Z",
       "route": null,
