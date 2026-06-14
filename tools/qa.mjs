@@ -31,6 +31,13 @@ const flag = (name) => {
   const i = process.argv.indexOf("--" + name);
   return i > -1 ? process.argv[i + 1] : undefined;
 };
+// Collect ALL values for a repeatable flag (e.g. multiple --image for a
+// multi-screen fix). Returns [] when absent.
+const allFlag = (name) => {
+  const out = [];
+  process.argv.forEach((a, i) => { if (a === "--" + name && process.argv[i + 1]) out.push(process.argv[i + 1]); });
+  return out;
+};
 const rawUrl = (path, commit) => `https://raw.githubusercontent.com/${OWNER_REPO}/${commit || "main"}/${path}`;
 
 const [, , cmd, idArg] = process.argv;
@@ -68,25 +75,32 @@ try {
       }));
     console.log(JSON.stringify({ open, count: open.length }, null, 2));
   } else if (cmd === "resolve") {
-    const id = idArg, image = flag("image"), desc = flag("desc"), appCommit = flag("app-commit");
-    if (!id || !image || !desc) throw new Error('Usage: resolve <id> --image <absPath> --desc "<text>" [--app-commit <sha>]');
-    if (!existsSync(image)) throw new Error("Image not found: " + image);
+    // Multiple --image flags supported: a fix that spans two screens / scroll
+    // positions can submit 2+ fix images (shown side-by-side on the board).
+    const id = idArg, images = allFlag("image"), desc = flag("desc"), appCommit = flag("app-commit");
+    if (!id || images.length === 0 || !desc) throw new Error('Usage: resolve <id> --image <absPath> [--image <absPath2> …] --desc "<text>" [--app-commit <sha>]');
+    for (const img of images) if (!existsSync(img)) throw new Error("Image not found: " + img);
     git("pull", "--rebase");
     const db = loadDb();
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
     if (issue.status === "fixed") throw new Error(id + " is already fixed.");
 
-    const ext = (extname(image) || ".png").toLowerCase();
-    const rel = `images/${id}-fix${ext}`;
-    copyFileSync(image, join(ROOT, rel));
-    git("add", rel);
-    git("commit", "-m", `issue ${id}: fix screenshot`);
+    // First image keeps the canonical name (backward-compat); extras get -2, -3…
+    const relPaths = images.map((img, idx) => {
+      const ext = (extname(img) || ".png").toLowerCase();
+      const rel = `images/${id}-fix${idx === 0 ? "" : "-" + (idx + 1)}${ext}`;
+      copyFileSync(img, join(ROOT, rel));
+      git("add", rel);
+      return rel;
+    });
+    git("commit", "-m", `issue ${id}: fix screenshot${relPaths.length > 1 ? "s (" + relPaths.length + ")" : ""}`);
     const imageCommit = git("rev-parse", "HEAD");
 
     issue.fix = {
       description: desc,
-      imagePath: rel,
+      imagePath: relPaths[0],   // backward-compat: first image
+      imagePaths: relPaths,     // all fix images (multi-image support)
       imageCommit,
       fixedAt: new Date().toISOString(),
       ...(appCommit ? { appCommit } : {}),
@@ -100,8 +114,8 @@ try {
     git("add", "data/issues.json");
     git("commit", "-m", `issue ${id}: resolved`);
     gitPush();
-    console.log(`Resolved ${id}`);
-    console.log(`  fix shot: ${rawUrl(rel, imageCommit)}`);
+    console.log(`Resolved ${id} (${relPaths.length} fix image${relPaths.length > 1 ? "s" : ""})`);
+    relPaths.forEach((rel) => console.log(`  fix shot: ${rawUrl(rel, imageCommit)}`));
   } else if (cmd === "reopen") {
     const id = idArg, note = flag("note");
     if (!id || !note) throw new Error('Usage: reopen <id> --note "<text>"');
