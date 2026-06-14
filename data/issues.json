@@ -455,33 +455,6 @@
       "reviewRepliedAt": "2026-06-14T05:35:49.290Z"
     },
     {
-      "id": "i-20260614-7c42",
-      "createdAt": "2026-06-14T02:42:25.228Z",
-      "route": null,
-      "description": "Make sure we add that margine to all pages where nesseary",
-      "imagePath": "images/i-20260614-7c42.jpg",
-      "imageCommit": "6d2b404d2b7d01a8464857b6dfe8a82adedf3ae9",
-      "imagePaths": [
-        "images/i-20260614-7c42.jpg"
-      ],
-      "imageCommits": [
-        "6d2b404d2b7d01a8464857b6dfe8a82adedf3ae9"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Systematic safe-area sweep. Root cause: the .pt-safe-top and .safe-area-top utilities (used by ~30 sticky headers + fixed-overlay screens) collapsed on env=0 Android 12+ devices (.safe-area-top to 0px, .pt-safe-top to 16px), intruding under the camera island. Fix (index.css): cap-native overrides that add the --statusbar-fallback-android 34px floor, mirroring the global main/.page-root rule; web preview stays flush, real notches keep the +12 buffer, landscape reverts. Verified .pt-safe-top 16->34px and .safe-area-top 0->34px under cap-native. Shot: a representative header now reserving the top inset.",
-        "imagePath": "images/i-20260614-7c42-fix.png",
-        "imagePaths": [
-          "images/i-20260614-7c42-fix.png"
-        ],
-        "imageCommit": "612ae5b487adc5a2c85d36fea80d86199cb1c3de",
-        "fixedAt": "2026-06-14T06:08:20.524Z",
-        "appCommit": "4543a499"
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260614-5c9b",
       "createdAt": "2026-06-14T02:45:18.089Z",
       "route": null,
