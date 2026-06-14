@@ -496,7 +496,10 @@
       ],
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Part 1 DONE + pushed (b2b87867): the level-up/milestone overlay and the 'Badge earned' toast were firing on top of each other (your screenshot). Added a shared celebration bus — a full-screen overlay now marks it busy while on screen and the badge toast defers until it's idle, so they SEQUENCE (overlay first, then toast) instead of colliding. App-wide background tracking already works (LevelUpWatcher fires on any page). Caught + fixed an app crash I introduced while doing this. Couldn't stage a live side-by-side capture: the QA account's gamification overview endpoint is erroring (no level/badge data to trigger the overlay) — could you confirm on-device that level-up + badge no longer overlap? Part 2 (beautiful badge icons via OpenAI) is the remaining half — it's a ~one-time batch of badge images; I'll generate + wire those next. Reply to send it back as a normal fix.",
+      "reviewedAt": "2026-06-14T07:46:15.662Z"
     },
     {
       "id": "i-20260614-fb14",
