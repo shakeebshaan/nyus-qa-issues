@@ -174,9 +174,19 @@
       "imageCommits": [
         "a4e90c9f4c4d3906905cdee799b2d0bfee118bda"
       ],
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the goal-reached subline used text-muted-foreground and washed out once the blue water fill rose behind it; nothing marked the moment the goal was hit. Fix: full-contrast subline (text-foreground/90 + soft text-shadow on the overlay) so the % and 'Goal reached' stay legible over both empty tank and blue fill, plus a contained reduced-motion-safe confetti burst + goal sound fired once on the false-to-true goal transition.",
+        "imagePath": "images/i-20260614-657f-fix.png",
+        "imagePaths": [
+          "images/i-20260614-657f-fix.png"
+        ],
+        "imageCommit": "0af6c3919aea400acd31b155da0f90ffab444b7e",
+        "fixedAt": "2026-06-14T04:14:12.128Z",
+        "appCommit": "ccf54dce"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260614-0e40",
