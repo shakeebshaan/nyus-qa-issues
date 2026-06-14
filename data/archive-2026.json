@@ -754,6 +754,35 @@
       "needsReview": false,
       "resolvedAt": "2026-06-14T10:12:03.938Z",
       "archivedAt": "2026-06-14T10:12:03.938Z"
+    },
+    {
+      "id": "i-20260614-0e40",
+      "createdAt": "2026-06-14T02:34:02.683Z",
+      "route": null,
+      "description": "Meals images should be there use openai to generate images that can be used as place holder untill real are generated generate around 15-20 for such use.",
+      "imagePath": "images/i-20260614-0e40.jpg",
+      "imageCommit": "c5df6ba947ac14e98f9f373c281efb12a808ebec",
+      "imagePaths": [
+        "images/i-20260614-0e40.jpg"
+      ],
+      "imageCommits": [
+        "c5df6ba947ac14e98f9f373c281efb12a808ebec"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Generated a one-time pool of 18 appetizing plated-meal photos via OpenAI (bounded one-off, honoring the 'limit OpenAI use' rule — not per-request gen), served from catalog-images/meal/ph<n>.png. AsyncImage now shows one of these (picked deterministically by meal id) for any meal with no real image yet, instead of the bare category icon, and swaps to the real image the instant the worker's image_ready fires. Screenshot shows the no-image state from your report now rendering appetizing placeholders (smoothie bowl, shrimp skewers, paneer, wrap). Note: secure_filename on the serve route rejects a leading underscore, so the pool uses ph<n>.png.",
+        "imagePath": "images/i-20260614-0e40-fix.png",
+        "imagePaths": [
+          "images/i-20260614-0e40-fix.png"
+        ],
+        "imageCommit": "6ee4c5d30edb45649544c69614a8db9d483a4a6f",
+        "fixedAt": "2026-06-14T05:46:17.496Z",
+        "appCommit": "7f97b9d8"
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-14T10:13:41.734Z",
+      "archivedAt": "2026-06-14T10:13:41.734Z"
     }
   ]
 }
