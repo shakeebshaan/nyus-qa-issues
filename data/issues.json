@@ -328,19 +328,26 @@
       "imageCommits": [
         "6e38a06d93f6235206669a5470ce12eae128f9a9"
       ],
-      "status": "fixed",
-      "fix": {
-        "description": "Built pro-gated photo meal logging. Add Custom Meal now has a 'Snap or attach a photo (PRO)' button: the photo is sent to a new backend endpoint POST /ai/analyze-meal-photo (backend 8923ee7) which is pro-gated (active subscription required, else 403 -> upgrade), runs OpenAI gpt-4o-mini vision at 'low' detail, and returns a one-line meal description that prefills the field for the user to review + log. Cost is bounded per your 'limit OpenAI use' rule: pro-only + cheap model + a 25/day per-user cap. Verified end-to-end live: uploaded a meal photo, vision returned 'Grilled chicken breast (150g), steamed broccoli (100g), and white rice (150g)' which prefilled the description. Image 1: result, image 2: the PRO entry point.",
-        "imagePath": "images/i-20260614-20d3-fix.png",
-        "imagePaths": [
-          "images/i-20260614-20d3-fix.png",
-          "images/i-20260614-20d3-fix-2.png"
-        ],
-        "imageCommit": "eed94d5f12911309fee7ff77c8e1d186d945a422",
-        "fixedAt": "2026-06-14T07:18:30.844Z",
-        "appCommit": "de2143d9"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-14T10:13:26.988Z",
+          "event": "reopened",
+          "note": "find and fix issues",
+          "previousFix": {
+            "description": "Built pro-gated photo meal logging. Add Custom Meal now has a 'Snap or attach a photo (PRO)' button: the photo is sent to a new backend endpoint POST /ai/analyze-meal-photo (backend 8923ee7) which is pro-gated (active subscription required, else 403 -> upgrade), runs OpenAI gpt-4o-mini vision at 'low' detail, and returns a one-line meal description that prefills the field for the user to review + log. Cost is bounded per your 'limit OpenAI use' rule: pro-only + cheap model + a 25/day per-user cap. Verified end-to-end live: uploaded a meal photo, vision returned 'Grilled chicken breast (150g), steamed broccoli (100g), and white rice (150g)' which prefilled the description. Image 1: result, image 2: the PRO entry point.",
+            "imagePath": "images/i-20260614-20d3-fix.png",
+            "imagePaths": [
+              "images/i-20260614-20d3-fix.png",
+              "images/i-20260614-20d3-fix-2.png"
+            ],
+            "imageCommit": "eed94d5f12911309fee7ff77c8e1d186d945a422",
+            "fixedAt": "2026-06-14T07:18:30.844Z",
+            "appCommit": "de2143d9"
+          }
+        }
+      ],
       "needsReview": false
     },
     {
