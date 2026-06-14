@@ -14,14 +14,8 @@
       "imageCommits": [
         "6bceabd6d870a5e02026a381e92637aecac72e45"
       ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: re-fix #1 derived the top INGREDIENT ('Oats'), which (you're right) reads as an ingredient, not a meal name. Fix: mealDisplayName now (1) prefers a real recipe title (accepted-suggestion meals carry one), (2) else the meal's own non-slot name, (3) else composes a DISH name from cleaned top ingredients -> 'Oats Bowl' (one main) or 'Chicken Breast & White Rice' (two+), never a bare ingredient or slot label. cleanIngredientName strips '(Cooked)'/prep words. Verified live in the plan-ready overview: meals read 'Oats Bowl / Chicken Breast Bowl'. NOTE: these are composed from ingredients because the meal carries no real name in the plan data — for richer, LLM-quality per-meal names everywhere (the deeper fix, same root as 522a's slot-named meals) I'd name meals at plan generation; say the word and I'll do that.",
-        "imagePath": "images/i-20260612-cd61-fix.png",
-        "imageCommit": "1e271824fb536b153953f686006a53520b73cd6a",
-        "fixedAt": "2026-06-13T18:07:39.167Z",
-        "appCommit": "ce0521ea"
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-13T15:09:11.075Z",
@@ -45,6 +39,18 @@
             "imageCommit": "8663d208e067e9f9fc0f3895c27de3d2edf6ab17",
             "fixedAt": "2026-06-13T17:09:25.055Z",
             "appCommit": "7c1c9143"
+          }
+        },
+        {
+          "at": "2026-06-14T01:07:27.136Z",
+          "event": "reopened",
+          "note": "mean name not ingredient name that you have",
+          "previousFix": {
+            "description": "Root cause: re-fix #1 derived the top INGREDIENT ('Oats'), which (you're right) reads as an ingredient, not a meal name. Fix: mealDisplayName now (1) prefers a real recipe title (accepted-suggestion meals carry one), (2) else the meal's own non-slot name, (3) else composes a DISH name from cleaned top ingredients -> 'Oats Bowl' (one main) or 'Chicken Breast & White Rice' (two+), never a bare ingredient or slot label. cleanIngredientName strips '(Cooked)'/prep words. Verified live in the plan-ready overview: meals read 'Oats Bowl / Chicken Breast Bowl'. NOTE: these are composed from ingredients because the meal carries no real name in the plan data — for richer, LLM-quality per-meal names everywhere (the deeper fix, same root as 522a's slot-named meals) I'd name meals at plan generation; say the word and I'll do that.",
+            "imagePath": "images/i-20260612-cd61-fix.png",
+            "imageCommit": "1e271824fb536b153953f686006a53520b73cd6a",
+            "fixedAt": "2026-06-13T18:07:39.167Z",
+            "appCommit": "ce0521ea"
           }
         }
       ],
