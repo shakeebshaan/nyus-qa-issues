@@ -136,8 +136,17 @@
       "imageCommits": [
         "6e38a06d93f6235206669a5470ce12eae128f9a9"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Pro photo-meal feature identified the dish but logged it with NO nutrition, and custom meal logs never fed the day's totals — so a photo-logged meal showed 0 kcal on Today's Nutrition. Fix (3 parts): (1) backend ai_analyze_meal_photo now returns calories+protein/carbs/fat from gpt-4o-mini vision in JSON mode [a5e21c3]; (2) CustomMealModal stores & logs those macros with the meal [43f8881d]; (3) /diet/plan folds non-skipped custom MealLog rows into consumed totals so photo/custom meals count [d4ddac1]. Verified end-to-end on prod: photo of a smoothie bowl -> identified + ~300 kcal estimated -> logged -> Today's Nutrition jumped 0 -> 350 kcal (P5g/C60g/F10g, bars filled). Pro-gate, gpt-4o-mini low-detail, and per-user daily cap unchanged (OpenAI use stays bounded).",
+        "imagePath": "images/i-20260614-20d3-fix.png",
+        "imagePaths": [
+          "images/i-20260614-20d3-fix.png"
+        ],
+        "imageCommit": "7f3bb67e6cbac5b2e94e49c44a414e31c03d1056",
+        "fixedAt": "2026-06-14T12:25:24.330Z",
+        "appCommit": "43f8881d"
+      },
       "history": [
         {
           "at": "2026-06-14T10:13:26.988Z",
