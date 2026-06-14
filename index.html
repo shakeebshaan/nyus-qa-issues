@@ -505,12 +505,13 @@ function cardHtml(it, archived) {
   const prevFixes = (it.history || []).filter((h) => h.event === "reopened" && h.previousFix).map((h) => h.previousFix);
   const prevHtml = prevFixes.length
     ? `<details class="prevfix"><summary>Previous fix${prevFixes.length > 1 ? "es" : ""} (${prevFixes.length})</summary>${
-        prevFixes.map((pf, i) => `${i ? '<hr class="pf-sep">' : ""}${pf.fixedAt ? `<div class="pf-when">${fmtDate(pf.fixedAt)}</div>` : ""}${shotHtml(pf.imagePath, pf.imageCommit, "previous fix")}<p class="desc">${esc(pf.description || "")}</p>`).join("")
+        prevFixes.map((pf, i) => { const pp = pf.imagePaths || [pf.imagePath]; return `${i ? '<hr class="pf-sep">' : ""}${pf.fixedAt ? `<div class="pf-when">${fmtDate(pf.fixedAt)}</div>` : ""}${shotsHtml(pp, pp.map(() => pf.imageCommit), "previous fix")}<p class="desc">${esc(pf.description || "")}</p>`; }).join("")
       }</details>`
     : "";
 
+  const fixPaths = it.fix ? (it.fix.imagePaths || [it.fix.imagePath]) : [];
   const right = it.status === "fixed" && it.fix
-    ? `${shotHtml(it.fix.imagePath, it.fix.imageCommit, "fix screenshot")}
+    ? `${shotsHtml(fixPaths, fixPaths.map(() => it.fix.imageCommit), "fix screenshot")}
        <p class="desc">${esc(it.fix.description)}</p>
        ${prevHtml}
        ${archived ? "" : `<div class="verdict">
