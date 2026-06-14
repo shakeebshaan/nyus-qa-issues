@@ -607,18 +607,25 @@
       "imageCommits": [
         "06da5db18267b459d46439b2df7c16d823f2bdb9"
       ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the plan-ready 'Plan Details > Meals' list mapped previewDietDay.meals directly (unfiltered), so an unfilled slot (0 ingredients) rendered as 'Dinner ~0 kcal' — unlike the weekly-progression list + the save path, which both strip empty meals. Fix: previewDietDay now filters out meals with no ingredients at the source, so a ~0 kcal empty slot never shows (and if a day has only empty slots, the existing 'No meals added yet' note shows). Verified on /dev/plan-builder?stage=overview (its seed has an empty dinner): Meals now reads just 'Oats Bowl / Chicken Breast Bowl' — the Dinner ~0 kcal row is gone.",
-        "imagePath": "images/i-20260614-985d-fix.png",
-        "imagePaths": [
-          "images/i-20260614-985d-fix.png"
-        ],
-        "imageCommit": "0140ab02718d149c4ecaf481198a53a7908a0114",
-        "fixedAt": "2026-06-14T09:34:58.784Z",
-        "appCommit": "2a252642"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-14T10:05:46.540Z",
+          "event": "reopened",
+          "note": "not clear",
+          "previousFix": {
+            "description": "Root cause: the plan-ready 'Plan Details > Meals' list mapped previewDietDay.meals directly (unfiltered), so an unfilled slot (0 ingredients) rendered as 'Dinner ~0 kcal' — unlike the weekly-progression list + the save path, which both strip empty meals. Fix: previewDietDay now filters out meals with no ingredients at the source, so a ~0 kcal empty slot never shows (and if a day has only empty slots, the existing 'No meals added yet' note shows). Verified on /dev/plan-builder?stage=overview (its seed has an empty dinner): Meals now reads just 'Oats Bowl / Chicken Breast Bowl' — the Dinner ~0 kcal row is gone.",
+            "imagePath": "images/i-20260614-985d-fix.png",
+            "imagePaths": [
+              "images/i-20260614-985d-fix.png"
+            ],
+            "imageCommit": "0140ab02718d149c4ecaf481198a53a7908a0114",
+            "fixedAt": "2026-06-14T09:34:58.784Z",
+            "appCommit": "2a252642"
+          }
+        }
+      ],
       "needsReview": false
     }
   ]
