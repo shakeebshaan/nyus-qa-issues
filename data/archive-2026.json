@@ -828,6 +828,82 @@
       "needsReview": false,
       "resolvedAt": "2026-06-14T10:14:14.149Z",
       "archivedAt": "2026-06-14T10:14:14.149Z"
+    },
+    {
+      "id": "i-20260612-a923",
+      "createdAt": "2026-06-12T07:46:06.145Z",
+      "route": null,
+      "description": "In this page also show how coach will reduce the calories over time and increase the workout/activity give challenge and increase the calories if on track plan this so this actually happens with user over the weeks also add meals cards if looks good and same for workouts if looks good",
+      "imagePath": "images/i-20260612-a923.jpg",
+      "imageCommit": "9e4533c8482083e63bf5139c53fd12c98872af96",
+      "imagePaths": [
+        "images/i-20260612-a923.jpg"
+      ],
+      "imageCommits": [
+        "9e4533c8482083e63bf5139c53fd12c98872af96"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Full-screen capture per your note. Same fix: animated 'How your coach adapts your plan' timeline on the plan-ready overview - 4 staggered steps (calories ease 2218->2133 kcal, training climbs, on-track 80%+ earns calories back + a challenge, off-week holds, never punitive). Shown full-screen above the weekly progression.",
+        "imagePath": "images/i-20260612-a923-fix.png",
+        "imagePaths": [
+          "images/i-20260612-a923-fix.png"
+        ],
+        "imageCommit": "ecee7bb48d11c3f5c29c35d205a8b5dfa8f854e3",
+        "fixedAt": "2026-06-14T05:09:25.145Z",
+        "appCommit": "80e00d47"
+      },
+      "history": [
+        {
+          "at": "2026-06-13T18:01:44.151Z",
+          "event": "reopened",
+          "note": "this is not accurate",
+          "previousFix": {
+            "description": "Owner said 'plan and do it'. PHASE 1 of 3 shipped + verified: app/services/weekly_adaptation.py — a pure decision engine (taper at each week's projected weight via the existing macro_calculator; +75 kcal on-track bonus when adherence >=80% AND weight on pace, capped below TDEE; HOLD at last week's target when off-track or no logs, never a punitive cut; BMR x1.1 floor; maintenance at goal) + 15 rule tests, all passing on prod venv (sample: week 4 on-track 2491 -> 2566 kcal). It is INERT (no DB writes, no scheduler) = zero production effect yet. Investigation also corrected the plan's baseline: the LIVE daily target is UserHealthProfile.target_kcal (static since onboarding) — that's now the resolved write target (WeeklyMacroTarget is display-only). STAGED next: Phase 2 = weekly dry-run scheduler that Discord-logs would-be changes (still no writes); Phase 3 = live weekly write behind FEATURE_WEEKLY_ADAPTATION + FE read. Phased deliberately because going live changes every athlete's calorie target. Resolve to greenlight Phase 2, or mark not-fixed if you want it fully wired now. Plan: docs/WEEKLY_ADAPTATION_PLAN.md",
+            "imagePath": "images/i-20260612-a923-fix.png",
+            "imageCommit": "1e7438cea4246aced2aa6aa2923daad17acad75c",
+            "fixedAt": "2026-06-13T17:44:59.310Z",
+            "appCommit": "5ebbd9e"
+          }
+        },
+        {
+          "at": "2026-06-14T01:06:25.126Z",
+          "event": "reopened",
+          "note": "or you can just showsome nice graphics of it happning win animation",
+          "previousFix": {
+            "description": "You chose (B): keep the date, show an honest note. Confirmed cause: at an aggressive goal pace the calorie taper is BMR-floored (can't safely eat little enough to lose that fast), so the SAFE weight projection ends short of the goal while the goal card implies it's reached — that mismatch is the 'not accurate'. WeeklyTrajectory now shows a calm note when the curve doesn't reach goal within the horizon: 'At a safe pace you'll reach ~X kg by week N - about M weeks to reach your G kg goal. Going faster would mean eating below a healthy minimum.' No note when the projection DOES reach goal (no false positive). Your date is kept. Verified live: a goal-reaching plan (78->72) shows no note; an aggressive 78->55 plan shows '~66.9 kg by week 13 - about 28 weeks to reach your 55 kg goal', goal line correctly below the curve. tsc clean. (The Phase-1 weekly-adaptation engine from the earlier tick stands; the dry-run scheduler + live target writes remain staged.)",
+            "imagePath": "images/i-20260612-a923-fix.png",
+            "imageCommit": "a8f436046daba097a7629988b43427ae5c68bf0e",
+            "fixedAt": "2026-06-14T00:35:58.016Z",
+            "appCommit": "1183f971"
+          }
+        },
+        {
+          "at": "2026-06-14T04:56:45.554Z",
+          "event": "reopened",
+          "note": "full screen shot",
+          "previousFix": {
+            "description": "Owner's latest direction: 'just show nice graphics of it happening with animation' (deferring live weekly calorie writes for every athlete). Fix: new CoachAdaptationCard on the plan-ready overview — a calm animated vertical timeline (connector line draws in, 4 steps stagger up; reduced-motion static) telling the adaptation story with concrete numbers: (1) calories ease from this plan's real start to end kcal as you lean out, (2) training/activity climbs week over week, (3) on-track 80%+ earns calories back + a fresh challenge, (4) an off week holds steady, never a punitive cut. Placed right after the weekly trajectory so the chart (what) is followed by the narrative (how).",
+            "imagePath": "images/i-20260612-a923-fix.png",
+            "imagePaths": [
+              "images/i-20260612-a923-fix.png"
+            ],
+            "imageCommit": "d6c744192643f92d4ceef6375d8e6126f2852dad",
+            "fixedAt": "2026-06-14T04:39:08.144Z",
+            "appCommit": "80e00d47"
+          }
+        }
+      ],
+      "needsReview": false,
+      "tags": [
+        "activity",
+        "backend",
+        "planning"
+      ],
+      "reviewReply": "(B)",
+      "reviewRepliedAt": "2026-06-14T00:29:17.240Z",
+      "resolvedAt": "2026-06-14T10:18:34.696Z",
+      "archivedAt": "2026-06-14T10:18:34.696Z"
     }
   ]
 }
