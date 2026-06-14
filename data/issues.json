@@ -14,17 +14,8 @@
       "imageCommits": [
         "6bceabd6d870a5e02026a381e92637aecac72e45"
       ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause (4th look): the prior 3 fixes derived the name from ingredients client-side, so a hand-built/slot-named meal still read as an ingredient ('Oats Bowl'). Fix (shipped 8f60a1e6 + backend db119e5): CustomDietBuilder.handleContinue now calls POST /ai/name-meals for every slot-named/unnamed meal, giving each a real LLM dish name that persists into the saved plan; PlanReadyOverview's mealDisplayName prefers that name. Verified the endpoint live (returns 'Banana Peanut Oat Bowl', 'Chicken & Broccoli Rice Bowl', 'Palak Paneer Roti') and verified the built plan overview now reads 'Turkey Oats Bowl / Chicken Rice Plate / Beef Rice Plate' — real dish names, never a bare ingredient or slot label, on every build path.",
-        "imagePath": "images/i-20260612-cd61-fix.png",
-        "imagePaths": [
-          "images/i-20260612-cd61-fix.png"
-        ],
-        "imageCommit": "cb7e0e405c2c52f6eea1cdbc5acbb18ebb34ed24",
-        "fixedAt": "2026-06-14T04:33:02.614Z",
-        "appCommit": "8f60a1e6"
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-13T15:09:11.075Z",
@@ -60,6 +51,21 @@
             "imageCommit": "1e271824fb536b153953f686006a53520b73cd6a",
             "fixedAt": "2026-06-13T18:07:39.167Z",
             "appCommit": "ce0521ea"
+          }
+        },
+        {
+          "at": "2026-06-14T04:57:17.039Z",
+          "event": "reopened",
+          "note": "complete screenshot",
+          "previousFix": {
+            "description": "Root cause (4th look): the prior 3 fixes derived the name from ingredients client-side, so a hand-built/slot-named meal still read as an ingredient ('Oats Bowl'). Fix (shipped 8f60a1e6 + backend db119e5): CustomDietBuilder.handleContinue now calls POST /ai/name-meals for every slot-named/unnamed meal, giving each a real LLM dish name that persists into the saved plan; PlanReadyOverview's mealDisplayName prefers that name. Verified the endpoint live (returns 'Banana Peanut Oat Bowl', 'Chicken & Broccoli Rice Bowl', 'Palak Paneer Roti') and verified the built plan overview now reads 'Turkey Oats Bowl / Chicken Rice Plate / Beef Rice Plate' — real dish names, never a bare ingredient or slot label, on every build path.",
+            "imagePath": "images/i-20260612-cd61-fix.png",
+            "imagePaths": [
+              "images/i-20260612-cd61-fix.png"
+            ],
+            "imageCommit": "cb7e0e405c2c52f6eea1cdbc5acbb18ebb34ed24",
+            "fixedAt": "2026-06-14T04:33:02.614Z",
+            "appCommit": "8f60a1e6"
           }
         }
       ],
