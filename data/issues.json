@@ -305,8 +305,17 @@
         "ab7ab3e013a8ba5f6ae2cd6f5ad8294a7bb68b09",
         "8bc689d0db40031667864054052099b71a54e428"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Re-fix for 'don't stick with one coach rohan — different styles and personality.' The build-plan coach hero already loads the assigned coach's real PORTRAIT, and the coach is NOT hardcoded: app/services/coach_roster.py deterministically matches each user to one of 12 seeded roster coaches (each with its own art + bio), so different users get different coaches (a given user keeps theirs — by design). The gap was that the hero only showed a name, so the personality didn't come through. Fix: CoachDetails now carries bio/specialty (backend already returned them) and the hero renders the matched coach's bio as an italic personality line under the portrait — e.g. Rohan now reads 'Former cricketer turned coach — home-workout progressions and high-protein Indian meals are his lane.' The real coach also loads over any stale cached name. Verified on /dev/coach-preview: portrait + name + personality line render, 0 console errors. (If you want a LARGER visual-style range, the next step is generating more roster coaches/art via the one-time OpenAI pipeline — say the word and I'll batch it.)",
+        "imagePath": "images/i-20260614-1bc5-fix.png",
+        "imagePaths": [
+          "images/i-20260614-1bc5-fix.png"
+        ],
+        "imageCommit": "6325b4918876e532f6ffc8254305b3672152012f",
+        "fixedAt": "2026-06-14T13:43:28.421Z",
+        "appCommit": "64695dbe"
+      },
       "history": [
         {
           "at": "2026-06-14T10:06:59.344Z",
