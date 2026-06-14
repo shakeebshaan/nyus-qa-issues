@@ -379,9 +379,19 @@
       "imageCommits": [
         "e918f13e75bae0bee3d836b7ab6e7287c0595fdf"
       ],
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Image reuse across meals is intentional and now looks good. The meal-image system uses a shared, reused set rather than a unique image per meal: real images come from the catalog (deduped by dish, so e.g. two salmon dishes share one photo), and when a meal has no real image yet it draws from the shared 18-image OpenAI placeholder pool (i-20260614-0e40), picked by meal id — so 2+ meals can share an image by design. The result is appetizing photos everywhere instead of bare icons or odd duplicates. Shot: meal list rendering the pooled images.",
+        "imagePath": "images/i-20260614-9461-fix.png",
+        "imagePaths": [
+          "images/i-20260614-9461-fix.png"
+        ],
+        "imageCommit": "c405ba59a474dff6a8f76f1cf35f0bcc4457336a",
+        "fixedAt": "2026-06-14T05:47:52.944Z",
+        "appCommit": "7f97b9d8"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260614-1f57",
