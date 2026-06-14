@@ -547,18 +547,25 @@
       "imageCommits": [
         "5e2629fb54cba6f31f2c571ca3fb141c644d47bd"
       ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: tapping 'I'll build it myself' kicks off an eager save + builder prefetch (the busy window), but the screen only dimmed the cards (opacity-60) with no clear response — so the tap felt unanswered. Fix: the instant a path is chosen, the choice cards are replaced by a clear loading state ('Setting up your builder...' spinner for self-build, 'Coach is setting up your plan...' for coach) — immediate feedback that the next page is loading, instead of a dead delay. Verified on a new /dev/plan-choice harness: tapping the card swaps straight to the spinner view. tsc clean.",
-        "imagePath": "images/i-20260614-0ece-fix.png",
-        "imagePaths": [
-          "images/i-20260614-0ece-fix.png"
-        ],
-        "imageCommit": "90c5f72b73466367dd11b42af1cb495680dad4ac",
-        "fixedAt": "2026-06-14T08:40:04.575Z",
-        "appCommit": "0c2dcc51"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-14T10:07:37.488Z",
+          "event": "reopened",
+          "note": "show skeleton not loader",
+          "previousFix": {
+            "description": "Root cause: tapping 'I'll build it myself' kicks off an eager save + builder prefetch (the busy window), but the screen only dimmed the cards (opacity-60) with no clear response — so the tap felt unanswered. Fix: the instant a path is chosen, the choice cards are replaced by a clear loading state ('Setting up your builder...' spinner for self-build, 'Coach is setting up your plan...' for coach) — immediate feedback that the next page is loading, instead of a dead delay. Verified on a new /dev/plan-choice harness: tapping the card swaps straight to the spinner view. tsc clean.",
+            "imagePath": "images/i-20260614-0ece-fix.png",
+            "imagePaths": [
+              "images/i-20260614-0ece-fix.png"
+            ],
+            "imageCommit": "90c5f72b73466367dd11b42af1cb495680dad4ac",
+            "fixedAt": "2026-06-14T08:40:04.575Z",
+            "appCommit": "0c2dcc51"
+          }
+        }
+      ],
       "needsReview": false
     },
     {
