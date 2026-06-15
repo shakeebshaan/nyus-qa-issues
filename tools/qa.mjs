@@ -1,17 +1,22 @@
 #!/usr/bin/env node
-// NYUS QA tracker CLI — zero deps, pure git. Run from anywhere:
+// NYUS QA tracker CLI — zero deps, pure git + gh CLI. Run from anywhere:
 //   node tools/qa.mjs list [--all]
 //   node tools/qa.mjs pull
-//   node tools/qa.mjs resolve <id> --image <absPath> --desc "<text>" [--app-commit <sha>]
+//   node tools/qa.mjs resolve <id> --image <absPath> [--image <absPath2> …] --desc "<text>" [--app-commit <sha>]
 //   node tools/qa.mjs reopen <id> --note "<text>"
-import { readFileSync, writeFileSync, copyFileSync, existsSync } from "node:fs";
+//   node tools/qa.mjs review <id> --reason "<text>" [--tags a,b,c]
+//   node tools/qa.mjs unreview <id>
+//   node tools/qa.mjs archive <id> | archive --all-fixed
+import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from "node:fs";
 import { resolve, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DB = join(ROOT, "data", "issues.json");
 const OWNER_REPO = "shakeebshaan/nyus-qa-issues";
+const PRIV_OWNER = "shakeebshaan", PRIV_REPO = "nyus-qa-private";
 
 function git(...args) {
   const r = spawnSync("git", args, { cwd: ROOT, encoding: "utf8" });
@@ -25,6 +30,42 @@ function gitPush() {
     git("push");
   }
 }
+
+// Use gh CLI (already authenticated) to call GitHub API
+function ghApi(endpoint, method = "GET", bodyObj = null) {
+  const args = ["api", endpoint, "--method", method];
+  let tmp = null;
+  if (bodyObj) {
+    tmp = join(tmpdir(), `nyus-qa-api-${Date.now()}.json`);
+    writeFileSync(tmp, JSON.stringify(bodyObj));
+    args.push("--input", tmp);
+  }
+  const r = spawnSync("gh", args, { encoding: "utf8" });
+  if (tmp) { try { unlinkSync(tmp); } catch {} }
+  if (r.status !== 0) throw new Error(`gh api ${endpoint} failed:\n${r.stderr || r.stdout}`);
+  return r.stdout ? JSON.parse(r.stdout) : null;
+}
+
+function downloadPrivImage(privPath, localDest) {
+  try {
+    const res = ghApi(`repos/${PRIV_OWNER}/${PRIV_REPO}/contents/${privPath}`);
+    const buf = Buffer.from(res.content.replace(/\s/g, ""), "base64");
+    writeFileSync(localDest, buf);
+    return localDest;
+  } catch {
+    return null;
+  }
+}
+
+function uploadToPrivRepo(localPath, privPath, message) {
+  const content = readFileSync(localPath).toString("base64");
+  return ghApi(
+    `repos/${PRIV_OWNER}/${PRIV_REPO}/contents/${privPath}`,
+    "PUT",
+    { message, content, branch: "main" }
+  );
+}
+
 const loadDb = () => JSON.parse(readFileSync(DB, "utf8"));
 const saveDb = (db) => writeFileSync(DB, JSON.stringify(db, null, 2) + "\n");
 const flag = (name) => {
@@ -51,8 +92,9 @@ try {
       .sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || ""));
     if (!rows.length) { console.log("No " + (process.argv.includes("--all") ? "" : "open ") + "issues."); process.exit(0); }
     for (const i of rows) {
+      const priv = i.imagePrivate ? " [PRIV]" : "";
       console.log(
-        `${i.id}  ${i.status.toUpperCase().padEnd(5)}  ${(i.createdAt || "").slice(0, 10)}  ${(i.route || "-").padEnd(22)}  ${i.description.replace(/\s+/g, " ").slice(0, 60)}`
+        `${i.id}  ${i.status.toUpperCase().padEnd(5)}  ${(i.createdAt || "").slice(0, 10)}  ${(i.route || "-").padEnd(22)}${priv}  ${i.description.replace(/\s+/g, " ").slice(0, 60)}`
       );
     }
   } else if (cmd === "pull") {
@@ -61,18 +103,38 @@ try {
     const open = db.issues
       .filter((i) => i.status === "open")
       .sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || ""))
-      .map((i) => ({
-        id: i.id,
-        createdAt: i.createdAt,
-        route: i.route,
-        description: i.description,
-        image: join(ROOT, i.imagePath),
-        reopenNote: (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0]?.note || null,
-        needsReview: !!i.needsReview,
-        reviewReason: i.reviewReason || null,
-        reviewReply: i.reviewReply || null,
-        tags: i.tags || null,
-      }));
+      .map((i) => {
+        const paths = i.imagePaths || [i.imagePath];
+        let image, images;
+        if (i.imagePrivate) {
+          // Download private images locally so Claude can read them
+          const dlDir = join(ROOT, "tmp", "downloads", i.id);
+          mkdirSync(dlDir, { recursive: true });
+          images = paths.map((p, idx) => {
+            const ext = extname(p) || ".jpg";
+            const localPath = join(dlDir, `img-${idx}${ext}`);
+            return downloadPrivImage(p, localPath);
+          }).filter(Boolean);
+          image = images[0] || null;
+        } else {
+          image = join(ROOT, i.imagePath);
+          images = paths.map((p) => join(ROOT, p));
+        }
+        return {
+          id: i.id,
+          createdAt: i.createdAt,
+          route: i.route,
+          description: i.description,
+          imagePrivate: !!i.imagePrivate,
+          image,
+          images,
+          reopenNote: (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0]?.note || null,
+          needsReview: !!i.needsReview,
+          reviewReason: i.reviewReason || null,
+          reviewReply: i.reviewReply || null,
+          tags: i.tags || null,
+        };
+      });
     console.log(JSON.stringify({ open, count: open.length }, null, 2));
   } else if (cmd === "resolve") {
     // Multiple --image flags supported: a fix that spans two screens / scroll
@@ -86,22 +148,26 @@ try {
     if (!issue) throw new Error("No such issue: " + id);
     if (issue.status === "fixed") throw new Error(id + " is already fixed.");
 
-    // First image keeps the canonical name (backward-compat); extras get -2, -3…
-    const relPaths = images.map((img, idx) => {
-      const ext = (extname(img) || ".png").toLowerCase();
-      const rel = `images/${id}-fix${idx === 0 ? "" : "-" + (idx + 1)}${ext}`;
-      copyFileSync(img, join(ROOT, rel));
-      git("add", rel);
-      return rel;
-    });
-    git("commit", "-m", `issue ${id}: fix screenshot${relPaths.length > 1 ? "s (" + relPaths.length + ")" : ""}`);
-    const imageCommit = git("rev-parse", "HEAD");
+    // Upload all fix screenshots to private repo via gh API.
+    // First image keeps the canonical name (backward-compat); extras get -2, -3...
+    console.log(`Uploading fix screenshot${images.length > 1 ? "s" : ""} to private repo...`);
+    const privPaths = [];
+    const imageCommits = [];
+    for (let idx = 0; idx < images.length; idx++) {
+      const ext = (extname(images[idx]) || ".png").toLowerCase();
+      const privRel = `images/${id}-fix${idx === 0 ? "" : "-" + (idx + 1)}${ext}`;
+      const uploadResult = uploadToPrivRepo(images[idx], privRel, `issue ${id}: fix screenshot${images.length > 1 ? " " + (idx + 1) : ""}`);
+      privPaths.push(privRel);
+      imageCommits.push(uploadResult?.commit?.sha || "");
+    }
 
     issue.fix = {
       description: desc,
-      imagePath: relPaths[0],   // backward-compat: first image
-      imagePaths: relPaths,     // all fix images (multi-image support)
-      imageCommit,
+      imagePath: privPaths[0],   // backward-compat: first image
+      imagePaths: privPaths,     // all fix images (multi-image support)
+      imagePrivate: true,
+      imageCommit: imageCommits[0],
+      imageCommits,
       fixedAt: new Date().toISOString(),
       ...(appCommit ? { appCommit } : {}),
     };
@@ -114,8 +180,8 @@ try {
     git("add", "data/issues.json");
     git("commit", "-m", `issue ${id}: resolved`);
     gitPush();
-    console.log(`Resolved ${id} (${relPaths.length} fix image${relPaths.length > 1 ? "s" : ""})`);
-    relPaths.forEach((rel) => console.log(`  fix shot: ${rawUrl(rel, imageCommit)}`));
+    console.log(`Resolved ${id} (${privPaths.length} fix image${privPaths.length > 1 ? "s" : ""})`);
+    privPaths.forEach((rel, i) => console.log(`  fix shot ${i + 1}: (private) ${PRIV_OWNER}/${PRIV_REPO}/${rel} @ ${imageCommits[i].slice(0, 7)}`));
   } else if (cmd === "reopen") {
     const id = idArg, note = flag("note");
     if (!id || !note) throw new Error('Usage: reopen <id> --note "<text>"');
@@ -196,9 +262,9 @@ try {
     git("add", "data");
     git("commit", "-m", all ? `archive: ${targets.length} fixed issue(s)` : `issue ${idArg}: archived`);
     gitPush();
-    console.log(`Archived ${targets.length} → data/archive-${year}.json`);
+    console.log(`Archived ${targets.length} -> data/archive-${year}.json`);
   } else {
-    console.log("Commands: list [--all] | pull | resolve <id> --image <p> --desc <t> [--app-commit <sha>] | review <id> --reason <t> [--tags a,b] | unreview <id> | reopen <id> --note <t> | archive <id> | archive --all-fixed");
+    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] | review <id> --reason <t> [--tags a,b] | unreview <id> | reopen <id> --note <t> | archive <id> | archive --all-fixed");
     process.exit(cmd ? 1 : 0);
   }
 } catch (e) {

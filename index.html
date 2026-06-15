@@ -237,6 +237,14 @@
   }
   .shots-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .shots-grid .shot { height: clamp(120px, 28vw, 200px); }
+  /* -- Private images ----------------------------------------- */
+  img[data-priv-path] { opacity: 0; transition: opacity .25s; }
+  img[data-priv-path].priv-loaded { opacity: 1; }
+  .shot.priv-lock {
+    display: grid; place-items: center; color: var(--muted);
+    font-size: 12.5px; font-weight: 600; gap: 6px; cursor: default; text-align: center;
+  }
+  .shot.priv-lock::before { content: "🔒"; font-size: 28px; display: block; opacity: .45; margin-bottom: 4px; }
   .field { margin-top: 12px; }
   .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
   input[type="text"], textarea {
@@ -300,6 +308,7 @@
       <span class="chip open" id="chip-open">– open</span>
       <span class="chip fixed" id="chip-fixed">– fixed</span>
       <button class="chip conn" id="chip-conn" type="button"><span class="st"></span><span id="conn-label">connect</span></button>
+      <button class="iconbtn" id="btn-qa-report" type="button" title="Open QA Report" aria-label="Open local QA report">⊞</button>
       <button class="iconbtn" id="btn-refresh" type="button" title="Refresh" aria-label="Refresh">⟳</button>
     </div>
   </div>
@@ -362,6 +371,19 @@
   </div>
 </dialog>
 
+<dialog id="qa-report-dialog">
+  <div class="sheet">
+    <h2>Local QA Report</h2>
+    <p>Paste the <code>file://</code> URL to your local <code>.qa-report/index.html</code>. Stored per browser.</p>
+    <input type="text" id="qa-report-url" autocomplete="off" spellcheck="false" placeholder="file:///C:/Users/.../nyus-well-tracker-.../.qa-report/index.html" />
+    <div class="row" style="margin-top:14px">
+      <button class="btn danger" type="button" id="qr-forget">Forget</button>
+      <button class="btn" type="button" id="qr-close">Close</button>
+      <button class="btn primary" type="button" id="qr-open">Save &amp; open</button>
+    </div>
+  </div>
+</dialog>
+
 <dialog id="lightbox"><img id="lightbox-img" alt="screenshot" /></dialog>
 <div id="toast" role="status"></div>
 
@@ -369,10 +391,14 @@
 "use strict";
 const OWNER = "shakeebshaan", REPO = "nyus-qa-issues", BRANCH = "main";
 const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+const PRIV_OWNER = "shakeebshaan", PRIV_REPO = "nyus-qa-private", PRIV_BRANCH = "main";
+const PRIV_API = `https://api.github.com/repos/${PRIV_OWNER}/${PRIV_REPO}`;
+const privImgCache = new Map(); // path -> data URI | null
 const $ = (id) => document.getElementById(id);
 
 let db = null;          // parsed issues.json
 let token = localStorage.getItem("qaToken") || "";
+let qaReportUrl = localStorage.getItem("qaReportUrl") || "";
 let lastLoad = 0;
 
 /* ── utils ─────────────────────────────────────────────── */
@@ -399,6 +425,39 @@ const fmtDate = (iso) => {
 };
 const rawUrl = (path, commit) =>
   `https://raw.githubusercontent.com/${OWNER}/${REPO}/${commit || BRANCH}/${path}`;
+async function fetchPrivImage(path) {
+  if (privImgCache.has(path)) return privImgCache.get(path);
+  if (!token) { privImgCache.set(path, null); return null; }
+  try {
+    const r = await fetch(`${PRIV_API}/contents/${path}?ref=${PRIV_BRANCH}`, {
+      headers: headers(), cache: "no-store",
+    });
+    if (!r.ok) { privImgCache.set(path, null); return null; }
+    const j = await r.json();
+    const uri = `data:image/jpeg;base64,${j.content.replace(/\s/g, "")}`;
+    privImgCache.set(path, uri);
+    return uri;
+  } catch {
+    privImgCache.set(path, null);
+    return null;
+  }
+}
+async function resolvePrivImages() {
+  const imgs = document.querySelectorAll("img[data-priv-path]:not(.priv-loaded)");
+  for (const img of imgs) {
+    img.classList.add("priv-loaded"); // mark immediately to prevent double-fetch
+    const uri = await fetchPrivImage(img.dataset.privPath);
+    if (uri) {
+      img.src = uri;
+      img.style.opacity = "1";
+      const btn = img.closest(".shot");
+      if (btn) btn.dataset.full = uri; // lightbox gets the data URI
+    } else {
+      const btn = img.closest(".shot");
+      if (btn) { btn.classList.add("priv-lock"); btn.removeAttribute("data-full"); }
+    }
+  }
+}
 function toast(msg, ms = 2600) {
   const t = $("toast");
   t.textContent = msg;
@@ -453,14 +512,17 @@ function renderSkeleton() {
     `<div class="skel"><div class="sh" style="height:18px;width:40%"></div><div class="sh" style="height:280px;margin-top:12px"></div></div>`
   ).join("");
 }
-function shotHtml(path, commit, alt) {
+function shotHtml(path, commit, alt, isPrivate) {
+  if (isPrivate) {
+    return `<button class="shot" type="button" data-full="" aria-label="Enlarge ${esc(alt)}"><img data-priv-path="${esc(path)}" alt="${esc(alt)}" src="" /></button>`;
+  }
   const u = rawUrl(path, commit);
   return `<button class="shot" type="button" data-full="${esc(u)}" aria-label="Enlarge ${esc(alt)}"><img loading="lazy" src="${esc(u)}" alt="${esc(alt)}" /></button>`;
 }
-function shotsHtml(paths, commits, altBase) {
+function shotsHtml(paths, commits, altBase, isPrivate) {
   if (!paths || paths.length === 0) return "";
-  if (paths.length === 1) return shotHtml(paths[0], commits?.[0], altBase);
-  return `<div class="shots-grid">${paths.map((p, i) => shotHtml(p, commits?.[i] ?? commits?.[0], `${altBase} ${i + 1}`)).join("")}</div>`;
+  if (paths.length === 1) return shotHtml(paths[0], commits?.[0], altBase, isPrivate);
+  return `<div class="shots-grid">${paths.map((p, i) => shotHtml(p, commits?.[i] ?? commits?.[0], `${altBase} ${i + 1}`, isPrivate)).join("")}</div>`;
 }
 let activeTag = null;  // current tag filter (null = all)
 
@@ -505,13 +567,13 @@ function cardHtml(it, archived) {
   const prevFixes = (it.history || []).filter((h) => h.event === "reopened" && h.previousFix).map((h) => h.previousFix);
   const prevHtml = prevFixes.length
     ? `<details class="prevfix"><summary>Previous fix${prevFixes.length > 1 ? "es" : ""} (${prevFixes.length})</summary>${
-        prevFixes.map((pf, i) => { const pp = pf.imagePaths || [pf.imagePath]; return `${i ? '<hr class="pf-sep">' : ""}${pf.fixedAt ? `<div class="pf-when">${fmtDate(pf.fixedAt)}</div>` : ""}${shotsHtml(pp, pp.map(() => pf.imageCommit), "previous fix")}<p class="desc">${esc(pf.description || "")}</p>`; }).join("")
+        prevFixes.map((pf, i) => { const pp = pf.imagePaths || [pf.imagePath]; return `${i ? '<hr class="pf-sep">' : ""}${pf.fixedAt ? `<div class="pf-when">${fmtDate(pf.fixedAt)}</div>` : ""}${shotsHtml(pp, pp.map(() => pf.imageCommit), "previous fix", pf.imagePrivate)}<p class="desc">${esc(pf.description || "")}</p>`; }).join("")
       }</details>`
     : "";
 
   const fixPaths = it.fix ? (it.fix.imagePaths || [it.fix.imagePath]) : [];
   const right = it.status === "fixed" && it.fix
-    ? `${shotsHtml(fixPaths, fixPaths.map(() => it.fix.imageCommit), "fix screenshot")}
+    ? `${shotsHtml(fixPaths, fixPaths.map(() => it.fix.imageCommit), "fix screenshot", it.fix?.imagePrivate)}
        <p class="desc">${esc(it.fix.description)}</p>
        ${prevHtml}
        ${archived ? "" : `<div class="verdict">
@@ -542,7 +604,7 @@ function cardHtml(it, archived) {
     <div class="sides">
       <div class="side">
         <h3>Issue</h3>
-        ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot")}
+        ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot", it.imagePrivate)}
         <p class="desc">${esc(it.description)}</p>
         ${tagsHtml}
       </div>
@@ -581,8 +643,9 @@ function render() {
   $("list").innerHTML = visible.length
     ? visible.map((it) => cardHtml(it)).join("")
     : all.length
-      ? `<div class="empty"><b>No issues with “${esc(activeTag)}”</b>Clear the filter to see all.</div>`
-      : `<div class="empty"><b>No issues yet</b>File the first one above — it shows up here with an “awaiting fix” slot.</div>`;
+      ? `<div class="empty"><b>No issues with "${esc(activeTag)}"</b>Clear the filter to see all.</div>`
+      : `<div class="empty"><b>No issues yet</b>File the first one above — it shows up here with an "awaiting fix" slot.</div>`;
+  resolvePrivImages();
 }
 
 /* ── image compression ─────────────────────────────────── */
@@ -626,6 +689,16 @@ async function putFile(path, b64, message, sha) {
   if (r.status === 401) { connState(false); throw new Error("Token rejected — update it in settings."); }
   if (r.status === 409 || r.status === 422) { const e = new Error("conflict"); e.conflict = true; throw e; }
   if (!r.ok) throw new Error("Upload failed (" + r.status + ")");
+  return r.json();
+}
+async function putPrivFile(path, b64, message) {
+  const body = { message, content: b64, branch: PRIV_BRANCH };
+  const r = await fetch(`${PRIV_API}/contents/${path}`, {
+    method: "PUT", headers: headers({ "Content-Type": "application/json" }), body: JSON.stringify(body),
+  });
+  if (r.status === 401) { connState(false); throw new Error("Token rejected — update it in settings."); }
+  if (r.status === 409 || r.status === 422) { const e = new Error("conflict"); e.conflict = true; throw e; }
+  if (!r.ok) throw new Error("Private upload failed (" + r.status + ")");
   return r.json();
 }
 async function mutateJson(path, message, mutator, init) {
@@ -721,7 +794,7 @@ $("form").addEventListener("submit", async (ev) => {
       const b64 = await blobToB64(blob);
       if (b64.length > 5_000_000) throw new Error(`Image ${i + 1} too large even after compression.`);
       const suffix = pickedFiles.length > 1 ? `-${i}` : "";
-      const imgRes = await putFile(`images/${id}${suffix}.jpg`, b64, `issue ${id}: screenshot ${i + 1}`);
+      const imgRes = await putPrivFile(`images/${id}${suffix}.jpg`, b64, `issue ${id}: screenshot ${i + 1}`);
       imagePaths.push(`images/${id}${suffix}.jpg`);
       imageCommits.push(imgRes.commit?.sha || "");
     }
@@ -734,7 +807,7 @@ $("form").addEventListener("submit", async (ev) => {
         id, createdAt: new Date().toISOString(), route: route || null,
         description: $("desc").value.trim(),
         imagePath: imagePaths[0], imageCommit: imageCommits[0],
-        imagePaths, imageCommits,
+        imagePaths, imageCommits, imagePrivate: true,
         status: "open", fix: null, history: [],
       });
     });
@@ -796,12 +869,51 @@ $("tok-save").addEventListener("click", async () => {
   }
 });
 
+/* ── QA report link ────────────────────────────────────── */
+function updateQrBtn() {
+  $("btn-qa-report").style.opacity = qaReportUrl ? "1" : "0.45";
+  $("btn-qa-report").title = qaReportUrl ? "Open QA Report" : "Configure QA Report URL";
+}
+updateQrBtn();
+$("btn-qa-report").addEventListener("click", () => {
+  if (qaReportUrl) { window.open(qaReportUrl, "_blank"); return; }
+  $("qa-report-url").value = qaReportUrl;
+  $("qa-report-dialog").showModal();
+});
+$("qr-close").addEventListener("click", () => $("qa-report-dialog").close());
+$("qr-forget").addEventListener("click", () => {
+  qaReportUrl = ""; localStorage.removeItem("qaReportUrl");
+  $("qa-report-url").value = "";
+  updateQrBtn();
+  toast("QA report URL cleared.");
+  $("qa-report-dialog").close();
+});
+$("qr-open").addEventListener("click", () => {
+  const u = $("qa-report-url").value.trim();
+  if (!u) return;
+  qaReportUrl = u; localStorage.setItem("qaReportUrl", u);
+  updateQrBtn();
+  $("qa-report-dialog").close();
+  window.open(u, "_blank");
+});
+
 /* ── lightbox ──────────────────────────────────────────── */
 document.addEventListener("click", (ev) => {
   const b = ev.target.closest(".shot");
-  if (b) {
-    $("lightbox-img").src = b.dataset.full;
-    $("lightbox").showModal();
+  if (b && !b.classList.contains("priv-lock")) {
+    const full = b.dataset.full;
+    if (full) {
+      $("lightbox-img").src = full;
+      $("lightbox").showModal();
+    } else {
+      // Private image not yet loaded — try fetching
+      const privPath = b.querySelector("img[data-priv-path]")?.dataset.privPath;
+      if (privPath) {
+        fetchPrivImage(privPath).then(uri => {
+          if (uri) { $("lightbox-img").src = uri; $("lightbox").showModal(); }
+        });
+      }
+    }
   }
 });
 $("lightbox").addEventListener("click", () => $("lightbox").close());
@@ -919,6 +1031,7 @@ $("arch-toggle").addEventListener("click", async () => {
     $("arch-list").innerHTML = archCache.length
       ? archCache.map((i) => cardHtml(i, true)).join("")
       : `<div class="empty">Nothing resolved yet.</div>`;
+    resolvePrivImages();
     sec.hidden = false;
     t.textContent = "Hide resolved";
   } catch (e) {
