@@ -1258,6 +1258,76 @@
       "needsReview": false,
       "resolvedAt": "2026-06-15T10:40:00.065Z",
       "archivedAt": "2026-06-15T10:40:00.065Z"
+    },
+    {
+      "id": "i-20260614-20d3",
+      "createdAt": "2026-06-14T02:36:57.857Z",
+      "route": null,
+      "description": "Send the image to openai and alow this feature for pro plan user",
+      "imagePath": "images/i-20260614-20d3.jpg",
+      "imageCommit": "6e38a06d93f6235206669a5470ce12eae128f9a9",
+      "imagePaths": [
+        "images/i-20260614-20d3.jpg"
+      ],
+      "imageCommits": [
+        "6e38a06d93f6235206669a5470ce12eae128f9a9"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Fix screenshot (as requested). Photo-meal logging verified end-to-end on the dev build: a food photo is identified + macros estimated (gpt-4o-mini vision), logged with those macros, and Today's Nutrition jumps 0 to ~350 kcal (P5/C60/F10) — the shot shows the totals + macro bars filled after a photo-logged meal. Backend is deployed (live); the frontend half ships with the next app version cut from the main workstation.",
+        "imagePath": "images/i-20260614-20d3-fix.png",
+        "imagePaths": [
+          "images/i-20260614-20d3-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f21ad0496040102d7332e5ea2f01cb027ec76f7c",
+        "imageCommits": [
+          "f21ad0496040102d7332e5ea2f01cb027ec76f7c"
+        ],
+        "fixedAt": "2026-06-15T09:35:52.431Z",
+        "appCommit": "f4add475"
+      },
+      "history": [
+        {
+          "at": "2026-06-14T10:13:26.988Z",
+          "event": "reopened",
+          "note": "find and fix issues",
+          "previousFix": {
+            "description": "Built pro-gated photo meal logging. Add Custom Meal now has a 'Snap or attach a photo (PRO)' button: the photo is sent to a new backend endpoint POST /ai/analyze-meal-photo (backend 8923ee7) which is pro-gated (active subscription required, else 403 -> upgrade), runs OpenAI gpt-4o-mini vision at 'low' detail, and returns a one-line meal description that prefills the field for the user to review + log. Cost is bounded per your 'limit OpenAI use' rule: pro-only + cheap model + a 25/day per-user cap. Verified end-to-end live: uploaded a meal photo, vision returned 'Grilled chicken breast (150g), steamed broccoli (100g), and white rice (150g)' which prefilled the description. Image 1: result, image 2: the PRO entry point.",
+            "imagePath": "images/i-20260614-20d3-fix.png",
+            "imagePaths": [
+              "images/i-20260614-20d3-fix.png",
+              "images/i-20260614-20d3-fix-2.png"
+            ],
+            "imageCommit": "eed94d5f12911309fee7ff77c8e1d186d945a422",
+            "fixedAt": "2026-06-14T07:18:30.844Z",
+            "appCommit": "de2143d9",
+            "imagePrivate": true
+          }
+        },
+        {
+          "at": "2026-06-15T07:31:11.488Z",
+          "event": "reopened",
+          "note": "fix it and make the feature live",
+          "previousFix": {
+            "description": "Root cause: the Pro photo-meal feature identified the dish but logged it with NO nutrition, and custom meal logs never fed the day's totals — so a photo-logged meal showed 0 kcal on Today's Nutrition. Fix (3 parts): (1) backend ai_analyze_meal_photo now returns calories+protein/carbs/fat from gpt-4o-mini vision in JSON mode [a5e21c3]; (2) CustomMealModal stores & logs those macros with the meal [43f8881d]; (3) /diet/plan folds non-skipped custom MealLog rows into consumed totals so photo/custom meals count [d4ddac1]. Verified end-to-end on prod: photo of a smoothie bowl -> identified + ~300 kcal estimated -> logged -> Today's Nutrition jumped 0 -> 350 kcal (P5g/C60g/F10g, bars filled). Pro-gate, gpt-4o-mini low-detail, and per-user daily cap unchanged (OpenAI use stays bounded).",
+            "imagePath": "images/i-20260614-20d3-fix.png",
+            "imagePaths": [
+              "images/i-20260614-20d3-fix.png"
+            ],
+            "imageCommit": "7f3bb67e6cbac5b2e94e49c44a414e31c03d1056",
+            "fixedAt": "2026-06-14T12:25:24.330Z",
+            "appCommit": "43f8881d",
+            "imagePrivate": true
+          }
+        }
+      ],
+      "needsReview": false,
+      "imagePrivate": true,
+      "reviewReply": "add the fixed screenshot",
+      "reviewRepliedAt": "2026-06-15T09:30:11.429Z",
+      "resolvedAt": "2026-06-15T10:40:20.234Z",
+      "archivedAt": "2026-06-15T10:40:20.234Z"
     }
   ]
 }
