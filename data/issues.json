@@ -230,8 +230,21 @@
       "imageCommits": [
         "06da5db18267b459d46439b2df7c16d823f2bdb9"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopened with dinner",
+        "imagePath": "images/i-20260614-985d-fix.png",
+        "imagePaths": [
+          "images/i-20260614-985d-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b59b6a6a9d60fc36811aa2235a394dbc9500121b",
+        "imageCommits": [
+          "b59b6a6a9d60fc36811aa2235a394dbc9500121b"
+        ],
+        "fixedAt": "2026-06-15T12:08:14.102Z",
+        "appCommit": "70c85c53"
+      },
       "history": [
         {
           "at": "2026-06-14T10:05:46.540Z",
@@ -251,8 +264,6 @@
         }
       ],
       "needsReview": false,
-      "reviewReason": "Can't reproduce an error on the dinner plan, and the description + 'not clear' reopen don't pin it down — could you point me at the specifics? What I checked this pass (all clean): opened the Dinner meal from Today's Nutrition -> /recipe-detail rendered fine (189 kcal, 4 ingredients, instructions), edited ingredient quantities, and tapped Save Meal Changes (saved + returned to nutrition) — 0 console errors throughout. My earlier fix (2a252642) is still in place: it removed a 'Dinner ~0 kcal' empty-slot row from the plan-ready 'Plan Details > Meals' list. To fix the right thing, could you share: (1) which screen the error is on — Today's Nutrition / recipe-detail / meal customize / the plan-build overview / the AI plan wizard? (2) what the error looks like — a red error toast, a crash/blank screen, or wrong data? and (3) ideally a screenshot. With that I'll fix it next pass.",
-      "reviewedAt": "2026-06-14T14:05:35.834Z",
       "reviewReply": "dinner said 0 calories",
       "reviewRepliedAt": "2026-06-15T07:28:06.444Z",
       "imagePrivate": true
