@@ -168,35 +168,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260614-5c9b",
-      "createdAt": "2026-06-14T02:45:18.089Z",
-      "route": null,
-      "description": "Track this level completion in background and on all pages show this animation example of user was logging the meal on the 10 day 2nd meal which completed the xp and completed the level or got some reward then this animation will be shown there so it's backend tracked and revealed on user dynamicly also make sure we time the animation so it won't collide with other animations also create badges icons beautiful with openai api",
-      "imagePath": "images/i-20260614-5c9b.jpg",
-      "imageCommit": "d5b84a20f50b49a8d3f21768da30709d188b1b70",
-      "imagePaths": [
-        "images/i-20260614-5c9b.jpg"
-      ],
-      "imageCommits": [
-        "d5b84a20f50b49a8d3f21768da30709d188b1b70"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Part 2 done (reply 'do all'). Generated 43 premium badge emblems via OpenAI gpt-image-1 — a one-time, owner-sanctioned batch (scripts/_gen_badge_icons.py: tier-aware metal finish + a distinct per-badge motif). Served at /uploads/catalog-images/badge/<key>.png (added 'badge' to the catalog serve route) and stored on BadgeCatalog.icon_url. New BadgeIcon component fades each emblem in over the Award glyph fallback, wired into the Achievements gallery+detail, the unlock toast (icon_url threaded check-badges -> AchievementPayload -> useBadgeCheck), and the Profile LevelCard recent badges. Verified on /achievements: the 5 earned badges show their emblems, locked ones keep the lock glyph, 0 console errors. Part 1 (collision-safe overlay->toast sequencing + app-wide LevelUpWatcher) shipped earlier in b2b87867; backend this round b471652.",
-        "imagePath": "images/i-20260614-5c9b-fix.png",
-        "imagePaths": [
-          "images/i-20260614-5c9b-fix.png"
-        ],
-        "imageCommit": "9f45c6f3151796bc64553dc20515f292f950f242",
-        "fixedAt": "2026-06-14T13:01:32.996Z",
-        "appCommit": "2b3c6c07"
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewReply": "do all",
-      "reviewRepliedAt": "2026-06-14T10:05:12.554Z"
-    },
-    {
       "id": "i-20260614-1bc5",
       "createdAt": "2026-06-14T03:07:28.506Z",
       "route": null,
