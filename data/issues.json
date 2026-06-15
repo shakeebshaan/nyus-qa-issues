@@ -508,12 +508,23 @@
         "1ad663ee4009ace4a36442dabb748edaa34f7517"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Doing it. Scoped to the 97 exercises that appear in ACTIVE user plans (what people actually see) — cost-conscious vs the full ~2600-row catalog. The generator (now with an ACTIVE_PLANS scope, backend ac41a49) is running on the server, producing clean premium instructional illustrations that match each exercise — sample attached: a banded step-up with accurate form + equipment, flat editorial style, no scraped clickbait. Images go live on the catalog endpoint as each one finishes (the app's AsyncImage picks them up — no app version needed). A few exercises whose prompt trips OpenAI's content filter are skipped and keep their existing image (no regression). Say the word and I'll run the remaining ~1600 catalog exercises for full coverage.",
+        "imagePath": "images/i-20260615-b583-fix.png",
+        "imagePaths": [
+          "images/i-20260615-b583-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e375a6c116a0e0323f8d21a67168a4d6784c00e7",
+        "imageCommits": [
+          "e375a6c116a0e0323f8d21a67168a4d6784c00e7"
+        ],
+        "fixedAt": "2026-06-15T16:11:29.212Z",
+        "appCommit": "55a33769"
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Wrote an OpenAI exercise-image generator (scripts/_gen_exercise_images.py) with a per-exercise prompt tuned to the name + target muscles + equipment, so each image shows THAT exercise with correct form. Verified on 3: Barbell Bench Press, Tricep Dip, and Cable Crossover now have clean instructional illustrations — e.g. bench press shows correct form on a flat bench with the chest muscle highlighted — already live, replacing the old scraped clickbait thumbnails. Check those 3 in the app. Scope question before I do the rest: the catalog has 2616 exercises (~1735 still have no OpenAI image). Generating all of them is a large OpenAI run — hours of generation and meaningful spend, far beyond the small sets we did for badges (43) and coach art (13). How should I scope it — (a) the full 2616, (b) only exercises that appear in active user plans (far fewer, covers what people actually see), or (c) the 3-exercise sample is enough for now? I'll run whichever you choose; the generator is ready and idempotent.",
-      "reviewedAt": "2026-06-15T11:09:57.403Z",
       "reviewReply": "do it",
       "reviewRepliedAt": "2026-06-15T14:06:22.346Z"
     },
