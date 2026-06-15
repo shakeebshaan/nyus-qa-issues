@@ -336,9 +336,19 @@
         "eb95327f958624f9ead655e6780e6c37ea929d47",
         "85b8e6ab128be9106af444c09f28a041130721f1"
       ],
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: a plain 'Hi' was answered with a paragraph + a quick-actions button block + a full wellness check-in card. The live coach (gpt-5.4, via get_coach_response function-calling) was tool-calling show_quick_actions + show_wellness_checkin because the context flagged 'not logged today' + 'check-in overdue' — the greeting-restraint text alone didn't stop it. Fix (backend): withhold those two tools from the model's tool list for a detected bare greeting (llm_service._is_bare_greeting), so it can neither emit nor promise the cards; they resurface on the next real message. Also tightened the chat-prompt greeting rule. Verified live on /coach-chat: the screenshot shows the OLD 'Hi' (7:43, check-in card) vs the NEW 'Hi' (7:49, post-deploy) — now a single text-only greeting, 0 action/check-in blocks. (The socket errors in console are just the deploy restart bouncing the connection.) Backend cfbcdda + cf49d8a.",
+        "imagePath": "images/i-20260615-958c-fix.png",
+        "imagePaths": [
+          "images/i-20260615-958c-fix.png"
+        ],
+        "imageCommit": "d4599508c7d09494a6746a2b8dc88afa48b4e753",
+        "fixedAt": "2026-06-15T07:51:11.100Z",
+        "appCommit": "cfbcdda"
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
