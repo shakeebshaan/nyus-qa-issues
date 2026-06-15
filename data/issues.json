@@ -386,18 +386,25 @@
       "imageCommits": [
         "93ec5417917b3ba49d2262225fbe7de0998155d9"
       ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: each Today's Nutrition meal card showed the meal NAME and a meal-type pill with the same word — 'Breakfast' + a 'Breakfast' pill, 'Lunch' + 'Lunch', 'Afternoon Snack' + 'Snack' (the circled areas) — duplicated text that read as clutter. Fix (NutritionMealCard.tsx): the meal-type chip now renders only when it adds information; when the meal name already contains the type label it's hidden. Result (see shot): cards read cleanly as name + macros — Breakfast / Mid-Morning Snack / Lunch / Afternoon Snack / Evening Snack, no repeated pill. A recipe-named meal (e.g. 'Soy Bowl' in the Dinner slot) still shows its 'Dinner' chip since that's not redundant. Verified on /nutrition, 0 console errors.",
-        "imagePath": "images/i-20260614-1c7a-fix.png",
-        "imagePaths": [
-          "images/i-20260614-1c7a-fix.png"
-        ],
-        "imageCommit": "39b456a3fd8621f85bc018a1a3db20c43c222a7f",
-        "fixedAt": "2026-06-14T14:08:57.729Z",
-        "appCommit": "491013db"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-15T07:28:41.607Z",
+          "event": "reopened",
+          "note": "we can make the checkbox a bit smaller and make the ui ux nice",
+          "previousFix": {
+            "description": "Root cause: each Today's Nutrition meal card showed the meal NAME and a meal-type pill with the same word — 'Breakfast' + a 'Breakfast' pill, 'Lunch' + 'Lunch', 'Afternoon Snack' + 'Snack' (the circled areas) — duplicated text that read as clutter. Fix (NutritionMealCard.tsx): the meal-type chip now renders only when it adds information; when the meal name already contains the type label it's hidden. Result (see shot): cards read cleanly as name + macros — Breakfast / Mid-Morning Snack / Lunch / Afternoon Snack / Evening Snack, no repeated pill. A recipe-named meal (e.g. 'Soy Bowl' in the Dinner slot) still shows its 'Dinner' chip since that's not redundant. Verified on /nutrition, 0 console errors.",
+            "imagePath": "images/i-20260614-1c7a-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1c7a-fix.png"
+            ],
+            "imageCommit": "39b456a3fd8621f85bc018a1a3db20c43c222a7f",
+            "fixedAt": "2026-06-14T14:08:57.729Z",
+            "appCommit": "491013db"
+          }
+        }
+      ],
       "needsReview": false
     },
     {
