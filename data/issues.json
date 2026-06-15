@@ -172,8 +172,21 @@
       "imageCommits": [
         "6e38a06d93f6235206669a5470ce12eae128f9a9"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fix screenshot (as requested). Photo-meal logging verified end-to-end on the dev build: a food photo is identified + macros estimated (gpt-4o-mini vision), logged with those macros, and Today's Nutrition jumps 0 to ~350 kcal (P5/C60/F10) — the shot shows the totals + macro bars filled after a photo-logged meal. Backend is deployed (live); the frontend half ships with the next app version cut from the main workstation.",
+        "imagePath": "images/i-20260614-20d3-fix.png",
+        "imagePaths": [
+          "images/i-20260614-20d3-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f21ad0496040102d7332e5ea2f01cb027ec76f7c",
+        "imageCommits": [
+          "f21ad0496040102d7332e5ea2f01cb027ec76f7c"
+        ],
+        "fixedAt": "2026-06-15T09:35:52.431Z",
+        "appCommit": "f4add475"
+      },
       "history": [
         {
           "at": "2026-06-14T10:13:26.988Z",
@@ -211,8 +224,6 @@
       ],
       "needsReview": false,
       "imagePrivate": true,
-      "reviewReason": "Why this wave keeps reopening: the fixes are merged to main and verified on the dev preview, but they have not reached your installed app yet — a fresh app version has to be cut from the main (Shaan) workstation, which is where app versions are made (not this dev machine). So from here I cannot make them go live, only verify them on the preview. Ready and waiting on a fresh app version: photo-meal macros (20d3), welcome-page pricing line (126d), smaller meal-card checkbox (1c7a), dinner-shows-0kcal (985d), and the coach-greeting trim (958c, whose server side is already updated). Next step is on the main workstation: cut a fresh app version so all of these reach your device, then they verify on-device and close. Until then, re-marking them here just loops.",
-      "reviewedAt": "2026-06-15T09:06:50.395Z",
       "reviewReply": "add the fixed screenshot",
       "reviewRepliedAt": "2026-06-15T09:30:11.429Z"
     },
