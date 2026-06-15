@@ -59,10 +59,21 @@ function downloadPrivImage(privPath, localDest) {
 
 function uploadToPrivRepo(localPath, privPath, message) {
   const content = readFileSync(localPath).toString("base64");
+  // GitHub's contents API requires the existing blob's `sha` to OVERWRITE a
+  // file. Re-resolving an issue overwrites its prior fix image, so fetch the
+  // current sha first; a 404 (brand-new file) leaves it undefined — the correct
+  // payload for a create. Without this, every re-resolve 422'd ("sha wasn't supplied").
+  let sha;
+  try {
+    const existing = ghApi(`repos/${PRIV_OWNER}/${PRIV_REPO}/contents/${privPath}`);
+    sha = existing?.sha;
+  } catch { /* file does not exist yet — create, no sha needed */ }
+  const body = { message, content, branch: "main" };
+  if (sha) body.sha = sha;
   return ghApi(
     `repos/${PRIV_OWNER}/${PRIV_REPO}/contents/${privPath}`,
     "PUT",
-    { message, content, branch: "main" }
+    body
   );
 }
 
