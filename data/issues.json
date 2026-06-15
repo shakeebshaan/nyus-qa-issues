@@ -486,38 +486,6 @@
       "history": []
     },
     {
-      "id": "i-20260615-0ee6",
-      "createdAt": "2026-06-15T09:38:20.818Z",
-      "route": null,
-      "description": "This should not happen at all install very hard limits so that it's not answering other than the fitness or app related like this",
-      "imagePath": "images/i-20260615-0ee6.jpg",
-      "imageCommit": "6ebadc5ac1864d34ddff3a7cf594d52c9e38eb16",
-      "imagePaths": [
-        "images/i-20260615-0ee6.jpg"
-      ],
-      "imageCommits": [
-        "6ebadc5ac1864d34ddff3a7cf594d52c9e38eb16"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the coach had no hard topic boundary, so it happily answered off-domain questions (your shot: it explained how to install a Python venv). Fix: added a non-negotiable SCOPE limit at the top of the live coach system prompt (coach_system.txt) — it only handles fitness/nutrition/training/recovery/wellness + using the NYUS app; for anything else it declines in one warm sentence and redirects, and never emits code/commands/tutorials even if asked directly or told to ignore instructions. Verified live on /coach-chat: 'How do I install a Python virtual environment on Windows?' → 'That's outside what I can help with — I'm your fitness coach. Want to check today's meals or log your workout?'. Backend is deployed, so this is already live.",
-        "imagePath": "images/i-20260615-0ee6-fix.png",
-        "imagePaths": [
-          "images/i-20260615-0ee6-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "bf662c4cde935b2b4b57b83267fc6dcbafd85b08",
-        "imageCommits": [
-          "bf662c4cde935b2b4b57b83267fc6dcbafd85b08"
-        ],
-        "fixedAt": "2026-06-15T10:07:42.996Z",
-        "appCommit": "13c9b74"
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260615-3abb",
       "createdAt": "2026-06-15T09:40:57.157Z",
       "route": null,
