@@ -338,8 +338,21 @@
       "imageCommits": [
         "93ec5417917b3ba49d2262225fbe7de0998155d9"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Re: 'missing image and duplicate images, and the meal title can be over the checkbox.' Fixed 2 of 3 in the frontend (verified on dev): (1) MISSING IMAGE — a meal whose server image is a degenerate ~1x1 dud (e.g. Lunch's 9162.png) used to 'load' fine so onError never fired and the card showed a blank box; AsyncImage now treats naturalWidth<=2 as a failure and falls back to a real meal-photo placeholder (Lunch now shows a proper photo, see shot). (2) TITLE OVER CHECKBOX — added min-w-0 to the title button + break-words to the title so a long meal name stays in its column and can't run under the eaten-checkbox. (3) DUPLICATE IMAGES — the two snack cards are DIFFERENT files (9161 vs 9163), not a frontend dup; they're near-identical AI-generated photos, so that's a backend image-generation/dedup matter (the generator gave two snacks look-alike images) — flagging separately since the FE can't dedup distinct URLs. Ships to your device with the next app version.",
+        "imagePath": "images/i-20260614-1c7a-fix.png",
+        "imagePaths": [
+          "images/i-20260614-1c7a-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c0e5ccd952c0fbf0d9ef80db27580aa06519b569",
+        "imageCommits": [
+          "c0e5ccd952c0fbf0d9ef80db27580aa06519b569"
+        ],
+        "fixedAt": "2026-06-15T09:41:17.775Z",
+        "appCommit": "8b3e9453"
+      },
       "history": [
         {
           "at": "2026-06-15T07:28:41.607Z",
