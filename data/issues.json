@@ -197,53 +197,6 @@
       "reviewRepliedAt": "2026-06-14T10:05:12.554Z"
     },
     {
-      "id": "i-20260614-fb14",
-      "createdAt": "2026-06-14T02:57:39.576Z",
-      "route": null,
-      "description": "Animated these 3 so that there is only one button click make it loop so this animates in loop and user click on get started and we go forward instead of 3 taps",
-      "imagePath": "images/i-20260614-fb14-0.jpg",
-      "imageCommit": "39f30ba447fbf7db795b355d893acd18cbd896d2",
-      "imagePaths": [
-        "images/i-20260614-fb14-0.jpg",
-        "images/i-20260614-fb14-1.jpg",
-        "images/i-20260614-fb14-2.jpg"
-      ],
-      "imageCommits": [
-        "39f30ba447fbf7db795b355d893acd18cbd896d2",
-        "5c3051e470388b0bd186b696bdebb2ee346b07f1",
-        "1d2efb522ce2198e37ad1da34716fcfc5ea1bb4b"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Re: 'animated?'. The 3-slide intro already auto-loops (NOURISH→TRAIN→PROGRESS every 3s) with a single Get Started CTA — but a still screenshot can't show the loop, hence the doubt. Added a visible story-style countdown on the page dots: the active dot is a grey track with a solid-pink fill that grows left→right over each 3s auto-advance (the attached shot shows it ~55% through slide 1), so the auto-play reads as motion even in a still. Implemented as a pure-CSS keyframe (intro-dot-fill) after Framer drove it on the compositor where it collapsed to full and was invisible. Verified on /dev/intro: fill scaleX measured 0.52→0.85 across a cycle, slides cycle hands-free, 0 console errors. Bonus: auto-advance now pauses under prefers-reduced-motion (WCAG 2.2.2).",
-        "imagePath": "images/i-20260614-fb14-fix.png",
-        "imagePaths": [
-          "images/i-20260614-fb14-fix.png"
-        ],
-        "imageCommit": "75d863158ea1f2bc18929b2fc2c59e1c3d6814a8",
-        "fixedAt": "2026-06-14T13:19:06.148Z",
-        "appCommit": "b9704d03"
-      },
-      "history": [
-        {
-          "at": "2026-06-14T10:07:58.633Z",
-          "event": "reopened",
-          "note": "animated?",
-          "previousFix": {
-            "description": "Intro carousel no longer needs three taps. The 3 pillar slides (Nourish / Train / Progress) now AUTO-CYCLE in a continuous loop (~3s each), and the CTA is a single 'Get Started' that proceeds at any point — instead of tapping 'Continue' through all three. Swipe still browses (wraps both ways) and the dots jump to a slide; auto-advance pauses while dragging. Verified live on /dev/intro: sampled the loop NOURISH -> TRAIN -> PROGRESS and confirmed one Get Started button. Reduced-motion safe.",
-            "imagePath": "images/i-20260614-fb14-fix.png",
-            "imagePaths": [
-              "images/i-20260614-fb14-fix.png"
-            ],
-            "imageCommit": "70dfc4bdbcd7f61d077a3a47d90cf5ddcaac07d7",
-            "fixedAt": "2026-06-14T08:06:58.850Z",
-            "appCommit": "70b6d703"
-          }
-        }
-      ],
-      "needsReview": false
-    },
-    {
       "id": "i-20260614-1bc5",
       "createdAt": "2026-06-14T03:07:28.506Z",
       "route": null,
