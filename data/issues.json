@@ -615,8 +615,21 @@
         "242b76beb113f9b3b09657b2d9e68ef569aad808"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "The coach now references the user's badges, progress, streak and social context to motivate. The context already fed the coach this (streak/level/badges, friends/groups/leaderboard, recent DMs + group messages — all wired into ContextAssembler.build), but the prompt flatly banned levels/XP/game-vocabulary, which suppressed it. Reconciled the prompt: the coach may reference rank/level name + badges + streak + social to motivate (calm and concrete — no XP counters, no game emojis), plus a proactive instruction to weave a fresh badge/streak/social win into one calm line. Verified LIVE (screenshot): asked How",
+        "imagePath": "images/i-20260615-f0ad-fix.png",
+        "imagePaths": [
+          "images/i-20260615-f0ad-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f580cd766650bfbd0fdc2ab865daa506d73a56e3",
+        "imageCommits": [
+          "f580cd766650bfbd0fdc2ab865daa506d73a56e3"
+        ],
+        "fixedAt": "2026-06-15T15:07:44.725Z",
+        "appCommit": "e4d9a927"
+      },
       "history": [
         {
           "at": "2026-06-15T10:38:55.953Z",
