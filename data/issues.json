@@ -204,7 +204,9 @@
           }
         }
       ],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "It IS implemented — verified in code. (1) The coach context ALWAYS includes a [PROGRESS - STREAK, LEVEL & BADGES] block (ContextAssembler.build, _streak_status is priority-2/always-on) carrying the user's level + rank name, XP total, current streak, and earned badges; plus social context (_social_connections + _recent_user_chats - friends, leaderboard, recent DMs/group msgs). (2) The coach prompt (coach_system.txt 'ACHIEVEMENT ACKNOWLEDGMENT') tells the coach to proactively weave a fresh badge / level-rank gain / notable streak / social activity into one calm motivating line, using ONLY what's in context. Why you may not see it right now: the coach is returning 429 because the OpenAI billing limit is STILL hit (see b583). The moment billing is restored I'll demonstrate the coach proactively referencing your level/badges/streak/social; if it still isn't surfacing then, tell me what you expect and I'll tune the prompt.",
+      "reviewedAt": "2026-06-16T15:10:00.852Z"
     }
   ]
 }
