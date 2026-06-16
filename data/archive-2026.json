@@ -1416,6 +1416,111 @@
       "needsReview": false,
       "resolvedAt": "2026-06-16T10:54:26.721Z",
       "archivedAt": "2026-06-16T10:54:26.721Z"
+    },
+    {
+      "id": "i-20260614-1c7a",
+      "createdAt": "2026-06-14T10:11:30.426Z",
+      "route": null,
+      "description": "Fix text make it readable and UIUX fix",
+      "imagePath": "images/i-20260614-1c7a.jpg",
+      "imageCommit": "93ec5417917b3ba49d2262225fbe7de0998155d9",
+      "imagePaths": [
+        "images/i-20260614-1c7a.jpg"
+      ],
+      "imageCommits": [
+        "93ec5417917b3ba49d2262225fbe7de0998155d9"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Redesigned the meal card — implemented Design 1 Refined",
+        "imagePath": "images/i-20260614-1c7a-fix.png",
+        "imagePaths": [
+          "images/i-20260614-1c7a-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d5b1eb473edf473ac94ec19acbcc2820046d1e83",
+        "imageCommits": [
+          "d5b1eb473edf473ac94ec19acbcc2820046d1e83"
+        ],
+        "fixedAt": "2026-06-15T17:06:28.996Z",
+        "appCommit": "a668421b"
+      },
+      "history": [
+        {
+          "at": "2026-06-15T07:28:41.607Z",
+          "event": "reopened",
+          "note": "we can make the checkbox a bit smaller and make the ui ux nice",
+          "previousFix": {
+            "description": "Root cause: each Today's Nutrition meal card showed the meal NAME and a meal-type pill with the same word — 'Breakfast' + a 'Breakfast' pill, 'Lunch' + 'Lunch', 'Afternoon Snack' + 'Snack' (the circled areas) — duplicated text that read as clutter. Fix (NutritionMealCard.tsx): the meal-type chip now renders only when it adds information; when the meal name already contains the type label it's hidden. Result (see shot): cards read cleanly as name + macros — Breakfast / Mid-Morning Snack / Lunch / Afternoon Snack / Evening Snack, no repeated pill. A recipe-named meal (e.g. 'Soy Bowl' in the Dinner slot) still shows its 'Dinner' chip since that's not redundant. Verified on /nutrition, 0 console errors.",
+            "imagePath": "images/i-20260614-1c7a-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1c7a-fix.png"
+            ],
+            "imageCommit": "39b456a3fd8621f85bc018a1a3db20c43c222a7f",
+            "fixedAt": "2026-06-14T14:08:57.729Z",
+            "appCommit": "491013db",
+            "imagePrivate": true
+          }
+        },
+        {
+          "at": "2026-06-15T08:52:53.267Z",
+          "event": "reopened",
+          "note": "missing image and duplicate images , and the meal title can be over the checkbox",
+          "previousFix": {
+            "description": "Follow-up done: shrank the meal-card eaten-checkbox from a chunky 48px square to a 28px rounded box (rounded-lg), wrapped in a 44px touch-target label so the tap area still meets the touch rule. Verified on /nutrition: checkboxes read smaller/cleaner and still toggle (tapped Breakfast → checked, totals update), 0 console errors. The redundant meal-type pills from the first pass stay hidden, so each card now reads as a clean name + macros + compact checkbox.",
+            "imagePath": "images/i-20260614-1c7a-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1c7a-fix.png"
+            ],
+            "imageCommit": "13920ef9a2665ec440c6976ad5de338d78dc4c2f",
+            "fixedAt": "2026-06-15T07:39:40.182Z",
+            "appCommit": "f4add475",
+            "imagePrivate": true
+          }
+        },
+        {
+          "at": "2026-06-15T10:39:22.458Z",
+          "event": "reopened",
+          "note": "not quit there yet",
+          "previousFix": {
+            "description": "Re: 'missing image and duplicate images, and the meal title can be over the checkbox.' Fixed 2 of 3 in the frontend (verified on dev): (1) MISSING IMAGE — a meal whose server image is a degenerate ~1x1 dud (e.g. Lunch's 9162.png) used to 'load' fine so onError never fired and the card showed a blank box; AsyncImage now treats naturalWidth<=2 as a failure and falls back to a real meal-photo placeholder (Lunch now shows a proper photo, see shot). (2) TITLE OVER CHECKBOX — added min-w-0 to the title button + break-words to the title so a long meal name stays in its column and can't run under the eaten-checkbox. (3) DUPLICATE IMAGES — the two snack cards are DIFFERENT files (9161 vs 9163), not a frontend dup; they're near-identical AI-generated photos, so that's a backend image-generation/dedup matter (the generator gave two snacks look-alike images) — flagging separately since the FE can't dedup distinct URLs. Ships to your device with the next app version.",
+            "imagePath": "images/i-20260614-1c7a-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1c7a-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "c0e5ccd952c0fbf0d9ef80db27580aa06519b569",
+            "imageCommits": [
+              "c0e5ccd952c0fbf0d9ef80db27580aa06519b569"
+            ],
+            "fixedAt": "2026-06-15T09:41:17.775Z",
+            "appCommit": "8b3e9453"
+          }
+        },
+        {
+          "at": "2026-06-15T14:08:33.785Z",
+          "event": "reopened",
+          "note": "can be make the entire meal card better ?",
+          "previousFix": {
+            "description": "Reopen not",
+            "imagePath": "images/i-20260614-1c7a-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1c7a-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "83f32140b14f2a61d5bc40a7f9f43f026e65c5fc",
+            "imageCommits": [
+              "83f32140b14f2a61d5bc40a7f9f43f026e65c5fc"
+            ],
+            "fixedAt": "2026-06-15T13:44:46.011Z",
+            "appCommit": "a406489b"
+          }
+        }
+      ],
+      "needsReview": false,
+      "imagePrivate": true,
+      "resolvedAt": "2026-06-16T10:54:40.141Z",
+      "archivedAt": "2026-06-16T10:54:40.141Z"
     }
   ]
 }
