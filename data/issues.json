@@ -212,9 +212,11 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewReply": "do it",
-      "reviewRepliedAt": "2026-06-15T14:06:22.346Z"
+      "reviewRepliedAt": "2026-06-15T14:06:22.346Z",
+      "reviewReason": "URGENT PRODUCTION ALERT — the OpenAI account quota/billing hard limit has been reached. The exercise-image run completed 195 illustrations, then OpenAI began returning billing_hard_limit_reached. I verified it is ACCOUNT-WIDE: both gpt-5.4 and gpt-4o-mini now return 429 'exceeded your current quota', so coach chat, meal-photo analysis, and AI plan generation are ALL failing for real users right now. ACTION NEEDED: raise the OpenAI billing limit / add credits in the OpenAI dashboard to restore AI features. Status of b583 itself: your circled Chest+Triceps exercises are fixed and verified (6/6 clean OpenAI illustrations) plus ~195 other active-plan exercises; the remaining ~72 still show old thumbnails because the limit was hit mid-run. Once OpenAI billing is restored I just re-run the generator (the fixed candidate filter targets only the unconverted ones — no duplicate spend). I have STOPPED generating to avoid further overage.",
+      "reviewedAt": "2026-06-16T13:32:24.374Z"
     },
     {
       "id": "i-20260615-463e",
