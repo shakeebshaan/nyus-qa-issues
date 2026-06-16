@@ -20,8 +20,25 @@
         "ab7ab3e013a8ba5f6ae2cd6f5ad8294a7bb68b09",
         "8bc689d0db40031667864054052099b71a54e428"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the coach-creates-your-plan path showed a redundant 'Plan Created + Continue' screen between the plan-creation animation and the welcome tour, forcing an extra Continue tap after the plan was already done. Fix: the animation now auto-advances straight into the Plan Ready tour the instant the plan is ready (autoAdvanceOnComplete in Screen9_CoachPreview); the manual Continue gate is removed on the happy path (escape-hatch kept for a slow finalize). Flow is now two screens: coach Your-Goal page, then the animation which flows into the tour. Sequence screenshots attached: 1 goal page, 2 animation, 3 auto-advanced tour.",
+        "imagePath": "images/i-20260614-1bc5-fix.png",
+        "imagePaths": [
+          "images/i-20260614-1bc5-fix.png",
+          "images/i-20260614-1bc5-fix-2.png",
+          "images/i-20260614-1bc5-fix-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "945a9a5b72683bc0ea6cd6c5af9c5842b696824a",
+        "imageCommits": [
+          "945a9a5b72683bc0ea6cd6c5af9c5842b696824a",
+          "d53b6c4b162f32a6c2f1b8d103e7d92205c63b0b",
+          "5e063267562ee7480c5d397770080ffb83811c02"
+        ],
+        "fixedAt": "2026-06-16T11:20:45.574Z",
+        "appCommit": "a942e313"
+      },
       "history": [
         {
           "at": "2026-06-14T10:06:59.344Z",
