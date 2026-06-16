@@ -621,22 +621,29 @@
         "a2bbf93f1abd79f8ebe511544b6d92835584a2a1"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "The extra space is the floating-coach-FAB clearance reserved below the last card. Your installed build reserves the old footprint (--fab-clearance 112px, so .pb-fab = 72px nav + 112px + safe-area = ~184px of dead space below the list — matching your screenshot). Current code already sets --fab-clearance to 0, so the reservation collapses to nav-only: verified on the dev build that .pb-fab padding is now 72px (just the bottom-nav height), down from ~184px, so the list ends just above the nav (the coach FAB self-hides at scroll-bottom, so it needs no reserved footprint). CSS-only change, already in the codebase — reaches your device with the next app version. Note: your shot is the gym workout list; the QA test account is walking-only, so the attached capture shows the Activity walking state, but this clearance fix is global to every Activity state. If any residual gap remains after the next version, flag it and I will chase the specific element.",
-        "imagePath": "images/i-20260615-463e-fix.png",
-        "imagePaths": [
-          "images/i-20260615-463e-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a6186b862312c6f4a091919ef46a298eb92c9ac0",
-        "imageCommits": [
-          "a6186b862312c6f4a091919ef46a298eb92c9ac0"
-        ],
-        "fixedAt": "2026-06-15T16:38:52.589Z",
-        "appCommit": "55a33769"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-16T10:52:00.051Z",
+          "event": "reopened",
+          "note": "no images",
+          "previousFix": {
+            "description": "The extra space is the floating-coach-FAB clearance reserved below the last card. Your installed build reserves the old footprint (--fab-clearance 112px, so .pb-fab = 72px nav + 112px + safe-area = ~184px of dead space below the list — matching your screenshot). Current code already sets --fab-clearance to 0, so the reservation collapses to nav-only: verified on the dev build that .pb-fab padding is now 72px (just the bottom-nav height), down from ~184px, so the list ends just above the nav (the coach FAB self-hides at scroll-bottom, so it needs no reserved footprint). CSS-only change, already in the codebase — reaches your device with the next app version. Note: your shot is the gym workout list; the QA test account is walking-only, so the attached capture shows the Activity walking state, but this clearance fix is global to every Activity state. If any residual gap remains after the next version, flag it and I will chase the specific element.",
+            "imagePath": "images/i-20260615-463e-fix.png",
+            "imagePaths": [
+              "images/i-20260615-463e-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "a6186b862312c6f4a091919ef46a298eb92c9ac0",
+            "imageCommits": [
+              "a6186b862312c6f4a091919ef46a298eb92c9ac0"
+            ],
+            "fixedAt": "2026-06-15T16:38:52.589Z",
+            "appCommit": "55a33769"
+          }
+        }
+      ],
       "needsReview": false
     },
     {
