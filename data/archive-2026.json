@@ -1521,6 +1521,78 @@
       "imagePrivate": true,
       "resolvedAt": "2026-06-16T10:54:40.141Z",
       "archivedAt": "2026-06-16T10:54:40.141Z"
+    },
+    {
+      "id": "i-20260614-985d",
+      "createdAt": "2026-06-14T04:54:56.511Z",
+      "route": null,
+      "description": "Error.on dinner plan and fix",
+      "imagePath": "images/i-20260614-985d.jpg",
+      "imageCommit": "06da5db18267b459d46439b2df7c16d823f2bdb9",
+      "imagePaths": [
+        "images/i-20260614-985d.jpg"
+      ],
+      "imageCommits": [
+        "06da5db18267b459d46439b2df7c16d823f2bdb9"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Reopen verify",
+        "imagePath": "images/i-20260614-985d-fix.png",
+        "imagePaths": [
+          "images/i-20260614-985d-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "460d03f79a533c8ff9b831b04e55306485f43fad",
+        "imageCommits": [
+          "460d03f79a533c8ff9b831b04e55306485f43fad"
+        ],
+        "fixedAt": "2026-06-15T15:04:15.044Z",
+        "appCommit": "70c85c53"
+      },
+      "history": [
+        {
+          "at": "2026-06-14T10:05:46.540Z",
+          "event": "reopened",
+          "note": "not clear",
+          "previousFix": {
+            "description": "Root cause: the plan-ready 'Plan Details > Meals' list mapped previewDietDay.meals directly (unfiltered), so an unfilled slot (0 ingredients) rendered as 'Dinner ~0 kcal' — unlike the weekly-progression list + the save path, which both strip empty meals. Fix: previewDietDay now filters out meals with no ingredients at the source, so a ~0 kcal empty slot never shows (and if a day has only empty slots, the existing 'No meals added yet' note shows). Verified on /dev/plan-builder?stage=overview (its seed has an empty dinner): Meals now reads just 'Oats Bowl / Chicken Breast Bowl' — the Dinner ~0 kcal row is gone.",
+            "imagePath": "images/i-20260614-985d-fix.png",
+            "imagePaths": [
+              "images/i-20260614-985d-fix.png"
+            ],
+            "imageCommit": "0140ab02718d149c4ecaf481198a53a7908a0114",
+            "fixedAt": "2026-06-14T09:34:58.784Z",
+            "appCommit": "2a252642",
+            "imagePrivate": true
+          }
+        },
+        {
+          "at": "2026-06-15T14:09:09.139Z",
+          "event": "reopened",
+          "note": "verify it",
+          "previousFix": {
+            "description": "Reopened with dinner",
+            "imagePath": "images/i-20260614-985d-fix.png",
+            "imagePaths": [
+              "images/i-20260614-985d-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "b59b6a6a9d60fc36811aa2235a394dbc9500121b",
+            "imageCommits": [
+              "b59b6a6a9d60fc36811aa2235a394dbc9500121b"
+            ],
+            "fixedAt": "2026-06-15T12:08:14.102Z",
+            "appCommit": "70c85c53"
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewReply": "dinner said 0 calories",
+      "reviewRepliedAt": "2026-06-15T07:28:06.444Z",
+      "imagePrivate": true,
+      "resolvedAt": "2026-06-16T10:55:06.645Z",
+      "archivedAt": "2026-06-16T10:55:06.645Z"
     }
   ]
 }
