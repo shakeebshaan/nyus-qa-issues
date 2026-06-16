@@ -252,8 +252,21 @@
         "a3d35c9ec982eae20402ecce1a02ecae0884b601"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen 'no screenshot' — here is the verified fix. A 13.6 MB meal photo (well over the old 6 MB hard limit) is now accepted: handlePhotoSelected compresses it client-side (downscale to ~1568px JPEG via compressImageToDataUrl) and sends it to the vision API, which identified it — the screenshot shows the description auto-filled ('breakfast plate with hash browns, fried egg, bacon, cherry tomatoes'). The old 'Photo too large (under 6 MB)' reject is replaced by compression; only a 25 MB backstop remains for pathological inputs. Code: CustomMealModal + image-compress.ts (commit e4d9a927).",
+        "imagePath": "images/i-20260615-3abb-fix.png",
+        "imagePaths": [
+          "images/i-20260615-3abb-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7dc1dcc1498e55f6350d1b36445ddad250b8d960",
+        "imageCommits": [
+          "7dc1dcc1498e55f6350d1b36445ddad250b8d960"
+        ],
+        "fixedAt": "2026-06-16T11:43:21.973Z",
+        "appCommit": "e4d9a927"
+      },
       "history": [
         {
           "at": "2026-06-16T10:51:44.513Z",
