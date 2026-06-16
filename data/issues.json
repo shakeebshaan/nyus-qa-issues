@@ -327,21 +327,8 @@
         "242b76beb113f9b3b09657b2d9e68ef569aad808"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Reopen 'what is plan total at the bottom': the coach's progress-summary block can use period plan_total (coach_tools.py show_progress_summary), but the frontend only humanised daily/weekly/monthly/yearly — so plan_total leaked as the raw orphan label 'plan_total' at the bottom of the card. Fix (ProgressSummaryBlock): map plan_total to 'Plan to date' and humanise any unmapped machine token so a raw debug-looking label never surfaces again. Screenshot: the progress-summary card now reads 'Plan to date'. The original ask — coach aware of streak/level/badges + social — is the deployed backend context wiring (context_assembler.py _streak_status/_social_connections/_recent_user_chats).",
-        "imagePath": "images/i-20260615-f0ad-fix.png",
-        "imagePaths": [
-          "images/i-20260615-f0ad-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "e20d2e93711d96ad7520839735f9a7edf8b38a7c",
-        "imageCommits": [
-          "e20d2e93711d96ad7520839735f9a7edf8b38a7c"
-        ],
-        "fixedAt": "2026-06-16T11:49:15.735Z",
-        "appCommit": "a06c8810"
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-15T10:38:55.953Z",
@@ -398,6 +385,25 @@
             ],
             "fixedAt": "2026-06-15T15:07:44.725Z",
             "appCommit": "e4d9a927"
+          }
+        },
+        {
+          "at": "2026-06-16T14:57:40.634Z",
+          "event": "reopened",
+          "note": "implement it",
+          "previousFix": {
+            "description": "Reopen 'what is plan total at the bottom': the coach's progress-summary block can use period plan_total (coach_tools.py show_progress_summary), but the frontend only humanised daily/weekly/monthly/yearly — so plan_total leaked as the raw orphan label 'plan_total' at the bottom of the card. Fix (ProgressSummaryBlock): map plan_total to 'Plan to date' and humanise any unmapped machine token so a raw debug-looking label never surfaces again. Screenshot: the progress-summary card now reads 'Plan to date'. The original ask — coach aware of streak/level/badges + social — is the deployed backend context wiring (context_assembler.py _streak_status/_social_connections/_recent_user_chats).",
+            "imagePath": "images/i-20260615-f0ad-fix.png",
+            "imagePaths": [
+              "images/i-20260615-f0ad-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e20d2e93711d96ad7520839735f9a7edf8b38a7c",
+            "imageCommits": [
+              "e20d2e93711d96ad7520839735f9a7edf8b38a7c"
+            ],
+            "fixedAt": "2026-06-16T11:49:15.735Z",
+            "appCommit": "a06c8810"
           }
         }
       ],
