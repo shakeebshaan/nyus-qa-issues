@@ -1328,6 +1328,60 @@
       "reviewRepliedAt": "2026-06-15T09:30:11.429Z",
       "resolvedAt": "2026-06-15T10:40:20.234Z",
       "archivedAt": "2026-06-15T10:40:20.234Z"
+    },
+    {
+      "id": "i-20260615-d495",
+      "createdAt": "2026-06-15T09:34:23.406Z",
+      "route": null,
+      "description": "These badges should be shown on all screens when achieved not only on the profile page also fot the level up badge this is application wide not just profile page limited",
+      "imagePath": "images/i-20260615-d495.jpg",
+      "imageCommit": "71c54323876da287be76823d4f932b6f0e18341d",
+      "imagePaths": [
+        "images/i-20260615-d495.jpg"
+      ],
+      "imageCommits": [
+        "71c54323876da287be76823d4f932b6f0e18341d"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Reopen: how",
+        "imagePath": "images/i-20260615-d495-fix.png",
+        "imagePaths": [
+          "images/i-20260615-d495-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "942311df14b03fabcfb6e73225c747b8159dbb2f",
+        "imageCommits": [
+          "942311df14b03fabcfb6e73225c747b8159dbb2f"
+        ],
+        "fixedAt": "2026-06-15T14:24:00.421Z",
+        "appCommit": "e4d9a927"
+      },
+      "history": [
+        {
+          "at": "2026-06-15T14:07:51.903Z",
+          "event": "reopened",
+          "note": "this cant be before login, how are you wining a badge before login ?",
+          "previousFix": {
+            "description": "Root cause: the badge-unlock toast (useBadgeCheck) only ran on the Profile level card and the Achievements gallery, so an earned badge surfaced only when the user opened those two screens. Level-ups were already global via LevelUpWatcher but badges were not. Fix: added BadgeWatcher, mounted once at the app shell beside LevelUpWatcher, which runs the badge check on navigation and on app/tab resume (throttled to 60s) so a newly-earned badge raises its calm achievement toast on ANY screen. The server check is idempotent (it skips already-earned badges) so running it app-wide never repeats a toast. Verified: the badge check now fires on non-Profile screens and the real shipped BadgeWatcher to useBadgeCheck to AchievementProvider chain renders the toast off-Profile (capture attached; the logged-out background is a headless-harness session artifact, not a product state). Client-side change, so it appears on device with the next app version cut from the main workstation.",
+            "imagePath": "images/i-20260615-d495-fix.png",
+            "imagePaths": [
+              "images/i-20260615-d495-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "ab76609f41369b6aeac5259acb24f797bc71346b",
+            "imageCommits": [
+              "ab76609f41369b6aeac5259acb24f797bc71346b"
+            ],
+            "fixedAt": "2026-06-15T11:52:57.709Z",
+            "appCommit": "d5dd293e"
+          }
+        }
+      ],
+      "needsReview": false,
+      "resolvedAt": "2026-06-16T10:52:14.026Z",
+      "archivedAt": "2026-06-16T10:52:14.026Z"
     }
   ]
 }
