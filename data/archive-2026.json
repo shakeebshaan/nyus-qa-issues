@@ -1859,6 +1859,108 @@
       "needsReview": false,
       "resolvedAt": "2026-06-16T15:00:17.202Z",
       "archivedAt": "2026-06-16T15:00:17.202Z"
+    },
+    {
+      "id": "i-20260614-1bc5",
+      "createdAt": "2026-06-14T03:07:28.506Z",
+      "route": null,
+      "description": "There are lots of issues here on the automatically build plan path, the your goal page is very plan no animations no coach avatar should be same as meals images top with bottom blured nicely done, which shows coach details your details and then the button should say coach name build plan something like this you name it , and then will show that finalizing plan animated page and we will have the plan ready once the animation is completed",
+      "imagePath": "images/i-20260614-1bc5-0.jpg",
+      "imageCommit": "7a9883831f0005c509572750b12c0b3842576d18",
+      "imagePaths": [
+        "images/i-20260614-1bc5-0.jpg",
+        "images/i-20260614-1bc5-1.jpg",
+        "images/i-20260614-1bc5-2.jpg",
+        "images/i-20260614-1bc5-3.jpg"
+      ],
+      "imageCommits": [
+        "7a9883831f0005c509572750b12c0b3842576d18",
+        "ce2298ca6cc3c2162e243c1d5c7eacd4dd3c79cd",
+        "ab7ab3e013a8ba5f6ae2cd6f5ad8294a7bb68b09",
+        "8bc689d0db40031667864054052099b71a54e428"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the coach-creates-your-plan path showed a redundant 'Plan Created + Continue' screen between the plan-creation animation and the welcome tour, forcing an extra Continue tap after the plan was already done. Fix: the animation now auto-advances straight into the Plan Ready tour the instant the plan is ready (autoAdvanceOnComplete in Screen9_CoachPreview); the manual Continue gate is removed on the happy path (escape-hatch kept for a slow finalize). Flow is now two screens: coach Your-Goal page, then the animation which flows into the tour. Sequence screenshots attached: 1 goal page, 2 animation, 3 auto-advanced tour.",
+        "imagePath": "images/i-20260614-1bc5-fix.png",
+        "imagePaths": [
+          "images/i-20260614-1bc5-fix.png",
+          "images/i-20260614-1bc5-fix-2.png",
+          "images/i-20260614-1bc5-fix-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "945a9a5b72683bc0ea6cd6c5af9c5842b696824a",
+        "imageCommits": [
+          "945a9a5b72683bc0ea6cd6c5af9c5842b696824a",
+          "d53b6c4b162f32a6c2f1b8d103e7d92205c63b0b",
+          "5e063267562ee7480c5d397770080ffb83811c02"
+        ],
+        "fixedAt": "2026-06-16T11:20:45.574Z",
+        "appCommit": "a942e313"
+      },
+      "history": [
+        {
+          "at": "2026-06-14T10:06:59.344Z",
+          "event": "reopened",
+          "note": "don't stick with one coach rohan gen with different styles and personality",
+          "previousFix": {
+            "description": "Reworked the coach-build 'Your Goal' page (Screen9_CoachPreview). It was a plain icon-plate; now it LEADS with the assigned coach's rich drawn portrait (the 206f art) in a living teal-to-purple halo that springs in, with the greeting + your goal/nutrition details below, and the CTA now reads '[Coach], build my plan' (e.g. 'Rohan, build my plan') with a sparkle. The animated 'finalizing plan' page you described already exists (PlanBuildingScreen — the build choreography that plays until the plan is ready; preview at /dev/finalize-preview). Verified on a new /dev/coach-preview harness. Note: I used a circular halo portrait rather than the exact meal-card rectangular 'top image, blurred bottom' treatment — say the word if you want that exact framing and I'll swap it in.",
+            "imagePath": "images/i-20260614-1bc5-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1bc5-fix.png"
+            ],
+            "imageCommit": "c44a556618376c8f96cac696eb772d0b90895b25",
+            "fixedAt": "2026-06-14T09:11:49.749Z",
+            "appCommit": "caf123b7",
+            "imagePrivate": true
+          }
+        },
+        {
+          "at": "2026-06-15T07:29:30.059Z",
+          "event": "reopened",
+          "note": "run the entire flow for that path and show im screenshot",
+          "previousFix": {
+            "description": "Re-fix for 'don't stick with one coach rohan — different styles and personality.' The build-plan coach hero already loads the assigned coach's real PORTRAIT, and the coach is NOT hardcoded: app/services/coach_roster.py deterministically matches each user to one of 12 seeded roster coaches (each with its own art + bio), so different users get different coaches (a given user keeps theirs — by design). The gap was that the hero only showed a name, so the personality didn't come through. Fix: CoachDetails now carries bio/specialty (backend already returned them) and the hero renders the matched coach's bio as an italic personality line under the portrait — e.g. Rohan now reads 'Former cricketer turned coach — home-workout progressions and high-protein Indian meals are his lane.' The real coach also loads over any stale cached name. Verified on /dev/coach-preview: portrait + name + personality line render, 0 console errors. (If you want a LARGER visual-style range, the next step is generating more roster coaches/art via the one-time OpenAI pipeline — say the word and I'll batch it.)",
+            "imagePath": "images/i-20260614-1bc5-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1bc5-fix.png"
+            ],
+            "imageCommit": "6325b4918876e532f6ffc8254305b3672152012f",
+            "fixedAt": "2026-06-14T13:43:28.421Z",
+            "appCommit": "64695dbe",
+            "imagePrivate": true
+          }
+        },
+        {
+          "at": "2026-06-16T10:56:54.611Z",
+          "event": "reopened",
+          "note": "the 3rd screen with continue button is not needed",
+          "previousFix": {
+            "description": "Ran the entire Coach",
+            "imagePath": "images/i-20260614-1bc5-fix.png",
+            "imagePaths": [
+              "images/i-20260614-1bc5-fix.png",
+              "images/i-20260614-1bc5-fix-2.png",
+              "images/i-20260614-1bc5-fix-3.png",
+              "images/i-20260614-1bc5-fix-4.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "dd81934698d21b0c0069001f191607e967ffc0f2",
+            "imageCommits": [
+              "dd81934698d21b0c0069001f191607e967ffc0f2",
+              "3defeb7483ef90ea3929a2992d628f43db2cb1f0",
+              "90d624de5dcc891cc64fb3de14cf5017086fc954",
+              "52f40eb76d75d374b819de3e719eb0fbc0da5ec3"
+            ],
+            "fixedAt": "2026-06-15T13:08:27.976Z",
+            "appCommit": "a406489b"
+          }
+        }
+      ],
+      "needsReview": false,
+      "imagePrivate": true,
+      "resolvedAt": "2026-06-16T15:00:34.030Z",
+      "archivedAt": "2026-06-16T15:00:34.030Z"
     }
   ]
 }
