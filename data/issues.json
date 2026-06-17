@@ -695,7 +695,10 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root cause + a test-account blocker. The workout list renders exercise.image_url (TodaysExerciseList / NextSessionPreview); when it's null the app shows the stick-figure placeholder. The exercises missing images here — 'Pull-down or band row', 'Banded pull-up (if available)' — are COMPOUND / CONDITIONAL AI-generated plan names ('X or Y', '(if available)') that don't map to a single catalog Exercise row, so no image_url gets assigned (the clean names like 'Weighted Chin-Up', 'Concentration Curl' DO have images — OpenAI/YouTube from the earlier batch). The fix is backend: normalize these names when resolving images (strip ' or …', '(if available)', match the primary movement to a catalog exercise's image) and/or have the plan generator stamp a catalog exercise_id+image at build time. BLOCKER: I can't reproduce or verify this on the QA test login — it's walking-only (starter tier), so it has no strength 'Back + Biceps' plan containing these exercises AND can't render the strength workout list at all (same blocker as ac72/463e). To implement + verify I need a strength-tier test account (athlete/fit) with a generated workout plan. Once I have one I'll fix the name→image matching and confirm the placeholders fill in. Flagging together with ac72 — both need that strength-tier login.",
+      "reviewedAt": "2026-06-17T10:33:14.473Z"
     },
     {
       "id": "i-20260617-d039",
