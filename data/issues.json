@@ -61,11 +61,11 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewReply": "check now",
       "reviewRepliedAt": "2026-06-17T04:53:49.985Z",
-      "reviewReason": "Tried per your 'do it' — but OpenAI is STILL returning billing_hard_limit_reached / 429 'exceeded your current quota'. The limit has NOT been raised yet, so I cannot generate the remaining ~72 images, and the coach chat / meal-photo / AI plans are also still down for users. Please raise the limit in the OpenAI dashboard (platform.openai.com - Settings - Limits/Billing - increase the monthly hard limit, or add credits). The moment it's restored I auto-finish the remaining ~72 exercise images on the next tick (the candidate filter targets only the unconverted ones - no duplicate spend). Good news on your other point: the YouTube videos are already preserved - video_url is a SEPARATE column from image_url, so swapping the static image to the OpenAI illustration leaves the play-button video untouched.",
-      "reviewedAt": "2026-06-16T15:08:04.903Z"
+      "reviewReason": "Implemented your directive (only 280 OpenAI, rest YouTube thumbnails). State now: 280 exercises show OpenAI illustrations; 691 show their YouTube thumbnail (derived free from the stored video_url - img.youtube.com/vi/<id>/hqdefault.jpg, no OpenAI spend, no API key; committed scripts/_set_youtube_thumbnails.py, deployed + run). Every exercise that has a YouTube video now shows a thumbnail. This means b583 NO LONGER needs the OpenAI billing limit - YouTube thumbnails are the fallback for the non-OpenAI ones, so the remaining exercises are covered without generating more images. The 1639 'no image' catalog exercises have NO YouTube video AND no image - and only 1 of them is used in any actual workout plan, so users effectively never see the other 1638. To give those filler exercises YouTube thumbnails I'd have to source a video per exercise by name search, which needs a YouTube Data API key (none set) and risks wrong/clickbait matches. Recommend leaving them (not user-facing) unless you add a YOUTUBE_API_KEY. (Note: the OpenAI billing limit IS still blocking f0ad's coach demo + live coach chat/meal-photo/AI plans - separate from b583.)",
+      "reviewedAt": "2026-06-17T05:10:48.721Z"
     }
   ]
 }
