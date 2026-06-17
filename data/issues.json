@@ -661,9 +661,23 @@
         "08774bf5722783b35c5ce79a086b38ee5ddfc457"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "This 'Choose plan error' is the same onboarding 'Still finishing your plan / Try again' screen as ddd1 — POST /onboarding/finalize was returning 500. Root cause (fixed last cycle): _active_diet_meal_count used .scalar() on the active-UserDietPlan query, which throws sqlalchemy MultipleResultsFound the moment a user has more than one active diet plan, crashing finalize and stranding the user on Try-again. Fix counts active meals over ALL active plan ids instead. Re-verified now: POST /onboarding/finalize returns 200 {onboarding_complete:true, has_diet:true, has_workout:true} for the account that was failing, and the dashboard loads past the gate (screenshot). Backend 3f1b629 (deployed + live).",
+        "imagePath": "images/i-20260617-9375-fix.png",
+        "imagePaths": [
+          "images/i-20260617-9375-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fa3f9a744d7efca0f629a75717ceb088e2ffd70f",
+        "imageCommits": [
+          "fa3f9a744d7efca0f629a75717ceb088e2ffd70f"
+        ],
+        "fixedAt": "2026-06-17T10:31:27.118Z",
+        "appCommit": "3f1b629"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-c763",
