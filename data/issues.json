@@ -101,12 +101,23 @@
         "c5fb2a14238537a5d4313cd5abfbc4d0300255be"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Done (frontend b3044c81), all three: (1) SHORT — badge toast auto-dismiss cut 4000ms -> 2500ms; (2) SOUND — a calm 'success' sound now plays once when a badge toast appears (fires per-badge, not per re-render); (3) ONLY AFTER ONBOARDING — the toast queue is held while on /onboarding routes (badges still EARN during onboarding, they just surface once you land on a normal screen), the badge counterpart to the level-up gate (8ef2). Image: the Achievements gallery (badge home). I can't trigger a fresh unlock toast in the harness (the test account's badges are already earned + idempotent, and sound isn't capturable), so verify on device after the next APP RELEASE — this is a frontend change and your installed build predates it.",
+        "imagePath": "images/i-20260617-d517-fix.png",
+        "imagePaths": [
+          "images/i-20260617-d517-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "888881633f7ed63e92317109e005994e94792374",
+        "imageCommits": [
+          "888881633f7ed63e92317109e005994e94792374"
+        ],
+        "fixedAt": "2026-06-17T12:05:39.551Z",
+        "appCommit": "b3044c81"
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Badge animation (make it short + add sound, only play AFTER onboarding completes, and add badges into the onboarding). This is the post-onboarding achievement celebration — to implement and VERIFY it I need to complete an onboarding run, which is currently broken by the OpenAI billing outage (see ddd1: /finalize 429s). I'll build it (short celebration, gate it to fire only after onboarding, and route the badge sound through the new app-wide Sounds toggle from i-20260617-55ab) as soon as onboarding works again once you raise the OpenAI billing limit.",
-      "reviewedAt": "2026-06-17T06:59:03.478Z",
       "reviewReply": "fix this",
       "reviewRepliedAt": "2026-06-17T11:24:46.716Z"
     },
