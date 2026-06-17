@@ -879,9 +879,11 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Needs a design decision + it's a 'create 6 designs' exploration, so flagging for your direction rather than guessing. Diagnosis: the dashboard Weight card (DashboardWeightCard.tsx) ALREADY has a real SVG progress ring (gradient arc, track groove, goal-complete pulse) — but it tracks WEEKLY progress, so on a flat week (your shot says 'No change this week' = 0%) it collapses to the thin quiet gray ring you circled. The overview/progress page shows GOAL progress (start -> current -> goal), which always has a meaningful fill — that's the mismatch. Two ways forward, your call: (A) CONCRETE FIX — switch the dashboard ring to the same goal-progress model as the overview so it always shows a real arc (I can do + screenshot-verify this now); or (B) you want the full 'create 6 designs' exploration of the weight-ring/card — that's a design-shotgun pass (6 distinct concepts for you to pick from), which I'll run via the design skills. Tell me A, B, or both and I'll proceed. (This is a design/product choice about what the ring should represent, so I didn't want to silently change a core dashboard element.)",
-      "reviewedAt": "2026-06-17T10:46:18.934Z"
+      "reviewedAt": "2026-06-17T10:46:18.934Z",
+      "reviewReply": "run it and give screenshot",
+      "reviewRepliedAt": "2026-06-17T11:21:26.041Z"
     },
     {
       "id": "i-20260617-e575",
