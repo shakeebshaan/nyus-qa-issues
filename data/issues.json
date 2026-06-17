@@ -917,22 +917,29 @@
         "7a4f4c430f67072e0d4db667cb1778e7094a81ed"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: usePullToRefresh awaited onRefresh() and only reset the spinner in finally{}; if onRefresh() never resolved (a hung request - plausible while backend AI calls stall during the OpenAI outage) the finally never ran and the spinner spun forever. Fix: bound the refresh with Promise.race against a 10s timer, so whichever settles first clears the spinner - it can never stick beyond 10s. Normal refreshes are unaffected (resolve fast). tsc clean; committed 6056e68f.",
-        "imagePath": "images/i-20260617-e575-fix.png",
-        "imagePaths": [
-          "images/i-20260617-e575-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ce141ed7c8ee08bcdeb4d640c4a6c182591ee125",
-        "imageCommits": [
-          "ce141ed7c8ee08bcdeb4d640c4a6c182591ee125"
-        ],
-        "fixedAt": "2026-06-17T07:42:07.531Z",
-        "appCommit": "6056e68f"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-17T11:25:08.546Z",
+          "event": "reopened",
+          "note": "fix",
+          "previousFix": {
+            "description": "Root cause: usePullToRefresh awaited onRefresh() and only reset the spinner in finally{}; if onRefresh() never resolved (a hung request - plausible while backend AI calls stall during the OpenAI outage) the finally never ran and the spinner spun forever. Fix: bound the refresh with Promise.race against a 10s timer, so whichever settles first clears the spinner - it can never stick beyond 10s. Normal refreshes are unaffected (resolve fast). tsc clean; committed 6056e68f.",
+            "imagePath": "images/i-20260617-e575-fix.png",
+            "imagePaths": [
+              "images/i-20260617-e575-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "ce141ed7c8ee08bcdeb4d640c4a6c182591ee125",
+            "imageCommits": [
+              "ce141ed7c8ee08bcdeb4d640c4a6c182591ee125"
+            ],
+            "fixedAt": "2026-06-17T07:42:07.531Z",
+            "appCommit": "6056e68f"
+          }
+        }
+      ],
       "needsReview": false
     }
   ]
