@@ -488,9 +488,23 @@
         "4ce8a5542d573961c2126734e23610ec73a9c3af"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: building the plan during onboarding mints a burst of XP, so the GLOBAL level-up watcher (LevelUpWatcher, mounted app-wide) fired its confetti 'Level up' overlay right on top of the onboarding workout builder. Fix: gate the celebration off onboarding — setCelebrateLevel only fires when NOT on an /onboarding route. The last-seen level is still synced, so levels earned during onboarding are absorbed silently (no replayed barrage on the first post-onboarding screen); post-onboarding level-ups are unaffected. Verified: forced a level-up delta on /onboarding/flow (set last-seen level to 0 while the account is level 3) — the watcher processed it (last-seen synced 0->3) but NO 'Level up' overlay rendered (screenshot: clean onboarding, no celebration). Worth a final confirm on a real fresh onboarding run. Frontend 34b4d8bd.",
+        "imagePath": "images/i-20260617-8ef2-fix.png",
+        "imagePaths": [
+          "images/i-20260617-8ef2-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8fdac94e1746ff75c0f0df04427bb02a305f26c0",
+        "imageCommits": [
+          "8fdac94e1746ff75c0f0df04427bb02a305f26c0"
+        ],
+        "fixedAt": "2026-06-17T10:16:09.085Z",
+        "appCommit": "34b4d8bd"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-d4b8",
