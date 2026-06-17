@@ -645,12 +645,23 @@
         "c3357efeccfbfb8d5001f162e8dc0930afc3f24f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Ran it as you asked. The 'describe this meal' free-text box now fetches + matches ingredients correctly: I typed 'oats, whey protein, banana, almond butter' and it grounded all four to real catalog ingredients with full macros and unit toggles — Oats (152 kcal, 0.4 cups), Whey Protein Powder (120 kcal, 30g), Banana (107 kcal, 1 banana), Almond Butter — see screenshot. The earlier 'not matching' was the OpenAI outage (this parse uses the LLM grounding, which was 429ing); with billing restored it matches again, and it's live on prod (backend path), so your app gets it now. The picker is the complete fetch-and-match UI (each parsed item shows kcal/P/C/F + g/serving unit switch). If you meant a DIFFERENT 'complete UI' (e.g. a confirm-before-add step), tell me and I'll build it. Verified build b3044c81.",
+        "imagePath": "images/i-20260617-5d00-fix.png",
+        "imagePaths": [
+          "images/i-20260617-5d00-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fcf53b6009b25662680c7b2879a25560e62aeee2",
+        "imageCommits": [
+          "fcf53b6009b25662680c7b2879a25560e62aeee2"
+        ],
+        "fixedAt": "2026-06-17T12:08:58.494Z",
+        "appCommit": "b3044c81"
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Need scope clarification (same screen as 4c37). Description is cut off — 'Ingredients are not matching, make a complete ui that fetches the ingredients ___' — so I can't be sure of the full ask, and 'make a complete UI' reads as a redesign rather than a bug fix. Two distinct things live on this 'describe this meal' card and I want to fix the RIGHT one: (a) the 'Add ingredient' SEARCH — already fixed separately in f3f8 (it now returns only ingredients, no meals/AI bowls); (b) the free-text/voice 'describe this meal' -> Add parse ('oats whey protein and' should ground to Oats + Whey Protein) — if THIS is mis-matching ingredients, that's the parse-meal grounding and I can fix + verify it concretely. Please (1) finish the sentence after 'fetches the ingredients…', and (2) tell me whether you want a fix to the free-text ingredient matching, or a redesigned ingredient-picker UI (and if so, what it should do differently). With that I'll build + verify it. (4c37 on the same screen is also flagged for the cut-off voice/transcript ask.)",
-      "reviewedAt": "2026-06-17T10:36:59.537Z",
       "reviewReply": "run it and give screenshot",
       "reviewRepliedAt": "2026-06-17T11:23:17.311Z"
     },
