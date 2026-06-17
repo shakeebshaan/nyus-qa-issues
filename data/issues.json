@@ -620,12 +620,23 @@
         "056b769377d42c00f1890837bc9f74d115719fc2"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Done (frontend ca3eeec0). Both asks: (1) LIVE TRANSCRIPT — the 'describe this meal' box now streams the transcript AS you speak, not only after you stop (useSpeechInput gained an onPartial callback; web now uses interimResults, native surfaces its partial results; the final still commits on stop). (2) SPEAKING ANIMATION — a clear pulsing '● Listening…' indicator shows above the box while the mic is live (alongside the existing mic pulse). Screenshot shows it mid-dictation: '● Listening…' + the live text 'paneer tikka with mint chutney and salad' filling the box. Verified on dev by injecting a mock SpeechRecognition (the QA harness has no microphone); your device drives the exact same wiring via real speech-to-text. Frontend change — ships on the next APP RELEASE.",
+        "imagePath": "images/i-20260617-4c37-fix.png",
+        "imagePaths": [
+          "images/i-20260617-4c37-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c4b0cdf878ce2d3112df4dc0dabb936a36a91bf8",
+        "imageCommits": [
+          "c4b0cdf878ce2d3112df4dc0dabb936a36a91bf8"
+        ],
+        "fixedAt": "2026-06-17T12:42:34.741Z",
+        "appCommit": "ca3eeec0"
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Two blockers for an autonomous fix here. (1) The description looks cut off ('...and the speaking in microphone animation and live transcript and the ___') so I can't be sure of the full ask. (2) Voice input can't be driven in the QA Playwright harness (no real microphone / the Web Speech API needs live audio), so I can't auto-verify a mic animation or a streaming transcript — it needs on-device testing. What I FOUND so I'm ready to build the moment you confirm: the mic button (MealSlotCard + CustomWorkoutBuilder, via useSpeechInput) already pulses while listening, but the transcript only appears AFTER you stop speaking — web sets interimResults=false and native uses partialResults:false (partials are tracked in lastPartialRef but never surfaced), so there is NO live transcript today. To make it live I'll: add an onPartial callback to useSpeechInput, set interimResults=true on web + surface the native partial listener, and stream the interim text into the describe-meal box as you speak; and upgrade the 'speaking' state to a clearer animation (e.g. animated mic + waveform/ring) instead of the plain pulse. Please (a) finish the sentence — what's after 'and the…'? — and (b) confirm you want live interim transcript + the richer animation, and I'll ship it for you to verify on device.",
-      "reviewedAt": "2026-06-17T10:25:00.038Z",
       "reviewReply": "do it",
       "reviewRepliedAt": "2026-06-17T11:22:17.384Z"
     },
