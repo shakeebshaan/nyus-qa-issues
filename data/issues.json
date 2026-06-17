@@ -699,7 +699,10 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Already FIXED in main (main is ahead of the build in your screenshot) — pending the next release/OTA. Your shot shows the achievement toast pinned to the top-right and running off the screen edge on the longer '+25 XP added' line. In main, src/components/achievement-context.tsx now renders it CENTERED and width-capped — 'fixed left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm' (1rem margin each side, never wider than sm) — and every text line ('Badge earned' / badge name / '+XP added') has 'truncate', with the code comment 'Each line truncates so a long badge name can never push the toast wider … off-screen'. So it can no longer cut off. Shipped via commits b2b87867 + 2b3c6c07. I did NOT auto-resolve because I can't capture a real 'after' here — the toast only fires on a FRESH badge unlock and the QA test account has already earned its badges (no way to retrigger it in the headless harness, and I won't submit a hand-built replica as proof). Please verify on your next release/OTA build and Resolve it, or reopen if it still clips and I'll dig further.",
+      "reviewedAt": "2026-06-17T10:29:35.170Z"
     },
     {
       "id": "i-20260617-26ce",
