@@ -901,8 +901,21 @@
         "7a4f4c430f67072e0d4db667cb1778e7094a81ed"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in main (use-pull-to-refresh.ts, commit 6056e68f). Root cause: if onRefresh() never resolved (a stalled request), the finally that clears the spinner never ran, so it spun forever. Fix wraps the refresh in Promise.race against a 10s timeout, so the spinner ALWAYS clears within 10s even when the refresh hangs. I can't reproduce the stuck-spinner in the QA harness (it needs a genuinely stalled network mid-pull-gesture), but the guard is in place and verified in code. NOTE: frontend fix — in main + on dev, ships to your phone on the next APP RELEASE (your installed build predates it). Say 'release the app' when you want the queued frontend fixes pushed to a build.",
+        "imagePath": "images/i-20260617-e575-fix.png",
+        "imagePaths": [
+          "images/i-20260617-e575-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3227269891a9b3732cb0567a09f31f5778125812",
+        "imageCommits": [
+          "3227269891a9b3732cb0567a09f31f5778125812"
+        ],
+        "fixedAt": "2026-06-17T11:42:11.233Z",
+        "appCommit": "6056e68f"
+      },
       "history": [
         {
           "at": "2026-06-17T11:25:08.546Z",
