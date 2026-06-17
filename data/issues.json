@@ -793,7 +793,10 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Two reasons to flag rather than auto-fix. (1) This is a design-EXPLORATION ask ('create best UIUX for this PR section, looks good with the entire app') — not a bug. The Strength/PR list on Activity is functional but plain and the rows are repetitive (every PR reads 'best 20 kg x 10 today' — test data). The right tool is a design-shotgun pass: I'd generate a few distinct PR-section concepts (e.g. a hero 'PR of the week' + compact rows, tier/medal accents within the calm guardrails, a sparkline-per-lift, grouping by muscle) for you to pick from, then build the winner. (2) VERIFICATION BLOCKER: this is the strength workout/PR surface, and the QA test login is walking-only (starter tier) — it can't render the Strength section at all (same blocker as ac72 / c763 / 463e), so I can't build + visually verify a redesign against the real component without a strength-tier test account. Please (a) confirm you want the design-shotgun exploration (and any direction/anti-references), and (b) provide/enable a strength-tier test login so I can implement + verify. I'll then ship the chosen design.",
+      "reviewedAt": "2026-06-17T10:46:59.059Z"
     },
     {
       "id": "i-20260617-5dea",
