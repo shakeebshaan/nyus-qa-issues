@@ -552,9 +552,23 @@
         "8ab85290ad6433476cd26cd258124b6544c72484"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: an empty meal in the inline editor (after 'I'll build it myself', or when no coach) rendered ghostIngredientRows — two grey skeleton placeholder rows (MealSlotCard) — which read as a stuck/loading state on a meal the user is about to fill by hand. Fix: replaced those bare skeleton rows with an honest empty-state line 'No ingredients yet — add one below or describe the meal.' The ghost rows still back the coach-build blur overlay, where the blurred-placeholder look is intended. Verified in-app: added an empty meal, tapped 'I'll build it myself', and the editor now shows the clean hint (no skeleton) above Add ingredient / describe (screenshot). Frontend 72a52e29.",
+        "imagePath": "images/i-20260617-73a4-fix.png",
+        "imagePaths": [
+          "images/i-20260617-73a4-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d9cee8898e5ae55b2f0f7d3fac597b611628ddce",
+        "imageCommits": [
+          "d9cee8898e5ae55b2f0f7d3fac597b611628ddce"
+        ],
+        "fixedAt": "2026-06-17T10:19:53.142Z",
+        "appCommit": "72a52e29"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-4c37",
