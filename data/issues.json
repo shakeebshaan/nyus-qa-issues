@@ -435,9 +435,23 @@
         "713c417b5dfcf40cc9c835d30a896f720bfb391d"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the 'Add ingredient' search (GET /foods/search) unions the ingredients + food_database tables, and the ingredients table is polluted with ~1900 MEAL rows — multi-component combos ('1 cup jeera rice + dal + tinda sabzi'), AI meal bowls ('Grilled Chicken Rice Bowl', category ai_generated / 'AI:' name prefix), and explicit category 'meal' — so meals showed up in the ingredient picker. Fix: a shared _exclude_meals() filter drops those three shapes (names with ' + ', 'AI:' prefix, category in meal/ai_generated) from BOTH source tables at query time. Non-destructive — the meal rows stay in the DB for their other uses (logged-meal history), just not in ingredient search. Verified in-app: 'Rice' now returns only ingredients (Basmati/Brown/Jasmine Rice, Poha, Idli, etc.); API check returned 0 meals leaked. Backend f5dfb83.",
+        "imagePath": "images/i-20260617-f3f8-fix.png",
+        "imagePaths": [
+          "images/i-20260617-f3f8-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6b74e8397123b921ecef73b610e6431ea14f7aef",
+        "imageCommits": [
+          "6b74e8397123b921ecef73b610e6431ea14f7aef"
+        ],
+        "fixedAt": "2026-06-17T09:52:55.242Z",
+        "appCommit": "f5dfb83"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-2a8e",
