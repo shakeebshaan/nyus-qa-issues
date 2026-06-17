@@ -753,9 +753,23 @@
         "f0ce2a92a0cbacca6419e162090a9816f1187a4f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "The coach chat was showing 'I'm temporarily unavailable for live coaching…' (twice) — that's the backend coach FALLBACK template (app/services/coach/fallback_templates.py) used when the coach LLM is unreachable, i.e. the OpenAI billing outage (same root cause as b4e3 / 9989 / ddd1). Fix: OpenAI is restored; the coach LLM responds again. No code change needed. Verified live in-app: sent a fresh message ('What's a good high-protein breakfast?') and Coach Anaya replied with a real, contextual coaching response + a Today's Breakfast meal-plan card (337 kcal, P25/C38/F9, Mark Eaten/Swap/Skip) — no 'temporarily unavailable' fallback anywhere (screenshot). Frontend 72a52e29.",
+        "imagePath": "images/i-20260617-2ce9-fix.png",
+        "imagePaths": [
+          "images/i-20260617-2ce9-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "178d0b4c84e97ad6376e1481c626f968e8ca86f0",
+        "imageCommits": [
+          "178d0b4c84e97ad6376e1481c626f968e8ca86f0"
+        ],
+        "fixedAt": "2026-06-17T10:36:01.789Z",
+        "appCommit": "72a52e29"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-6774",
