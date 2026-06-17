@@ -56,8 +56,21 @@
         "64ed811b80045478515518148206efea937a552e"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the 'Still finishing your plan / Try again' screen is POST /onboarding/finalize failing. The OpenAI outage was the original trigger (plan couldn't build), but probing finalize after OpenAI was restored surfaced a SECOND, latent bug: _active_diet_meal_count ran .scalar() on the active-UserDietPlan query, which raises sqlalchemy MultipleResultsFound the moment a user has more than one active diet plan (the one-active-plan invariant breaks when a save or self-heal doesn't deactivate the prior plan). That threw a 500, so finalize could never complete and the user was stuck on Try-again forever. Fix: count active meals over ALL active plan ids instead of assuming exactly one, so a duplicate-active state degrades gracefully. Verified: finalize now returns 200 {onboarding_complete:true, has_diet:true, has_workout:true} for the account that was 500-ing, and the dashboard loads past the gate (screenshot). Backend 3f1b629.",
+        "imagePath": "images/i-20260617-ddd1-fix.png",
+        "imagePaths": [
+          "images/i-20260617-ddd1-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "42b291d919506aae734511ec9fb8172493bea678",
+        "imageCommits": [
+          "42b291d919506aae734511ec9fb8172493bea678"
+        ],
+        "fixedAt": "2026-06-17T09:23:17.210Z",
+        "appCommit": "3f1b629"
+      },
       "history": [],
       "needsReview": false
     },
