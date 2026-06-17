@@ -2228,6 +2228,40 @@
       "reviewedAt": "2026-06-17T05:13:52.912Z",
       "resolvedAt": "2026-06-17T05:34:58.077Z",
       "archivedAt": "2026-06-17T05:34:58.077Z"
+    },
+    {
+      "id": "i-20260617-5dea",
+      "createdAt": "2026-06-17T07:07:25.549Z",
+      "route": null,
+      "description": "Fix this and similar from the entire app also plan it",
+      "imagePath": "images/i-20260617-5dea.jpg",
+      "imageCommit": "c26a3c2a9a168346dd0edd52d639da9d8357944c",
+      "imagePaths": [
+        "images/i-20260617-5dea.jpg"
+      ],
+      "imageCommits": [
+        "c26a3c2a9a168346dd0edd52d639da9d8357944c"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: ingredient ids leaked into meal names (e.g. 'Yogurt 56a926074578 & Walnuts 12138a13991f') - the existing cleaner only stripped a TRAILING 6-char hex, so 12-char embedded ids passed through. Fix at BOTH layers: frontend cleanMealName (applies at every meal-name render site) and backend _strip_id_tokens + _clean_ingredient_name (the source / db serialization, so the API returns clean names). Rule: strip 6+ char hex runs that contain BOTH a digit and an a-f letter (an id), which spares real words ('facade') and plain numbers ('100', 'B12', '2024'). Verified both layers: 'Yogurt 56a926074578 & Walnuts 12138a13991f' -> 'Yogurt & Walnuts'; 'Rice & Beans' / 'Grilled Chicken Rice Bowl' untouched. Deployed: frontend 8b1d8729, backend 690a005 (health 200).",
+        "imagePath": "images/i-20260617-5dea-fix.png",
+        "imagePaths": [
+          "images/i-20260617-5dea-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b8ebae5ddaf7760234c7c66078e25ad1ebeaf585",
+        "imageCommits": [
+          "b8ebae5ddaf7760234c7c66078e25ad1ebeaf585"
+        ],
+        "fixedAt": "2026-06-17T08:09:58.124Z",
+        "appCommit": "8b1d8729"
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-17T11:25:41.810Z",
+      "archivedAt": "2026-06-17T11:25:41.810Z"
     }
   ]
 }
