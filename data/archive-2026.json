@@ -2015,6 +2015,106 @@
       "needsReview": false,
       "resolvedAt": "2026-06-16T15:00:57.707Z",
       "archivedAt": "2026-06-16T15:00:57.707Z"
+    },
+    {
+      "id": "i-20260615-f0ad",
+      "createdAt": "2026-06-15T09:41:58.158Z",
+      "route": null,
+      "description": "The coach should inform an motivated by letting user know about ther badges progress social if there are any so the coach is aware of all the social message and the leveling etc",
+      "imagePath": "images/i-20260615-f0ad.jpg",
+      "imageCommit": "242b76beb113f9b3b09657b2d9e68ef569aad808",
+      "imagePaths": [
+        "images/i-20260615-f0ad.jpg"
+      ],
+      "imageCommits": [
+        "242b76beb113f9b3b09657b2d9e68ef569aad808"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-15T10:38:55.953Z",
+          "event": "reopened",
+          "note": "show in working",
+          "previousFix": {
+            "description": "Done: the coach is now aware of the user's gamification + progress and uses it to motivate. The coach context already carried streak + recent badges + social connections; added the missing LEVEL/XP (GamificationProfile) to the [PROGRESS — STREAK, LEVEL & BADGES] block and instruct it to celebrate level-ups + recent badges (never invent any). Verified live on /coach-chat — asked 'How am I doing with my progress so far?' and the coach replied referencing the real data: 'you've already got your first meal and first check-in badges, which means the restart has begun…' plus streak + meals logged. Backend deployed, so this is live now.",
+            "imagePath": "images/i-20260615-f0ad-fix.png",
+            "imagePaths": [
+              "images/i-20260615-f0ad-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "6826201a6ab629512f4ab60165463705267b2d2c",
+            "imageCommits": [
+              "6826201a6ab629512f4ab60165463705267b2d2c"
+            ],
+            "fixedAt": "2026-06-15T10:36:40.089Z",
+            "appCommit": "f58b936"
+          }
+        },
+        {
+          "at": "2026-06-15T14:07:08.448Z",
+          "event": "reopened",
+          "note": null,
+          "previousFix": {
+            "description": "Showing it working (live now, backend). The coach context now includes the user's level/XP + recent badges + streak + social. Demo in the shot — I asked the coach 'How am I doing with my progress so far?' and it replied using the real data: 'you've already got your first meal and first check-in badges, which means the restart has begun' + current streak + meals logged. So when there's progress to mention, the coach surfaces it to motivate. Try it on-device: open the coach and ask about your progress.",
+            "imagePath": "images/i-20260615-f0ad-fix.png",
+            "imagePaths": [
+              "images/i-20260615-f0ad-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "1ebe751adc730de310604937ab62ff9bff5a079b",
+            "imageCommits": [
+              "1ebe751adc730de310604937ab62ff9bff5a079b"
+            ],
+            "fixedAt": "2026-06-15T11:05:14.598Z",
+            "appCommit": "f58b936"
+          }
+        },
+        {
+          "at": "2026-06-16T10:51:15.352Z",
+          "event": "reopened",
+          "note": "what is plan total at the bottom",
+          "previousFix": {
+            "description": "The coach now references the user's badges, progress, streak and social context to motivate. The context already fed the coach this (streak/level/badges, friends/groups/leaderboard, recent DMs + group messages — all wired into ContextAssembler.build), but the prompt flatly banned levels/XP/game-vocabulary, which suppressed it. Reconciled the prompt: the coach may reference rank/level name + badges + streak + social to motivate (calm and concrete — no XP counters, no game emojis), plus a proactive instruction to weave a fresh badge/streak/social win into one calm line. Verified LIVE (screenshot): asked How",
+            "imagePath": "images/i-20260615-f0ad-fix.png",
+            "imagePaths": [
+              "images/i-20260615-f0ad-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "f580cd766650bfbd0fdc2ab865daa506d73a56e3",
+            "imageCommits": [
+              "f580cd766650bfbd0fdc2ab865daa506d73a56e3"
+            ],
+            "fixedAt": "2026-06-15T15:07:44.725Z",
+            "appCommit": "e4d9a927"
+          }
+        },
+        {
+          "at": "2026-06-16T14:57:40.634Z",
+          "event": "reopened",
+          "note": "implement it",
+          "previousFix": {
+            "description": "Reopen 'what is plan total at the bottom': the coach's progress-summary block can use period plan_total (coach_tools.py show_progress_summary), but the frontend only humanised daily/weekly/monthly/yearly — so plan_total leaked as the raw orphan label 'plan_total' at the bottom of the card. Fix (ProgressSummaryBlock): map plan_total to 'Plan to date' and humanise any unmapped machine token so a raw debug-looking label never surfaces again. Screenshot: the progress-summary card now reads 'Plan to date'. The original ask — coach aware of streak/level/badges + social — is the deployed backend context wiring (context_assembler.py _streak_status/_social_connections/_recent_user_chats).",
+            "imagePath": "images/i-20260615-f0ad-fix.png",
+            "imagePaths": [
+              "images/i-20260615-f0ad-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e20d2e93711d96ad7520839735f9a7edf8b38a7c",
+            "imageCommits": [
+              "e20d2e93711d96ad7520839735f9a7edf8b38a7c"
+            ],
+            "fixedAt": "2026-06-16T11:49:15.735Z",
+            "appCommit": "a06c8810"
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "It IS implemented — verified in code. (1) The coach context ALWAYS includes a [PROGRESS - STREAK, LEVEL & BADGES] block (ContextAssembler.build, _streak_status is priority-2/always-on) carrying the user's level + rank name, XP total, current streak, and earned badges; plus social context (_social_connections + _recent_user_chats - friends, leaderboard, recent DMs/group msgs). (2) The coach prompt (coach_system.txt 'ACHIEVEMENT ACKNOWLEDGMENT') tells the coach to proactively weave a fresh badge / level-rank gain / notable streak / social activity into one calm motivating line, using ONLY what's in context. Why you may not see it right now: the coach is returning 429 because the OpenAI billing limit is STILL hit (see b583). The moment billing is restored I'll demonstrate the coach proactively referencing your level/badges/streak/social; if it still isn't surfacing then, tell me what you expect and I'll tune the prompt.",
+      "reviewedAt": "2026-06-16T15:10:00.852Z",
+      "resolvedAt": "2026-06-17T04:52:19.552Z",
+      "archivedAt": "2026-06-17T04:52:19.552Z"
     }
   ]
 }
