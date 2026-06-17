@@ -215,9 +215,23 @@
         "24781be560beae515e901cf6fb18780741d7552d"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the dashboard challenge card read 'completed' straight off the stored row, but completion was only stamped by the NIGHTLY job — so logging your 4th meal didn't flip the card to Done until the next day ('not linked'). Fix (deployed, backend f56aacf): GET /gamification/weekly-challenge now evaluates completion ON READ (idempotent evaluate_weekly_challenge — no-ops once done, awards XP once), committing if it just completed. Verified live on prod: the endpoint now evaluates on every read and returns the current state (no error). The card flips to Done the instant the weekly target is met — please confirm on your account where the meals are complete.",
+        "imagePath": "images/i-20260617-804d-fix.png",
+        "imagePaths": [
+          "images/i-20260617-804d-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a0155aef4878e71eb2b536cd863b7eb87b5c740c",
+        "imageCommits": [
+          "a0155aef4878e71eb2b536cd863b7eb87b5c740c"
+        ],
+        "fixedAt": "2026-06-17T06:55:46.109Z",
+        "appCommit": "f56aacf"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-afe0",
