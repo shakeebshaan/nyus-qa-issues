@@ -119,9 +119,23 @@
         "5335170ea7881dbecdd5de6aa6a583b3e837dad3"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the notifications list used a top+bottom fade mask, so the first row (the TODAY section header) sat in the top fade zone and rendered washed-out / blurry. Fix: the mask now fades ONLY the bottom edge - the top is fully opaque. Verified: TODAY and the first card are crisp; the bottom still soft-fades past the fold.",
+        "imagePath": "images/i-20260617-c178-fix.png",
+        "imagePaths": [
+          "images/i-20260617-c178-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c1a61e7fa349b50df3f819b7c7e21b269c41b0a1",
+        "imageCommits": [
+          "c1a61e7fa349b50df3f819b7c7e21b269c41b0a1"
+        ],
+        "fixedAt": "2026-06-17T06:49:53.952Z",
+        "appCommit": "6d1fc7bf"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-3b21",
