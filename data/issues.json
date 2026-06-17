@@ -481,8 +481,23 @@
         "178237845a2252a5a2a4edf4f86e60f33d678c01"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: coach portraits were the old editorial-ILLUSTRATION (cartoon) style, and gpt-image-1 was printing the prompt's role/name words onto the garment (your screenshot: Coach Hana had 'Hana' on the shirt). Fix: rewrote the portrait prompt to a PREMIUM PHOTOREALISTIC studio photo (real person, teal rim light, warm-neutral bg), removed the job-title noun + coach name from the visible prompt (they were leaking as shirt text; name still seeds the variety hash) and added a hard plain/unbranded-clothing + no-lettering-anywhere constraint. Regenerated ALL 13 active coaches on prod via OpenAI (now restored) and verified each: photorealistic, not cartoon, ZERO text on any garment or in frame. Image 1 = the exact flagged coach (Hana) now clean; image 2 = full-roster contact sheet (the name captions are MY labels on the beige gutter, not on the photos). All serve 200 image/png at /uploads/catalog-images/coach/<slug>.png, so Meet-Your-Coach + the build-plan button now render the real portraits. Prompt fix: backend cd49d26.",
+        "imagePath": "images/i-20260617-f9e4-fix.png",
+        "imagePaths": [
+          "images/i-20260617-f9e4-fix.png",
+          "images/i-20260617-f9e4-fix-2.jpg"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9b6ddc4284cbd7594a60b5589ce52a004a18bbf8",
+        "imageCommits": [
+          "9b6ddc4284cbd7594a60b5589ce52a004a18bbf8",
+          "339780be4e62d9c0eb82676fd47802abd9cf2f95"
+        ],
+        "fixedAt": "2026-06-17T08:50:59.361Z",
+        "appCommit": "cd49d26"
+      },
       "history": [],
       "needsReview": false
     },
