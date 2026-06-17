@@ -612,9 +612,11 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Need scope clarification (same screen as 4c37). Description is cut off — 'Ingredients are not matching, make a complete ui that fetches the ingredients ___' — so I can't be sure of the full ask, and 'make a complete UI' reads as a redesign rather than a bug fix. Two distinct things live on this 'describe this meal' card and I want to fix the RIGHT one: (a) the 'Add ingredient' SEARCH — already fixed separately in f3f8 (it now returns only ingredients, no meals/AI bowls); (b) the free-text/voice 'describe this meal' -> Add parse ('oats whey protein and' should ground to Oats + Whey Protein) — if THIS is mis-matching ingredients, that's the parse-meal grounding and I can fix + verify it concretely. Please (1) finish the sentence after 'fetches the ingredients…', and (2) tell me whether you want a fix to the free-text ingredient matching, or a redesigned ingredient-picker UI (and if so, what it should do differently). With that I'll build + verify it. (4c37 on the same screen is also flagged for the cut-off voice/transcript ask.)",
-      "reviewedAt": "2026-06-17T10:36:59.537Z"
+      "reviewedAt": "2026-06-17T10:36:59.537Z",
+      "reviewReply": "run it and give screenshot",
+      "reviewRepliedAt": "2026-06-17T11:23:17.311Z"
     },
     {
       "id": "i-20260617-f9e4",
