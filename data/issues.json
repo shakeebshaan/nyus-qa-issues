@@ -405,22 +405,29 @@
         "d9980ee83d9ae87f299d8ac023b7f0ffdf7ee35f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: coach assignment only randomized among EXACT-best scoring ties, so a single top-scorer won every matching profile - the same coach (Nisha/Rohan) got assigned over and over. Fix (deployed, backend acb968c): assignment now spreads across the TOP TIER (within 2 pts of best); the stable per-user hash fans different users across that tier. Verified on prod (60 synthetic users): a male/fat_loss/non-veg profile now spreads across 6 coaches (Amira, Hana, Meera, Zara, Rohan, Nisha) instead of always Nisha. Same user still keeps the same coach (idempotent). Note: veg/vegan users still funnel to fewer coaches because the veg-specialist pool is small - wider variety there needs more veg coaches (tracked under 9151).",
-        "imagePath": "images/i-20260617-e7cd-fix.png",
-        "imagePaths": [
-          "images/i-20260617-e7cd-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "150d565c4693f0d258406369073893644eaa67e6",
-        "imageCommits": [
-          "150d565c4693f0d258406369073893644eaa67e6"
-        ],
-        "fixedAt": "2026-06-17T07:11:05.112Z",
-        "appCommit": "acb968c"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-17T11:27:22.907Z",
+          "event": "reopened",
+          "note": "do it",
+          "previousFix": {
+            "description": "Root cause: coach assignment only randomized among EXACT-best scoring ties, so a single top-scorer won every matching profile - the same coach (Nisha/Rohan) got assigned over and over. Fix (deployed, backend acb968c): assignment now spreads across the TOP TIER (within 2 pts of best); the stable per-user hash fans different users across that tier. Verified on prod (60 synthetic users): a male/fat_loss/non-veg profile now spreads across 6 coaches (Amira, Hana, Meera, Zara, Rohan, Nisha) instead of always Nisha. Same user still keeps the same coach (idempotent). Note: veg/vegan users still funnel to fewer coaches because the veg-specialist pool is small - wider variety there needs more veg coaches (tracked under 9151).",
+            "imagePath": "images/i-20260617-e7cd-fix.png",
+            "imagePaths": [
+              "images/i-20260617-e7cd-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "150d565c4693f0d258406369073893644eaa67e6",
+            "imageCommits": [
+              "150d565c4693f0d258406369073893644eaa67e6"
+            ],
+            "fixedAt": "2026-06-17T07:11:05.112Z",
+            "appCommit": "acb968c"
+          }
+        }
+      ],
       "needsReview": false
     },
     {
