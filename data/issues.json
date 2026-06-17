@@ -15,8 +15,21 @@
         "1b3103fef51cacbec327586d2bff66538cbc5497"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Addressing your reopen ('coach assigning should be random'). Two deterministic behaviours were pinning you to Rohan: (1) the 70/30 male->female gender routing used a per-user FNV hash, so your account was fixed in the 30% male bucket and only ever scored male coaches — and Rohan is the only male fat-loss coach, so you got him every time; (2) ties were broken by a stable user_id hash. Both are now RANDOM: gender routing is a random 70/30 per assignment, and selection is random.choice among the equally best-matching coaches. Verified on YOUR exact profile (male/fat_loss): the same account now spreads across 9 different coaches with ~77% female (was always Rohan); match quality preserved (a vegan still only ever gets vegan-listing coaches). Also re-rolled your stuck assignment: Coach Rohan -> Coach Anaya (screenshot: 'Anaya wants to know you better' on your dashboard). New users get a random coach from first assignment; it then stays stable via the persisted coach_id. Backend fb752f7.",
+        "imagePath": "images/i-20260617-9151-fix.png",
+        "imagePaths": [
+          "images/i-20260617-9151-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e3b33e7b8f570c8e3ad143f5870cde803ebb0d8d",
+        "imageCommits": [
+          "e3b33e7b8f570c8e3ad143f5870cde803ebb0d8d"
+        ],
+        "fixedAt": "2026-06-17T09:41:03.230Z",
+        "appCommit": "fb752f7"
+      },
       "history": [
         {
           "at": "2026-06-17T09:22:57.544Z",
