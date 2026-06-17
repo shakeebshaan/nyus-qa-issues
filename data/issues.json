@@ -69,9 +69,23 @@
         "b092855d05dc94f7f25754bceb2eed4ce4fec2d5"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: only the Activity card's title linked to /activity; the rest of the card did nothing. Fix: DashboardActivityCard now mirrors the diet card - a full-area button (absolute inset-0) navigates to /activity behind a pointer-events-none content layer whose inner buttons (Customize, Generate) keep their own taps. Verified: tapping the card body now navigates to the Activity page.",
+        "imagePath": "images/i-20260617-7d3f-fix.png",
+        "imagePaths": [
+          "images/i-20260617-7d3f-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e1353f83f7cba773524a461b4248563d75f8cdeb",
+        "imageCommits": [
+          "e1353f83f7cba773524a461b4248563d75f8cdeb"
+        ],
+        "fixedAt": "2026-06-17T06:46:23.976Z",
+        "appCommit": "38d05f43"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-ac72",
