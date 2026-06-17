@@ -745,9 +745,11 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Root cause found + FIXED in code (frontend a7d238cc) — flagging only because I can't verify AUDIO in the QA harness (no sound capture, and the level-up celebration won't even trigger via the seeded-level method, so I can't count plays either). The bug: CelebrationOverlay's sound effect listed onComplete + type in its deps, and every caller passes a fresh inline onComplete each render (e.g. LevelUpWatcher onComplete={() => setCelebrateLevel(null)}). So ANY parent re-render while the overlay was on screen re-ran the effect and re-fired playSfx — that's exactly 'multiple sounds for one level up'. Fix: read onComplete/type via refs and depend on [show] alone, so the sound + auto-dismiss timer fire EXACTLY ONCE per show. (The animation was already single — LevelUpWatcher shows one overlay for the latest level — so this was purely the repeated sound.) Please confirm on device that a level-up / multi-badge moment now plays a single sound. If you still hear overlapping sounds, tell me — there's a secondary path (level-up + streak-milestone overlays both mounted) I can also serialize.",
-      "reviewedAt": "2026-06-17T10:44:02.718Z"
+      "reviewedAt": "2026-06-17T10:44:02.718Z",
+      "reviewReply": "fix this",
+      "reviewRepliedAt": "2026-06-17T11:22:38.225Z"
     },
     {
       "id": "i-20260617-2ce9",
