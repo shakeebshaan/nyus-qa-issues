@@ -470,9 +470,11 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Root cause CONFIRMED + owner-only (Google Cloud/Firebase config, not reproducible on the web dev server — this is a native-Android-only flow). 'Google Sign-In failed: [16]' is GMS CommonStatusCodes.CANCELED — the native sign-in can't validate the app because the Firebase project has NO OAuth client / NO SHA-1 cert registered for it: android/app/google-services.json (project nyus-and, package com.nyus.nyusand) has an EMPTY oauth_client array and zero certificate hashes. The webClientId env var alone isn't enough — Android Google Sign-In requires the app's signing-cert SHA-1 registered against an OAuth client in the console. ACTION (owner): in Firebase Console > Project nyus-and > Project settings > the com.nyus.nyusand Android app > Add fingerprint, register the SHA-1s below, ensure a Web OAuth client (type 3) exists, then re-download google-services.json and replace android/app/google-services.json. Register THREE keys: (1) Upload key SHA-1 B9:5C:EA:C4:08:94:17:5B:7E:E1:E8:91:AA:D1:2E:22:18:4A:04:4C / SHA-256 7D:B7:33:AB:42:1F:74:C8:7E:D4:07:57:0B:9B:BD:0E:0C:DD:E0:0E:6B:DB:44:71:7D:25:BF:9C:1A:48:9B:5F (computed from android/app/nyus-release-key.jks); (2) the Play App Signing SHA-1 from Play Console > App integrity (this is what production-signed installs use); (3) optionally the debug keystore SHA-1 for local testing. Once the updated google-services.json is committed, reply here and I'll wire up + verify. I can also add graceful code-16 handling (nudge to email instead of the raw error toast) if you want that as an interim — say the word.",
-      "reviewedAt": "2026-06-17T10:02:19.850Z"
+      "reviewedAt": "2026-06-17T10:02:19.850Z",
+      "reviewReply": "less text",
+      "reviewRepliedAt": "2026-06-17T11:23:42.005Z"
     },
     {
       "id": "i-20260617-8ef2",
