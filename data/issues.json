@@ -272,8 +272,23 @@
         "9e0db4e5b28d4542fc5d9cf28d71cec45efdf721"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the workout-day builder (suggest-workout-day) targets 6 exercises, but on LATER days of a build-all (your screenshot was 'Day 6 of 10') the sibling-day exclusion list — every exercise already used by earlier days — drains the non-repeating pool, and the intensity-tier difficulty gate trims more. The only backstop re-selected ungated when fewer than 3 picks survived, so a 4-exercise day stood. Fix: after the tier gate, if a day is under the 6-exercise target AND sibling exclusions are active, re-select from the full pool, gate the extras to the same tier, and append non-duplicates until the day is full (cross-day repeats on tail days beat a too-short day; day 1 / healthy days untouched). The endpoint already consumes goal/experience/equipment/limitations/intensity_tier, so it stays questionnaire-driven. Verified: (1) simulated a full 6-day build with accumulating exclusions — every day incl. Day 6 (30 ids excluded) now returns 6 exercises (was 4); (2) live in-app — regenerating 'Pull Day B' via More ideas returned a full 6-exercise day (screenshot: 18/18 sets, 3/3 must-have, Doorway Row / Lat Pulldown / Inverted Row / Machine Back Extension / Cable Row / Prone Y-T-W Raise). Backend a4c827b.",
+        "imagePath": "images/i-20260617-afe0-fix.png",
+        "imagePaths": [
+          "images/i-20260617-afe0-fix.png",
+          "images/i-20260617-afe0-fix-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e73b4bd06a8183b10164060c39b87b4f03fada97",
+        "imageCommits": [
+          "e73b4bd06a8183b10164060c39b87b4f03fada97",
+          "820889a6710007c0e96d5582d6c3429cb6623c14"
+        ],
+        "fixedAt": "2026-06-17T09:17:17.201Z",
+        "appCommit": "a4c827b"
+      },
       "history": [],
       "needsReview": false
     },
