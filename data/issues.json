@@ -369,9 +369,23 @@
         "11b4e6c2f5c3fc2c750374c4cf4af2695d64dadc"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the red 'Couldn't build your meals - Couldn't fill: Breakfast, Lunch, Dinner' banner fires when 'Coach builds all meals' fills 0 slots. That action runs the same /ai/suggest-meal call per empty slot (CustomDietBuilder), and during the OpenAI billing outage every slot 429'd -> built=0 -> the destructive error. Same root cause as b4e3. Fix: OpenAI billing is restored; suggest-meal returns ideas again, so the build-all fills slots. No code change needed. Verified in-app: added an empty meal slot, clicked 'Coach Anaya builds all meals', and it built a real meal (Chicken Quinoa Plate) with the day landing on-target and NO error banner (screenshot). Frontend 8b1d8729.",
+        "imagePath": "images/i-20260617-9989-fix.png",
+        "imagePaths": [
+          "images/i-20260617-9989-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b343935122804af55933e808f43c74886e13034f",
+        "imageCommits": [
+          "b343935122804af55933e808f43c74886e13034f"
+        ],
+        "fixedAt": "2026-06-17T09:45:29.249Z",
+        "appCommit": "8b1d8729"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260617-e7cd",
