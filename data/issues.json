@@ -15,8 +15,23 @@
         "1b3103fef51cacbec327586d2bff66538cbc5497"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: roster had 13 coaches (9F/4M) and you happened to hash onto Rohan; you asked for 20+ coaches with 15 female and diverse (non-Rohan) assignment. Fix (3 parts): (1) Expanded the roster 13 to 21 via migration 20260617_001 — added 8 new personas (7 female + 1 male: Veda, Anaya, Mei, Sakura, Layla, Maya, Nova, Diego) so it's now 16 female / 5 male, names drawn from the coach-name pools with goals/diets spread and ta/bn regional languages added. (2) Generated a photorealistic, text-free portrait for each new coach (image 1 = the 8 new; image 2 = the original 13, all regenerated photoreal in f9e4). (3) Assignment already spreads across the top-scoring tier (pick_coach ELIGIBLE_MARGIN, e7cd) and with the bigger female-majority roster a 400-user simulation of your exact profile (male/fat_loss) now fans out across 9 distinct coaches — Rohan only ~14% (55/400), the rest female-weighted (Nisha 54, Sakura 49, Maya 48, Amira 45, Anaya 43, Zara 40, Hana 39, Meera 27). All 21 portraits serve 200 image/png. Backend 17ce0b6, deployed + migrated on prod.",
+        "imagePath": "images/i-20260617-9151-fix.jpg",
+        "imagePaths": [
+          "images/i-20260617-9151-fix.jpg",
+          "images/i-20260617-9151-fix-2.jpg"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c958be6a2423306b6ea3ee4760c71e0a58523930",
+        "imageCommits": [
+          "c958be6a2423306b6ea3ee4760c71e0a58523930",
+          "a6e9ae89d9114641466480080b1b48f9dec4d927"
+        ],
+        "fixedAt": "2026-06-17T09:01:47.662Z",
+        "appCommit": "17ce0b6"
+      },
       "history": [],
       "needsReview": false
     },
