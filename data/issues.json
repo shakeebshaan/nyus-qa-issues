@@ -220,38 +220,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260617-3b21",
-      "createdAt": "2026-06-17T06:29:41.833Z",
-      "route": null,
-      "description": "Don't detect the system dark mode and auto dark the app, make the ligh theme by default and keep the option to change to the dark mode in the profile page.",
-      "imagePath": "images/i-20260617-3b21.jpg",
-      "imageCommit": "7c70f0b165dc7ea22f1b8dc7fa5cf145721d14dd",
-      "imagePaths": [
-        "images/i-20260617-3b21.jpg"
-      ],
-      "imageCommits": [
-        "7c70f0b165dc7ea22f1b8dc7fa5cf145721d14dd"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: default theme was 'system', so the app followed the device and auto-darkened. Fix: default is now Light and the System option is removed entirely (ThemeContext + ProfileAppearance) - the app never follows the OS scheme; a legacy 'system' preference coerces to Light. The manual Light/Dark toggle stays in Profile - Appearance. Verified: a fresh user loads in Light (no .dark class) and the picker shows Light/Dark only.",
-        "imagePath": "images/i-20260617-3b21-fix.png",
-        "imagePaths": [
-          "images/i-20260617-3b21-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "893dd86ee5f1b1eda779419bfd5850f4687127ba",
-        "imageCommits": [
-          "893dd86ee5f1b1eda779419bfd5850f4687127ba"
-        ],
-        "fixedAt": "2026-06-17T06:39:36.145Z",
-        "appCommit": "a712ce0a"
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260617-f3f8",
       "createdAt": "2026-06-17T06:43:03.190Z",
       "route": null,
