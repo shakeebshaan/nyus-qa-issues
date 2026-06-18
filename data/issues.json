@@ -41,8 +41,8 @@
         }
       ],
       "needsReview": true,
-      "reviewReason": "Sorry - that was unclear. Plain version: the onboarding finalize fix is ALREADY live in main. That Still",
-      "reviewedAt": "2026-06-18T19:11:47.153Z",
+      "reviewReason": "Plain version: after building the plan, the app sometimes hung on 'Still finishing your plan' even though the plan was actually saved fine. Cause: the app waited on a SECOND server check that lags a few seconds behind the save, instead of trusting the 'done' confirmation it already got from the save itself. Fixed (67ae35d8) — it now advances the moment the save confirms. Note: the released app still runs the old code, so you'll only see this gone after the next app release. Same root cause as 9da9.",
+      "reviewedAt": "2026-06-18T19:33:37.194Z",
       "reviewReply": "what?",
       "reviewRepliedAt": "2026-06-18T18:48:38.964Z"
     },
