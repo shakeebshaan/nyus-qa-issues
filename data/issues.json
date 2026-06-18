@@ -911,58 +911,6 @@
       "reviewRepliedAt": "2026-06-17T11:21:35.400Z"
     },
     {
-      "id": "i-20260617-6d7d",
-      "createdAt": "2026-06-17T07:08:20.533Z",
-      "route": null,
-      "description": "Fix horizontal scrolling in the make sure this and other pages are mobile only",
-      "imagePath": "images/i-20260617-6d7d.jpg",
-      "imageCommit": "a6553020c03fcd7cb5092f66e53cdcebe2693fb4",
-      "imagePaths": [
-        "images/i-20260617-6d7d.jpg"
-      ],
-      "imageCommits": [
-        "a6553020c03fcd7cb5092f66e53cdcebe2693fb4"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Verified fixed on the current build. Measured the page on /log-weight: document scrollWidth == viewport (390px), horizontal overflow = 0px — the page does NOT scroll sideways. The WeightRuler's off-bounds tick marks (internal content ~637px) are now clipped by overflow-hidden (WeightRuler.tsx, commit d6e3adb1) so they can't inflate the page width. NOTE: this is a FRONTEND fix — it's in main + verified on the dev build, but it ships to your phone only on the next APP RELEASE (your installed build predates it). If you're still seeing sideways scroll, it's because that release hasn't gone out yet; say 'release the app' when you want the queued frontend fixes (this + e575/26ce/etc.) pushed to a build.",
-        "imagePath": "images/i-20260617-6d7d-fix.png",
-        "imagePaths": [
-          "images/i-20260617-6d7d-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "dcbecd8a246372da5d5d5d7f39c6dfa67f80ad8f",
-        "imageCommits": [
-          "dcbecd8a246372da5d5d5d7f39c6dfa67f80ad8f"
-        ],
-        "fixedAt": "2026-06-17T11:41:01.291Z",
-        "appCommit": "d6e3adb1"
-      },
-      "history": [
-        {
-          "at": "2026-06-17T11:25:20.863Z",
-          "event": "reopened",
-          "note": "fixed",
-          "previousFix": {
-            "description": "Root cause: the weight ruler positioned its tick marks far beyond its visible bounds (left ~ -300px as the scale extends), inflating the ancestor scrollWidth up to the page's overflow-y-auto column - whose overflow-x then computed to auto, making the whole page horizontally scrollable (content panned sideways and clipped on the left). Fix: overflow-hidden on the WeightRuler container clips the off-bounds ticks. Verified: no element is horizontally scrollable anymore and the horizontal scrollbar is gone. WeightRuler is reused on the onboarding body and goal screens, so this fixes those pages too. (commit d6e3adb1)",
-            "imagePath": "images/i-20260617-6d7d-fix.png",
-            "imagePaths": [
-              "images/i-20260617-6d7d-fix.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "bbd9d30206994e3326538fb484bf07ad23263196",
-            "imageCommits": [
-              "bbd9d30206994e3326538fb484bf07ad23263196"
-            ],
-            "fixedAt": "2026-06-17T07:39:05.595Z",
-            "appCommit": "d6e3adb1"
-          }
-        }
-      ],
-      "needsReview": false
-    },
-    {
       "id": "i-20260617-86ba",
       "createdAt": "2026-06-17T07:09:34.405Z",
       "route": null,
