@@ -280,8 +280,21 @@
         "c36ade43d0ec76030def5f7e01e544f3f46489d0"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Built the milestone track you picked. Replaced the weekly progress ring (the dead gray circle on a flat week you circled) with a Start to Now to Goal track: a filled bar + position knob, N% to goal, the current weight + a weekly-change chip, and Start/Goal end labels - always meaningfully filled, shows the whole journey. Full-stack: backend adds start_weight_kg to the dashboard weight summary (onboarding start, with earliest-log + health-profile-goal fallbacks so the track always has anchors); frontend rebuilds DashboardWeightCard and derives the overall start-to-goal progress. Verified live (before/after attached): Start 86.5 - Now 78.0 - Goal 62.5, 35% to goal. Frontend d7ef0968 + backend fd4d094, deployed. Visible in the app after the next release.",
+        "imagePath": "images/i-20260617-86ba-fix.png",
+        "imagePaths": [
+          "images/i-20260617-86ba-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4e93e0f16d524fdb5a656a10ba0761bceb7e9a7a",
+        "imageCommits": [
+          "4e93e0f16d524fdb5a656a10ba0761bceb7e9a7a"
+        ],
+        "fixedAt": "2026-06-18T15:36:42.841Z",
+        "appCommit": "d7ef0968"
+      },
       "history": [
         {
           "at": "2026-06-18T14:40:43.206Z",
