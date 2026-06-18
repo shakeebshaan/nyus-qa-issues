@@ -350,38 +350,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260617-b4e3",
-      "createdAt": "2026-06-17T06:40:09.528Z",
-      "route": null,
-      "description": "This issue when I press let coach nisha build the breakfast",
-      "imagePath": "images/i-20260617-b4e3.jpg",
-      "imageCommit": "c0121faae916cb16c7c52b5b408ab8c0f7f1df7a",
-      "imagePaths": [
-        "images/i-20260617-b4e3.jpg"
-      ],
-      "imageCommits": [
-        "c0121faae916cb16c7c52b5b408ab8c0f7f1df7a"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: pressing 'Coach Nisha builds Breakfast' (and the per-meal Suggest-ideas button) calls POST /ai/suggest-meal, which runs the LLM; the OpenAI account was billing-capped (429) so _call_llm returned nothing and the endpoint returned an empty suggestions list, which the swiper renders as 'No ideas matched your preferences.' Fix: OpenAI billing is restored. No code change needed — the endpoint recovers automatically. Verified two ways on the QA account's own profile: (1) live in-app — opened 'Ideas for Breakfast' in the diet builder and it now returns 6 grounded ideas (screenshot: 'Egg Oats Bowl' 610 kcal, P58/C72/F11, 5 real ingredients + 3 cooking steps, '1 / 6 swipe or tap'); (2) direct API call returned 5 grounded breakfast ideas. Frontend build verified: 8b1d8729.",
-        "imagePath": "images/i-20260617-b4e3-fix.png",
-        "imagePaths": [
-          "images/i-20260617-b4e3-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ee418207cb32d1deb71d4046dcbf6e337fa8a25a",
-        "imageCommits": [
-          "ee418207cb32d1deb71d4046dcbf6e337fa8a25a"
-        ],
-        "fixedAt": "2026-06-17T09:07:28.493Z",
-        "appCommit": "8b1d8729"
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260617-f3f8",
       "createdAt": "2026-06-17T06:43:03.190Z",
       "route": null,
