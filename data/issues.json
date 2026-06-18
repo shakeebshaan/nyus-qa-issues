@@ -281,7 +281,10 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Dug into this with prod data. The diet plan has no stored 'target' — the kcal shown (2991) is the SUM of the assembled meals. On the test account the pipeline is CORRECT: computed target 1824 == assembled meals 1824 (TDEE 2189 minus deficit, floored at BMR), so I can't reproduce a 2991-style overshoot there. Most likely cause: the build wizard's PROPOSED target comes from the client calc (calcOnboardingStats) which has a goal-completion-DATE trajectory override (a steeper deficit to hit your target date), but the SAVED/displayed plan uses the server calc (calculate_target_calories) which is deficit-only with NO date logic. If a date was set, the proposed (lower) and the saved (higher) legitimately diverge -> looks like an overshoot. The builder also tolerates up to +10% over target before blocking. To fix the RIGHT one safely (this calc drives everyone's calorie goals) I need: the affected account's email, OR did you set a goal completion date on that build, OR the proposed number you saw vs the 2991? Once I know which target should win (date-driven trajectory or standard deficit), I'll reconcile the two calcs so the proposed and the saved plan always match.",
+      "reviewedAt": "2026-06-18T20:44:42.730Z"
     }
   ]
 }
