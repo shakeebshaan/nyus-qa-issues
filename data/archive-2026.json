@@ -3390,6 +3390,61 @@
       "needsReview": false,
       "resolvedAt": "2026-06-18T16:32:17.669Z",
       "archivedAt": "2026-06-18T16:32:17.669Z"
+    },
+    {
+      "id": "i-20260617-4c37",
+      "createdAt": "2026-06-17T06:50:20.843Z",
+      "route": null,
+      "description": "And the speaking in microphone animation and live transcript and the longer mic on timing",
+      "imagePath": "images/i-20260617-4c37.jpg",
+      "imageCommit": "056b769377d42c00f1890837bc9f74d115719fc2",
+      "imagePaths": [
+        "images/i-20260617-4c37.jpg"
+      ],
+      "imageCommits": [
+        "056b769377d42c00f1890837bc9f74d115719fc2"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Your reopen was that screenshots didnt show it - here it is captured live. Tapping the mic on the describe-meal box now shows a pulsing red dot + Listening... and the live transcript streams into the box word-by-word as you speak (two",
+        "imagePath": "images/i-20260617-4c37-fix.png",
+        "imagePaths": [
+          "images/i-20260617-4c37-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "701add90e3e2fe68bc57c4dea50b86a0ff3cec6d",
+        "imageCommits": [
+          "701add90e3e2fe68bc57c4dea50b86a0ff3cec6d"
+        ],
+        "fixedAt": "2026-06-18T16:43:39.140Z"
+      },
+      "history": [
+        {
+          "at": "2026-06-18T14:45:55.286Z",
+          "event": "reopened",
+          "note": "screenshots donot show it",
+          "previousFix": {
+            "description": "Done (frontend ca3eeec0). Both asks: (1) LIVE TRANSCRIPT — the 'describe this meal' box now streams the transcript AS you speak, not only after you stop (useSpeechInput gained an onPartial callback; web now uses interimResults, native surfaces its partial results; the final still commits on stop). (2) SPEAKING ANIMATION — a clear pulsing '● Listening…' indicator shows above the box while the mic is live (alongside the existing mic pulse). Screenshot shows it mid-dictation: '● Listening…' + the live text 'paneer tikka with mint chutney and salad' filling the box. Verified on dev by injecting a mock SpeechRecognition (the QA harness has no microphone); your device drives the exact same wiring via real speech-to-text. Frontend change — ships on the next APP RELEASE.",
+            "imagePath": "images/i-20260617-4c37-fix.png",
+            "imagePaths": [
+              "images/i-20260617-4c37-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "c4b0cdf878ce2d3112df4dc0dabb936a36a91bf8",
+            "imageCommits": [
+              "c4b0cdf878ce2d3112df4dc0dabb936a36a91bf8"
+            ],
+            "fixedAt": "2026-06-17T12:42:34.741Z",
+            "appCommit": "ca3eeec0"
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewReply": "do it",
+      "reviewRepliedAt": "2026-06-17T11:22:17.384Z",
+      "resolvedAt": "2026-06-18T18:50:35.263Z",
+      "archivedAt": "2026-06-18T18:50:35.263Z"
     }
   ]
 }
