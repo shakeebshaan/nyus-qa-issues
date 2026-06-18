@@ -481,21 +481,8 @@
         "713c417b5dfcf40cc9c835d30a896f720bfb391d"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Yes — fixed and LIVE on prod (backend /foods/search, so your app already gets it). Re-verified just now two ways: (1) API check — searching 'rice' returns 0 meals leaked (no '+'-combos, no 'AI:' bowls, no meal/ai_generated categories); (2) in-app screenshot — the 'Add ingredient' search for 'Rice' shows only ingredients (Basmati/Brown Rice, Awadhi Chicken Rice, etc.), no meals. The _exclude_meals() filter (backend f5dfb83) is deployed. If your phone still showed meals, it was a pre-deploy/cached view — it's clean now.",
-        "imagePath": "images/i-20260617-f3f8-fix.png",
-        "imagePaths": [
-          "images/i-20260617-f3f8-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "aed7a0789d2d4b5477e545859f049029e30c13f5",
-        "imageCommits": [
-          "aed7a0789d2d4b5477e545859f049029e30c13f5"
-        ],
-        "fixedAt": "2026-06-17T11:39:01.542Z",
-        "appCommit": "f5dfb83"
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-17T11:27:13.351Z",
@@ -513,6 +500,25 @@
               "6b74e8397123b921ecef73b610e6431ea14f7aef"
             ],
             "fixedAt": "2026-06-17T09:52:55.242Z",
+            "appCommit": "f5dfb83"
+          }
+        },
+        {
+          "at": "2026-06-18T14:47:37.838Z",
+          "event": "reopened",
+          "note": "dont show the meals just show the ingredients",
+          "previousFix": {
+            "description": "Yes — fixed and LIVE on prod (backend /foods/search, so your app already gets it). Re-verified just now two ways: (1) API check — searching 'rice' returns 0 meals leaked (no '+'-combos, no 'AI:' bowls, no meal/ai_generated categories); (2) in-app screenshot — the 'Add ingredient' search for 'Rice' shows only ingredients (Basmati/Brown Rice, Awadhi Chicken Rice, etc.), no meals. The _exclude_meals() filter (backend f5dfb83) is deployed. If your phone still showed meals, it was a pre-deploy/cached view — it's clean now.",
+            "imagePath": "images/i-20260617-f3f8-fix.png",
+            "imagePaths": [
+              "images/i-20260617-f3f8-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "aed7a0789d2d4b5477e545859f049029e30c13f5",
+            "imageCommits": [
+              "aed7a0789d2d4b5477e545859f049029e30c13f5"
+            ],
+            "fixedAt": "2026-06-17T11:39:01.542Z",
             "appCommit": "f5dfb83"
           }
         }
