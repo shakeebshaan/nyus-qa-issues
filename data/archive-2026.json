@@ -2438,6 +2438,42 @@
       "needsReview": false,
       "resolvedAt": "2026-06-18T14:40:48.029Z",
       "archivedAt": "2026-06-18T14:40:48.029Z"
+    },
+    {
+      "id": "i-20260617-26ce",
+      "createdAt": "2026-06-17T06:58:37.534Z",
+      "route": null,
+      "description": "Don't play multiple sound for multiple level up so one animation which looks clean",
+      "imagePath": "images/i-20260617-26ce.jpg",
+      "imageCommit": "4093629671502533046a0e6f50830bec8535645e",
+      "imagePaths": [
+        "images/i-20260617-26ce.jpg"
+      ],
+      "imageCommits": [
+        "4093629671502533046a0e6f50830bec8535645e"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Fixed (frontend a7d238cc). Root cause: CelebrationOverlay's sound effect had onComplete + type in its deps, and every caller passes a fresh inline onComplete each render — so any parent re-render while the overlay was up re-fired playSfx = 'multiple sounds for one level-up'. Now reads onComplete/type via refs and depends on [show] alone, so the sound + auto-dismiss fire EXACTLY ONCE per celebration. (The animation was already single.) I can't capture AUDIO in the harness (image is the Achievements surface for context), so please confirm a single sound on device after the next app release — this is a frontend change and your installed build predates it.",
+        "imagePath": "images/i-20260617-26ce-fix.png",
+        "imagePaths": [
+          "images/i-20260617-26ce-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9ed60ef58894d53ffea2e8b4014fc785c22093b1",
+        "imageCommits": [
+          "9ed60ef58894d53ffea2e8b4014fc785c22093b1"
+        ],
+        "fixedAt": "2026-06-17T11:46:05.763Z",
+        "appCommit": "a7d238cc"
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewReply": "fix this",
+      "reviewRepliedAt": "2026-06-17T11:22:38.225Z",
+      "resolvedAt": "2026-06-18T14:41:38.500Z",
+      "archivedAt": "2026-06-18T14:41:38.500Z"
     }
   ]
 }
