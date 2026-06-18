@@ -822,22 +822,29 @@
         "d33fb53eaefa5f6dd0335ce00128395b4bb37608"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "It IS fixed in main — this is a FRONTEND fix and your installed app build predates it, which is why you still see the cutoff ('not fixed' = old build). In src/components/achievement-context.tsx the badge toast is now centered + width-capped ('fixed left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm') with 'truncate' on every line, with the code comment 'a long badge name can never push the toast wider … off-screen'. So it cannot run off the edge anymore. I can't trigger a live badge toast in the QA harness (badges already earned on the test account), hence the dashboard context image. This + several other frontend fixes (6d7d, e575, 26ce, 2a8e) are all queued in main waiting on an APP RELEASE — say 'release the app' and I'll ship them to a build where you can verify on-device.",
-        "imagePath": "images/i-20260617-d039-fix.png",
-        "imagePaths": [
-          "images/i-20260617-d039-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "79786f40aaff6b95ea2be74673d09da630b1b97f",
-        "imageCommits": [
-          "79786f40aaff6b95ea2be74673d09da630b1b97f"
-        ],
-        "fixedAt": "2026-06-17T11:51:07.505Z",
-        "appCommit": "2b3c6c07"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-18T14:42:12.097Z",
+          "event": "reopened",
+          "note": "capture the notification UI in screenshot",
+          "previousFix": {
+            "description": "It IS fixed in main — this is a FRONTEND fix and your installed app build predates it, which is why you still see the cutoff ('not fixed' = old build). In src/components/achievement-context.tsx the badge toast is now centered + width-capped ('fixed left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm') with 'truncate' on every line, with the code comment 'a long badge name can never push the toast wider … off-screen'. So it cannot run off the edge anymore. I can't trigger a live badge toast in the QA harness (badges already earned on the test account), hence the dashboard context image. This + several other frontend fixes (6d7d, e575, 26ce, 2a8e) are all queued in main waiting on an APP RELEASE — say 'release the app' and I'll ship them to a build where you can verify on-device.",
+            "imagePath": "images/i-20260617-d039-fix.png",
+            "imagePaths": [
+              "images/i-20260617-d039-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "79786f40aaff6b95ea2be74673d09da630b1b97f",
+            "imageCommits": [
+              "79786f40aaff6b95ea2be74673d09da630b1b97f"
+            ],
+            "fixedAt": "2026-06-17T11:51:07.505Z",
+            "appCommit": "2b3c6c07"
+          }
+        }
+      ],
       "needsReview": false,
       "reviewReply": "not fixed",
       "reviewRepliedAt": "2026-06-17T11:22:59.864Z"
