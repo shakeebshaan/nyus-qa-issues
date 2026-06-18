@@ -17,8 +17,20 @@
         "713c417b5dfcf40cc9c835d30a896f720bfb391d"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Add-ingredient search pulled from catalog tables that MIX meals/dishes with ingredients - the ingredients table is ~104k other rows (mostly AI meal/portion instances) and food_database carries prepared_*/snacks dishes - and a negative name/category exclude could not catch a dish filed under category other (e.g. Andhra Pepper Egg Rice). Fix (backend 076d593, deployed): foods_search now filters POSITIVELY to known single-food categories (protein/grain/vegetable/fruit/dairy/legume/spice/nut_seed/oil_fat/seafood/...); NULL/empty/other/meal/ai_generated/prepared-dish all fall out. Rows stay in the DB. Verified live: searching rice now returns only ingredients (Basmati/Brown/Jasmine/White Rice, Rice Flour, Rice Noodles, Rice Bran Oil, Poha) - zero meals/dishes/dupes (before/after attached). Re fix",
+        "imagePath": "images/i-20260617-f3f8-fix.png",
+        "imagePaths": [
+          "images/i-20260617-f3f8-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "db9881894e7895f01e2bc10d2be4415544399f63",
+        "imageCommits": [
+          "db9881894e7895f01e2bc10d2be4415544399f63"
+        ],
+        "fixedAt": "2026-06-18T15:55:25.126Z"
+      },
       "history": [
         {
           "at": "2026-06-17T11:27:13.351Z",
