@@ -2474,6 +2474,41 @@
       "reviewRepliedAt": "2026-06-17T11:22:38.225Z",
       "resolvedAt": "2026-06-18T14:41:38.500Z",
       "archivedAt": "2026-06-18T14:41:38.500Z"
+    },
+    {
+      "id": "i-20260617-c763",
+      "createdAt": "2026-06-17T06:55:36.206Z",
+      "route": null,
+      "description": "Plan and fix missing images",
+      "imagePath": "images/i-20260617-c763.jpg",
+      "imageCommit": "68a700e82420dfb14135c8bec2c35697533e4bc4",
+      "imagePaths": [
+        "images/i-20260617-c763.jpg"
+      ],
+      "imageCommits": [
+        "68a700e82420dfb14135c8bec2c35697533e4bc4"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: AI-generated plans create compound exercise names (Pull-down or band row, Banded pull-up (if available)) with no catalog image, so the workout card fell back to a generic stick-figure placeholder. Fix (backend, deployed 28f5481): new _resolve_exercise_image_url normalises the name (strips parentheticals, splits on or / slash) and fuzzy-matches it against catalog exercises that DO have an image (difflib, accept ratio >= 0.70), borrowing the closest match - Pull-down or band row now shows the real Band Row photo, Banded pull-up shows a Pull-Up photo. Applied at all 3 Activity image points (today, next-session, tomorrow); candidate list cached 10 min; still falls back to the keyword photo when nothing matches confidently. Verified live on prod: the two compound exercises now return /uploads catalog images instead of placeholders (before/after attached).",
+        "imagePath": "images/i-20260617-c763-fix.png",
+        "imagePaths": [
+          "images/i-20260617-c763-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b98123cbdfa13e0ad14cd7a46cc8320fe2ba876d",
+        "imageCommits": [
+          "b98123cbdfa13e0ad14cd7a46cc8320fe2ba876d"
+        ],
+        "fixedAt": "2026-06-18T09:17:33.375Z"
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewReply": "run it and give screenshot",
+      "reviewRepliedAt": "2026-06-17T11:21:58.529Z",
+      "resolvedAt": "2026-06-18T14:43:12.024Z",
+      "archivedAt": "2026-06-18T14:43:12.024Z"
     }
   ]
 }
