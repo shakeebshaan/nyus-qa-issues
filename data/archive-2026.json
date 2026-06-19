@@ -3646,6 +3646,31 @@
       "reviewedAt": "2026-06-19T04:43:10.313Z",
       "resolvedAt": "2026-06-19T05:24:11.396Z",
       "archivedAt": "2026-06-19T05:24:11.396Z"
+    },
+    {
+      "id": "i-20260618-9d43",
+      "createdAt": "2026-06-18T18:56:46.922Z",
+      "route": null,
+      "description": "Calories overshoot then orignal proposed plan",
+      "imagePath": "images/i-20260618-9d43.jpg",
+      "imageCommit": "a491139ba16fc6d482a482a4df8daecf121c95a1",
+      "imagePaths": [
+        "images/i-20260618-9d43.jpg"
+      ],
+      "imageCommits": [
+        "a491139ba16fc6d482a482a4df8daecf121c95a1"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Done (option A) — built on BOTH onboarding target screens: the Coach Preview AND the plan-ready overview now show the SERVER's accurate target (a shared useDisplayStats hook reads your saved target/tdee/bmr from /profile and re-derives the deficit + pace from it), so the number you see during onboarding == your saved plan. Falls back to the old estimate only until the server value is computed (no regression). Commits be5853a3 + 0f0395f5. I couldn't attach a screenshot — these are mid-onboarding screens and the QA test account is already past onboarding (re-running would wipe its provisioning). You'll see it on your next FRESH-signup test after the app updates: the onboarding calorie number should match the Nutrition plan, no more overshoot. Data path verified server-side (target exposed = 1824 for the test profile).",
+      "reviewedAt": "2026-06-19T08:16:17.813Z",
+      "reviewReply": "A",
+      "reviewRepliedAt": "2026-06-19T07:17:18.785Z",
+      "resolvedAt": "2026-06-19T08:40:36.574Z",
+      "archivedAt": "2026-06-19T08:40:36.574Z"
     }
   ]
 }
