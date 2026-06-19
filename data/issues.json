@@ -2,51 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260617-9375",
-      "createdAt": "2026-06-17T06:54:54.538Z",
-      "route": null,
-      "description": "Choose plan error",
-      "imagePath": "images/i-20260617-9375-0.jpg",
-      "imageCommit": "d9d98cd83a34aae2691e462ad1130e135a0b9b6b",
-      "imagePaths": [
-        "images/i-20260617-9375-0.jpg",
-        "images/i-20260617-9375-1.jpg"
-      ],
-      "imageCommits": [
-        "d9d98cd83a34aae2691e462ad1130e135a0b9b6b",
-        "08774bf5722783b35c5ce79a086b38ee5ddfc457"
-      ],
-      "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": [
-        {
-          "at": "2026-06-18T14:44:45.284Z",
-          "event": "reopened",
-          "note": "capture the entire onboarding flow both paths and capture screenshots",
-          "previousFix": {
-            "description": "This 'Choose plan error' is the same onboarding 'Still finishing your plan / Try again' screen as ddd1 — POST /onboarding/finalize was returning 500. Root cause (fixed last cycle): _active_diet_meal_count used .scalar() on the active-UserDietPlan query, which throws sqlalchemy MultipleResultsFound the moment a user has more than one active diet plan, crashing finalize and stranding the user on Try-again. Fix counts active meals over ALL active plan ids instead. Re-verified now: POST /onboarding/finalize returns 200 {onboarding_complete:true, has_diet:true, has_workout:true} for the account that was failing, and the dashboard loads past the gate (screenshot). Backend 3f1b629 (deployed + live).",
-            "imagePath": "images/i-20260617-9375-fix.png",
-            "imagePaths": [
-              "images/i-20260617-9375-fix.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "fa3f9a744d7efca0f629a75717ceb088e2ffd70f",
-            "imageCommits": [
-              "fa3f9a744d7efca0f629a75717ceb088e2ffd70f"
-            ],
-            "fixedAt": "2026-06-17T10:31:27.118Z",
-            "appCommit": "3f1b629"
-          }
-        }
-      ],
-      "needsReview": true,
-      "reviewReason": "Plain version: after building the plan, the app sometimes hung on 'Still finishing your plan' even though the plan was actually saved fine. Cause: the app waited on a SECOND server check that lags a few seconds behind the save, instead of trusting the 'done' confirmation it already got from the save itself. Fixed (67ae35d8) — it now advances the moment the save confirms. Note: the released app still runs the old code, so you'll only see this gone after the next app release. Same root cause as 9da9.",
-      "reviewedAt": "2026-06-18T19:33:37.194Z",
-      "reviewReply": "what?",
-      "reviewRepliedAt": "2026-06-18T18:48:38.964Z"
-    },
-    {
       "id": "i-20260617-6774",
       "createdAt": "2026-06-17T07:05:39.860Z",
       "route": null,
