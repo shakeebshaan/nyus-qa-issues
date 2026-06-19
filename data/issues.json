@@ -141,40 +141,6 @@
       "reviewedAt": "2026-06-18T19:24:51.952Z"
     },
     {
-      "id": "i-20260618-bcb7",
-      "createdAt": "2026-06-18T18:48:24.327Z",
-      "route": null,
-      "description": "Level up before the onboarding",
-      "imagePath": "images/i-20260618-bcb7.jpg",
-      "imageCommit": "d4abbe82125e8ad717830f401a936ee5b1f01873",
-      "imagePaths": [
-        "images/i-20260618-bcb7.jpg"
-      ],
-      "imageCommits": [
-        "d4abbe82125e8ad717830f401a936ee5b1f01873"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the 'Level up' overlay fired on the /verify OTP screen during signup. The instant a correct code flips you authenticated, the freshly-fetched gamification level settled above the last-seen value and the celebration painted ON the verify screen, a beat before the redirect into the app. The old guard only silenced this on /onboarding, not the auth screens. Fix (19b38e8e): one shared route gate now covers the entire pre-app funnel (Welcome /, /verify, /onboarding, /choose-plan) — levels earned there are absorbed silently and celebrated cleanly once you're actually in the app; also hardened the badge watcher the same way so a badge earned mid-build can't pop on the OTP/builder screen. Shot 1: the /verify screen WITH a level-up armed — no overlay, level absorbed silently (the bug condition, now clean). Shot 2: the 'Level up' overlay still fires correctly on the dashboard (in-app), proving it's suppressed only in the funnel, not disabled. Frontend-only — visible after the next app release.",
-        "imagePath": "images/i-20260618-bcb7-fix.png",
-        "imagePaths": [
-          "images/i-20260618-bcb7-fix.png",
-          "images/i-20260618-bcb7-fix-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "3000a04729759c43c5d1d530432d2317653da39b",
-        "imageCommits": [
-          "3000a04729759c43c5d1d530432d2317653da39b",
-          "789e45f2e80c609d39e40173faf68d886ff0128c"
-        ],
-        "fixedAt": "2026-06-18T19:47:19.848Z",
-        "appCommit": "19b38e8e"
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260618-e470",
       "createdAt": "2026-06-18T18:56:00.503Z",
       "route": null,
