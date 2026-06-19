@@ -96,12 +96,25 @@
         "bf9041643ab4f4424a2b03046e00ca1ee81beb54"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Built it per your note ('don't build the plan again but have the existing plan for exercise'). 'Build Activity Plan' no longer dumps you into the full 7-day workout builder. It now opens a focused Daily Activity editor (shot 1) PREFILLED from your existing plan (here 11,500 steps, 4x cardio) — tap to adjust steps/cardio/NEAT, then 'Save & view activity' saves ONLY the targets and drops you on the Activity page (shot 2: Steps 0/11,500). Your workout stays exactly as it was (still '0 of 6 exercises' — no rebuild). New backend PUT /onboarding/custom-plan/activity-targets upserts the targets onto your active plan; nothing touches the workout days. Backend 4793d3e + frontend 7b916b05, both deployed/pushed; verified end-to-end (target round-trips and the plan's 6 workout days are untouched). Visible after the next app release.",
+        "imagePath": "images/i-20260618-e470-fix.png",
+        "imagePaths": [
+          "images/i-20260618-e470-fix.png",
+          "images/i-20260618-e470-fix-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f606ef447cc34a3eef0e445922ee9e33a941babb",
+        "imageCommits": [
+          "f606ef447cc34a3eef0e445922ee9e33a941babb",
+          "84244e6ef1a98db0136796e94cb372ff794a996e"
+        ],
+        "fixedAt": "2026-06-19T04:20:54.635Z",
+        "appCommit": "7b916b05"
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Traced it. 'Build Activity Plan' currently opens the FULL workout builder (/ai/create-workout-plan?focus=activity) and just scrolls to the Daily-activity section — so to actually reach the Activity page you have to build the whole 7-day workout first (the activity steps/cardio/NEAT targets are saved bundled WITH the workout; there's no standalone save). That's why you land in 'Build your workout' instead of on the Activity page. Note: routing here was deliberate — the older standalone AI activity chat-wizard (/ai/create-activity-plan) was intentionally bypassed in favor of this quick targets sheet. To make it land on /activity right after you set the targets (no full workout build), the cleanest fix is a small full-stack add: a standalone 'save activity targets onto the active plan' path, and for the focus=activity entry the Daily-activity sheet's primary CTA becomes 'Save & view activity' -> persists targets -> opens /activity prefilled. Want me to build that? Or should 'Build Activity Plan' instead just open /activity and let you edit the daily targets inline there? Either is doable — confirming the intended behavior before I build, since it changes a deliberate flow.",
-      "reviewedAt": "2026-06-18T20:19:12.537Z",
       "reviewReply": "yes build it and make sure we don't build the plan again but have the existing plan for exercise",
       "reviewRepliedAt": "2026-06-19T04:07:18.692Z"
     },
