@@ -15,21 +15,8 @@
         "c814233e5d17d1750c8349149b30b3baccbb06eb"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Done — addressed every part of the reopen. (1) Full-screen UI on tap: PrCollectibleCard opens a full-screen collectable 'trading card' (orange foil art zone + trophy/emblem + weight hero, est. 1RM, date). (2) Badges 'what you got' + 'what you get on breaking': the card and the section both show your earned PR badges (First Record, Record Setter, etc.) as tier-free chips, plus a 'Beat this PR to earn your next badge' break incentive. (3) Leaderboard standings shown here + auto-entry: a new 'Strength standings' card now sits right under the Personal-bests carousel (see screenshot) — top 3 lifters + YOUR own rank, ranked by heaviest lift, with 'you're entered automatically' (logging a set auto-enters you on the existing exercise_pr board). 'See full leaderboard' opens the full board straight on the PR tab. Verified live on the dev server: standings render against the real 27-athlete board, deep-link lands on the Exercise PR board, zero console errors. Note on 'badges on each exercise': the badges shown are the account PR-milestone family (1st PR / 5 / 25 / 100) surfaced in PR context; truly per-exercise badges (a badge per individual lift) would be a new backend system — happy to build that next if you want it, just confirm on the board.",
-        "imagePath": "images/i-20260617-6774-fix.png",
-        "imagePaths": [
-          "images/i-20260617-6774-fix.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f6583eed8e6a462b15822eacea8ef8a5df3860d3",
-        "imageCommits": [
-          "f6583eed8e6a462b15822eacea8ef8a5df3860d3"
-        ],
-        "fixedAt": "2026-06-19T09:04:18.564Z",
-        "appCommit": "5ca88f00"
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-18T14:41:28.497Z",
@@ -105,6 +92,25 @@
             ],
             "fixedAt": "2026-06-19T05:19:31.497Z",
             "appCommit": "1de68415"
+          }
+        },
+        {
+          "at": "2026-06-19T16:23:57.846Z",
+          "event": "reopened",
+          "note": "remove the leaderboard, the leaderboard standings should be inside the pr card as text",
+          "previousFix": {
+            "description": "Done — addressed every part of the reopen. (1) Full-screen UI on tap: PrCollectibleCard opens a full-screen collectable 'trading card' (orange foil art zone + trophy/emblem + weight hero, est. 1RM, date). (2) Badges 'what you got' + 'what you get on breaking': the card and the section both show your earned PR badges (First Record, Record Setter, etc.) as tier-free chips, plus a 'Beat this PR to earn your next badge' break incentive. (3) Leaderboard standings shown here + auto-entry: a new 'Strength standings' card now sits right under the Personal-bests carousel (see screenshot) — top 3 lifters + YOUR own rank, ranked by heaviest lift, with 'you're entered automatically' (logging a set auto-enters you on the existing exercise_pr board). 'See full leaderboard' opens the full board straight on the PR tab. Verified live on the dev server: standings render against the real 27-athlete board, deep-link lands on the Exercise PR board, zero console errors. Note on 'badges on each exercise': the badges shown are the account PR-milestone family (1st PR / 5 / 25 / 100) surfaced in PR context; truly per-exercise badges (a badge per individual lift) would be a new backend system — happy to build that next if you want it, just confirm on the board.",
+            "imagePath": "images/i-20260617-6774-fix.png",
+            "imagePaths": [
+              "images/i-20260617-6774-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "f6583eed8e6a462b15822eacea8ef8a5df3860d3",
+            "imageCommits": [
+              "f6583eed8e6a462b15822eacea8ef8a5df3860d3"
+            ],
+            "fixedAt": "2026-06-19T09:04:18.564Z",
+            "appCommit": "5ca88f00"
           }
         }
       ],
