@@ -3671,6 +3671,84 @@
       "reviewRepliedAt": "2026-06-19T07:17:18.785Z",
       "resolvedAt": "2026-06-19T08:40:36.574Z",
       "archivedAt": "2026-06-19T08:40:36.574Z"
+    },
+    {
+      "id": "i-20260618-e470",
+      "createdAt": "2026-06-18T18:56:00.503Z",
+      "route": null,
+      "description": "When the build activity plan open the activity page directly with prefilled current workout in the entire page",
+      "imagePath": "images/i-20260618-e470-0.jpg",
+      "imageCommit": "6249ebab88ed217dabeedeea89af0dc29d15a931",
+      "imagePaths": [
+        "images/i-20260618-e470-0.jpg",
+        "images/i-20260618-e470-1.jpg"
+      ],
+      "imageCommits": [
+        "6249ebab88ed217dabeedeea89af0dc29d15a931",
+        "bf9041643ab4f4424a2b03046e00ca1ee81beb54"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "The bottom section is NOT empty in the current code — this fresh capture off main shows 'Day 1 of 6 - 6 built', the Training-days tabs (Pull Day B / Legs B), and your existing exercises prefilled (Barbell Row 4x6-8, Chin-Up 3x6-10, Bent-Over Row 3x8-10, Upright Row...), with Save plan. IMPORTANT: this fix (commit 578ea51d) is on main and verified, but the installed build on your phone still runs the OLD code — frontend changes only reach the device in a new app build/update, not instantly. That's almost certainly why your screenshot still shows empty: your installed version predates this fix (same reason the collectable card / prefill / other recent UI fixes aren't visible to you yet). They'll all appear together in the next app update. (If it's STILL empty in a build that DOES include 578ea51d, then it's account-specific — your plan isn't returned by getCurrentWorkout — and I'll chase that; the QA account with a real plan prefills correctly as shown.)",
+        "imagePath": "images/i-20260618-e470-fix.png",
+        "imagePaths": [
+          "images/i-20260618-e470-fix.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2def2520e8c705a95fe3d235af33017beb7f71cd",
+        "imageCommits": [
+          "2def2520e8c705a95fe3d235af33017beb7f71cd"
+        ],
+        "fixedAt": "2026-06-19T07:26:14.475Z"
+      },
+      "history": [
+        {
+          "at": "2026-06-19T05:24:52.802Z",
+          "event": "reopened",
+          "note": "we should see the bottom ui with our existing plan, PLAN THIS AND FIX",
+          "previousFix": {
+            "description": "Built it per your note ('don't build the plan again but have the existing plan for exercise'). 'Build Activity Plan' no longer dumps you into the full 7-day workout builder. It now opens a focused Daily Activity editor (shot 1) PREFILLED from your existing plan (here 11,500 steps, 4x cardio) — tap to adjust steps/cardio/NEAT, then 'Save & view activity' saves ONLY the targets and drops you on the Activity page (shot 2: Steps 0/11,500). Your workout stays exactly as it was (still '0 of 6 exercises' — no rebuild). New backend PUT /onboarding/custom-plan/activity-targets upserts the targets onto your active plan; nothing touches the workout days. Backend 4793d3e + frontend 7b916b05, both deployed/pushed; verified end-to-end (target round-trips and the plan's 6 workout days are untouched). Visible after the next app release.",
+            "imagePath": "images/i-20260618-e470-fix.png",
+            "imagePaths": [
+              "images/i-20260618-e470-fix.png",
+              "images/i-20260618-e470-fix-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "f606ef447cc34a3eef0e445922ee9e33a941babb",
+            "imageCommits": [
+              "f606ef447cc34a3eef0e445922ee9e33a941babb",
+              "84244e6ef1a98db0136796e94cb372ff794a996e"
+            ],
+            "fixedAt": "2026-06-19T04:20:54.635Z",
+            "appCommit": "7b916b05"
+          }
+        },
+        {
+          "at": "2026-06-19T07:18:53.571Z",
+          "event": "reopened",
+          "note": "still the bottom section is empty in the screenshot",
+          "previousFix": {
+            "description": "Re-fixed per 'we should see the bottom ui with our existing plan'. The problem was the builder opened EMPTY ('Day 1 of 7 - 0 built'), ignoring your current plan (my earlier targets-only sheet was the wrong call - reverted). Now Build Activity Plan opens PREFILLED with your existing plan: the workout section (bottom UI) shows your current exercises - screenshot shows 'Day 1 of 6 - 6 built' with Chin-Up / Bent-Over Row / Upright Row / Preacher Curl / etc. - AND your saved daily-activity targets up top (11,500 steps - 4x cardio), all editable. Save updates that plan (no build-from-scratch). New users with no plan still get a fresh seed. App commit 578ea51d. Visible after the next app release.",
+            "imagePath": "images/i-20260618-e470-fix.png",
+            "imagePaths": [
+              "images/i-20260618-e470-fix.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "797e26bc38a07996824c955fd3a686b768ff9092",
+            "imageCommits": [
+              "797e26bc38a07996824c955fd3a686b768ff9092"
+            ],
+            "fixedAt": "2026-06-19T05:51:41.357Z",
+            "appCommit": "578ea51d"
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewReply": "yes build it and make sure we don't build the plan again but have the existing plan for exercise",
+      "reviewRepliedAt": "2026-06-19T04:07:18.692Z",
+      "resolvedAt": "2026-06-19T08:41:27.844Z",
+      "archivedAt": "2026-06-19T08:41:27.844Z"
     }
   ]
 }
