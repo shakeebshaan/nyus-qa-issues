@@ -109,24 +109,31 @@
         "bf9041643ab4f4424a2b03046e00ca1ee81beb54"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Built it per your note ('don't build the plan again but have the existing plan for exercise'). 'Build Activity Plan' no longer dumps you into the full 7-day workout builder. It now opens a focused Daily Activity editor (shot 1) PREFILLED from your existing plan (here 11,500 steps, 4x cardio) — tap to adjust steps/cardio/NEAT, then 'Save & view activity' saves ONLY the targets and drops you on the Activity page (shot 2: Steps 0/11,500). Your workout stays exactly as it was (still '0 of 6 exercises' — no rebuild). New backend PUT /onboarding/custom-plan/activity-targets upserts the targets onto your active plan; nothing touches the workout days. Backend 4793d3e + frontend 7b916b05, both deployed/pushed; verified end-to-end (target round-trips and the plan's 6 workout days are untouched). Visible after the next app release.",
-        "imagePath": "images/i-20260618-e470-fix.png",
-        "imagePaths": [
-          "images/i-20260618-e470-fix.png",
-          "images/i-20260618-e470-fix-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f606ef447cc34a3eef0e445922ee9e33a941babb",
-        "imageCommits": [
-          "f606ef447cc34a3eef0e445922ee9e33a941babb",
-          "84244e6ef1a98db0136796e94cb372ff794a996e"
-        ],
-        "fixedAt": "2026-06-19T04:20:54.635Z",
-        "appCommit": "7b916b05"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-19T05:24:52.802Z",
+          "event": "reopened",
+          "note": "we should see the bottom ui with our existing plan, PLAN THIS AND FIX",
+          "previousFix": {
+            "description": "Built it per your note ('don't build the plan again but have the existing plan for exercise'). 'Build Activity Plan' no longer dumps you into the full 7-day workout builder. It now opens a focused Daily Activity editor (shot 1) PREFILLED from your existing plan (here 11,500 steps, 4x cardio) — tap to adjust steps/cardio/NEAT, then 'Save & view activity' saves ONLY the targets and drops you on the Activity page (shot 2: Steps 0/11,500). Your workout stays exactly as it was (still '0 of 6 exercises' — no rebuild). New backend PUT /onboarding/custom-plan/activity-targets upserts the targets onto your active plan; nothing touches the workout days. Backend 4793d3e + frontend 7b916b05, both deployed/pushed; verified end-to-end (target round-trips and the plan's 6 workout days are untouched). Visible after the next app release.",
+            "imagePath": "images/i-20260618-e470-fix.png",
+            "imagePaths": [
+              "images/i-20260618-e470-fix.png",
+              "images/i-20260618-e470-fix-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "f606ef447cc34a3eef0e445922ee9e33a941babb",
+            "imageCommits": [
+              "f606ef447cc34a3eef0e445922ee9e33a941babb",
+              "84244e6ef1a98db0136796e94cb372ff794a996e"
+            ],
+            "fixedAt": "2026-06-19T04:20:54.635Z",
+            "appCommit": "7b916b05"
+          }
+        }
+      ],
       "needsReview": false,
       "reviewReply": "yes build it and make sure we don't build the plan again but have the existing plan for exercise",
       "reviewRepliedAt": "2026-06-19T04:07:18.692Z"
