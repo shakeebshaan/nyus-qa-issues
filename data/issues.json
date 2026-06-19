@@ -176,11 +176,11 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Root-caused exactly. The number you saw DURING onboarding comes from a CLIENT calc (simple: BMR x activity-multiplier, minus a deficit). But your saved plan's calories come from a richer SERVER calc (a two-axis estimate that also factors your weekly workout sessions + daily steps). The two don't match, so the onboarding number != the final plan -> looks like an overshoot. Verified the pipeline is otherwise correct (on the test account both happen to agree at 1824). Since this sets EVERY user's calorie goal, one call before I ship (health-sensitive): (A) RECOMMENDED - show the SERVER's more-accurate target during onboarding so what you see == what you get (the onboarding number shifts to match the plan); or (B) keep the simpler onboarding number and make the plan use that (matches what you saw, but less accurate). I recommend A. Reply A or B and I'll implement + verify shown==saved before it goes out.",
       "reviewedAt": "2026-06-19T06:13:12.889Z",
-      "reviewReply": "it was different during the onboarding",
-      "reviewRepliedAt": "2026-06-19T04:05:25.663Z"
+      "reviewReply": "A",
+      "reviewRepliedAt": "2026-06-19T07:17:18.785Z"
     }
   ]
 }
