@@ -3445,6 +3445,44 @@
       "reviewRepliedAt": "2026-06-17T11:22:17.384Z",
       "resolvedAt": "2026-06-18T18:50:35.263Z",
       "archivedAt": "2026-06-18T18:50:35.263Z"
+    },
+    {
+      "id": "i-20260618-5462",
+      "createdAt": "2026-06-18T18:53:35.241Z",
+      "route": null,
+      "description": "Home page says 6 exercise but the activity page says rest day fix this major issue",
+      "imagePath": "images/i-20260618-5462-0.jpg",
+      "imageCommit": "fb784256864fff8900cbd860794eeaae77a8efd3",
+      "imagePaths": [
+        "images/i-20260618-5462-0.jpg",
+        "images/i-20260618-5462-1.jpg"
+      ],
+      "imageCommits": [
+        "fb784256864fff8900cbd860794eeaae77a8efd3",
+        "979c71b8673398e98e325485e2c5072306b67e64"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: Home and Activity computed 'today' in different timezones. The dashboard rolls up against the client's LOCAL day (it sends ?day=<your local date>), but the Activity overview endpoint used server-UTC (now_utc.date()) and sent no day. For the Asia/Kolkata default base, near the UTC/local midnight boundary the two landed on DIFFERENT weekdays -> Home showed today's workout while Activity showed the adjacent day as 'Rest'. Fix (FE 841684d3 + BE dd64ce3 deployed): the Activity page now forwards the same ?day=<local date>, the backend honors it and falls back to user_today(user_id) (the user's local calendar date) instead of UTC; the dashboard's fallback uses user_today too. Verified via the API for the same account: day=2026-06-18 (Thu) -> BOTH report 8 exercises; day=2026-06-20 (Sat, rest) -> BOTH report 0. Screenshots: Home 'Activity 0 of 8 exercises done' (shot 1) and the Activity page 'Today's Workout - Thursday - Pull Day A' with 8 exercises (shot 2) now agree. Visible after the next app release.",
+        "imagePath": "images/i-20260618-5462-fix.png",
+        "imagePaths": [
+          "images/i-20260618-5462-fix.png",
+          "images/i-20260618-5462-fix-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "867803f1c1fbb755a84fb185985f8f74996e7103",
+        "imageCommits": [
+          "867803f1c1fbb755a84fb185985f8f74996e7103",
+          "bd24d6166e0692ec7d9ccf3f2300e6879d6470be"
+        ],
+        "fixedAt": "2026-06-18T20:12:32.842Z",
+        "appCommit": "841684d3"
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-19T04:08:13.179Z",
+      "archivedAt": "2026-06-19T04:08:13.179Z"
     }
   ]
 }
