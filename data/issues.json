@@ -176,9 +176,9 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "Dug into this with prod data. The diet plan has no stored 'target' — the kcal shown (2991) is the SUM of the assembled meals. On the test account the pipeline is CORRECT: computed target 1824 == assembled meals 1824 (TDEE 2189 minus deficit, floored at BMR), so I can't reproduce a 2991-style overshoot there. Most likely cause: the build wizard's PROPOSED target comes from the client calc (calcOnboardingStats) which has a goal-completion-DATE trajectory override (a steeper deficit to hit your target date), but the SAVED/displayed plan uses the server calc (calculate_target_calories) which is deficit-only with NO date logic. If a date was set, the proposed (lower) and the saved (higher) legitimately diverge -> looks like an overshoot. The builder also tolerates up to +10% over target before blocking. To fix the RIGHT one safely (this calc drives everyone's calorie goals) I need: the affected account's email, OR did you set a goal completion date on that build, OR the proposed number you saw vs the 2991? Once I know which target should win (date-driven trajectory or standard deficit), I'll reconcile the two calcs so the proposed and the saved plan always match.",
-      "reviewedAt": "2026-06-18T20:44:42.730Z",
+      "needsReview": true,
+      "reviewReason": "Root-caused exactly. The number you saw DURING onboarding comes from a CLIENT calc (simple: BMR x activity-multiplier, minus a deficit). But your saved plan's calories come from a richer SERVER calc (a two-axis estimate that also factors your weekly workout sessions + daily steps). The two don't match, so the onboarding number != the final plan -> looks like an overshoot. Verified the pipeline is otherwise correct (on the test account both happen to agree at 1824). Since this sets EVERY user's calorie goal, one call before I ship (health-sensitive): (A) RECOMMENDED - show the SERVER's more-accurate target during onboarding so what you see == what you get (the onboarding number shifts to match the plan); or (B) keep the simpler onboarding number and make the plan use that (matches what you saw, but less accurate). I recommend A. Reply A or B and I'll implement + verify shown==saved before it goes out.",
+      "reviewedAt": "2026-06-19T06:13:12.889Z",
       "reviewReply": "it was different during the onboarding",
       "reviewRepliedAt": "2026-06-19T04:05:25.663Z"
     }
