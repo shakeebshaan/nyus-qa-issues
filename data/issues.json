@@ -261,9 +261,11 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Traced it. 'Build Activity Plan' currently opens the FULL workout builder (/ai/create-workout-plan?focus=activity) and just scrolls to the Daily-activity section — so to actually reach the Activity page you have to build the whole 7-day workout first (the activity steps/cardio/NEAT targets are saved bundled WITH the workout; there's no standalone save). That's why you land in 'Build your workout' instead of on the Activity page. Note: routing here was deliberate — the older standalone AI activity chat-wizard (/ai/create-activity-plan) was intentionally bypassed in favor of this quick targets sheet. To make it land on /activity right after you set the targets (no full workout build), the cleanest fix is a small full-stack add: a standalone 'save activity targets onto the active plan' path, and for the focus=activity entry the Daily-activity sheet's primary CTA becomes 'Save & view activity' -> persists targets -> opens /activity prefilled. Want me to build that? Or should 'Build Activity Plan' instead just open /activity and let you edit the daily targets inline there? Either is doable — confirming the intended behavior before I build, since it changes a deliberate flow.",
-      "reviewedAt": "2026-06-18T20:19:12.537Z"
+      "reviewedAt": "2026-06-18T20:19:12.537Z",
+      "reviewReply": "yes build it and make sure we don't build the plan again but have the existing plan for exercise",
+      "reviewRepliedAt": "2026-06-19T04:07:18.692Z"
     },
     {
       "id": "i-20260618-9d43",
