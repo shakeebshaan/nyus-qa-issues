@@ -157,7 +157,10 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Diagnosed — this is a Google Cloud Console config issue, not a code bug (so it needs you, I can't access the console). What I verified is CORRECT: the sign-in code (src/lib/google-auth.ts + backend verify_google_token) is fine, and the frontend client ID (VITE_GOOGLE_WEB_CLIENT_ID) matches the backend GOOGLE_CLIENT_ID (both 415757416413-d8k…). Since the web/token path is configured right, 'Google sign-in didn't complete' in the RELEASED Android app is almost certainly the app's signing-key SHA-256 not being registered on the Android OAuth client. Fix: Google Cloud Console → APIs & Services → Credentials → the OAuth 2.0 'Android' client for package com.nyus.nyusand → add BOTH SHA-256 fingerprints: (1) UPLOAD key (I pulled it from android/app/nyus-release-key.jks): 7D:B7:33:AB:42:1F:74:C8:7E:D4:07:57:0B:9B:BD:0E:0C:DD:E0:0E:6B:DB:44:71:7D:25:BF:9C:1A:48:9B:5F  (2) PLAY APP SIGNING key SHA-256 — Play Console → your app → Test and release → App integrity → App signing key certificate (THIS is the one that matters for Play installs, since Play re-signs). Also confirm the OAuth consent screen is 'In production' (not 'Testing', which blocks non-allowlisted users). After adding the SHA(s), allow a few minutes and retry — no app rebuild needed. Email OTP sign-in is unaffected.",
+      "reviewedAt": "2026-06-19T04:43:10.313Z"
     }
   ]
 }
