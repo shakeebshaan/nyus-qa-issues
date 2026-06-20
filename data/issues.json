@@ -27,7 +27,10 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Big one — shipping it in safe, verifiable increments rather than one risky rewrite. KEY FINDING from a deep multi-agent investigation: most of this flow is ALREADY built, so I'm editing in place, not rebuilding (full plan saved in the repo at docs/PLAN_BUILD_REDESIGN_i-20260620-1469.md). DONE NOW (increment 1, verified on the dev server): the 'How should we build your plan?' 2-path screen is GONE — after Health & Food you go straight into Build Your Workout. REMAINING increments need two quick decisions from you: (A) BLUR/FOCUS on the builder screens — a previous design review deliberately removed blur as 'no glassmorphism'. Your new ask reverses that. OK to bring a calm focus-dim back (dim/blur everything except 'Let coach build it all' + a quiet 'I'll build myself')? (B) The 'coach is building' DOUBLE-CHECK that re-checks workout/diet/activity vs your goal needs a backend change to the plan-finalize step + a deploy; I'd ship it observe-only first (it never blocks finishing onboarding). Also queued, no decision needed: fix the sedentary-user step target (showing ~11.5k for a sedentary profile), and consolidate the 'your plan is ready' page to the coach-profile style with a single scroll-revealed 'Continue to dashboard'. Reply with a yes/no on A and B and I'll proceed; otherwise I'll do the no-decision ones (steps + plan-ready) next.",
+      "reviewedAt": "2026-06-20T10:42:06.669Z"
     },
     {
       "id": "i-20260620-31c4",
