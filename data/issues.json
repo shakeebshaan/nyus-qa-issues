@@ -197,9 +197,23 @@
         "3cb2a52ebf55eaf9a404476566cfeffb5fabbf18"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Metabolic Age formula back-solves from your BMR-per-kg against a fixed reference body, but BMR-per-kg naturally drops as body weight rises — so a heavier-for-height profile got pushed all the way to the formula's hard ceiling of 90, which looked like a bug. Fix: it's now bounded to a believable range around your real age (won't read more than ~18 years older), so it still moves the right way (leaner = younger, heavier = older) without the absurd 90. Checked against the exact formula: your ~120kg profile now reads 48 instead of 90 (a 95kg case reads 53 instead of 78); normal/lean profiles are unchanged. Screenshot shows the metric rendering a credible value on the test account. The number is a frontend estimate (Mifflin-St Jeor), so this is computed locally — no backend change needed.",
+        "imagePath": "images/i-20260620-73c4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260620-73c4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "852e31c9cc1d92469e45185c354201ef4b7dddf7",
+        "imageCommits": [
+          "852e31c9cc1d92469e45185c354201ef4b7dddf7"
+        ],
+        "fixedAt": "2026-06-20T08:19:28.059Z",
+        "appCommit": "3eda147a"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260620-0f41",
