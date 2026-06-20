@@ -25,22 +25,29 @@
         "4fb8c4e56bf9abffa69eff99311c148749218c94"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: BuildFocusOverlay used bg-background/55 (too opaque) making the builder invisible behind; 'I'll build myself' was sequential below the coach card, not overlaid on the blur. Fix: changed to backdrop-blur-xl + bg-background/8 so the builder is clearly visible but blurred; flex-1 flex wrapper centres 'I'll build myself' button in the blurred area below the coach card. Also fixed sedentary step goal (was 10k, now uses activity-level-derived target). Screenshot: entire page blurred, coach card sharp at top, 'I'll build myself' centred on blurred builder content.",
-        "imagePath": "images/i-20260620-1469-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260620-1469-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "d59df6cd8eb0487342fe7ca5189e468c4a487777",
-        "imageCommits": [
-          "d59df6cd8eb0487342fe7ca5189e468c4a487777"
-        ],
-        "fixedAt": "2026-06-20T13:22:34.862Z",
-        "appCommit": "4f9b4537"
-      },
-      "history": [],
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-20T13:28:25.486Z",
+          "event": "reopened",
+          "note": "nice complete what's left in. my query",
+          "previousFix": {
+            "description": "Root cause: BuildFocusOverlay used bg-background/55 (too opaque) making the builder invisible behind; 'I'll build myself' was sequential below the coach card, not overlaid on the blur. Fix: changed to backdrop-blur-xl + bg-background/8 so the builder is clearly visible but blurred; flex-1 flex wrapper centres 'I'll build myself' button in the blurred area below the coach card. Also fixed sedentary step goal (was 10k, now uses activity-level-derived target). Screenshot: entire page blurred, coach card sharp at top, 'I'll build myself' centred on blurred builder content.",
+            "imagePath": "images/i-20260620-1469-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260620-1469-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "d59df6cd8eb0487342fe7ca5189e468c4a487777",
+            "imageCommits": [
+              "d59df6cd8eb0487342fe7ca5189e468c4a487777"
+            ],
+            "fixedAt": "2026-06-20T13:22:34.862Z",
+            "appCommit": "4f9b4537"
+          }
+        }
+      ],
       "needsReview": false,
       "reviewReply": "read the plan on blur again. Its not the same what was earlier this is completely page blue on only at the verry to coach section is unblured and also on the entire page blur there is a overlay button on top of the blur which says I build myself, read again ana plan again do the rightfull",
       "reviewRepliedAt": "2026-06-20T12:01:35.690Z"
