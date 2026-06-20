@@ -38,7 +38,10 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Could you attach a screenshot of the badge notification cut off? There are two different cutoffs and each needs a different fix: (1) the badge NAME text truncated with an ellipsis (horizontal clip), or (2) the whole notification clipped under the status bar / camera island at the top (vertical clip) — the latter would affect every badge equally, which matches your 'on all badges'. The in-app badge toast already has a top safe-area guard, so if it's still clipping at the top I'd need your device model to tune it. A screenshot tells me which one + lets me verify the fix.",
+      "reviewedAt": "2026-06-20T05:13:46.913Z"
     }
   ]
 }
