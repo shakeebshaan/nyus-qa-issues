@@ -160,14 +160,19 @@ try {
     if (issue.status === "fixed") throw new Error(id + " is already fixed.");
 
     // Upload all fix screenshots to private repo via gh API.
-    // First image keeps the canonical name (backward-compat); extras get -2, -3...
-    console.log(`Uploading fix screenshot${images.length > 1 ? "s" : ""} to private repo...`);
+    // Revision-scoped filenames so a RE-RESOLVE never overwrites a prior fix's
+    // screenshot: rev = (number of times this issue was previously reopened) + 1.
+    // Every fix attempt's image is preserved in the private repo and the board
+    // shows all of them (current fix + each history.previousFix). Within one
+    // resolve, the first image keeps the base name and extras get -2, -3…
+    const rev = (issue.history || []).filter((h) => h.event === "reopened").length + 1;
+    console.log(`Uploading fix screenshot${images.length > 1 ? "s" : ""} (revision r${rev}) to private repo...`);
     const privPaths = [];
     const imageCommits = [];
     for (let idx = 0; idx < images.length; idx++) {
       const ext = (extname(images[idx]) || ".png").toLowerCase();
-      const privRel = `images/${id}-fix${idx === 0 ? "" : "-" + (idx + 1)}${ext}`;
-      const uploadResult = uploadToPrivRepo(images[idx], privRel, `issue ${id}: fix screenshot${images.length > 1 ? " " + (idx + 1) : ""}`);
+      const privRel = `images/${id}-fix-r${rev}${idx === 0 ? "" : "-" + (idx + 1)}${ext}`;
+      const uploadResult = uploadToPrivRepo(images[idx], privRel, `issue ${id}: fix screenshot r${rev}${images.length > 1 ? " " + (idx + 1) : ""}`);
       privPaths.push(privRel);
       imageCommits.push(uploadResult?.commit?.sha || "");
     }
