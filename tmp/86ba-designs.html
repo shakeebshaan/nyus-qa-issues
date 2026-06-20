@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=390, initial-scale=1" />
+<title>Weight card — 6 concepts (86ba)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: hsl(36 20% 98%);
+    --card: hsl(0 0% 100%);
+    --grad-weight: linear-gradient(135deg, hsl(166 55% 90%) 0%, hsl(155 50% 93%) 100%);
+    --teal: hsl(166 70% 42%);
+    --teal-deep: hsl(166 70% 30%);
+    --teal-bright: hsl(174 60% 47%);
+    --fg: hsl(170 30% 13%);
+    --muted: hsl(166 9% 40%);
+    --muted-soft: hsl(166 12% 52%);
+    --track: hsl(160 16% 84%);
+    --success: hsl(160 55% 38%);
+    --line: hsl(160 18% 88%);
+    --chip-bg: rgba(255,255,255,0.55);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background:var(--bg); color:var(--fg);
+    width:390px; margin:0 auto; padding:18px 16px 40px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page-head{padding:6px 2px 16px;}
+  .page-head h1{font-size:19px; font-weight:700; letter-spacing:-0.02em;}
+  .page-head p{font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.45;}
+  .concept{margin-bottom:22px;}
+  .clabel{display:flex; align-items:baseline; gap:8px; margin:0 2px 8px;}
+  .clabel .n{font-size:11px; font-weight:700; color:var(--teal-deep);
+    background:hsl(166 50% 92%); border-radius:999px; padding:2px 8px; letter-spacing:0.02em;}
+  .clabel .t{font-size:14px; font-weight:600; letter-spacing:-0.01em;}
+  .clabel .tag{font-size:10px; font-weight:600; color:hsl(28 60% 42%);
+    background:hsl(30 70% 92%); border-radius:999px; padding:2px 7px; margin-left:auto;}
+  .rationale{font-size:11.5px; color:var(--muted); margin:8px 4px 0; line-height:1.5;}
+  .rationale b{color:var(--fg); font-weight:600;}
+
+  /* ----- the weight card shell (mimics DashboardWeightCard) ----- */
+  .card{
+    position:relative; overflow:hidden; border-radius:18px;
+    background:var(--grad-weight);
+    box-shadow:0 1px 2px rgba(20,50,40,0.04), 0 6px 18px -8px rgba(20,60,50,0.16);
+    padding:18px 18px 16px;
+  }
+  .card .title{font-size:16.5px; font-weight:700; letter-spacing:-0.01em; margin-bottom:13px;}
+  .row{display:flex; align-items:center; gap:18px;}
+  .grow{flex:1; min-width:0;}
+  .wt-num{font-size:31px; font-weight:700; letter-spacing:-0.03em; line-height:1; font-variant-numeric:tabular-nums;}
+  .wt-num .u{font-size:14px; font-weight:600; color:var(--muted); margin-left:3px; letter-spacing:0;}
+  .headline{font-size:14.5px; font-weight:600; letter-spacing:-0.01em;}
+  .sub{font-size:12px; color:var(--muted); margin-top:3px; line-height:1.4;}
+  .chip{display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:500;
+    background:var(--chip-bg); border-radius:999px; padding:3px 9px; margin-top:9px; color:var(--fg);}
+  .chip.green{color:var(--success);}
+  .ringwrap{position:relative; width:96px; height:96px; flex-shrink:0;}
+  .ringwrap .center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .ringwrap .cw{font-size:21px; font-weight:700; letter-spacing:-0.02em; line-height:1; font-variant-numeric:tabular-nums;}
+  .ringwrap .cu{font-size:10px; color:var(--muted); margin-top:2px; font-weight:600;}
+
+  .streak{display:flex; align-items:center; justify-content:space-between; margin-top:15px;
+    padding-top:13px; border-top:1px solid rgba(20,60,50,0.08);}
+  .streak .s{display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--muted); font-weight:500;}
+  .streak .cta{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--teal-deep);
+    background:rgba(255,255,255,0.7); border-radius:999px; padding:8px 14px;}
+  .flame{color:hsl(20 80% 52%);}
+
+  /* sparkline / segmented / linear / dots helpers */
+  .spark{width:118px; height:54px; flex-shrink:0;}
+  .seg-track{position:relative; height:12px; border-radius:999px; background:var(--track); margin:14px 0 10px;}
+  .seg-fill{position:absolute; left:0; top:0; bottom:0; border-radius:999px;
+    background:linear-gradient(90deg, var(--teal-deep), var(--teal-bright)); }
+  .seg-knob{position:absolute; top:50%; width:18px; height:18px; border-radius:999px; background:#fff;
+    transform:translate(-50%,-50%); box-shadow:0 1px 4px rgba(0,0,0,0.18); border:3px solid var(--teal);}
+  .ends{display:flex; justify-content:space-between; font-size:11px; color:var(--muted); font-weight:500;}
+  .ends b{color:var(--fg); font-weight:700;}
+  .lin-track{height:8px; border-radius:999px; background:var(--track); margin:12px 0 0; overflow:hidden;}
+  .lin-fill{height:100%; border-radius:999px; background:linear-gradient(90deg, var(--teal-deep), var(--teal-bright));}
+  .dots{display:flex; gap:9px; margin:14px 0 2px;}
+  .dot{width:19px; height:19px; border-radius:999px; border:2px solid var(--track); display:flex; align-items:center; justify-content:center;}
+  .dot.on{background:var(--teal); border-color:var(--teal);}
+  .dot.on::after{content:''; width:6px; height:6px; border-radius:999px; background:#fff;}
+  .legend{display:flex; gap:14px; margin-top:11px; font-size:11px; color:var(--muted); font-weight:500;}
+  .legend i{display:inline-block; width:9px; height:9px; border-radius:999px; margin-right:5px; vertical-align:middle;}
+
+  .reco{margin:8px 2px 0; padding:14px; background:hsl(166 45% 95%); border:1px solid hsl(166 40% 86%);
+    border-radius:14px; font-size:12px; line-height:1.55; color:var(--fg);}
+  .reco b{color:var(--teal-deep);}
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>Weight card — 6 concepts</h1>
+    <p>Issue 86ba · the dashboard Weight ring reads as a dead gray circle on a flat week. Below are 6 directions that make it convey real progress and align with the Overview page's trend language. One reviewable artifact — pick one and I'll build it production-grade.</p>
+  </div>
+
+  <!-- CONCEPT 1 — GOAL RING -->
+  <div class="concept">
+    <div class="clabel"><span class="n">01</span><span class="t">Goal-progress ring</span><span class="tag">needs API: start_weight</span></div>
+    <div class="card">
+      <div class="title">Weight</div>
+      <div class="row">
+        <div class="ringwrap">
+          <svg width="96" height="96" viewBox="0 0 100 100">
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="hsl(166 70% 30%)"/><stop offset="100%" stop-color="hsl(174 60% 47%)"/>
+            </linearGradient></defs>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--track)" stroke-width="10"/>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="251.3" stroke-dashoffset="95.5" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div class="center"><div class="cw">99.9</div><div class="cu">kg</div></div>
+        </div>
+        <div class="grow">
+          <div class="headline">On your way</div>
+          <div class="sub">62% of the way from your start to goal.</div>
+          <span class="chip green">↓ 2.1 kg overall</span>
+        </div>
+      </div>
+      <div class="streak"><div class="s"><span class="flame">🔥</span> 1-day streak</div><div class="cta">⚖ Edit Weight</div></div>
+    </div>
+    <p class="rationale"><b>The direct fix.</b> Keeps the familiar ring but maps it to the whole journey (start → goal), so it's always a real arc — never an empty gray circle on a flat week. Requires adding <b>start_weight_kg</b> to the weight summary API.</p>
+  </div>
+
+  <!-- CONCEPT 2 — TREND SPARKLINE -->
+  <div class="concept">
+    <div class="clabel"><span class="n">02</span><span class="t">Trend sparkline</span><span class="tag">matches Overview</span></div>
+    <div class="card">
+      <div class="title">Weight</div>
+      <div class="row">
+        <div class="grow">
+          <div class="wt-num">99.9<span class="u">kg</span></div>
+          <div class="sub" style="margin-top:6px">14-day trend</div>
+          <span class="chip green">▾ 0.4 kg · 2 wks</span>
+        </div>
+        <svg class="spark" viewBox="0 0 118 54" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sf" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="hsl(166 70% 42% / 0.28)"/><stop offset="100%" stop-color="hsl(166 70% 42% / 0)"/>
+            </linearGradient>
+          </defs>
+          <path d="M2 18 L13 16 L24 22 L35 19 L46 26 L57 24 L68 30 L79 27 L90 33 L101 31 L112 36 L112 54 L2 54 Z" fill="url(#sf)"/>
+          <path d="M2 18 L13 16 L24 22 L35 19 L46 26 L57 24 L68 30 L79 27 L90 33 L101 31 L112 36" fill="none"
+            stroke="var(--teal)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="112" cy="36" r="3.4" fill="var(--teal-deep)"/>
+        </svg>
+      </div>
+      <div class="streak"><div class="s"><span class="flame">🔥</span> 1-day streak</div><div class="cta">⚖ Edit Weight</div></div>
+    </div>
+    <p class="rationale"><b>Best "match the Overview" option.</b> Drops the ring for the same per-day trend the Overview/Progress page uses, so the two screens speak one visual language. Shows direction even when the week is flat. Uses existing data (no backend change).</p>
+  </div>
+
+  <!-- CONCEPT 3 — SEGMENTED MILESTONE TRACK -->
+  <div class="concept">
+    <div class="clabel"><span class="n">03</span><span class="t">Milestone track</span><span class="tag">needs API: start_weight</span></div>
+    <div class="card">
+      <div class="title">Weight</div>
+      <div class="row" style="align-items:flex-end">
+        <div class="grow"><div class="wt-num">99.9<span class="u">kg</span></div></div>
+        <div class="headline" style="color:var(--teal-deep)">62%<span style="font-size:11px;color:var(--muted);font-weight:500"> to goal</span></div>
+      </div>
+      <div class="seg-track">
+        <div class="seg-fill" style="width:62%"></div>
+        <div class="seg-knob" style="left:62%"></div>
+      </div>
+      <div class="ends"><span>Start <b>108</b></span><span>Now <b>99.9</b></span><span>Goal <b>92</b></span></div>
+      <div class="streak"><div class="s"><span class="flame">🔥</span> 1-day streak</div><div class="cta">⚖ Edit Weight</div></div>
+    </div>
+    <p class="rationale"><b>Whole journey, linearly.</b> A horizontal start→goal track with a position marker; flat weeks still show real overall progress. Reads cleanly and scales to any goal distance. Requires <b>start_weight_kg</b>.</p>
+  </div>
+
+  <!-- CONCEPT 4 — DUAL ARC -->
+  <div class="concept">
+    <div class="clabel"><span class="n">04</span><span class="t">Dual arc · overall + this week</span><span class="tag">needs API: start_weight</span></div>
+    <div class="card">
+      <div class="title">Weight</div>
+      <div class="row">
+        <div class="ringwrap">
+          <svg width="96" height="96" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--track)" stroke-width="6.5"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--teal-deep)" stroke-width="6.5" stroke-linecap="round"
+              stroke-dasharray="263.9" stroke-dashoffset="100.3" transform="rotate(-90 50 50)"/>
+            <circle cx="50" cy="50" r="30" fill="none" stroke="var(--track)" stroke-width="6.5"/>
+            <circle cx="50" cy="50" r="30" fill="none" stroke="var(--teal-bright)" stroke-width="6.5" stroke-linecap="round"
+              stroke-dasharray="188.5" stroke-dashoffset="170" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div class="center"><div class="cw" style="font-size:18px">99.9</div><div class="cu">kg</div></div>
+        </div>
+        <div class="grow">
+          <div class="headline">Steady week</div>
+          <div class="sub">Trend matters more than daily change.</div>
+          <div class="legend" style="margin-top:10px">
+            <span><i style="background:var(--teal-deep)"></i>Goal 62%</span>
+            <span><i style="background:var(--teal-bright)"></i>Week —</span>
+          </div>
+        </div>
+      </div>
+      <div class="streak"><div class="s"><span class="flame">🔥</span> 1-day streak</div><div class="cta">⚖ Edit Weight</div></div>
+    </div>
+    <p class="rationale"><b>Two truths in one ring.</b> Outer arc = overall goal progress; inner arc = this week. A flat week reads as a quiet inner arc, not a dead whole ring. Keeps the ring identity. Requires <b>start_weight_kg</b>.</p>
+  </div>
+
+  <!-- CONCEPT 5 — REMAINING FOCUS (LINEAR) -->
+  <div class="concept">
+    <div class="clabel"><span class="n">05</span><span class="t">Remaining-to-goal</span><span class="tag">needs API: start_weight</span></div>
+    <div class="card">
+      <div class="title">Weight</div>
+      <div class="row" style="align-items:flex-end">
+        <div class="grow">
+          <div class="wt-num" style="font-size:34px">7.9<span class="u">kg to go</span></div>
+        </div>
+        <span class="chip green" style="margin-top:0">↓ on track</span>
+      </div>
+      <div class="lin-track"><div class="lin-fill" style="width:62%"></div></div>
+      <div class="sub" style="margin-top:7px">99.9 kg now · 62% of the way to 92 kg</div>
+      <div class="streak"><div class="s"><span class="flame">🔥</span> 1-day streak</div><div class="cta">⚖ Edit Weight</div></div>
+    </div>
+    <p class="rationale"><b>Number-forward, calm.</b> Leads with the distance left (the athlete's real question), backed by a thin overall bar. No ring at all — maximum clarity, minimum decoration. Requires <b>start_weight_kg</b>.</p>
+  </div>
+
+  <!-- CONCEPT 6 — WEEKLY RHYTHM DOTS -->
+  <div class="concept">
+    <div class="clabel"><span class="n">06</span><span class="t">Weekly rhythm</span><span class="tag">no backend change</span></div>
+    <div class="card">
+      <div class="title">Weight</div>
+      <div class="row" style="align-items:flex-end">
+        <div class="grow"><div class="wt-num">99.9<span class="u">kg</span></div></div>
+        <div class="sub">Logged <b style="color:var(--fg)">5</b> / 7 days</div>
+      </div>
+      <div class="dots">
+        <span class="dot on"></span><span class="dot on"></span><span class="dot on"></span>
+        <span class="dot on"></span><span class="dot"></span><span class="dot on"></span><span class="dot"></span>
+      </div>
+      <div class="sub" style="margin-top:8px">Steady week — trend matters more than daily change.</div>
+      <div class="streak"><div class="s"><span class="flame">🔥</span> 1-day streak</div><div class="cta">⚖ Edit Weight</div></div>
+    </div>
+    <p class="rationale"><b>Reframes the flat week as consistency.</b> When weight doesn't move, the honest signal is "did you log?" — Whoop-style rhythm dots. Avoids implying false progress and never shows an empty ring. Uses existing streak/log data.</p>
+  </div>
+
+  <div class="reco">
+    <b>My recommendation → 01 (Goal-progress ring)</b>, with <b>02 (Trend sparkline)</b> as the runner-up.<br>
+    01 directly fixes the exact thing you circled — the dead gray ring — while keeping the ring you already know; the arc becomes a real start→goal journey that's always meaningfully filled. 02 is the strongest pick if "match the Overview page" is the priority, since it adopts the same trend-chart language (and ships with no backend change).<br>
+    Concepts 01/03/04/05 need one small backend add — <b>start_weight_kg</b> in the weight-summary payload — which I'll wire up as part of building whichever you choose. Reply with a number and I'll ship it.
+  </div>
+</body>
+</html>
