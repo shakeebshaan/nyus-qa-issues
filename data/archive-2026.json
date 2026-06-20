@@ -3915,6 +3915,40 @@
       "needsReview": false,
       "resolvedAt": "2026-06-20T08:54:41.461Z",
       "archivedAt": "2026-06-20T08:54:41.461Z"
+    },
+    {
+      "id": "i-20260620-4664",
+      "createdAt": "2026-06-20T05:59:06.466Z",
+      "route": null,
+      "description": "Rate this app not working",
+      "imagePath": "images/i-20260620-4664.jpg",
+      "imageCommit": "22e8a854ae1df1078d055e6b35f7a4b0f1e810e6",
+      "imagePaths": [
+        "images/i-20260620-4664.jpg"
+      ],
+      "imageCommits": [
+        "22e8a854ae1df1078d055e6b35f7a4b0f1e810e6"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: 'Rate the App' called Google's in-app-review dialog, but Google silently suppresses that dialog once a device hits its display quota — so the code thought it succeeded, skipped the store fallback, and you just got a 'Thanks for the support' toast with nothing actually opening. Google's own guidance is that the in-app-review API is for the automatic in-context prompt, not a tap-to-rate button. Fix: the manual 'Rate the App' tap now goes straight to the app's store page so you can actually leave a rating (the automatic prompt elsewhere still uses the quieter in-app flow). Verified on the dev server: tapping it now navigates to the app's store page (play.google.com/store/apps/details?id=com.nyus.nyusand). Screenshot shows the Support section. Note: this likely also clears 31c4's 'Something went wrong' popup if that was triggered by the same tap; if 31c4 happens at app launch instead, I'll chase that separately.",
+        "imagePath": "images/i-20260620-4664-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260620-4664-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e1566ff58f6dfeba179e885fae3d1e4748acaba8",
+        "imageCommits": [
+          "e1566ff58f6dfeba179e885fae3d1e4748acaba8"
+        ],
+        "fixedAt": "2026-06-20T07:45:47.798Z",
+        "appCommit": "af9f0fd0"
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-20T08:55:25.753Z",
+      "archivedAt": "2026-06-20T08:55:25.753Z"
     }
   ]
 }
