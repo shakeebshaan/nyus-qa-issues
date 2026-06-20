@@ -4089,6 +4089,81 @@
       "needsReview": false,
       "resolvedAt": "2026-06-20T12:19:34.530Z",
       "archivedAt": "2026-06-20T12:19:34.530Z"
+    },
+    {
+      "id": "i-20260620-0f41",
+      "createdAt": "2026-06-20T06:03:33.302Z",
+      "route": null,
+      "description": "For thai question show nice progress bars animation nice ui elements planned deeply also for similar other use the same ui",
+      "imagePath": "images/i-20260620-0f41-0.jpg",
+      "imageCommit": "370d491f6c6c148b61ec5e17c2a274797101fcda",
+      "imagePaths": [
+        "images/i-20260620-0f41-0.jpg",
+        "images/i-20260620-0f41-1.jpg"
+      ],
+      "imageCommits": [
+        "370d491f6c6c148b61ec5e17c2a274797101fcda",
+        "f518a44930d418131a522f94e9b88fbe7551c739"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: user body-comp message rendered as a plain bullet wall. Fix: BodyCompositionSummaryBlock parses the controlled body-comp message format and renders a 2-col metric grid (14 tiles: Weight, BMI, Body fat with pink bar, Visceral fat, Muscle rate with orange bar, Body water with teal bar, BMR, TDEE, Metabolic age, Fitness age, VO2 max, FFMI, Goal, Daily target) — live at /dev/chat-block/body-comp-summary. Re-resolve provides fresh screenshot of the metric grid with progress bars as requested.",
+        "imagePath": "images/i-20260620-0f41-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260620-0f41-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "55ae3aeb218a0fb4f8a41fb0b093f7d35d69816c",
+        "imageCommits": [
+          "55ae3aeb218a0fb4f8a41fb0b093f7d35d69816c"
+        ],
+        "fixedAt": "2026-06-20T13:22:08.274Z",
+        "appCommit": "8364d48a"
+      },
+      "history": [
+        {
+          "at": "2026-06-20T12:14:34.848Z",
+          "event": "reopened",
+          "note": "show me the response ui",
+          "previousFix": {
+            "description": "Done. When you tap 'Discuss all metrics with Coach', your body-composition message now renders as a clean metric grid instead of a plain bullet wall: a 2-column set of tiles with progress bars for the percentage metrics (body fat, muscle rate, body water) and tidy stat tiles for Weight, BMI, visceral fat, BMR, TDEE, metabolic age, fitness age, VO2 max, FFMI, goal and your daily protein/water target — with your question as the header. The coach still receives the full numbers, so its advice is unchanged. Screenshot shows it live in chat. Built as a reusable pattern, so similar 'review these numbers' messages can use the same rich UI next. (Note: this is the same body-comp message where metabolic age now reads a sensible '30 yrs' per the earlier fix.)",
+            "imagePath": "images/i-20260620-0f41-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260620-0f41-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "2bc670618dbb890e10b58930178027b8ba84ad29",
+            "imageCommits": [
+              "2bc670618dbb890e10b58930178027b8ba84ad29"
+            ],
+            "fixedAt": "2026-06-20T10:35:33.380Z",
+            "appCommit": "4852f9dd"
+          }
+        },
+        {
+          "at": "2026-06-20T13:21:00.220Z",
+          "event": "reopened",
+          "note": "first use this progress bars in metric pages and second this is not the coach response.",
+          "previousFix": {
+            "description": "Here's the response UI you asked to see (screenshot). When you tap 'Discuss all metrics with Coach', the body-composition message now renders in chat as a metric grid: progress bars for body fat (20.9%), muscle rate (37.6%), body water (57.6%), and clean stat tiles for Weight, BMI, visceral fat, BMR, TDEE, metabolic age (30 yrs), fitness age, VO2 max, FFMI, goal, and your daily protein/water target — with your question as the header. Live in v124 on alpha (also reuses for similar structured messages).",
+            "imagePath": "images/i-20260620-0f41-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260620-0f41-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "1e43a27572c08ad448f90674003dfdb94aa88f1c",
+            "imageCommits": [
+              "1e43a27572c08ad448f90674003dfdb94aa88f1c"
+            ],
+            "fixedAt": "2026-06-20T12:57:12.300Z",
+            "appCommit": "4852f9dd"
+          }
+        }
+      ],
+      "needsReview": false,
+      "resolvedAt": "2026-06-20T13:27:44.399Z",
+      "archivedAt": "2026-06-20T13:27:44.399Z"
     }
   ]
 }
