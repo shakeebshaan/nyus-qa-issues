@@ -3949,6 +3949,42 @@
       "needsReview": false,
       "resolvedAt": "2026-06-20T08:55:25.753Z",
       "archivedAt": "2026-06-20T08:55:25.753Z"
+    },
+    {
+      "id": "i-20260620-b098",
+      "createdAt": "2026-06-20T05:02:06.267Z",
+      "route": null,
+      "description": "Fix the notification cutoff for badges on all badges",
+      "imagePath": "images/i-20260620-b098.jpg",
+      "imageCommit": "5008188f289d0c45fc021c841d20ead71ced218c",
+      "imagePaths": [
+        "images/i-20260620-b098.jpg"
+      ],
+      "imageCommits": [
+        "5008188f289d0c45fc021c841d20ead71ced218c"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Found the real cause. The badge toast is centered with a CSS transform (-translate-x-1/2), but it's an animated element and the animation library writes its own inline transform (slide/scale) that overrode the centering — so the toast sat at the 50% mark and spilled off the right edge ('Welcome Aboa…'). That's why it hit every badge. Fix: center it with auto margins instead (immune to the animation transform), and let long names wrap to 2 lines. Screenshot: triggered the toast live — now fully centered on-screen with the complete name 'Welcome Aboard'. Verified the box sits at 16px from each edge in a 390px screen.",
+        "imagePath": "images/i-20260620-b098-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260620-b098-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "570582370b99ae1745edf61399a56c19df9b6d8e",
+        "imageCommits": [
+          "570582370b99ae1745edf61399a56c19df9b6d8e"
+        ],
+        "fixedAt": "2026-06-20T06:54:00.723Z",
+        "appCommit": "870301c6"
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewReply": "already did",
+      "reviewRepliedAt": "2026-06-20T05:48:18.811Z",
+      "resolvedAt": "2026-06-20T08:55:49.126Z",
+      "archivedAt": "2026-06-20T08:55:49.126Z"
     }
   ]
 }
