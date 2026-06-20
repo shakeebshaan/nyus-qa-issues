@@ -35,38 +35,6 @@
       "reviewRepliedAt": "2026-06-20T12:01:35.690Z"
     },
     {
-      "id": "i-20260620-31c4",
-      "createdAt": "2026-06-20T05:54:09.069Z",
-      "route": null,
-      "description": "Application error",
-      "imagePath": "images/i-20260620-31c4.jpg",
-      "imageCommit": "7c4a9594dbcda28d721cf70aca8b9c97a373ab4b",
-      "imagePaths": [
-        "images/i-20260620-31c4.jpg"
-      ],
-      "imageCommits": [
-        "7c4a9594dbcda28d721cf70aca8b9c97a373ab4b"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: on every 5th time you reopened the app, it auto-asked for a rating via Google's in-app-review API. That API throws the native 'Something went wrong — check Google Play / reinstall' popup when the app wasn't installed from the Play Store — which is exactly the case for the alpha/test builds you install. (Same Google-Play family as the Rate-the-App issue 4664.) Fix: removed that automatic on-open rating trigger. Production users installed from the Play Store still get a rating nudge after a positive action (logging a weight/workout/meal), and the manual 'Rate the App' button opens your store page directly. This is native-only behaviour (the popup can't occur in a browser), so it's verified by the code change + a clean app boot with no errors (screenshot). On your next alpha build you should no longer see this popup on app open.",
-        "imagePath": "images/i-20260620-31c4-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260620-31c4-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "3af47cd3155925fd6c2f3e48b0e9b1569f0d85a2",
-        "imageCommits": [
-          "3af47cd3155925fd6c2f3e48b0e9b1569f0d85a2"
-        ],
-        "fixedAt": "2026-06-20T10:18:36.005Z",
-        "appCommit": "6efebe04"
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260620-e8cf",
       "createdAt": "2026-06-20T05:59:46.262Z",
       "route": null,
