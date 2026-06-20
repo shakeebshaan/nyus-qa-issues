@@ -25,8 +25,21 @@
         "4fb8c4e56bf9abffa69eff99311c148749218c94"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Blur reworked exactly per your reviewReply + verified live (see 3-shot montage). The WHOLE build page is blurred and ONLY the top coach section is sharp; 'I'll build it myself' is overlaid on the blur (BuildFocusOverlay: fixed inset-0 backdrop-blur-xl, portalled to body so the full page blurs under the transformed onboarding container). Uniform across both pages — Workout & Meals share the identical overlay; Meals additionally keeps the calories/protein/carbs/fat MacroTargetBars SHARP under the coach card (this tick fixed the missing unblurredExtra slot). Old 2-path 'How should we build your plan' screen removed (always-custom). Building screen is multi-voice (Profile Analyst/Nutrition Engine/Training Coordinator/Meal Planner/Safety Validator/Plan Assembler) with sedentary step-cap + safe-pace notes. Plan-ready uses the coach-profile-card style with a single Continue revealed on scroll. App commit c1e6edfe.",
+        "imagePath": "images/i-20260620-1469-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260620-1469-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3bbea8f75f834ec9568f0e95b314987ea3526fc6",
+        "imageCommits": [
+          "3bbea8f75f834ec9568f0e95b314987ea3526fc6"
+        ],
+        "fixedAt": "2026-06-20T21:19:29.273Z",
+        "appCommit": "c1e6edfe"
+      },
       "history": [
         {
           "at": "2026-06-20T13:28:25.486Z",
