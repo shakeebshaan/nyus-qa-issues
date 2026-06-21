@@ -185,9 +185,23 @@
         "1d01f3118bddd4dee3918a1b6d001daf649b6fcf"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: exercise-article hero photos (free-exercise-db, varying tall aspect ratios) had no height cap — .hero was width:100% only, so a portrait image filled the entire mobile viewport and pushed content off-screen. Fix: scoped a constraint to img.hero (exercise photos) — max-height min(56vh,440px) + aspect-ratio 4/3 + object-fit cover — so the hero is a clean banner crop. Meal articles use an <svg class=hero> 800x320 banner and are deliberately untouched (img.hero selector, not .hero), verified intact. Verified live on nyus.in/blog/exercise/barbell-deadlift.html: hero renders 440px tall, title + chips + content all fit. Applies to all 873 exercise articles. NYUSLANDING@c97343d.",
+        "imagePath": "images/i-20260621-16f8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260621-16f8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6142ee57a3b36d5f5a62fe47c1f67f4bf9eefbc8",
+        "imageCommits": [
+          "6142ee57a3b36d5f5a62fe47c1f67f4bf9eefbc8"
+        ],
+        "fixedAt": "2026-06-21T08:27:57.000Z",
+        "appCommit": "c97343d"
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
