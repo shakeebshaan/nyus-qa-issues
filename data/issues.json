@@ -282,9 +282,23 @@
         "a4f5047a4e8e8bf2ea6c18418da019a619203fb7"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: 'Your plan is ready' (PlanReadyOverview) used MobilePage variant=scroll, which relies on a route-level scroller — but OnboardingFlow mounts the custom builder/overview inside a 'fixed inset-0 flex flex-col' container with no scroller, so content past the viewport (PLAN DETAILS + the Continue button) was clipped and the page wouldn't scroll on mobile. Fix: variant=fixed heightMode=fill → self-contained overflow-y-auto scroll region. Verified on the builder: 2950px content scrolls in the 844px column, 'Continue to dashboard' reachable at the bottom. App commit b05453e2 (ships in next alpha build).",
+        "imagePath": "images/i-20260621-f79c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260621-f79c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c0bbe218680defe374f1b6592d1a495e0fc29a0f",
+        "imageCommits": [
+          "c0bbe218680defe374f1b6592d1a495e0fc29a0f"
+        ],
+        "fixedAt": "2026-06-21T13:51:18.045Z",
+        "appCommit": "b05453e2"
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
