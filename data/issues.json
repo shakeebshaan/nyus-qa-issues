@@ -15,21 +15,8 @@
         "8956ea4fa47e7dc52da6de97dea7c216fc5a50c1"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Yes — visitor analytics is now set up site-wide + verified collecting. Finding: only the landing + 10 fitness guides had GA4; the 873 exercise + 795 meal articles (the bulk of SEO traffic) were UNtracked. Fixed: injected GA4 (G-D020NJ3FCC, same property as the landing) into the shared blog template head, so all 1,669 blog pages now report. Verified LIVE transmitting — a headless load of a real article fired google-analytics.com/g/collect?tid=G-D020NJ3FCC (a true pageview, not just a tag). Improvement: each article's Download CTA now sends an app_download_click GA4 event (source:blog) so you can measure blog -> Play Store conversion per page. NYUSLANDING@bf69308, deployed to nyus.in. OWNER ACTION (for the 'check analytics every 30 min' monitoring loop): reading live visitor NUMBERS needs GA4 read access — either add me to the GA4 property or drop a service-account JSON with Analytics Data API access; until then I can tag/instrument but can't pull the realtime figures to auto-suggest content improvements.",
-        "imagePath": "images/i-20260620-e8cf-fix-r4.png",
-        "imagePaths": [
-          "images/i-20260620-e8cf-fix-r4.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c9b9a809f598509455d9da8ebc21db7896e1ff2f",
-        "imageCommits": [
-          "c9b9a809f598509455d9da8ebc21db7896e1ff2f"
-        ],
-        "fixedAt": "2026-06-21T00:20:11.499Z",
-        "appCommit": "bf69308"
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-20T12:18:15.688Z",
@@ -92,6 +79,25 @@
             ],
             "fixedAt": "2026-06-20T20:56:21.475Z",
             "appCommit": "764c845"
+          }
+        },
+        {
+          "at": "2026-06-21T06:06:03.511Z",
+          "event": "reopened",
+          "note": "odd this to the pending md, and complete rest of the things",
+          "previousFix": {
+            "description": "Yes — visitor analytics is now set up site-wide + verified collecting. Finding: only the landing + 10 fitness guides had GA4; the 873 exercise + 795 meal articles (the bulk of SEO traffic) were UNtracked. Fixed: injected GA4 (G-D020NJ3FCC, same property as the landing) into the shared blog template head, so all 1,669 blog pages now report. Verified LIVE transmitting — a headless load of a real article fired google-analytics.com/g/collect?tid=G-D020NJ3FCC (a true pageview, not just a tag). Improvement: each article's Download CTA now sends an app_download_click GA4 event (source:blog) so you can measure blog -> Play Store conversion per page. NYUSLANDING@bf69308, deployed to nyus.in. OWNER ACTION (for the 'check analytics every 30 min' monitoring loop): reading live visitor NUMBERS needs GA4 read access — either add me to the GA4 property or drop a service-account JSON with Analytics Data API access; until then I can tag/instrument but can't pull the realtime figures to auto-suggest content improvements.",
+            "imagePath": "images/i-20260620-e8cf-fix-r4.png",
+            "imagePaths": [
+              "images/i-20260620-e8cf-fix-r4.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "c9b9a809f598509455d9da8ebc21db7896e1ff2f",
+            "imageCommits": [
+              "c9b9a809f598509455d9da8ebc21db7896e1ff2f"
+            ],
+            "fixedAt": "2026-06-21T00:20:11.499Z",
+            "appCommit": "bf69308"
           }
         }
       ],
