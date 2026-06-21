@@ -228,9 +228,23 @@
         "580f7eb357e6e7607e4a5de24949863537cde984"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Done — the real Google sign-in error is now logged + surfaced so we can fix the root cause. Before: the handler showed a generic 'Try again' and deliberately discarded the raw error. Now on failure it (1) captureException()s the real error to Sentry with {feature:'google_signin', raw}, (2) console.error logs the full message+code, and (3) the red toast shows the ACTUAL reason (e.g. '[16] Account reauth failed', capped 120 chars) instead of a generic line — so the next failure is diagnosable on-screen and in Sentry. src/pages/Welcome.tsx, tsc clean, App commit b577f321 (ships next alpha). NOTE: the live Google-failure state can't be force-triggered in the dev browser (the web path gates to the email flow when no OAuth client is configured), so the attached shot is the login surface; the fix is the error capture/surface path, verified by code + typecheck. Next real failure will now show + log the cause.",
+        "imagePath": "images/i-20260621-8625-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260621-8625-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0864da9a01aee9bb3b21e96ac52177e516e619e0",
+        "imageCommits": [
+          "0864da9a01aee9bb3b21e96ac52177e516e619e0"
+        ],
+        "fixedAt": "2026-06-21T13:54:21.905Z",
+        "appCommit": "b577f321"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260621-05ce",
