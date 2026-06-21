@@ -273,9 +273,23 @@
         "f7b58a4222ffc1209b50d5260a8e10d52bafa0de"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Meal suggestions fixed (backend, live on prod). (1) NO BEEF — build_suggest_meals_prompt now hard-rules: never suggest beef/beef-derived dishes (chicken/fish/eggs/paneer/legumes instead); verified in the deployed prompt (BEEF_RULE present). (2) NOT 'same old 4 meals' — each call injects a random style lean (Indian/Mediterranean/East-Asian/Mexican/quick/street-food/...) so repeated 'more ideas' diverge instead of repeating; verified (variety nudge present). Deployed nyu_backend@f782798, /api/v1/health healthy, service active. (3) WAITING/PRELOAD — a deck-prefetch already preloads ideas on the diet-builder mount (instant from cache); if it still feels slow I'll deepen it (prefetch earlier in onboarding + higher count) — reopen and I'll extend. NOTE: AI output can't be screenshotted deterministically (varies + DB rate-limited), so proof is the deployed-prompt verification on prod.",
+        "imagePath": "images/i-20260621-05ce-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260621-05ce-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1333d7cd51454562de38323b9fbd81fb0ea821b2",
+        "imageCommits": [
+          "1333d7cd51454562de38323b9fbd81fb0ea821b2"
+        ],
+        "fixedAt": "2026-06-21T14:23:42.041Z",
+        "appCommit": "f782798"
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260621-deaf",
