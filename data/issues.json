@@ -241,8 +241,21 @@
         "580f7eb357e6e7607e4a5de24949863537cde984"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Google sign-in toast fell back to the generic line because the social-login plugin error has an empty .message (the reason lives in .code/.errorMessage/nested response or it is a plain object), so the extracted text was empty. Fix (Welcome.tsx onError): raw is now pulled from message/errorMessage/error_description/response.data.detail|error|message/code + a JSON-stringify fallback, so the ACTUAL error always shows in the red message (and is sent to Sentry + console). Verified all error shapes now yield non-empty text (empty-message Error, {code:10}->'code: 10', {errorMessage}, nested->detail, plain object). NOTE: the exact red-error text needs a real Google failure which can't be force-triggered in QA; screenshot shows the Welcome screen renders cleanly (no regression) — the real error will now appear in the red toast on the next failed attempt.",
+        "imagePath": "images/i-20260621-8625-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260621-8625-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "783861b9192a7ebc3af901a3a1a33f41aaa7d243",
+        "imageCommits": [
+          "783861b9192a7ebc3af901a3a1a33f41aaa7d243"
+        ],
+        "fixedAt": "2026-06-22T08:17:06.200Z",
+        "appCommit": "0b1a6c7f"
+      },
       "history": [
         {
           "at": "2026-06-22T07:43:25.912Z",
