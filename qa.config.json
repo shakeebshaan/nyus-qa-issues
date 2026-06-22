@@ -1,0 +1,47 @@
+{
+  "board": {
+    "owner": "shakeebshaan",
+    "repo": "nyus-qa-issues",
+    "private": "nyus-qa-private",
+    "branch": "main"
+  },
+  "app": {
+    "repo": "../nyus-well-tracker-00146a-75469",
+    "devServer": "http://localhost:8080",
+    "viewport": "390x844",
+    "framework": "vite",
+    "theme": {
+      "fontFamily": "\"DM Sans\", system-ui, -apple-system, sans-serif",
+      "googleFontHref": "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap",
+      "source": "src/index.css (NYUS design tokens)"
+    }
+  },
+  "reproduce": {
+    "tool": "playwright",
+    "recaptureCmd": "node recapture.mjs {route} {out}"
+  },
+  "auth": {
+    "strategy": "seeded-jwt",
+    "tokenKey": "nyus_access_token",
+    "loginUrl": "/"
+  },
+  "loop": {
+    "trigger": "manual",
+    "schedule": {
+      "cron": "0 9 * * *",
+      "agentCmd": "claude -p \"/fix-issues\""
+    },
+    "action": {
+      "on": "new-issue",
+      "pollSeconds": 60
+    },
+    "goal": {
+      "satisfaction": 80,
+      "tests": {
+        "required": false,
+        "command": "npm test",
+        "coverage": 0
+      }
+    }
+  }
+}

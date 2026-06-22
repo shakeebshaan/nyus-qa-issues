@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// NYUS QA tracker CLI — zero deps, pure git + gh CLI. Run from anywhere:
+// snapfix QA tracker CLI — zero deps, pure git + gh CLI. Run from anywhere:
 //   node tools/qa.mjs list [--all]
 //   node tools/qa.mjs pull
 //   node tools/qa.mjs resolve <id> --image <absPath> [--image <absPath2> …] --desc "<text>" [--app-commit <sha>]
@@ -7,16 +7,108 @@
 //   node tools/qa.mjs review <id> --reason "<text>" [--tags a,b,c]
 //   node tools/qa.mjs unreview <id>
 //   node tools/qa.mjs archive <id> | archive --all-fixed
+//
+// Repo names are NOT hardcoded — they are read from qa.config.json (written by
+// `npx github:OWNER/snapfix init`). See loadConfig() below.
 import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from "node:fs";
-import { resolve, dirname, extname, join } from "node:path";
+import { resolve, dirname, extname, join, parse as parsePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DB = join(ROOT, "data", "issues.json");
-const OWNER_REPO = "shakeebshaan/nyus-qa-issues";
-const PRIV_OWNER = "shakeebshaan", PRIV_REPO = "nyus-qa-private";
+
+// ---------------------------------------------------------------------------
+// Config — qa.config.json drives the repo names. Search order:
+//   1. the board repo ROOT (alongside data/) — the canonical location
+//   2. walking up parent dirs from the current working directory
+// This lets the CLI run from anywhere inside the app project tree.
+// ---------------------------------------------------------------------------
+function findConfigPath() {
+  const rootCandidate = join(ROOT, "qa.config.json");
+  if (existsSync(rootCandidate)) return rootCandidate;
+  let dir = process.cwd();
+  // Walk up to (and including) the filesystem root.
+  while (true) {
+    const candidate = join(dir, "qa.config.json");
+    if (existsSync(candidate)) return candidate;
+    const parent = parsePath(dir).dir || dirname(dir);
+    if (parent === dir) break; // reached the FS root
+    dir = parent;
+  }
+  return null;
+}
+
+let FULL_CFG = null; // the whole parsed qa.config.json (loop settings live here too)
+function loadConfig() {
+  const path = findConfigPath();
+  if (!path) {
+    console.error(
+      "ERROR: qa.config.json not found.\n" +
+      "  Looked in the board repo root (" + ROOT + ") and walked up from " + process.cwd() + ".\n" +
+      "  Set up snapfix first:  npx github:OWNER/snapfix init"
+    );
+    process.exit(1);
+  }
+  let cfg;
+  try {
+    cfg = JSON.parse(readFileSync(path, "utf8"));
+  } catch (e) {
+    console.error("ERROR: qa.config.json is not valid JSON (" + path + "):\n  " + e.message);
+    process.exit(1);
+  }
+  FULL_CFG = cfg;
+  const board = cfg && cfg.board;
+  if (!board || !board.owner || !board.repo || !board.private) {
+    console.error(
+      "ERROR: qa.config.json (" + path + ") is missing required board fields.\n" +
+      '  Expected: { "board": { "owner": "...", "repo": "...", "private": "...", "branch": "main" } }\n' +
+      "  Re-run setup:  npx github:OWNER/snapfix init"
+    );
+    process.exit(1);
+  }
+  return board;
+}
+
+// SNAPFIX_NO_MAIN keeps the module inert on import (no config load, no CLI
+// dispatch) so pure helpers — buildPullEntry — can be unit-tested. Matches the
+// guard in loop.mjs / create.mjs.
+const board = process.env.SNAPFIX_NO_MAIN ? {} : loadConfig();
+
+// The fix-issues loop's goal settings (see LOOP.md). Live values from the board
+// repo's data/loop.json (the satisfaction slider's target) override the static
+// qa.config.json loop.goal defaults.
+function loopSettings() {
+  const goal = (FULL_CFG && FULL_CFG.loop && FULL_CFG.loop.goal) || {};
+  const tests = goal.tests || {};
+  let satisfaction = Number.isFinite(Number(goal.satisfaction)) ? Number(goal.satisfaction) : 80;
+  let testGate = tests.required !== false;
+  const testCommand = tests.command || "npm test";
+  const coverage = Number(tests.coverage) || 0;
+  const loopPath = join(ROOT, "data", "loop.json");
+  if (existsSync(loopPath)) {
+    try {
+      const live = JSON.parse(readFileSync(loopPath, "utf8"));
+      if (Number.isFinite(Number(live.satisfaction))) satisfaction = Number(live.satisfaction);
+      if (typeof live.testGate === "boolean") testGate = live.testGate;
+    } catch { /* fall back to config defaults */ }
+  }
+  return { satisfaction, testGate, testCommand, coverage };
+}
+
+// The acting GitHub identity (multi-user attribution). Uses the same gh CLI
+// session every other CLI call rides on. Cached; null if it can't be read.
+let _login;
+function ghLogin() {
+  if (_login !== undefined) return _login;
+  const r = spawnSync("gh", ["api", "user", "--jq", ".login"], { encoding: "utf8" });
+  _login = r.status === 0 && r.stdout ? r.stdout.trim() : null;
+  return _login;
+}
+const OWNER_REPO = `${board.owner}/${board.repo}`;
+const PRIV_OWNER = board.owner, PRIV_REPO = board.private;
+const BRANCH = board.branch || "main";
 
 function git(...args) {
   const r = spawnSync("git", args, { cwd: ROOT, encoding: "utf8" });
@@ -24,10 +116,10 @@ function git(...args) {
   return r.stdout.trim();
 }
 function gitPush() {
-  try { git("push"); }
+  try { git("push", "origin", BRANCH); }
   catch {
-    git("pull", "--rebase");
-    git("push");
+    git("pull", "--rebase", "origin", BRANCH);
+    git("push", "origin", BRANCH);
   }
 }
 
@@ -36,7 +128,7 @@ function ghApi(endpoint, method = "GET", bodyObj = null) {
   const args = ["api", endpoint, "--method", method];
   let tmp = null;
   if (bodyObj) {
-    tmp = join(tmpdir(), `nyus-qa-api-${Date.now()}.json`);
+    tmp = join(tmpdir(), `snapfix-qa-api-${Date.now()}.json`);
     writeFileSync(tmp, JSON.stringify(bodyObj));
     args.push("--input", tmp);
   }
@@ -68,7 +160,7 @@ function uploadToPrivRepo(localPath, privPath, message) {
     const existing = ghApi(`repos/${PRIV_OWNER}/${PRIV_REPO}/contents/${privPath}`);
     sha = existing?.sha;
   } catch { /* file does not exist yet — create, no sha needed */ }
-  const body = { message, content, branch: "main" };
+  const body = { message, content, branch: BRANCH };
   if (sha) body.sha = sha;
   return ghApi(
     `repos/${PRIV_OWNER}/${PRIV_REPO}/contents/${privPath}`,
@@ -90,13 +182,52 @@ const allFlag = (name) => {
   process.argv.forEach((a, i) => { if (a === "--" + name && process.argv[i + 1]) out.push(process.argv[i + 1]); });
   return out;
 };
-const rawUrl = (path, commit) => `https://raw.githubusercontent.com/${OWNER_REPO}/${commit || "main"}/${path}`;
+const rawUrl = (path, commit) => `https://raw.githubusercontent.com/${OWNER_REPO}/${commit || BRANCH}/${path}`;
+
+// Map one open issue → its `pull` manifest entry. Image-less issues (e.g. the
+// [snapfix demo] seed: imagePaths:[], imagePath:null) MUST NOT blow up — guard
+// the paths so we never join(ROOT, null) / extname(null), which would abort the
+// whole pull (and so the --auto demo). `dl(privPath, idx)` downloads a private
+// image to a local path (or returns null). Pure + exported for unit testing.
+function buildPullEntry(i, root, dl) {
+  // Resolve a set of image paths to readable locations. Private images go
+  // through `dl(privPath, idx, kind)` (downloaded locally); public ones are
+  // joined under root. `kind` ("issue" | "reply") lets the caller name files.
+  const toImages = (paths, priv, kind) => {
+    const ps = (Array.isArray(paths) && paths.length) ? paths : [];
+    return priv ? ps.map((p, idx) => dl(p, idx, kind)).filter(Boolean) : ps.map((p) => join(root, p));
+  };
+  const issuePaths = (Array.isArray(i.imagePaths) && i.imagePaths.length)
+    ? i.imagePaths
+    : (i.imagePath ? [i.imagePath] : []);
+  const images = toImages(issuePaths, i.imagePrivate, "issue");
+  // The owner's response screenshots (uploaded private, like issue shots) so the
+  // agent can SEE the attached direction, not just read the reviewReply text.
+  const reviewReplyImages = toImages(i.reviewReplyImagePaths, i.reviewReplyImagePrivate, "reply");
+  return {
+    id: i.id,
+    createdAt: i.createdAt,
+    route: i.route,
+    description: i.description,
+    imagePrivate: !!i.imagePrivate,
+    image: images[0] || null,
+    images,
+    reopenNote: (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0]?.note || null,
+    needsReview: !!i.needsReview,
+    reviewReason: i.reviewReason || null,
+    reviewReply: i.reviewReply || null,
+    reviewReplyImages,                     // owner's attached response screenshots (local paths)
+    author: i.author || null,              // who filed it (multi-user)
+    tags: i.tags || null,
+  };
+}
 
 const [, , cmd, idArg] = process.argv;
 
+if (!process.env.SNAPFIX_NO_MAIN) {
 try {
   if (cmd === "list") {
-    git("pull", "--rebase");
+    git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
     const rows = db.issues
       .filter((i) => process.argv.includes("--all") || i.status === "open")
@@ -109,55 +240,65 @@ try {
       );
     }
   } else if (cmd === "pull") {
-    git("pull", "--rebase");
+    git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
     const open = db.issues
       .filter((i) => i.status === "open")
       .sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || ""))
-      .map((i) => {
-        const paths = i.imagePaths || [i.imagePath];
-        let image, images;
-        if (i.imagePrivate) {
-          // Download private images locally so Claude can read them
-          const dlDir = join(ROOT, "tmp", "downloads", i.id);
-          mkdirSync(dlDir, { recursive: true });
-          images = paths.map((p, idx) => {
-            const ext = extname(p) || ".jpg";
-            const localPath = join(dlDir, `img-${idx}${ext}`);
-            return downloadPrivImage(p, localPath);
-          }).filter(Boolean);
-          image = images[0] || null;
-        } else {
-          image = join(ROOT, i.imagePath);
-          images = paths.map((p) => join(ROOT, p));
-        }
-        return {
-          id: i.id,
-          createdAt: i.createdAt,
-          route: i.route,
-          description: i.description,
-          imagePrivate: !!i.imagePrivate,
-          image,
-          images,
-          reopenNote: (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0]?.note || null,
-          needsReview: !!i.needsReview,
-          reviewReason: i.reviewReason || null,
-          reviewReply: i.reviewReply || null,
-          tags: i.tags || null,
-        };
-      });
-    console.log(JSON.stringify({ open, count: open.length }, null, 2));
+      .map((i) => buildPullEntry(i, ROOT, (p, idx, kind = "issue") => {
+        // Download private images locally so Claude can read them. `kind`
+        // separates issue shots (img-N) from response shots (reply-N).
+        const dlDir = join(ROOT, "tmp", "downloads", i.id);
+        mkdirSync(dlDir, { recursive: true });
+        const ext = extname(p) || ".jpg";
+        const name = (kind === "reply" ? "reply-" : "img-") + idx + ext;
+        return downloadPrivImage(p, join(dlDir, name));
+      }));
+    // The loop's live goal — the agent reads the satisfaction bar + test gate
+    // from here so it knows the bar it must clear before resolving (LOOP.md).
+    console.log(JSON.stringify({ open, count: open.length, loop: loopSettings() }, null, 2));
   } else if (cmd === "resolve") {
     // Multiple --image flags supported: a fix that spans two screens / scroll
     // positions can submit 2+ fix images (shown side-by-side on the board).
     const id = idArg, images = allFlag("image"), desc = flag("desc"), appCommit = flag("app-commit");
-    if (!id || images.length === 0 || !desc) throw new Error('Usage: resolve <id> --image <absPath> [--image <absPath2> …] --desc "<text>" [--app-commit <sha>]');
+    const tests = flag("tests"), coverageArg = flag("coverage"), judgeArg = flag("judge"), judgeNote = flag("judge-note");
+    if (!id || images.length === 0 || !desc) throw new Error('Usage: resolve <id> --image <absPath> [--image <absPath2> …] --desc "<text>" [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note "<why>"]');
     for (const img of images) if (!existsSync(img)) throw new Error("Image not found: " + img);
-    git("pull", "--rebase");
+    git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
     if (issue.status === "fixed") throw new Error(id + " is already fixed.");
+
+    // ── GOAL GATES (see LOOP.md) — enforced BEFORE any upload, so a fix that
+    // can't clear the bar never reaches the board and no image is wasted. ──
+    const settings = loopSettings();
+    // Verifiable goal: the app's tests must be confirmed passing.
+    if (settings.testGate && tests !== "pass") {
+      throw new Error(
+        "Verifiable goal not met: app tests are not confirmed passing.\n" +
+        "  Run `node tools/loop.mjs verify` in the app repo, and once green resolve with --tests pass.\n" +
+        "  (Turn the test gate off on the board — set data/loop.json testGate=false — to skip this.)"
+      );
+    }
+    // LLM-as-judge goal: a positive satisfaction bar requires a self-score ≥ bar.
+    if (settings.satisfaction > 0) {
+      if (judgeArg === undefined) {
+        throw new Error(
+          "LLM-as-judge goal is on (satisfaction bar " + settings.satisfaction + "/100).\n" +
+          '  Self-score this fix and resolve with --judge <0-100> (and optionally --judge-note "<why>").\n' +
+          "  Move the board's satisfaction slider to 0 to disable the judge gate."
+        );
+      }
+      const score = Number(judgeArg);
+      if (!Number.isFinite(score) || score < 0 || score > 100) throw new Error("--judge must be a number 0–100.");
+      if (score < settings.satisfaction) {
+        throw new Error(
+          "LLM-as-judge goal not met: self-score " + score + " < satisfaction bar " + settings.satisfaction + ".\n" +
+          "  Keep refactoring until satisfied, then re-score — or lower the bar on the board."
+        );
+      }
+    }
 
     // Upload all fix screenshots to private repo via gh API.
     // Revision-scoped filenames so a RE-RESOLVE never overwrites a prior fix's
@@ -185,7 +326,12 @@ try {
       imageCommit: imageCommits[0],
       imageCommits,
       fixedAt: new Date().toISOString(),
+      by: ghLogin() || undefined,                 // multi-user attribution
       ...(appCommit ? { appCommit } : {}),
+      // Verifiable-goal proof (shown as a ✓ tests/coverage badge on the card).
+      ...(tests ? { tests: { passed: tests === "pass", ...(coverageArg !== undefined ? { coverage: Number(coverageArg) } : {}) } } : {}),
+      // LLM-as-judge proof (the self-score that cleared the satisfaction bar).
+      ...(judgeArg !== undefined ? { judge: { score: Number(judgeArg), bar: settings.satisfaction, ...(judgeNote ? { note: judgeNote } : {}) } } : {}),
     };
     issue.status = "fixed";
     // A fix clears any pending user-review flag.
@@ -201,13 +347,13 @@ try {
   } else if (cmd === "reopen") {
     const id = idArg, note = flag("note");
     if (!id || !note) throw new Error('Usage: reopen <id> --note "<text>"');
-    git("pull", "--rebase");
+    git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
     if (issue.status !== "fixed") throw new Error(id + " is not fixed — nothing to reopen.");
     issue.history = issue.history || [];
-    issue.history.push({ at: new Date().toISOString(), event: "reopened", note, previousFix: issue.fix });
+    issue.history.push({ at: new Date().toISOString(), event: "reopened", note, by: ghLogin() || undefined, previousFix: issue.fix });
     issue.fix = null;
     issue.status = "open";
     saveDb(db);
@@ -221,13 +367,14 @@ try {
     // "User review" badge + the reason. Optional comma-separated --tags.
     const id = idArg, reason = flag("reason"), tagsRaw = flag("tags");
     if (!id || !reason) throw new Error('Usage: review <id> --reason "<what it needs / why not fixed>" [--tags a,b,c]');
-    git("pull", "--rebase");
+    git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
     issue.needsReview = true;
     issue.reviewReason = reason;
     issue.reviewedAt = new Date().toISOString();
+    issue.reviewedBy = ghLogin() || undefined;
     if (tagsRaw) {
       issue.tags = tagsRaw.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
     }
@@ -240,7 +387,7 @@ try {
     // Clear the user-review flag (the blocker is resolved / no longer needed).
     const id = idArg;
     if (!id) throw new Error("Usage: unreview <id>");
-    git("pull", "--rebase");
+    git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
@@ -255,7 +402,7 @@ try {
   } else if (cmd === "archive") {
     const all = process.argv.includes("--all-fixed");
     if (!all && !idArg) throw new Error("Usage: archive <id> | archive --all-fixed");
-    git("pull", "--rebase");
+    git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
     const targets = all
       ? db.issues.filter((i) => i.status === "fixed")
@@ -280,10 +427,13 @@ try {
     gitPush();
     console.log(`Archived ${targets.length} -> data/archive-${year}.json`);
   } else {
-    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] | review <id> --reason <t> [--tags a,b] | unreview <id> | reopen <id> --note <t> | archive <id> | archive --all-fixed");
+    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note <t>] | review <id> --reason <t> [--tags a,b] | unreview <id> | reopen <id> --note <t> | archive <id> | archive --all-fixed");
     process.exit(cmd ? 1 : 0);
   }
 } catch (e) {
   console.error("ERROR: " + e.message);
   process.exit(1);
 }
+}
+
+export { buildPullEntry };
