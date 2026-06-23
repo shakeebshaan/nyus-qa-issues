@@ -275,49 +275,6 @@
         "owner-config",
         "blocked"
       ]
-    },
-    {
-      "id": "i-20260623-ab17",
-      "createdAt": "2026-06-23T07:52:16.842Z",
-      "route": null,
-      "description": "This section is broken plan to give me meals which are for the breakfast under the calories for breakfast and not repeate once sean and minimum of 20 swipes should be present before.we see more ideas loading, once user saw a meal it should not repeat even on lunch breakfast and other meals should feel link it's generated on the go and is unlimited without swap also, remove the meals with turkey and other ingredients which are not easily available in tier 2 tier 3 cities unless specified in ingredients",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260623-ab17-0.jpg",
-      "imageCommit": "1b3da3060ba0ccf019b62edea6c9e653f111543e",
-      "imagePaths": [
-        "images/i-20260623-ab17-0.jpg",
-        "images/i-20260623-ab17-1.jpg",
-        "images/i-20260623-ab17-2.jpg"
-      ],
-      "imageCommits": [
-        "1b3da3060ba0ccf019b62edea6c9e653f111543e",
-        "502c6eaf8ab6bfd0eeeb3f4e5c3ac217c76913bb",
-        "ecb24aaa663b0445ea2b2ec963ed3df96ce8b37b"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Full-stack fix for the meal-idea swiper. Verified END-TO-END on prod (live /api/v1/ai/suggest-meal, breakfast, ~520 kcal budget): 8 ideas returned, over-budget=0, exotic=0 — Besan Chilla Curd, Paneer Thalipeeth, Egg Bhurji Pav, Chicken Dalia, Rohu Rice Curd, Matki Paneer Misal, Oats Egg Upma, Rajma Paneer Bowl (see image).\n\nWhat changed:\n- CALORIES: each idea must stay within the slot's kcal budget. The prompt now sets a hard per-slot ceiling, and a deterministic backend guard drops any idea whose grounded total exceeds budget x1.25 — so a 2300-kcal \"lunch\" can never surface again.\n- INGREDIENTS: meals now use only ingredients sourceable in Indian tier-2/tier-3 cities (dal, paneer, curd, eggs, chicken, rohu, atta/roti, rice, poha, oats, seasonal sabzi...). Turkey, salmon, asparagus, skyr, quinoa, granola etc. are banned in the prompt AND filtered out server-side UNLESS the client's own ingredients list them. India-regional variety (dropped the Mediterranean/Mexican/East-Asian leans that pulled exotic foods).\n- NO REPEATS, even across slots: every meal you've swiped/picked is remembered session-wide and sent as `exclude`, so a breakfast idea never reappears at lunch.\n- UNLIMITED / on-the-go: 6 -> 10 ideas per batch and the swiper auto-appends another batch as you near the end, so 20+ unique ideas are always queued before any \"loading\" — feels generated on the go.\n\nBackend is LIVE now (the calorie + ingredient fixes apply to the current app immediately). The swiper UX polish (auto-append + cross-slot dedup) ships in alpha v136 (building now) — please re-test the swipe feel on-device once it lands.",
-        "imagePath": "images/i-20260623-ab17-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260623-ab17-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "5e6b723963b28c491a4e61f22872a88943616bcc",
-        "imageCommits": [
-          "5e6b723963b28c491a4e61f22872a88943616bcc"
-        ],
-        "fixedAt": "2026-06-23T08:39:56.897Z",
-        "by": "shakeebshaan",
-        "appCommit": "903b7b26",
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "Verified end-to-end on prod: 8 India-appropriate breakfast ideas, over-budget=0, exotic=0, no beef. Backend (calories+ingredients) live now; swiper UX (infinite+dedup) tsc-clean in v136. Deterministic guards make over-budget/exotic cards impossible regardless of the LLM."
-        }
-      },
-      "history": [],
-      "needsReview": false
     }
   ]
 }
