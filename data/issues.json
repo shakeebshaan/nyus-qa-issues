@@ -314,28 +314,36 @@
         "8571c76c80294abbbd9a8f9e8e81aca58ee3f75f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause of '[16] Account reauth failed': on Android, @capgo/capacitor-social-login routes through Credential Manager, which defaults filterByAuthorizedAccounts:true — it ONLY offers Google accounts that have ALREADY authorized this app. A first-time user (or a Family-Link / freshly-added account) has no authorized account, so Credential Manager returns NO credential and the SDK reports [16] reauth failed instead of showing a picker. Fix (v134, src/lib/google-auth.ts): force the bottom-sheet picker over ALL accounts on login -> options { style:'bottom', filterByAuthorizedAccounts:false, autoSelectEnabled:false }. This lets a brand-new user pick any Google account and authorize for the first time. tsc clean; shipped in versionCode 134 (1.6.76), built + uploaded to Play alpha. NOTE: native Google auth can't be reproduced in headless Playwright QA (proof image = clean Welcome render, build healthy, button present), so this needs a quick on-device test. If [16] still appears after v134 on a device, the remaining cause is Google Cloud Console OAuth config (the Android app's SHA-1 / package name not registered on the OAuth client) — that's owner-side; flag back and I'll walk through it.",
-        "imagePath": "images/i-20260623-16b7-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260623-16b7-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "3e88297677580741ba89a8af80042aedd3383fd1",
-        "imageCommits": [
-          "3e88297677580741ba89a8af80042aedd3383fd1"
-        ],
-        "fixedAt": "2026-06-23T03:39:39.188Z",
-        "by": "shakeebshaan",
-        "appCommit": "19f758a3",
-        "judge": {
-          "score": 82,
-          "bar": 80,
-          "note": "Code fix is solid + tsc-clean and the build renders cleanly (0 console errors), but the native Google account-picker cannot be exercised in headless QA, so on-device confirmation is still owner-side."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-23T07:40:11.257Z",
+          "event": "reopened",
+          "note": "still same",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause of '[16] Account reauth failed': on Android, @capgo/capacitor-social-login routes through Credential Manager, which defaults filterByAuthorizedAccounts:true — it ONLY offers Google accounts that have ALREADY authorized this app. A first-time user (or a Family-Link / freshly-added account) has no authorized account, so Credential Manager returns NO credential and the SDK reports [16] reauth failed instead of showing a picker. Fix (v134, src/lib/google-auth.ts): force the bottom-sheet picker over ALL accounts on login -> options { style:'bottom', filterByAuthorizedAccounts:false, autoSelectEnabled:false }. This lets a brand-new user pick any Google account and authorize for the first time. tsc clean; shipped in versionCode 134 (1.6.76), built + uploaded to Play alpha. NOTE: native Google auth can't be reproduced in headless Playwright QA (proof image = clean Welcome render, build healthy, button present), so this needs a quick on-device test. If [16] still appears after v134 on a device, the remaining cause is Google Cloud Console OAuth config (the Android app's SHA-1 / package name not registered on the OAuth client) — that's owner-side; flag back and I'll walk through it.",
+            "imagePath": "images/i-20260623-16b7-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260623-16b7-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "3e88297677580741ba89a8af80042aedd3383fd1",
+            "imageCommits": [
+              "3e88297677580741ba89a8af80042aedd3383fd1"
+            ],
+            "fixedAt": "2026-06-23T03:39:39.188Z",
+            "by": "shakeebshaan",
+            "appCommit": "19f758a3",
+            "judge": {
+              "score": 82,
+              "bar": 80,
+              "note": "Code fix is solid + tsc-clean and the build renders cleanly (0 console errors), but the native Google account-picker cannot be exercised in headless QA, so on-device confirmation is still owner-side."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     }
   ]
