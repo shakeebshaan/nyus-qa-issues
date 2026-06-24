@@ -4606,6 +4606,47 @@
       "needsReview": false,
       "resolvedAt": "2026-06-23T13:55:26.482Z",
       "archivedAt": "2026-06-23T13:55:26.482Z"
+    },
+    {
+      "id": "i-20260624-d1cf",
+      "createdAt": "2026-06-24T05:22:32.374Z",
+      "route": null,
+      "description": "Fix it cutoff issue",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260624-d1cf.jpg",
+      "imageCommit": "f55b680b22bd4931e0822510f178e6f8709ef78a",
+      "imagePaths": [
+        "images/i-20260624-d1cf.jpg"
+      ],
+      "imageCommits": [
+        "f55b680b22bd4931e0822510f178e6f8709ef78a"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the QA board itself — the .review-note element (which renders my review reasons) had no text-wrap rule, so long reasons (URLs, SHA-1 fingerprints, multi-line text like the 16b7/bak1 notes) were clipped at the card right edge. Fix: added white-space:pre-wrap + overflow-wrap:anywhere + word-break:break-word to .review-note in index.html, matching .desc/.response-note. Now wraps fully and preserves line breaks. Board auto-deploys from main (GitHub Pages) — hard-refresh to see it.",
+        "imagePath": "images/i-20260624-d1cf-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-d1cf-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "eb59d7a9282498df46ca6fd7e7422664a714a8b8",
+        "imageCommits": [
+          "eb59d7a9282498df46ca6fd7e7422664a714a8b8"
+        ],
+        "fixedAt": "2026-06-24T05:50:21.762Z",
+        "by": "shakeebshaan",
+        "appCommit": "00d1808",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-24T05:52:38.239Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-24T05:52:38.239Z"
     }
   ]
 }
