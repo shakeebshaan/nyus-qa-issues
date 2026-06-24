@@ -210,27 +210,8 @@
         "f7b58a4222ffc1209b50d5260a8e10d52bafa0de"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Re-fix for \"load 20 meals at time\". The meal-idea swiper now PRELOADS ~20 ideas per slot at the onboarding builder mount (background), so it opens instantly with a full deck (fixes \"too much waiting\"), then tops up +10 once you've seen ~10 — endless and non-repeating.\n\nHow: backend raised the per-batch cap 10->20 with a bigger token budget (ed1dc6e); since one LLM call reliably yields only ~12-14 distinct ideas, suggestMeal now fires a 2nd batch (excluding the first) to reach the requested count, and CustomDietBuilder preloads count:20 per slot (5328c5bb). Verified LIVE on prod (breakfast, ~520 kcal): a 2-batch deck = 17 unique ideas, 0 overlap, 0 over-budget, 0 exotic — Moong Chilla, Paneer Upma, Egg Bhurji Pav, Surmai Idiyappam, Ragi Dosa, Rohu Rice... (see image).\n\nAll your earlier asks hold: no beef, random + per-slot (breakfast/lunch/dinner each get their own random set), India tier-2/tier-3 ingredients only, within each meal's calorie budget. NOTE: ~17-20 is the honest distinct-ceiling one profile can yield under the India + calorie + no-repeat constraints (pushing past it would mean repeats or exotic foods) — the swiper then tops up endlessly as you swipe, so it never runs out. Backend is live now; the preload/top-up UX lands in the next alpha build for on-device re-test.",
-        "imagePath": "images/i-20260621-05ce-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260621-05ce-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f295985e89e0562670de19e2defff354539feec1",
-        "imageCommits": [
-          "f295985e89e0562670de19e2defff354539feec1"
-        ],
-        "fixedAt": "2026-06-23T15:53:16.715Z",
-        "by": "shakeebshaan",
-        "appCommit": "5328c5bb",
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "Backend live + prod-verified (2-batch breakfast = 17 unique, 0 over-budget/exotic/overlap). Preload+top-up makes the deck feel like 20+ with no wait; ~17-20 is the LLM's honest distinct-ceiling under the India/calorie/no-repeat constraints, then endless top-up. Frontend UX rides next alpha for on-device confirm."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-23T13:55:42.535Z",
@@ -249,6 +230,32 @@
             ],
             "fixedAt": "2026-06-21T14:23:42.041Z",
             "appCommit": "f782798"
+          }
+        },
+        {
+          "at": "2026-06-24T10:31:45.252Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Re-fix for \"load 20 meals at time\". The meal-idea swiper now PRELOADS ~20 ideas per slot at the onboarding builder mount (background), so it opens instantly with a full deck (fixes \"too much waiting\"), then tops up +10 once you've seen ~10 — endless and non-repeating.\n\nHow: backend raised the per-batch cap 10->20 with a bigger token budget (ed1dc6e); since one LLM call reliably yields only ~12-14 distinct ideas, suggestMeal now fires a 2nd batch (excluding the first) to reach the requested count, and CustomDietBuilder preloads count:20 per slot (5328c5bb). Verified LIVE on prod (breakfast, ~520 kcal): a 2-batch deck = 17 unique ideas, 0 overlap, 0 over-budget, 0 exotic — Moong Chilla, Paneer Upma, Egg Bhurji Pav, Surmai Idiyappam, Ragi Dosa, Rohu Rice... (see image).\n\nAll your earlier asks hold: no beef, random + per-slot (breakfast/lunch/dinner each get their own random set), India tier-2/tier-3 ingredients only, within each meal's calorie budget. NOTE: ~17-20 is the honest distinct-ceiling one profile can yield under the India + calorie + no-repeat constraints (pushing past it would mean repeats or exotic foods) — the swiper then tops up endlessly as you swipe, so it never runs out. Backend is live now; the preload/top-up UX lands in the next alpha build for on-device re-test.",
+            "imagePath": "images/i-20260621-05ce-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260621-05ce-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "f295985e89e0562670de19e2defff354539feec1",
+            "imageCommits": [
+              "f295985e89e0562670de19e2defff354539feec1"
+            ],
+            "fixedAt": "2026-06-23T15:53:16.715Z",
+            "by": "shakeebshaan",
+            "appCommit": "5328c5bb",
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Backend live + prod-verified (2-batch breakfast = 17 unique, 0 over-budget/exotic/overlap). Preload+top-up makes the deck feel like 20+ with no wait; ~17-20 is the LLM's honest distinct-ceiling under the India/calorie/no-repeat constraints, then endless top-up. Frontend UX rides next alpha for on-device confirm."
+            }
           }
         }
       ],
