@@ -5262,6 +5262,49 @@
       "resolvedAt": "2026-06-24T12:28:43.473Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-24T12:28:43.473Z"
+    },
+    {
+      "id": "i-20260624-4fd3",
+      "createdAt": "2026-06-24T06:03:42.291Z",
+      "route": null,
+      "description": "When resume it starts from here even if we are on the building page make sure we save the building state",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260624-4fd3-0.jpg",
+      "imageCommit": "5e77c3313784fae8b8b256856e2004bf5d003dce",
+      "imagePaths": [
+        "images/i-20260624-4fd3-0.jpg",
+        "images/i-20260624-4fd3-1.jpg"
+      ],
+      "imageCommits": [
+        "5e77c3313784fae8b8b256856e2004bf5d003dce",
+        "09196e0dfb23abfdc9995a4f6bae9a670d338d39"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the always-custom builder lives inside the FINAL onboarding step, where saveDraft does not fire (it only saves when step < TOTAL_STEPS), so draft.step stayed at the last questionnaire step; on reload customActive/customStageIdx reset to false/0, dropping the user back on the questionnaire (Health & Food) even though their build was saved in nyus_builder_draft. Fix (OnboardingFlow.tsx, 96165c04): ResumeGate onResume now checks hasBuilderDraft() and, if a build was in progress, re-enters the builder (workout stage) — the CustomWorkout/CustomDiet builders hydrate their saved workout/diet from nyus_builder_draft. Start Fresh still clears the builder draft. VERIFIED LIVE (local playwright): with a builder draft present, Resume lands on \"Build Your Workout Plan / Let Coach <name> build it all\" (the builder, screenshot attached) instead of the questionnaire. tsc clean.",
+        "imagePath": "images/i-20260624-4fd3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-4fd3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2b13aa2b5371de986e23a237c9079c232e551eaa",
+        "imageCommits": [
+          "2b13aa2b5371de986e23a237c9079c232e551eaa"
+        ],
+        "fixedAt": "2026-06-24T09:20:10.982Z",
+        "by": "shakeebshaan",
+        "appCommit": "96165c04",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-24T12:28:50.408Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-24T12:28:50.408Z"
     }
   ]
 }
