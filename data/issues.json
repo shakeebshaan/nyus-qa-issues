@@ -728,46 +728,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260624-95e5",
-      "createdAt": "2026-06-24T06:01:20.023Z",
-      "route": null,
-      "description": "These meals are repeated for everyone no customisation not depth very generic as static result for all users",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260624-95e5-0.jpg",
-      "imageCommit": "35cc401d2bcc9c19b6187aa59e74198df35385bd",
-      "imagePaths": [
-        "images/i-20260624-95e5-0.jpg",
-        "images/i-20260624-95e5-1.jpg"
-      ],
-      "imageCommits": [
-        "35cc401d2bcc9c19b6187aa59e74198df35385bd",
-        "4173246c39c617b36fae620d7d1462d92e3c05dc"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "First, meals already DO personalize by diet+goal (verified live: veg/fat-loss -> Rajma Paneer Salad vs non-veg/muscle -> Chicken Handvo Plate — not static). The real cause of the generic/repeated feel: \"Coach builds all\" made a fresh count:4 LLM call per slot and IGNORED the 20-idea deck already preloaded at builder mount; grounding/filter attrition left ~1 meal/slot, so every build looked the same. Fix (CustomDietBuilder.tsx, a3d61883): build-all now draws from the preloaded deck via suggestMealCached (same slot+target+context key as the prefetch -> cache hit = instant, no per-slot wait), and consumeMealIdea removes each chosen meal so every slot gets a DIFFERENT one (cross-slot de-dup) from the ~14-deep deck. Live prod: one slot count:20 yields 14 distinct meals (Chicken Curd Rice, Egg Appam Plate, Surmai Lemon Rice, Paneer Egg Dosa, ...). Cache miss transparently fetches a full deck. Reuses already unit-tested deck/consume/cross-slot-dedup semantics; tsc + 11 tests green. (Earlier-stage background preload + builder UX are tracked separately on 1975/62ed.)",
-        "imagePath": "images/i-20260624-95e5-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260624-95e5-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "cd1d5e8c6ea3e25e40d2117b4533c972112df898",
-        "imageCommits": [
-          "cd1d5e8c6ea3e25e40d2117b4533c972112df898"
-        ],
-        "fixedAt": "2026-06-24T08:18:03.646Z",
-        "by": "shakeebshaan",
-        "appCommit": "a3d61883",
-        "judge": {
-          "score": 95,
-          "bar": 95
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260624-4fd3",
       "createdAt": "2026-06-24T06:03:42.291Z",
       "route": null,
