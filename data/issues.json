@@ -690,44 +690,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260624-f458",
-      "createdAt": "2026-06-24T05:58:48.319Z",
-      "route": null,
-      "description": "Meals are failing",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260624-f458.jpg",
-      "imageCommit": "462c454b23b62bbb65d3b0c2e2f2649410da670b",
-      "imagePaths": [
-        "images/i-20260624-f458.jpg"
-      ],
-      "imageCommits": [
-        "462c454b23b62bbb65d3b0c2e2f2649410da670b"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the bulk \"Coach builds all meals\" loop asked the suggest-meal route for count:1 idea per slot. The route drops ideas that overshoot the 1.25x kcal ceiling or use exotic ingredients, so when that SINGLE idea was dropped the slot returned empty -> \"Couldnt fill: <slot>\". Fix (2 parts): (1) build-all now requests 4 candidates per slot and uses the first survivor (frontend bdca59be); (2) the route now SALVAGES the least-overshooting grounded, non-exotic idea when every idea overshoots, so a slot is never left empty (the FE auto-fit pass then scales the day to target) — backend 00a0b8a. Exotic + duplicate ideas remain hard-excluded. VERIFIED LIVE on prod (authed suggest-meal route): tight kcal:250 -> 2 meals (301/239), very-tight kcal:120 -> 2 meals (144/135) — route reliably returns >=1, so slots fill. Deployed + health OK. (The separate \"slow / waiting\" and \"variety/personalization\" asks are tracked on f3de + 95e5.)",
-        "imagePath": "images/i-20260624-f458-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260624-f458-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "cf700678ec44684fb12e1eec11596f7fe3547fc5",
-        "imageCommits": [
-          "cf700678ec44684fb12e1eec11596f7fe3547fc5"
-        ],
-        "fixedAt": "2026-06-24T06:23:32.023Z",
-        "by": "shakeebshaan",
-        "appCommit": "bdca59be",
-        "judge": {
-          "score": 95,
-          "bar": 95
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260624-4fd3",
       "createdAt": "2026-06-24T06:03:42.291Z",
       "route": null,
