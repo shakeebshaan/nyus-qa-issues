@@ -650,46 +650,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260624-9171",
-      "createdAt": "2026-06-24T05:57:57.476Z",
-      "route": null,
-      "description": "Only 3 exercise and we should be able to see exercise video",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260624-9171-0.jpg",
-      "imageCommit": "df9452213452b3c91b7a38463d6bb8b5edc55461",
-      "imagePaths": [
-        "images/i-20260624-9171-0.jpg",
-        "images/i-20260624-9171-1.jpg"
-      ],
-      "imageCommits": [
-        "df9452213452b3c91b7a38463d6bb8b5edc55461",
-        "1b6f2195e324af1d44a864aec3ebfd5cab84ea0f"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: a narrow workout focus (e.g. arms) with a thin equipment pool (bodyweight) exhausted the per-muscle top-up with no fallback, so the day under-filled below the 6-exercise target. Fix (backend 88f06be): added a final breadth top-up in _select_exercises_for_session that pulls accessory work from a broader muscle set (focus muscles first), keeping ALL hygiene filters (exclusions incl. ebb9 awkward-move filter, injuries, equipment) — compounds from adjacent groups legitimately train the focus muscles on a bodyweight day. VERIFIED LIVE on prod (suggest-workout-day): arms/bodyweight 2 -> 6, arms/dumbbell 4 -> 6; core/push/pull/legs/full-body already 6. Sample arms/bodyweight day: Spider Curl, Diamond Push-Up, Decline Bench Press, Commando Push-Up, Reverse Curl, Wall Push-Up. SEPARATE: \"see exercise video\" is an enhancement (exercises currently carry an IMAGE shown on the card, but no tutorial video — adding per-exercise video needs a video source + UI). Tracked as a follow-up; this resolve covers the \"only 3 exercises\" count bug. Re-file if you want the video prioritized.",
-        "imagePath": "images/i-20260624-9171-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260624-9171-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "9258117f3e3d9a977d2aa1942302197f6e5232f0",
-        "imageCommits": [
-          "9258117f3e3d9a977d2aa1942302197f6e5232f0"
-        ],
-        "fixedAt": "2026-06-24T06:48:53.709Z",
-        "by": "shakeebshaan",
-        "appCommit": "88f06be",
-        "judge": {
-          "score": 95,
-          "bar": 95
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260624-4fd3",
       "createdAt": "2026-06-24T06:03:42.291Z",
       "route": null,
