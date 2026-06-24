@@ -312,14 +312,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Per your reply \"Only send me via email and delete it.\" Rewrote perform_daily_backup (backend.py): mysqldump (creds parsed from DATABASE_URL; password via MYSQL_PWD env so it is never in argv/ps) | gzip -9 -> email the .sql.gz as a Resend attachment to your email -> delete the local file in a finally block. Removed the old git-commit/push of the PII dump entirely. VERIFIED live on prod just now: dump nyus_backup_20260624.sql.gz = 15.6 MB, emailed to shaan.s@chartraiders.com (check your inbox), local file deleted (none left on disk), BACKUP_RESULT True. The nightly 00:00 job will now succeed (it had failed 74+ nights because export_data.py was never deployed). No PII is kept on disk or in GitHub anymore.",
+        "imagePath": "images/i-20260624-bak1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-bak1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f4b61b9d4c8d2e064dd9c9058ec4fde5eb709928",
+        "imageCommits": [
+          "f4b61b9d4c8d2e064dd9c9058ec4fde5eb709928"
+        ],
+        "fixedAt": "2026-06-24T05:47:41.003Z",
+        "by": "shakeebshaan",
+        "appCommit": "ad29194",
+        "judge": {
+          "score": 96,
+          "bar": 95
+        }
+      },
       "history": [],
       "needsReview": false,
       "reviewReply": "Only send me via email and delete it",
       "reviewRepliedAt": "2026-06-24T05:21:53.109Z",
-      "reviewReason": "Root cause: the nightly daily_backup APScheduler job (backend.py perform_daily_backup, 00:00 IST) shells out to export_data.py, which is NOT in the repo (never committed) -> it has FAILED every night for 74+ days (150x \"No such file\" + 74x \"Export failed return code 2\" in nyus_app.log; last fails 06-22/23/24).\n\nIMPACT 1 (data-loss): the production MySQL DB is NOT being backed up.\nIMPACT 2 (security): the backup mechanism (backend.py ~289-320) moves the dump into DB_DAILY_backups/ then git-commits + PUSHES it to the nyu_backend GitHub repo — i.e. a full prod DB SQL dump (every email, health/body metrics, payment records, hashed OTPs) committed into git history.\nNOTE: daily_backup swallows its own exception (returns False), so the EVENT_JOB_ERROR->Discord listener I added does NOT surface these failures.\n\nThis needs YOUR decision (security + data) — I did NOT unilaterally re-enable PII-to-git. Options:\nA (RECOMMENDED): I write export_data.py to mysqldump nyus_db, but change the TARGET off git — upload to Oracle Object Storage / scp to a private backups-only location with retention, and REMOVE the git commit+push of PII. Restores backups AND removes PII from git. Needs a bucket/credential or your OK to provision one.\nB: Restore export_data.py to the old behavior (mysqldump -> commit+push to the PRIVATE nyu_backend repo). Fastest, but keeps full prod PII in git history (only OK if the repo stays private and you accept that).\nC: Disable daily_backup entirely and rely on MySQL/Oracle managed snapshots if you already run them.\n\nReply on the board with A/B/C and I will implement. (Unrelated: I already fixed the kudos double-registration startup error this tick — backend 0c77fcf.)",
-      "reviewedAt": "2026-06-24T03:48:29.587Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "backend",
