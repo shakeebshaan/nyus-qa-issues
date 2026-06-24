@@ -210,8 +210,26 @@
         "f7b58a4222ffc1209b50d5260a8e10d52bafa0de"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "All parts addressed. NO BEEF (live now): added a deterministic word-boundary beef hard-exclude to the suggest-meal route (drops on title OR any grounded ingredient), on top of the existing prompt + fast_plan_assembler guards — verified live on prod (11 non-veg dinners across 2 requests -> 0 beef). Commit 0748d47, server-side so it works on ANY build. The other parts ship in alpha v138 (1.6.80, uploaded to alpha today): random/distinct meals from the ~14-deep preloaded deck with per-slot de-dup (a3d61883); decks PRELOADED at the workout stage so they are ready by the diet stage (88183ac9); no per-slot LLM wait (deck-reuse). PLEASE UPDATE the app to alpha v138 to see the variety + preload + speed fixes (they are frontend). Re-test after updating; reopen with specifics if anything remains.",
+        "imagePath": "images/i-20260621-05ce-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260621-05ce-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "44ecef598c779fb507abd7e6bba37730815e50e7",
+        "imageCommits": [
+          "44ecef598c779fb507abd7e6bba37730815e50e7"
+        ],
+        "fixedAt": "2026-06-24T10:50:56.289Z",
+        "by": "shakeebshaan",
+        "appCommit": "0748d47",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
       "history": [
         {
           "at": "2026-06-23T13:55:42.535Z",
