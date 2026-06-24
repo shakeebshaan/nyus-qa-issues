@@ -4861,6 +4861,47 @@
       "resolvedAt": "2026-06-24T12:27:07.480Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-24T12:27:07.480Z"
+    },
+    {
+      "id": "i-20260624-62ed",
+      "createdAt": "2026-06-24T05:11:19.663Z",
+      "route": null,
+      "description": "Here coach mera build should AI build the meal based on the preference and don't show the swaping  meals here, remove the start button to meal options and show the there preload",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260624-62ed.jpg",
+      "imageCommit": "e11d872785e0b4a62bf336054311ffb5a5627f9c",
+      "imagePaths": [
+        "images/i-20260624-62ed.jpg"
+      ],
+      "imageCommits": [
+        "e11d872785e0b4a62bf336054311ffb5a5627f9c"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Per your asks on the empty-meal build card: (1) \"coach build should AI build the meal based on preference\" -> the empty-state \"Coach <name> can build <slot>\" now AI-builds directly from the user prefs (pulls a meal from the warmed deck via a new handleCoachBuildMeal + consumeMealIdea so each slot gets a distinct meal); (2) \"dont show the swapping meals here\" -> tapping it auto-applies a meal instead of opening the swap swiper, and the ✨ swap icon is removed on EMPTY meals (built meals keep it); (3) \"remove the start button to meal options\" -> removed the \"Ill build it myself\" button from the empty-state; (4) \"show there preload\" -> BlurBuildOverlay shows a \"Coach <name> is building…\" spinner while it builds. Verified on the dev diet-builder route (screenshot: empty Breakfast/Lunch show ONLY \"Coach Nisha can build …\", no manual button, no swap icon). Files: MealSlotCard.tsx + CustomDietBuilder.tsx, commit d90a3bda, tsc clean.",
+        "imagePath": "images/i-20260624-62ed-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-62ed-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5f7878a512f6ce322f62cf63aa6a0bf6f082c560",
+        "imageCommits": [
+          "5f7878a512f6ce322f62cf63aa6a0bf6f082c560"
+        ],
+        "fixedAt": "2026-06-24T10:21:48.343Z",
+        "by": "shakeebshaan",
+        "appCommit": "d90a3bda",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-24T12:27:15.214Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-24T12:27:15.214Z"
     }
   ]
 }
