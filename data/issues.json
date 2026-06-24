@@ -280,44 +280,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260624-3bd3",
-      "createdAt": "2026-06-24T05:13:24.807Z",
-      "route": null,
-      "description": "We can ask quick question popup in screen with coach image nice beautiful quick ui, which are required for build perfect meals and also user can skip the questions plan it have 100 voices and then implement",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260624-3bd3.jpg",
-      "imageCommit": "24790a00ed7c14882c9932f04e01768259cd473b",
-      "imagePaths": [
-        "images/i-20260624-3bd3.jpg"
-      ],
-      "imageCommits": [
-        "24790a00ed7c14882c9932f04e01768259cd473b"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Built the pre-build clarifying-questions popup. Designed via a judge-panel workflow ('plan it 100 voices') — 3 independent designs scored on meal-quality/friction/on-brand/implementability, synthesized into one spec, then implemented + verified. New MealPrefsSheet (src/components/plan-builder/MealPrefsSheet.tsx): a quick, SKIPPABLE bottom sheet with the coach's face shown when you tap 'Let Coach build it all' (every build-all entry). One-tap questions — cooking style (N/S Indian, Bengali, pan-Indian, light), cook time, spice, and an optional dislikes box — advance-on-tap, calm/premium, reduced-motion fallback. Answers persist in the builder draft and ride along in the suggest-meal context so the coach builds meals that fit. VERIFIED: (UI, screenshot) tapping 'Coach Nisha builds all meals' opens the sheet with the coach header + cuisine chips + 'Skip and build'; (backend, live on prod) passing the prefs makes meals respect them — cuisine South-Indian -> Egg Dosa Sambar etc., dislikes 'paneer' -> 0 paneer in the deck. Full data flow wired so the enriched build gets its own meal deck (mealDeckKey + prefetch include the pref fields; skip = baseline deck). Frontend d5618168 + backend prompt 2926bbb. Backend is LIVE now; the sheet ships to alpha in the next build (v138 already shipped this session).",
-        "imagePath": "images/i-20260624-3bd3-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260624-3bd3-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "9050d0fca7acfb6f008a1d790809ff0d05396b96",
-        "imageCommits": [
-          "9050d0fca7acfb6f008a1d790809ff0d05396b96"
-        ],
-        "fixedAt": "2026-06-24T12:08:13.142Z",
-        "by": "shakeebshaan",
-        "appCommit": "d5618168",
-        "judge": {
-          "score": 95,
-          "bar": 95
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260624-4fd3",
       "createdAt": "2026-06-24T06:03:42.291Z",
       "route": null,
