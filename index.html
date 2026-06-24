@@ -123,6 +123,10 @@
     margin: 10px 0 0; padding: 10px 12px; border-radius: 10px;
     background: hsl(263 60% 96%); border: 1px solid hsl(263 50% 88%);
     color: hsl(263 40% 32%); font-size: 13px; line-height: 1.45;
+    /* d1cf: long review reasons (URLs, SHA-1 fingerprints, multi-line) were
+       clipped at the right edge. Match .desc/.response-note: preserve newlines
+       and hard-wrap unbreakable tokens so nothing is cut off. */
+    white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;
   }
   .review-note b { color: hsl(263 50% 38%); }
   /* Tag filter bar + per-card tag chips */
