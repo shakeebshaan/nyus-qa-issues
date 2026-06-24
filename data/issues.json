@@ -374,9 +374,28 @@
         "22e103e2c29b726add7fcb883957eb949a526ac2"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Two onboarding screens both showed the title \"Your plan is ready\" — the pre-finalize plan OVERVIEW (PlanReadyOverview) and the post-finalize PostPlanTour — which is the duplicate you flagged. The first is a review/overview step, so retitled it \"Your plan overview\" with subtitle \"Review what your coach built, <name> - tweak anything, then finish\"; the final celebratory screen keeps \"Your plan is ready\". They are now distinct in title (overview vs plan-ready) and already differ in design (the overview is a review-card layout, the final is a hero/tour). Verified live via the dev plan-builder overview route (screenshot attached: \"Your plan overview\"). Fix: PlanReadyOverview.tsx, commit e0a9e276, tsc clean.",
+        "imagePath": "images/i-20260624-9422-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-9422-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d00ed3e1649ad3df256bf4be54531c38a78c77f0",
+        "imageCommits": [
+          "d00ed3e1649ad3df256bf4be54531c38a78c77f0"
+        ],
+        "fixedAt": "2026-06-24T07:51:49.947Z",
+        "by": "shakeebshaan",
+        "appCommit": "e0a9e276",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260624-cd34",
