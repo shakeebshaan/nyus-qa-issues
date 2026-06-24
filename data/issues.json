@@ -362,9 +362,28 @@
         "d2787c61711757cdbe5e9bef1c85040da8b3431e"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the coach workout builder (_select_exercises_for_session in workout_builder_service.py) picked ANY catalog exercise matching the muscle focus — including awkward/skill-heavy moves (Hindu push-up, handstand push-up, floor press, pike push-up, pistol squat, L-sit, planche, front lever, muscle-up, archer/clap push-ups). Fix: added _UNFRIENDLY_NAME_PATTERNS, applied in _strength_exclusion_filters so BOTH the primary muscle-focus pass and the top-up pass exclude them from the auto-built plan (users can still add them manually). Verified on PROD: 46 such rows exist in the catalog and now 0 survive the filter (PASS). Note: the authenticated onboarding UI was not captured because the QA session token is revoked while you are actively testing — the attached proof is the prod data-layer verification (46 -> 0).",
+        "imagePath": "images/i-20260624-ebb9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-ebb9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8a3babff79f3d53c9eda0121e80a022de15bf4b1",
+        "imageCommits": [
+          "8a3babff79f3d53c9eda0121e80a022de15bf4b1"
+        ],
+        "fixedAt": "2026-06-24T05:20:00.680Z",
+        "by": "shakeebshaan",
+        "appCommit": "3667db3",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260624-8276",
