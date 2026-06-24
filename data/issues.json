@@ -254,8 +254,26 @@
         "8571c76c80294abbbd9a8f9e8e81aca58ee3f75f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "ROOT CAUSE FOUND (not the SHA-1 — you added that correctly). The release build runs minifyEnabled=true but the ProGuard/R8 rules kept only Capacitor classes, so R8 obfuscated the Google Credential Manager classes (GetGoogleIdOption, GoogleIdTokenCredential, androidx.credentials). Play Services then could not vend a verifiable ID-token credential and Credential Manager returned status 16 ('[16] Account reauth failed'). This explains everything: it failed only on alpha/release (never debug), on BOTH sign-in styles, and was unaffected by the correct SHA-1. FIX (android/app/proguard-rules.pro, a44b7a26): added R8 keep rules for googleid + androidx.credentials(+playservices) + gms.auth.api.identity. VERIFIED in the v140 release mapping.txt — GetGoogleIdOption + the credential classes are now un-renamed (no longer stripped). Built + uploaded to Play ALPHA as v140 (1.6.82). TO TEST: update from the Play closed-testing (alpha) track to v140 and sign in with a fresh Gmail. TWO musts: (1) install FROM THE PLAY TRACK — not a sideloaded/locally-built APK; Play re-signs with the App-Signing cert A5:83:5C (the one registered + in google-services.json), while a sideloaded upload-key APK (B9:5C:EA) is on no OAuth client and will always [16]. (2) If it STILL fails on v140, in Cloud Console -> OAuth consent screen confirm User type = External (Internal/Workspace-only [16]s every personal Gmail regardless of SHA). Diagnosed via a 4-agent investigation workflow.",
+        "imagePath": "images/i-20260623-16b7-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260623-16b7-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9",
+        "imageCommits": [
+          "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9"
+        ],
+        "fixedAt": "2026-06-24T13:15:37.588Z",
+        "by": "shakeebshaan",
+        "appCommit": "a44b7a26",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
       "history": [
         {
           "at": "2026-06-23T07:40:11.257Z",
@@ -285,8 +303,6 @@
         }
       ],
       "needsReview": false,
-      "reviewReason": "Root-caused the persistent \"[16] Account reauth failed\" — it is NOT a code bug; it is a Google Cloud / Play Console config blocker that only you can fix (I have no Console access). Evidence: I verified the app code is correct — it passes the WEB OAuth client (…d8ktncq…apps.googleusercontent.com) as the serverClientId, package is com.nyus.nyusand. Both Android sign-in paths the plugin supports (one-tap bottom-sheet AND the standard \"Sign in with Google\" chooser) return the SAME [16], and [16] appeared even before my v134 change — that only happens when Credential Manager cannot validate the installed app against the OAuth client, i.e. a SIGNING-FINGERPRINT or CONSENT-SCREEN registration problem. Alpha builds are signed by Google Play App Signing (Play re-signs), so the SHA-1 that must be registered is the PLAY signing cert's — not the upload key's.\n\nFIX (Google Cloud Console + Play Console, ~3 min):\n1) Play Console -> your app -> Test and release -> Setup -> App integrity -> \"App signing key certificate\" -> copy its SHA-1 fingerprint.\n2) Google Cloud Console (project 415757416413) -> APIs & Services -> Credentials -> OAuth 2.0 Client IDs -> the ANDROID client (…veopshgfin…) -> add that Play App Signing SHA-1. The client currently has only a5:83:5c:43:22:81…; the upload key is b9:5c:ea:c4:08:94:17:5b:7e:e1:e8:91:aa:d1:2e:22:18:4a:04:4c. Add the Play signing SHA-1 (and you can add the upload-key one too for local release builds).\n3) OAuth consent screen -> Publishing status must be \"In production\" (email/profile/openid need no Google verification). If it is in \"Testing\", either publish it OR add your test Google account under Test users — otherwise non-listed accounts get reauth failures.\n4) If google-services.json changed, re-download it into android/app/ and I will rebuild.\n\nOnce you confirm (1)-(3) are done, reopen/comment and I will rebuild + you re-test. Optional code tweak I can also ship: switch the in-app flow from the v134 one-tap bottom-sheet back to the standard \"Sign in with Google\" chooser (better for first-time users) — but it will NOT resolve [16] until the SHA-1/consent above is fixed.",
-      "reviewedAt": "2026-06-23T07:47:49.000Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "google-auth",
