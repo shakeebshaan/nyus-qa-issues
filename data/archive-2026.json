@@ -4647,6 +4647,52 @@
       "resolvedAt": "2026-06-24T05:52:38.239Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-24T05:52:38.239Z"
+    },
+    {
+      "id": "i-20260624-bak1",
+      "createdAt": "2026-06-24T03:47:54.904Z",
+      "route": null,
+      "description": "[Claude-raised] Nightly production DB backup is broken AND its mechanism commits a full prod DB dump (all user PII/health/payment data) into GitHub — owner decision needed on the backup target. Details in the review note.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Per your reply \"Only send me via email and delete it.\" Rewrote perform_daily_backup (backend.py): mysqldump (creds parsed from DATABASE_URL; password via MYSQL_PWD env so it is never in argv/ps) | gzip -9 -> email the .sql.gz as a Resend attachment to your email -> delete the local file in a finally block. Removed the old git-commit/push of the PII dump entirely. VERIFIED live on prod just now: dump nyus_backup_20260624.sql.gz = 15.6 MB, emailed to shaan.s@chartraiders.com (check your inbox), local file deleted (none left on disk), BACKUP_RESULT True. The nightly 00:00 job will now succeed (it had failed 74+ nights because export_data.py was never deployed). No PII is kept on disk or in GitHub anymore.",
+        "imagePath": "images/i-20260624-bak1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-bak1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f4b61b9d4c8d2e064dd9c9058ec4fde5eb709928",
+        "imageCommits": [
+          "f4b61b9d4c8d2e064dd9c9058ec4fde5eb709928"
+        ],
+        "fixedAt": "2026-06-24T05:47:41.003Z",
+        "by": "shakeebshaan",
+        "appCommit": "ad29194",
+        "judge": {
+          "score": 96,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewReply": "Only send me via email and delete it",
+      "reviewRepliedAt": "2026-06-24T05:21:53.109Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "backend",
+        "reliability",
+        "security",
+        "owner-config"
+      ],
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-06-24T05:53:04.266Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-24T05:53:04.266Z"
     }
   ]
 }
