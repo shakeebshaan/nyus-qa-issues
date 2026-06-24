@@ -420,44 +420,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260624-8276",
-      "createdAt": "2026-06-24T05:00:41.006Z",
-      "route": null,
-      "description": "Choose plan now not working it took me to dashboard",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260624-8276.jpg",
-      "imageCommit": "f4407489f3f84ef2623b46d1bdefc8d7f7c17c25",
-      "imagePaths": [
-        "images/i-20260624-8276.jpg"
-      ],
-      "imageCommits": [
-        "f4407489f3f84ef2623b46d1bdefc8d7f7c17c25"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: ProtectedRoute (App.tsx) redirected EVERY subscription_active user away from /choose-plan to /dashboard — but a 30-day free TRIAL sets subscription_active=true while is_trial=true (your QA acct: is_trial true, 17 days left). So tapping \"Choose a plan\" bounced trial users straight to the dashboard (\"Choose plan now took me to dashboard\"). The guard also ignored ?manage=1, which silently defeated ChoosePlan subscription management. Fix (App.tsx + ChoosePlan.tsx, 98df814e): the anti-repurchase redirect now fires ONLY for PAID subscribers (subscription_active && !is_trial) and never when ?manage=1 — trial users reach /choose-plan and can view/buy a plan; paid subscribers are still bounced. VERIFIED LIVE on the dev server: trial user -> STAYS on /choose-plan (renders the plan tiers + projection, screenshot attached), paid user -> /dashboard. tsc clean.",
-        "imagePath": "images/i-20260624-8276-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260624-8276-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "00ace508f9ae619bd6dee42c3fd67c6d759c85f3",
-        "imageCommits": [
-          "00ace508f9ae619bd6dee42c3fd67c6d759c85f3"
-        ],
-        "fixedAt": "2026-06-24T07:24:08.090Z",
-        "by": "shakeebshaan",
-        "appCommit": "98df814e",
-        "judge": {
-          "score": 96,
-          "bar": 95
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260624-9422",
       "createdAt": "2026-06-24T05:01:34.360Z",
       "route": null,
