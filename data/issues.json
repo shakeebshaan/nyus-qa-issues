@@ -376,9 +376,28 @@
         "880e0e751a869b374f274987e710378bf03a4844"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the bulk \"Coach builds all meals\" loop asked the suggest-meal route for count:1 idea per slot. The route drops ideas that overshoot the 1.25x kcal ceiling or use exotic ingredients, so when that SINGLE idea was dropped the slot returned empty -> \"Couldnt fill: <slot>\". Fix (2 parts): (1) build-all now requests 4 candidates per slot and uses the first survivor (frontend bdca59be); (2) the route now SALVAGES the least-overshooting grounded, non-exotic idea when every idea overshoots, so a slot is never left empty (the FE auto-fit pass then scales the day to target) — backend 00a0b8a. Exotic + duplicate ideas remain hard-excluded. VERIFIED LIVE on prod (authed suggest-meal route): tight kcal:250 -> 2 meals (301/239), very-tight kcal:120 -> 2 meals (144/135) — route reliably returns >=1, so slots fill. Deployed + health OK. (The separate \"slow / waiting\" and \"variety/personalization\" asks are tracked on f3de + 95e5.)",
+        "imagePath": "images/i-20260624-cd34-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-cd34-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f998f647f9e1c51032fb0190fe3b2ddd222070f7",
+        "imageCommits": [
+          "f998f647f9e1c51032fb0190fe3b2ddd222070f7"
+        ],
+        "fixedAt": "2026-06-24T06:23:38.980Z",
+        "by": "shakeebshaan",
+        "appCommit": "bdca59be",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260624-1975",
