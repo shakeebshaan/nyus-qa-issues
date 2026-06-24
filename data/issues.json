@@ -317,9 +317,28 @@
         "6e346a4ce2011ac739768343e0e0a7a2dbd42f4d"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Multi-part — all four addressed across this session and re-verified live: (1) \"too much time waiting\" -> meal decks now warm at the workout stage (early preload 88183ac9) AND build-all reads the warm deck instead of per-slot LLM calls (a3d61883) = no wait; (2) \"error … only created the breakfast\" -> the route now salvages the least-overshooting grounded idea so no slot is ever empty (00a0b8a); (3) \"had the pre-build button again to build rest 2 meals\" -> all slots now fill in ONE pass, no re-tap (count + salvage, bdca59be); (4) \"variety is very less\" -> build-all draws DISTINCT meals from the ~14-deep preloaded deck with cross-slot de-dup (a3d61883). LIVE RE-VERIFY on prod (one build pass): breakfast=Egg Dal Cheela, lunch=Egg Paneer Poha, dinner=Chicken Curd Bowl — all 3 slots filled, distinct, in one pass (no empty, no re-tap). Cumulative commits: ebb9 3667db3, salvage 00a0b8a, count bdca59be, deck-reuse a3d61883, early-preload 88183ac9 — all live on prod + alpha v138.",
+        "imagePath": "images/i-20260624-f3de-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-f3de-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0b77d7cc86702fa6953db70ffed16f1a43ee0641",
+        "imageCommits": [
+          "0b77d7cc86702fa6953db70ffed16f1a43ee0641"
+        ],
+        "fixedAt": "2026-06-24T09:45:35.231Z",
+        "by": "shakeebshaan",
+        "appCommit": "88183ac9",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260624-8276",
