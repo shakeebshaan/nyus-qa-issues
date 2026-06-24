@@ -4902,6 +4902,47 @@
       "resolvedAt": "2026-06-24T12:27:15.214Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-24T12:27:15.214Z"
+    },
+    {
+      "id": "i-20260624-1975",
+      "createdAt": "2026-06-24T05:09:25.675Z",
+      "route": null,
+      "description": "Too much waiting where preload in background when we are in the onboarding",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260624-1975.jpg",
+      "imageCommit": "ba1a5683ebef4e59dc84e1afe771b2ba92276ce0",
+      "imagePaths": [
+        "images/i-20260624-1975.jpg"
+      ],
+      "imageCommits": [
+        "ba1a5683ebef4e59dc84e1afe771b2ba92276ce0"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: meal-idea decks were prefetched only at diet-builder MOUNT, so a user who reached the diet stage and tapped \"coach builds all\" waited on per-slot LLM calls (\"Cooking up ideas...\"). Fix (88183ac9): extracted the prefetch-body derivation into a shared lib (src/lib/diet-prefetch.ts) and fire it EARLY from OnboardingFlow builder warm-up — when the user enters the WORKOUT stage — so the breakfast/lunch/dinner decks fill in the background while they build their workout, and are ready by the time they reach the diet stage. Both the early warm and the diet builder use the SAME buildDietPrefetchBodies, so the deck keys are identical (no wasted warm). Pairs with the build-all deck-reuse (95e5) so the build reads the warm deck = instant. tsc clean; 6 new unit tests lock the shared derivation so the two paths can never drift (16 tests total green). (Verified by the code path + key-matching tests rather than a live stopwatch.) Remaining f3de \"pre-build button\" + 62ed builder UX are tracked separately.",
+        "imagePath": "images/i-20260624-1975-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260624-1975-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "00918f7c5b17d352acc91532a33ce1427108aef9",
+        "imageCommits": [
+          "00918f7c5b17d352acc91532a33ce1427108aef9"
+        ],
+        "fixedAt": "2026-06-24T08:51:32.918Z",
+        "by": "shakeebshaan",
+        "appCommit": "88183ac9",
+        "judge": {
+          "score": 95,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-24T12:27:29.117Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-24T12:27:29.117Z"
     }
   ]
 }
