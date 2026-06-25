@@ -16,26 +16,8 @@
         "8571c76c80294abbbd9a8f9e8e81aca58ee3f75f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "ROOT CAUSE FOUND (not the SHA-1 — you added that correctly). The release build runs minifyEnabled=true but the ProGuard/R8 rules kept only Capacitor classes, so R8 obfuscated the Google Credential Manager classes (GetGoogleIdOption, GoogleIdTokenCredential, androidx.credentials). Play Services then could not vend a verifiable ID-token credential and Credential Manager returned status 16 ('[16] Account reauth failed'). This explains everything: it failed only on alpha/release (never debug), on BOTH sign-in styles, and was unaffected by the correct SHA-1. FIX (android/app/proguard-rules.pro, a44b7a26): added R8 keep rules for googleid + androidx.credentials(+playservices) + gms.auth.api.identity. VERIFIED in the v140 release mapping.txt — GetGoogleIdOption + the credential classes are now un-renamed (no longer stripped). Built + uploaded to Play ALPHA as v140 (1.6.82). TO TEST: update from the Play closed-testing (alpha) track to v140 and sign in with a fresh Gmail. TWO musts: (1) install FROM THE PLAY TRACK — not a sideloaded/locally-built APK; Play re-signs with the App-Signing cert A5:83:5C (the one registered + in google-services.json), while a sideloaded upload-key APK (B9:5C:EA) is on no OAuth client and will always [16]. (2) If it STILL fails on v140, in Cloud Console -> OAuth consent screen confirm User type = External (Internal/Workspace-only [16]s every personal Gmail regardless of SHA). Diagnosed via a 4-agent investigation workflow.",
-        "imagePath": "images/i-20260623-16b7-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260623-16b7-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9",
-        "imageCommits": [
-          "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9"
-        ],
-        "fixedAt": "2026-06-24T13:15:37.588Z",
-        "by": "shakeebshaan",
-        "appCommit": "a44b7a26",
-        "judge": {
-          "score": 95,
-          "bar": 95
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-23T07:40:11.257Z",
@@ -60,6 +42,31 @@
               "score": 82,
               "bar": 80,
               "note": "Code fix is solid + tsc-clean and the build renders cleanly (0 console errors), but the native Google account-picker cannot be exercised in headless QA, so on-device confirmation is still owner-side."
+            }
+          }
+        },
+        {
+          "at": "2026-06-25T12:03:45.444Z",
+          "event": "reopened",
+          "note": "still not fixed same error",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "ROOT CAUSE FOUND (not the SHA-1 — you added that correctly). The release build runs minifyEnabled=true but the ProGuard/R8 rules kept only Capacitor classes, so R8 obfuscated the Google Credential Manager classes (GetGoogleIdOption, GoogleIdTokenCredential, androidx.credentials). Play Services then could not vend a verifiable ID-token credential and Credential Manager returned status 16 ('[16] Account reauth failed'). This explains everything: it failed only on alpha/release (never debug), on BOTH sign-in styles, and was unaffected by the correct SHA-1. FIX (android/app/proguard-rules.pro, a44b7a26): added R8 keep rules for googleid + androidx.credentials(+playservices) + gms.auth.api.identity. VERIFIED in the v140 release mapping.txt — GetGoogleIdOption + the credential classes are now un-renamed (no longer stripped). Built + uploaded to Play ALPHA as v140 (1.6.82). TO TEST: update from the Play closed-testing (alpha) track to v140 and sign in with a fresh Gmail. TWO musts: (1) install FROM THE PLAY TRACK — not a sideloaded/locally-built APK; Play re-signs with the App-Signing cert A5:83:5C (the one registered + in google-services.json), while a sideloaded upload-key APK (B9:5C:EA) is on no OAuth client and will always [16]. (2) If it STILL fails on v140, in Cloud Console -> OAuth consent screen confirm User type = External (Internal/Workspace-only [16]s every personal Gmail regardless of SHA). Diagnosed via a 4-agent investigation workflow.",
+            "imagePath": "images/i-20260623-16b7-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260623-16b7-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9",
+            "imageCommits": [
+              "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9"
+            ],
+            "fixedAt": "2026-06-24T13:15:37.588Z",
+            "by": "shakeebshaan",
+            "appCommit": "a44b7a26",
+            "judge": {
+              "score": 95,
+              "bar": 95
             }
           }
         }
