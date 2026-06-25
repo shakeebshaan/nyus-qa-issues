@@ -5587,6 +5587,48 @@
       "resolvedAt": "2026-06-25T11:57:47.926Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-25T11:57:47.926Z"
+    },
+    {
+      "id": "i-20260625-987b",
+      "createdAt": "2026-06-25T07:28:05.624Z",
+      "route": null,
+      "description": "Too much waiting here waited 1 minute, the should be less than 3 seconds and this is wrong screen we should have waited on the blurred screen after questionss",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260625-987b.jpg",
+      "imageCommit": "25e6053fc6e764eb787d63ecea300a013ab551fa",
+      "imagePaths": [
+        "images/i-20260625-987b.jpg"
+      ],
+      "imageCommits": [
+        "25e6053fc6e764eb787d63ecea300a013ab551fa"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: pre-build MealPrefsSheet makes the build read the ENRICHED meal-idea deck while the prefetch warmed only the BASELINE deck -> cache MISS -> the build looped empties SEQUENTIALLY (4 live suggestMealCached LLM calls ~= ~1 min). handleMealPrefsDone also dismissed the BuildFocusOverlay before building, so the wait happened on the bare builder with per-meal 'Coach Kabir is building...' spinners (the captured screen). Fix (CustomDietBuilder.tsx 323922b6): (1) concurrent build -- empties grouped by slot, slots run via Promise.all (~one LLM round-trip ~= ~15s instead of N); same-slot empties stay sequential within their slot so consumeMealIdea still drains distinct cards; each apply targets the meal's exact index (parallel-safe). (2) right screen -- handleMealPrefsDone keeps showFocus up; the blurred overlay shows 'Building your meals...' (CTAs disabled) and the build drops it only once the day is built. Repeat visits hit the warmed enriched deck -> instant.",
+        "imagePath": "images/i-20260625-987b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260625-987b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ef069851d02171465256b9b6bd45c8cff8d91d4b",
+        "imageCommits": [
+          "ef069851d02171465256b9b6bd45c8cff8d91d4b"
+        ],
+        "fixedAt": "2026-06-25T08:25:29.281Z",
+        "by": "shakeebshaan",
+        "appCommit": "323922b6",
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Both complaints fixed at root. Speed: sequential per-slot LLM loop (4x back-to-back ~1min, cache-miss on enriched deck) -> Promise.all across slots (~one round-trip ~15s); same-slot empties stay sequential within slot to keep distinct meals; apply targets exact meal index (parallel-safe). Screen: handleMealPrefsDone no longer dismisses the BuildFocusOverlay, so the wait now happens on the blurred screen showing 'Building your meals...' (the captured bare-builder screen is exactly what's eliminated). /ai/suggest-meal is not per-request rate limited so 4 concurrent is safe. tsc clean; 42 tests pass."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-25T11:58:33.271Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-25T11:58:33.271Z"
     }
   ]
 }
