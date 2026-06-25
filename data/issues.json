@@ -152,44 +152,6 @@
       },
       "history": [],
       "needsReview": false
-    },
-    {
-      "id": "i-20260625-15e6",
-      "createdAt": "2026-06-25T07:30:08.015Z",
-      "route": null,
-      "description": "Review everysingle.resolved from this bord and create a list of what not fixed make sure the latest code.is the update one don't compare discarded features with new features",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260625-15e6.jpg",
-      "imageCommit": "3f524d47939e6b95f2c3874d24c76ca9543b0ae0",
-      "imagePaths": [
-        "images/i-20260625-15e6.jpg"
-      ],
-      "imageCommits": [
-        "3f524d47939e6b95f2c3874d24c76ca9543b0ae0"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Reviewed every resolved issue (121: 118 archived + 3 recent) against the LATEST checked-out frontend + backend code via 8 parallel read-only agents, each citing concrete file:line/symbol evidence. Verified against current code (not historical commits); features later redesigned or removed on purpose were scored SUPERSEDED-OK, NOT broken (per your 'don't compare discarded features with new ones'). HEADLINE: 0 of 121 resolved issues are actually broken in the latest code (0 regressions, 109 KEPT-and-verified). The complete 'what's not fixed / can't-confirm' list = 12 items: (A) NEEDS A LOOK x1 -- e8cf 'add all FAQ of all features': the recorded resolution note (commit 18f9e94) is about social handles/LAUNCH_README, not the FAQ ask, BUT the FAQ feature itself exists (src/lib/faq-fallback.ts, 15 categories) -> bookkeeping mismatch only, no user-facing gap. (B) CANNOT-VERIFY FROM SOURCE x11 (none are regressions -- resolved outside the code tree or no fix recorded): OpenAI-billing-restored external = 2ce9, 9989, b4e3, 5d00; prod-DB/generated assets = b583 (thumbnails), f9e4 (coach portraits); empty fix desc / null commit = 463e, 9375, 0f79, 300e (meta board test); truncated note no tied commit = d039 (related toast fix b098 IS present). Recommend a live recheck on the OpenAI-dependent ones if you want certainty. Full per-issue evidence table retained in the audit run. No fix-loop code action required beyond optionally re-attaching e8cf's resolution note.",
-        "imagePath": "images/i-20260625-15e6-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260625-15e6-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "719cdc2de5001398007b1ba125a0c40793edf709",
-        "imageCommits": [
-          "719cdc2de5001398007b1ba125a0c40793edf709"
-        ],
-        "fixedAt": "2026-06-25T08:36:12.449Z",
-        "by": "shakeebshaan",
-        "judge": {
-          "score": 96,
-          "bar": 95,
-          "note": "Audit deliverable, not a code fix. All 121 resolved issues re-verified against the CURRENT frontend+backend source (8 parallel read-only agents, file:line evidence per issue). Honored the owner directive: checked latest code, scored intentionally-redesigned/removed features as SUPERSEDED-OK (not broken). Result: 0 regressions. The 'what's not fixed' list = 1 note-mismatch (e8cf, feature actually present) + 11 not-source-verifiable (OpenAI-billing/prod-data/empty-claim), enumerated with reasons."
-        }
-      },
-      "history": [],
-      "needsReview": false
     }
   ]
 }
