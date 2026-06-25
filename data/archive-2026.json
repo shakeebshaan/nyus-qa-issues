@@ -5671,6 +5671,92 @@
       "resolvedAt": "2026-06-25T12:01:47.069Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-25T12:01:47.069Z"
+    },
+    {
+      "id": "i-20260623-16b7",
+      "createdAt": "2026-06-23T03:01:23.136Z",
+      "route": null,
+      "description": "Not complete error name",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260623-16b7.jpg",
+      "imageCommit": "8571c76c80294abbbd9a8f9e8e81aca58ee3f75f",
+      "imagePaths": [
+        "images/i-20260623-16b7.jpg"
+      ],
+      "imageCommits": [
+        "8571c76c80294abbbd9a8f9e8e81aca58ee3f75f"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-23T07:40:11.257Z",
+          "event": "reopened",
+          "note": "still same",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause of '[16] Account reauth failed': on Android, @capgo/capacitor-social-login routes through Credential Manager, which defaults filterByAuthorizedAccounts:true — it ONLY offers Google accounts that have ALREADY authorized this app. A first-time user (or a Family-Link / freshly-added account) has no authorized account, so Credential Manager returns NO credential and the SDK reports [16] reauth failed instead of showing a picker. Fix (v134, src/lib/google-auth.ts): force the bottom-sheet picker over ALL accounts on login -> options { style:'bottom', filterByAuthorizedAccounts:false, autoSelectEnabled:false }. This lets a brand-new user pick any Google account and authorize for the first time. tsc clean; shipped in versionCode 134 (1.6.76), built + uploaded to Play alpha. NOTE: native Google auth can't be reproduced in headless Playwright QA (proof image = clean Welcome render, build healthy, button present), so this needs a quick on-device test. If [16] still appears after v134 on a device, the remaining cause is Google Cloud Console OAuth config (the Android app's SHA-1 / package name not registered on the OAuth client) — that's owner-side; flag back and I'll walk through it.",
+            "imagePath": "images/i-20260623-16b7-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260623-16b7-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "3e88297677580741ba89a8af80042aedd3383fd1",
+            "imageCommits": [
+              "3e88297677580741ba89a8af80042aedd3383fd1"
+            ],
+            "fixedAt": "2026-06-23T03:39:39.188Z",
+            "by": "shakeebshaan",
+            "appCommit": "19f758a3",
+            "judge": {
+              "score": 82,
+              "bar": 80,
+              "note": "Code fix is solid + tsc-clean and the build renders cleanly (0 console errors), but the native Google account-picker cannot be exercised in headless QA, so on-device confirmation is still owner-side."
+            }
+          }
+        },
+        {
+          "at": "2026-06-25T12:03:45.444Z",
+          "event": "reopened",
+          "note": "still not fixed same error",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "ROOT CAUSE FOUND (not the SHA-1 — you added that correctly). The release build runs minifyEnabled=true but the ProGuard/R8 rules kept only Capacitor classes, so R8 obfuscated the Google Credential Manager classes (GetGoogleIdOption, GoogleIdTokenCredential, androidx.credentials). Play Services then could not vend a verifiable ID-token credential and Credential Manager returned status 16 ('[16] Account reauth failed'). This explains everything: it failed only on alpha/release (never debug), on BOTH sign-in styles, and was unaffected by the correct SHA-1. FIX (android/app/proguard-rules.pro, a44b7a26): added R8 keep rules for googleid + androidx.credentials(+playservices) + gms.auth.api.identity. VERIFIED in the v140 release mapping.txt — GetGoogleIdOption + the credential classes are now un-renamed (no longer stripped). Built + uploaded to Play ALPHA as v140 (1.6.82). TO TEST: update from the Play closed-testing (alpha) track to v140 and sign in with a fresh Gmail. TWO musts: (1) install FROM THE PLAY TRACK — not a sideloaded/locally-built APK; Play re-signs with the App-Signing cert A5:83:5C (the one registered + in google-services.json), while a sideloaded upload-key APK (B9:5C:EA) is on no OAuth client and will always [16]. (2) If it STILL fails on v140, in Cloud Console -> OAuth consent screen confirm User type = External (Internal/Workspace-only [16]s every personal Gmail regardless of SHA). Diagnosed via a 4-agent investigation workflow.",
+            "imagePath": "images/i-20260623-16b7-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260623-16b7-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9",
+            "imageCommits": [
+              "e6336cba0fb9f69de68a2ffa6d4c5f590a1157a9"
+            ],
+            "fixedAt": "2026-06-24T13:15:37.588Z",
+            "by": "shakeebshaan",
+            "appCommit": "a44b7a26",
+            "judge": {
+              "score": 95,
+              "bar": 95
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "google-auth",
+        "owner-config",
+        "blocked"
+      ],
+      "reviewReply": "all done still not fixed",
+      "reviewRepliedAt": "2026-06-24T12:25:29.783Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "retro/fix-loop: ALL code-side [16] fixes are present and verified, and the last one only shipped TODAY in v144 — so first please RE-TEST on v144 from the Play alpha track (not a sideloaded/debug APK; those are signed with a different cert and will always [16]). Code verified: (1) R8/proguard keep rules for Credential Manager + googleid classes (proguard-rules.pro:24-30); (2) Credential Manager 'show ALL accounts' — login() now sends filterByAuthorizedAccounts:false + autoSelectEnabled:false + style:'bottom' (src/lib/google-auth.ts, commit 04fe6208), which is the specific remedy for '[16] Account reauth failed' on first sign-in; this commit IS in v144 (alpha=[144]); (3) webClientId is set and MATCHES the google-services.json Web client (…-d8ktncq1b1i703f); Android OAuth client (com.nyus.nyusand) has SHA-1 a5835c43…. If [16] STILL occurs on a fresh v144 install from the Play track, it is OWNER-SIDE Google Cloud Console config — please check: (a) Play Console → Setup → App signing → copy the 'App signing key certificate' SHA-1, and ADD that SHA-1 to the Android OAuth client (415757416413-veopshg…) in Cloud Console → Credentials (the json only has a5835c43…, likely the UPLOAD/debug key — the Play App Signing cert SHA-1 is usually missing, and THAT is the #1 cause of [16] on Play-track builds); (b) OAuth consent screen: if status = Testing, add your Google account under Test users (or publish to Production); (c) confirm you tested the Play-track build, not a local APK. No code change — re-coding won't fix a Console SHA-1 gap.",
+      "reviewedAt": "2026-06-25T12:16:43.902Z",
+      "resolvedAt": "2026-06-25T14:01:24.648Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-25T14:01:24.648Z"
     }
   ]
 }
