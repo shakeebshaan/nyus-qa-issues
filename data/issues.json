@@ -19,10 +19,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "FIX IS DONE + SHIPPED, but I can't pass the new board test gate — and the reason is the gate command, not the fix. (1) Fix (15a47f9c): the coach meal-build now warms the ENRICHED meal decks DURING the prefs sheet — MealPrefsSheet fires onPartialPrefs the instant the 3 chips are answered, CustomDietBuilder prefetches the same deck key the build will request, so by 'Build my meals' the deck is hot = instant (common no-dislikes path; full Skip = baseline key warm at mount = also instant). LIVE on Play alpha v145/1.6.87 (alpha track confirmed [145]) — please re-test there. Its unit tests pass: Screen9c_DietCustomize + custom-plan.suggest = 44 green; tsc clean. (2) GATE BLOCKER (owner action): testGate was turned on 12:04 with testCommand defaulting to 'npm test' = full 'vitest run' with NO path — that includes test/e2e (Playwright), test/integration, test/contract (PACT=1) and test/a11y (needs the 'canvas' npm package: failures are 'getContext() without installing canvas'). Those need servers/PACT-broker/canvas that don't exist in the headless fix-loop env, so the full suite is RED + slow (~39 min) regardless of any fix — it is structurally unsatisfiable here. The red tests (a11y/canvas x12, WorkoutPlanBuilder parallel-pollution flake, onboarding-calc, api-client timeout) are pre-existing + UNRELATED to fd1e. RECOMMEND: set data/loop.json testCommand to a runnable unit scope (e.g. 'npm run test:component' or a curated unit run) instead of the default full 'npm test', OR keep testGate but point it at the unit subset — otherwise every resolve is blocked by infra-dependent suites. I did NOT fake --tests pass and did NOT flip your gate off; your call on the config.",
       "reviewedAt": "2026-06-25T12:53:55.405Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "run the entire onboarding",
+      "reviewRepliedAt": "2026-06-25T14:02:10.004Z",
+      "reviewReplyBy": "shakeebshaan"
     }
   ]
 }
