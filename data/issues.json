@@ -71,7 +71,7 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "google-auth",
@@ -80,7 +80,9 @@
       ],
       "reviewReply": "all done still not fixed",
       "reviewRepliedAt": "2026-06-24T12:25:29.783Z",
-      "reviewReplyBy": "shakeebshaan"
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "retro/fix-loop: ALL code-side [16] fixes are present and verified, and the last one only shipped TODAY in v144 — so first please RE-TEST on v144 from the Play alpha track (not a sideloaded/debug APK; those are signed with a different cert and will always [16]). Code verified: (1) R8/proguard keep rules for Credential Manager + googleid classes (proguard-rules.pro:24-30); (2) Credential Manager 'show ALL accounts' — login() now sends filterByAuthorizedAccounts:false + autoSelectEnabled:false + style:'bottom' (src/lib/google-auth.ts, commit 04fe6208), which is the specific remedy for '[16] Account reauth failed' on first sign-in; this commit IS in v144 (alpha=[144]); (3) webClientId is set and MATCHES the google-services.json Web client (…-d8ktncq1b1i703f); Android OAuth client (com.nyus.nyusand) has SHA-1 a5835c43…. If [16] STILL occurs on a fresh v144 install from the Play track, it is OWNER-SIDE Google Cloud Console config — please check: (a) Play Console → Setup → App signing → copy the 'App signing key certificate' SHA-1, and ADD that SHA-1 to the Android OAuth client (415757416413-veopshg…) in Cloud Console → Credentials (the json only has a5835c43…, likely the UPLOAD/debug key — the Play App Signing cert SHA-1 is usually missing, and THAT is the #1 cause of [16] on Play-track builds); (b) OAuth consent screen: if status = Testing, add your Google account under Test users (or publish to Production); (c) confirm you tested the Play-track build, not a local APK. No code change — re-coding won't fix a Console SHA-1 gap.",
+      "reviewedAt": "2026-06-25T12:16:43.902Z"
     },
     {
       "id": "i-20260625-fd1e",
