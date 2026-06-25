@@ -5629,6 +5629,48 @@
       "resolvedAt": "2026-06-25T11:58:33.271Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-25T11:58:33.271Z"
+    },
+    {
+      "id": "i-20260625-56a7",
+      "createdAt": "2026-06-25T07:26:46.522Z",
+      "route": null,
+      "description": "Only 3 exercise not exercise video plan button, not building the workout plan correctly",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260625-56a7.jpg",
+      "imageCommit": "2f701fd4ceb16c446847ff60422b915d4e58ae68",
+      "imagePaths": [
+        "images/i-20260625-56a7.jpg"
+      ],
+      "imageCommits": [
+        "2f701fd4ceb16c446847ff60422b915d4e58ae68"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the /ai/suggest-workout-day short-day top-up only fired 'if len(picked)<6 AND exclude_ids', so Day 1 (no sibling exclusions) was never topped up — the tier gate dropped the focus day to 3 (all push). Fix (backend a7a1053, deployed): top up ANY short day, re-selecting from the broader pre-gate pool + re-gating extras to the 6-movement target. Verified live: upper-body Day 1 now returns 6 balanced exercises (Push-Up/Bench/Pull-Up/Chin-Up/Spider Curl/Decline Press — push+pull+arms), not 3 all-press.",
+        "imagePath": "images/i-20260625-56a7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260625-56a7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "32be81531853a5e2355cbdb1dcfb5421bc015040",
+        "imageCommits": [
+          "32be81531853a5e2355cbdb1dcfb5421bc015040"
+        ],
+        "fixedAt": "2026-06-25T07:49:52.091Z",
+        "by": "shakeebshaan",
+        "appCommit": "a7a1053",
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Root-caused + deployed + verified LIVE on the real endpoint (3->6 exercises, breadth fixed). Proof is a faithful render of the live API response, which the onboarding builder renders verbatim (driving the deep mid-onboarding builder UI is impractical)."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-06-25T12:01:47.069Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-25T12:01:47.069Z"
     }
   ]
 }
