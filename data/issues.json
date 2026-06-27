@@ -26,6 +26,33 @@
       "reviewReply": "run the entire onboarding",
       "reviewRepliedAt": "2026-06-25T14:02:10.004Z",
       "reviewReplyBy": "shakeebshaan"
+    },
+    {
+      "id": "i-20260627-gsex",
+      "createdAt": "2026-06-27T09:47:11.600Z",
+      "route": "/onboarding/flow",
+      "description": "[Claude-raised] Onboarding pre-selects Gender=Male and never requires a choice; gender drives BMR (biological_sex uncollected -> fallback), so non-male users who do not change it get male-BMR calorie targets (~166 kcal high).",
+      "author": "claude",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "S6 first-time-UX walk (fresh account, current always-custom release). Flow is otherwise clean (0 console errors, clear gating helpers, good screens). One precision/data-quality concern worth your call:\n\nFINDING: The Basics step PRE-SELECTS Gender=Male (OnboardingFlow.tsx:256 inits gender:\"male\") and Continue gates only on NAME — line 714 never marks gender missing because it already holds a valid default. Gender is \"identity-only since v5\", BUT BMR still uses biological_sex ?? gender (onboarding-calc.ts:48; PlanReadyOverview.tsx:181), and biological_sex is NEVER collected in the condensed onboarding (stays null, line 257). So gender is the EFFECTIVE BMR sex.\n\nIMPACT: a female/other first-timer who does not change the pre-selected Male gets a male-BMR calorie target (~166 kcal too high, Mifflin-St Jeor sex term). For a precision-branded app this silently skews non-male users targets.\n\nOPTIONS (your product/UX call): (a) do NOT pre-select gender + gate Continue on an explicit choice (most accurate; small flow change); (b) collect biological_sex explicitly (the v5 design intent) so BMR does not depend on the identity-gender fallback; (c) keep the default if acceptable for onboarding speed.\n\nI did NOT silently change it — it touches shipped onboarding gating + the v5 biological_sex design, so it is your decision.",
+      "reviewedAt": "2026-06-27T09:47:11.600Z",
+      "reviewedBy": "claude",
+      "reviewReply": null,
+      "reviewRepliedAt": null,
+      "reviewReplyBy": null,
+      "tags": [
+        "onboarding",
+        "data-quality",
+        "product-decision"
+      ]
     }
   ]
 }
