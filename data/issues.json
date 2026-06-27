@@ -53,6 +53,33 @@
         "data-quality",
         "product-decision"
       ]
+    },
+    {
+      "id": "i-20260627-purp",
+      "createdAt": "2026-06-27T19:47:14.574Z",
+      "route": null,
+      "description": "[Claude-raised] domain-purple design token renders CYAN, not purple. src/index.css --domain-purple is `190 50% 58%` (hue 190) and the whole d-purple oklch scale uses hue ~195 — both cyan/teal. But the design system (CLAUDE.md) specifies the AI/coaching domain = purple `263 50% 58%`. Net: every AI/coaching surface (coach cards, AI plan buttons, the Suggestions tip button) renders cyan-teal, near-indistinguishable from the teal/health domain (hue 166-175), which collapses two of the four domain colors into one hue.",
+      "author": "claude",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "DESIGN/BRAND DECISION NEEDED (owner-only, not changing unilaterally). Is the cyan d-purple intentional (a rebrand of the AI/coaching color away from 263 purple) or a token bug? If INTENTIONAL: I will update the CLAUDE.md design context (it still documents purple 263) so docs match. If a BUG: I will restore --domain-purple to hue ~263 + regenerate the scale, then re-verify all AI surfaces + contrast. Either way teal(166-175) and purple(currently 190) are too close to read as distinct domains. Tell me which and I will execute.",
+      "reviewedAt": "2026-06-27T19:47:14.575Z",
+      "reviewedBy": "claude",
+      "reviewReply": null,
+      "reviewRepliedAt": null,
+      "reviewReplyBy": null,
+      "tags": [
+        "design",
+        "tokens",
+        "a11y"
+      ]
     }
   ]
 }
