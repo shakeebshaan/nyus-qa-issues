@@ -206,6 +206,17 @@
     cursor: pointer; padding: 10px 16px; min-height: 44px;
   }
   .linkbtn:active { opacity: .6; }
+  /* Clickable report/external link on a card (e.g. daily-ops report page) */
+  .report-cta {
+    display: inline-flex; align-items: center; gap: 7px; margin: 10px 0 2px;
+    padding: 10px 16px; min-height: 44px; border-radius: 10px;
+    background: var(--accent-soft); color: var(--accent-ink);
+    font-size: 13.5px; font-weight: 700; text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .report-cta:hover { border-color: var(--accent); }
+  .report-cta:active { opacity: .7; }
+  .report-cta .arr { font-size: 15px; line-height: 1; }
   #arch h2 {
     font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
     color: var(--muted); margin: 18px 2px 12px;
@@ -822,6 +833,7 @@ function cardHtml(it, archived) {
         <h3>Issue</h3>
         ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot", it.imagePrivate)}
         <p class="desc">${esc(it.description)}</p>
+        ${it.link ? `<a class="report-cta" href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.linkLabel || "View report")} <span class="arr">&rarr;</span></a>` : ""}
         ${it.author ? `<div class="card-tags">${actorHtml(it.author, "filed by")}</div>` : ""}
         ${tagsHtml}
       </div>
