@@ -217,4 +217,23 @@ def _eng(c):
             "waitlist_signups": safe("SELECT COUNT(*) FROM waitlist_signups")}
 metric("engagement_extra", _eng)
 
+# ---- Experiments (A/B) ----
+def _experiments(c):
+    def safe(sql):
+        try: return q1(c, sql)
+        except Exception: return None
+    return {"active": safe("SELECT COUNT(DISTINCT experiment_id) FROM user_experiment_assignments"),
+            "assignments": safe("SELECT COUNT(*) FROM user_experiment_assignments"),
+            "defined_active": safe("SELECT COUNT(*) FROM notification_experiments WHERE status='active'")}
+metric("experiments", _experiments)
+
+# ---- GDPR / privacy (table exists) ----
+def _gdpr(c):
+    def safe(sql):
+        try: return q1(c, sql)
+        except Exception: return None
+    return {"requests_30d": safe("SELECT COUNT(*) FROM admin_gdpr_requests WHERE created_at >= NOW()-INTERVAL 30 DAY"),
+            "open": safe("SELECT COUNT(*) FROM admin_gdpr_requests WHERE status NOT IN ('completed','closed','resolved')")}
+metric("gdpr", _gdpr)
+
 print(json.dumps(out, default=str))
