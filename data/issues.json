@@ -295,33 +295,6 @@
       ]
     },
     {
-      "id": "i-20260628-mt-aiaccuracy",
-      "createdAt": "2026-06-28T19:38:10.729Z",
-      "route": null,
-      "description": "[Metrics setup] AI accuracy / hallucination eval harness — unlocks 'hallucination rate' + 'factual accuracy' (AI, priority H). This is a BUILD, not a credential: a periodic job that scores AI answers against ground truth (BMR/TDEE/macro/nutrition facts we can compute deterministically) and logs a correctness %. DECISION FOR YOU: approve me to build a small eval harness (a fixed Q&A set of health-fact questions -> ask the coach -> grade vs computed truth -> store a daily accuracy/hallucination %). It runs against the existing AI with no new credentials. Reply 'build it' and I'll ship it as a loop. (Until then these two metrics stay 'awaiting'; everything else AI-related — latency p50/p95, cost, error rate, tokens, safety flags — is already LIVE from llm_interaction_logs.)",
-      "author": "claude",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Owner replied 'Build it'. Already built last tick — metrics_ai_eval.py exists on prod (confirmed via SSH ls), runs daily, AI factual accuracy = 100% (8/8 health-fact Qs) LIVE on Metrics tab. No further build needed. Safe to Resolve.",
-      "reviewedAt": "2026-06-28T21:45:29.720Z",
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Build it",
-      "reviewRepliedAt": "2026-06-28T20:59:27.339Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "metrics",
-        "setup",
-        "ai"
-      ]
-    },
-    {
       "id": "i-20260628-mt-social",
       "createdAt": "2026-06-28T19:38:10.729Z",
       "route": null,
