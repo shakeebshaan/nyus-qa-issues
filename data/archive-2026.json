@@ -5757,6 +5757,36 @@
       "resolvedAt": "2026-06-25T14:01:24.648Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-25T14:01:24.648Z"
+    },
+    {
+      "id": "i-20260627-gsex",
+      "createdAt": "2026-06-27T09:47:11.600Z",
+      "route": "/onboarding/flow",
+      "description": "[Claude-raised] Onboarding pre-selects Gender=Male and never requires a choice; gender drives BMR (biological_sex uncollected -> fallback), so non-male users who do not change it get male-BMR calorie targets (~166 kcal high).",
+      "author": "claude",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Shipped: the biological_sex onboarding field + BMR sex-precedence fix (option B) is now live on the Play ALPHA track as v150/1.6.92 (alpha track confirmed [150]), alongside the rest of the batch. Testable on alpha now. Locked by tests on both halves (FE onboarding-calc/findMissingCritical + backend calculate_full_plan). Awaiting your Resolve verdict.",
+      "reviewedAt": "2026-06-28T03:30:37.940Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "B",
+      "reviewRepliedAt": "2026-06-27T12:26:11.845Z",
+      "reviewReplyBy": "shakeebshaan",
+      "tags": [
+        "onboarding",
+        "data-quality",
+        "product-decision"
+      ],
+      "resolvedAt": "2026-06-28T14:20:03.129Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-28T14:20:03.129Z"
     }
   ]
 }
