@@ -163,33 +163,6 @@
       "reportLabel": "Open contrast fix proof (before/after)"
     },
     {
-      "id": "i-20260628-hdls",
-      "createdAt": "2026-06-28T18:57:29.345Z",
-      "route": null,
-      "description": "[Claude-raised] Durable QA-loop fallback is OFF. The Windows scheduled task \"NYUS QA Fix Loop\" (headless fallback that runs a tick every 30 min and survives this chat closing / hitting limits) is currently DISABLED — last ran 2026-06-20 (exit 0, healthy). Right now the in-session /loop is the ONLY runner: if this Claude Code session closes, ZERO ticks run = no QA-fix coverage until reopened. The task was fixed to run headless on 2026-06-20 (pure-ASCII + --model sonnet-4-6, verified exit 0), so it should work if re-enabled. DECISION (yours, cost-related - it spends tokens autonomously every 30 min): re-enable via PowerShell  Enable-ScheduledTask -TaskName \"NYUS QA Fix Loop\"  , or leave off for in-session-only. ALSO RESOLVED: last release tick hit a v153 versionCode collision - confirmed it was parallel work pushed from another machine (Google account-chooser auth fix 32433977), NOT a tick-lock bug; tick.ps1 lock logic is correct; shipped unified v154 to alpha so nothing stranded.",
-      "author": "claude",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "DONE. Owner said 'Fix loop'. Re-enabled 'NYUS QA Fix Loop' scheduled task via Enable-ScheduledTask. Task state confirmed Running (last run 2026-06-28 21:26:44). The headless 30-min fallback is now active — ticks run every 30 min even if this session closes. Safe to Resolve.",
-      "reviewedAt": "2026-06-28T21:44:50.552Z",
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Fix loop",
-      "reviewRepliedAt": "2026-06-28T20:43:31.124Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "process",
-        "reliability",
-        "infra"
-      ]
-    },
-    {
       "id": "i-20260628-mt-gsc",
       "createdAt": "2026-06-28T19:38:10.729Z",
       "route": null,
