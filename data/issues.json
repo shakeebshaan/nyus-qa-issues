@@ -19,12 +19,12 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Did what you asked — ran the ENTIRE release onboarding end-to-end (always-custom path, automated walk). Findings: (1) biological_sex gate works (Continue disabled before a sex is picked, enabled after); (2) workout build ~4s, fine; (3) DIET build = 44-58s = your 'waiting here for too long'. Root cause: the coach 'build it all' fires its meal slots CONCURRENTLY, but the /ai/suggest-meal LLM endpoint throttles concurrent calls to ~the slowest single call, so all meals apply BUNCHED at the very end — the macro bars sat at 0/target and the button label froze on 'Building your meals...' the whole ~44s = reads as hung. (The count:20->8 tuning already landed; the duration is backend-throttle-bound.) FIX shipped (commit 9956a668, pushed to main): the blurred build screen now cycles a staged progress label — 'Reading your goals...' -> 'Picking your meals...' -> 'Balancing your macros...' -> 'Plating it up...' -> 'Finishing your plan...' (7s/stage) — so the wait visibly progresses instead of looking frozen. Verified by re-walking onboarding: at ~9s it shows 'Picking your meals...', at ~30s 'Finishing your plan...', the build completes (macros fill), 0 console errors. OPEN QUESTION for you: this fixes the FELT wait, not the 44s itself. The real speedup (prefetch-warm reliability + the endpoint's concurrency throttle) is a deeper backend effort — want me to take that on next, or is the perceived-progress fix enough for now? (I can't click Resolve myself — the board testGate requires a green full 'npm test', infra-blocked headless. Please Resolve if the progress fix suffices, or direct me on the backend speedup.)",
       "reviewedAt": "2026-06-28T15:31:05.418Z",
       "reviewedBy": "shakeebshaan",
-      "reviewReply": "run the entire onboarding",
-      "reviewRepliedAt": "2026-06-25T14:02:10.004Z",
+      "reviewReply": "run the entire onboarding, where are the screenshots",
+      "reviewRepliedAt": "2026-06-28T20:52:32.770Z",
       "reviewReplyBy": "shakeebshaan"
     },
     {
