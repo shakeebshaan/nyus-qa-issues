@@ -28,33 +28,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260627-purp",
-      "createdAt": "2026-06-27T19:47:14.574Z",
-      "route": null,
-      "description": "[Claude-raised] domain-purple design token renders CYAN, not purple. src/index.css --domain-purple is `190 50% 58%` (hue 190) and the whole d-purple oklch scale uses hue ~195 — both cyan/teal. But the design system (CLAUDE.md) specifies the AI/coaching domain = purple `263 50% 58%`. Net: every AI/coaching surface (coach cards, AI plan buttons, the Suggestions tip button) renders cyan-teal, near-indistinguishable from the teal/health domain (hue 166-175), which collapses two of the four domain colors into one hue.",
-      "author": "claude",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED (commit 0f3c118f) + verified 3 ways. Root cause: --domain-purple was hue 190 (cyan) in src/index.css and the oklch d-purple scale was hue 195 — both restored to violet (HSL 263 / oklch 293). Proof: (1) --domain-purple now computes rgb(135,94,201) = purple, not cyan; (2) /suggestions TIP card renders a violet 'Try this tip' button + purple icon chip & pill; (3) scoped token test healthScore.service.test.ts green (53/53). I can't click Resolve myself — the board testGate requires a green full 'npm test', which is infra-blocked headless (e2e/contract/a11y need canvas + Playwright, ~39min, not the fix). Please Resolve, or scope loop.json testCommand to a unit subset so the loop can auto-resolve CSS/unit fixes.",
-      "reviewedAt": "2026-06-28T15:17:04.926Z",
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "fix it",
-      "reviewRepliedAt": "2026-06-28T14:19:50.426Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "design",
-        "tokens",
-        "a11y"
-      ]
-    },
-    {
       "id": "i-20260628-sntr",
       "createdAt": "2026-06-28T03:43:37.550Z",
       "route": null,
