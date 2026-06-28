@@ -134,6 +134,33 @@
         "contrast",
         "design-system"
       ]
+    },
+    {
+      "id": "i-20260628-hdls",
+      "createdAt": "2026-06-28T18:57:29.345Z",
+      "route": null,
+      "description": "[Claude-raised] Durable QA-loop fallback is OFF. The Windows scheduled task \"NYUS QA Fix Loop\" (headless fallback that runs a tick every 30 min and survives this chat closing / hitting limits) is currently DISABLED — last ran 2026-06-20 (exit 0, healthy). Right now the in-session /loop is the ONLY runner: if this Claude Code session closes, ZERO ticks run = no QA-fix coverage until reopened. The task was fixed to run headless on 2026-06-20 (pure-ASCII + --model sonnet-4-6, verified exit 0), so it should work if re-enabled. DECISION (yours, cost-related - it spends tokens autonomously every 30 min): re-enable via PowerShell  Enable-ScheduledTask -TaskName \"NYUS QA Fix Loop\"  , or leave off for in-session-only. ALSO RESOLVED: last release tick hit a v153 versionCode collision - confirmed it was parallel work pushed from another machine (Google account-chooser auth fix 32433977), NOT a tick-lock bug; tick.ps1 lock logic is correct; shipped unified v154 to alpha so nothing stranded.",
+      "author": "claude",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Process/cost decision: re-enable the disabled headless QA-loop fallback (autonomous 30-min ticks) or keep in-session-only? Enable command in the description.",
+      "reviewedAt": "2026-06-28T18:57:29.345Z",
+      "reviewedBy": "claude",
+      "reviewReply": null,
+      "reviewRepliedAt": null,
+      "reviewReplyBy": null,
+      "tags": [
+        "process",
+        "reliability",
+        "infra"
+      ]
     }
   ]
 }
