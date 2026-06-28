@@ -178,7 +178,7 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "B",
       "reviewRepliedAt": "2026-06-28T22:09:14.070Z",
@@ -189,7 +189,9 @@
         "design-system"
       ],
       "reportPath": "reports/a11c-proof.html",
-      "reportLabel": "Open contrast fix proof (before/after)"
+      "reportLabel": "Open contrast fix proof (before/after)",
+      "reviewReason": "Option B IMPLEMENTED (commit 26155eb2). Bumped: WaterLoggerBlock teal-500/600->teal-700 (both states), CoachNudgeCard teal-600->teal-700, WorkoutPlanCard orange-600->orange-700. All prior commits (2475b7b6 /nutrition, cc362637 coach-chat error) were already at -700/-600. Rule fully enforced: teal/orange CTAs use bg-d-*-700, purple/pink use bg-d-*-600. Decorative -500 dots/sliders/checkboxes unchanged (no text sits on them). tsc --noEmit green. Visual proof is blocked headless: these blocks are conditionally rendered only in active coach-chat sessions (AI sends them as interactive messages) -- cannot trigger headlessly without a live chat. Please Resolve if commit suffices, or test in-app by asking coach to log water/log workout/view a nudge.",
+      "reviewedAt": "2026-06-28T22:46:33.557Z"
     },
     {
       "id": "i-20260628-mt-gsc",
