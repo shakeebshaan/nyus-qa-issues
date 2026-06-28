@@ -248,6 +248,17 @@
   }
   .shot img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .desc { margin: 10px 2px 0; font-size: 14.5px; white-space: pre-wrap; word-break: break-word; }
+  /* 831e: structured description — step list + option radios */
+  .desc-steps { margin: 8px 2px 0; padding-left: 22px; font-size: 13.5px; line-height: 1.5; color: var(--ink); }
+  .desc-steps li { margin: 6px 0; padding-left: 3px; }
+  .desc-steps li::marker { color: var(--accent-ink); font-weight: 700; }
+  .desc-opts { display: flex; flex-direction: column; gap: 8px; margin: 12px 2px 0; }
+  .opt-radio { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 11px; cursor: pointer; font-size: 13.5px; line-height: 1.45; background: var(--card); transition: border-color .15s, background .15s; }
+  .opt-radio:hover { border-color: var(--accent); }
+  .opt-radio:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .opt-radio input { margin-top: 3px; width: 17px; height: 17px; accent-color: var(--accent); flex: 0 0 auto; }
+  .opt-radio b { color: var(--accent-ink); }
+  .opt-hint { font-size: 11.5px; color: var(--muted); margin-top: 2px; padding-left: 2px; }
   .await {
     height: clamp(260px, 58vw, 400px); border: 1.5px dashed var(--line); border-radius: 12px;
     display: grid; place-items: center; color: var(--muted); font-size: 13.5px;
@@ -700,6 +711,41 @@ function goalBadgesHtml(fix) {
 
 /* ── utils ─────────────────────────────────────────────── */
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// i-20260628-831e: render issue descriptions structured — numbered "(1)…(2)…"
+// runs become a bullet/step list; "(A)…(B)…" choices become selectable RADIOS
+// that pre-fill the Respond box with the picked letter. Falls back to a plain
+// paragraph when no structure is detected.
+function formatDesc(raw, id) {
+  if (!raw) return "";
+  let head = String(raw), optsHtml = "";
+  const letters = [...head.matchAll(/\(([A-F])\)/g)];
+  const distinct = [...new Set(letters.map((m) => m[1]))];
+  if (distinct.length >= 2) {
+    const firstAt = letters[0].index;
+    const block = head.slice(firstAt);
+    head = head.slice(0, firstAt).trim();
+    const parts = block.split(/(?=\([A-F]\)\s)/).filter((s) => s.trim());
+    const opts = parts.map((p) => {
+      const m = p.match(/^\(([A-F])\)\s*([\s\S]*)$/);
+      if (!m) return "";
+      return `<label class="opt-radio"><input type="radio" name="opt-${esc(id)}" value="${esc(m[1])}"><span><b>${esc(m[1])}.</b> ${esc(m[2].trim())}</span></label>`;
+    }).join("");
+    if (opts) optsHtml = `<div class="desc-opts" data-opts="${esc(id)}">${opts}<div class="opt-hint">Pick one → opens your response pre-filled</div></div>`;
+  }
+  let stepsHtml = "";
+  const nums = [...head.matchAll(/\((\d+)\)/g)];
+  if (nums.length >= 2) {
+    const firstAt = nums[0].index;
+    const pre = head.slice(0, firstAt).trim();
+    const block = head.slice(firstAt);
+    const items = block.split(/(?=\(\d+\)\s)/).filter((s) => s.trim());
+    const lis = items.map((s) => { const m = s.match(/^\(\d+\)\s*([\s\S]*)$/); return m ? `<li>${esc(m[1].trim())}</li>` : ""; }).join("");
+    stepsHtml = (pre ? `<p class="desc">${esc(pre)}</p>` : "") + `<ol class="desc-steps">${lis}</ol>`;
+    head = "";
+  }
+  const headHtml = head.trim() ? `<p class="desc">${esc(head.trim())}</p>` : "";
+  return headHtml + stepsHtml + optsHtml;
+}
 function b64encodeUtf8(str) {
   const bytes = new TextEncoder().encode(str);
   let bin = "";
@@ -977,7 +1023,7 @@ function cardHtml(it, archived) {
       <div class="side">
         <h3>Issue</h3>
         ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot", it.imagePrivate)}
-        <p class="desc">${esc(it.description)}</p>
+        ${formatDesc(it.description, it.id)}
         ${it.reportPath
           ? `<button type="button" class="report-cta" data-report-path="${esc(it.reportPath)}" data-report-label="${esc(it.reportLabel || "Open report")}">📄 ${esc(it.reportLabel || "Open report")} <span class="arr">&rarr;</span></button>`
           : it.link ? `<a class="report-cta" href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.linkLabel || "View report")} <span class="arr">&rarr;</span></a>` : ""}
@@ -1579,6 +1625,13 @@ function openRespond(id) {
   $("reply-text").focus();
 }
 $("respond-cancel").addEventListener("click", () => $("respond-dialog").close());
+// 831e: picking an option radio opens the Respond dialog pre-filled with the letter.
+document.addEventListener("change", (ev) => {
+  const r = ev.target.closest && ev.target.closest(".desc-opts input[type=radio]");
+  if (!r) return;
+  const id = r.closest(".desc-opts").dataset.opts;
+  if (id) { openRespond(id); $("reply-text").value = r.value; $("reply-text").focus(); }
+});
 $("respond-save").addEventListener("click", async (ev) => {
   const id = respondTargetId;
   const reply = $("reply-text").value.trim();
