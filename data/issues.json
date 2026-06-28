@@ -80,6 +80,33 @@
         "tokens",
         "a11y"
       ]
+    },
+    {
+      "id": "i-20260628-sntr",
+      "createdAt": "2026-06-28T03:43:37.550Z",
+      "route": null,
+      "description": "[Claude-raised] Frontend Sentry crash reporting is DISABLED in production. .env.production has VITE_SENTRY_DSN= (blank); Vite inlines it as an empty string at build time, so initSentry() (src/lib/sentry.ts:26) hits `if(!dsn) return` and the WHOLE Sentry init -- including the `nyus-frontend@<version>` release tag -- is tree-shaken out. Verified on the v150 dist just shipped: no Sentry init, no release literal anywhere. Net: React render crashes / FE runtime errors are NOT reported in production, and the release-tagging work (commit 2dba89c6) has zero effect. .env.example says prod builds should always set a DSN, so this looks like an unfilled-credential oversight, not intent.",
+      "author": "claude",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "OWNER-ONLY (needs the real Sentry DSN). Two paths: (1) ENABLE -- paste the frontend browser DSN from sentry.io (Settings > Projects > nyus > Client Keys) into VITE_SENTRY_DSN in .env.production, then a rebuild + cap sync (next release) starts capturing FE crashes and correlating them to the release tag. The DSN is inlined into the public web bundle -- that is normal/expected for a Sentry browser DSN. (2) INTENTIONALLY OFF -- if you rely only on the backend discord errors channel and do not want FE Sentry, confirm and I will note it in docs and stop flagging. Backend error logging (discord_logger) is unaffected either way.",
+      "reviewedAt": "2026-06-28T03:43:37.550Z",
+      "reviewedBy": "claude",
+      "reviewReply": null,
+      "reviewRepliedAt": null,
+      "reviewReplyBy": null,
+      "tags": [
+        "observability",
+        "release",
+        "owner-config"
+      ]
     }
   ]
 }
