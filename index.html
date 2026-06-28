@@ -583,6 +583,10 @@ const PRIV_OWNER = QA.PRIV_OWNER, PRIV_REPO = QA.PRIV_REPO, PRIV_BRANCH = QA.PRI
 const PRIV_API = `https://api.github.com/repos/${PRIV_OWNER}/${PRIV_REPO}`;
 const privImgCache = new Map(); // path -> data URI | null
 const privReportCache = new Map(); // path -> decoded HTML string | null
+// Private-content caches are keyed by path only, so a token change must flush them:
+// otherwise a stale-token failure (cached null) blocks a retry after the token is
+// fixed, and content fetched under one token could surface under another.
+function clearPrivCaches() { privImgCache.clear(); privReportCache.clear(); }
 const $ = (id) => document.getElementById(id);
 
 let db = null;          // parsed issues.json
@@ -675,21 +679,33 @@ async function fetchPrivReport(path) {
     return null;
   }
 }
-// Render a private report inline in a sandboxed iframe (sandbox="" → no scripts,
-// no same-origin: the report can NEVER read the parent's token or call out).
+// Defence-in-depth CSP injected into every rendered report. The bare `sandbox`
+// attribute already blocks ALL scripts and forces an opaque origin (so a report
+// can never execute JS or read the parent's token — verified empirically). This
+// CSP additionally blocks external sub-resource loads (img/css/font beacons),
+// closing the last "phone home" vector if the private store were ever tampered
+// with. Reports are self-contained (inline <style> only), so nothing breaks.
+const REPORT_CSP = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:; base-uri 'none'; form-action 'none'">`;
+const stubDoc = (msg) => `<!doctype html><meta charset=utf-8>${REPORT_CSP}<body style="font-family:system-ui;color:#6b6b6b;padding:48px 22px;text-align:center">${msg}</body>`;
+// Render a private report inline. sandbox="" (bare) = no scripts + opaque origin;
+// the REPORT_CSP above adds sub-resource lockdown. The report can neither read the
+// parent token nor call out.
 async function openReport(path, label) {
   $("rv-title").textContent = label || "Report";
   const frame = $("rv-frame");
   if (!token) { openSettings("Connect your token to view this private report."); return; }
   frame.removeAttribute("srcdoc");
-  frame.srcdoc = `<!doctype html><meta charset=utf-8><body style="font-family:system-ui;color:#6b6b6b;padding:48px 22px;text-align:center">Loading report…</body>`;
+  frame.srcdoc = stubDoc("Loading report…");
   $("report-viewer").showModal();
   const html = await fetchPrivReport(path);
   if (html == null) {
-    frame.srcdoc = `<!doctype html><meta charset=utf-8><body style="font-family:system-ui;color:#6b6b6b;padding:48px 22px;text-align:center">Couldn't load this report — your token may lack access to the private store.</body>`;
+    frame.srcdoc = stubDoc("Couldn't load this report — your token may lack access to the private store.");
     return;
   }
-  frame.srcdoc = html;
+  // Inject the CSP into the report's <head> (fallback: prepend) before rendering.
+  frame.srcdoc = /<head[^>]*>/i.test(html)
+    ? html.replace(/<head[^>]*>/i, (m) => m + REPORT_CSP)
+    : REPORT_CSP + html;
 }
 async function resolvePrivImages() {
   const imgs = document.querySelectorAll("img[data-priv-path]:not(.priv-loaded)");
@@ -1133,6 +1149,7 @@ $("chip-conn").addEventListener("click", () => openSettings());
 $("tok-close").addEventListener("click", () => $("settings").close());
 $("tok-forget").addEventListener("click", () => {
   token = ""; localStorage.removeItem("qaToken");
+  clearPrivCaches();
   connState(false); $("token").value = "";
   $("tok-state").textContent = "Token forgotten."; $("tok-state").className = "tok-state";
 });
@@ -1143,6 +1160,7 @@ $("tok-save").addEventListener("click", async () => {
   try {
     const login = await testToken(t);
     token = t; localStorage.setItem("qaToken", t);
+    clearPrivCaches();
     connState(true, login);
     $("tok-state").textContent = "Connected as " + login + " ✓";
     $("tok-state").className = "tok-state ok";
