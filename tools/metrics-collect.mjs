@@ -55,15 +55,20 @@ async function ga4Token(sa) {
   const signed = `${b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64url(JSON.stringify(claim))}`;
   const sig = createSign("RSA-SHA256").update(signed).end().sign(sa.private_key);
   const jwt = `${signed}.${sig.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
-  const r = await fetch("https://oauth2.googleapis.com/token", { method: "POST",
+  const r = await fetchT("https://oauth2.googleapis.com/token", { method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}` });
   const j = await r.json();
   if (!j.access_token) throw new Error("ga4 token: " + JSON.stringify(j).slice(0, 120));
   return j.access_token;
 }
+async function fetchT(url, opt = {}, ms = 25000) {
+  const ac = new AbortController();
+  const t = setTimeout(() => ac.abort(), ms);
+  try { return await fetch(url, { ...opt, signal: ac.signal }); } finally { clearTimeout(t); }
+}
 async function ga4Run(token, body) {
-  const r = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY}:runReport`,
+  const r = await fetchT(`https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY}:runReport`,
     { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(body) });
   return r.json();
 }
@@ -258,14 +263,14 @@ writeFileSync(tmp, payload);
 const PRIV = cfg("privRepo", process.env.QA_PRIV_REPO || "");
 if (!PRIV) { console.error("No private repo configured (metrics.config.local.json privRepo). metrics.json kept at tmp/."); process.exit(1); }
 const PRIV_PATH = "data/metrics.json";
-function ghJson(args) { return JSON.parse(execFileSync("gh", args, { encoding: "utf8", maxBuffer: 16 << 20 })); }
+function ghJson(args) { return JSON.parse(execFileSync("gh", args, { encoding: "utf8", maxBuffer: 16 << 20, timeout: 45000 })); }
 try {
   let sha;
   try { sha = ghJson(["api", `repos/${PRIV}/contents/${PRIV_PATH}`]).sha; } catch { /* new file */ }
   const b64 = Buffer.from(payload).toString("base64");
   const body = join(ROOT, "tmp", "metrics-put.json");
   writeFileSync(body, JSON.stringify({ message: `metrics: refresh ${metrics.generatedAt}`, content: b64, ...(sha ? { sha } : {}) }));
-  execFileSync("gh", ["api", "--method", "PUT", `repos/${PRIV}/contents/${PRIV_PATH}`, "--input", body], { encoding: "utf8" });
+  execFileSync("gh", ["api", "--method", "PUT", `repos/${PRIV}/contents/${PRIV_PATH}`, "--input", body], { encoding: "utf8", timeout: 45000 });
   console.log(`metrics.json -> PRIVATE ${PRIV}:${PRIV_PATH} | ${total} metrics (${liveCount} live, ${awaitingCount} awaiting) | db=${metrics.sources.db} ga4=${metrics.sources.ga4} health=${metrics.sources.health}`);
 } catch (e) {
   console.error("PRIVATE upload failed (metrics.json kept at tmp/):", String(e.message || e).slice(0, 160));
