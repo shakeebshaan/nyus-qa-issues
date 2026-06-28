@@ -1,0 +1,277 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>How Onboarding Builds Your Plan — NYUS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:hsl(36 20% 98%); --ink:hsl(20 14% 12%); --soft:hsl(20 8% 38%); --line:hsl(30 12% 88%);
+  --card:#fff;
+  --teal:hsl(166 70% 38%); --teal-bg:hsl(166 55% 95%);
+  --purple:hsl(263 50% 52%); --purple-bg:hsl(263 50% 96%);
+  --orange:hsl(20 90% 50%); --orange-bg:hsl(28 90% 95%);
+  --pink:hsl(340 65% 52%); --pink-bg:hsl(340 65% 96%);
+  --good:hsl(150 60% 36%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);max-width:1080px;width:100%;margin:0 auto;padding:40px 40px 64px;line-height:1.5}
+.head{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:14px}
+.head h1{font-size:32px;letter-spacing:-.02em;font-weight:800;line-height:1.1}
+.head .sub{color:var(--soft);font-size:15px;margin-top:8px;max-width:760px}
+.badge{display:inline-block;background:var(--ink);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase;vertical-align:middle;margin-left:8px}
+.note{background:var(--teal-bg);border-left:3px solid var(--teal);padding:12px 16px;border-radius:0 10px 10px 0;font-size:13.5px;color:hsl(166 40% 22%);margin:16px 0}
+h2.sec{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin:38px 0 16px;font-weight:700;display:flex;align-items:center;gap:10px}
+h2.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.dom{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.03em}
+.dom.di{background:var(--pink-bg);color:var(--pink)} .dom.wo{background:var(--purple-bg);color:var(--purple)}
+.dom.ac{background:var(--orange-bg);color:var(--orange)} .dom.td{background:var(--teal-bg);color:var(--teal)}
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.q .qh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.q .qn{font-size:13px;font-weight:800;color:var(--teal);min-width:24px}
+.q .qt{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.q .vals{font-size:12.5px;color:var(--soft);margin:5px 0 0 34px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.q ul{margin:12px 0 2px 34px;padding:0;list-style:none}
+.q li{font-size:13.5px;margin:7px 0;padding-left:18px;position:relative;color:hsl(20 10% 22%)}
+.q li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px}
+.q li.di::before{background:var(--pink)} .q li.wo::before{background:var(--purple)}
+.q li.ac::before{background:var(--orange)} .q li.td::before{background:var(--teal)}
+.q li b{font-weight:700}
+.q li code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:hsl(36 16% 94%);padding:1px 5px;border-radius:4px}
+.q .src{font-size:11px;color:hsl(20 6% 55%);margin:10px 0 0 34px;font-family:ui-monospace,Menlo,monospace}
+.screen{font-size:12px;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px 2px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+table.scroll-wrap{}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:10px 0}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{background:hsl(36 16% 96%);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--soft);font-weight:700}
+td b{font-weight:700} td code{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+tr:last-child td{border-bottom:0}
+.calc{background:hsl(20 14% 12%);color:hsl(36 20% 92%);border-radius:14px;padding:18px 20px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.7;margin:12px 0;overflow-x:auto}
+.calc .c{color:hsl(166 50% 65%)} .calc .r{color:hsl(340 60% 72%);font-weight:700} .calc .d{color:hsl(36 10% 60%)}
+.ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0}
+.exc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.exc.di{border-top:4px solid var(--pink)} .exc.wo{border-top:4px solid var(--purple)} .exc.ac{border-top:4px solid var(--orange)} .exc.tt{border-top:4px solid var(--teal)}
+.exc h4{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--soft);margin-bottom:10px}
+.exc .big{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.exc .lbl{font-size:12.5px;color:var(--soft);margin-top:2px}
+.exc ul{list-style:none}
+.exc li{font-size:13px;margin:6px 0;display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:5px}
+.exc li span:last-child{color:var(--soft);white-space:nowrap}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--soft)}
+.foot code{font-family:ui-monospace,Menlo,monospace}
+@media(max-width:680px){body{padding:24px 16px 48px}.head h1{font-size:24px}.q .vals,.q ul,.q .src{margin-left:0}}
+</style></head>
+<body>
+<div class="head">
+  <h1>How Your Onboarding Answers Build Your Plan <span class="badge">100% code-traced</span></h1>
+  <p class="sub">Every question the condensed onboarding asks, exactly what it captures, and the concrete effect each answer has on your three generated plans — <b>diet</b>, <b>workout</b>, and <b>activity</b> — followed by a fully worked example. Traced field-by-field from the shipped <code>FEATURE_ONBOARDING_CONDENSED</code> frontend and the backend plan engine; every claim is verified against source.</p>
+</div>
+
+<div class="legend">
+  <span style="font-size:11px;font-weight:700;color:var(--soft);align-self:center">Domain key:</span>
+  <span class="dom tt">▮ TDEE / calories</span>
+  <span class="dom di">▮ Diet plan</span>
+  <span class="dom wo">▮ Workout plan</span>
+  <span class="dom ac">▮ Activity plan</span>
+</div>
+<div class="note">The condensed flow asks <b>20 questions across 4 screens</b> (You &amp; Goal → Training → Health &amp; Food). Older onboarding fields (sleep, detailed activity prefs, medical) are no longer asked here — they are derived from your intensity tier or collected later by the coach. Each card below shows only what is actually collected today.</div>
+
+<h2 class="sec">Screen 1 — You &amp; Goal · Basics</h2>
+
+<div class="q"><div class="qh"><span class="qn">Q1</span><span class="qt">Full name</span></div>
+<div class="vals">text · required (gates Continue)</div>
+<ul><li class="tt">Personalises every coach message and the plan header. No effect on the numbers.</li></ul>
+<div class="src">Screen2_BasicInfo.tsx:78</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q2</span><span class="qt">Age</span></div>
+<div class="vals">14–80 (slider; or derived from date of birth)</div>
+<ul>
+<li class="tt"><b>Lowers your BMR by 5 kcal per year of age</b> in the Mifflin-St Jeor equation — older athletes get a slightly lower calorie target for the same body.</li>
+<li class="wo">Feeds the workout/activity LLM context as a safety input (it never raises training load on its own).</li></ul>
+<div class="src">Screen2_BasicInfo.tsx:100 → tdee_calculator.py:116</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q3</span><span class="qt">Gender (identity)</span></div>
+<div class="vals">male · female · other — required</div>
+<ul><li class="tt"><b>Identity only — deliberately NOT used for calories.</b> The calorie math keys off the separate "Sex" question (Q6) so it stays physiologically accurate regardless of how you identify (the v5 sex/identity split).</li></ul>
+<div class="src">Screen2_BasicInfo.tsx:119 · (BMR uses biological_sex, not this)</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q4</span><span class="qt">Phone number</span></div>
+<div class="vals">tel · optional</div>
+<ul><li class="tt">Contact only. No effect on any plan.</li></ul>
+<div class="src">Screen2_BasicInfo.tsx:138</div></div>
+
+<h2 class="sec">Screen 1 — You &amp; Goal · Body</h2>
+
+<div class="q"><div class="qh"><span class="qn">Q5</span><span class="qt">Unit preference</span></div>
+<div class="vals">mixed · metric · imperial — required</div>
+<ul><li class="tt">Display only — everything is stored in metric and converted for the calculations. Changes how height/weight are shown, not the math.</li></ul>
+<div class="src">Screen3_BodyStats.tsx:135</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q6</span><span class="qt">Sex (for calorie accuracy)</span></div>
+<div class="vals">male · female — required (gates Continue)</div>
+<ul>
+<li class="tt"><b>The BMR sex coefficient:</b> <code>+5</code> kcal for male, <code>−161</code> for female (Mifflin-St Jeor). This is the single biggest physiological lever on your calorie target — a male and female of identical size differ by ~166 kcal/day.</li>
+<li class="tt">If left unknown, an averaged <code>−78</code> coefficient is used.</li></ul>
+<div class="src">Screen3_BodyStats.tsx:156 → tdee_calculator.py:117-124</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q7</span><span class="qt">Height</span></div>
+<div class="vals">120–220 cm — required</div>
+<ul><li class="tt"><b>Adds 6.25 kcal to BMR per cm</b> of height (Mifflin-St Jeor). Taller bodies get a higher calorie target.</li></ul>
+<div class="src">Screen3_BodyStats.tsx:195 → tdee_calculator.py:116</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q8</span><span class="qt">Current weight</span></div>
+<div class="vals">30–250 kg — required</div>
+<ul>
+<li class="tt"><b>Adds 10 kcal to BMR per kg</b> — the largest single BMR input.</li>
+<li class="di"><b>Sets your protein target</b> (grams per kg of bodyweight) and the <b>fat floor</b> (≥ 0.5 g/kg for hormonal health).</li>
+<li class="ac">Drives calorie burn per step in the activity science (~40 kcal per 1,000 steps, scaled by weight).</li>
+<li class="tt">Combined with goal weight, feeds the <b>pace sanity gate</b> (blocks dangerously fast targets).</li></ul>
+<div class="src">Screen3_BodyStats.tsx:222 → tdee_calculator.py:116,433,440</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q9</span><span class="qt">Goal weight</span></div>
+<div class="vals">30–250 kg — required</div>
+<ul>
+<li class="tt">The <b>direction + size of your weight change</b> vs current weight. With your target date it sets the required weekly pace and feeds the pace gate (caution / hard-block for unsafe rates).</li></ul>
+<div class="src">Screen3_BodyStats.tsx:249 → Screen4_Goal.tsx:67</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q10</span><span class="qt">Body fat % <span style="font-weight:500;color:var(--soft)">(optional)</span></span></div>
+<div class="vals">5–50% · or skip</div>
+<ul>
+<li class="tt"><b>Unlocks the Katch-McArdle BMR formula</b> (lean-mass based), more precise than Mifflin for lean/heavy athletes.</li>
+<li class="di"><b>Protein is then calculated off lean body mass</b> instead of total weight — leaner targeting.</li>
+<li class="tt">High body fat (&gt;25% male / &gt;35% female) lets fat-loss use a steeper 25% deficit instead of 20%.</li>
+<li class="tt">Skipped → falls back to total-weight Mifflin (zero penalty, just less precise).</li></ul>
+<div class="src">Screen3_BodyStats.tsx:308 → tdee_calculator.py:136,299,432</div></div>
+
+<h2 class="sec">Screen 1 — You &amp; Goal · Goal</h2>
+
+<div class="q"><div class="qh"><span class="qn">Q11</span><span class="qt">Your goal</span></div>
+<div class="vals">fat_loss · muscle_gain · recomp · maintenance · endurance — required</div>
+<ul>
+<li class="tt"><b>Sets the calorie delta off your TDEE:</b> fat loss −20% (or −25% if high body-fat); muscle gain a surplus of +400 / +250 / +150 kcal (beginner→advanced); recomp −200; endurance +200; maintenance 0.</li>
+<li class="di"><b>Picks your protein &amp; carb ranges</b> (g/kg): fat loss runs protein high at 2.3–2.7 g/kg to protect muscle; muscle gain 1.6–2.2; etc.</li>
+<li class="wo"><b>Sets your rep scheme:</b> fat loss 3×12–15 (RPE 7); muscle/recomp 4×8–12 (RPE 7.5); endurance 2×15–20; maintenance 3×8–12.</li>
+<li class="ac"><b>Sets your daily step ceiling:</b> fat loss 8k–12k; maintenance 7k–10k; muscle gain 6k–8k.</li></ul>
+<div class="src">Screen4_Goal.tsx:27 → tdee_calculator.py:283-362 · workout_builder_service.py:267 · llm_prompts.py:758</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q12</span><span class="qt">Start date</span></div>
+<div class="vals">today · next Monday · custom (≥ today) — required</div>
+<ul><li class="tt">Anchors the plan timeline. With the target date it sets the plan's total week count, which drives the activity-target phase ramp.</li></ul>
+<div class="src">Screen4_Goal.tsx:224</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q13</span><span class="qt">Target completion date</span></div>
+<div class="vals">90 / 120 / 200 days or custom · 4–52 weeks out — required</div>
+<ul>
+<li class="tt"><b>Sets the required weekly pace</b> (weight delta ÷ weeks) and feeds the pace gate.</li>
+<li class="ac"><b>Sets how many weeks the activity ramp spans</b> (foundation → building → peak → maintenance phases).</li></ul>
+<div class="src">Screen4_Goal.tsx:280 → backend.py:12357</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q14</span><span class="qt">Pace acknowledgement <span style="font-weight:500;color:var(--soft)">(conditional)</span></span></div>
+<div class="vals">"I understand the trade-off" — only on caution/block verdicts</div>
+<ul><li class="tt">A safety checkbox that appears only when your weight target + date imply an aggressive (caution) pace. Records the acknowledgement; a hard medical block (pregnant/nursing) can't be overridden.</li></ul>
+<div class="src">Screen4_Goal.tsx:92-422</div></div>
+
+<h2 class="sec">Screen 1 — You &amp; Goal · Why Now</h2>
+
+<div class="q"><div class="qh"><span class="qn">Q15</span><span class="qt">What's driving this right now?</span></div>
+<div class="vals">multi-select: health · appearance · energy · mental health · sports performance · accountability — required</div>
+<ul><li class="wo">Shapes the <b>coach's tone and the habit/nudge priming</b> (the "why" the coach references), not the numeric plan.</li></ul>
+<div class="src">Screen4_5_WhyNow.tsx:85</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q16</span><span class="qt">What have you tried before?</span></div>
+<div class="vals">multi-select: none · calorie apps · paid programs · gym · supplements · yoga/pilates — required</div>
+<ul><li class="wo">Context for the coach to avoid re-pitching what hasn't worked. Behavioural priming, not numeric.</li></ul>
+<div class="src">Screen4_5_WhyNow.tsx:102</div></div>
+
+<h2 class="sec">Screen 2 — Training</h2>
+
+<div class="q"><div class="qh"><span class="qn">Q17</span><span class="qt">How intense should training be?</span></div>
+<div class="vals">starter · everyday · fit · athlete — required</div>
+<ul>
+<li class="wo"><b>The master dial for your whole workout.</b> Each tier is a fixed spec:</li>
+<li class="wo"><b>Starter</b> → 3 days/wk, 20 min, walk + mobility only (<i>no lifting generated</i>), beginner/bodyweight.</li>
+<li class="wo"><b>Everyday</b> → 5 exercises, 3 days/wk, 30 min, beginner+intermediate.</li>
+<li class="wo"><b>Fit</b> → 6 exercises, 4 days/wk, 45 min, no difficulty cap.</li>
+<li class="wo"><b>Athlete</b> → 8 exercises, 5 days/wk, 60 min, intermediate+advanced, no mandatory rest.</li>
+<li class="tt">The tier also implies your <b>activity-level multiplier</b> for TDEE (sedentary 1.20 → very active 1.725) and your <b>training experience</b>, so you're never asked those separately.</li></ul>
+<div class="src">Screen7_5_Intensity.tsx → intensity_tiers.py:31-44 · fast_plan_assembler.py:954</div></div>
+
+<h2 class="sec">Screen 3 — Health &amp; Food</h2>
+
+<div class="q"><div class="qh"><span class="qn">Q18</span><span class="qt">Dietary style</span></div>
+<div class="vals">veg · non_veg · egg_only · vegan — required</div>
+<ul>
+<li class="di"><b>Hard filter on every meal.</b> Veg/vegan anchor on paneer/tofu/tempeh/legume rotation (+ B12/iron flags); egg-only adds eggs; non-veg requires ≥2 of 7 meals on lean meat/fish/eggs.</li>
+<li class="di">Beef is <b>never</b> included for anyone, and ingredients stay within tier-2/tier-3 Indian availability (rohu/surmai, not salmon; no asparagus/kale unless you list them).</li></ul>
+<div class="src">Screen6_FoodPrefs.tsx:104 → plan_generator.py:661-707 · llm_prompts.py:1286</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q19</span><span class="qt">Allergies / intolerances</span></div>
+<div class="vals">multi-select: lactose · gluten · nuts · soy · none</div>
+<ul><li class="di"><b>Strictly excluded from every meal</b> — no trace ingredients, no cross-contamination assumptions. Digestive sensitivities also defer gassy foods (rajma/chole/cabbage) out of week 1.</li></ul>
+<div class="src">Screen6_FoodPrefs.tsx:120 → plan_generator.py:710-715</div></div>
+
+<div class="q"><div class="qh"><span class="qn">Q20</span><span class="qt">Other intolerances <span style="font-weight:500;color:var(--soft)">(optional)</span></span></div>
+<div class="vals">free text (e.g. "shellfish")</div>
+<ul><li class="di">Any unlisted intolerance you type is added to the strict-avoid list for every meal.</li></ul>
+<div class="src">Screen6_FoodPrefs.tsx:148</div></div>
+
+<h2 class="sec">The engine — from answers to a plan</h2>
+<p style="font-size:14px;color:hsl(20 10% 25%);margin-bottom:6px">Three deterministic stages turn the answers above into the plan:</p>
+<div class="tw"><table>
+<tr><th>Stage</th><th>Inputs</th><th>Output</th><th>Source</th></tr>
+<tr><td><b>1 · Energy</b></td><td>sex, age, height, weight, body-fat, goal, intensity tier</td><td>BMR → TDEE → daily calorie target (with safety floors 1200 ♀ / 1500 ♂)</td><td><code>tdee_calculator.py</code></td></tr>
+<tr><td><b>2 · Macros</b></td><td>goal, weight (or lean mass), target calories</td><td>protein (g/kg) → fat (27.5% of kcal, floor 0.5 g/kg) → carbs (remainder)</td><td><code>tdee_calculator.py:394</code></td></tr>
+<tr><td><b>3 · Content</b></td><td>diet style, allergies, target macros, meals/day</td><td>7-day meals (LLM, grounded + filtered), workout split, step ramp</td><td><code>plan_generator.py · workout_builder_service.py · llm_prompts.py</code></td></tr>
+</table></div>
+
+<h2 class="sec">Worked example — every number from real answers</h2>
+<p style="font-size:14px;color:hsl(20 10% 25%)">Sample athlete: <b>female, 29, 164 cm, 78 kg → goal 72 kg, fat loss, "fit" intensity, non-veg, lactose-intolerant.</b> Here is exactly what the engine produces.</p>
+
+<div class="calc">
+<span class="d"># Stage 1 — Energy (Mifflin-St Jeor, female)</span>
+BMR = 10×78 + 6.25×164 − 5×29 <span class="c">− 161</span>
+    = 780 + 1025 − 145 − 161 = <span class="r">1499 kcal</span>
+<span class="d"># "fit" tier ⇒ moderately active ⇒ ×1.55</span>
+TDEE = 1499 × 1.55 = <span class="r">2323 kcal</span>
+<span class="d"># fat_loss, no body-fat given ⇒ standard −20%</span>
+Target = 2323 × 0.80 = <span class="r">1858 kcal</span>  <span class="d">(&gt; 1200 floor ✓)</span>
+
+<span class="d"># Stage 2 — Macros</span>
+Protein = 78 × 2.5 g/kg  = <span class="r">195 g</span> (780 kcal)  <span class="d">fat-loss runs high to spare muscle</span>
+Fat     = max(1858×27.5%/9, 78×0.5) = <span class="r">57 g</span> (511 kcal)
+Carbs   = (1858 − 780 − 511) / 4    = <span class="r">142 g</span> (567 kcal)
+</div>
+<div class="note">Honesty note: at this calorie level the 2.5 g/kg protein target pushes carbs to ~1.8 g/kg, just under the fat-loss carb range — the engine flags this as a soft note (not a block). It is intentional: protein is prioritised to preserve lean mass during the cut.</div>
+
+<div class="ex">
+  <div class="exc tt"><h4>Daily target</h4><div class="big">1,858</div><div class="lbl">kcal/day · 195P / 142C / 57F</div></div>
+  <div class="exc di"><h4>Meals (4/day split)</h4><ul>
+    <li><span>Breakfast 27%</span><span>~502 kcal</span></li>
+    <li><span>Lunch 33%</span><span>~613 kcal</span></li>
+    <li><span>Snack 13%</span><span>~242 kcal</span></li>
+    <li><span>Dinner 27%</span><span>~502 kcal</span></li></ul></div>
+  <div class="exc wo"><h4>Workout ("fit")</h4><ul>
+    <li><span>Split</span><span>Upper/Lower ×4</span></li>
+    <li><span>Per session</span><span>6 exercises · 45 min</span></li>
+    <li><span>Scheme</span><span>3×12–15 (RPE 7)</span></li>
+    <li><span>Compounds</span><span>3×10–12</span></li></ul></div>
+  <div class="exc ac"><h4>Activity (fat loss)</h4><ul>
+    <li><span>Wk 1–2 foundation</span><span>~5,000 steps</span></li>
+    <li><span>Wk 3–5 building</span><span>~7,000 steps</span></li>
+    <li><span>Peak weeks</span><span>~10,000 steps</span></li>
+    <li><span>Final 2 wk</span><span>~8,000 steps</span></li></ul></div>
+</div>
+
+<div class="screen">Example day's meals (non-veg · lactose-free · tier-2 Indian · 1,858 kcal)</div>
+<div class="tw"><table>
+<tr><th>Slot</th><th>Dish</th><th>~kcal</th><th>Why it fits</th></tr>
+<tr><td>Breakfast</td><td>4-egg bhurji + 2 multigrain rotis</td><td>~500</td><td>non-veg anchor; lactose-free; high protein start</td></tr>
+<tr><td>Lunch</td><td>Grilled chicken breast (200 g) + jeera rice + sabzi</td><td>~610</td><td>lean-meat anchor (~62 g protein); everyday ingredients</td></tr>
+<tr><td>Snack</td><td>Roasted chana + banana + black coffee</td><td>~240</td><td>fits the 13% snack budget; no dairy</td></tr>
+<tr><td>Dinner</td><td>Rohu fish curry + 1 roti + cucumber salad</td><td>~500</td><td>local fish (not salmon); lactose-free; rounds protein to ~195 g</td></tr>
+</table></div>
+<p style="font-size:12.5px;color:var(--soft);margin-top:8px">Variety rules guarantee ≥5 distinct proteins and no repeated dish across the 7 days; the dishes above are one valid day the LLM would generate within these exact macro &amp; filter constraints.</p>
+
+<div class="foot">
+<b>Accuracy:</b> every formula, coefficient, multiplier and tier spec above was verified against the live source on 2026-06-28. Key files — frontend: <code>src/pages/onboarding/Screen2_BasicInfo · Screen3_BodyStats · Screen4_Goal · Screen4_5_WhyNow · Screen7_5_Intensity · Screen6_FoodPrefs</code>; backend: <code>app/services/tdee_calculator.py · intensity_tiers.py · workout_builder_service.py · plan_generator.py · llm_prompts.py · fast_plan_assembler.py</code>.<br><br>
+Example figures are computed deterministically; the specific meals/exercises chosen are LLM-generated within the constraints shown, so exact dishes vary while the macros, filters and structure are fixed. Generated for QA board item i-20260628-dfd5.
+</div>
+</body></html>
