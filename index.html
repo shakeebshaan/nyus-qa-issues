@@ -353,6 +353,16 @@
   #lightbox::backdrop { background: rgb(10 12 14 / .92); }
   #lightbox img { width: 100vw; height: 100dvh; object-fit: contain; cursor: zoom-out; }
 
+  /* ── Report viewer (private HTML report rendered inline, on click) ── */
+  #report-viewer { width: 100vw; max-width: none; height: 100dvh; margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--bg); }
+  #report-viewer::backdrop { background: rgb(10 12 14 / .92); }
+  .rv-bar { position: sticky; top: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--ink); color: #fff; }
+  .rv-bar .rv-title { font-size: 13.5px; font-weight: 700; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rv-bar .rv-x { border: 0; background: rgb(255 255 255 / .14); color: #fff; font: inherit; font-size: 14px; font-weight: 700; min-height: 40px; min-width: 40px; border-radius: 9px; cursor: pointer; }
+  .rv-bar .rv-x:active { opacity: .7; }
+  #rv-frame { width: 100%; height: calc(100dvh - 60px); border: 0; background: var(--bg); }
+  .rv-state { padding: 48px 22px; text-align: center; color: var(--muted); font-size: 14.5px; }
+
   /* ── Skeletons ──────────────────────────────────────── */
   .skel { border-radius: var(--radius); border: 1px solid var(--line); background: var(--card); margin-bottom: 18px; padding: 16px; }
   .sh { background: linear-gradient(90deg, hsl(40 20% 94%), hsl(40 25% 90%), hsl(40 20% 94%)); background-size: 200% 100%; animation: shm 1.2s linear infinite; border-radius: 10px; }
@@ -502,6 +512,10 @@
 </dialog>
 
 <dialog id="lightbox"><img id="lightbox-img" alt="screenshot" /></dialog>
+<dialog id="report-viewer">
+  <div class="rv-bar"><span class="rv-title" id="rv-title">Report</span><button type="button" class="rv-x" id="rv-close" aria-label="Close report">✕ Close</button></div>
+  <iframe id="rv-frame" title="Report" sandbox referrerpolicy="no-referrer"></iframe>
+</dialog>
 <div id="toast" role="status"></div>
 
 <!-- Optional: written by `snapfix init` at setup. Sets window.QA_CONFIG =
@@ -568,6 +582,7 @@ const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
 const PRIV_OWNER = QA.PRIV_OWNER, PRIV_REPO = QA.PRIV_REPO, PRIV_BRANCH = QA.PRIV_BRANCH;
 const PRIV_API = `https://api.github.com/repos/${PRIV_OWNER}/${PRIV_REPO}`;
 const privImgCache = new Map(); // path -> data URI | null
+const privReportCache = new Map(); // path -> decoded HTML string | null
 const $ = (id) => document.getElementById(id);
 
 let db = null;          // parsed issues.json
@@ -640,6 +655,41 @@ async function fetchPrivImage(path) {
     privImgCache.set(path, null);
     return null;
   }
+}
+// Fetch a private HTML report from the PRIVATE repo (same auth path as private
+// images) and decode it to a UTF-8 string. Reports live in nyus-qa-private so
+// they are NOT publicly reachable; only a connected token can read them.
+async function fetchPrivReport(path) {
+  if (privReportCache.has(path)) return privReportCache.get(path);
+  if (!token) return null; // not cached — so it retries once a token is added
+  try {
+    const r = await fetch(`${PRIV_API}/contents/${path}?ref=${PRIV_BRANCH}`, {
+      headers: headers(), cache: "no-store",
+    });
+    if (!r.ok) { privReportCache.set(path, null); return null; }
+    const j = await r.json();
+    const html = b64decodeUtf8(j.content);
+    privReportCache.set(path, html);
+    return html;
+  } catch {
+    return null;
+  }
+}
+// Render a private report inline in a sandboxed iframe (sandbox="" → no scripts,
+// no same-origin: the report can NEVER read the parent's token or call out).
+async function openReport(path, label) {
+  $("rv-title").textContent = label || "Report";
+  const frame = $("rv-frame");
+  if (!token) { openSettings("Connect your token to view this private report."); return; }
+  frame.removeAttribute("srcdoc");
+  frame.srcdoc = `<!doctype html><meta charset=utf-8><body style="font-family:system-ui;color:#6b6b6b;padding:48px 22px;text-align:center">Loading report…</body>`;
+  $("report-viewer").showModal();
+  const html = await fetchPrivReport(path);
+  if (html == null) {
+    frame.srcdoc = `<!doctype html><meta charset=utf-8><body style="font-family:system-ui;color:#6b6b6b;padding:48px 22px;text-align:center">Couldn't load this report — your token may lack access to the private store.</body>`;
+    return;
+  }
+  frame.srcdoc = html;
 }
 async function resolvePrivImages() {
   const imgs = document.querySelectorAll("img[data-priv-path]:not(.priv-loaded)");
@@ -833,7 +883,9 @@ function cardHtml(it, archived) {
         <h3>Issue</h3>
         ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot", it.imagePrivate)}
         <p class="desc">${esc(it.description)}</p>
-        ${it.link ? `<a class="report-cta" href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.linkLabel || "View report")} <span class="arr">&rarr;</span></a>` : ""}
+        ${it.reportPath
+          ? `<button type="button" class="report-cta" data-report-path="${esc(it.reportPath)}" data-report-label="${esc(it.reportLabel || "Open report")}">📄 ${esc(it.reportLabel || "Open report")} <span class="arr">&rarr;</span></button>`
+          : it.link ? `<a class="report-cta" href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.linkLabel || "View report")} <span class="arr">&rarr;</span></a>` : ""}
         ${it.author ? `<div class="card-tags">${actorHtml(it.author, "filed by")}</div>` : ""}
         ${tagsHtml}
       </div>
@@ -1199,6 +1251,20 @@ document.addEventListener("click", (ev) => {
   }
 });
 $("lightbox").addEventListener("click", () => $("lightbox").close());
+
+/* ── report viewer (private HTML, rendered inline on click) ── */
+document.addEventListener("click", (ev) => {
+  const b = ev.target.closest(".report-cta[data-report-path]");
+  if (!b) return;
+  ev.preventDefault();
+  openReport(b.dataset.reportPath, b.dataset.reportLabel);
+});
+$("rv-close").addEventListener("click", () => {
+  const f = $("rv-frame");
+  $("report-viewer").close();
+  f.removeAttribute("srcdoc"); // unload so a reopen starts clean
+});
+$("report-viewer").addEventListener("cancel", () => $("rv-frame").removeAttribute("srcdoc"));
 
 /* ── resolve (user accepts a fix → off-board store) ────── */
 let archCache = null;

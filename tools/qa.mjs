@@ -399,6 +399,34 @@ try {
     git("commit", "-m", `issue ${id}: cleared user-review flag`);
     gitPush();
     console.log(`Cleared user-review flag on ${id}`);
+  } else if (cmd === "report") {
+    // Attach a PRIVATE, inline-rendered HTML report to an issue. The HTML is
+    // uploaded to the PRIVATE repo (nyus-qa-private) — NOT the public board repo
+    // — so it is never publicly reachable; the board fetches + renders it in a
+    // sandboxed iframe on click, gated by the owner's token (same path as private
+    // images). Replaces the old public `link` (GitHub Pages URL) mechanism.
+    const id = idArg, file = flag("file"), label = flag("label") || "Open report";
+    const destFlag = flag("path");
+    if (!id || !file) throw new Error('Usage: report <id> --file <absHtmlPath> [--label "<button text>"] [--path reports/<name>.html]');
+    if (!existsSync(file)) throw new Error("File not found: " + file);
+    const base = file.split(/[\\/]/).pop();
+    const privPath = destFlag || `reports/${base}`;
+    console.log(`Uploading ${base} to private repo (${PRIV_OWNER}/${PRIV_REPO}:${privPath})...`);
+    uploadToPrivRepo(file, privPath, `report: ${id} ${base}`);
+    git("pull", "--rebase", "origin", BRANCH);
+    const db = loadDb();
+    const issue = db.issues.find((i) => i.id === id);
+    if (!issue) throw new Error("No such issue: " + id);
+    issue.reportPath = privPath;
+    issue.reportLabel = label;
+    // Retire any old public link so the board renders the private report instead.
+    delete issue.link;
+    delete issue.linkLabel;
+    saveDb(db);
+    git("add", "data/issues.json");
+    git("commit", "-m", `issue ${id}: attach private report ${privPath}`);
+    gitPush();
+    console.log(`Attached private report to ${id}: ${privPath} (label: "${label}")`);
   } else if (cmd === "archive") {
     const all = process.argv.includes("--all-fixed");
     if (!all && !idArg) throw new Error("Usage: archive <id> | archive --all-fixed");
@@ -427,7 +455,7 @@ try {
     gitPush();
     console.log(`Archived ${targets.length} -> data/archive-${year}.json`);
   } else {
-    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note <t>] | review <id> --reason <t> [--tags a,b] | unreview <id> | reopen <id> --note <t> | archive <id> | archive --all-fixed");
+    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note <t>] | review <id> --reason <t> [--tags a,b] | unreview <id> | report <id> --file <html> [--label <t>] | reopen <id> --note <t> | archive <id> | archive --all-fixed");
     process.exit(cmd ? 1 : 0);
   }
 } catch (e) {
