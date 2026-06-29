@@ -346,8 +346,29 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "IMPLEMENTED this tick: (1) paid_ads metric now auto-shows GA4 Paid Search+Social sessions — goes live when owner links Google Ads in GA4, no code changes needed then. (2) backlinks message updated with GSC-status-conditional guidance. ALREADY LIVE (prior ticks): CSAT in-app modal, avg rating, resolution time, A/B experiment counts, competitor estimates (9 competitors), support ticket counts. OWNER STEPS: PAID ADS full CPI/CAC/ROAS — GA4 Admin->Product Links->Google Ads. SOCIAL — create brand accounts on personal device (server IP flagged), then Meta Business Suite->Instagram Basic Display->long-lived token. BACKLINKS — auto from GSC once mt-gsc resolved. PLAY STORE — grant fastlane SA reporting scope (mt-appstore). iOS — App Store Connect API key (.p8 + key ID + issuer ID).",
+        "imagePath": "images/i-20260628-mt-misc-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260628-mt-misc-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "eed27191afdde25e731e62c76ee7797bc767e3a2",
+        "imageCommits": [
+          "eed27191afdde25e731e62c76ee7797bc767e3a2"
+        ],
+        "fixedAt": "2026-06-29T15:39:57.813Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "All automatable metrics live; paid_ads now GA4-wired; comprehensive steps for remaining owner-gated items."
+        }
+      },
       "history": [
         {
           "at": "2026-06-29T11:46:27.881Z",
@@ -378,7 +399,7 @@
           }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Add mostof what you can do and I will provide the remaining setups give me steps",
       "reviewRepliedAt": "2026-06-28T20:55:42.732Z",
@@ -389,9 +410,7 @@
         "misc"
       ],
       "reportPath": "reports/mt-misc-owner-guide.html",
-      "reportLabel": "Metrics Setup Guide (Live + Owner Steps)",
-      "reviewReason": "THIS TICK DONE: (1) Removed HR accuracy measured metrics (hr_accuracy + calorie_accuracy) from health_data category in metrics-collect.mjs — no longer asking for chest-strap data (commit 4fab899). ALREADY LIVE (prior ticks): CSAT positive rate, avg rating, resolution time, competitor estimates (9 competitors), A/B experiments active/total/users, support ticket counts. OWNER STEPS FOR REMAINING: (A) PAID ADS — log into GA4 at analytics.google.com -> Admin -> Product Links -> Google Ads -> Link account -> select your Google Ads account. After linking, UTM-tagged campaigns will appear as 'Paid Search' / 'Paid Social' channels in GA4 and metrics will auto-populate. (B) SOCIAL — create brand Instagram/TikTok/Facebook on your personal device (server IPs are flagged + phone/CAPTCHA required). Once created: Meta Business Suite -> Apps -> create app -> Instagram Basic Display -> get long-lived token -> share token securely. (C) BACKLINKS — will auto-pull from GSC Links report once the GSC issue (mt-gsc) is resolved — no extra action needed. (D) COMPETITOR downloads — Sensor Tower paid tier (/mo) for official data, OR I can add a manual-update reminder to competitor_estimates.json each quarter (reply 'manual reminders' to enable).",
-      "reviewedAt": "2026-06-29T15:06:35.436Z"
+      "reportLabel": "Metrics Setup Guide (Live + Owner Steps)"
     },
     {
       "id": "i-20260628-4709",
