@@ -67,13 +67,78 @@
       "key_strengths": "Step gamification, rewards, India-first",
       "key_weaknesses": "Step-only, no nutrition/workout plans, shallow",
       "nyus_advantage": "Complete health platform vs step counter"
+    },
+    {
+      "name": "Fitterfly",
+      "market": "India",
+      "category": "Digital Therapeutics (Diabetes/Metabolic)",
+      "play_rating": 4.5,
+      "play_reviews": 45000,
+      "est_mau_k": 300,
+      "est_downloads_total_k": 500,
+      "est_revenue_inr_cr_yr": 25,
+      "key_strengths": "Clinical partnerships, diabetes reversal programs, doctor-guided",
+      "key_weaknesses": "Disease-specific niche, high cost, not for general fitness",
+      "nyus_advantage": "General fitness + nutrition for healthy users, more accessible"
+    },
+    {
+      "name": "Ultrahuman",
+      "market": "India (premium)",
+      "category": "Metabolic Tracking (CGM + Ring)",
+      "play_rating": 4.6,
+      "play_reviews": 12000,
+      "est_mau_k": 150,
+      "est_downloads_total_k": 250,
+      "est_revenue_inr_cr_yr": 80,
+      "key_strengths": "CGM glucose tracking, Ring wearable, bio-hacker community, premium brand",
+      "key_weaknesses": "Very expensive hardware (Rs 15k+ ring), niche tech-savvy user only",
+      "nyus_advantage": "No hardware required, affordable, AI meal+workout plans for mainstream"
+    },
+    {
+      "name": "Noom",
+      "market": "Global (India: limited)",
+      "category": "Psychology-based Weight Loss",
+      "play_rating": 4.2,
+      "play_reviews": 900000,
+      "est_mau_k": 15000,
+      "est_downloads_total_k": 60000,
+      "est_revenue_inr_cr_yr": null,
+      "key_strengths": "Behavior-change psychology, coaching, high-completion programs",
+      "key_weaknesses": "Expensive subscription ($60/mo), US-centric food database, no Indian context",
+      "nyus_advantage": "Indian meal plans, local food database, AI coach, far lower price"
+    },
+    {
+      "name": "Fittr",
+      "market": "India",
+      "category": "Fitness Coaching + Community",
+      "play_rating": 4.5,
+      "play_reviews": 80000,
+      "est_mau_k": 1200,
+      "est_downloads_total_k": 3000,
+      "est_revenue_inr_cr_yr": 12,
+      "key_strengths": "Strong coach community, transformation programs, India-first",
+      "key_weaknesses": "Coach-dependent (not always AI-first), limited meal plan depth",
+      "nyus_advantage": "AI-generated plans 24/7, instant coach responses, no waiting for human coach"
     }
   ],
   "nyus_benchmarks": {
-    "_note": "Fill these in from your Play Console + DB once tracking is wired",
+    "_note": "Fill play_rating + play_reviews from Play Console once wired. mau + downloads_total from DB + Play reporting once the SA has reporting scope. Package: com.nyus.nyusand",
+    "package": "com.nyus.nyusand",
     "play_rating": null,
     "play_reviews": null,
     "mau": null,
     "downloads_total": null
+  },
+  "health_accuracy_benchmarks": {
+    "_note": "Scientific reference accuracy for NYUS's calculation models. These are baseline error rates from peer-reviewed literature — not NYUS-specific measurements. Owner: once you have 10+ users with chest-strap HR data, replace est_ values with measured_.",
+    "bmr_formula": "Mifflin-St Jeor (1990)",
+    "bmr_mean_abs_error_pct": 8.5,
+    "bmr_source": "Frankenfield et al. J Am Diet Assoc 2005 (N=47 studies, ±8-10% typical error)",
+    "calorie_burn_formula": "HR-based (Keytel et al. 2005)",
+    "calorie_burn_mean_abs_error_pct": 17,
+    "calorie_burn_source": "Keytel et al. Int J Sports Med 2005 (±15-20% vs indirect calorimetry, ±10% with BF% input)",
+    "macro_target_adherence_proxy": "Self-reported 7-day logging completeness (not lab-validated)",
+    "measured_hr_accuracy_pct_error": null,
+    "measured_calorie_accuracy_pct_error": null
   }
 }
