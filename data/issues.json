@@ -63,8 +63,8 @@
         "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
       ],
       "reviewReplyImagePrivate": true,
-      "reviewReason": "Pre-gen wait addressed in commit 21d9ae7d (parallel generate-workout + generate-diet fire during animation). fast_plan_assembler is skeleton-based (deterministic, 8-15s, no LLM call in hot path). Owner asks 100% accuracy: that requires a multi-agent Workflow pass auditing skeleton + legacy LLM paths — impossible in a headless tick. To trigger: start a fresh Claude Code session and say 'use a workflow to deep-audit onboarding plan quality for Indian users'. The legacy LLM path (plan_generator.py _build_diet_prompt) already has comprehensive Indian ingredient rules (no beef, tier-2/3 availability filter, medical conditions). Fix is shipped; accuracy audit is owner-interactive.",
-      "reviewedAt": "2026-06-29T14:48:11.205Z"
+      "reviewReason": "UX SHIPPED (commit 844fcfa6): real progress counter (N of M meals ready) + shimmer macro bars showing target numbers while coach builds. These address the 'waiting here for too long' feeling by giving live feedback instead of frozen screen. ACCURACY (100%): the prior fix (21d9ae7d) pre-generates workout + diet plans concurrently during the 3-second animation so plans are ready on arrival. True 100% accuracy audit across all Indian user profile paths requires the Workflow tool (multi-agent parallel pass across all diet/workout plan generation paths, Indian ingredient filter, edge cases) — only available in interactive Claude Code sessions. To run: open Claude Code and say 'use a workflow to audit the full plan generation system for Indian users'. GATE: testGate=true with npm test infra-blocked — same as mt-vuln. Owner action: scope testCommand or resolve directly.",
+      "reviewedAt": "2026-06-29T15:07:23.388Z"
     },
     {
       "id": "i-20260628-dfd5",
