@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -189,6 +189,7 @@
   .vbtn.resolve { background: var(--accent-soft); color: var(--accent-ink); }
   .vbtn.reject  { background: var(--amber-soft); color: var(--amber-ink); }
   .vbtn.respond { background: hsl(263 60% 95%); color: hsl(263 50% 42%); }
+  .vbtn.reopen  { background: hsl(215 60% 95%); color: hsl(215 60% 40%); }
   /* Previous-fix dropdown (accumulates across not-fixed → re-fix cycles) */
   details.prevfix { margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 8px; }
   details.prevfix > summary {
@@ -1675,6 +1676,40 @@ async function markNotFixed(id, btn) {
     toast(e.message || "Couldn't send back.", 4200);
   }
 }
+// Owner reopens a resolved (archived) issue - moves it from archive-YYYY.json
+// back to issues.json with status open so Claude picks it up again.
+async function reopenArchivedIssue(id, btn) {
+  if (!token) { openSettings("A token is needed to reopen."); return; }
+  if (!confirm("Reopen  + '$' + {id}? It will return to the active board as Submitted.")) return;
+  btn.disabled = true; btn.textContent = "Reopeningu2026";
+  try {
+    const thisYear = new Date().getFullYear();
+    let found = null, foundYear = null;
+    for (let y = thisYear; y >= 2025; y--) {
+      const { data, missing } = await loadJson( + 'data/archive-$' + {y}.json + '' + );
+      if (missing) continue;
+      const hit = (data.issues || []).find((i) => i.id === id);
+      if (hit) { found = JSON.parse(JSON.stringify(hit)); foundYear = y; break; }
+    }
+    if (!found) throw new Error( + '$' + {id} not found in any archive. + '' + );
+    await mutateJson( + 'data/archive-$' + {foundYear}.json + '' + ,  + 'issue $' + {id}: reopened + '' + , (a) => {
+      a.issues = (a.issues || []).filter((i) => i.id !== id);
+    }, { version: 1, issues: [] });
+    const reactivated = Object.assign({}, found, {
+      status: "open", needsReview: false, fix: null,
+      history: [...(found.history || []), { at: new Date().toISOString(), event: "reopened", note: "Owner reopened from archive", by: myLogin || undefined, previousFix: found.fix || undefined }],
+    });
+    await mutateIssues( + 'issue $' + {id}: restored to active board + '' + , (d) => {
+      if (!d.issues.some((i) => i.id === id)) d.issues.push(reactivated);
+    });
+    archCache = null;
+    render();
+    toast( + '$' + {id} reopened + ' ✓' + );
+  } catch (e) {
+    btn.disabled = false; btn.textContent = " + [char]0x21BA +  Reopen";
+    toast(e.message || "Couldn't reopen.", 4200);
+  }
+}
 // Owner answers a user-review item via the response dialog: a text reply plus
 // optional attached screenshots (uploaded to the PRIVATE repo, like issue
 // shots). Saving records the reply + image paths and clears the review flag so
@@ -1826,6 +1861,8 @@ document.addEventListener("click", (ev) => {
   if (r) { resolveIssue(r.dataset.resolve, r); return; }
   const n = ev.target.closest("[data-notfixed]");
   if (n) { markNotFixed(n.dataset.notfixed, n); return; }
+  const ro = ev.target.closest("[data-reopen-archived]");
+  if (ro) { reopenArchivedIssue(ro.dataset.reopenArchived, ro); return; }
   const p = ev.target.closest("[data-respond]");
   if (p) { openRespond(p.dataset.respond); return; }
 });
