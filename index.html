@@ -605,6 +605,14 @@
   <div class="sheet">
     <h2>What's still wrong?</h2>
     <p>Optional — Claude reads this and re-fixes. Be specific about what's missing.</p>
+    <div id="nf-thumbs" hidden>
+      <div class="thumb-grid" id="nf-thumb-grid"></div>
+      <div class="thumbs-footer"><button type="button" class="clear-all-btn" id="nf-clear-all">Remove all</button></div>
+    </div>
+    <label class="pick add-more" id="nf-pick">
+      <input type="file" id="nf-file" accept="image/*" multiple hidden />
+      <span id="nf-pick-inner">📎 &nbsp;Attach a screenshot<span class="hint">optional · tap to pick · or paste (Ctrl+V)</span></span>
+    </label>
     <textarea id="not-fixed-note" rows="4" placeholder="e.g. 'The design D banner still isn't showing on the dinner card'" autocomplete="off"></textarea>
     <div class="row">
       <button class="btn" type="button" id="not-fixed-cancel">Cancel</button>
@@ -1189,10 +1197,10 @@ $("file").addEventListener("change", () => {
 });
 
 document.addEventListener("paste", (ev) => {
-  // Route a pasted image to the response dialog when it's open, else the add form.
+  const toNf    = $("not-fixed-dialog").open;
   const toReply = $("respond-dialog").open;
   for (const item of (ev.clipboardData?.items || [])) {
-    if (item.type.startsWith("image/")) (toReply ? addReplyFile : addPickedFile)(item.getAsFile());
+    if (item.type.startsWith("image/")) (toNf ? addNfFile : toReply ? addReplyFile : addPickedFile)(item.getAsFile());
   }
 });
 
@@ -1589,6 +1597,8 @@ function promptCustom(placeholder) {
     const cancel = document.getElementById("not-fixed-cancel");
     ta.value = "";
     ta.placeholder = placeholder || "";
+    notFixedFiles = [];
+    renderNfZone();
     const done = (val) => {
       dlg.close();
       ok.removeEventListener("click", onOk);
@@ -1597,8 +1607,8 @@ function promptCustom(placeholder) {
       resolve(val);
     };
     const onOk     = () => done(ta.value.trim());
-    const onCancel = () => done(null);
-    const onClose  = () => done(null);
+    const onCancel = () => { notFixedFiles = []; done(null); };
+    const onClose  = () => { notFixedFiles = []; done(null); };
     ok.addEventListener("click", onOk);
     cancel.addEventListener("click", onCancel);
     dlg.addEventListener("close", onClose, { once: true });
@@ -1611,13 +1621,29 @@ async function markNotFixed(id, btn) {
   if (!it || it.status !== "fixed") return;
   if (!token) { openSettings("A token is needed to send it back."); return; }
   const note = (await promptCustom('e.g. "The banner still isn\'t showing on the dinner card"') || "").trim();
+  const filesToUpload = notFixedFiles.slice();
+  notFixedFiles = [];
   btn.disabled = true;
   try {
+    const imgPaths = [], imgCommits = [];
+    for (let i = 0; i < filesToUpload.length; i++) {
+      btn.textContent = `Uploading ${i + 1}/${filesToUpload.length}…`;
+      const blob = await compress(filesToUpload[i]);
+      const b64 = await blobToB64(blob);
+      if (b64.length > 5_000_000) throw new Error(`Image ${i + 1} too large even after compression.`);
+      const suffix = filesToUpload.length > 1 ? `-${i}` : "";
+      const res = await putPrivFile(`images/${id}-notfixed${suffix}.jpg`, b64, `issue ${id}: not-fixed image ${i + 1}`);
+      imgPaths.push(`images/${id}-notfixed${suffix}.jpg`);
+      imgCommits.push(res.commit?.sha || "");
+    }
+    btn.textContent = "Send back";
     await mutateIssues(`issue ${id}: not fixed → re-fix`, (d) => {
       const x = d.issues.find((i) => i.id === id);
       if (!x) return;
       x.history = x.history || [];
-      x.history.push({ at: new Date().toISOString(), event: "reopened", note: note || null, by: myLogin || undefined, previousFix: x.fix });
+      const entry = { at: new Date().toISOString(), event: "reopened", note: note || null, by: myLogin || undefined, previousFix: x.fix };
+      if (imgPaths.length) { entry.images = imgPaths; entry.imageCommits = imgCommits; }
+      x.history.push(entry);
       x.fix = null;
       x.status = "open";
     });
@@ -1625,6 +1651,7 @@ async function markNotFixed(id, btn) {
     toast(note ? "Sent back with your note ✓" : "Sent back for re-fix ✓");
   } catch (e) {
     btn.disabled = false;
+    btn.textContent = "Send back";
     toast(e.message || "Couldn't send back.", 4200);
   }
 }
@@ -1665,6 +1692,38 @@ $("reply-thumb-grid").addEventListener("click", (ev) => {
   renderReplyZone();
 });
 $("reply-clear-all").addEventListener("click", () => { replyFiles = []; renderReplyZone(); });
+
+let notFixedFiles = [];
+function renderNfZone() {
+  const has = notFixedFiles.length > 0;
+  $("nf-thumbs").hidden = !has;
+  if (has) {
+    $("nf-thumb-grid").innerHTML = notFixedFiles.map((f, i) => {
+      const url = URL.createObjectURL(f);
+      return `<div class="thumb"><img src="${url}" alt="not-fixed preview ${i + 1}" /><button class="rm-img" type="button" data-nfidx="${i}" aria-label="Remove image ${i + 1}">✕</button></div>`;
+    }).join("");
+    $("nf-pick-inner").innerHTML = `➕ &nbsp;Add another screenshot<span class="hint">tap · paste (Ctrl+V)</span>`;
+  } else {
+    $("nf-pick-inner").innerHTML = `📎 &nbsp;Attach a screenshot<span class="hint">optional · tap to pick · or paste (Ctrl+V)</span>`;
+  }
+}
+function addNfFile(f) {
+  if (!f || !f.type.startsWith("image/")) return;
+  notFixedFiles.push(f);
+  renderNfZone();
+}
+$("nf-file").addEventListener("change", () => {
+  for (const f of $("nf-file").files) addNfFile(f);
+  $("nf-file").value = "";
+});
+$("nf-thumb-grid").addEventListener("click", (ev) => {
+  const b = ev.target.closest(".rm-img");
+  if (!b) return;
+  ev.preventDefault();
+  notFixedFiles.splice(parseInt(b.dataset.nfidx, 10), 1);
+  renderNfZone();
+});
+$("nf-clear-all").addEventListener("click", () => { notFixedFiles = []; renderNfZone(); });
 
 function openRespond(id) {
   const it = (db?.issues || []).find((i) => i.id === id);
