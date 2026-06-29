@@ -143,10 +143,14 @@ def _support(c):
     avg_stars = q1(c, "SELECT AVG(stars) FROM app_feedback WHERE stars IS NOT NULL AND stars > 0")
     with_comment = q1(c, "SELECT COUNT(*) FROM app_feedback WHERE comment IS NOT NULL AND comment <> ''") or 0
     tickets_open = None
-    try: tickets_open = q1(c, "SELECT COUNT(*) FROM admin_support_tickets WHERE status NOT IN ('closed','resolved')")
+    avg_resolution_hrs = None
+    try:
+        tickets_open = q1(c, "SELECT COUNT(*) FROM admin_support_tickets WHERE status NOT IN ('closed','resolved')")
+        avg_resolution_hrs = q1(c, "SELECT AVG(TIMESTAMPDIFF(HOUR, created_at, resolved_at)) FROM admin_support_tickets WHERE resolved_at IS NOT NULL AND created_at >= NOW() - INTERVAL 90 DAY")
     except Exception: pass
     return {"feedback_30d": fb_30d, "avg_stars": round(float(avg_stars),2) if avg_stars else None,
-            "feedback_with_comment": with_comment, "support_tickets_open": tickets_open}
+            "feedback_with_comment": with_comment, "support_tickets_open": tickets_open,
+            "avg_resolution_hrs": round(float(avg_resolution_hrs), 1) if avg_resolution_hrs else None}
 metric("support", _support)
 
 # ---- Security ----

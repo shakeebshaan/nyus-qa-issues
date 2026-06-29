@@ -265,6 +265,7 @@ const categories = [
     m("feedback_comments", "Feedback with comments", num(sup.feedback_with_comment), { source: "DB app_feedback", owner: "Support", priority: "L" }),
     m("tickets_open", "Open support tickets", num(sup.support_tickets_open), { source: "DB admin_support_tickets", owner: "Support", priority: "M" }),
     m("csat", "CSAT avg rating (30d)", sup.avg_stars != null ? sup.avg_stars : A("in-app CSAT modal live (commit 4b56fac9) — awaiting first responses"), { unit: sup.avg_stars != null ? `★/5 (${sup.feedback_30d || 0} responses)` : "", formula: "avg(stars) from app_feedback WHERE created_at > now()-30d", source: "DB app_feedback", owner: "Support", priority: "M" }),
+    m("resolution_time", "Avg ticket resolution time (90d)", sup.avg_resolution_hrs != null ? sup.avg_resolution_hrs : A("no resolved tickets yet"), { unit: sup.avg_resolution_hrs != null ? "hours" : "", formula: "avg(TIMESTAMPDIFF(HOUR,created_at,resolved_at)) WHERE resolved_at IS NOT NULL 90d window", source: "DB admin_support_tickets", owner: "Support", priority: "M" }),
   ]},
   { key: "security", title: "Security & Privacy", metrics: [
     m("sec_events_30d", "Security events (30d, by severity)", sec.events_30d_by_severity ? Object.entries(sec.events_30d_by_severity).map(([k, v]) => `${k}:${v}`).join(" ") : null, { source: "DB security_event_logs", owner: "Security", priority: "M" }),
