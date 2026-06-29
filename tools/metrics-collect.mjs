@@ -326,8 +326,8 @@ const categories = [
       gsc ? `${gsc.impressions} impr / ${gsc.ctr}% CTR / pos ${gsc.position} (30d)` : A("Enable Search Console API in GCP project 415757416413 + add SA nyus-ga4-reader@nyus-and.iam.gserviceaccount.com as GSC user for nyus.in"),
       { owner: "SEO", priority: "H" }),
     m("keyword_rankings", "Top search queries (GSC, 30d)", gsc ? gsc.topQueries.map(q => `${q.query} (${q.impressions} impr, pos ${q.position})`).join(" | ") || "no data" : A("GSC for web + an ASO tool (AppTweak/SEMrush) for app keywords"), { owner: "Marketing", priority: "M" }),
-    m("backlinks", "Backlinks (count / authority)", A("Ahrefs or Moz API key, or GSC Links report export"), { owner: "SEO", priority: "L" }),
-    m("paid_ads", "Paid: CPI / CAC / ROAS", A("Connect Google Ads / Meta Ads (UTMs → GA4) — only if running paid campaigns"), { owner: "Growth", priority: "H" }),
+    m("backlinks", "Backlinks (count / authority)", gsc ? A("GSC enabled — backlink count via Ahrefs/Moz API or manual GSC Links export; auto-populates once an API key is added") : A("Enable GSC (see mt-gsc) then add Ahrefs/Moz API key for backlink counts"), { owner: "SEO", priority: "L" }),
+    m("paid_ads", "Paid sessions (30d, GA4)", ga4 && ga4.channels && (ga4.channels["Paid Search"] || ga4.channels["Paid Social"]) ? `${(ga4.channels["Paid Search"] || 0) + (ga4.channels["Paid Social"] || 0)} sessions (Search:${ga4.channels["Paid Search"] || 0} Social:${ga4.channels["Paid Social"] || 0})` : A("No paid traffic yet — link Google Ads to GA4: Admin→Product Links→Google Ads; paid sessions auto-appear once linked. CPI/CAC/ROAS require ad-platform API (owner step)."), { formula: "GA4 Paid Search + Paid Social channel sessions", source: "GA4 channels", owner: "Growth", priority: "H" }),
   ]},
   { key: "app_store", title: "App Store (ASO)", metrics: [
     m("in_app_rating", "In-app rating (avg stars)", num(sup.avg_stars), { unit: "★", source: "DB app_feedback", owner: "PM", priority: "H" }),
