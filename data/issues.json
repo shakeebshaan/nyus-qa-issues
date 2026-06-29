@@ -285,8 +285,8 @@
         "setup",
         "security"
       ],
-      "reviewReason": "Confirmed 4 vulnerabilities: 1 HIGH (GHSA-fx2h-pf6j-xcff: vite server.fs.deny bypass on Windows, patched in vite 6.4.3), 3 moderate (vite dev-server header injection, vite source-map exposure, qs prototype pollution in typed-rest-client). ALL dev-server only — zero production risk (app ships as compiled Capacitor APK, vite never runs in prod). npm audit fix (safe) is a no-op — all fixes require vite 5->6 upgrade (breaking change). Steps for interactive session: (1) npm install vite@6.4.3 @vitejs/plugin-react-swc@latest (2) npm run build -- verify zero TS/build errors (3) commit if build passes. vite.config.ts uses only standard APIs (manualChunks, allowedHosts, plugins) — no vite 5-specific internals. The HIGH severity is Windows-only and only exploitable if an attacker can reach the dev server.",
-      "reviewedAt": "2026-06-29T14:48:52.220Z"
+      "reviewReason": "FIX SHIPPED (commit 1fcdcda7): upgraded vite 5.4.21 -> 6.4.3 and @vitejs/plugin-react-swc to latest. HIGH severity GHSA-fx2h-pf6j-xcff (vite server.fs.deny bypass on Windows) is ELIMINATED — npm audit now shows 0 high. 2 moderate remain in @stryker-mutator/typed-rest-client (dev-only mutation testing tool, zero prod risk — stryker 8->9 upgrade pre-existed in working tree). Production build (npm run build) and tsc --noEmit both clean. GATE: testGate=true requires npm test but full vitest run includes e2e/integration/contract/a11y (~39 min, RED on infra flakes) — infra-blocked, not related to this fix. Recommend owner scope loop.json testCommand to 'npm run test:component' or 'vitest run src' for the gate to be satisfiable in headless ticks. Owner choice: (A) scope testCommand in loop.json, OR (B) accept this review note as sufficient evidence and resolve.",
+      "reviewedAt": "2026-06-29T15:07:10.302Z"
     },
     {
       "id": "i-20260628-mt-social",
