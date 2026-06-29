@@ -6424,6 +6424,36 @@
       "resolvedAt": "2026-06-29T11:20:11.778Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-29T11:20:11.778Z"
+    },
+    {
+      "id": "i-20260628-mt-billing",
+      "createdAt": "2026-06-28T19:38:10.729Z",
+      "route": null,
+      "description": "[Metrics setup] Connect billing (Razorpay/Stripe) â€” unlocks true ARPU, LTV, CAC and accurate MRR. Today the Metrics tab shows REAL subscription counts + gross active revenue from the DB (118 active, ~Rs 10,693), but ARPU/LTV/CAC need the payment provider's history to normalize monthly vs annual vs one-time. STEPS: (1) Razorpay Dashboard -> Settings -> API Keys -> generate a Key ID + Secret (read-only if available). (2) Stripe (if used) -> Developers -> API keys -> a restricted read-only key (read: charges, subscriptions, customers). (3) Send me both via a secure channel (NOT in this public board â€” drop them in the prod .env or a private note). (4) I'll add a nightly pull computing MRR (normalized), ARPU = MRR/active, churn from cancellations, and LTV = ARPU x avg lifetime. Marketing spend (for CAC) comes from the paid-ads issue.",
+      "author": "claude",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Owner action: provide read-only Razorpay/Stripe API keys (securely, not on this public board) to unlock ARPU/LTV/CAC + normalized MRR.",
+      "reviewedAt": "2026-06-28T19:38:10.729Z",
+      "reviewedBy": "claude",
+      "reviewReply": null,
+      "reviewRepliedAt": null,
+      "reviewReplyBy": null,
+      "tags": [
+        "metrics",
+        "setup",
+        "finance"
+      ],
+      "resolvedAt": "2026-06-29T11:29:27.435Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-29T11:29:27.435Z"
     }
   ]
 }
