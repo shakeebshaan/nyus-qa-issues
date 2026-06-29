@@ -107,6 +107,31 @@ function pullVuln() {
   } catch (e) { warn.push("vuln: " + String(e.message || e).slice(0, 120)); return null; }
 }
 
+// ── 3c. backend vulnerabilities (pip-audit via SSH) ──────────────────────────
+function pullVulnBackend() {
+  if (!HOST || !HOSTKEY) return null;
+  try {
+    const cmd = "cd ~/nyu_backend && . venv/bin/activate && ~/.local/bin/pip-audit -f json 2>/dev/null";
+    // pip-audit exits 1 when vulns found — capture stdout from error like npm audit
+    let out = "";
+    try { out = execFileSync("plink", ["-batch", "-hostkey", HOSTKEY, "-i", KEY, HOST, cmd],
+      { encoding: "utf8", timeout: 120000, maxBuffer: 32 << 20 }); }
+    catch (e) { out = e.stdout || ""; }
+    const raw = out.trim();
+    if (!raw) return null;
+    const deps = JSON.parse(raw).dependencies || [];
+    let critical = 0, high = 0, moderate = 0, low = 0;
+    for (const dep of deps) {
+      for (const v of dep.vulns || []) {
+        const sev = (v.fix_versions?.[0] ? "high" : "moderate"); // pip-audit 2.x has no severity field; treat any vuln as high
+        if (sev === "critical") critical++; else if (sev === "high") high++; else moderate++;
+      }
+    }
+    const total = critical + high + moderate + low;
+    return { critical, high, moderate, low, total };
+  } catch (e) { warn.push("vuln_backend: " + String(e.message || e).slice(0, 120)); return null; }
+}
+
 // ── 3. prod health ─────────────────────────────────────────
 function pullHealth() {
   if (!HOST || !HOSTKEY) return {};
@@ -154,6 +179,7 @@ const db = pullDb();
 const ga4 = await pullGa4();
 const health = pullHealth();
 const vuln = pullVuln();
+const vulnBackend = pullVulnBackend();
 const comp = pullCompetitors();
 let aiEval = null;
 {
@@ -270,7 +296,8 @@ const categories = [
   { key: "security", title: "Security & Privacy", metrics: [
     m("sec_events_30d", "Security events (30d, by severity)", sec.events_30d_by_severity ? Object.entries(sec.events_30d_by_severity).map(([k, v]) => `${k}:${v}`).join(" ") : null, { source: "DB security_event_logs", owner: "Security", priority: "M" }),
     m("otp_30d", "OTP requests (30d)", num(sec.otp_requests_30d), { source: "DB otps", owner: "Security", priority: "L" }),
-    m("vuln_count", "Open high-severity vulnerabilities", vuln ? (vuln.high + vuln.critical) : A("set auditDir in metrics.config.local.json (free npm audit) or provide a Snyk token"), { unit: vuln ? `high+crit (${vuln.total} total: ${vuln.critical}C/${vuln.high}H/${vuln.moderate}M/${vuln.low}L)` : "", formula: "npm audit high+critical", source: "npm audit", owner: "Security", priority: "H" }),
+    m("vuln_count", "Open high-severity vulnerabilities (frontend)", vuln ? (vuln.high + vuln.critical) : A("set auditDir in metrics.config.local.json (free npm audit) or provide a Snyk token"), { unit: vuln ? `high+crit (${vuln.total} total: ${vuln.critical}C/${vuln.high}H/${vuln.moderate}M/${vuln.low}L)` : "", formula: "npm audit high+critical", source: "npm audit (frontend)", owner: "Security", priority: "H" }),
+    m("vuln_count_backend", "Open vulnerabilities (backend Python)", vulnBackend ? (vulnBackend.high + vulnBackend.critical) : A("ssh host/hostkey must be configured — pip-audit runs via SSH on prod venv"), { unit: vulnBackend ? `high+crit (${vulnBackend.total} total: ${vulnBackend.critical}C/${vulnBackend.high}H/${vulnBackend.moderate}M/${vulnBackend.low}L)` : "", formula: "pip-audit -f json on prod venv", source: "pip-audit (backend SSH)", owner: "Security", priority: "H" }),
     m("privacy_consents", "Privacy consent opt-in rate", A("Consent events instrumented in-app (ATT/GDPR prompt outcomes)"), { owner: "Compliance", priority: "M" }),
   ]},
   { key: "infra", title: "Infrastructure & Ops", metrics: [
@@ -392,7 +419,7 @@ function appendHistory() {
     organic: ga4 ? ga4.organic_30d : null, aeo: ga4 ? ga4.aeo_ai_assistant_30d : null,
     web_sessions: ga4 ? ga4.sessions_30d : null,
     workouts_7d: db.workouts_completed_7d ?? null, meals_7d: db.meals_logged_7d ?? null,
-    vuln_high: vuln ? (vuln.high + vuln.critical) : null, errors_today: health.errors_today ?? null,
+    vuln_high: vuln ? (vuln.high + vuln.critical) : null, vuln_backend_high: vulnBackend ? (vulnBackend.high + vulnBackend.critical) : null, errors_today: health.errors_today ?? null,
     ai_accuracy: aiEval ? aiEval.accuracy_pct : null };
   let hist = [];
   try { hist = JSON.parse(b64FromGh(ghJson(["api", `repos/${PRIV}/contents/data/metrics-history.json`]))); } catch {}
