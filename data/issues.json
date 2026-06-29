@@ -275,7 +275,7 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "A",
       "reviewRepliedAt": "2026-06-28T22:03:13.603Z",
@@ -284,7 +284,9 @@
         "metrics",
         "setup",
         "security"
-      ]
+      ],
+      "reviewReason": "This metric (open high-severity vulnerabilities) requires running a vulnerability scanner (Snyk, Trivy, or similar) against the codebase/dependencies and feeding results into the metrics collector. This is an owner-setup task: choose a scanner, run it against the repo, add credentials/output to metrics-collect.mjs. No code fix can provide this data without the external scanner being set up.",
+      "reviewedAt": "2026-06-29T12:59:27.878Z"
     },
     {
       "id": "i-20260628-mt-social",
