@@ -188,8 +188,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fix: vite 5->6.4.3 eliminates GHSA-fx2h-pf6j-xcff HIGH severity vuln (0 high now, 2 moderate in dev-only stryker). Scoped loop.json testCommand to npm run test:unit per owner reply A — gate now satisfiable in headless ticks. Dashboard screenshot confirms app runs cleanly post-upgrade.",
+        "imagePath": "images/i-20260628-mt-vuln-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260628-mt-vuln-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "30b43304c792da35ca46d45635de36dbde1bdb3e",
+        "imageCommits": [
+          "30b43304c792da35ca46d45635de36dbde1bdb3e"
+        ],
+        "fixedAt": "2026-06-29T15:37:18.265Z",
+        "by": "shakeebshaan",
+        "appCommit": "1fcdcda7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "0 high vulns eliminated + testCommand scoped. Gate passes."
+        }
+      },
       "history": [
         {
           "at": "2026-06-29T07:40:18.890Z",
@@ -275,7 +297,7 @@
           }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "A",
       "reviewRepliedAt": "2026-06-28T22:03:13.603Z",
@@ -284,9 +306,7 @@
         "metrics",
         "setup",
         "security"
-      ],
-      "reviewReason": "FIX SHIPPED (commit 1fcdcda7): upgraded vite 5.4.21 -> 6.4.3 and @vitejs/plugin-react-swc to latest. HIGH severity GHSA-fx2h-pf6j-xcff (vite server.fs.deny bypass on Windows) is ELIMINATED — npm audit now shows 0 high. 2 moderate remain in @stryker-mutator/typed-rest-client (dev-only mutation testing tool, zero prod risk — stryker 8->9 upgrade pre-existed in working tree). Production build (npm run build) and tsc --noEmit both clean. GATE: testGate=true requires npm test but full vitest run includes e2e/integration/contract/a11y (~39 min, RED on infra flakes) — infra-blocked, not related to this fix. Recommend owner scope loop.json testCommand to 'npm run test:component' or 'vitest run src' for the gate to be satisfiable in headless ticks. Owner choice: (A) scope testCommand in loop.json, OR (B) accept this review note as sufficient evidence and resolve.",
-      "reviewedAt": "2026-06-29T15:07:10.302Z"
+      ]
     },
     {
       "id": "i-20260628-mt-social",
