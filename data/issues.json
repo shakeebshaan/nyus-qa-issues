@@ -262,8 +262,28 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "npm-audit wired into metrics collector (metrics-collect.mjs pullVuln()). Collector runs npm audit --json in AUDIT_DIR, parses metadata.vulnerabilities, surfaces vuln_count (high+critical) on Metrics tab. Live: 6 high, 0 critical at last collect run. Owner confirmed Option A. No further code change needed.",
+        "imagePath": "images/i-20260628-mt-vuln-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260628-mt-vuln-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a6c5bec7fa82982264791c8f4a8a806351ef2830",
+        "imageCommits": [
+          "a6c5bec7fa82982264791c8f4a8a806351ef2830"
+        ],
+        "fixedAt": "2026-06-29T08:58:51.426Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95
+        }
+      },
       "history": [
         {
           "at": "2026-06-29T07:40:18.890Z",
@@ -294,7 +314,7 @@
           }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "A",
       "reviewRepliedAt": "2026-06-28T22:03:13.603Z",
@@ -303,9 +323,7 @@
         "metrics",
         "setup",
         "security"
-      ],
-      "reviewReason": "Owner confirmed option A ('A'). npm-audit is LIVE â€” wired into the metrics collector, showing '6 high, 0 critical' on the Metrics tab (implemented prior tick). No further code action needed. Safe to Resolve on the board.",
-      "reviewedAt": "2026-06-28T22:39:43.626Z"
+      ]
     },
     {
       "id": "i-20260628-mt-social",
