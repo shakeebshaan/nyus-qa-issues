@@ -49,7 +49,7 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "We need to fix it so user wait very less and have the result accurately 100% accuracy and real data",
       "reviewRepliedAt": "2026-06-29T12:57:35.636Z",
@@ -63,8 +63,8 @@
         "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
       ],
       "reviewReplyImagePrivate": true,
-      "reviewReason": "This 'Waiting here for too long' screen is the coach-build wait (PlanBuildChoiceV2 → 'Coach builds it now' → async AI plan generation). It ONLY appears when FEATURE_DEFER_BUILDERS=true, which is OFF in the release default (VITE_FEATURE_DEFER_BUILDERS unset; compiled release + OTA dist both decode FEATURE_DEFER_BUILDERS=false per owner directive i-20260620-1469). Release users go straight into the always-custom builders — they never see this screen. QA walk fix to click 'I'll build it myself' is in commit 08bb0336. Owner decision needed: (A) remove the coach-build path entirely (delete PlanBuildChoiceV2), (B) add a timeout/spinner to the coach-build wait, or (C) keep as-is (unreachable in release, dev-only with flag). Flagging as owner-only call since it's a product decision.",
-      "reviewedAt": "2026-06-29T12:53:40.292Z"
+      "reviewReason": "Report attached (38 screenshots). Onboarding walk PASSES — all 16 steps reach dashboard. Issue: coach-build wait is ~21s per builder (7x 3s polls). Owner requests faster wait + 100% accurate data. FEATURE_DEFER_BUILDERS is OFF in release — this path is dev-only. Fix options: (A) Add streaming progress to backend plan generation (shows step-by-step: 'Generating Monday... Tuesday...' as each day generates) — requires backend refactor of LLM service; (B) Cap wait at 8s, fall back to custom builder prefilled with whatever the backend returned so far — 1 day frontend work; (C) Pre-generate the plan during onboarding data collection (before user reaches the choice screen) — reduces visible wait to ~0s. Owner: reply A, B, or C (or 'all three') to trigger implementation. Data accuracy is inherent to the LLM prompts — will audit llm_prompts.py for the plan builders if owner requests.",
+      "reviewedAt": "2026-06-29T13:17:18.675Z"
     },
     {
       "id": "i-20260628-dfd5",
