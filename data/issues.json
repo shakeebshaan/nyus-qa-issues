@@ -37,33 +37,6 @@
       "reviewReplyImagePrivate": true
     },
     {
-      "id": "i-20260628-sntr",
-      "createdAt": "2026-06-28T03:43:37.550Z",
-      "route": null,
-      "description": "[Claude-raised] Frontend Sentry crash reporting is DISABLED in production. .env.production has VITE_SENTRY_DSN= (blank); Vite inlines it as an empty string at build time, so initSentry() (src/lib/sentry.ts:26) hits `if(!dsn) return` and the WHOLE Sentry init -- including the `nyus-frontend@<version>` release tag -- is tree-shaken out. Verified on the v150 dist just shipped: no Sentry init, no release literal anywhere. Net: React render crashes / FE runtime errors are NOT reported in production, and the release-tagging work (commit 2dba89c6) has zero effect. .env.example says prod builds should always set a DSN, so this looks like an unfilled-credential oversight, not intent.",
-      "author": "claude",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Owner confirmed: 'will add sentry later'. No code action needed. VITE_SENTRY_DSN stays unset in .env.production. Frontend crash reporting continues via Discord errors channel only (ErrorBoundary + captureException already log there). This issue can be Resolved as a known-gap tracker or left open as a reminder -- your call. No further action from me until you add the DSN.",
-      "reviewedAt": "2026-06-28T23:43:50.723Z",
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "will add sentry later",
-      "reviewRepliedAt": "2026-06-28T14:19:27.415Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "observability",
-        "release",
-        "owner-config"
-      ]
-    },
-    {
       "id": "i-20260628-rpt1",
       "createdAt": "2026-06-28T14:27:11.384Z",
       "route": null,
