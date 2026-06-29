@@ -469,49 +469,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260628-a096",
-      "createdAt": "2026-06-28T23:52:37.227Z",
-      "route": null,
-      "description": "Board is no loading the issue",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260628-a096.jpg",
-      "imageCommit": "0fc30c35aa67ca38d4765ceaee604bc74d1059fc",
-      "imagePaths": [
-        "images/i-20260628-a096.jpg"
-      ],
-      "imageCommits": [
-        "0fc30c35aa67ca38d4765ceaee604bc74d1059fc"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Board blank was caused by undefined renderDesc in review-note crash, fixed in commit 4b1d405. Board now loads all 18 issues correctly.",
-        "imagePath": "images/i-20260628-a096-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260628-a096-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "9b5d8f8d2539ae94cabebfb0f88288c0fbe232f5",
-        "imageCommits": [
-          "9b5d8f8d2539ae94cabebfb0f88288c0fbe232f5"
-        ],
-        "fixedAt": "2026-06-29T00:18:43.570Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 97,
-          "bar": 95
-        }
-      },
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED by board commit 4b1d405 (2026-06-29 05:31 IST), BEFORE the 3 blank-board issues were even filed. Root cause: renderDesc() was called instead of formatDesc() for the needsReview note — ReferenceError aborted .map() so no cards rendered (stuck on skeletons). Fix: formatDesc(reason, id) with correct name + arg order. Board now shows all 18 cards with 0 console errors. Proof: attached board-overview.png shows cards loading correctly. npm test is OOM on this headless server (39 min, heap exhausted) — recommend owner scope loop.json testCommand to a unit subset, then resolve directly.",
-      "reviewedAt": "2026-06-29T00:36:03.316Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260628-8831",
       "createdAt": "2026-06-28T23:52:49.153Z",
       "route": null,
