@@ -120,15 +120,16 @@ function pullVulnBackend() {
     const raw = out.trim();
     if (!raw) return null;
     const deps = JSON.parse(raw).dependencies || [];
-    let critical = 0, high = 0, moderate = 0, low = 0;
+    // pip-audit 2.x has no CVSS severity field — count by fix availability
+    let fixable = 0, unfixable = 0;
     for (const dep of deps) {
       for (const v of dep.vulns || []) {
-        const sev = (v.fix_versions?.[0] ? "high" : "moderate"); // pip-audit 2.x has no severity field; treat any vuln as high
-        if (sev === "critical") critical++; else if (sev === "high") high++; else moderate++;
+        if (v.fix_versions?.length) fixable++; else unfixable++;
       }
     }
-    const total = critical + high + moderate + low;
-    return { critical, high, moderate, low, total };
+    const total = fixable + unfixable;
+    // Map to the standard shape: fixable → high (action required), unfixable → moderate
+    return { critical: 0, high: fixable, moderate: unfixable, low: 0, total };
   } catch (e) { warn.push("vuln_backend: " + String(e.message || e).slice(0, 120)); return null; }
 }
 
@@ -297,7 +298,7 @@ const categories = [
     m("sec_events_30d", "Security events (30d, by severity)", sec.events_30d_by_severity ? Object.entries(sec.events_30d_by_severity).map(([k, v]) => `${k}:${v}`).join(" ") : null, { source: "DB security_event_logs", owner: "Security", priority: "M" }),
     m("otp_30d", "OTP requests (30d)", num(sec.otp_requests_30d), { source: "DB otps", owner: "Security", priority: "L" }),
     m("vuln_count", "Open high-severity vulnerabilities (frontend)", vuln ? (vuln.high + vuln.critical) : A("set auditDir in metrics.config.local.json (free npm audit) or provide a Snyk token"), { unit: vuln ? `high+crit (${vuln.total} total: ${vuln.critical}C/${vuln.high}H/${vuln.moderate}M/${vuln.low}L)` : "", formula: "npm audit high+critical", source: "npm audit (frontend)", owner: "Security", priority: "H" }),
-    m("vuln_count_backend", "Open vulnerabilities (backend Python)", vulnBackend ? (vulnBackend.high + vulnBackend.critical) : A("ssh host/hostkey must be configured — pip-audit runs via SSH on prod venv"), { unit: vulnBackend ? `high+crit (${vulnBackend.total} total: ${vulnBackend.critical}C/${vulnBackend.high}H/${vulnBackend.moderate}M/${vulnBackend.low}L)` : "", formula: "pip-audit -f json on prod venv", source: "pip-audit (backend SSH)", owner: "Security", priority: "H" }),
+    m("vuln_count_backend", "Open vulnerabilities (backend Python)", vulnBackend ? vulnBackend.total : A("ssh host/hostkey must be configured — pip-audit runs via SSH on prod venv"), { unit: vulnBackend ? `total (${vulnBackend.high} fixable / ${vulnBackend.moderate} no-fix; pip-audit 2.x no CVSS severity)` : "", formula: "pip-audit -f json on prod venv; fixable=high, no-fix=moderate", source: "pip-audit (backend SSH)", owner: "Security", priority: "H" }),
     m("privacy_consents", "Privacy consent opt-in rate", A("Consent events instrumented in-app (ATT/GDPR prompt outcomes)"), { owner: "Compliance", priority: "M" }),
   ]},
   { key: "infra", title: "Infrastructure & Ops", metrics: [
