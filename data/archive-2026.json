@@ -6038,6 +6038,52 @@
       "resolvedAt": "2026-06-29T07:41:30.248Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-29T07:41:30.248Z"
+    },
+    {
+      "id": "i-20260628-7474",
+      "createdAt": "2026-06-28T23:52:59.543Z",
+      "route": null,
+      "description": "Board is no loading the issue",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260628-7474.jpg",
+      "imageCommit": "546306337e90de5c9871573b0cb7683c8e4d9c21",
+      "imagePaths": [
+        "images/i-20260628-7474.jpg"
+      ],
+      "imageCommits": [
+        "546306337e90de5c9871573b0cb7683c8e4d9c21"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Duplicate of a096. Board blank fix (renderDesc crash) applied in commit 4b1d405. Board now renders all issues.",
+        "imagePath": "images/i-20260628-7474-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260628-7474-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5e3916a8cab507412d5191212b9e10718e8b426e",
+        "imageCommits": [
+          "5e3916a8cab507412d5191212b9e10718e8b426e"
+        ],
+        "fixedAt": "2026-06-29T00:21:22.044Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 97,
+          "bar": 95
+        }
+      },
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED by board commit 4b1d405 (same fix as a096/8831). Board blank was caused by renderDesc() ReferenceError inside needsReview card rendering — aborted the entire card list. Fixed to formatDesc(reason, id). Board now renders all issues correctly. npm test OOM infra-blocked — owner can resolve directly.",
+      "reviewedAt": "2026-06-29T00:36:44.907Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-06-29T07:41:42.424Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-29T07:41:42.424Z"
     }
   ]
 }
