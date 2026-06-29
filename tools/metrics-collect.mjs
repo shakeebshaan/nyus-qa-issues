@@ -9,7 +9,7 @@
 //
 //   node tools/metrics-collect.mjs
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { createSign } from "node:crypto";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -155,10 +155,11 @@ async function pullGsc() {
 function pullVuln() {
   if (!AUDIT_DIR || !existsSync(AUDIT_DIR)) return null;
   try {
-    // npm audit exits non-zero when vulns exist → capture stdout regardless.
-    let out = "";
-    try { out = execFileSync("npm", ["audit", "--json"], { cwd: AUDIT_DIR, encoding: "utf8", timeout: 90000, maxBuffer: 32 << 20, shell: true }); }
-    catch (e) { out = e.stdout || ""; }
+    // npm audit exits non-zero when vulns exist — use spawnSync so stdout is
+    // always captured regardless of exit code (execFileSync throws and loses stdout on Windows).
+    const r = spawnSync("npm", ["audit", "--json"], { cwd: AUDIT_DIR, encoding: "utf8", timeout: 90000, maxBuffer: 32 << 20, shell: true });
+    const out = (r.stdout || "").trim();
+    if (!out) return null;
     const v = JSON.parse(out).metadata?.vulnerabilities;
     if (!v) return null;
     return { critical: v.critical || 0, high: v.high || 0, moderate: v.moderate || 0, low: v.low || 0, total: v.total || 0 };
@@ -338,8 +339,8 @@ const categories = [
     m("weight_logs_30d", "Weight logs (30d)", num(db.weight_logs_30d), { source: "DB weight_log", owner: "Data", priority: "L" }),
     m("bmr_formula_ref_error", "BMR formula ref. error (Mifflin-St Jeor baseline)", comp && comp.health_accuracy_benchmarks ? comp.health_accuracy_benchmarks.bmr_mean_abs_error_pct : null, { unit: "% mean abs error", formula: "Frankenfield et al. 2005 (reference — not NYUS-specific)", source: "data/competitor_estimates.json health_accuracy_benchmarks", owner: "Data Science", priority: "L" }),
     m("calorie_burn_ref_error", "Calorie-burn formula ref. error (HR-based baseline)", comp && comp.health_accuracy_benchmarks ? comp.health_accuracy_benchmarks.calorie_burn_mean_abs_error_pct : null, { unit: "% mean abs error", formula: "Keytel et al. 2005 (reference — not NYUS-specific)", source: "data/competitor_estimates.json health_accuracy_benchmarks", owner: "Data Science", priority: "L" }),
-    m("hr_accuracy", "Heart-rate accuracy (measured % error)", comp && comp.health_accuracy_benchmarks && comp.health_accuracy_benchmarks.measured_hr_accuracy_pct_error != null ? comp.health_accuracy_benchmarks.measured_hr_accuracy_pct_error : A("Send chest-strap HR vs NYUS app comparison from a workout session (Garmin/Polar export + NYUS session same time) — see board issue mt-misc"), { owner: "Data Science", priority: "M" }),
-    m("calorie_accuracy", "Calorie-burn accuracy (measured % error)", comp && comp.health_accuracy_benchmarks && comp.health_accuracy_benchmarks.measured_calorie_accuracy_pct_error != null ? comp.health_accuracy_benchmarks.measured_calorie_accuracy_pct_error : A("Indirect-calorimetry reference or weight-trend back-calc study — or send chest-strap + scale data"), { owner: "Data Science", priority: "M" }),
+    m("hr_accuracy", "Heart-rate accuracy (measured % error)", comp && comp.health_accuracy_benchmarks && comp.health_accuracy_benchmarks.measured_hr_accuracy_pct_error != null ? comp.health_accuracy_benchmarks.measured_hr_accuracy_pct_error : null, { unit: "% error vs reference device", formula: "NYUS session vs chest-strap reference (same-time export)", source: "data/competitor_estimates.json health_accuracy_benchmarks", owner: "Data Science", priority: "L" }),
+    m("calorie_accuracy", "Calorie-burn accuracy (measured % error)", comp && comp.health_accuracy_benchmarks && comp.health_accuracy_benchmarks.measured_calorie_accuracy_pct_error != null ? comp.health_accuracy_benchmarks.measured_calorie_accuracy_pct_error : null, { unit: "% error vs reference", formula: "Indirect-calorimetry or weight-trend back-calc study", source: "data/competitor_estimates.json health_accuracy_benchmarks", owner: "Data Science", priority: "L" }),
   ]},
   { key: "social_community", title: "Social & Community", metrics: [
     m("friendships", "Friendships (in-app)", num(soc.friendships_total), { source: "DB friendships", owner: "Community", priority: "L" }),
