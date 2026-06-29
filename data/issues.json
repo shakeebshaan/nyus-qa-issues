@@ -633,7 +633,10 @@
         }
       },
       "history": [],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED by board commit 4b1d405 (same fix as a096/8831). Board blank was caused by renderDesc() ReferenceError inside needsReview card rendering — aborted the entire card list. Fixed to formatDesc(reason, id). Board now renders all issues correctly. npm test OOM infra-blocked — owner can resolve directly.",
+      "reviewedAt": "2026-06-29T00:36:44.907Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260629-21d3",
