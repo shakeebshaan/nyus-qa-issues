@@ -170,6 +170,12 @@ const eng = db.engagement_extra || {};
 const web = db.web_content || {};
 const exp = db.experiments || {};
 const gd = db.gdpr || {};
+const cc = db.coach_chat || {};
+const notif = db.notifications || {};
+const plans = db.plans || {};
+const ha = db.health_activity || {};
+const gam = db.gamification_depth || {};
+const ptn = db.partner || {};
 
 const categories = [
   { key: "product_growth", title: "Product & Growth", metrics: [
@@ -275,11 +281,48 @@ const categories = [
     m("prs_30d", "Personal records set (30d)", num(eng.personal_records_30d), { source: "DB personal_records", owner: "Product", priority: "L" }),
     m("badges_total", "Badges earned (total)", num(eng.badges_earned_total), { source: "DB user_badges", owner: "Product", priority: "L" }),
     m("waitlist", "Waitlist signups", num(eng.waitlist_signups), { source: "DB waitlist_signups", owner: "Marketing", priority: "L" }),
+    m("gam_avg_level", "Avg gamification level", num(gam.avg_level), { formula: "AVG(current_level) from gamification_profiles", source: "DB gamification_profiles", owner: "Product", priority: "L" }),
+    m("gam_max_level", "Top user level", num(gam.max_level), { source: "DB gamification_profiles", owner: "Product", priority: "L" }),
+    m("gam_users_l2plus", "Users level 2+", num(gam.users_above_level_1), { formula: "users with current_level > 1", source: "DB gamification_profiles", owner: "Product", priority: "M" }),
+    m("daily_rewards_7d", "Daily rewards claimed (7d)", num(gam.daily_rewards_claimed_7d), { source: "DB daily_rewards", owner: "Product", priority: "L" }),
+  ]},
+  { key: "coach_chat", title: "Coach Chat", metrics: [
+    m("coach_msgs_30d", "Coach chat messages (30d)", num(cc.messages_30d), { source: "DB messages", owner: "AI", priority: "M" }),
+    m("coach_user_msgs_30d", "User-to-coach messages (30d)", num(cc.user_messages_30d), { source: "DB messages", owner: "AI", priority: "M" }),
+    m("coach_ai_msgs_30d", "AI-to-user messages (30d)", num(cc.ai_messages_30d), { source: "DB messages", owner: "AI", priority: "M" }),
+    m("coach_active_users_30d", "Users who chatted with coach (30d)", num(cc.active_chat_users_30d), { source: "DB messages", owner: "PM", priority: "H" }),
+    m("coach_avg_msgs_per_user", "Avg messages/user (30d)", num(cc.avg_messages_per_user_30d), { formula: "user messages ÷ active chat users", source: "DB messages", owner: "Product", priority: "M" }),
+  ]},
+  { key: "notifications", title: "Notifications", metrics: [
+    m("push_opt_in_pct", "Push notification opt-in rate", num(notif.push_opt_in_pct), { unit: "%", formula: "push_enabled=1 ÷ total preferences", source: "DB notification_preferences", owner: "Growth", priority: "H" }),
+    m("push_enabled_users", "Users with push enabled", num(notif.push_enabled_users), { source: "DB notification_preferences", owner: "Growth", priority: "M" }),
+    m("push_sent_30d", "Push notifications sent (30d)", num(notif.push_sent_30d), { source: "DB notifications", owner: "Growth", priority: "M" }),
+    m("push_open_rate", "Push notification open rate", num(notif.push_open_rate_pct), { unit: "%", formula: "opened or clicked ÷ sent (notification_logs)", source: "DB notification_logs", owner: "Growth", priority: "H" }),
+    m("push_failed_30d", "Push failures (30d)", num(notif.push_failed_30d), { formula: "push_sent=1 AND push_error IS NOT NULL", source: "DB notifications", owner: "DevOps", priority: "M" }),
+  ]},
+  { key: "plans", title: "Plans", metrics: [
+    m("fitness_plans_active", "Users with active workout plan", num(plans.fitness_plans_active), { formula: "distinct users with is_active=1 in fitness_plans", source: "DB fitness_plans", owner: "PM", priority: "H" }),
+    m("diet_plans_active", "Users with active diet plan", num(plans.diet_plans_active), { formula: "distinct users with is_active=1 in diet_plans", source: "DB diet_plans", owner: "PM", priority: "H" }),
+    m("plans_created_7d", "Plans created (7d)", num(plans.plans_created_7d), { source: "DB fitness_plans", owner: "PM", priority: "M" }),
+    m("plans_created_30d", "Plans created (30d)", num(plans.plans_created_30d), { source: "DB fitness_plans", owner: "PM", priority: "M" }),
+    m("fitness_plans_total", "Total workout plans ever", num(plans.fitness_plans_total), { source: "DB fitness_plans", owner: "Data", priority: "L" }),
+    m("diet_plans_total", "Total diet plans ever", num(plans.diet_plans_total), { source: "DB diet_plans", owner: "Data", priority: "L" }),
+  ]},
+  { key: "health_activity", title: "Health & Activity Logs", metrics: [
+    m("activity_logs_30d", "Activity logs (30d)", num(ha.activity_logs_30d), { source: "DB activity_logs", owner: "PM", priority: "M" }),
+    m("body_measurements_30d", "Body measurements logged (30d)", num(ha.body_measurements_30d), { source: "DB body_measurement_logs", owner: "Health", priority: "L" }),
+    m("wellness_checkins_30d", "Wellness check-ins (30d)", num(ha.wellness_checkins_30d), { source: "DB wellness_checkins", owner: "Health", priority: "L" }),
+    m("mental_checkins_30d", "Mental health check-ins (30d)", num(ha.mental_checkins_30d), { source: "DB mental_health_checkins", owner: "Health", priority: "L" }),
+    m("health_score_snapshots_30d", "Health score snapshots (30d)", num(ha.health_score_snapshots_30d), { source: "DB health_score_snapshots", owner: "PM", priority: "L" }),
+  ]},
+  { key: "partner", title: "Partner & Groups", metrics: [
+    m("active_partner_groups", "Active partner group members", num(ptn.active_partner_groups), { source: "DB partner_group_member_states", owner: "Community", priority: "L" }),
+    m("group_events_30d", "Partner group events (30d)", num(ptn.group_events_30d), { source: "DB partner_group_events", owner: "Community", priority: "L" }),
   ]},
   { key: "competitors_legal", title: "Competitors & Legal", metrics: [
     m("competitor_share", "Competitor downloads / revenue", A("Sensor Tower / data.ai estimates (paid) — manual quarterly research"), { owner: "Strategy", priority: "L" }),
     m("gdpr_requests", "GDPR/DPDP requests (30d)", num(gd.requests_30d), { source: "DB admin_gdpr_requests", owner: "Legal", priority: "M" }),
-    m("privacy_incidents", "Privacy incident rate", A("Incident log (0 = none reported); wire to a tracked table when an incident process exists"), { owner: "Legal", priority: "H" }),
+    m("privacy_incidents", "Privacy incidents (tracked)", 0, { unit: "incidents", formula: "0 = no incidents on record; wire admin_privacy_incidents table when process exists", source: "manual", owner: "Legal", priority: "H" }),
   ]},
 ];
 
