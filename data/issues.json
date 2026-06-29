@@ -370,8 +370,8 @@
       ],
       "reportPath": "reports/mt-misc-owner-guide.html",
       "reportLabel": "Metrics Setup Guide (Live + Owner Steps)",
-      "reviewReason": "A/B Experiments: WIRED — metrics_db.py already has experiments metric (active/total/users), metrics-collect.mjs already shows experiments_active/total/users. Health accuracy (hr/calorie): cleaned to null (no fake action items). GSC backlinks: auto-populates when mt-gsc is resolved. REMAINING (owner action needed): (1) PAID ADS — reply 'connect ads' when running Google/Meta campaigns; (2) COMPETITOR downloads — +/mo Sensor Tower seat or reply 'manual quarterly' for a free estimate; (3) IN-APP CSAT — reply 'add in-app CSAT' to trigger 1-tap survey implementation (1-2 days work); (4) SUPPORT tickets — adopt Zendesk/Intercom or reply 'use current support table' to pull from existing support_tickets DB table.",
-      "reviewedAt": "2026-06-29T13:16:32.248Z"
+      "reviewReason": "IMPLEMENTED THIS TICK: csat_positive_pct metric (% of 4-5 star ratings, 30d) added to metrics_db.py + metrics-collect.mjs (commits 3d634ff backend, fdcff05 qa-repo). ALREADY LIVE: competitor_estimates.json (HealthifyMe/Cultfit/Fittr/Ultrahuman Q2 2026), A/B experiments (experiments_active/total/users from DB notification_experiments), support tickets (tickets_open + avg_resolution_hrs), CSAT avg_stars. OWNER ACTION NEEDED: (1) PAID ADS — link Google Ads account to GA4: GA4 -> Admin -> Product Links -> Google Ads -> link your account; metrics will auto-populate on next collect run. (2) SOCIAL — create brand Instagram/TikTok/Facebook on your own device (headless server IPs are flagged + phone/CAPTCHA required), share Graph API tokens. (3) GSC — see separate mt-gsc issue. (4) COMPETITOR downloads — Sensor Tower paid tier needed for official data; free alternative is manual updates to competitor_estimates.json each quarter.",
+      "reviewedAt": "2026-06-29T14:49:06.101Z"
     },
     {
       "id": "i-20260628-4709",
