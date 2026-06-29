@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -851,6 +851,18 @@ async function openReport(path, label) {
     ? html.replace(/<head[^>]*>/i, (m) => m + REPORT_CSP)
     : REPORT_CSP + html;
 }
+async function resolvePrivDescriptions() {
+  if (!token) return;
+  const spans = document.querySelectorAll("[data-priv-desc-id]:not(.priv-desc-done)");
+  for (const span of spans) {
+    span.classList.add("priv-desc-done");
+    const id = span.dataset.privDescId;
+    try {
+      const data = await fetchPrivJson(`data/desc-${id}.json`);
+      if (data?.description) span.textContent = data.description;
+    } catch {}
+  }
+}
 async function resolvePrivImages() {
   const imgs = document.querySelectorAll("img[data-priv-path]:not(.priv-loaded)");
   for (const img of imgs) {
@@ -1006,13 +1018,14 @@ function cardHtml(it, archived) {
     : "";
 
   const fixPaths = it.fix ? (it.fix.imagePaths || [it.fix.imagePath]) : [];
-  const right = it.status === "fixed" && it.fix
+  const reopenVerdict = archived ? `<div class="verdict"><button class="vbtn reopen" type="button" data-reopen-archived="${esc(it.id)}">↺ Reopen</button></div>` : "";
+  const right = (it.status === "fixed" || archived) && it.fix
     ? `${shotsHtml(fixPaths, fixPaths.map(() => it.fix.imageCommit), "fix screenshot", it.fix?.imagePrivate)}
        ${goalBadgesHtml(it.fix)}
        <p class="desc">${esc(it.fix.description)}</p>
        ${it.fix.by ? `<div class="card-tags">${actorHtml(it.fix.by, "fixed by")}</div>` : ""}
        ${prevHtml}
-       ${archived ? "" : `<div class="verdict">
+       ${archived ? reopenVerdict : `<div class="verdict">
          <button class="vbtn resolve" type="button" data-resolve="${esc(it.id)}">✓ Resolve</button>
          <button class="vbtn reject" type="button" data-notfixed="${esc(it.id)}">✗ Not fixed</button>
        </div>`}`
@@ -1020,14 +1033,15 @@ function cardHtml(it, archived) {
       ? `<div class="review-note"><b>Needs your review.</b><br>${formatDesc(it.reviewReason || "Blocked — see notes.", it.id)}</div>
          ${responseHtml}
          ${prevHtml}
-         ${archived ? "" : `<div class="verdict">
+         ${archived ? reopenVerdict : `<div class="verdict">
            <button class="vbtn respond" type="button" data-respond="${esc(it.id)}">↩ Respond</button>
            <button class="vbtn resolve" type="button" data-resolve="${esc(it.id)}">✓ Resolve</button>
          </div>`}`
       : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
        <div class="await"><span><span class="w">🔧</span>${reopened ? "Awaiting re-fix" : "Awaiting fix"}<br><span style="font-size:12px;opacity:.7">Claude will post the ${reopened ? "re-" : ""}fixed screenshot here</span></span></div>
        ${responseHtml}
-       ${prevHtml}`;
+       ${prevHtml}
+       ${reopenVerdict}`;
   const tags = tagsFor(it);
   const tagsHtml = tags.length
     ? `<div class="card-tags">${tags.map((t) => `<span class="card-tag">${esc(t)}</span>`).join("")}</div>` : "";
@@ -1042,7 +1056,9 @@ function cardHtml(it, archived) {
       <div class="side">
         <h3>Issue</h3>
         ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot", it.imagePrivate)}
-        ${formatDesc(it.description, it.id)}
+        ${it.descPrivate
+          ? `<p class="desc" data-priv-desc-id="${esc(it.id)}">${token ? "Loading…" : "🔒 Private — connect your token to view"}</p>`
+          : formatDesc(it.description, it.id)}
         ${it.reportPath
           ? `<button type="button" class="report-cta" data-report-path="${esc(it.reportPath)}" data-report-label="${esc(it.reportLabel || "Open report")}">📄 ${esc(it.reportLabel || "Open report")} <span class="arr">&rarr;</span></button>`
           : it.link ? `<a class="report-cta" href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.linkLabel || "View report")} <span class="arr">&rarr;</span></a>` : ""}
@@ -1087,6 +1103,7 @@ function render() {
       ? `<div class="empty"><b>No issues with "${esc(activeTag)}"</b>Clear the filter to see all.</div>`
       : `<div class="empty"><b>No issues yet</b>File the first one above — it shows up here with an "awaiting fix" slot.</div>`;
   resolvePrivImages();
+  resolvePrivDescriptions();
 }
 
 /* ── image compression ─────────────────────────────────── */
@@ -1243,12 +1260,15 @@ $("form").addEventListener("submit", async (ev) => {
     }
     let route = $("route").value.trim();
     if (route && !route.startsWith("/")) route = "/" + route;
+    // Store description in private repo so it's not publicly readable (i-20260629-7a27).
+    const descText = $("desc").value.trim();
     $("submit-label").textContent = "Saving issue…";
+    await putPrivFile(`data/desc-${id}.json`, b64encodeUtf8(JSON.stringify({ description: descText })), `issue ${id}: private description`);
     await mutateIssues(`issue ${id}: add`, (d) => {
       if (d.issues.some((i) => i.id === id)) return;
       d.issues.push({
         id, createdAt: new Date().toISOString(), route: route || null,
-        description: $("desc").value.trim(),
+        description: "", descPrivate: true,
         author: myLogin || undefined,   // multi-user: who filed it
         imagePath: imagePaths[0], imageCommit: imageCommits[0],
         imagePaths, imageCommits, imagePrivate: true,
@@ -1836,6 +1856,7 @@ $("arch-toggle").addEventListener("click", async () => {
       ? archCache.map((i) => cardHtml(i, true)).join("")
       : `<div class="empty">Nothing resolved yet.</div>`;
     resolvePrivImages();
+    resolvePrivDescriptions();
     sec.hidden = false;
     t.textContent = "Hide resolved";
   } catch (e) {

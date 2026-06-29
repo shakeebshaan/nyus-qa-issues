@@ -204,11 +204,20 @@ function buildPullEntry(i, root, dl) {
   // The owner's response screenshots (uploaded private, like issue shots) so the
   // agent can SEE the attached direction, not just read the reviewReply text.
   const reviewReplyImages = toImages(i.reviewReplyImagePaths, i.reviewReplyImagePrivate, "reply");
+  // Resolve private description (i-20260629-7a27: descriptions stored in private repo).
+  let description = i.description || "";
+  if (i.descPrivate) {
+    try {
+      const res = ghApi(`repos/${PRIV_OWNER}/${PRIV_REPO}/contents/data/desc-${i.id}.json`);
+      const decoded = JSON.parse(Buffer.from(res.content.replace(/\s/g, ""), "base64").toString("utf8"));
+      description = decoded.description || description;
+    } catch { /* fall back to public description */ }
+  }
   return {
     id: i.id,
     createdAt: i.createdAt,
     route: i.route,
-    description: i.description,
+    description,
     imagePrivate: !!i.imagePrivate,
     image: images[0] || null,
     images,
