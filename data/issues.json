@@ -136,7 +136,7 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "B",
       "reviewRepliedAt": "2026-06-29T07:43:01.348Z",
@@ -148,8 +148,8 @@
       ],
       "reportPath": "reports/a11c-proof.html",
       "reportLabel": "Open contrast fix proof (before/after)",
-      "reviewReason": "Option B IMPLEMENTED (commit 26155eb2). Bumped: WaterLoggerBlock teal-500/600->teal-700 (both states), CoachNudgeCard teal-600->teal-700, WorkoutPlanCard orange-600->orange-700. All prior commits (2475b7b6 /nutrition, cc362637 coach-chat error) were already at -700/-600. Rule fully enforced: teal/orange CTAs use bg-d-*-700, purple/pink use bg-d-*-600. Decorative -500 dots/sliders/checkboxes unchanged (no text sits on them). tsc --noEmit green. Visual proof is blocked headless: these blocks are conditionally rendered only in active coach-chat sessions (AI sends them as interactive messages) -- cannot trigger headlessly without a live chat. Please Resolve if commit suffices, or test in-app by asking coach to log water/log workout/view a nudge.",
-      "reviewedAt": "2026-06-28T22:46:33.557Z"
+      "reviewReason": "OPTION B COMPLETE (commit 54df44d0). All remaining orange CTAs fixed to bg-d-orange-700 (light) / bg-d-orange-400 (dark): PlanActionBar activity (-500->-700), Suggestions challenge CTA (-600->-700), LogWeight confirm-weight (-600->-700), DailyFocus log-workout (-600->-700), WorkoutEditPanel 5x CTAs (-600->-700), ActivityEditPanel 2x CTAs (-600->-700), WorkoutSessionHeader badge (-600->-700). tsc --noEmit clean. Visual proof: fix screenshot on /suggestions shows 'Accept challenge' button rendered in correct dark orange-700 (darker brown tone, WCAG AA pass). GATE NOTE: testGate is set to 'npm test' which requires canvas+PACT+Playwright infra (infra-blocked headless, 39-min hang). Scoped tsc passed; no unit tests cover Tailwind classNames. Recommend changing loop.json testCommand from 'npm test' to 'npx vitest run test/unit' to unblock resolution. Resolve if commit + visual proof suffice.",
+      "reviewedAt": "2026-06-29T08:05:59.259Z"
     },
     {
       "id": "i-20260628-mt-gsc",
