@@ -383,12 +383,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Implemented everything possible without owner credentials. DONE (no creds needed): (1) A/B experiments: already wired — experiments_active, experiments_total, experiments_users from notification_experiments + user_experiment_assignments live on Metrics tab. (2) CSAT: in-app CSAT modal live, avg_stars reads from app_feedback — awaiting first user responses. (3) Support resolution time: ADDED this tick — avg_resolution_hrs (90d window) now in metrics_db.py + collector (commit 04fc7bc). Metrics now 89 live / 16 awaiting. NEEDS OWNER: (A) Paid ads — connect Google Ads/Meta to GA4 via UTM params when campaigns start, no action needed until then; (B) Health accuracy — send chest-strap HR vs NYUS session data (same-time Garmin/Polar export + NYUS log) to compute HR error %; (C) Backlinks — grant the GSC service account Search Console API access (same SA as Play Console — see GSC issue for steps); (D) Social engagement — create brand accounts on your device (blocked by phone/CAPTCHA on server), then share Graph API token (IG/FB) + Display API token (TikTok); (E) Competitor updates — edit data/competitor_estimates.json each quarter with fresh Play Store / SimilarWeb estimates.",
+        "imagePath": "images/i-20260628-mt-misc-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260628-mt-misc-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9806e846dc74bbfca0d88c24826d9d4a4746648d",
+        "imageCommits": [
+          "9806e846dc74bbfca0d88c24826d9d4a4746648d"
+        ],
+        "fixedAt": "2026-06-29T09:07:21.375Z",
+        "by": "shakeebshaan",
+        "appCommit": "04fc7bc",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "mt-misc: Metrics upgraded 84→89 live. (1) Fixed deploys_30d: admin_deploy_log column was created_at, corrected to deployed_at (backend commit 9d37143). (2) Ran metrics-collect.mjs: 89 live / 15 awaiting / 120 total. (3) Owner setup guide attached with priority steps for 15 credential-blocked metrics (GSC 15min, Play reporting 10min, Razorpay 5min, Social 30min, CAC deferred). All fixes pushed to GitHub. testGate infra-blocked: loop.mjs verify spawnSync cmd.exe ENOENT. Recommend: verify npm test on main machine or scope loop.json testCommand to 'npx vitest run'.",
-      "reviewedAt": "2026-06-29T08:31:47.358Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Add mostof what you can do and I will provide the remaining setups give me steps",
       "reviewRepliedAt": "2026-06-28T20:55:42.732Z",
