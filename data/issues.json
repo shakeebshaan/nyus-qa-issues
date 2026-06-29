@@ -590,7 +590,10 @@
         }
       },
       "history": [],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED by board commit 4b1d405 (same fix as a096/7474). Root cause: undefined renderDesc() called instead of formatDesc() — crashed .map(), board showed skeleton skeletons only. Fix committed before these issues were filed. Board loads all 18 cards correctly. npm test OOM on this server — owner can resolve directly.",
+      "reviewedAt": "2026-06-29T00:36:29.582Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260628-7474",
