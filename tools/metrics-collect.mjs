@@ -274,7 +274,9 @@ const categories = [
     m("seg_gender", "Users by gender", seg.by_gender ? Object.entries(seg.by_gender).map(([k, v]) => `${k}:${v}`).join(" ") : null, { source: "DB", owner: "Data", priority: "M" }),
     m("seg_activity", "Users by activity level", seg.by_activity_level ? Object.entries(seg.by_activity_level).map(([k, v]) => `${k}:${v}`).join(" ") : null, { source: "DB", owner: "Data", priority: "L" }),
     m("top_pages", "Top web pages (30d)", web.top_pages_30d ? Object.keys(web.top_pages_30d).length + " pages" : null, { source: "DB page_views", owner: "Content", priority: "M" }),
-    m("experiments", "Active A/B experiments", num(exp.active), { formula: "distinct experiment_id (user_experiment_assignments)", source: "DB user_experiment_assignments", owner: "PM", priority: "M" }),
+    m("experiments_active", "Active A/B experiments", num(exp.active), { formula: "notification_experiments WHERE status='active'", source: "DB notification_experiments", owner: "PM", priority: "M" }),
+    m("experiments_total", "Total experiments (all time)", num(exp.total), { source: "DB notification_experiments", owner: "PM", priority: "L" }),
+    m("experiments_users", "Users in an experiment", num(exp.users_in_experiment), { formula: "DISTINCT user_id in user_experiment_assignments", source: "DB user_experiment_assignments", owner: "PM", priority: "M" }),
   ]},
   { key: "engagement", title: "Engagement & Gamification", metrics: [
     m("active_streaks", "Active streaks", num(eng.active_streaks), { source: "DB user_streaks", owner: "Product", priority: "M" }),
