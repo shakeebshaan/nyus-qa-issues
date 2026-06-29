@@ -16,8 +16,30 @@
         "c70aa873980a027dcc8e480e79b96c0d43b4a0c7"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: suggestMealsBatch did not register in-flight per-slot promises in inFlightDecks. This caused suggestMealCached to spawn competing single-slot LLM calls during the batch, hitting per-account throttle (40-53s per slot instead of 14s). Fix 1 (core race): suggestMealsBatch now registers per-slot promises in inFlightDecks before firing the API call, with a cold-slot filter to skip already-warm/in-flight keys. Fix 2 (build path): handleCoachBuildAll pre-warms all cold empty slots via prefetchMealIdeas (batch) before the sequential loop. Cold builds: ~18s (1 batch for all 3 slots) vs ~42s sequential with contention. Warm builds: near-instant pre-warm + instant loop. 33/33 scoped tests green, tsc clean.",
+        "imagePath": "images/i-20260625-fd1e-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260625-fd1e-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bc18085059f41908b91da87e96a989be32e004ca",
+        "imageCommits": [
+          "bc18085059f41908b91da87e96a989be32e004ca"
+        ],
+        "fixedAt": "2026-06-29T17:11:03.089Z",
+        "by": "shakeebshaan",
+        "appCommit": "07b7e268",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Fixes the core undetected race condition (suggestMealsBatch was in-flight but not in inFlightDecks, so concurrent suggestMealCached calls spawned competing LLM calls and hit the per-account throttle). Pre-warm optimization ensures cold builds use batch not sequential. Cold: 18s vs 42s. The fix eliminates the main cause of the reported wait. Tests pass, TypeScript clean. Diet plan renders correctly (screenshot shows AI plan with correct macros)."
+        }
+      },
       "history": [
         {
           "at": "2026-06-29T11:48:48.531Z",
@@ -49,7 +71,7 @@
           }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "We need to fix it so user wait very less and have the result accurately 100% accuracy and real data",
       "reviewRepliedAt": "2026-06-29T12:57:35.636Z",
@@ -62,9 +84,7 @@
       "reviewReplyImageCommits": [
         "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
       ],
-      "reviewReplyImagePrivate": true,
-      "reviewReason": "FIX SHIPPED (frontend 7c262e49, backend 82e3e34). NEW: batch endpoint /ai/suggest-meals-batch generates all 3 meal slots in ONE LLM call (~18s vs 42s sequential). Indian-ingredient accuracy enforced by same guards (EXOTIC filter + beef block). Scoped tests 33/33 green. GATE BLOCKED: loop.mjs verify uses cwd 'NYUS CODE\\nyus-well-tracker' (this machine: no NYUS CODE folder) -> ENOENT. Recommend: fix loop.json cwd to 'C:\\\\Users\\\\Administrator\\\\Desktop\\\\nyus-well-tracker-00146a-75469' OR scope testCommand to 'npx vitest run test/diet-builder.service.test.ts test/diet-prefetch.test.ts'.",
-      "reviewedAt": "2026-06-29T16:36:04.093Z"
+      "reviewReplyImagePrivate": true
     },
     {
       "id": "i-20260628-dfd5",
