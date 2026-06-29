@@ -6370,6 +6370,60 @@
       "resolvedAt": "2026-06-29T11:13:44.860Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-29T11:13:44.860Z"
+    },
+    {
+      "id": "i-20260629-21d3",
+      "createdAt": "2026-06-29T00:06:19.448Z",
+      "route": null,
+      "description": "Fix the responsiveness issue on the html",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260629-21d3.jpg",
+      "imageCommit": "5ad5a630a93b3805022b575546c2b74257a36c99",
+      "imagePaths": [
+        "images/i-20260629-21d3.jpg"
+      ],
+      "imageCommits": [
+        "5ad5a630a93b3805022b575546c2b74257a36c99"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-29T10:32:39.338Z",
+          "event": "reopened",
+          "note": "the html should fit the screen",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Added word-break:break-all + overflow-wrap:anywhere to code elements, mobile media query for padding, max-width:100% on all elements. Long email addresses (fastlane-deploy@...) and long code strings now wrap on 390px viewport instead of overflowing.",
+            "imagePath": "images/i-20260629-21d3-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260629-21d3-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0b9185b508ede85cba082601f8ea0ecb5379b01c",
+            "imageCommits": [
+              "0b9185b508ede85cba082601f8ea0ecb5379b01c"
+            ],
+            "fixedAt": "2026-06-29T00:24:11.935Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "FIXED: added <meta name='viewport' content='width=device-width, initial-scale=1'> to reports/mt-misc-steps.html in the private repo (commit fcb486c0 on nyus-qa-private). Root cause: the report HTML was missing the viewport meta tag, so mobile browsers rendered it at ~980px desktop width and scaled it down — making content appear cut off at the right edge. The HTML already had responsive CSS (max-width: 100% on *, @media max-width:480px breakpoint, word-break:break-all on code), so adding the viewport meta makes it fully responsive. Fix uploaded via gh api. Proof: attached screenshot shows the report rendering correctly at 390px mobile viewport — all 5 owner-setup sections visible, no overflow, code elements wrap properly. npm test is OOM infra-blocked on this server — no NYUS app code changed (private HTML report only), so owner can resolve directly.",
+      "reviewedAt": "2026-06-29T00:36:58.971Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-06-29T11:20:11.778Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-29T11:20:11.778Z"
     }
   ]
 }
