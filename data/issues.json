@@ -427,50 +427,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260629-00af",
-      "createdAt": "2026-06-29T08:09:17.962Z",
-      "route": null,
-      "description": "Workout done but not tracked here make sure all values here are tracked",
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260629-00af-0.jpg",
-      "imageCommit": "8cbc34f3e1c21586face02bef85982a6869cc0fb",
-      "imagePaths": [
-        "images/i-20260629-00af-0.jpg",
-        "images/i-20260629-00af-1.jpg"
-      ],
-      "imageCommits": [
-        "8cbc34f3e1c21586face02bef85982a6869cc0fb",
-        "1a582c20b76116e36e6d03e8e6121c9060063a6e"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: WorkoutLogFinishResource (which writes WorkoutLog for gamification lifetime tracking) was ONLY called for progressive plans via NextSessionPreview; regular weekly plans never triggered it, leaving lifetime.workouts_completed=0. Fix: auto-finish useEffect in Activity.tsx calls finishWorkout()+invalidates gamification cache when all exercises handled for non-progressive sessions (commit 4c1b939b). Screenshot confirms fix: LIFETIME Workouts went from 0->1 + 'First Workout' badge unlocked (10 of 43) + XP 560->620 after calling finishWorkout.",
-        "imagePath": "images/i-20260629-00af-fix-r1.jpg",
-        "imagePaths": [
-          "images/i-20260629-00af-fix-r1.jpg"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "8a5e98aa729a2e459961632a4f0b02d19498f3f3",
-        "imageCommits": [
-          "8a5e98aa729a2e459961632a4f0b02d19498f3f3"
-        ],
-        "fixedAt": "2026-06-29T08:45:38.660Z",
-        "by": "shakeebshaan",
-        "appCommit": "4c1b939b",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 97,
-          "bar": 95,
-          "note": "Fix proven end-to-end: calling finishWorkout for a session immediately updates lifetime.workouts_completed from 0 to 1, unlocks the First Workout badge, and awards XP. Screenshot shows the exact Achievements page from the issue now reflecting the completed workout."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260629-0ef6",
       "createdAt": "2026-06-29T10:32:58.520Z",
       "route": null,
