@@ -470,9 +470,9 @@
           }
         }
       ],
-      "needsReview": false,
-      "reviewReason": "3 design options created for profile card trophy section. Report attached above — click '3 Designs — Pick A/B/C' to view all three. A=Collectible Shelf (tier rings, shimmer tiles), B=Achievement Banner (gold gradient, overlapping circles), C=Prestige Cards (horizontal scroll, gradient headers). Reply A/B/C to have the chosen design ported into the live ProfileIdentityCard. Dev server preview at /dev/profile-badge-designs.",
-      "reviewedAt": "2026-06-29T11:29:00.521Z",
+      "needsReview": true,
+      "reviewReason": "Fix implemented + verified: Design A Collectible Shelf is live in ProfileIdentityCard.tsx (commit ebd2c5ee). Screenshot shows TROPHY CASE header, 10 earned, 3 square tiles with tier rings and badge images. TypeScript 0 errors. Resolve blocked by testGate=true + worker OOM on this machine (known infra issue — project_test_unit_noop). Recommend owner scope loop.json testCommand to unit subset (e.g. npx vitest run test/auth test/dashboard) to unblock, OR flip testGate=false for this issue.",
+      "reviewedAt": "2026-06-29T12:45:29.730Z",
       "reviewedBy": "shakeebshaan",
       "reportPath": "reports/i-20260629-2f18-designs-report.html",
       "reportLabel": "3 Designs — Pick A/B/C",
