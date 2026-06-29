@@ -236,6 +236,7 @@ function pullAiEval() {
 
 const db = pullDb();
 const ga4 = await pullGa4();
+const gsc = await pullGsc();
 const health = pullHealth();
 const vuln = pullVuln();
 const vulnBackend = pullVulnBackend();
@@ -320,8 +321,10 @@ const categories = [
     m("ga4_sessions", "Web sessions (30d)", ga4 ? ga4.sessions_30d : null, { source: "GA4", owner: "Marketing", priority: "M" }),
     m("ga4_users", "Web active users (30d)", ga4 ? ga4.activeUsers_30d : null, { source: "GA4", owner: "Marketing", priority: "M" }),
     m("ga4_engagement", "Web engagement rate", ga4 ? ga4.engagementRate : null, { unit: "%", source: "GA4", owner: "Content", priority: "M" }),
-    m("gsc_impressions", "Search Console impressions / CTR / position", A("Google Search Console API: add the SA email as a GSC user + enable the Search Console API (see board issue)"), { owner: "SEO", priority: "H" }),
-    m("keyword_rankings", "Keyword rankings (web/app)", A("GSC for web + an ASO tool (AppTweak/SEMrush) for app keywords"), { owner: "Marketing", priority: "M" }),
+    m("gsc_impressions", "Search Console impressions / CTR / position",
+      gsc ? `${gsc.impressions} impr / ${gsc.ctr}% CTR / pos ${gsc.position} (30d)` : A("Enable Search Console API in GCP project 415757416413 + add SA nyus-ga4-reader@nyus-and.iam.gserviceaccount.com as GSC user for nyus.in"),
+      { owner: "SEO", priority: "H" }),
+    m("keyword_rankings", "Top search queries (GSC, 30d)", gsc ? gsc.topQueries.map(q => `${q.query} (${q.impressions} impr, pos ${q.position})`).join(" | ") || "no data" : A("GSC for web + an ASO tool (AppTweak/SEMrush) for app keywords"), { owner: "Marketing", priority: "M" }),
     m("backlinks", "Backlinks (count / authority)", A("Ahrefs or Moz API key, or GSC Links report export"), { owner: "SEO", priority: "L" }),
     m("paid_ads", "Paid: CPI / CAC / ROAS", A("Connect Google Ads / Meta Ads (UTMs → GA4) — only if running paid campaigns"), { owner: "Growth", priority: "H" }),
   ]},
