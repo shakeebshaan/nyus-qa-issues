@@ -601,6 +601,17 @@
   </div>
 </dialog>
 
+<dialog id="not-fixed-dialog">
+  <div class="sheet">
+    <h2>What's still wrong?</h2>
+    <p>Optional — Claude reads this and re-fixes. Be specific about what's missing.</p>
+    <textarea id="not-fixed-note" rows="4" placeholder="e.g. 'The design D banner still isn't showing on the dinner card'" autocomplete="off"></textarea>
+    <div class="row">
+      <button class="btn" type="button" id="not-fixed-cancel">Cancel</button>
+      <button class="btn primary" type="button" id="not-fixed-ok">Send back</button>
+    </div>
+  </div>
+</dialog>
 <dialog id="lightbox"><img id="lightbox-img" alt="screenshot" /></dialog>
 <dialog id="report-viewer">
   <div class="rv-bar"><span class="rv-title" id="rv-title">Report</span><button type="button" class="rv-x" id="rv-close" aria-label="Close report">✕ Close</button></div>
@@ -1570,11 +1581,36 @@ async function markNotFixedWithNote(id, note) {
     toast(e.message || "Couldn't send back.", 4200);
   }
 }
+function promptCustom(placeholder) {
+  return new Promise((resolve) => {
+    const dlg = document.getElementById("not-fixed-dialog");
+    const ta  = document.getElementById("not-fixed-note");
+    const ok  = document.getElementById("not-fixed-ok");
+    const cancel = document.getElementById("not-fixed-cancel");
+    ta.value = "";
+    ta.placeholder = placeholder || "";
+    const done = (val) => {
+      dlg.close();
+      ok.removeEventListener("click", onOk);
+      cancel.removeEventListener("click", onCancel);
+      dlg.removeEventListener("close", onClose);
+      resolve(val);
+    };
+    const onOk     = () => done(ta.value.trim());
+    const onCancel = () => done(null);
+    const onClose  = () => done(null);
+    ok.addEventListener("click", onOk);
+    cancel.addEventListener("click", onCancel);
+    dlg.addEventListener("close", onClose, { once: true });
+    dlg.showModal();
+    ta.focus();
+  });
+}
 async function markNotFixed(id, btn) {
   const it = (db?.issues || []).find((i) => i.id === id);
   if (!it || it.status !== "fixed") return;
   if (!token) { openSettings("A token is needed to send it back."); return; }
-  const note = (prompt("What's still wrong? (optional — Claude reads this and re-fixes)") || "").trim();
+  const note = (await promptCustom('e.g. "The banner still isn\'t showing on the dinner card"') || "").trim();
   btn.disabled = true;
   try {
     await mutateIssues(`issue ${id}: not fixed → re-fix`, (d) => {
