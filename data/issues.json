@@ -301,28 +301,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "npm-audit wired into metrics collector (metrics-collect.mjs pullVuln()). Collector runs npm audit --json in AUDIT_DIR, parses metadata.vulnerabilities, surfaces vuln_count (high+critical) on Metrics tab. Live: 6 high, 0 critical at last collect run. Owner confirmed Option A. No further code change needed.",
-        "imagePath": "images/i-20260628-mt-vuln-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260628-mt-vuln-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a6c5bec7fa82982264791c8f4a8a806351ef2830",
-        "imageCommits": [
-          "a6c5bec7fa82982264791c8f4a8a806351ef2830"
-        ],
-        "fixedAt": "2026-06-29T08:58:51.426Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 96,
-          "bar": 95
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-29T07:40:18.890Z",
@@ -349,6 +329,33 @@
               "score": 96,
               "bar": 95,
               "note": "Owner confirmed A. npm audit already wired into metrics collector. Live KPI on Metrics tab."
+            }
+          }
+        },
+        {
+          "at": "2026-06-29T10:33:15.984Z",
+          "event": "reopened",
+          "note": "A",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "npm-audit wired into metrics collector (metrics-collect.mjs pullVuln()). Collector runs npm audit --json in AUDIT_DIR, parses metadata.vulnerabilities, surfaces vuln_count (high+critical) on Metrics tab. Live: 6 high, 0 critical at last collect run. Owner confirmed Option A. No further code change needed.",
+            "imagePath": "images/i-20260628-mt-vuln-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260628-mt-vuln-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "a6c5bec7fa82982264791c8f4a8a806351ef2830",
+            "imageCommits": [
+              "a6c5bec7fa82982264791c8f4a8a806351ef2830"
+            ],
+            "fixedAt": "2026-06-29T08:58:51.426Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95
             }
           }
         }
