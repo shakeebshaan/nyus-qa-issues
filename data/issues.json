@@ -285,8 +285,8 @@
         "setup",
         "security"
       ],
-      "reviewReason": "This metric (open high-severity vulnerabilities) requires running a vulnerability scanner (Snyk, Trivy, or similar) against the codebase/dependencies and feeding results into the metrics collector. This is an owner-setup task: choose a scanner, run it against the repo, add credentials/output to metrics-collect.mjs. No code fix can provide this data without the external scanner being set up.",
-      "reviewedAt": "2026-06-29T12:59:27.878Z"
+      "reviewReason": "npm audit wired + tested: 6 high / 13 moderate / 9 low / 0 critical vulns found in frontend (vite, undici, engine.io-client, form-data, tmp, +1). pullVuln() already implemented via spawnSync fix (commit d1d1b38). auditDir configured in data/metrics.config.local.json pointing at frontend repo. Backend pip-audit via SSH also implemented in pullVulnBackend(). Metric vuln_count will auto-populate on next metrics-collect.mjs run. High-severity packages should be reviewed for upgrades.",
+      "reviewedAt": "2026-06-29T13:12:39.182Z"
     },
     {
       "id": "i-20260628-mt-social",
