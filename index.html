@@ -998,7 +998,7 @@ function cardHtml(it, archived) {
          <button class="vbtn reject" type="button" data-notfixed="${esc(it.id)}">✗ Not fixed</button>
        </div>`}`
     : needsReview
-      ? `<div class="review-note"><b>Needs your review.</b><br>${renderDesc(it.id, it.reviewReason || "Blocked — see notes.")}</div>
+      ? `<div class="review-note"><b>Needs your review.</b><br>${formatDesc(it.reviewReason || "Blocked — see notes.", it.id)}</div>
          ${responseHtml}
          ${prevHtml}
          ${archived ? "" : `<div class="verdict">
