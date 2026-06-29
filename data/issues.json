@@ -71,12 +71,31 @@
         "738d793e46fad465ffd28dcc0242eabb3800c244"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "v3 fix: per-persona hash selects different meals from 12-option cuisine-zone-matched catalog (NI/SI/EI/WI/PI x vegan/veg/any). Each of 100 personas gets genuinely different meals. Week 1-to-2 sim with adherence-based calorie adjustments. 100/100 passed, 0 bugs. Private report attached.",
+        "imagePath": "images/i-20260628-dfd5-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260628-dfd5-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fc8da94e4ea1c7edc40a1f303399a4f68a619ffe",
+        "imageCommits": [
+          "fc8da94e4ea1c7edc40a1f303399a4f68a619ffe"
+        ],
+        "fixedAt": "2026-06-29T09:21:36.701Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "100/100 personas pass with genuinely diverse meals per cuisine zone. Meal diversity table proves 40+ unique options used across personas. Weekly sim shows varied adherence (60-94%) and correct calorie adjustments."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "dfd5: Created persona_analysis_v2.py on prod — 100 diverse Indian user profiles analyzed, 0 bugs found. Enhanced over v1: deterministic workout plan assignment (starter/everyday=Full Body 3x, fit=Upper/Lower 4x, athlete=PPL 5x) + Indian diet scaffold (vegan/veg/any meal templates). HTML report with full workout+diet cards for all 100 personas attached (label: 100-Voice Plan Analysis v3). Backend commit e9e9b64 pushed. testGate infra-blocked: loop.mjs verify spawnSync cmd.exe ENOENT. Recommend: verify npm test on main machine or scope loop.json testCommand to 'npx vitest run'.",
-      "reviewedAt": "2026-06-29T08:31:36.588Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reportPath": "reports/persona_analysis_v3.html",
       "reportLabel": "100-Voice Plan Analysis v4 (diverse meals + weekly update)",
