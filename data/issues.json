@@ -433,6 +433,25 @@
       "reviewReason": "FIXED: added <meta name='viewport' content='width=device-width, initial-scale=1'> to reports/mt-misc-steps.html in the private repo (commit fcb486c0 on nyus-qa-private). Root cause: the report HTML was missing the viewport meta tag, so mobile browsers rendered it at ~980px desktop width and scaled it down — making content appear cut off at the right edge. The HTML already had responsive CSS (max-width: 100% on *, @media max-width:480px breakpoint, word-break:break-all on code), so adding the viewport meta makes it fully responsive. Fix uploaded via gh api. Proof: attached screenshot shows the report rendering correctly at 390px mobile viewport — all 5 owner-setup sections visible, no overflow, code elements wrap properly. npm test is OOM infra-blocked on this server — no NYUS app code changed (private HTML report only), so owner can resolve directly.",
       "reviewedAt": "2026-06-29T00:36:58.971Z",
       "reviewedBy": "shakeebshaan"
+    },
+    {
+      "id": "i-20260629-97e7",
+      "createdAt": "2026-06-29T08:06:04.334Z",
+      "route": null,
+      "description": "Workout like this should not been given",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260629-97e7.jpg",
+      "imageCommit": "fa123cda578f0894203dbad37ea4a0860b66b31e",
+      "imagePaths": [
+        "images/i-20260629-97e7.jpg"
+      ],
+      "imageCommits": [
+        "fa123cda578f0894203dbad37ea4a0860b66b31e"
+      ],
+      "imagePrivate": true,
+      "status": "open",
+      "fix": null,
+      "history": []
     }
   ]
 }
