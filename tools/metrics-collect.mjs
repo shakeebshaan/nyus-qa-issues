@@ -120,6 +120,13 @@ function pullHealth() {
   } catch (e) { warn.push("health: " + String(e.message || e).slice(0, 120)); return {}; }
 }
 
+// ── 4. Competitor estimates (static quarterly JSON, manually maintained) ──────
+function pullCompetitors() {
+  const p = join(ROOT, "data", "competitor_estimates.json");
+  if (!existsSync(p)) return null;
+  try { return JSON.parse(readFileSync(p, "utf8")); } catch { return null; }
+}
+
 // ── assemble ───────────────────────────────────────────────
 const A = (need) => ({ status: "awaiting", need });
 function num(v) { return (v === null || v === undefined) ? null : v; }
@@ -147,6 +154,7 @@ const db = pullDb();
 const ga4 = await pullGa4();
 const health = pullHealth();
 const vuln = pullVuln();
+const comp = pullCompetitors();
 let aiEval = null;
 {
   const prev = (ghGetJson("data/metrics.json") || {}).aiEval;
@@ -322,7 +330,10 @@ const categories = [
     m("group_events_30d", "Partner group events (30d)", num(ptn.group_events_30d), { source: "DB partner_group_events", owner: "Community", priority: "L" }),
   ]},
   { key: "competitors_legal", title: "Competitors & Legal", metrics: [
-    m("competitor_share", "Competitor downloads / revenue", A("Sensor Tower / data.ai estimates (paid) — manual quarterly research"), { owner: "Strategy", priority: "L" }),
+    m("competitor_data_updated", "Competitor data quarter", comp ? comp._updated : null, { formula: "manual quarterly update — edit data/competitor_estimates.json", source: "data/competitor_estimates.json", owner: "Strategy", priority: "L" }),
+    m("competitor_healthifyme", "HealthifyMe est. MAU", comp ? (comp.competitors.find(c => c.name === "HealthifyMe") || {}).est_mau_k : null, { unit: "k users (estimated)", formula: "manual quarterly estimate", source: "data/competitor_estimates.json", owner: "Strategy", priority: "L" }),
+    m("competitor_cultfit", "Cult.fit est. MAU", comp ? (comp.competitors.find(c => c.name === "Cult.fit") || {}).est_mau_k : null, { unit: "k users (estimated)", formula: "manual quarterly estimate", source: "data/competitor_estimates.json", owner: "Strategy", priority: "L" }),
+    m("competitor_count", "Competitors tracked", comp ? comp.competitors.length : null, { formula: "number of competitors in data/competitor_estimates.json", source: "data/competitor_estimates.json", owner: "Strategy", priority: "L" }),
     m("gdpr_requests", "GDPR/DPDP requests (30d)", num(gd.requests_30d), { source: "DB admin_gdpr_requests", owner: "Legal", priority: "M" }),
     m("privacy_incidents", "Privacy incidents (tracked)", 0, { unit: "incidents", formula: "0 = no incidents on record; wire admin_privacy_incidents table when process exists", source: "manual", owner: "Legal", priority: "H" }),
   ]},
