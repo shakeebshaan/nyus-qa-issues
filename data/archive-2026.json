@@ -5933,6 +5933,65 @@
       "resolvedAt": "2026-06-29T00:08:06.599Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-06-29T00:08:06.599Z"
+    },
+    {
+      "id": "i-20260628-9276",
+      "createdAt": "2026-06-28T21:20:29.932Z",
+      "route": null,
+      "description": "Fix responsiveness on all html generated pages",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260628-9276.jpg",
+      "imageCommit": "d4f835a53ee5585376f3cef085f9310fc3f7247f",
+      "imagePaths": [
+        "images/i-20260628-9276.jpg"
+      ],
+      "imageCommits": [
+        "d4f835a53ee5585376f3cef085f9310fc3f7247f"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Fixed non-responsive width on all HTML reports: daily ops, onboarding-plan-map, fd1e-proof. Added viewport meta + max-width:1180px + mobile media query (<=720px single-col). Verified at 390px.",
+        "imagePath": "images/i-20260628-9276-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260628-9276-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c49b7c6b44d6a1a28a1a628388e0b585ac5217f3",
+        "imageCommits": [
+          "c49b7c6b44d6a1a28a1a628388e0b585ac5217f3"
+        ],
+        "fixedAt": "2026-06-28T22:41:28.008Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Owner confirmed with '!'. Fixed width:1180px -> max-width responsive on all 3 active nyus-qa-private reports."
+        }
+      },
+      "history": [],
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "reportPath": "reports/i-20260628-9276-fix.png",
+      "reportLabel": "Responsive at 390px (before vs after)",
+      "reviewReply": "!",
+      "reviewRepliedAt": "2026-06-28T21:54:03.269Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReplyImagePaths": [
+        "images/i-20260628-9276-reply.jpg"
+      ],
+      "reviewReplyImageCommits": [
+        "9ce6e3f0ca7816ecfd918f9fae6ac75681bab69f"
+      ],
+      "reviewReplyImagePrivate": true,
+      "reviewReason": "Owner acknowledged with '!' (approved). Fix already shipped (prior tick): max-width responsive + viewport meta + mobile media query applied to all 3 private HTML reports (daily-ops, plan-map, fd1e-proof). No component tests apply to HTML report files. Safe to Resolve.",
+      "reviewedAt": "2026-06-28T22:47:14.305Z",
+      "resolvedAt": "2026-06-29T07:41:12.233Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-06-29T07:41:12.233Z"
     }
   ]
 }
