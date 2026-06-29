@@ -184,29 +184,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: pullVulnBackend() command used 'source venv/bin/activate' + '--no-deps' which caused pip-audit to fail silently (exit 1, no stdout). Fix: removed venv activate, dropped --no-deps, use direct ~/.local/bin/pip-audit path. Now BOTH metrics live: vuln_count (npm audit, 6H frontend) + vuln_count_backend (pip-audit, 74H backend Python deps). Collector runs clean, no warnings.",
-        "imagePath": "images/i-20260628-mt-vuln-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260628-mt-vuln-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "2d8cb7c8da52a70f5cd588dc9fbd45ea95959322",
-        "imageCommits": [
-          "2d8cb7c8da52a70f5cd588dc9fbd45ea95959322"
-        ],
-        "fixedAt": "2026-06-29T11:43:33.937Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 97,
-          "bar": 95,
-          "note": "Both npm-audit (6H) and pip-audit (74H) confirmed live in metrics.json from fresh collector run. Screenshot shows both rows green. Command fix is surgical: 1-line change removing broken 'source venv activate' + '--no-deps'."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-29T07:40:18.890Z",
@@ -260,6 +239,34 @@
             "judge": {
               "score": 96,
               "bar": 95
+            }
+          }
+        },
+        {
+          "at": "2026-06-29T11:51:28.445Z",
+          "event": "reopened",
+          "note": "Fix all",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: pullVulnBackend() command used 'source venv/bin/activate' + '--no-deps' which caused pip-audit to fail silently (exit 1, no stdout). Fix: removed venv activate, dropped --no-deps, use direct ~/.local/bin/pip-audit path. Now BOTH metrics live: vuln_count (npm audit, 6H frontend) + vuln_count_backend (pip-audit, 74H backend Python deps). Collector runs clean, no warnings.",
+            "imagePath": "images/i-20260628-mt-vuln-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260628-mt-vuln-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "2d8cb7c8da52a70f5cd588dc9fbd45ea95959322",
+            "imageCommits": [
+              "2d8cb7c8da52a70f5cd588dc9fbd45ea95959322"
+            ],
+            "fixedAt": "2026-06-29T11:43:33.937Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 97,
+              "bar": 95,
+              "note": "Both npm-audit (6H) and pip-audit (74H) confirmed live in metrics.json from fresh collector run. Screenshot shows both rows green. Command fix is surgical: 1-line change removing broken 'source venv activate' + '--no-deps'."
             }
           }
         }
