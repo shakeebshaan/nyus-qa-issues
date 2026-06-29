@@ -449,9 +449,32 @@
         "fa123cda578f0894203dbad37ea4a0860b66b31e"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: _resolve_workout_exercises in plan_generator.py filtered sport-type exercises when found in DB, but on DB miss (exercises not in DB, like 'Sand Bound') it fell through to the else-branch keeping AI-hallucinated sport/activity names verbatim. Fix: added _EXCLUDED_HALLUCINATED_NAME_PATTERNS frozenset (cricket, sand bound, badminton, boxing, etc.) applied in the else-branch to drop hallucinated sport exercises (backend commit 0c6a146). Existing persisted plans retain their exercises; the fix prevents future plan generation from including sports.",
+        "imagePath": "images/i-20260629-97e7-fix-r1.jpg",
+        "imagePaths": [
+          "images/i-20260629-97e7-fix-r1.jpg"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "96a063f9884b0acaa9692f34b558d80867fd80d4",
+        "imageCommits": [
+          "96a063f9884b0acaa9692f34b558d80867fd80d4"
+        ],
+        "fixedAt": "2026-06-29T08:46:14.046Z",
+        "by": "shakeebshaan",
+        "appCommit": "4c1b939b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Root cause definitively found in plan_generator.py else-branch. Fix is precise and backend-deployed. Screenshot shows Activity page for reference; the fix applies to new plan generation — existing persisted plans would need regeneration. The backend is live at nyus.in."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260629-2f18",
