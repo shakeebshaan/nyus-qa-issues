@@ -537,12 +537,32 @@
         "e404da3209f69206e4f1469c2e24301dd2d1c9a7"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Added reopenArchivedIssue() + Reopen button on resolved cards. Owner can now move an archived issue back to open for re-fix. Commit f4c16f6.",
+        "imagePath": "images/i-20260629-91ee-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260629-91ee-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d4841c7499a74e9afbbdb6b88b8d4688abb23eac",
+        "imageCommits": [
+          "d4841c7499a74e9afbbdb6b88b8d4688abb23eac"
+        ],
+        "fixedAt": "2026-06-29T12:56:39.171Z",
+        "by": "shakeebshaan",
+        "appCommit": "f4c16f6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Button wired + confirmation prompt"
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Owner wants to reopen i-20260628-mt-billing (billing/Razorpay setup). To reopen any fixed issue: scroll to it in the board, tap 'Mark not fixed', and type what's still needed in the new styled textarea (just deployed — it replaced the old browser prompt). Alternatively, reply here with the Razorpay API key/Stripe key and I'll wire the billing collector. Note: filed the same request as 8611 too.",
-      "reviewedAt": "2026-06-29T11:53:31.871Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "There is no button",
       "reviewRepliedAt": "2026-06-29T11:56:53.959Z",
