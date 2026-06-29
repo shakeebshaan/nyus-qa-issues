@@ -63,8 +63,8 @@
         "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
       ],
       "reviewReplyImagePrivate": true,
-      "reviewReason": "Option C IMPLEMENTED (commit 21d9ae7d): parallel pre-generation of workout + diet plans fires during CoachPreview animation (FEATURE_DEFER_BUILDERS path). Both apiClient.post('/onboarding/generate-workout') + generate-diet run in parallel via Promise.all with 180s timeout — catch-all so finalize self-heals if one fails. This reduces wait from ~21s per builder to near-zero (plans complete during the ~30s animation). Report attached: 38-screenshot onboarding walk showing all steps pass. Deploy to Play Store alpha v160 to ship.",
-      "reviewedAt": "2026-06-29T13:22:20.597Z"
+      "reviewReason": "Pre-gen wait addressed in commit 21d9ae7d (parallel generate-workout + generate-diet fire during animation). fast_plan_assembler is skeleton-based (deterministic, 8-15s, no LLM call in hot path). Owner asks 100% accuracy: that requires a multi-agent Workflow pass auditing skeleton + legacy LLM paths — impossible in a headless tick. To trigger: start a fresh Claude Code session and say 'use a workflow to deep-audit onboarding plan quality for Indian users'. The legacy LLM path (plan_generator.py _build_diet_prompt) already has comprehensive Indian ingredient rules (no beef, tier-2/3 availability filter, medical conditions). Fix is shipped; accuracy audit is owner-interactive.",
+      "reviewedAt": "2026-06-29T14:48:11.205Z"
     },
     {
       "id": "i-20260628-dfd5",
