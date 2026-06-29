@@ -93,6 +93,64 @@ async function pullGa4() {
   } catch (e) { warn.push("ga4: " + String(e.message || e).slice(0, 120)); return null; }
 }
 
+// ── 2b. Google Search Console (same SA, webmasters.readonly scope) ────────────
+async function gscToken(sa) {
+  const now = Math.floor(Date.now() / 1000);
+  const claim = { iss: sa.client_email, scope: "https://www.googleapis.com/auth/webmasters.readonly",
+    aud: "https://oauth2.googleapis.com/token", iat: now, exp: now + 3600 };
+  const signed = `${b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64url(JSON.stringify(claim))}`;
+  const sig = createSign("RSA-SHA256").update(signed).end().sign(sa.private_key);
+  const jwt = `${signed}.${sig.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
+  const r = await fetchT("https://oauth2.googleapis.com/token", { method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}` });
+  const j = await r.json();
+  if (!j.access_token) throw new Error("gsc token: " + JSON.stringify(j).slice(0, 120));
+  return j.access_token;
+}
+async function pullGsc() {
+  if (!GA4_SA) return null;
+  try {
+    const sa = JSON.parse(readFileSync(GA4_SA, "utf8"));
+    const token = await gscToken(sa);
+    // Compute last-30-day date range (GSC requires YYYY-MM-DD, not "30daysAgo")
+    const nowMs = Date.now();
+    const end = new Date(nowMs).toISOString().slice(0, 10);
+    const start = new Date(nowMs - 30 * 86400000).toISOString().slice(0, 10);
+    // Try domain property first, then URL-prefix property
+    for (const siteUrl of ["sc-domain:nyus.in", "https://nyus.in/"]) {
+      const enc = encodeURIComponent(siteUrl);
+      const checkR = await fetchT(`https://www.googleapis.com/webmasters/v3/sites/${enc}`,
+        { headers: { Authorization: `Bearer ${token}` } });
+      if (!checkR.ok) continue;
+      // Overall totals (no dimensions = site-wide)
+      const totR = await fetchT(
+        `https://www.googleapis.com/webmasters/v3/sites/${enc}/searchAnalytics/query`,
+        { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ startDate: start, endDate: end, rowLimit: 1 }) });
+      const tot = await totR.json();
+      // Top 5 queries
+      const qR = await fetchT(
+        `https://www.googleapis.com/webmasters/v3/sites/${enc}/searchAnalytics/query`,
+        { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ startDate: start, endDate: end, rowLimit: 5, dimensions: ["query"] }) });
+      const q = await qR.json();
+      const row = tot.rows?.[0];
+      const topQueries = (q.rows || []).slice(0, 5).map(r => ({
+        query: r.keys[0], impressions: Math.round(r.impressions), position: +r.position.toFixed(1)
+      }));
+      return {
+        impressions: Math.round(row?.impressions || 0),
+        clicks: Math.round(row?.clicks || 0),
+        ctr: row?.ctr ? +(row.ctr * 100).toFixed(1) : 0,
+        position: row?.position ? +row.position.toFixed(1) : null,
+        topQueries,
+      };
+    }
+    return null;
+  } catch (e) { warn.push("gsc: " + String(e.message || e).slice(0, 120)); return null; }
+}
+
 // ── 3b. dependency vulnerabilities (npm audit, free — no third-party) ──
 function pullVuln() {
   if (!AUDIT_DIR || !existsSync(AUDIT_DIR)) return null;
