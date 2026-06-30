@@ -144,52 +144,6 @@
       "reviewedAt": "2026-06-30T15:51:45.496Z"
     },
     {
-      "id": "i-20260628-mt-gsc",
-      "createdAt": "2026-06-28T19:38:10.729Z",
-      "route": null,
-      "description": "[Metrics setup] Connect Google Search Console â€” unlocks 5 SEO/AEO metrics (search impressions, CTR, avg position, keyword rankings, index coverage), all currently 'awaiting' on the Metrics tab. STEPS: (1) Go to search.google.com/search-console and confirm nyus.in is a verified property (add + verify via DNS TXT if not). (2) Reuse the existing GA4 service account email (the client_email in nyus-ga4-sa.json) OR create a new one: GCP Console -> IAM -> Service Accounts. (3) In GCP Console enable the 'Google Search Console API' for that project. (4) In Search Console -> Settings -> Users and permissions -> Add user -> paste the service-account email -> role 'Full' (or Restricted). (5) Tell me it's done (reply here) and I'll wire scripts that pull searchAnalytics (impressions/clicks/CTR/position by query+page) into the collector. No code needed from you â€” just the access grant.",
-      "author": "claude",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "GSC API connected and returning live search data. SA nyus-ga4-reader@nyus-and.iam.gserviceaccount.com confirmed active with siteFullUser permission on sc-domain:nyus.in. Live metrics: 17 impressions / 11.8% CTR / avg position 4.8 (30d). Top query: nyus (11 impr, pos 3.5). metrics-collect.mjs pullGsc() returns HTTP 200. Data uploads to nyus-qa-private metrics.json on every hourly collection run. No code changes — pullGsc() was already in metrics-collect.mjs lines 96-151. Only blocker was GCP API not enabled; owner enabled it. Verification: node metrics-collect.mjs ran successfully with 98 live metrics (up from 93).",
-        "imagePath": "images/i-20260628-mt-gsc-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260628-mt-gsc-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a75bb7ec064ec8e5ec807cd6b9c4a490ecd885cf",
-        "imageCommits": [
-          "a75bb7ec064ec8e5ec807cd6b9c4a490ecd885cf"
-        ],
-        "fixedAt": "2026-06-30T11:05:29.916Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 97,
-          "bar": 95,
-          "note": "Setup issue fully resolved: API enabled, SA auth confirmed, pullGsc() returning HTTP 200 with real search data, 5 GSC metrics now live on board. No code regression possible (no code changed). Single minor note: 'span' tag rendering artifact in evidence screenshot is cosmetic only."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "All 4 steps are complete. Confirmed in your screenshot: nyus-ga4-reader@nyus-and.iam.gserviceaccount.com now has Full access to the nyus.in property (Users: 2).\nRecap:\n\n✅ Property verified (sc-domain:nyus.in)\n✅ SA reused (nyus-ga4-reader)\n✅ Search Console API enabled on nyus-and\n✅ Access granted\n\nNothing left on your side. The only remaining action is the handoff: reply to whoever asked — \"Access granted, nyus-ga4-reader@nyus-and.iam.gserviceaccount.com has Full on nyus.in\" — and they'll wire the searchAnalytics pulls into the collector. That unlocks the 5 SEO/AEO metrics (impressions, CTR, avg position, keyword rankings, index coverage) currently \"awaiting.\"",
-      "reviewRepliedAt": "2026-06-30T11:00:21.036Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "metrics",
-        "setup",
-        "seo"
-      ]
-    },
-    {
       "id": "i-20260628-mt-appstore",
       "createdAt": "2026-06-28T19:38:10.729Z",
       "route": null,
