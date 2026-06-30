@@ -1680,33 +1680,33 @@ async function markNotFixed(id, btn) {
 // back to issues.json with status open so Claude picks it up again.
 async function reopenArchivedIssue(id, btn) {
   if (!token) { openSettings("A token is needed to reopen."); return; }
-  if (!confirm("Reopen  + '$' + {id}? It will return to the active board as Submitted.")) return;
-  btn.disabled = true; btn.textContent = "Reopeningu2026";
+  if (!confirm(`Reopen ${id}? It will return to the active board as Submitted.`)) return;
+  btn.disabled = true; btn.textContent = "Reopening…";
   try {
     const thisYear = new Date().getFullYear();
     let found = null, foundYear = null;
     for (let y = thisYear; y >= 2025; y--) {
-      const { data, missing } = await loadJson( + 'data/archive-$' + {y}.json + '' + );
+      const { data, missing } = await loadJson(`data/archive-${y}.json`);
       if (missing) continue;
       const hit = (data.issues || []).find((i) => i.id === id);
       if (hit) { found = JSON.parse(JSON.stringify(hit)); foundYear = y; break; }
     }
-    if (!found) throw new Error( + '$' + {id} not found in any archive. + '' + );
-    await mutateJson( + 'data/archive-$' + {foundYear}.json + '' + ,  + 'issue $' + {id}: reopened + '' + , (a) => {
+    if (!found) throw new Error(`${id} not found in any archive.`);
+    await mutateJson(`data/archive-${foundYear}.json`, `issue ${id}: reopened`, (a) => {
       a.issues = (a.issues || []).filter((i) => i.id !== id);
     }, { version: 1, issues: [] });
     const reactivated = Object.assign({}, found, {
       status: "open", needsReview: false, fix: null,
       history: [...(found.history || []), { at: new Date().toISOString(), event: "reopened", note: "Owner reopened from archive", by: myLogin || undefined, previousFix: found.fix || undefined }],
     });
-    await mutateIssues( + 'issue $' + {id}: restored to active board + '' + , (d) => {
+    await mutateIssues(`issue ${id}: restored to active board`, (d) => {
       if (!d.issues.some((i) => i.id === id)) d.issues.push(reactivated);
     });
     archCache = null;
     render();
-    toast( + '$' + {id} reopened + ' ✓' + );
+    toast(`${id} reopened ✓`);
   } catch (e) {
-    btn.disabled = false; btn.textContent = " + [char]0x21BA +  Reopen";
+    btn.disabled = false; btn.textContent = "↺ Reopen";
     toast(e.message || "Couldn't reopen.", 4200);
   }
 }
