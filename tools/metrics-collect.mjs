@@ -34,6 +34,10 @@ const DB_CMD = cfg("dbCommand", "cd ~/nyu_backend && ./venv/bin/python metrics_d
 const GA4_PROPERTY = cfg("ga4Property", "");
 const AUDIT_DIR = cfg("auditDir", "");
 const GA4_SA = [process.env.GA4_SA_JSON, CFG.ga4SaPath, `${HOME}\\Desktop\\nyus-ga4-sa.json`, `${HOME}\\Desktop\\NYUSLANDING\\scripts\\ga4-sa.json`].find(p => p && existsSync(p));
+// Play Store service account key (fastlane-deploy@nyus-and.iam.gserviceaccount.com)
+// Must have "View app information and download bulk reports" + "Reply to reviews" in Play Console
+const PLAY_SA = [process.env.PLAY_STORE_JSON_KEY, CFG.playSaPath, `${HOME}\\Desktop\\nyus-and-a51a4c88bd51.json`, `${HOME}\\Desktop\\nyus-and-28394d25990f.json`].find(p => p && existsSync(p));
+const PLAY_PACKAGE = cfg("playPackage", "com.nyus.nyusand");
 
 const warn = [];
 
@@ -151,6 +155,85 @@ async function pullGsc() {
   } catch (e) { warn.push("gsc: " + String(e.message || e).slice(0, 120)); return null; }
 }
 
+// ── 2c. Play Store (Android Publisher API — reviews + ratings) ───────────────
+async function playToken(sa) {
+  const now = Math.floor(Date.now() / 1000);
+  const claim = { iss: sa.client_email, scope: "https://www.googleapis.com/auth/androidpublisher",
+    aud: "https://oauth2.googleapis.com/token", iat: now, exp: now + 3600 };
+  const signed = `${b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64url(JSON.stringify(claim))}`;
+  const sig = createSign("RSA-SHA256").update(signed).end().sign(sa.private_key);
+  const jwt = `${signed}.${sig.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
+  const r = await fetchT("https://oauth2.googleapis.com/token", { method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}` });
+  const j = await r.json();
+  if (!j.access_token) throw new Error("play token: " + JSON.stringify(j).slice(0, 200));
+  return j.access_token;
+}
+async function pullPlay() {
+  if (!PLAY_SA) { warn.push("play: no SA key found (expected nyus-and-a51a4c88bd51.json on Desktop)"); return null; }
+  try {
+    const sa = JSON.parse(readFileSync(PLAY_SA, "utf8"));
+    const token = await playToken(sa);
+    // reviews.list — last 100 reviews
+    const revR = await fetchT(
+      `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${PLAY_PACKAGE}/reviews?maxResults=100&translationLanguage=en`,
+      { headers: { Authorization: `Bearer ${token}` } }, 30000);
+    if (!revR.ok) {
+      const err = await revR.text();
+      // 403 = permissions not yet granted; surface as awaiting rather than hard error
+      if (revR.status === 403) { warn.push("play: 403 reviews — ensure fastlane SA has 'Reply to reviews' in Play Console and Save was clicked"); return { permissionPending: true }; }
+      throw new Error(`reviews ${revR.status}: ${err.slice(0, 120)}`);
+    }
+    const revData = await revR.json();
+    const reviews = revData.reviews || [];
+    const ratings = reviews.map(r => r.comments && r.comments[0] && r.comments[0].userComment ? r.comments[0].userComment.starRating : null).filter(Boolean);
+    const avgRating = ratings.length ? +(ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2) : null;
+    const recentReviews = reviews.slice(0, 5).map(r => {
+      const uc = r.comments && r.comments[0] && r.comments[0].userComment;
+      return { stars: uc ? uc.starRating : null, text: uc && uc.text ? uc.text.slice(0, 200) : '', date: uc && uc.lastModified ? new Date(parseInt(uc.lastModified.seconds || 0) * 1000).toISOString().slice(0, 10) : '' };
+    });
+    // Play Developer Reporting API — installs/CVR (v1beta1, newer API)
+    let installs = null;
+    let storeCvr = null;
+    try {
+      const repToken = await (async () => {
+        const now2 = Math.floor(Date.now() / 1000);
+        const claim2 = { iss: sa.client_email, scope: "https://www.googleapis.com/auth/playdeveloperreporting",
+          aud: "https://oauth2.googleapis.com/token", iat: now2, exp: now2 + 3600 };
+        const signed2 = `${b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64url(JSON.stringify(claim2))}`;
+        const sig2 = createSign("RSA-SHA256").update(signed2).end().sign(sa.private_key);
+        const jwt2 = `${signed2}.${sig2.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
+        const tr = await fetchT("https://oauth2.googleapis.com/token", { method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt2}` });
+        const tj = await tr.json(); return tj.access_token;
+      })();
+      if (repToken) {
+        // storePerformance metricSet gives store listing CVR
+        const storeR = await fetchT(
+          `https://playdeveloperreporting.googleapis.com/v1beta1/apps/${PLAY_PACKAGE}/storePerformanceOverviewMetricSet:query`,
+          { method: "POST", headers: { Authorization: `Bearer ${repToken}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ timelineSpec: { aggregationPeriod: "MONTHLY" }, dimensions: [], metrics: ["storeListingConversionRate", "storeListingVisitors"] }) }, 20000);
+        if (storeR.ok) {
+          const sd = await storeR.json();
+          const rows = sd.rows || [];
+          if (rows.length) {
+            const last = rows[rows.length - 1];
+            const cvr = last.metrics && last.metrics.storeListingConversionRate;
+            const visitors = last.metrics && last.metrics.storeListingVisitors;
+            storeCvr = cvr ? +(parseFloat(cvr.decimalValue || 0) * 100).toFixed(1) : null;
+            installs = visitors && cvr ? Math.round(parseFloat(visitors.decimalValue || 0) * parseFloat(cvr.decimalValue || 0)) : null;
+          }
+        } else {
+          warn.push("play-reporting: " + storeR.status + " — may need Play Developer Reporting API enabled in GCP");
+        }
+      }
+    } catch (e2) { warn.push("play-reporting-cvr: " + String(e2.message || e2).slice(0, 100)); }
+    return { avgRating, ratingCount: ratings.length, recentReviews, installs, storeCvr };
+  } catch (e) { warn.push("play: " + String(e.message || e).slice(0, 150)); return null; }
+}
+
 // ── 3b. dependency vulnerabilities (npm audit, free — no third-party) ──
 function pullVuln() {
   if (!AUDIT_DIR || !existsSync(AUDIT_DIR)) return null;
@@ -238,6 +321,7 @@ function pullAiEval() {
 const db = pullDb();
 const ga4 = await pullGa4();
 const gsc = await pullGsc();
+const play = await pullPlay();
 const health = pullHealth();
 const vuln = pullVuln();
 const vulnBackend = pullVulnBackend();
@@ -331,9 +415,10 @@ const categories = [
   ]},
   { key: "app_store", title: "App Store (ASO)", metrics: [
     m("in_app_rating", "In-app rating (avg stars)", num(sup.avg_stars), { unit: "★", source: "DB app_feedback", owner: "PM", priority: "H" }),
-    m("store_cvr", "Play Store conversion (impressions→installs)", A("Play Console reporting (bulk CSV in the linked GCS bucket) or the Play Developer Reporting API — enable for the service account"), { owner: "PM", priority: "H" }),
-    m("installs", "Installs (Play/App Store)", A("Play Console statistics / App Store Connect Analytics — grant the SA reporting access"), { owner: "Marketing", priority: "H" }),
-    m("store_reviews", "Store reviews & ratings", A("Play Developer API reviews.list + App Store Connect — enable reviews scope for the SA"), { owner: "Support", priority: "H" }),
+    m("play_rating", "Play Store rating (Publisher API, last 100 reviews)", play && !play.permissionPending && play.avgRating != null ? play.avgRating : (play && play.permissionPending ? A("Play SA 403: confirm fastlane-deploy has 'Reply to reviews' in Play Console → Save changes → re-run collector") : A("Play SA not found or API error — check warnings")), { unit: play && play.avgRating != null ? `★/5 (${play.ratingCount} Play Store reviews)` : "", source: "androidpublisher API reviews.list", owner: "Support", priority: "H" }),
+    m("store_cvr", "Play Store conversion rate (store listing CVR)", play && !play.permissionPending && play.storeCvr != null ? play.storeCvr : (play && play.permissionPending ? A("Play SA 403: permissions pending — see play_rating note") : A("Enable Play Developer Reporting API in GCP Console (project nyus-and) → re-run collector")), { unit: play && play.storeCvr != null ? "% (store listing visitors → installs)" : "", source: "playdeveloperreporting API storePerformanceOverviewMetricSet", owner: "PM", priority: "H" }),
+    m("installs", "Estimated installs (Play reporting, last month)", play && !play.permissionPending && play.installs != null ? play.installs : (play && play.permissionPending ? A("Play SA permissions pending") : A("Derived from CVR × visitors — available once Play Developer Reporting API is enabled")), { unit: play && play.installs != null ? "installs (est. CVR × visitors)" : "", source: "playdeveloperreporting API", owner: "Marketing", priority: "H" }),
+    m("store_reviews", "Store reviews & ratings", A("App Store Connect API key (.p8) needed for iOS — send key id + issuer id + .p8 securely to wire iOS reviews"), { owner: "Support", priority: "H" }),
   ]},
   { key: "health_data", title: "Health-Data Accuracy", metrics: [
     m("weight_logs_30d", "Weight logs (30d)", num(db.weight_logs_30d), { source: "DB weight_log", owner: "Data", priority: "L" }),
@@ -428,7 +513,7 @@ const categories = [
     m("competitor_cultfit", "Cult.fit est. MAU", comp ? (comp.competitors.find(c => c.name === "Cult.fit") || {}).est_mau_k : null, { unit: "k users (est.)", formula: "manual quarterly estimate", source: "data/competitor_estimates.json", owner: "Strategy", priority: "L" }),
     m("competitor_fittr", "Fittr est. MAU", comp ? (comp.competitors.find(c => c.name === "Fittr") || {}).est_mau_k : null, { unit: "k users (est.)", formula: "manual quarterly estimate", source: "data/competitor_estimates.json", owner: "Strategy", priority: "L" }),
     m("competitor_ultrahuman", "Ultrahuman est. MAU", comp ? (comp.competitors.find(c => c.name === "Ultrahuman") || {}).est_mau_k : null, { unit: "k users (est.)", formula: "manual quarterly estimate", source: "data/competitor_estimates.json", owner: "Strategy", priority: "L" }),
-    m("nyus_play_rating", "NYUS Play Store rating", comp && comp.nyus_benchmarks && comp.nyus_benchmarks.play_rating != null ? comp.nyus_benchmarks.play_rating : A("Grant the fastlane SA 'View app information and download bulk reports' scope in Play Console → I will wire the Play Developer Reporting API to pull rating + installs automatically"), { unit: "★/5", source: "data/competitor_estimates.json nyus_benchmarks (set play_rating manually or via Play API)", owner: "Strategy", priority: "M" }),
+    m("nyus_play_rating", "NYUS Play Store rating", play && !play.permissionPending && play.avgRating != null ? play.avgRating : (comp && comp.nyus_benchmarks && comp.nyus_benchmarks.play_rating != null ? comp.nyus_benchmarks.play_rating : A("Play API live — see play_rating metric in App Store section; or set play_rating in data/competitor_estimates.json manually")), { unit: play && play.avgRating != null ? `★/5 (Play API live, ${play.ratingCount} reviews)` : "★/5", source: "Play Publisher API (live) or data/competitor_estimates.json nyus_benchmarks", owner: "Strategy", priority: "M" }),
     m("gdpr_requests", "GDPR/DPDP requests (30d)", num(gd.requests_30d), { source: "DB admin_gdpr_requests", owner: "Legal", priority: "M" }),
     m("privacy_incidents", "Privacy incidents (tracked)", 0, { unit: "incidents", formula: "0 = no incidents on record; wire admin_privacy_incidents table when process exists", source: "manual", owner: "Legal", priority: "H" }),
   ]},
