@@ -634,31 +634,39 @@
         "1a4a6aeb3f4b7eac506fe2c4cd2d68556f8c55c0"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Fixed 7 column/table name mismatches in nyu_backend/metrics_db.py. safe() wrapper swallowed SQL exceptions silently. fitness_plans_active=90, diet_plans_active=118, activity_logs_30d=0, active_users_logged_today=1, body_measurements_30d=2, health_score_snapshots_30d=7, active_partner_groups=0 — all now LIVE. Deployed commit 89aae53 to prod, verified via SSH.",
-        "imagePath": "images/i-20260629-98a5-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260629-98a5-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "62a0cdfec7afeae8bbf5b718ff1e069f7539cd01",
-        "imageCommits": [
-          "62a0cdfec7afeae8bbf5b718ff1e069f7539cd01"
-        ],
-        "fixedAt": "2026-06-29T12:52:43.236Z",
-        "by": "shakeebshaan",
-        "appCommit": "89aae53",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "SSH verification showed all 7 return real values after schema name fix"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-06-30T20:42:20.273Z",
+          "event": "reopened",
+          "note": "Check for more",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Fixed 7 column/table name mismatches in nyu_backend/metrics_db.py. safe() wrapper swallowed SQL exceptions silently. fitness_plans_active=90, diet_plans_active=118, activity_logs_30d=0, active_users_logged_today=1, body_measurements_30d=2, health_score_snapshots_30d=7, active_partner_groups=0 — all now LIVE. Deployed commit 89aae53 to prod, verified via SSH.",
+            "imagePath": "images/i-20260629-98a5-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260629-98a5-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "62a0cdfec7afeae8bbf5b718ff1e069f7539cd01",
+            "imageCommits": [
+              "62a0cdfec7afeae8bbf5b718ff1e069f7539cd01"
+            ],
+            "fixedAt": "2026-06-29T12:52:43.236Z",
+            "by": "shakeebshaan",
+            "appCommit": "89aae53",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "SSH verification showed all 7 return real values after schema name fix"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     }
   ]
