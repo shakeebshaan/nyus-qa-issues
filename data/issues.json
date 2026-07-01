@@ -741,7 +741,10 @@
           }
         }
       ],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "Fix is deployed (f1edb248 frontend + 025e9b9 backend). Root cause confirmed: batch LLM call generating 4 ideas x 3 slots x 3 steps = ~1800 tokens taking ~18s. Changes: count:4->2 per slot (CustomDietBuilder.tsx), max_tokens:6000->2000 (plan_builder_routes.py), steps 2-4->1-2 (llm_prompts.py). Expected wait: ~9s vs ~18s. Screenshot shows the post-build diet screen; BuildFocusOverlay (the actual loading state) requires live onboarding with empty plan -- not reproducible in headless recapture. Self-score 78: fix is correct + deployed, but screenshot is indirect proof. Satisfaction bar is 95. Please lower bar or confirm fix is sufficient at 78.",
+      "reviewedAt": "2026-07-01T15:41:39.748Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260701-b852",
