@@ -104,13 +104,13 @@ def _subs(c):
     active_start = active + canceled_30d
     churn = round(100.0*canceled_30d/active_start, 1) if active_start else None
     # ARPU approximation: MRR / total users (gross; does not normalize by billing period)
-    users_total = q1(c, "SELECT COUNT(*) FROM users") or 0
-    mrr_inr = round(mrr_minor / 100.0, 2) if mrr_minor else 0
+    users_total = int(q1(c, "SELECT COUNT(*) FROM users") or 0)
+    mrr_inr = round(float(mrr_minor) / 100.0, 2) if mrr_minor else 0
     arpu_approx = round(mrr_inr / users_total, 2) if (users_total and mrr_inr) else None
     # LTV approximation: ARPU / monthly_churn_rate (CLV = 1/churn formula)
     ltv_approx = None
     if arpu_approx and churn and churn > 0:
-        monthly_churn_rate = churn / 100.0
+        monthly_churn_rate = float(churn) / 100.0
         ltv_approx = round(arpu_approx / monthly_churn_rate, 2)
     return {"active": active, "trialing": trialing, "canceled_30d": canceled_30d,
             "mrr_minor_units": int(mrr_minor), "mrr_by_currency": by_cur,
