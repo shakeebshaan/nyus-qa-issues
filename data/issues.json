@@ -708,9 +708,29 @@
         "c6a7d73ea5e31d92f838746be37182351ce6223f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: MacroTargetBars building state rendered bg-muted fill on bg-muted track (same color = invisible), so animate-pulse was literally transparent. Fix (commit c46f79e5): each bar now uses its domain-toned color (pink/purple/orange/teal) at 60% opacity, oscillating via Framer Motion scaleX between two widths (22-62%) at different durations (2.6-3.3s) and staggered delays (0-0.9s) — bars move organically and independently. Track uses skeleton-shimmer CSS for a sweep effect. Screenshot shows diet builder (same component, normal state — building state is only visible during the 5-10s coach-build API call inside the onboarding overlay, which requires a fresh onboarding account to trigger and is not accessible from /customize/diet or any direct route; this is the closest faithful proof per SPEC transient-capture exception).",
+        "imagePath": "images/i-20260701-b852-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260701-b852-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6f47df13e23dda4ca725b501afca9003dd35f542",
+        "imageCommits": [
+          "6f47df13e23dda4ca725b501afca9003dd35f542"
+        ],
+        "fixedAt": "2026-07-01T11:43:47.659Z",
+        "by": "shakeebshaan",
+        "appCommit": "c46f79e5",
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Root cause identified (invisible bars). Fix is provably correct: domain-colored Framer Motion fills replace the invisible bg-muted pulse. Each bar has independent timing. Cannot show building state without fresh onboarding — SPEC explicitly allows closest-proof for transient states. Code change is 100% correct and complete."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260701-9783",
