@@ -47,19 +47,21 @@ def _sticky(c):
     return round(100.0*d/m, 1) if m else None
 metric("stickiness_dau_mau_pct", _sticky)
 
-# Retention DN: of users who signed up ~N days ago, % with a session on/after day N
-def _ret(days):
+# Retention DN: of users who signed up ~N days ago, % with a session on/after day N.
+# D1 uses a 7-day cohort window (not single-day) to avoid empty cohorts on low-traffic days.
+def _ret(days, cohort_window=1):
     def fn(c):
-        cohort = q1(c, f"SELECT COUNT(*) FROM users WHERE created_at >= NOW() - INTERVAL {days+1} DAY AND created_at < NOW() - INTERVAL {days} DAY") or 0
+        cohort = q1(c, f"SELECT COUNT(*) FROM users WHERE created_at >= NOW() - INTERVAL {days+cohort_window} DAY AND created_at < NOW() - INTERVAL {days} DAY") or 0
         if not cohort: return None
         ret = q1(c, f"""SELECT COUNT(DISTINCT u.id) FROM users u JOIN user_sessions s ON s.user_id COLLATE utf8mb4_unicode_ci = u.id
-                        WHERE u.created_at >= NOW() - INTERVAL {days+1} DAY AND u.created_at < NOW() - INTERVAL {days} DAY
+                        WHERE u.created_at >= NOW() - INTERVAL {days+cohort_window} DAY AND u.created_at < NOW() - INTERVAL {days} DAY
                         AND s.last_active >= u.created_at + INTERVAL {days} DAY""") or 0
-        return {"cohort": cohort, "retained": ret, "pct": round(100.0*ret/cohort, 1)}
+        return {"cohort": cohort, "retained": ret, "pct": round(100.0*ret/cohort, 1),
+                "_window_days": cohort_window}
     return fn
-metric("retention_d1", _ret(1))
-metric("retention_d7", _ret(7))
-metric("retention_d30", _ret(30))
+metric("retention_d1", _ret(1, cohort_window=7))
+metric("retention_d7", _ret(7, cohort_window=7))
+metric("retention_d30", _ret(30, cohort_window=7))
 
 # North Star + feature adoption + engagement volume
 metric("workouts_completed_7d", lambda c: q1(c, "SELECT COUNT(*) FROM workout_session_logs WHERE completed_at >= NOW() - INTERVAL 7 DAY"))
@@ -101,10 +103,21 @@ def _subs(c):
     except Exception: pass
     active_start = active + canceled_30d
     churn = round(100.0*canceled_30d/active_start, 1) if active_start else None
+    # ARPU approximation: MRR / total users (gross; does not normalize by billing period)
+    users_total = q1(c, "SELECT COUNT(*) FROM users") or 0
+    mrr_inr = round(mrr_minor / 100.0, 2) if mrr_minor else 0
+    arpu_approx = round(mrr_inr / users_total, 2) if (users_total and mrr_inr) else None
+    # LTV approximation: ARPU / monthly_churn_rate (CLV = 1/churn formula)
+    ltv_approx = None
+    if arpu_approx and churn and churn > 0:
+        monthly_churn_rate = churn / 100.0
+        ltv_approx = round(arpu_approx / monthly_churn_rate, 2)
     return {"active": active, "trialing": trialing, "canceled_30d": canceled_30d,
             "mrr_minor_units": int(mrr_minor), "mrr_by_currency": by_cur,
             "churn_30d_pct": churn,
-            "_note": "amount_paid is in minor units (paise/cents); divide by 100. ARPU/LTV/CAC need Stripe+ad-spend (owner)."}
+            "arpu_approx_inr": arpu_approx,
+            "ltv_approx_inr": ltv_approx,
+            "_note": "amount_paid is in minor units (paise). arpu_approx = MRR/total_users (gross). ltv_approx = ARPU/monthly_churn."}
 metric("subscriptions", _subs)
 
 # ---- AI System (llm_interaction_logs) ----
@@ -142,14 +155,22 @@ def _support(c):
     fb_30d = q1(c, "SELECT COUNT(*) FROM app_feedback WHERE created_at >= NOW() - INTERVAL 30 DAY") or 0
     avg_stars = q1(c, "SELECT AVG(stars) FROM app_feedback WHERE stars IS NOT NULL AND stars > 0")
     with_comment = q1(c, "SELECT COUNT(*) FROM app_feedback WHERE comment IS NOT NULL AND comment <> ''") or 0
+    # CSAT positive rate: % of responses in last 30d with stars >= 4
+    csat_total_30d = q1(c, "SELECT COUNT(*) FROM app_feedback WHERE stars IS NOT NULL AND stars > 0 AND created_at >= NOW()-INTERVAL 30 DAY") or 0
+    csat_pos_30d = q1(c, "SELECT COUNT(*) FROM app_feedback WHERE stars >= 4 AND created_at >= NOW()-INTERVAL 30 DAY") or 0
+    csat_pct = round(100.0 * csat_pos_30d / csat_total_30d, 1) if csat_total_30d > 0 else None
     tickets_open = None
     avg_resolution_hrs = None
+    resolved_tickets_90d = None
     try:
         tickets_open = q1(c, "SELECT COUNT(*) FROM admin_support_tickets WHERE status NOT IN ('closed','resolved')")
         avg_resolution_hrs = q1(c, "SELECT AVG(TIMESTAMPDIFF(HOUR, created_at, resolved_at)) FROM admin_support_tickets WHERE resolved_at IS NOT NULL AND created_at >= NOW() - INTERVAL 90 DAY")
+        resolved_tickets_90d = q1(c, "SELECT COUNT(*) FROM admin_support_tickets WHERE resolved_at IS NOT NULL AND created_at >= NOW()-INTERVAL 90 DAY") or 0
     except Exception: pass
     return {"feedback_30d": fb_30d, "avg_stars": round(float(avg_stars),2) if avg_stars else None,
-            "feedback_with_comment": with_comment, "support_tickets_open": tickets_open,
+            "feedback_with_comment": with_comment, "csat_pct": csat_pct,
+            "csat_total_30d": csat_total_30d, "support_tickets_open": tickets_open,
+            "resolved_tickets_90d": resolved_tickets_90d,
             "avg_resolution_hrs": round(float(avg_resolution_hrs), 1) if avg_resolution_hrs else None}
 metric("support", _support)
 
