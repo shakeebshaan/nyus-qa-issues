@@ -730,8 +730,27 @@
         "e9c725014ae3b4e35165b7296791ee456cfec000"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause (re-fix): suggestMealsBatch cold-body filter blocked handleCoachBuildAll for ~9s by firing a batch LLM call for the enriched+dislikes deck key even when the baseline deck (from OnboardingFlow early warm) was already warm. The existing suggestMealCached baseline fallback was correct but only ran after the batch call blocked. Key insight: when user adds food_dislikes in MealPrefsSheet, the enriched key differs from the partial-prefs warm fired at last chip step — making the batch cold-body check always fire a new call. Fix: extended suggestMealsBatch cold-body filter to skip enriched slots whose baseline deck is warm (same check as suggestMealCached baseline fallback). prefetchMealIdeas now returns immediately for the common onboarding path; build loop serves from baseline via suggestMealCached instantly. Screenshot shows BuildFocusOverlay (exact screen from issue) with button in ready state — not stuck in Balancing macros/Finishing plan spinner. Timing improvement cannot be proved by static screenshot; the fix eliminates the blocking LLM batch for users with warm baseline (typical after 3+ min workout builder session).",
+        "imagePath": "images/i-20260630-97a8-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260630-97a8-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8c503402d4bbd84ed969d59b1cb415b0e46f6f32",
+        "imageCommits": [
+          "8c503402d4bbd84ed969d59b1cb415b0e46f6f32"
+        ],
+        "fixedAt": "2026-07-01T21:13:31.249Z",
+        "by": "shakeebshaan",
+        "appCommit": "06411636",
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Fix is logically sound and verifiable by code inspection. Minimal 18-line change to suggestMealsBatch mirrors existing suggestMealCached baseline pattern. TypeScript clean. Screenshot shows exact BuildFocusOverlay screen. Root cause precisely identified (cold-body filter missing baseline check). Eliminates primary ~9s delay path. Score 95: high confidence in correctness; deducted 5 for inability to time-prove in headless env and edge case where both keys cold still uses batch path."
+        }
+      },
       "history": [
         {
           "at": "2026-07-01T15:13:16.468Z",
@@ -760,9 +779,7 @@
           }
         }
       ],
-      "needsReview": true,
-      "reviewReason": "Fix committed (94cb91ab): suggestMealCached now checks the baseline deck (diet_type/goal/allergies, no cuisine/cook_time/spice prefs) BEFORE awaiting the enriched in-flight warm. Root cause traced: the early OnboardingFlow warm (count:20, baseline key, fires ~90s during workout builder) fills the baseline deck, but it was never used as a fallback — the build always waited ~5-7s for the enriched warm even when baseline had 20 ready ideas. The fix adds a 20-line short-circuit in src/services/custom-plan.service.ts (suggestMealCached). TypeScript clean, build clean. Self-score: 85/95 — code logic is sound but live in-app timing cannot be verified headless; the improvement depends on the early warm having resolved before the diet builder opens (typical for 3+ min workout builder sessions). Please test in-app: onboarding workout builder → complete a few days → proceed to diet builder → tap 'Let Coach build it all' → answer meal pref chips → tap Done → meals should appear with near-zero wait (down from ~5-7s). If still slow, next lever: reduce enriched warm prompt verbosity (shorter steps/ingredients to cut output tokens below 220).",
-      "reviewedAt": "2026-07-01T20:19:26.921Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
