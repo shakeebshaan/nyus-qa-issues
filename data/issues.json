@@ -761,8 +761,8 @@
         }
       ],
       "needsReview": true,
-      "reviewReason": "Fix committed and pushed (frontend a933f10f). Root cause confirmed: handleWarmEnrichedDecks fired count:8 per slot (24 ideas, 6000 tokens, ~25s warm). Prior fix f1edb248 changed the build-all's OWN warm (count:4->2) — but this never fires while the enriched warm is in-flight, so it had zero effect on the common case (user answers chip questions). Real fix: count:8->3 (9 ideas, 3200 tokens, ~13s warm). Max wait drops from ~25s to ~13s minus time user spends on the dislikes text step. CustomDietBuilder.tsx:896. TypeScript clean. Judge gate requires 95; self-score 88 — real improvement, confirmed root cause, but can't measure actual in-app timing from headless run. Please verify in-app: open diet builder, answer chip questions quickly (without dislikes), tap Build — should now be noticeably faster.",
-      "reviewedAt": "2026-07-01T18:41:16.039Z",
+      "reviewReason": "Fix committed (47aef1f6): count:3->1 in handleWarmEnrichedDecks cuts enriched warm from ~13s to ~5-7s (LLM output tokens ~400 vs ~1000, same max_tokens floor 2000). mealDeckKey ignores count so build hits same cache key. TypeScript clean. Judge gate requires 95 self-score; headless can't measure actual in-app timing so self-score was 82. Fix logic is sound — verified from code. Please test in-app: open diet builder -> answer chip questions quickly -> tap Done -> Build should now be noticeably faster (~5-7s vs ~13s). If still too long, the next lever is reducing the backend max_tokens floor (currently 2000 for count<=2 total_ideas) or parallelizing slot warms.",
+      "reviewedAt": "2026-07-01T19:13:03.560Z",
       "reviewedBy": "shakeebshaan"
     },
     {
