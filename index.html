@@ -1515,10 +1515,12 @@ function renderMetrics(d, hist) {
     + hero(CPAL[0], "Total users", findVal("product_growth", "users_total"), "", "users_total")
     + hero(CPAL[4], "Monthly active", findVal("product_growth", "mau"), "", "mau")
     + hero(CPAL[1], "Active subs", findVal("finance", "active_subs"), "", "active_subs")
+    + hero(CPAL[3], "Paid revenue (live) ₹", findVal("finance", "paid_revenue_live"), "", "paid_revenue_live")
     + hero(CPAL[2], "AI cost 30d", findVal("ai", "ai_cost_30d"), "$", "ai_cost")
     + `</div>`;
   const charts = [];
-  if (det.funnel && det.funnel.signups != null) charts.push(`<div class="m-chart"><h4>Acquisition funnel</h4>${chartFunnel([{ label: "Signups", value: det.funnel.signups }, { label: "Verified", value: det.funnel.verified }, { label: "Onboarded", value: det.funnel.onboarded }, { label: "Subscribed", value: det.funnel.subscribed }])}</div>`);
+  if (det.funnel && det.funnel.live && det.funnel.live.signups != null) charts.push(`<div class="m-chart"><h4>Acquisition funnel — LIVE (test accounts excluded, Paid = real money)</h4>${chartFunnel([{ label: "Signups", value: det.funnel.live.signups }, { label: "Verified", value: det.funnel.live.verified }, { label: "Onboarded", value: det.funnel.live.onboarded }, { label: "Paid", value: det.funnel.live.subscribed_paid }]) || `<div class="rv-state" style="padding:12px">0 live users yet — everything on record is a test account</div>`}</div>`);
+  if (det.funnel && det.funnel.signups != null) charts.push(`<div class="m-chart"><h4>${det.funnel.live ? "All accounts (incl. test users & trials)" : "Acquisition funnel"}</h4>${chartFunnel([{ label: "Signups", value: det.funnel.signups }, { label: "Verified", value: det.funnel.verified }, { label: "Onboarded", value: det.funnel.onboarded }, { label: "Subscribed", value: det.funnel.subscribed }])}</div>`);
   if (det.retention) { const r = det.retention, rb = [["D1", r.d1], ["D7", r.d7], ["D30", r.d30]].filter(x => x[1]).map(x => ({ label: x[0], value: x[1].pct, unit: "%" })); if (rb.length) charts.push(`<div class="m-chart"><h4>Retention by cohort</h4>${chartBars(rb, CPAL[1])}</div>`); }
   if (det.ga4_channels && Object.keys(det.ga4_channels).length) { const segs = Object.entries(det.ga4_channels).map(([k, v]) => ({ label: k, value: v })).sort((a, b) => b.value - a.value).slice(0, 6); charts.push(`<div class="m-chart"><h4>Web acquisition channels</h4>${chartDonut(segs)}</div>`); }
   if (det.ai_by_model && Object.keys(det.ai_by_model).length) { const segs = Object.entries(det.ai_by_model).map(([k, v]) => ({ label: k.slice(0, 20), value: v.calls })).sort((a, b) => b.value - a.value).slice(0, 5); charts.push(`<div class="m-chart"><h4>AI calls by model (30d)</h4>${chartBars(segs, CPAL[1])}</div>`); }

@@ -234,6 +234,57 @@ async function pullPlay() {
   } catch (e) { warn.push("play: " + String(e.message || e).slice(0, 150)); return null; }
 }
 
+// ── 2d. Play install stats via GCS bulk-report bucket (mt-appstore) ──────────
+// Owner-confirmed bucket: gs://pubsite_prod_7589983569042484220/stats/installs/
+// Monthly CSVs (UTF-16LE) written by Play Console; needs only devstorage scope
+// on the fastlane SA — works without the Play Developer Reporting API.
+async function saToken(sa, scope) {
+  const now = Math.floor(Date.now() / 1000);
+  const claim = { iss: sa.client_email, scope, aud: "https://oauth2.googleapis.com/token", iat: now, exp: now + 3600 };
+  const signed = `${b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64url(JSON.stringify(claim))}`;
+  const sig = createSign("RSA-SHA256").update(signed).end().sign(sa.private_key);
+  const jwt = `${signed}.${sig.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
+  const r = await fetchT("https://oauth2.googleapis.com/token", { method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}` });
+  const j = await r.json();
+  if (!j.access_token) throw new Error("token: " + JSON.stringify(j).slice(0, 120));
+  return j.access_token;
+}
+async function pullPlayInstallsGcs() {
+  if (!PLAY_SA) return null;
+  try {
+    const sa = JSON.parse(readFileSync(PLAY_SA, "utf8"));
+    const token = await saToken(sa, "https://www.googleapis.com/auth/devstorage.read_only");
+    const bucket = cfg("playStatsBucket", "pubsite_prod_7589983569042484220");
+    const listR = await fetchT(
+      `https://storage.googleapis.com/storage/v1/b/${bucket}/o?prefix=${encodeURIComponent(`stats/installs/installs_${PLAY_PACKAGE}_`)}&fields=items(name)`,
+      { headers: { Authorization: `Bearer ${token}` } }, 30000);
+    if (!listR.ok) { warn.push(`play-gcs: list ${listR.status} — SA may need Storage access on the Play stats bucket`); return null; }
+    const names = ((await listR.json()).items || []).map(i => i.name);
+    const overview = names.filter(n => n.endsWith("_overview.csv")).sort();
+    if (!overview.length) { warn.push("play-gcs: no overview CSVs under stats/installs/"); return null; }
+    const latest = overview[overview.length - 1];
+    const csvR = await fetchT(
+      `https://storage.googleapis.com/storage/v1/b/${bucket}/o/${encodeURIComponent(latest)}?alt=media`,
+      { headers: { Authorization: `Bearer ${token}` } }, 30000);
+    if (!csvR.ok) { warn.push(`play-gcs: get ${csvR.status}`); return null; }
+    const buf = Buffer.from(await csvR.arrayBuffer());
+    const csv = buf.toString(buf[0] === 0xff || buf[0] === 0xfe ? "utf16le" : "utf8").replace(/^﻿/, "");
+    const lines = csv.trim().split(/\r?\n/);
+    const head = lines[0].split(",").map(s => s.trim().toLowerCase());
+    const dailyIdx = head.findIndex(h => h.includes("daily device installs"));
+    const activeIdx = head.findIndex(h => h.includes("active device installs"));
+    let dailySum = 0, activeLast = null;
+    for (const ln of lines.slice(1)) {
+      const cols = ln.split(",");
+      if (dailyIdx >= 0) dailySum += +cols[dailyIdx] || 0;
+      if (activeIdx >= 0 && cols[activeIdx] !== "" && cols[activeIdx] != null) activeLast = +cols[activeIdx] || activeLast;
+    }
+    return { month: (latest.match(/_(\d{6})_/) || [])[1] || null, installsMonth: dailySum, activeDevices: activeLast };
+  } catch (e) { warn.push("play-gcs: " + String(e.message || e).slice(0, 120)); return null; }
+}
+
 // ── 3b. dependency vulnerabilities (npm audit, free — no third-party) ──
 function pullVuln() {
   if (!AUDIT_DIR || !existsSync(AUDIT_DIR)) return null;
@@ -322,6 +373,7 @@ const db = pullDb();
 const ga4 = await pullGa4();
 const gsc = await pullGsc();
 const play = await pullPlay();
+const playGcs = await pullPlayInstallsGcs();
 const health = pullHealth();
 const vuln = pullVuln();
 const vulnBackend = pullVulnBackend();
@@ -376,11 +428,14 @@ const categories = [
     m("adopt_workout", "Feature adoption: workouts", num(fa.workout_pct), { unit: "% of MAU", source: "DB", owner: "PM", priority: "M" }),
     m("adopt_weight", "Feature adoption: weight logging", num(fa.weight_pct), { unit: "% of MAU", source: "DB", owner: "PM", priority: "M" }),
     m("funnel", "Funnel signup→verify→onboard→subscribe", fn.signups != null ? `${fn.signups}→${fn.verified}→${fn.onboarded}→${fn.subscribed}` : null, { formula: "counts; rates in detail", source: "DB", owner: "Growth", priority: "H" }),
+    m("funnel_live", "LIVE funnel (test accounts excluded, subscribed = real payments)", fn.live ? `${fn.live.signups}→${fn.live.verified}→${fn.live.onboarded}→${fn.live.subscribed_paid}` : null, { formula: "email domain not in test list; last step = active + amount_paid>0 + razorpay id", source: "DB", owner: "Growth", priority: "H" }),
   ]},
   { key: "finance", title: "Finance & Monetization", metrics: [
     m("active_subs", "Active subscriptions", num(sub.active), { source: "DB subscriptions", owner: "Finance", priority: "H" }),
     m("trialing", "Trialing", num(sub.trialing), { source: "DB subscriptions", owner: "Finance", priority: "M" }),
     m("sub_revenue", "Subscription revenue (active, gross)", sub.mrr_minor_units != null ? +(sub.mrr_minor_units / 100).toFixed(2) : null, { unit: "₹", formula: "Σ amount_paid (active) ÷ 100", source: "DB subscriptions", owner: "Finance", priority: "H" }),
+    m("paid_revenue_live", "LIVE paid revenue (real users, razorpay-verified)", sub.paid_revenue_minor != null ? +(sub.paid_revenue_minor / 100).toFixed(2) : null, { unit: sub.razorpay_mode === "test" ? "₹ — ⚠ razorpay key is TEST-MODE, so even these are test payments until the live key lands" : "₹", formula: "Σ amount_paid (active, >0, razorpay id present, test accounts excluded) ÷ 100", source: "DB subscriptions", owner: "Finance", priority: "H" }),
+    m("razorpay_mode", "Razorpay key mode", sub.razorpay_mode || null, { formula: "rzp_test_* prefix = test-mode: all payment rows are test money", source: "prod .env RAZORPAY_KEY_ID", owner: "Finance", priority: "H" }),
     m("churn_30d", "Churn (30d)", num(sub.churn_30d_pct), { unit: "%", formula: "canceled_30d ÷ active_at_start", source: "DB subscriptions", owner: "Finance", priority: "H" }),
     m("arpu", "ARPU (approx)", sub.arpu_approx_inr != null ? sub.arpu_approx_inr : A("Stripe/Razorpay payment history for true monthly revenue normalization — or ensure subscriptions.amount_paid is populated"), { unit: sub.arpu_approx_inr != null ? "₹ (gross MRR ÷ total users; approx)" : "", formula: "MRR ÷ users_total (gross approximation from subscriptions table)", source: "DB subscriptions", owner: "Finance", priority: "H" }),
     m("ltv", "LTV (approx)", sub.ltv_approx_inr != null ? sub.ltv_approx_inr : A("ARPU × avg lifetime — needs ARPU computed + nonzero churn"), { unit: sub.ltv_approx_inr != null ? "₹ (ARPU ÷ monthly_churn; approx)" : "", formula: "ARPU ÷ monthly_churn_rate (1/churn formula)", source: "DB subscriptions", owner: "Finance", priority: "H" }),
@@ -417,7 +472,8 @@ const categories = [
     m("in_app_rating", "In-app rating (avg stars)", num(sup.avg_stars), { unit: "★", source: "DB app_feedback", owner: "PM", priority: "H" }),
     m("play_rating", "Play Store rating (Publisher API, last 100 reviews)", play && !play.permissionPending ? (play.avgRating != null ? play.avgRating : "No reviews yet") : (play && play.permissionPending ? A("Play SA 403: confirm fastlane-deploy has 'Reply to reviews' in Play Console → Save changes → re-run collector") : A("Play SA not found or API error — check warnings")), { unit: play && !play.permissionPending ? (play.avgRating != null ? `★/5 (${play.ratingCount} Play Store reviews)` : "(Play API connected, 0 reviews on record)") : "", source: "androidpublisher API reviews.list", owner: "Support", priority: "H" }),
     m("store_cvr", "Play Store conversion rate (store listing CVR)", play && !play.permissionPending && play.storeCvr != null ? play.storeCvr : (play && play.permissionPending ? A("Play SA 403: permissions pending — see play_rating note") : A("Enable Play Developer Reporting API in GCP Console (project nyus-and) → re-run collector")), { unit: play && play.storeCvr != null ? "% (store listing visitors → installs)" : "", source: "playdeveloperreporting API storePerformanceOverviewMetricSet", owner: "PM", priority: "H" }),
-    m("installs", "Estimated installs (Play reporting, last month)", play && !play.permissionPending && play.installs != null ? play.installs : (play && play.permissionPending ? A("Play SA permissions pending") : A("Derived from CVR × visitors — available once Play Developer Reporting API is enabled")), { unit: play && play.installs != null ? "installs (est. CVR × visitors)" : "", source: "playdeveloperreporting API", owner: "Marketing", priority: "H" }),
+    m("installs", "Installs (Play bulk reports, latest month)", playGcs && playGcs.installsMonth != null ? playGcs.installsMonth : (play && !play.permissionPending && play.installs != null ? play.installs : (play && play.permissionPending ? A("Play SA permissions pending") : A("Play stats bucket CSV pull failed — see warnings; fallback needs Play Developer Reporting API enabled"))), { unit: playGcs && playGcs.installsMonth != null ? `device installs in ${playGcs.month || "latest month"} (GCS stats CSV)` : (play && play.installs != null ? "installs (est. CVR × visitors)" : ""), source: playGcs ? "GCS pubsite_prod stats/installs CSV" : "playdeveloperreporting API", owner: "Marketing", priority: "H" }),
+    m("active_devices", "Active device installs (Play)", playGcs && playGcs.activeDevices != null ? playGcs.activeDevices : A("From the same Play stats CSV — appears once the bucket pull succeeds"), { unit: playGcs && playGcs.activeDevices != null ? "devices" : "", source: "GCS pubsite_prod stats/installs CSV", owner: "Marketing", priority: "M" }),
     m("store_reviews", "Store reviews & ratings", A("App Store Connect API key (.p8) needed for iOS — send key id + issuer id + .p8 securely to wire iOS reviews"), { owner: "Support", priority: "H" }),
   ]},
   { key: "health_data", title: "Health-Data Accuracy", metrics: [
@@ -562,6 +618,7 @@ function appendHistory() {
     dau: db.dau ?? null, wau: db.wau ?? null, mau: db.mau ?? null,
     activation: db.activation_rate_pct ?? null,
     active_subs: sub.active ?? null, sub_revenue: sub.mrr_minor_units != null ? +(sub.mrr_minor_units / 100).toFixed(2) : null,
+    paid_revenue_live: sub.paid_revenue_minor != null ? +(sub.paid_revenue_minor / 100).toFixed(2) : null,
     ai_calls: ai.calls_today ?? null, ai_cost: ai.cost_usd_today ?? null, ai_p95: ai.latency_p95_ms ?? null,
     organic: ga4 ? ga4.organic_30d : null, aeo: ga4 ? ga4.aeo_ai_assistant_30d : null,
     web_sessions: ga4 ? ga4.sessions_30d : null,
