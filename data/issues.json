@@ -452,8 +452,26 @@
         "1a4a6aeb3f4b7eac506fe2c4cd2d68556f8c55c0"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "metrics_db.py: 4 more metrics now live (112/122 vs 108/122 before). Fixed: (1) retention_d1 cohort expanded to 7-day window — now 5.0% (cohort=20). (2) ARPU approx = MRR/total_users = ₹60.41 (from subscriptions table). (3) csat_positive_pct = 0 (72 feedbacks in window, 0 star-rated). (4) resolution_time = 0 resolved tickets (live). Decimal/float type error in _subs also fixed. Remaining 10 awaiting are owner-setup items: paid ads API, Play reporting, iOS App Store key, social media APIs, backlinks API — no code can fix without credentials.",
+        "imagePath": "images/i-20260629-98a5-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260629-98a5-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e4b623dc6322dbe50bb6fb343f5ebd6482250de2",
+        "imageCommits": [
+          "e4b623dc6322dbe50bb6fb343f5ebd6482250de2"
+        ],
+        "fixedAt": "2026-07-01T12:08:51.797Z",
+        "by": "shakeebshaan",
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Concrete improvement: 108→112 live metrics (+4). Root causes identified and fixed. Remaining 10 awaiting are genuinely external-API-dependent — they require owner action (no code fix possible). All SQL fixes deployed to prod."
+        }
+      },
       "history": [
         {
           "at": "2026-06-30T20:42:20.273Z",
