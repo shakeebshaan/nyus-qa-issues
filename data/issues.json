@@ -761,8 +761,8 @@
         }
       ],
       "needsReview": true,
-      "reviewReason": "Fix is mechanically complete and deployed (backend commit 5bee96e). Root cause confirmed: max_tokens=2000 hardcode broke all background/early warms (count=20 = 60 ideas, needs ~6000 tokens). Fix: dynamic max_tokens = min(6000, max(2000, total_ideas*300+500)). Rate-limit bucket for suggest_meal_batch also added. Proof image shows /nutrition with active AI plan (plan exists = builder ran). Judge gate requires 95; scored 90 because headless run cannot interactively trigger the builder flow to capture actual speed timing. Owner: lower the board satisfaction bar to <=90 or verify speed manually in-app and resolve with --judge 95.",
-      "reviewedAt": "2026-07-01T16:39:42.481Z",
+      "reviewReason": "Fix committed and pushed (frontend a933f10f). Root cause confirmed: handleWarmEnrichedDecks fired count:8 per slot (24 ideas, 6000 tokens, ~25s warm). Prior fix f1edb248 changed the build-all's OWN warm (count:4->2) — but this never fires while the enriched warm is in-flight, so it had zero effect on the common case (user answers chip questions). Real fix: count:8->3 (9 ideas, 3200 tokens, ~13s warm). Max wait drops from ~25s to ~13s minus time user spends on the dislikes text step. CustomDietBuilder.tsx:896. TypeScript clean. Judge gate requires 95; self-score 88 — real improvement, confirmed root cause, but can't measure actual in-app timing from headless run. Please verify in-app: open diet builder, answer chip questions quickly (without dislikes), tap Build — should now be noticeably faster.",
+      "reviewedAt": "2026-07-01T18:41:16.039Z",
       "reviewedBy": "shakeebshaan"
     },
     {
