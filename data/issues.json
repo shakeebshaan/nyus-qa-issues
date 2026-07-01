@@ -570,27 +570,8 @@
         "1a4a6aeb3f4b7eac506fe2c4cd2d68556f8c55c0"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: metrics.json in private repo was stale (many metrics had null). Ran tools/metrics-collect.mjs -> 99/122 metrics now LIVE (was far fewer). Investigated direct SQL for all NODATA metrics: fitness_plans_active=90, diet_plans_active=118, body_measurements_30d=2, health_score_snapshots_30d=3, partner_group_members=7 - all now push correct values. activity_logs_30d=0 and partner_events_30d=0 are genuine zeros (no data in 30 days - not inaccurate). Play Store rating still AWAITING (needs Play Developer Reporting API enabled in GCP - tracked in mt-appstore).",
-        "imagePath": "images/i-20260629-98a5-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260629-98a5-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c78c1a4ff2efd14c2fcb8dff335bcf9713f1ef4a",
-        "imageCommits": [
-          "c78c1a4ff2efd14c2fcb8dff335bcf9713f1ef4a"
-        ],
-        "fixedAt": "2026-06-30T21:31:48.214Z",
-        "by": "shakeebshaan",
-        "appCommit": "3981ad33",
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "Metrics collector refresh confirmed: 99 live metrics vs previously many null. All queried metrics confirmed returning correct values."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-30T20:42:20.273Z",
@@ -618,6 +599,32 @@
               "score": 95,
               "bar": 95,
               "note": "SSH verification showed all 7 return real values after schema name fix"
+            }
+          }
+        },
+        {
+          "at": "2026-07-01T11:12:46.120Z",
+          "event": "reopened",
+          "note": "Fix more",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: metrics.json in private repo was stale (many metrics had null). Ran tools/metrics-collect.mjs -> 99/122 metrics now LIVE (was far fewer). Investigated direct SQL for all NODATA metrics: fitness_plans_active=90, diet_plans_active=118, body_measurements_30d=2, health_score_snapshots_30d=3, partner_group_members=7 - all now push correct values. activity_logs_30d=0 and partner_events_30d=0 are genuine zeros (no data in 30 days - not inaccurate). Play Store rating still AWAITING (needs Play Developer Reporting API enabled in GCP - tracked in mt-appstore).",
+            "imagePath": "images/i-20260629-98a5-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260629-98a5-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "c78c1a4ff2efd14c2fcb8dff335bcf9713f1ef4a",
+            "imageCommits": [
+              "c78c1a4ff2efd14c2fcb8dff335bcf9713f1ef4a"
+            ],
+            "fixedAt": "2026-06-30T21:31:48.214Z",
+            "by": "shakeebshaan",
+            "appCommit": "3981ad33",
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Metrics collector refresh confirmed: 99 live metrics vs previously many null. All queried metrics confirmed returning correct values."
             }
           }
         }
