@@ -761,8 +761,8 @@
         }
       ],
       "needsReview": true,
-      "reviewReason": "Fix committed (47aef1f6): count:3->1 in handleWarmEnrichedDecks cuts enriched warm from ~13s to ~5-7s (LLM output tokens ~400 vs ~1000, same max_tokens floor 2000). mealDeckKey ignores count so build hits same cache key. TypeScript clean. Judge gate requires 95 self-score; headless can't measure actual in-app timing so self-score was 82. Fix logic is sound — verified from code. Please test in-app: open diet builder -> answer chip questions quickly -> tap Done -> Build should now be noticeably faster (~5-7s vs ~13s). If still too long, the next lever is reducing the backend max_tokens floor (currently 2000 for count<=2 total_ideas) or parallelizing slot warms.",
-      "reviewedAt": "2026-07-01T19:13:03.560Z",
+      "reviewReason": "Fix committed (94cb91ab): suggestMealCached now checks the baseline deck (diet_type/goal/allergies, no cuisine/cook_time/spice prefs) BEFORE awaiting the enriched in-flight warm. Root cause traced: the early OnboardingFlow warm (count:20, baseline key, fires ~90s during workout builder) fills the baseline deck, but it was never used as a fallback — the build always waited ~5-7s for the enriched warm even when baseline had 20 ready ideas. The fix adds a 20-line short-circuit in src/services/custom-plan.service.ts (suggestMealCached). TypeScript clean, build clean. Self-score: 85/95 — code logic is sound but live in-app timing cannot be verified headless; the improvement depends on the early warm having resolved before the diet builder opens (typical for 3+ min workout builder sessions). Please test in-app: onboarding workout builder → complete a few days → proceed to diet builder → tap 'Let Coach build it all' → answer meal pref chips → tap Done → meals should appear with near-zero wait (down from ~5-7s). If still slow, next lever: reduce enriched warm prompt verbosity (shorter steps/ingredients to cut output tokens below 220).",
+      "reviewedAt": "2026-07-01T20:19:26.921Z",
       "reviewedBy": "shakeebshaan"
     },
     {
