@@ -7131,6 +7131,49 @@
       "resolvedAt": "2026-07-01T21:33:48.772Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-01T21:33:48.772Z"
+    },
+    {
+      "id": "i-20260630-4d27",
+      "createdAt": "2026-06-30T20:47:42.019Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260630-4d27.jpg",
+      "imageCommit": "08c23a3def1b6fc805dfbc82d2d6590b65526d0c",
+      "imagePaths": [
+        "images/i-20260630-4d27.jpg"
+      ],
+      "imageCommits": [
+        "08c23a3def1b6fc805dfbc82d2d6590b65526d0c"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Backend UnboundLocalError fixed (99cca72): parsed=None init prevents crash when LLM rate-limited. count:8->4 reduces LLM tokens ~50%. Progress label shows 'Built N of M' instead of stuck spinner. Diet builder now creates meals reliably.",
+        "imagePath": "images/i-20260630-4d27-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260630-4d27-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6a9b0a45264d3da471751a578293afc4d257fe6c",
+        "imageCommits": [
+          "6a9b0a45264d3da471751a578293afc4d257fe6c"
+        ],
+        "fixedAt": "2026-06-30T21:23:04.750Z",
+        "by": "shakeebshaan",
+        "appCommit": "3981ad33",
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Root cause (backend 500 UnboundLocalError) addressed. Batch endpoint crash prevented. Count reduction speeds builds. Verified diet builder loads with Design D hero visible."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-01T21:40:54.311Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-01T21:40:54.311Z"
     }
   ]
 }
