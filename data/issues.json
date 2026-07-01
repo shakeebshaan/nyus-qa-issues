@@ -314,29 +314,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "IMPLEMENTED this tick: (1) paid_ads metric now auto-shows GA4 Paid Search+Social sessions — goes live when owner links Google Ads in GA4, no code changes needed then. (2) backlinks message updated with GSC-status-conditional guidance. ALREADY LIVE (prior ticks): CSAT in-app modal, avg rating, resolution time, A/B experiment counts, competitor estimates (9 competitors), support ticket counts. OWNER STEPS: PAID ADS full CPI/CAC/ROAS — GA4 Admin->Product Links->Google Ads. SOCIAL — create brand accounts on personal device (server IP flagged), then Meta Business Suite->Instagram Basic Display->long-lived token. BACKLINKS — auto from GSC once mt-gsc resolved. PLAY STORE — grant fastlane SA reporting scope (mt-appstore). iOS — App Store Connect API key (.p8 + key ID + issuer ID).",
-        "imagePath": "images/i-20260628-mt-misc-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260628-mt-misc-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "eed27191afdde25e731e62c76ee7797bc767e3a2",
-        "imageCommits": [
-          "eed27191afdde25e731e62c76ee7797bc767e3a2"
-        ],
-        "fixedAt": "2026-06-29T15:39:57.813Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 96,
-          "bar": 95,
-          "note": "All automatable metrics live; paid_ads now GA4-wired; comprehensive steps for remaining owner-gated items."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-06-29T11:46:27.881Z",
@@ -363,6 +342,34 @@
             "judge": {
               "score": 96,
               "bar": 95
+            }
+          }
+        },
+        {
+          "at": "2026-07-01T21:41:05.040Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "IMPLEMENTED this tick: (1) paid_ads metric now auto-shows GA4 Paid Search+Social sessions — goes live when owner links Google Ads in GA4, no code changes needed then. (2) backlinks message updated with GSC-status-conditional guidance. ALREADY LIVE (prior ticks): CSAT in-app modal, avg rating, resolution time, A/B experiment counts, competitor estimates (9 competitors), support ticket counts. OWNER STEPS: PAID ADS full CPI/CAC/ROAS — GA4 Admin->Product Links->Google Ads. SOCIAL — create brand accounts on personal device (server IP flagged), then Meta Business Suite->Instagram Basic Display->long-lived token. BACKLINKS — auto from GSC once mt-gsc resolved. PLAY STORE — grant fastlane SA reporting scope (mt-appstore). iOS — App Store Connect API key (.p8 + key ID + issuer ID).",
+            "imagePath": "images/i-20260628-mt-misc-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260628-mt-misc-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "eed27191afdde25e731e62c76ee7797bc767e3a2",
+            "imageCommits": [
+              "eed27191afdde25e731e62c76ee7797bc767e3a2"
+            ],
+            "fixedAt": "2026-06-29T15:39:57.813Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95,
+              "note": "All automatable metrics live; paid_ads now GA4-wired; comprehensive steps for remaining owner-gated items."
             }
           }
         }
