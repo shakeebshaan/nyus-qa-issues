@@ -704,28 +704,36 @@
         "e9c725014ae3b4e35165b7296791ee456cfec000"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Build wait reduced: count:8->4 for all LLM build calls (~50% fewer output tokens = faster cold builds). Backend batch endpoint crash fixed (99cca72). Progress label confirms per-slot build progress.",
-        "imagePath": "images/i-20260630-97a8-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260630-97a8-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ab0ce424608ba9994a081dbc0ed94abd215048af",
-        "imageCommits": [
-          "ab0ce424608ba9994a081dbc0ed94abd215048af"
-        ],
-        "fixedAt": "2026-06-30T21:23:17.763Z",
-        "by": "shakeebshaan",
-        "appCommit": "3981ad33",
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "Dual fix: backend 500 prevented (no more stuck state), frontend count reduction speeds all build paths. Verified diet builder page loads and builds correctly."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-01T15:13:16.468Z",
+          "event": "reopened",
+          "note": "Still long",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Build wait reduced: count:8->4 for all LLM build calls (~50% fewer output tokens = faster cold builds). Backend batch endpoint crash fixed (99cca72). Progress label confirms per-slot build progress.",
+            "imagePath": "images/i-20260630-97a8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260630-97a8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "ab0ce424608ba9994a081dbc0ed94abd215048af",
+            "imageCommits": [
+              "ab0ce424608ba9994a081dbc0ed94abd215048af"
+            ],
+            "fixedAt": "2026-06-30T21:23:17.763Z",
+            "by": "shakeebshaan",
+            "appCommit": "3981ad33",
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Dual fix: backend 500 prevented (no more stuck state), frontend count reduction speeds all build paths. Verified diet builder page loads and builds correctly."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
