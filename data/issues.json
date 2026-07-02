@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-02T09:10:24.853Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260702-4d29",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Week/month date labels shift one day back for users in UTC-negative timezones. Backend sends week_start/month_start as bare \"YYYY-MM-DD\" (backend.py /summary/weekly + /summary/monthly use date.isoformat()), and the frontend parses them with new Date(str) which treats them as UTC midnight. In any UTC-negative timezone (Americas) the displayed local date is the PREVIOUS day: WeeklyProgress.tsx lines ~468/599 show a week range starting Sunday instead of Monday, and MonthlyProgress.tsx line ~355 shows \"June 2026\" as the header of the July page whenever month_start is the 1st. Expected: labels match the dates the backend computed. Actual: off-by-one day / wrong month name for US/LatAm users. Repro: set device timezone to America/New_York, open /weekly-progress and /monthly-progress on the 1st-of-month week. Fix pattern already exists in the same file - MonthlyProgress.tsx line ~165 appends \"T00:00:00\" and calls it TZ-safe; the three label sites missed it."
+    },
+    {
+      "createdAt": "2026-07-02T09:10:24.853Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260702-10e5",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Weekly Progress contradicts itself mid-week: warning banner says \"Workout gap\" while the ON TRACK card right below says \"On track - N sessions left\". WeeklyProgress.tsx onTrackBanner (lines ~127-135) flags a workout gap whenever sessions_completed < sessions_total, i.e. on EVERY day of the week until all sessions are done - it does not account for sessions still scheduled in the future. Meanwhile onTrackMessage (lines ~564-569) renders \"On track - N sessions left\" for the same state. Repro: user with calories within +/-15% of target and a 5-session plan opens /weekly-progress on Tuesday having done 1 session (perfectly on schedule): amber warning banner \"Workout gap - 1/5 logged\" renders directly above a teal card saying \"On track - 4 sessions left\". Expected: gap warning only when behind pace (e.g. fewer sessions done than elapsed training days) or at week end; the two elements must never disagree on the same screen."
+    },
+    {
+      "createdAt": "2026-07-02T09:10:24.853Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260702-c2e9",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] New user who logs their FIRST weight sees \"No progress logged yet\" on Weekly Progress even though the day rail on the same screen shows the log. WeeklyProgress.tsx hasNoData gate (lines ~441-446) only checks sessionsTotal/sessionsCompleted/mealsLeft/weightChange/calorie-target - it never checks the daily_status flags (weight_logged/diet_completed/activity_completed). A lone first weight log produces weight_current_change_kg = 0 (backend diffs first vs last log of the week - acknowledged in the weightTrendStats comment at lines ~285-288), so with no plan and no calorie target the page falls into the empty state, while the muted day-circle rail rendered inside that same empty state shows today filled/labelled \"weight logged\". MonthlyProgress.tsx already fixed this exact hole - its hasAnyMonthlyData includes anyDayLogged derived from daily_status (lines ~294-309); the weekly gate missed it. Repro: fresh account, no plans, log one weight, open /weekly-progress. Expected: populated view (or at least no \"No progress logged yet\" claim). Actual: empty-state headline contradicted by its own day rail."
+    },
+    {
       "id": "i-20260702-6345",
       "createdAt": "2026-07-02T03:56:15.577Z",
       "route": "/log-weight",
