@@ -16,8 +16,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: backend daily_weight_history dates were 'Jul 02' display format; frontend streak memo built ISO strings that never matched. Fix: backend now emits date_iso in ISO format (backend.py:6064,6077); frontend streak uses p.date_iso ?? p.date and filters p.logged!==false to exclude carry-forward days. Streak now counts real consecutive log days correctly.",
+        "imagePath": "images/i-20260702-e0bc-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260702-e0bc-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e61555c7e28db394797f694dc9882b8dfdd38d0c",
+        "imageCommits": [
+          "e61555c7e28db394797f694dc9882b8dfdd38d0c"
+        ],
+        "fixedAt": "2026-07-02T12:49:27.594Z",
+        "by": "shakeebshaan",
+        "appCommit": "119b09d2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root cause correctly identified and fixed at both layers. date_iso field confirmed in backend diff (d7ab770). Frontend streak loop at LogWeight.tsx:318-336 uses ISO keys and filters logged!==false. Both carry-forward and date-format defects addressed. Complete fix."
+        }
+      },
       "history": [
         {
           "at": "2026-07-02T11:12:41.308Z",
