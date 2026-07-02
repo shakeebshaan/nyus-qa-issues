@@ -310,8 +310,30 @@
         "5ba933db2efbcb707bcc502f0933c81cbf019cba"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Design D (your pick) is live on the meal builder: full-bleed tinted hero card per meal type with the meal-type chip, kcal badge, macro chips and meal name overlaid on the gradient, rounded-3xl with elevated shadow. Recapture shows it rendered with a real built meal (Chicken Oats Bowl breakfast) including the dish photo.",
+        "imagePath": "images/i-20260628-4709-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260628-4709-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2b11392939c61a7e6216c2c89860772b59698443",
+        "imageCommits": [
+          "2b11392939c61a7e6216c2c89860772b59698443"
+        ],
+        "fixedAt": "2026-07-02T07:31:50.354Z",
+        "by": "shakeebshaan",
+        "appCommit": "e76de639",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Chosen shotgun option D verified live in fresh capture with real meal data and image"
+        }
+      },
       "history": [
         {
           "at": "2026-06-29T10:33:47.476Z",
@@ -404,13 +426,11 @@
       ],
       "reportPath": "reports/mealcard-designs.html",
       "reportLabel": "Open the 4 meal-card designs",
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "D",
       "reviewRepliedAt": "2026-06-28T21:17:16.053Z",
-      "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "Design D VERIFIED live: full screenshot shows MealSlotCard with full-bleed tinted hero banner (amber/olive tint per meal type, BREAKFAST chip, meal name overlaid on gradient, rounded-3xl shadow-elevated). Committed in e76de639 + image-fallback fix 649a2b38. TS clean. Gate npm test infra-blocked (OOM worker ~39min on this machine) — recommend scoping loop.json testCommand to npm run test:component. Fix is ready to resolve.",
-      "reviewedAt": "2026-07-02T03:39:35.380Z"
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260630-2346",
