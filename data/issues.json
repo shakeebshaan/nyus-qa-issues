@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260702-plc8",
+      "createdAt": "2026-07-02T23:42:10.535Z",
+      "route": "/activity",
+      "description": "[suggestion] Barbell plate calculator in the live workout screen. Feature: a small plates icon next to the weight (kg) input on each set row in Activity live-workout mode - tap it and a bottom sheet shows the per-side plate breakdown for that weight (e.g. 100kg = bar 20 + 2x[20+15+2.5+2.5]), with a one-time bar-weight picker (20/15/10/7.5/6kg - India gyms mix Olympic and standard bars) remembered in Preferences. Problem: strength athletes do this mental math between every working set while fatigued; a wrong load ruins a set or a PR attempt, and the app already positions itself as a precision tool for dedicated athletes (set logging, rest timer, PR leaderboard, Personal Bests just shipped). Evidence: grep shows zero plate-calc code; every serious lifting app ships one (Strong, Hevy, Jefit, Boostcamp); the QA strength-tier surfaces (set rows with weight_kg inputs in src/pages/Activity.tsx) are exactly where users stare between sets. v1 scope: frontend-only - one PlateCalculatorSheet component (kg denominations 25/20/15/10/5/2.5/1.25 per side, greedy breakdown, unloadable-weight hint showing nearest loadable), icon trigger on the set-row weight field, bar weight stored via @capacitor/preferences. No backend, no schema. Effort: small (~1 component + Activity.tsx wiring, half a day incl. QA capture).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260701-738b",
       "createdAt": "2026-07-01T21:35:01.769Z",
       "route": null,
