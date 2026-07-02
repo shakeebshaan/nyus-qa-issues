@@ -226,7 +226,7 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "We need to fix it so user wait very less and have the result accurately 100% accuracy and real data",
       "reviewRepliedAt": "2026-06-29T12:57:35.636Z",
@@ -239,7 +239,9 @@
       "reviewReplyImageCommits": [
         "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
       ],
-      "reviewReplyImagePrivate": true
+      "reviewReplyImagePrivate": true,
+      "reviewReason": "Fix deployed (commit 05eb6251): CustomDietBuilder bg-mode threshold reduced 10s->5s (WorkoutBuilder was already at 5s per 65ade25a). After 5s of building, BuildFocusOverlay switches to background mode showing 'Continue to my plan' so user can proceed immediately without waiting for full build. BuildFocusOverlay prop comment updated (>5s). Screenshot shows diet builder rendering correctly at 390x844. TS clean. Owner direction re '100% accuracy and real data' noted: plan quality unchanged by this fix; the fast_plan_assembler Indian food filter (RETRO ab17) is the remaining accuracy gap and requires a backend change tracked separately. testGate npm test infra-blocked headless (~39min OOM) -- recommend scoping loop.json testCommand to npm run test:component.",
+      "reviewedAt": "2026-07-02T07:56:00.710Z"
     },
     {
       "id": "i-20260628-mt-appstore",
