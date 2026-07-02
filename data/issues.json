@@ -246,31 +246,39 @@
         "cdd0ce736c767acc209c68f4b425abfadccdd72e"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: MealPrefsSheet always showed all 3 cooking-style questions even if the user already answered them in a prior session. Fix: pendingQuestions filters CHIP_QUESTIONS to those not already answered in initialPrefs; if all are answered, onDone is called immediately (no sheet shown). Users who already answered cooking style / cook time / spice level skip straight to the build.",
-        "imagePath": "images/i-20260702-8694-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-8694-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "3f0e9a371bb1673ff7c5e1d095d4f936b55055fa",
-        "imageCommits": [
-          "3f0e9a371bb1673ff7c5e1d095d4f936b55055fa"
-        ],
-        "fixedAt": "2026-07-02T12:53:43.818Z",
-        "by": "shakeebshaan",
-        "appCommit": "68a98d5a",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "MealPrefsSheet.tsx:81-91 pendingQuestions useMemo filters by initialPrefs; nothingToAsk=true calls onDone immediately. Questions already in saved draft are skipped."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-02T14:24:54.480Z",
+          "event": "reopened",
+          "note": "also ask necessary questions on the workouts only if needed and required to create the workout plan",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: MealPrefsSheet always showed all 3 cooking-style questions even if the user already answered them in a prior session. Fix: pendingQuestions filters CHIP_QUESTIONS to those not already answered in initialPrefs; if all are answered, onDone is called immediately (no sheet shown). Users who already answered cooking style / cook time / spice level skip straight to the build.",
+            "imagePath": "images/i-20260702-8694-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-8694-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "3f0e9a371bb1673ff7c5e1d095d4f936b55055fa",
+            "imageCommits": [
+              "3f0e9a371bb1673ff7c5e1d095d4f936b55055fa"
+            ],
+            "fixedAt": "2026-07-02T12:53:43.818Z",
+            "by": "shakeebshaan",
+            "appCommit": "68a98d5a",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "MealPrefsSheet.tsx:81-91 pendingQuestions useMemo filters by initialPrefs; nothingToAsk=true calls onDone immediately. Questions already in saved draft are skipped."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
