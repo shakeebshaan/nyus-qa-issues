@@ -120,8 +120,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Acknowledged - no code change needed on my side. The Metrics tab already labels revenue as test payments until the live key lands. When you add the live Razorpay key: update RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET in ~/nyu_backend/.env on the prod VM and sudo systemctl restart nyu-backend. Metrics and checkout pick the new key up automatically (ChoosePlan uses whatever key the backend order endpoint returns).",
-      "reviewedAt": "2026-07-02T12:43:38.986Z",
+      "reviewReason": "Owner-only action: swapping the Razorpay API key requires access to the production .env file (RAZORPAY_KEY_ID on the server). The app currently shows 'test' mode correctly. Once you update the .env on the prod server with the live key and restart nyu-backend, payments will go live. Steps: SSH to prod, edit ~/nyu_backend/.env: RAZORPAY_KEY_ID=rzp_live_xxx RAZORPAY_KEY_SECRET=xxx, then sudo systemctl restart nyu-backend.",
+      "reviewedAt": "2026-07-02T12:54:09.232Z",
       "reviewedBy": "shakeebshaan"
     },
     {
