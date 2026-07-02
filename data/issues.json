@@ -96,13 +96,36 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Full-stack fasting-day mode v1: (1) backend DailyLog.fasting_day+fasting_type columns + migration deployed, (2) GET+PUT /api/v1/daily-logs/fasting endpoints, (3) meal reminder scheduler skips users with fasting_day=true, (4) suggest_meals LLM prompt injects vrat/full/intermittent context so AI recommends sabudana/kuttu/fruit on vrat days, (5) Nutrition page shows 3-option fasting toggle (Vrat, Full fast, 16:8); active fasting shows calm teal banner with End fast button. Screenshot shows toggle row live on production Nutrition screen.",
+        "imagePath": "images/i-20260702-fa5t-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-fa5t-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e35d17828d929fe25ec277c3f90c772f5aa28259",
+        "imageCommits": [
+          "e35d17828d929fe25ec277c3f90c772f5aa28259"
+        ],
+        "fixedAt": "2026-07-02T04:23:54.270Z",
+        "by": "shakeebshaan",
+        "appCommit": "119b09d2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "All 4 v1 scope items implemented (storage, endpoints, notification skip, LLM context, UI). Screenshot confirms fasting toggle visible on Nutrition page. 91 scoped tests green. Backend deployed + migration applied."
+        }
+      },
       "history": [],
       "tags": [
         "suggestion",
         "auto"
-      ]
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260625-fd1e",
