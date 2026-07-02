@@ -8480,6 +8480,54 @@
       "resolvedAt": "2026-07-02T14:22:49.622Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T14:22:49.622Z"
+    },
+    {
+      "id": "i-20260702-237e",
+      "createdAt": "2026-07-02T11:33:40.155Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260702-237e-0.jpg",
+      "imageCommit": "1104687709d1671d8beda55753c607e49b3e6baf",
+      "imagePaths": [
+        "images/i-20260702-237e-0.jpg",
+        "images/i-20260702-237e-1.jpg"
+      ],
+      "imageCommits": [
+        "1104687709d1671d8beda55753c607e49b3e6baf",
+        "0bbe2e00de9d390816d694522d2d465cdfe56c20"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: plan cards had no per-card checkout action; only the page-bottom CTA triggered Razorpay. Fix: each plan card's 'Subscribe — ₹X' button calls handleRazorpayPayment(planId) directly, starting Razorpay checkout for that plan immediately on tap.",
+        "imagePath": "images/i-20260702-237e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-237e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "81f82f3f7590579f5a5e57a9b9b4d398434e5e48",
+        "imageCommits": [
+          "81f82f3f7590579f5a5e57a9b9b4d398434e5e48"
+        ],
+        "fixedAt": "2026-07-02T12:50:45.440Z",
+        "by": "shakeebshaan",
+        "appCommit": "68a98d5a",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "ChoosePlan.tsx:645 per-card Subscribe wired with planIdOverride. Screenshot shows 'Subscribe - 1299' CTA inline on the plan card. Razorpay script preloaded at mount."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-02T14:23:07.647Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-02T14:23:07.647Z"
     }
   ]
 }
