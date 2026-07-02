@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260702-6345",
+      "createdAt": "2026-07-02T03:56:15.577Z",
+      "route": "/log-weight",
+      "description": "[bug-hunt] Weight-confirm flow can save a different value than the one shown/edited on screen.\n\nExpected: after the \"Large weight change detected\" warning appears, tapping \"Yes, this is correct\" saves the weight currently shown in the input.\nActual: it re-submits the ORIGINAL flagged payload (pendingData captured at first Save), while the success screen shows the CURRENT input value. The input stays fully editable (ruler / +/- / typing) while the warning card is visible, so the two can diverge silently.\n\nRepro:\n1. Have a last log (e.g. 80 kg). On /log-weight type 90 and tap \"Save & Track\" -> warning card appears.\n2. WITHOUT tapping \"Edit weight\", scrub the ruler down to 85.\n3. Tap \"Yes, this is correct\".\n4. Backend saves 90 kg (pendingData from use-weight-validation.ts confirmAndSubmit, src/hooks/use-weight-validation.ts:39-54), but SuccessMoment reads the live field and announces \"85.0 kg recorded\" (src/pages/LogWeight.tsx:209-231, 468). Chart/history then show 90.\n\nFix direction: either lock the weight input while warning is active, or have confirmAndSubmit re-read the current field value (and update pendingData on edit).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260702-e0bc",
+      "createdAt": "2026-07-02T03:56:15.577Z",
+      "route": "/log-weight",
+      "description": "[bug-hunt] Logging streak is ALWAYS 0 - date format mismatch between backend history and frontend streak calc (streak chip + success-message streak never render).\n\nExpected: after logging weight on consecutive days, /log-weight shows the \"N-day logging streak\" chip and the post-save message appends \"N-day streak\".\nActual: streak is permanently 0 for every user. Backend /api/v1/weight/log-data returns daily_weight_history[].date as strftime('%b %d') e.g. \"Jul 02\" (nyu_backend/backend.py:6061,6072), but the frontend streak memo builds ISO strings \"2026-07-02\" and checks days.has(iso) (src/pages/LogWeight.tsx:316-329). No ISO string ever matches \"Jul 02\", so the loop breaks immediately -> streak 0 -> the chip at LogWeight.tsx:524 and the streak suffix at :468 are dead code in production.\n\nRepro (code-level, deterministic): log weight today and yesterday, open /log-weight -> no streak chip despite 2-day run. Verify via console: fetch /weight/log-data and compare date format vs the memo's template string.\n\nSecondary defect same feature: backend carry-forwards the previous weight into unlogged days (backend.py:6064-6074), so even with matching formats the streak would count days the user never logged. Fix should compare on ISO dates AND only count real log days (or compute streak server-side).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260702-fa5t",
       "createdAt": "2026-07-02T03:43:06.494Z",
       "route": "/nutrition",
