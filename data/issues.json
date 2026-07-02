@@ -491,7 +491,10 @@
           }
         }
       ],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "Fix deployed to prod (commit 3eee31d, deployed 2026-07-02). Backend image_providers.py: (1) openverse_thumb_url now uses only CDN thumbnail field, skipping wikimedia raw URLs that frontend filters; (2) food_preview_url adds Pollinations AI hotlink fallback with deterministic seed from MD5(meal_name) for Indian dishes TheMealDB misses. Existing cached meals refresh within 24h. Screenshot: diet builder shows full-bleed h-52 meal card (Design D confirmed). testGate infra-blocked headless.",
+      "reviewedAt": "2026-07-02T03:10:46.479Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260701-738b",
