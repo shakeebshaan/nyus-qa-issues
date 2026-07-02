@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: confirmAndSubmit used stale pendingData.morning_weight_kg captured at first Save; weight input stays editable during warning, so user could change 90->85 and backend saved 90 while success showed 85. Fix: confirmAndSubmit now accepts optional currentWeightKg override; handleConfirmWeight passes live parsed weight so backend saves exactly what user sees. Scoped tests: 91/91 pass.",
+        "imagePath": "images/i-20260702-6345-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-6345-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4d0795cbed7c362b8fb6dc62293bf441bbeead93",
+        "imageCommits": [
+          "4d0795cbed7c362b8fb6dc62293bf441bbeead93"
+        ],
+        "fixedAt": "2026-07-02T04:23:19.125Z",
+        "by": "shakeebshaan",
+        "appCommit": "119b09d2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Data integrity fix: the divergence between saved value and displayed value is now impossible. Fix is minimal (2-line change to hook + 2-line change to handler). Tests green."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260702-e0bc",
