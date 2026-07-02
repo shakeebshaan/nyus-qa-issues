@@ -252,31 +252,39 @@
         "e7ae8bb012579b32091f3d99fb9557bdc0ebe518"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Answer to 'is this best?': yes - shipped. The pre-build 'Your plan overview' duplicated what 'Your plan is ready' already shows, so of the 3 screens the redundant one is gone: finishing the meal builder now auto-starts the save+finalize and the user goes straight to the 'Coach is building your plan' animation (screenshot - with the workout stat strip) and then the plan-ready tour. 2 screens instead of 3, nothing lost: the overview screen still exists solely as the error/retry surface if the save ever fails. Verified on a fresh end-to-end onboarding: builders -> building -> tour -> dashboard.",
-        "imagePath": "images/i-20260702-4e12-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-4e12-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "5763a34b2416c2c972feeba8004aa538c636ee99",
-        "imageCommits": [
-          "5763a34b2416c2c972feeba8004aa538c636ee99"
-        ],
-        "fixedAt": "2026-07-02T18:00:11.114Z",
-        "by": "shakeebshaan",
-        "appCommit": "beab445e",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Live fresh-account run confirms the overview screen is skipped and finalize lands on the tour + dashboard"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-02T18:13:30.525Z",
+          "event": "reopened",
+          "note": "do it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Answer to 'is this best?': yes - shipped. The pre-build 'Your plan overview' duplicated what 'Your plan is ready' already shows, so of the 3 screens the redundant one is gone: finishing the meal builder now auto-starts the save+finalize and the user goes straight to the 'Coach is building your plan' animation (screenshot - with the workout stat strip) and then the plan-ready tour. 2 screens instead of 3, nothing lost: the overview screen still exists solely as the error/retry surface if the save ever fails. Verified on a fresh end-to-end onboarding: builders -> building -> tour -> dashboard.",
+            "imagePath": "images/i-20260702-4e12-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-4e12-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "5763a34b2416c2c972feeba8004aa538c636ee99",
+            "imageCommits": [
+              "5763a34b2416c2c972feeba8004aa538c636ee99"
+            ],
+            "fixedAt": "2026-07-02T18:00:11.114Z",
+            "by": "shakeebshaan",
+            "appCommit": "beab445e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Live fresh-account run confirms the overview screen is skipped and finalize lands on the tour + dashboard"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "is this best\n?",
