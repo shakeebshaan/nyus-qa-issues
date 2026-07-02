@@ -80,8 +80,30 @@
         "cdd0ce736c767acc209c68f4b425abfadccdd72e"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen (workout questions): new WorkoutPrefsSheet opens on every 'Let Coach build it all' and asks ONLY the plan-critical questions onboarding didn't answer - where you train + days/week (condensed flow leaves these blank, so gym users were getting bodyweight-only 7-day plans). Answers persist in the builder draft, drive the exercise catalog + limitations, and reshape the week to the chosen day count. All-known -> no sheet, straight to build. Verified live: fresh user answered Full gym + 4 days, coach built exactly 4 gym days.",
+        "imagePath": "images/i-20260702-8694-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260702-8694-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d2aae164f6748b08b366ab5e3b9636cf5d9f1194",
+        "imageCommits": [
+          "d2aae164f6748b08b366ab5e3b9636cf5d9f1194"
+        ],
+        "fixedAt": "2026-07-02T17:55:27.939Z",
+        "by": "shakeebshaan",
+        "appCommit": "c2f1a3b7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "End-to-end verified on a fresh account: sheet asks only unanswered questions; built week honors equipment + day count"
+        }
+      },
       "history": [
         {
           "at": "2026-07-02T14:24:54.480Z",
