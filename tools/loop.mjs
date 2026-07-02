@@ -156,6 +156,11 @@ function liveTestGate(lc) {
   if (loop && typeof loop.testGate === "boolean") return loop.testGate;
   return lc.testsRequired;
 }
+function liveTestCommand(lc) {
+  const loop = readBoardJson(join("data", "loop.json"));
+  if (loop && typeof loop.testCommand === "string" && loop.testCommand.trim()) return loop.testCommand.trim();
+  return lc.testCommand;
+}
 
 // ── the agent tick (manual `run` / inside `watch`) ──────────────────────────
 function runAgentOnce(lc, cwd) {
@@ -189,9 +194,10 @@ function readCoveragePct(dir) {
 }
 
 function verify(lc, dir) {
-  step("Verifiable goal — running: " + paint(C.bold, lc.testCommand));
+  const testCommand = liveTestCommand(lc);
+  step("Verifiable goal — running: " + paint(C.bold, testCommand));
   log(paint(C.dim, "  (cwd: " + dir + ")"));
-  const r = spawnSync(lc.testCommand, { cwd: dir, stdio: "inherit", shell: true });
+  const r = spawnSync(testCommand, { cwd: dir, stdio: "inherit", shell: true });
   if (r.error) { fail("Could not run the test command: " + r.error.message); return EXIT.GOAL_NOT_MET; }
   const testsPassed = r.status === 0;
   if (!testsPassed) { fail("Tests FAILED (exit " + r.status + ") — the verifiable goal is not met."); return EXIT.GOAL_NOT_MET; }

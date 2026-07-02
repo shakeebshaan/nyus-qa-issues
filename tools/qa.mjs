@@ -84,7 +84,7 @@ function loopSettings() {
   const tests = goal.tests || {};
   let satisfaction = Number.isFinite(Number(goal.satisfaction)) ? Number(goal.satisfaction) : 80;
   let testGate = tests.required !== false;
-  const testCommand = tests.command || "npm test";
+  let testCommand = tests.command || "npm test";
   const coverage = Number(tests.coverage) || 0;
   const loopPath = join(ROOT, "data", "loop.json");
   if (existsSync(loopPath)) {
@@ -92,6 +92,7 @@ function loopSettings() {
       const live = JSON.parse(readFileSync(loopPath, "utf8"));
       if (Number.isFinite(Number(live.satisfaction))) satisfaction = Number(live.satisfaction);
       if (typeof live.testGate === "boolean") testGate = live.testGate;
+      if (typeof live.testCommand === "string" && live.testCommand.trim()) testCommand = live.testCommand.trim();
     } catch { /* fall back to config defaults */ }
   }
   return { satisfaction, testGate, testCommand, coverage };
