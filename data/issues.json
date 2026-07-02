@@ -96,7 +96,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Acknowledged - no code change needed on my side. The Metrics tab already labels revenue as test payments until the live key lands. When you add the live Razorpay key: update RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET in ~/nyu_backend/.env on the prod VM and sudo systemctl restart nyu-backend. Metrics and checkout pick the new key up automatically (ChoosePlan uses whatever key the backend order endpoint returns).",
+      "reviewedAt": "2026-07-02T12:43:38.986Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260702-3a8b",
