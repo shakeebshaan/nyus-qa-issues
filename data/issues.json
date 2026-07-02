@@ -2,29 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260702-wdgt",
-      "createdAt": "2026-07-02T13:40:41.486Z",
-      "route": "/dashboard",
-      "description": "[suggestion] Android home-screen widget showing today's calories remaining, protein progress, and logging streak at a glance. Problem: NYUS athletes open the app multiple times a day just to check where they stand, and a Capacitor app has a noticeable cold-start before the dashboard paints - a widget answers 'am I on track?' in zero taps and keeps the app visible on the home screen (retention, right as Razorpay goes live). Evidence: no widget code exists anywhere in android/ (grep appwidget/glance = 0); every comparable tracker ships one - HealthifyMe (India market leader), MyFitnessPal, and MacroFactor all have calorie/macro widgets; the app already computes these exact numbers on the Dashboard rings. v1 scope: (1) one fixed 2x2 RemoteViews widget (Kotlin, no Glance dependency): kcal remaining, protein g of target, streak flame - no configuration options; (2) tiny Capacitor bridge: on every dashboard data sync the web app writes {kcalRemaining, proteinG, proteinTarget, streak, date} to SharedPreferences and pings AppWidgetManager to redraw; (3) stale-guard: if the stored date != today, widget shows targets fresh at 0 (midnight WorkManager tick); (4) tap anywhere opens the app to /dashboard. Android-only (primary platform), no network calls from the widget itself, dark/light follows system. Effort: ~2-3 days native+bridge.",
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "needsReview": true,
-      "reviewReason": "Implementation complete (commit a81244c1). All 8 deliverables shipped: NyusDashboardWidget.kt (AppWidgetProvider, stale-date guard, tap-to-open), WidgetBridgePlugin.kt (Capacitor plugin writing SharedPreferences + triggering AppWidgetManager), widget_dashboard.xml (2x2 dark card, teal kcal value, white protein+streak rows), widget_dashboard_info.xml (110x110dp, targetCellWidth/Height=2), widget_background.xml, widget-bridge.ts (registerPlugin stub), useWidgetSync.ts (fetches diet plan on Dashboard mount native-only, computes kcal remaining + protein from macros), Dashboard.tsx integration. TypeScript compiles clean. ProGuard keep rules added. CANNOT fully verify without a physical Android device with the widget pinned to the home screen --- the test gate (npm run test:unit = vitest) cannot cover native Android Kotlin code. To verify: build the APK (fastlane beta or gradlew assembleDebug), install on device, long-press home screen, add NYUS widget (2x2), open the app to /dashboard, confirm widget shows kcal remaining + protein + streak.",
-      "reviewedAt": "2026-07-02T14:07:06.603Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260702-e0bc",
       "createdAt": "2026-07-02T03:56:15.577Z",
       "route": "/log-weight",
