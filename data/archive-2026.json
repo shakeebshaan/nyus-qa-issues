@@ -8767,6 +8767,52 @@
       "resolvedAt": "2026-07-02T15:02:54.002Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T15:02:54.002Z"
+    },
+    {
+      "id": "i-20260702-4560",
+      "createdAt": "2026-07-02T15:35:00.067Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260702-4560.jpg",
+      "imageCommit": "ddcb1ecb86d818b2552cbd8bb9596e496c4ed2dc",
+      "imagePaths": [
+        "images/i-20260702-4560.jpg"
+      ],
+      "imageCommits": [
+        "ddcb1ecb86d818b2552cbd8bb9596e496c4ed2dc"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "The 'pages build and deployment failed' email was transient GitHub-side congestion: the deploy job sat in deployment_queued for the full 10-minute window and timed out (build itself succeeded both times, 15:21 + 15:35 UTC). Nothing in the repo was broken - re-running the deployment cleared it and every push since 18:03 UTC deploys green. Screenshot is the LIVE board rendering the current data (only possible when the deploy succeeded).",
+        "imagePath": "images/i-20260702-4560-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-4560-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b0779678ed266a6dbd1e279fdbf5fdac746c105b",
+        "imageCommits": [
+          "b0779678ed266a6dbd1e279fdbf5fdac746c105b"
+        ],
+        "fixedAt": "2026-07-02T18:10:58.567Z",
+        "by": "shakeebshaan",
+        "appCommit": "e8efd877",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root-caused to GitHub Pages queue timeout; pipeline verified green with the live site rendering current issue state"
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-02T18:11:38.749Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-02T18:11:38.749Z"
     }
   ]
 }
