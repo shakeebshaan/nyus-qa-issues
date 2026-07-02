@@ -669,12 +669,32 @@
         "951feb515235f59835bfebe1a9048dedf357b87b"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: funnel + revenue counted every account, including internal test/admin users on the test payment track. Fix: metrics_db.py now excludes test-domain accounts (LIVE_WHERE filter) and the dashboard leads with a LIVE funnel (test accounts excluded, paid = real money: 27 signups -> 4 paid, 22%) plus a live paid-revenue card; the all-accounts view stays as a second, clearly-labeled panel.",
+        "imagePath": "images/i-20260701-cfcc-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260701-cfcc-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "400b5c6ed1220507bcf150236389c677de8120f3",
+        "imageCommits": [
+          "400b5c6ed1220507bcf150236389c677de8120f3"
+        ],
+        "fixedAt": "2026-07-02T04:32:55.234Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf7a2fd",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Recaptured Metrics tab shows exactly the requested split: LIVE funnel first with test users excluded and paid=real money; verified against prod DB data regenerated today. (Test gate = owner's npm run test:unit, exit 0.)"
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Root cause: subscriptions table includes test/admin accounts not in users.onboarding_complete, so raw subscribed(111) > onboarded(109). Fix already deployed (commit bf7a2fd): metrics_db.py now has LIVE_WHERE filter (TEST_EMAIL_DOMAINS list) + live funnel in detail. metrics.json regenerated 2026-07-02: live funnel shows 27->24->18->4 paid (22.2%). Dashboard now shows LIVE funnel first, raw labeled All accounts (incl. test users). testGate infra-blocked headless.",
-      "reviewedAt": "2026-07-02T03:11:27.379Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
