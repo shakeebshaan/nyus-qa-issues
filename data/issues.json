@@ -543,49 +543,6 @@
       },
       "history": [],
       "needsReview": false
-    },
-    {
-      "id": "i-20260702-9e42",
-      "createdAt": "2026-07-02T11:45:43.668Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260702-9e42.jpg",
-      "imageCommit": "d3c4c011db7747d0c8ed2d1f5b22f023a5c30418",
-      "imagePaths": [
-        "images/i-20260702-9e42.jpg"
-      ],
-      "imageCommits": [
-        "d3c4c011db7747d0c8ed2d1f5b22f023a5c30418"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: BadgeWatcher/LevelUpWatcher only mounted on Profile page; XP-earning actions on other screens never triggered a badge/level check. Fix: both watchers moved to app shell (mounted globally); new gamification-bus module fires immediate re-check whenever weight/meal/workout/measurement/activity is logged, bypassing the 60s navigation throttle.",
-        "imagePath": "images/i-20260702-9e42-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-9e42-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "e3b4b4d34a703d4b44d11eadbb927672c7848d76",
-        "imageCommits": [
-          "e3b4b4d34a703d4b44d11eadbb927672c7848d76"
-        ],
-        "fixedAt": "2026-07-02T12:50:23.571Z",
-        "by": "shakeebshaan",
-        "appCommit": "68a98d5a",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Global mount confirmed in app shell. gamification-bus.ts fire-and-forget debounced. logging.service.ts calls requestGamificationCheck() on all XP-earning endpoints. Profile screenshot shows badges earning correctly."
-        }
-      },
-      "history": [],
-      "needsReview": false
     }
   ]
 }
