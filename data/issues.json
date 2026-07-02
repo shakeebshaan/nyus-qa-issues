@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260702-fa5t",
+      "createdAt": "2026-07-02T03:43:06.494Z",
+      "route": "/nutrition",
+      "description": "[suggestion] Fasting-day mode on the Nutrition screen. Feature: mark today (or recurring weekdays) as a fasting day with a type — full fast, vrat/fruit-only, or 16:8 window — via a small toggle in the Nutrition day header. Problem: the app has ZERO fasting support (grep confirms no fasting/IF code anywhere), yet the user base is India-focused where weekly vrat (Ekadashi, Tuesday/Thursday fasts, Navratri, Ramadan) is routine — on those days the app punishes users: skipped-meal logging dings adherence/streaks and the notification scheduler nags about missed meals. Competitors (HealthifyMe, MyFitnessPal) ship fasting tracking as a headline feature. v1 scope: (1) fasting_day flag+type stored per-date (backend column + endpoint), (2) Nutrition page shows a calm fasting banner instead of missed-meal states; skipped meals that day do not hurt adherence/streak, (3) notification dispatch skips meal reminders on fasting days, (4) pass fasting context into coach-chat/diet LLM prompts so vrat days suggest compliant meals (sabudana, fruit) instead of regular plan. No timers/rings in v1. Effort: ~2-3 days full-stack.",
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "tags": [
+        "suggestion",
+        "auto"
+      ]
+    },
+    {
       "id": "i-20260625-fd1e",
       "createdAt": "2026-06-25T12:02:10.366Z",
       "route": null,
