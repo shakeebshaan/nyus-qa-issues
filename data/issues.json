@@ -517,31 +517,39 @@
         "90a03b19dd9550c11cefd1c69f934aca641d7a59"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: ChoosePlan X button used navigate(-1); after fresh signup the history entry before /choose-plan is the OTP/verify screen so 'back' landed there. Fix: X now navigates to '/dashboard' with replace:true — always a valid exit regardless of history depth.",
-        "imagePath": "images/i-20260702-e21d-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-e21d-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "8b7fa3b7be542a4f1429a327f016f6b473f0d956",
-        "imageCommits": [
-          "8b7fa3b7be542a4f1429a327f016f6b473f0d956"
-        ],
-        "fixedAt": "2026-07-02T12:51:07.872Z",
-        "by": "shakeebshaan",
-        "appCommit": "68a98d5a",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "ChoosePlan.tsx:840 navigate('/dashboard',{replace:true}). Screenshot shows X button top-left on choose-plan page. Simple one-line fix addressing the root cause."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-02T14:12:05.834Z",
+          "event": "reopened",
+          "note": "find all such things from the entire app",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: ChoosePlan X button used navigate(-1); after fresh signup the history entry before /choose-plan is the OTP/verify screen so 'back' landed there. Fix: X now navigates to '/dashboard' with replace:true — always a valid exit regardless of history depth.",
+            "imagePath": "images/i-20260702-e21d-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-e21d-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "8b7fa3b7be542a4f1429a327f016f6b473f0d956",
+            "imageCommits": [
+              "8b7fa3b7be542a4f1429a327f016f6b473f0d956"
+            ],
+            "fixedAt": "2026-07-02T12:51:07.872Z",
+            "by": "shakeebshaan",
+            "appCommit": "68a98d5a",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "ChoosePlan.tsx:840 navigate('/dashboard',{replace:true}). Screenshot shows X button top-left on choose-plan page. Simple one-line fix addressing the root cause."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     }
   ]
