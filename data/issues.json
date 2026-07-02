@@ -244,33 +244,6 @@
       "reviewedAt": "2026-07-02T07:56:00.710Z"
     },
     {
-      "id": "i-20260628-mt-appstore",
-      "createdAt": "2026-06-28T19:38:10.729Z",
-      "route": null,
-      "description": "[Metrics setup] App-store reporting access â€” unlocks installs, store conversion (impressions->installs), and store reviews/ratings on the Metrics tab. We already have the Play service account (fastlane-deploy@nyus-and.iam.gserviceaccount.com) used for releases, but it needs reporting + reviews scopes. STEPS: (1) Play Console -> Setup -> API access -> find that service account -> grant 'View app information and download bulk reports' + 'Reply to reviews'. (2) Play Console -> Download reports -> Statistics: confirm the linked Google Cloud Storage bucket exists (installs/CVR live there as CSV). (3) (iOS, later) App Store Connect -> Users and Access -> Keys -> create an App Store Connect API key (Admin/Finance) and send me the .p8 + key id + issuer id securely. (4) Reply here when Play access is granted and I'll wire the Play Developer Reporting API (installs, store-listing CVR) + reviews.list (rating + recent reviews) into the collector.",
-      "author": "claude",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Owner reviewReply acknowledged. Code status: ALL approved items implemented and wired — (1) GSC searchAnalytics live against nyus-ga4-reader@nyus-and.iam.gserviceaccount.com, (2) Play reviews.list + play_rating wired, (3) GCS bulk installs CSV wired (pubsite_prod_7589983569042484220), (4) Play Developer Reporting API (store_cvr) code wired but returns 404 — API not enabled yet, (5) experiments_active/total/users wired, (6) in-app CSAT modal live (commit 4b56fac9), (7) competitor_estimates.json populated. ONE OWNER ACTION REMAINING: GCP Console > nyus-and project > APIs & Services > Enable 'Google Play Developer Reporting API'. Once enabled, store_cvr will auto-populate on the next hourly collector run. Razorpay live key + Meta Instagram token still pending via private channel.",
-      "reviewedAt": "2026-07-02T08:04:24.910Z",
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "GSC done — correction: SA is nyus-ga4-reader@nyus-and.iam.gserviceaccount.com (nyus-ga4-sa@ doesn't exist); already Full on sc-domain:nyus.in. Wire searchAnalytics against that.\nPlay done — fastlane-deploy@ has Admin, covering bulk reports + reply to reviews. Bucket: gs://pubsite_prod_7589983569042484220/stats/installs/ (store_performance CSVs same bucket). FYI \"Setup → API access\" is gone from Play Console.\nRazorpay key follows via private channel.\nApproved: wire experiments, add in-app CSAT, manual competitor estimates.\nSocial accounts + iOS ASC key: pending, will follow.",
-      "reviewRepliedAt": "2026-07-01T21:46:12.698Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "metrics",
-        "setup",
-        "aso"
-      ]
-    },
-    {
       "id": "i-20260628-mt-social",
       "createdAt": "2026-06-28T19:38:10.729Z",
       "route": null,
