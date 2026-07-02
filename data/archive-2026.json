@@ -7517,6 +7517,32 @@
       "resolvedAt": "2026-07-02T11:08:34.870Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T11:08:34.870Z"
+    },
+    {
+      "createdAt": "2026-07-02T09:54:31.556Z",
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260702-7b3e",
+      "route": "/activity",
+      "description": "[bug-hunt] Phantom rest timer + bogus rest_seconds after checkbox auto-log. logSetMutation.onSuccess (src/pages/Activity.tsx ~481) arms the rest timer (setShowRestTimer(true), restStartedAt=now, lastLoggedSetRef=that set) for EVERY logged set, including the checkbox auto-log path (handleCheckboxToggle) which logs all last-session sets WITHOUT opening the picker. The timer element only renders inside ExerciseWheelPicker, so nothing shows at the time - but showRestTimer stays true (handleExerciseClick never resets it; only the picker's onClose does). When the user later taps a DIFFERENT exercise, the picker mounts with a rest timer already counting down 90s for a set they never just logged in that picker, and on complete/skip it POSTs log-set for lastLoggedSetRef - the auto-logged exercise's final set - with rest_seconds = now minus the stale restStartedAt (can be minutes; e.g. 600+ s recorded as rest). Expected: rest timer appears only after a set logged in the open picker, and rest_seconds reflects actual rest for that set. Actual: wrong-exercise timer on picker open + garbage rest_seconds written to the previous exercise's last set. Repro: /activity with an active session where exercise A has last-session data -> tap A's checkbox (auto-log) -> wait ~2 min -> open exercise B: rest timer is already running; let it finish and watch the network: log-set POST for exercise A with rest_seconds ~200.",
+      "needsReview": true,
+      "reviewReason": "Fix implemented and committed (35f86a51). Root cause: logSetMutation.onSuccess armed the rest timer unconditionally, including for checkbox auto-log sets (picker never opened). Fix: added isModalOpen.current guard — timer only arms when picker is open. The phantom stale timer (showing for wrong exercise) and bogus rest_seconds POST are eliminated. Activity.page.test.tsx + Activity.extra.test.tsx: 33/33 pass. Cannot demo in browser QA (bug requires active workout with last_session_sets data — QA account has no workout plan). Code fix is surgical and correct. Resolve when confirmed on device.",
+      "reviewedAt": "2026-07-02T10:25:33.948Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-02T11:08:40.909Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-02T11:08:40.909Z"
     }
   ]
 }
