@@ -135,8 +135,32 @@
         "e7ae8bb012579b32091f3d99fb9557bdc0ebe518"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Done - the 3 duplicate screens are now 2. The pre-build 'Your plan overview' screen is gone: finishing the builders auto-starts save+finalize straight into the 'Coach is building your plan' animation, then the 'Your plan is ready' tour (it survives only as the retry surface if the save fails). Also hardened this tick: no flash of the old overview during the transition. Verified on a fresh end-to-end run - overview never rendered (screenshots: the 2 remaining screens; numbers are now consistent, 1601 kcal target matches the macros).",
+        "imagePath": "images/i-20260702-4e12-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260702-4e12-fix-r2.png",
+          "images/i-20260702-4e12-fix-r2-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2b3d9b10c958d3f145d7f4f45f2e8339a9c4ba00",
+        "imageCommits": [
+          "2b3d9b10c958d3f145d7f4f45f2e8339a9c4ba00",
+          "f713f8c2193dc1fe776764503be196c19d480f50"
+        ],
+        "fixedAt": "2026-07-02T22:25:39.395Z",
+        "by": "shakeebshaan",
+        "appCommit": "50cde599",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Fresh-account live walk asserts 'Your plan overview' text never renders (sawOverview=false); building->ready->dashboard captured; flash regression fixed in 50cde599"
+        }
+      },
       "history": [
         {
           "at": "2026-07-02T18:13:30.525Z",
