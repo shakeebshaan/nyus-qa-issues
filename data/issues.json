@@ -537,8 +537,30 @@
         "e9c725014ae3b4e35165b7296791ee456cfec000"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Long build waits no longer block: if a coach build-all exceeds 10s (was 20s) the overlay flips to background mode, and Continue auto-applies the built exercises/meals to the plan (handleBgContinue in both builders) with an in-app note that results land on the plan page. Recapture: all 7 workout days built (18/18 sets, must-haves filled) in ~4s warm.",
+        "imagePath": "images/i-20260630-97a8-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260630-97a8-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "486fbbebc3196194a8738f9ac6eea5722510ab7a",
+        "imageCommits": [
+          "486fbbebc3196194a8738f9ac6eea5722510ab7a"
+        ],
+        "fixedAt": "2026-07-02T07:31:10.067Z",
+        "by": "shakeebshaan",
+        "appCommit": "b24240d8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Reopen ask implemented exactly: over-threshold builds go background and auto-apply; recapture shows full built week"
+        }
+      },
       "history": [
         {
           "at": "2026-07-01T15:13:16.468Z",
@@ -593,10 +615,8 @@
           }
         }
       ],
-      "needsReview": true,
-      "reviewedBy": "shakeebshaan",
-      "reviewReason": "Fix deployed (commit 76502306). handleBgContinue added to both CustomDietBuilder + CustomWorkoutBuilder: when coachBuildBackground=true, Continue-to-plan auto-calls onComplete() with built meals/exercises instead of just dismissing overlay. TS clean. testGate infra-blocked headless (npm test ~39min, flaky CI). Frontend pushed to main.",
-      "reviewedAt": "2026-07-02T03:10:36.609Z"
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260701-b852",
