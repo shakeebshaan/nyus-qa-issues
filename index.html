@@ -1524,7 +1524,12 @@ function renderMetrics(d, hist) {
     if (!prevSnap) return null;
     if (typeof prevSnap[key] === "number") return prevSnap[key];
     const all = prevSnap.all || {};
-    return typeof all[key] === "number" ? all[key] : null;
+    if (typeof all[key] === "number") return all[key];
+    // Fallback: older snapshots lack `all` — try the leaf key (e.g.
+    // "product_growth.users_total" → "users_total") so the most-tracked
+    // metrics still show a delta even without the full all map (i-20260702-7847).
+    const leaf = key.includes(".") ? key.split(".").pop() : null;
+    return leaf && typeof prevSnap[leaf] === "number" ? prevSnap[leaf] : null;
   };
   const deltaChip = (key, value, cls) => {
     const pv = prevOf(key);
