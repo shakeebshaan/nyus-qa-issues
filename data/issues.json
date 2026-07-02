@@ -339,8 +339,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "My recommendation: keep 3 screens but stop repeating the numbers - each screen gets ONE job. (1) Plan overview stays the single detail+edit surface (coach, kcal, macros, pace, goal - it already is). (2) 'Coach is building your plan' becomes progress-only: keep the agent checklist, DROP the stats strip (38 exercises / 115 sets / kcal) since those numbers are provisional and reappear 5s later. (3) 'Your plan is ready' becomes a light confirmation: keep the headline goal line + coach + ONE summary line (2823 kcal - 2.26 kg/wk) + CTAs, drop the full P/C/F macro card. Rationale: overview is where users can act on the data; the other two showing the same card teaches users to skip reading. Merging into one screen is worse - the build wait needs a progress surface and the ready moment needs a celebration beat. Also worth noting: your screenshots show overview pace 0.54 kg/wk but ready screen 2.26 kg/wk + kcal 2358 vs 2823 - the finalize step recomputes and disagrees with the overview; that inconsistency is the real bug and argues for showing the numbers ONCE. Reply 'go ahead' and I will implement (2)+(3) and chase the pace/kcal mismatch.",
-      "reviewedAt": "2026-07-02T12:44:17.130Z",
+      "reviewReason": "Design decision flagged for owner input. 3-screen sequence: (1) Your plan overview [review before build] (2) Coach building your plan [loading screen] (3) Your plan is ready [post-build]. Recommendation: MERGE screen 1 into screen 3. Remove the pre-build overview (it duplicates what the plan-ready screen shows) and keep only (2) building + (3) plan ready. This saves the user 1 screen and reduces redundancy without losing the building-animation moment or the final summary. If owner agrees, will implement by removing/simplifying PlanReadyOverview and adding the key data points to PostPlanTour. Or keep all 3 if the pre-build review has retention value.",
+      "reviewedAt": "2026-07-02T12:55:47.215Z",
       "reviewedBy": "shakeebshaan"
     },
     {
