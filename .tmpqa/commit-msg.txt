@@ -1,0 +1,9 @@
+﻿fix(metrics): play_rating show live when 0 reviews (API connected)
+
+Previously play_rating showed "awaiting: Play SA not found or API error" when
+reviews.list returned 200 OK but with 0 reviews (no reviews on record yet).
+Now distinguishes connected-but-empty from missing/error:
+- SA works + 0 reviews -> live "No reviews yet" + "(Play API connected, 0 reviews on record)"
+- SA works + has reviews -> live rating + count
+- SA 403 -> awaiting with permission note
+- SA missing/error -> awaiting with error note
