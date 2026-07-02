@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260702-ppht",
+      "createdAt": "2026-07-02T09:43:26.017Z",
+      "route": "/measurements",
+      "description": "[suggestion] Progress photos on the Measurements screen. Feature: a \"Progress Photos\" section on /measurements — take/pick a front-pose photo (Capacitor Camera, already installed), auto-compress client-side (existing src/lib/image-compress.ts), upload privately, then view a date-stamped timeline grid and a side-by-side compare of any two dates. Problem: the app tracks weight, 8 body measurements, and body-fat estimates, but has ZERO visual record (grep: no progress-photo code anywhere) — scale weight is noisy (the board just processed 3 weekly-progress trend bugs users hit watching it) and photos are the ground truth for recomposition, especially for the strength-tier athletes the app targets. Every comparable tracker ships this: Fittr (India market leader) makes photo check-ins central, MacroFactor/MyFitnessPal premium both have it. v1 scope: (1) backend progress_photos table (user_id, taken_at, file ref) + upload/list/delete endpoints storing compressed JPEGs on the VM, (2) Measurements page section: capture button -> compress -> upload, chronological thumbnail grid, (3) compare view: pick two photos, side-by-side with dates + weight-on-that-date pulled from weight history. Private by default, no sharing, front pose only, no AI analysis in v1. Effort: ~2-3 days full-stack.",
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "tags": [
+        "suggestion",
+        "auto"
+      ]
+    },
+    {
       "createdAt": "2026-07-02T09:10:24.853Z",
       "status": "open",
       "fix": null,
