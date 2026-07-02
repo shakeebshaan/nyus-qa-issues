@@ -824,12 +824,14 @@ async function fetchPrivReport(path) {
   if (privReportCache.has(path)) return privReportCache.get(path);
   if (!token) return null; // not cached — so it retries once a token is added
   try {
+    // Raw media type: the JSON contents API returns EMPTY content for files
+    // >1MB (encoding:"none"), which made big reports render blank. Raw serves
+    // the bytes directly for files up to 100MB, same token auth.
     const r = await fetch(`${PRIV_API}/contents/${path}?ref=${PRIV_BRANCH}`, {
-      headers: headers(), cache: "no-store",
+      headers: headers({ Accept: "application/vnd.github.raw+json" }), cache: "no-store",
     });
     if (!r.ok) { privReportCache.set(path, null); return null; }
-    const j = await r.json();
-    const html = b64decodeUtf8(j.content);
+    const html = await r.text();
     privReportCache.set(path, html);
     return html;
   } catch {
