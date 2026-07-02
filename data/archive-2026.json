@@ -7660,6 +7660,51 @@
       "resolvedAt": "2026-07-02T11:10:44.611Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T11:10:44.611Z"
+    },
+    {
+      "id": "i-20260702-6345",
+      "createdAt": "2026-07-02T03:56:15.577Z",
+      "route": "/log-weight",
+      "description": "[bug-hunt] Weight-confirm flow can save a different value than the one shown/edited on screen.\n\nExpected: after the \"Large weight change detected\" warning appears, tapping \"Yes, this is correct\" saves the weight currently shown in the input.\nActual: it re-submits the ORIGINAL flagged payload (pendingData captured at first Save), while the success screen shows the CURRENT input value. The input stays fully editable (ruler / +/- / typing) while the warning card is visible, so the two can diverge silently.\n\nRepro:\n1. Have a last log (e.g. 80 kg). On /log-weight type 90 and tap \"Save & Track\" -> warning card appears.\n2. WITHOUT tapping \"Edit weight\", scrub the ruler down to 85.\n3. Tap \"Yes, this is correct\".\n4. Backend saves 90 kg (pendingData from use-weight-validation.ts confirmAndSubmit, src/hooks/use-weight-validation.ts:39-54), but SuccessMoment reads the live field and announces \"85.0 kg recorded\" (src/pages/LogWeight.tsx:209-231, 468). Chart/history then show 90.\n\nFix direction: either lock the weight input while warning is active, or have confirmAndSubmit re-read the current field value (and update pendingData on edit).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: confirmAndSubmit used stale pendingData.morning_weight_kg captured at first Save; weight input stays editable during warning, so user could change 90->85 and backend saved 90 while success showed 85. Fix: confirmAndSubmit now accepts optional currentWeightKg override; handleConfirmWeight passes live parsed weight so backend saves exactly what user sees. Scoped tests: 91/91 pass.",
+        "imagePath": "images/i-20260702-6345-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-6345-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4d0795cbed7c362b8fb6dc62293bf441bbeead93",
+        "imageCommits": [
+          "4d0795cbed7c362b8fb6dc62293bf441bbeead93"
+        ],
+        "fixedAt": "2026-07-02T04:23:19.125Z",
+        "by": "shakeebshaan",
+        "appCommit": "119b09d2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Data integrity fix: the divergence between saved value and displayed value is now impossible. Fix is minimal (2-line change to hook + 2-line change to handler). Tests green."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-02T11:12:19.194Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-02T11:12:19.194Z"
     }
   ]
 }
