@@ -541,7 +541,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root cause: subscriptions table includes test/admin accounts not in users.onboarding_complete, so raw subscribed(111) > onboarded(109). Fix already deployed (commit bf7a2fd): metrics_db.py now has LIVE_WHERE filter (TEST_EMAIL_DOMAINS list) + live funnel in detail. metrics.json regenerated 2026-07-02: live funnel shows 27->24->18->4 paid (22.2%). Dashboard now shows LIVE funnel first, raw labeled All accounts (incl. test users). testGate infra-blocked headless.",
+      "reviewedAt": "2026-07-02T03:11:27.379Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260701-71e5",
