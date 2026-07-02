@@ -35,9 +35,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: backend strftime('%b %d') dates ('Jul 02') never matched frontend ISO strings ('2026-07-02'), so streak Set lookup always missed + carry-forward days falsely counted. Fix: backend daily_weight_history now includes date_iso (ISO-8601) and logged:bool; frontend streak memo uses date_iso and filters logged:false carry-forwards. Scoped tests: 91/91 pass.",
+        "imagePath": "images/i-20260702-e0bc-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-e0bc-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b0cffc52745a135767ebda08d12a9949ba134ace",
+        "imageCommits": [
+          "b0cffc52745a135767ebda08d12a9949ba134ace"
+        ],
+        "fixedAt": "2026-07-02T04:22:44.938Z",
+        "by": "shakeebshaan",
+        "appCommit": "119b09d2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root cause is deterministic (date format mismatch), fix is surgical (add date_iso+logged fields, update memo filter). 91 scoped unit tests green. Backend deployed + migration applied. Both secondary defects (format mismatch + carry-forward inflation) fully addressed."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260702-fa5t",
