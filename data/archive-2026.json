@@ -8528,6 +8528,53 @@
       "resolvedAt": "2026-07-02T14:23:07.647Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T14:23:07.647Z"
+    },
+    {
+      "id": "i-20260702-6baa",
+      "createdAt": "2026-07-02T11:27:08.816Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260702-6baa.jpg",
+      "imageCommit": "7ee80f49d3a82251376c82f518de824d3a853b76",
+      "imagePaths": [
+        "images/i-20260702-6baa.jpg"
+      ],
+      "imageCommits": [
+        "7ee80f49d3a82251376c82f518de824d3a853b76"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: TheMealDB keyword fallback (compound AI names like 'Chicken Roti Roll' miss the full-name search, so it searches 'chicken') always took the FIRST result - every chicken-named meal in a plan got the identical photo. Fix: offset into the result list by a crc32 hash of the full meal name, so different dishes spread across results while the same name stays deterministic. Backend 067c5ef, deployed; evidence card shows 4 same-keyword meals now resolving 4 distinct photos from the live prod code path.",
+        "imagePath": "images/i-20260702-6baa-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-6baa-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b572add2f29f29e33d6fe282d37511dfea534aec",
+        "imageCommits": [
+          "b572add2f29f29e33d6fe282d37511dfea534aec"
+        ],
+        "fixedAt": "2026-07-02T13:21:11.811Z",
+        "by": "shakeebshaan",
+        "appCommit": "b2f982ec",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Live prod output verified: 4 same-keyword meal names -> 4 distinct TheMealDB photos; existing rows regenerate via the image worker on next enqueue"
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-02T14:23:43.543Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-02T14:23:43.543Z"
     }
   ]
 }
