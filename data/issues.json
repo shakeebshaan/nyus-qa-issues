@@ -627,50 +627,6 @@
       "reviewReply": "Do a complete end to end onboarding of a user if you have a user whose onboarding is already completed then delete the data and do the onboarding as fresh and capture every single screenshot",
       "reviewRepliedAt": "2026-07-02T11:10:15.688Z",
       "reviewReplyBy": "shakeebshaan"
-    },
-    {
-      "id": "i-20260701-cfcc",
-      "createdAt": "2026-07-01T21:53:47.226Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260701-cfcc.jpg",
-      "imageCommit": "951feb515235f59835bfebe1a9048dedf357b87b",
-      "imagePaths": [
-        "images/i-20260701-cfcc.jpg"
-      ],
-      "imageCommits": [
-        "951feb515235f59835bfebe1a9048dedf357b87b"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: funnel + revenue counted every account, including internal test/admin users on the test payment track. Fix: metrics_db.py now excludes test-domain accounts (LIVE_WHERE filter) and the dashboard leads with a LIVE funnel (test accounts excluded, paid = real money: 27 signups -> 4 paid, 22%) plus a live paid-revenue card; the all-accounts view stays as a second, clearly-labeled panel.",
-        "imagePath": "images/i-20260701-cfcc-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260701-cfcc-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "400b5c6ed1220507bcf150236389c677de8120f3",
-        "imageCommits": [
-          "400b5c6ed1220507bcf150236389c677de8120f3"
-        ],
-        "fixedAt": "2026-07-02T04:32:55.234Z",
-        "by": "shakeebshaan",
-        "appCommit": "bf7a2fd",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Recaptured Metrics tab shows exactly the requested split: LIVE funnel first with test users excluded and paid=real money; verified against prod DB data regenerated today. (Test gate = owner's npm run test:unit, exit 0.)"
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan"
     }
   ]
 }
