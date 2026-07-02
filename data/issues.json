@@ -18,7 +18,11 @@
       "tags": [
         "suggestion",
         "auto"
-      ]
+      ],
+      "needsReview": true,
+      "reviewReason": "Implementation complete (commit a81244c1). All 8 deliverables shipped: NyusDashboardWidget.kt (AppWidgetProvider, stale-date guard, tap-to-open), WidgetBridgePlugin.kt (Capacitor plugin writing SharedPreferences + triggering AppWidgetManager), widget_dashboard.xml (2x2 dark card, teal kcal value, white protein+streak rows), widget_dashboard_info.xml (110x110dp, targetCellWidth/Height=2), widget_background.xml, widget-bridge.ts (registerPlugin stub), useWidgetSync.ts (fetches diet plan on Dashboard mount native-only, computes kcal remaining + protein from macros), Dashboard.tsx integration. TypeScript compiles clean. ProGuard keep rules added. CANNOT fully verify without a physical Android device with the widget pinned to the home screen --- the test gate (npm run test:unit = vitest) cannot cover native Android Kotlin code. To verify: build the APK (fastlane beta or gradlew assembleDebug), install on device, long-press home screen, add NYUS widget (2x2), open the app to /dashboard, confirm widget shows kcal remaining + protein + streak.",
+      "reviewedAt": "2026-07-02T14:07:06.603Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260702-e0bc",
