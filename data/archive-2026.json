@@ -7630,6 +7630,36 @@
       "resolvedAt": "2026-07-02T11:10:37.663Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T11:10:37.663Z"
+    },
+    {
+      "id": "i-20260628-mt-social",
+      "createdAt": "2026-06-28T19:38:10.729Z",
+      "route": null,
+      "description": "[Metrics setup] Social platform APIs â€” unlocks engagement rate, follower growth, and social->app click-throughs. BLOCKED UPSTREAM: per the earlier note the brand social accounts (Instagram/TikTok/Facebook/X) aren't created yet (auto-signup was blocked by phone/CAPTCHA on this server). STEPS once accounts exist: (1) Create the brand accounts on your own device. (2) Instagram/Facebook: Meta for Developers -> create an app -> Instagram Graph API -> long-lived token. (3) TikTok: TikTok for Developers -> app -> Display API token. (4) Send tokens securely. (5) I'll add the engagement/follower pulls. Reply when the accounts + tokens exist.",
+      "author": "claude",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Owner reviewReply acknowledged. Social platform API wiring code is READY in metrics-collect.mjs but no tokens have arrived yet. Blocked on: (1) Instagram Business account created (owner said 'one login fix away' from Meta dev app + long-lived token) — please provide the token via private channel when ready. (2) TikTok: owner marked N/A (skipped). (3) iOS App Store Connect .p8 key: owner marked N/A. Once Meta Instagram token arrives, I'll wire follower_count/engagement_rate/social_clicks into the collector within one tick. No code change needed now.",
+      "reviewedAt": "2026-07-02T08:04:40.699Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "GSC done — correction: SA is nyus-ga4-reader@nyus-and.iam.gserviceaccount.com (nyus-ga4-sa@ doesn't exist); already Full on sc-domain:nyus.in. Wire searchAnalytics against that.\nPlay done — fastlane-deploy@ has Admin, covering bulk reports + reply to reviews. Bucket: gs://pubsite_prod_7589983569042484220/stats/installs/ (store_performance CSVs same bucket). FYI \"Setup → API access\" is gone from Play Console.\nRazorpay key follows via private channel.\nApproved: wire experiments, add in-app CSAT, manual competitor estimates.\nSocial accounts + iOS ASC key: pending, will follow.",
+      "reviewRepliedAt": "2026-07-01T21:46:05.991Z",
+      "reviewReplyBy": "shakeebshaan",
+      "tags": [
+        "metrics",
+        "setup",
+        "social"
+      ],
+      "resolvedAt": "2026-07-02T11:10:44.611Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-02T11:10:44.611Z"
     }
   ]
 }
