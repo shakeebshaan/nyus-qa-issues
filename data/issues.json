@@ -634,8 +634,30 @@
         "c6a7d73ea5e31d92f838746be37182351ce6223f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Meal images now render on the builder cards. Backend image_providers.py: openverse thumbnails use only the CDN field (wikimedia raw URLs the app blocks are skipped) and Indian dishes TheMealDB misses fall back to a deterministic Pollinations image; frontend blocks 402 URLs and falls back to ingredient photos. Recapture: built breakfast card shows a real dish photo with kcal + macro chips.",
+        "imagePath": "images/i-20260701-b852-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260701-b852-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d0a944cbdc07691a64d272bd5f275ea16b82109c",
+        "imageCommits": [
+          "d0a944cbdc07691a64d272bd5f275ea16b82109c"
+        ],
+        "fixedAt": "2026-07-02T07:31:30.463Z",
+        "by": "shakeebshaan",
+        "appCommit": "649a2b38",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Recapture shows an actual meal photo on the builder card, the exact thing the reopen said was missing"
+        }
+      },
       "history": [
         {
           "at": "2026-07-01T21:38:38.375Z",
@@ -664,9 +686,7 @@
           }
         }
       ],
-      "needsReview": true,
-      "reviewReason": "Fix deployed to prod (commit 3eee31d, deployed 2026-07-02). Backend image_providers.py: (1) openverse_thumb_url now uses only CDN thumbnail field, skipping wikimedia raw URLs that frontend filters; (2) food_preview_url adds Pollinations AI hotlink fallback with deterministic seed from MD5(meal_name) for Indian dishes TheMealDB misses. Existing cached meals refresh within 24h. Screenshot: diet builder shows full-bleed h-52 meal card (Design D confirmed). testGate infra-blocked headless.",
-      "reviewedAt": "2026-07-02T03:10:46.479Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
