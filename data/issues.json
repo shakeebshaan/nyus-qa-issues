@@ -462,31 +462,39 @@
         "840c9ebcaf0d097f2d17c459d78d1ef4c9c06716"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Live Razorpay keys already set in backend .env before this issue was filed (rzp_live_T8fIiH5P4vaIBT + secret). Payment flow live. ChoosePlan screenshot confirms paid tiers available.",
-        "imagePath": "images/i-20260702-0f27-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-0f27-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "4557095b25b8207ac6af179f5140bc8737739417",
-        "imageCommits": [
-          "4557095b25b8207ac6af179f5140bc8737739417"
-        ],
-        "fixedAt": "2026-07-02T17:52:21.873Z",
-        "by": "shakeebshaan",
-        "appCommit": "beab445e3a3d3f5fcbfc6302257d4a2730b22eec",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Verified live keys on prod server via SSH. No code change needed — keys were already configured prior to this issue."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-02T18:12:39.145Z",
+          "event": "reopened",
+          "note": "matric is also working now ?",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Live Razorpay keys already set in backend .env before this issue was filed (rzp_live_T8fIiH5P4vaIBT + secret). Payment flow live. ChoosePlan screenshot confirms paid tiers available.",
+            "imagePath": "images/i-20260702-0f27-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-0f27-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4557095b25b8207ac6af179f5140bc8737739417",
+            "imageCommits": [
+              "4557095b25b8207ac6af179f5140bc8737739417"
+            ],
+            "fixedAt": "2026-07-02T17:52:21.873Z",
+            "by": "shakeebshaan",
+            "appCommit": "beab445e3a3d3f5fcbfc6302257d4a2730b22eec",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Verified live keys on prod server via SSH. No code change needed — keys were already configured prior to this issue."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
