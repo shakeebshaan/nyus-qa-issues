@@ -437,49 +437,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260702-b12d",
-      "createdAt": "2026-07-02T11:41:03.045Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260702-b12d.jpg",
-      "imageCommit": "bfd8c51a868248b6df4534d90b3f71a375be144d",
-      "imagePaths": [
-        "images/i-20260702-b12d.jpg"
-      ],
-      "imageCommits": [
-        "bfd8c51a868248b6df4534d90b3f71a375be144d"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: ScrollableRuler (and ScrollableScale) positioned ticks via paddingLeft, but tick absolute-left ignored that padding; at scrollLeft=0 the center line hit ~halfW into the visible ticks, making the minimum ~halfW/tickSpacing steps unreachable. Fix: ticks rendered at halfW+i*tickSpacing from the div edge (no padding); scroll container width = totalWidth + containerWidth so min is reachable at scrollLeft=0.",
-        "imagePath": "images/i-20260702-b12d-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-b12d-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "d9e4fecaf3d96e8405f07565a8c3d0a4e6ed56d2",
-        "imageCommits": [
-          "d9e4fecaf3d96e8405f07565a8c3d0a4e6ed56d2"
-        ],
-        "fixedAt": "2026-07-02T12:51:29.715Z",
-        "by": "shakeebshaan",
-        "appCommit": "68a98d5a",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "ScrollableRuler.tsx:235 style left:halfW+i*tickSpacing. paddingLeft/Right removed. visibleTick range adjusted for halfW offset. Same fix applied to ScrollableScale. The height slider minimum is now reachable."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260702-e21d",
       "createdAt": "2026-07-02T11:43:22.868Z",
       "route": null,
