@@ -333,31 +333,39 @@
         "5c0e758388e47be5087c286146b63abd68dde9e5"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: MealSlotCard showed all ingredient names inline as text in every coach-built card, turning a 7-ingredient meal into a wall of text. Fix: coach meals now render a compact 'N ingredients | View & adjust' tap target; the full ingredient list + editor lives behind the Adjust Sheet, keeping the card clean. Manual meals retain the inline editor.",
-        "imagePath": "images/i-20260702-6698-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-6698-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c1589a1c9e161f8a73e0a2ad19ef6dc068349871",
-        "imageCommits": [
-          "c1589a1c9e161f8a73e0a2ad19ef6dc068349871"
-        ],
-        "fixedAt": "2026-07-02T12:53:11.396Z",
-        "by": "shakeebshaan",
-        "appCommit": "68a98d5a",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "MealSlotCard.tsx:390 compactBody renders count + View&adjust tap; isCoachCard gate at :596. Full editorBody in Adjust Sheet at :707. Ingredient wall-of-text gone from card view."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-02T14:23:31.640Z",
+          "event": "reopened",
+          "note": "give proper screenshot",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: MealSlotCard showed all ingredient names inline as text in every coach-built card, turning a 7-ingredient meal into a wall of text. Fix: coach meals now render a compact 'N ingredients | View & adjust' tap target; the full ingredient list + editor lives behind the Adjust Sheet, keeping the card clean. Manual meals retain the inline editor.",
+            "imagePath": "images/i-20260702-6698-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-6698-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "c1589a1c9e161f8a73e0a2ad19ef6dc068349871",
+            "imageCommits": [
+              "c1589a1c9e161f8a73e0a2ad19ef6dc068349871"
+            ],
+            "fixedAt": "2026-07-02T12:53:11.396Z",
+            "by": "shakeebshaan",
+            "appCommit": "68a98d5a",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "MealSlotCard.tsx:390 compactBody renders count + View&adjust tap; isCoachCard gate at :596. Full editorBody in Adjust Sheet at :707. Ingredient wall-of-text gone from card view."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
