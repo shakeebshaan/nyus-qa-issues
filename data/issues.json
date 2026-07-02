@@ -504,11 +504,34 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Simulated 1,000 plans (diet + workout prescription) through the PRODUCTION plan engine across the full onboarding-variable space (sex, age 18-65, BMI 16.5-42, all goals/tiers/lifestyles) and audited each against evidence-based safety rules. The audit FOUND and FIXED a real defect: 66/1000 endurance plans issued macros summing up to 70% over their own calorie target (unconditional 5g/kg carb floor - backend 67d90a5, deployed, tests 14/14 green; re-run = 998/1000 clean, 0 safety violations). Full audit report attached inline (findings, distributions, floors, residuals).",
+        "imagePath": "images/i-20260702-1e0a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-1e0a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0c653c5eb751d7780bba6db82f0d69331bbed389",
+        "imageCommits": [
+          "0c653c5eb751d7780bba6db82f0d69331bbed389"
+        ],
+        "fixedAt": "2026-07-02T22:48:16.608Z",
+        "by": "shakeebshaan",
+        "appCommit": "50cde599",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "1000 seeded profiles vs live engine; found+fixed a real macro-coherence bug and verified all safety rails (kcal floors, pace, volume, steps) hold at 0 violations; reproducible harness committed"
+        }
+      },
       "history": [],
       "reportPath": "reports/1e0a-report.html",
-      "reportLabel": "1,000-plan simulation audit"
+      "reportLabel": "1,000-plan simulation audit",
+      "needsReview": false
     }
   ]
 }
