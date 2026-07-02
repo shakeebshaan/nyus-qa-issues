@@ -360,8 +360,30 @@
         "578156f8e04d75ce4e7cc90b0fe6e0e5d295fea5"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Zara stays removed (is_active=0 - she is absent from the grid), and the 'all looks same' complaint is fixed at the root: portraits are no longer one shared recipe. Each coach now has a hand-authored look (age, hair silhouette, facial hair, glasses/turban, build, wardrobe colour, background, lighting - backend 0658603) and all 20 were regenerated on prod. Meera (long straight hair, sage green, nose stud) can no longer be confused with anyone on the roster.",
+        "imagePath": "images/i-20260702-20e7-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260702-20e7-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4c53811de4a9c20c94ef219cb0828a9ec6d088e0",
+        "imageCommits": [
+          "4c53811de4a9c20c94ef219cb0828a9ec6d088e0"
+        ],
+        "fixedAt": "2026-07-02T22:38:03.522Z",
+        "by": "shakeebshaan",
+        "appCommit": "50cde599",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Zara absent from active roster; regenerated grid shows 20 clearly distinct coaches - the lookalike class of bug is structurally gone (unique authored looks, not random pools)"
+        }
+      },
       "history": [
         {
           "at": "2026-07-02T18:12:10.176Z",
