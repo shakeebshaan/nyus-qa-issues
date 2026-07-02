@@ -8113,6 +8113,125 @@
       "resolvedAt": "2026-07-02T11:15:25.759Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T11:15:25.759Z"
+    },
+    {
+      "id": "i-20260625-fd1e",
+      "createdAt": "2026-06-25T12:02:10.366Z",
+      "route": null,
+      "description": "Waiting here for too long",
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260625-fd1e.jpg",
+      "imageCommit": "c70aa873980a027dcc8e480e79b96c0d43b4a0c7",
+      "imagePaths": [
+        "images/i-20260625-fd1e.jpg"
+      ],
+      "imageCommits": [
+        "c70aa873980a027dcc8e480e79b96c0d43b4a0c7"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Wait cut three ways: meal decks pre-warm on plan-builder mount (batch LLM call), early-prefetch trimmed 20 to 6 ideas for a ~40 percent faster warm, and the blocking overlay now unlocks at 10s (was 20s) into background mode that auto-applies the finished meals. Recapture: warm build completed in ~3s, cold full-day build 34s but user is free after 10s; final screen shows real meals with accurate on-target macros (2257/2224 kcal).",
+        "imagePath": "images/i-20260625-fd1e-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260625-fd1e-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2b4e38eeb82b8bd42a5fb78e507f91c6d59f2fcb",
+        "imageCommits": [
+          "2b4e38eeb82b8bd42a5fb78e507f91c6d59f2fcb"
+        ],
+        "fixedAt": "2026-07-02T07:30:52.294Z",
+        "by": "shakeebshaan",
+        "appCommit": "b24240d8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "User is never blocked more than 10s; result is real data with on-target macros, verified in recapture"
+        }
+      },
+      "history": [
+        {
+          "at": "2026-06-29T11:48:48.531Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Full onboarding walk captured: 35 screenshots from intro carousel through all 11 screens (Basics/name entry, Body, Goal, Why, Training, Health+Food, WorkoutBuilder, DietBuilder, PlanBuildChoice). Confirmed: all pre-builder screens render correctly. Builder AI prefill runs 21s polling loop. The 'Waiting here for too long' concern was on the PlanBuildChoiceV2 coach-build path (VITE_FEATURE_DEFER_BUILDERS=true, OFF in prod). Full annotated walk report attached (35 shots, inline HTML).",
+            "imagePath": "images/i-20260625-fd1e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260625-fd1e-fix-r1.png",
+              "images/i-20260625-fd1e-fix-r1-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "181971c031530fae48efdeebf4732360b924d311",
+            "imageCommits": [
+              "181971c031530fae48efdeebf4732360b924d311",
+              "e0d1235cc0cd5773ea321986916db314be2e9bb1"
+            ],
+            "fixedAt": "2026-06-29T09:02:04.124Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95
+            }
+          }
+        },
+        {
+          "at": "2026-07-01T21:27:59.501Z",
+          "event": "reopened",
+          "note": "still too long",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: suggestMealsBatch did not register in-flight per-slot promises in inFlightDecks. This caused suggestMealCached to spawn competing single-slot LLM calls during the batch, hitting per-account throttle (40-53s per slot instead of 14s). Fix 1 (core race): suggestMealsBatch now registers per-slot promises in inFlightDecks before firing the API call, with a cold-slot filter to skip already-warm/in-flight keys. Fix 2 (build path): handleCoachBuildAll pre-warms all cold empty slots via prefetchMealIdeas (batch) before the sequential loop. Cold builds: ~18s (1 batch for all 3 slots) vs ~42s sequential with contention. Warm builds: near-instant pre-warm + instant loop. 33/33 scoped tests green, tsc clean.",
+            "imagePath": "images/i-20260625-fd1e-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260625-fd1e-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "bc18085059f41908b91da87e96a989be32e004ca",
+            "imageCommits": [
+              "bc18085059f41908b91da87e96a989be32e004ca"
+            ],
+            "fixedAt": "2026-06-29T17:11:03.089Z",
+            "by": "shakeebshaan",
+            "appCommit": "07b7e268",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Fixes the core undetected race condition (suggestMealsBatch was in-flight but not in inFlightDecks, so concurrent suggestMealCached calls spawned competing LLM calls and hit the per-account throttle). Pre-warm optimization ensures cold builds use batch not sequential. Cold: 18s vs 42s. The fix eliminates the main cause of the reported wait. Tests pass, TypeScript clean. Diet plan renders correctly (screenshot shows AI plan with correct macros)."
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "We need to fix it so user wait very less and have the result accurately 100% accuracy and real data",
+      "reviewRepliedAt": "2026-06-29T12:57:35.636Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reportPath": "reports/fd1e-report.html",
+      "reportLabel": "Onboarding Walk Report",
+      "reviewReplyImagePaths": [
+        "images/i-20260625-fd1e-reply.jpg"
+      ],
+      "reviewReplyImageCommits": [
+        "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
+      ],
+      "reviewReplyImagePrivate": true,
+      "reviewReason": "Fix deployed (commit 05eb6251): CustomDietBuilder bg-mode threshold reduced 10s->5s (WorkoutBuilder was already at 5s per 65ade25a). After 5s of building, BuildFocusOverlay switches to background mode showing 'Continue to my plan' so user can proceed immediately without waiting for full build. BuildFocusOverlay prop comment updated (>5s). Screenshot shows diet builder rendering correctly at 390x844. TS clean. Owner direction re '100% accuracy and real data' noted: plan quality unchanged by this fix; the fast_plan_assembler Indian food filter (RETRO ab17) is the remaining accuracy gap and requires a backend change tracked separately. testGate npm test infra-blocked headless (~39min OOM) -- recommend scoping loop.json testCommand to npm run test:component.",
+      "reviewedAt": "2026-07-02T07:56:00.710Z",
+      "resolvedAt": "2026-07-02T11:15:49.823Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-02T11:15:49.823Z"
     }
   ]
 }
