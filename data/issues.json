@@ -242,9 +242,32 @@
         "0bbe2e00de9d390816d694522d2d465cdfe56c20"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: plan cards had no per-card checkout action; only the page-bottom CTA triggered Razorpay. Fix: each plan card's 'Subscribe — ₹X' button calls handleRazorpayPayment(planId) directly, starting Razorpay checkout for that plan immediately on tap.",
+        "imagePath": "images/i-20260702-237e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-237e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "81f82f3f7590579f5a5e57a9b9b4d398434e5e48",
+        "imageCommits": [
+          "81f82f3f7590579f5a5e57a9b9b4d398434e5e48"
+        ],
+        "fixedAt": "2026-07-02T12:50:45.440Z",
+        "by": "shakeebshaan",
+        "appCommit": "68a98d5a",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "ChoosePlan.tsx:645 per-card Subscribe wired with planIdOverride. Screenshot shows 'Subscribe - 1299' CTA inline on the plan card. Razorpay script preloaded at mount."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260702-4e12",
