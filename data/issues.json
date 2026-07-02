@@ -428,10 +428,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Design decision flagged for owner input. 3-screen sequence: (1) Your plan overview [review before build] (2) Coach building your plan [loading screen] (3) Your plan is ready [post-build]. Recommendation: MERGE screen 1 into screen 3. Remove the pre-build overview (it duplicates what the plan-ready screen shows) and keep only (2) building + (3) plan ready. This saves the user 1 screen and reduces redundancy without losing the building-animation moment or the final summary. If owner agrees, will implement by removing/simplifying PlanReadyOverview and adding the key data points to PostPlanTour. Or keep all 3 if the pre-build review has retention value.",
       "reviewedAt": "2026-07-02T12:55:47.215Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "is this best\n?",
+      "reviewRepliedAt": "2026-07-02T14:14:17.028Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260702-b12d",
