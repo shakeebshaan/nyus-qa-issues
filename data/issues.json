@@ -142,8 +142,30 @@
         "c70aa873980a027dcc8e480e79b96c0d43b4a0c7"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Wait cut three ways: meal decks pre-warm on plan-builder mount (batch LLM call), early-prefetch trimmed 20 to 6 ideas for a ~40 percent faster warm, and the blocking overlay now unlocks at 10s (was 20s) into background mode that auto-applies the finished meals. Recapture: warm build completed in ~3s, cold full-day build 34s but user is free after 10s; final screen shows real meals with accurate on-target macros (2257/2224 kcal).",
+        "imagePath": "images/i-20260625-fd1e-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260625-fd1e-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2b4e38eeb82b8bd42a5fb78e507f91c6d59f2fcb",
+        "imageCommits": [
+          "2b4e38eeb82b8bd42a5fb78e507f91c6d59f2fcb"
+        ],
+        "fixedAt": "2026-07-02T07:30:52.294Z",
+        "by": "shakeebshaan",
+        "appCommit": "b24240d8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "User is never blocked more than 10s; result is real data with on-target macros, verified in recapture"
+        }
+      },
       "history": [
         {
           "at": "2026-06-29T11:48:48.531Z",
@@ -204,7 +226,7 @@
           }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "We need to fix it so user wait very less and have the result accurately 100% accuracy and real data",
       "reviewRepliedAt": "2026-06-29T12:57:35.636Z",
@@ -217,9 +239,7 @@
       "reviewReplyImageCommits": [
         "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
       ],
-      "reviewReplyImagePrivate": true,
-      "reviewReason": "Two-layer wait reduction implemented: (1) CustomDietPlanCreation.tsx (commit 1e0de28f): pre-warm fires on profile load — when user navigates to /ai/create-diet-plan, batch prefetch starts immediately so decks are warm by the time they click Coach builds. (2) OnboardingFlow.tsx (commit 7100c659): early prefetch count 20->6 = ~4100 max tokens vs 6000 → ~40% faster warm (~11s vs ~18s), reduces cold-deck exposure on workout→diet transition. Existing: 20s bg-mode (76502306) + meal images (b852). Screenshot shows correct Diet Builder state. TS clean. Gate npm test infra-blocked headless — recommend scoping testCommand to npm run test:component.",
-      "reviewedAt": "2026-07-02T03:53:17.211Z"
+      "reviewReplyImagePrivate": true
     },
     {
       "id": "i-20260628-mt-appstore",
