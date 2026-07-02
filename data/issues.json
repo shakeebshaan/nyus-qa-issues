@@ -506,9 +506,32 @@
         "578156f8e04d75ce4e7cc90b0fe6e0e5d295fea5"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Zara removed: deactivated in the coaches roster (is_active=0 on prod), so no new user is ever assigned her - the active roster is now 20 coaches with Meera kept. Her 3 existing users keep their coach (resolve-by-id intentionally ignores is_active; never-rename rule). Grid shows the current active roster - no Zara. Both portraits were also regenerated under the new recipe, so the Meera lookalike problem can't recur.",
+        "imagePath": "images/i-20260702-20e7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260702-20e7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "05bbb1cc6106dc0de9762c00837a5c7a40c2ffc5",
+        "imageCommits": [
+          "05bbb1cc6106dc0de9762c00837a5c7a40c2ffc5"
+        ],
+        "fixedAt": "2026-07-02T17:56:13.917Z",
+        "by": "shakeebshaan",
+        "appCommit": "85c1dfe7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Roster grid shows 20 active coaches without Zara; deactivation verified in prod DB"
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260702-749f",
