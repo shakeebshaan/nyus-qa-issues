@@ -398,6 +398,18 @@
   .m-row .mv { font-size: 17px; font-weight: 800; letter-spacing: -.01em; white-space: nowrap; }
   .m-row .mv.awa { font-size: 12px; font-weight: 700; color: hsl(35 90% 42%); }
   .m-row .mv.nodata { font-size: 12px; color: var(--muted); font-weight: 600; }
+  /* Long text values wrap onto their own full-width line instead of squeezing
+     the right column off-screen (i-20260702-3a8b). */
+  .m-row .mv.long { white-space: normal; flex-basis: 100%; order: 5; font-size: 12.5px; font-weight: 600; line-height: 1.45; margin-top: 2px; }
+  /* "key:count key:count …" breakdown values render as wrapped chips. */
+  .m-chips { display: flex; flex-wrap: wrap; gap: 6px; flex-basis: 100%; order: 5; margin-top: 4px; }
+  .m-chip { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, var(--ca, var(--accent)) 9%, transparent); color: var(--ink); }
+  .m-chip b { font-weight: 800; }
+  /* Per-row day-over-day delta (i-20260702-7847). */
+  .m-row .rd { font-size: 11px; font-weight: 800; white-space: nowrap; padding: 2px 7px; border-radius: 999px; }
+  .m-row .rd.up { color: hsl(150 60% 32%); background: hsl(150 60% 36% / .1); }
+  .m-row .rd.dn { color: hsl(0 60% 44%); background: hsl(0 60% 48% / .1); }
+  .m-row .rd.flat { color: var(--muted); background: var(--line); }
   .m-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; letter-spacing: .03em; text-transform: uppercase; }
   .m-badge.live { background: var(--accent-soft); color: var(--accent-ink); }
   .m-badge.awa { background: var(--amber-soft); color: var(--amber-ink); }
@@ -415,7 +427,7 @@
   .m-hero { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px 8px; border-top: 3px solid var(--ha, var(--accent)); box-shadow: 0 1px 3px rgb(0 0 0 / .04); position: relative; overflow: hidden; }
   .mh-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
   .mh-l { font-size: 12px; color: var(--muted); font-weight: 600; }
-  .hd { font-size: 11px; font-weight: 700; } .hd.up { color: hsl(150 60% 36%); } .hd.dn { color: hsl(0 60% 48%); }
+  .hd { font-size: 11px; font-weight: 700; } .hd.up { color: hsl(150 60% 36%); } .hd.dn { color: hsl(0 60% 48%); } .hd.flat { color: var(--muted); }
   .mh-v { font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; margin: 4px 0 2px; }
   .mh-u { font-size: 14px; font-weight: 700; color: var(--muted); margin-left: 3px; }
   .spark { display: block; width: 100%; height: 34px; margin-top: 2px; }
@@ -1504,10 +1516,26 @@ function renderMetrics(d, hist) {
   const s = d.summary || {}, det = d.detail || {};
   const srcs = Object.entries(d.sources || {}).filter(([, v]) => v).map(([k]) => k).join(", ") || "none";
   const findVal = (ck, mk) => { const c = (d.categories || []).find(c => c.key === ck); const m = c && c.metrics.find(x => x.key === mk); return m && m.status === "live" ? m.value : null; };
+  // Day-over-day: compare against the most recent history snapshot BEFORE
+  // today (i-20260702-7847 — "how many points up from yesterday").
+  const today = (d.generatedAt || "").slice(0, 10);
+  const prevSnap = [...hist].reverse().find(h => h.date && h.date < today) || null;
+  const prevOf = (key) => {
+    if (!prevSnap) return null;
+    if (typeof prevSnap[key] === "number") return prevSnap[key];
+    const all = prevSnap.all || {};
+    return typeof all[key] === "number" ? all[key] : null;
+  };
+  const deltaChip = (key, value, cls) => {
+    const pv = prevOf(key);
+    if (pv == null || typeof value !== "number") return "";
+    const dv = +(value - pv).toFixed(2);
+    if (!dv) return `<span class="${cls} flat" title="no change since yesterday">＝</span>`;
+    return `<span class="${cls} ${dv > 0 ? "up" : "dn"}" title="vs yesterday">${dv > 0 ? "▲" : "▼"} ${Math.abs(dv)}</span>`;
+  };
   const hero = (accent, label, value, unit, key) => {
     const series = ser(key).filter(v => typeof v === "number");
-    let delta = "";
-    if (series.length > 1 && typeof value === "number") { const dv = +(value - series[0]).toFixed(2); if (dv) delta = `<span class="hd ${dv > 0 ? "up" : "dn"}">${dv > 0 ? "▲" : "▼"} ${Math.abs(dv)}</span>`; }
+    const delta = deltaChip(key, value, "hd");
     return `<div class="m-hero" style="--ha:${accent}"><div class="mh-top"><span class="mh-l">${esc(label)}</span>${delta}</div><div class="mh-v">${unit === "$" ? esc(unit) : ""}${value == null ? "–" : esc(String(value))}${unit && unit !== "$" ? `<span class="mh-u">${esc(unit)}</span>` : ""}</div>${svgSpark(series, accent)}</div>`;
   };
   let html = `<div class="m-head"><div class="m-pills"><span class="mp live">${s.live ?? "–"} live</span><span class="mp awa">${s.awaiting ?? "–"} awaiting</span><span class="mp">${s.total ?? "–"} tracked</span></div><div class="m-meta">Real data · ${fmtDate(d.generatedAt)} · ${esc(srcs)} · ${d.periodDays || 30}d window${hist.length ? ` · ${hist.length}d history` : ""}</div></div>`;
@@ -1529,12 +1557,26 @@ function renderMetrics(d, hist) {
     const acc = CAT_ACCENT[cat.key] || CPAL[5];
     html += `<div class="m-cat" style="--ca:${acc}"><h3>${esc(cat.title)}</h3>`;
     for (const x of cat.metrics || []) {
-      const val = x.status === "live"
-        ? `<span class="mv">${esc(String(x.value))}${x.unit ? " " + esc(x.unit) : ""}</span>`
-        : x.status === "awaiting" ? `<span class="mv awa">needs setup</span>` : `<span class="mv nodata">no data</span>`;
+      let val, rowDelta = "";
+      if (x.status === "live") {
+        const raw = x.value;
+        const asStr = String(raw);
+        // "key:count key:count …" breakdowns render as wrapped chips; other
+        // long strings wrap onto their own line (i-20260702-3a8b).
+        if (typeof raw === "string" && /^[\w-]+:\d+(?:\.\d+)?(?:\s+[\w-]+:\d+(?:\.\d+)?)+$/.test(raw.trim())) {
+          val = `<span class="m-chips">` + raw.trim().split(/\s+/).map(p => { const [k, v] = p.split(":"); return `<span class="m-chip">${esc(k.replace(/_/g, " "))} <b>${esc(v)}</b></span>`; }).join("") + `</span>`;
+        } else if (typeof raw === "string" && asStr.length > 26) {
+          val = `<span class="mv long">${esc(asStr)}${x.unit ? " " + esc(x.unit) : ""}</span>`;
+        } else {
+          val = `<span class="mv">${esc(asStr)}${x.unit ? " " + esc(x.unit) : ""}</span>`;
+        }
+        rowDelta = deltaChip(`${cat.key}.${x.key}`, raw, "rd");
+      } else {
+        val = x.status === "awaiting" ? `<span class="mv awa">needs setup</span>` : `<span class="mv nodata">no data</span>`;
+      }
       const sub = [x.formula, x.source && ("src " + x.source), x.owner && ("owner " + x.owner)].filter(Boolean).join(" · ");
       const bcls = { live: "live", awaiting: "awa", nodata: "nodata" }[x.status] || "nodata";
-      html += `<div class="m-row"><span class="ml">${esc(x.label)}${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</span>${val}<span class="m-badge ${bcls}">${esc(x.status)}</span>${x.priority ? `<span class="m-prio">P:${esc(x.priority)}</span>` : ""}`;
+      html += `<div class="m-row"><span class="ml">${esc(x.label)}${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</span>${val}${rowDelta}<span class="m-badge ${bcls}">${esc(x.status)}</span>${x.priority ? `<span class="m-prio">P:${esc(x.priority)}</span>` : ""}`;
       if (x.status === "awaiting" && x.value && x.value.need) html += `<div class="m-need">▸ ${esc(x.value.need)}</div>`;
       html += `</div>`;
     }

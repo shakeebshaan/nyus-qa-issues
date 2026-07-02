@@ -625,6 +625,12 @@ function appendHistory() {
     workouts_7d: db.workouts_completed_7d ?? null, meals_7d: db.meals_logged_7d ?? null,
     vuln_high: vuln ? (vuln.high + vuln.critical) : null, vuln_backend_high: vulnBackend ? (vulnBackend.high + vulnBackend.critical) : null, errors_today: health.errors_today ?? null,
     ai_accuracy: aiEval ? aiEval.accuracy_pct : null };
+  // Every live NUMERIC metric, keyed "<category>.<metric>" — feeds the board's
+  // per-row day-over-day delta chips (i-20260702-7847).
+  snap.all = {};
+  for (const cat of metrics.categories || [])
+    for (const x of cat.metrics || [])
+      if (x.status === "live" && typeof x.value === "number") snap.all[`${cat.key}.${x.key}`] = x.value;
   let hist = [];
   try { hist = JSON.parse(b64FromGh(ghJson(["api", `repos/${PRIV}/contents/data/metrics-history.json`]))); } catch {}
   if (!Array.isArray(hist)) hist = [];
