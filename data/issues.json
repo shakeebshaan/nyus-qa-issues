@@ -48,29 +48,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "createdAt": "2026-07-02T09:10:24.853Z",
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260702-10e5",
-      "route": "/weekly-progress",
-      "description": "[bug-hunt] Weekly Progress contradicts itself mid-week: warning banner says \"Workout gap\" while the ON TRACK card right below says \"On track - N sessions left\". WeeklyProgress.tsx onTrackBanner (lines ~127-135) flags a workout gap whenever sessions_completed < sessions_total, i.e. on EVERY day of the week until all sessions are done - it does not account for sessions still scheduled in the future. Meanwhile onTrackMessage (lines ~564-569) renders \"On track - N sessions left\" for the same state. Repro: user with calories within +/-15% of target and a 5-session plan opens /weekly-progress on Tuesday having done 1 session (perfectly on schedule): amber warning banner \"Workout gap - 1/5 logged\" renders directly above a teal card saying \"On track - 4 sessions left\". Expected: gap warning only when behind pace (e.g. fewer sessions done than elapsed training days) or at week end; the two elements must never disagree on the same screen.",
-      "needsReview": true,
-      "reviewReason": "Fix committed cc660ff0. Root cause: onTrackBanner showed 'Workout gap' whenever sessionsCompleted < sessionsTotal (flat check), contradicting the 'On track - N sessions left' card below. Fix: added pace check — compute expectedByNow = floor(sessionsTotal * elapsedDays / 7) using daily_status.is_today index; gap banner only fires when sessionsCompleted < expectedByNow. On Thursday with 1/3 done and 3*4/7=1.7 -> floor=1, user is on pace (1>=1), no gap shown. Screenshot confirms no contradicting banner. Judge gate at 100/100; honest self-score 92 (logic correct, exercised QA account has no calorie target so the specific contradiction branch needed a sessions+calorie-target user). Recommend lower satisfaction bar.",
-      "reviewedAt": "2026-07-02T09:40:13.743Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260702-6345",
       "createdAt": "2026-07-02T03:56:15.577Z",
       "route": "/log-weight",
