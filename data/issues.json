@@ -78,7 +78,7 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "We need to fix it so user wait very less and have the result accurately 100% accuracy and real data",
       "reviewRepliedAt": "2026-06-29T12:57:35.636Z",
@@ -91,7 +91,9 @@
       "reviewReplyImageCommits": [
         "9b54ea25a8048f4917a172cefbd997c6f4fb21ef"
       ],
-      "reviewReplyImagePrivate": true
+      "reviewReplyImagePrivate": true,
+      "reviewReason": "Root cause: (1) background build overlay was not auto-proceeding after 20s timeout -- fixed in 97a8 (commit 76502306): handleBgContinue now calls onComplete() with built data. (2) Meal images missing for Indian dishes -- fixed in b852 (commit 3eee31d): Pollinations AI fallback deployed. User wait reduced: 20s max before bg mode, then instant continue. testGate infra-blocked headless.",
+      "reviewedAt": "2026-07-02T03:11:21.098Z"
     },
     {
       "id": "i-20260628-mt-appstore",
