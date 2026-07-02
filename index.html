@@ -505,7 +505,7 @@
       </div>
       <label class="pick" id="pick">
         <input type="file" id="file" accept="image/*" multiple hidden />
-        <span id="pick-inner">📷 &nbsp;Upload screenshots<span class="hint">tap to pick · or paste (Ctrl+V)</span></span>
+        <span id="pick-inner">📷 &nbsp;Upload screenshots <span class="hint" style="font-style:italic">optional · tap to pick · or paste (Ctrl+V)</span></span>
       </label>
       <div class="field">
         <label for="route">Screen / route <span style="font-weight:400">(optional — e.g. /nutrition)</span></label>
@@ -1195,7 +1195,7 @@ async function mutateIssues(message, mutator) {
 let pickedFiles = [];
 
 function updateSubmit() {
-  $("submit").disabled = !(pickedFiles.length > 0 && $("desc").value.trim().length > 2);
+  $("submit").disabled = !($("desc").value.trim().length > 2);
 }
 
 function renderPickZone() {
@@ -1210,7 +1210,7 @@ function renderPickZone() {
     $("pick-inner").innerHTML = `➕ &nbsp;Add more screenshots<span class="hint">tap · paste (Ctrl+V)</span>`;
   } else {
     $("pick").classList.remove("add-more");
-    $("pick-inner").innerHTML = `📷 &nbsp;Upload screenshots<span class="hint">tap to pick · or paste (Ctrl+V)</span>`;
+    $("pick-inner").innerHTML = `📷 &nbsp;Upload screenshots <span class="hint" style="font-style:italic">optional · tap to pick · or paste (Ctrl+V)</span>`;
   }
 }
 
@@ -1283,8 +1283,8 @@ $("form").addEventListener("submit", async (ev) => {
         id, createdAt: new Date().toISOString(), route: route || null,
         description: "", descPrivate: true,
         author: myLogin || undefined,   // multi-user: who filed it
-        imagePath: imagePaths[0], imageCommit: imageCommits[0],
-        imagePaths, imageCommits, imagePrivate: true,
+        imagePath: imagePaths[0] || null, imageCommit: imageCommits[0] || null,
+        imagePaths, imageCommits, imagePrivate: imagePaths.length > 0,
         status: "open", fix: null, history: [],
       });
     });
