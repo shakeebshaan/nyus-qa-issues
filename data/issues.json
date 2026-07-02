@@ -225,7 +225,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Same image on 2 meals: root cause is TheMealDB returning the same photo for different meal names that share a top-level dish (e.g. two 'chicken curry' variations get the same stock photo). The image worker (diet_builder_service.py:_inline_food_image_url) enqueues each meal independently with no cross-meal dedup. Fix options: (1) Track used image_urls per plan session in the image enqueue worker and reject already-used images, or (2) use meal.id as a seed for openverse fallback to guarantee unique images. This is a backend change to image_enqueue.py. Flagging for direction on approach since it requires a DB query or session-scoped dedup in the worker.",
+      "reviewedAt": "2026-07-02T12:56:15.796Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260702-6698",
