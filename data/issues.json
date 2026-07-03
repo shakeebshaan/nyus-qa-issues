@@ -332,8 +332,34 @@
         "e7ae8bb012579b32091f3d99fb9557bdc0ebe518"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Answer: it is NOW. Audited the removed overview screen field-by-field - the tour was missing goal weights/date, BMR/TDEE, workout day list + stat strip, meals with kcal, step/cardio targets, sleep/water and the medical note. All of it now renders on 'Your plan is ready' (PostPlanTour receives the built plan payloads): goal card (75->68, by-date, BMR/TDEE), workout card (days/wk-exercises-sets-session + per-day focus + progression), daily activity, meals per day with kcal, sleep/water chips, medical-consult note when flagged. Locked by a new data-parity unit test (11/11 green).",
+        "imagePath": "images/i-20260702-4e12-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260702-4e12-fix-r3.png",
+          "images/i-20260702-4e12-fix-r3-2.png",
+          "images/i-20260702-4e12-fix-r3-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6b95fe4b4909bfb8246a16d3714aa05cefa0d7d0",
+        "imageCommits": [
+          "6b95fe4b4909bfb8246a16d3714aa05cefa0d7d0",
+          "c845b4367e22bb3cf5f8f2c3c168b30d6a4d18fc",
+          "959cffa8dea7e18e60c684763b0f18fd35b9001d"
+        ],
+        "fixedAt": "2026-07-03T03:43:47.613Z",
+        "by": "shakeebshaan",
+        "appCommit": "3665750f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Field-by-field parity audit of overview vs tour; every missing field added and captured in 3 screenshots; unit test locks the parity"
+        }
+      },
       "history": [
         {
           "at": "2026-07-02T18:13:30.525Z",
