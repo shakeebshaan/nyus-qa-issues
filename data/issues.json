@@ -243,8 +243,8 @@
       "reviewReply": "Fix the issue and implement the features",
       "reviewRepliedAt": "2026-07-03T02:37:39.123Z",
       "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "Full redesign shipped in commit 6b0a2756 (PlateCalculatorSheet.tsx): left side = red family (red-100..red-700 by weight), right side = emerald family (emerald-100..emerald-700). Dark zinc-900 bar diagram background, bar collars, individual plates animate in with scaleY+opacity. Legend row with colored dots, per-side kg caption. Screenshot in tmp/i-20260702-plc8-fix.png shows 120 kg loaded: red left plates, green right plates, 50.00 kg per side. Cannot resolve: testGate=true but npm run test:unit exits 1 on worker-OOM. Owner: flip testGate=false to close.",
-      "reviewedAt": "2026-07-03T08:54:21.601Z"
+      "reviewReason": "REDESIGN COMPLETE (commit ad16c399). Bar diagram is now premium: dark card with glowing red/green dot headers, 100-kg hero weight in white, red left plates + emerald right plates with vertical weight labels on plates >=10kg, colored per-side footer arrows. Orange activity-domain accent left bar on target weight card. Custom plates get purple ring-2 on red/green family (not plain purple). Screenshot in tmp/i-20260702-plc8-fix-r2.png shows 100kg loaded: 25+15 per side. TESTGATE BLOCKER: npm run test:unit exits 1 on worker-OOM (infra, not code regression -- 266 real unit files). Cannot resolve until owner scopes loop.json testCommand to e.g. test/unit or flips testGate=false. For the 5-design-shotgun side quest: see Activity page improvement opportunities in description -- 5 areas: (1) set-row weight input tactile +/- steppers; (2) rest timer full-screen with breathing ring; (3) personal bests collectible-card expand; (4) exercise sparkline mini-chart in the set row header; (5) workout-complete celebration with confetti + volume PR flash. Owner: flip testGate=false to close.",
+      "reviewedAt": "2026-07-03T09:08:04.141Z"
     },
     {
       "id": "i-20260701-738b",
