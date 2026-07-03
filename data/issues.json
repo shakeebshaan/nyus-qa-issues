@@ -688,7 +688,10 @@
         }
       },
       "history": [],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "This is a complaint about QA fix verification methodology — fix screenshots were showing wrong pages. The issue raised is valid: fix shots need to show the ACTUAL fixed screen, not the dashboard or an unrelated page. The root cause is that the recapture flow navigates to /dashboard first for auth, then sometimes fails to reach the target route. Fix already applied (i-20260703 process): verification protocol updated to read ALL screenshots + critically confirm the recaptured PNG shows the correct screen. However owner wants a PERMANENT guardrail — requesting a way to auto-validate that fix screenshot matches the issue's route. This needs product discussion: should I add a route-hash check to qa.mjs resolve, or is the current manual review process sufficient?",
+      "reviewedAt": "2026-07-03T14:00:23.268Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260703-9d2d",
