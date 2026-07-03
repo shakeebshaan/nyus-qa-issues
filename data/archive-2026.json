@@ -9649,6 +9649,114 @@
       "resolvedAt": "2026-07-03T12:51:00.411Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-03T12:51:00.411Z"
+    },
+    {
+      "id": "i-20260702-plc8",
+      "createdAt": "2026-07-02T23:42:10.535Z",
+      "route": "/activity",
+      "description": "[suggestion] Barbell plate calculator in the live workout screen. Feature: a small plates icon next to the weight (kg) input on each set row in Activity live-workout mode - tap it and a bottom sheet shows the per-side plate breakdown for that weight (e.g. 100kg = bar 20 + 2x[20+15+2.5+2.5]), with a one-time bar-weight picker (20/15/10/7.5/6kg - India gyms mix Olympic and standard bars) remembered in Preferences. Problem: strength athletes do this mental math between every working set while fatigued; a wrong load ruins a set or a PR attempt, and the app already positions itself as a precision tool for dedicated athletes (set logging, rest timer, PR leaderboard, Personal Bests just shipped). Evidence: grep shows zero plate-calc code; every serious lifting app ships one (Strong, Hevy, Jefit, Boostcamp); the QA strength-tier surfaces (set rows with weight_kg inputs in src/pages/Activity.tsx) are exactly where users stare between sets. v1 scope: frontend-only - one PlateCalculatorSheet component (kg denominations 25/20/15/10/5/2.5/1.25 per side, greedy breakdown, unloadable-weight hint showing nearest loadable), icon trigger on the set-row weight field, bar weight stored via @capacitor/preferences. No backend, no schema. Effort: small (~1 component + Activity.tsx wiring, half a day incl. QA capture).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Plate calculator shipped in commit 3630d733 (v176/1.8.6 alpha). Red/Green gradient scheme: left side = red plates, right side = green plates. Hub circles, dramatic bar visualization. Bar weight picker (20/15/10/7.5/6 kg), greedy per-side breakdown, stored via @capacitor/preferences. PlateCalculatorSheet component wired to set-row weight inputs in Activity live-workout mode. Owner reviewReply='D' (Done).",
+        "imagePath": "images/i-20260702-plc8-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260702-plc8-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "49473d837721621a93f89f963ac481333f71ac89",
+        "imageCommits": [
+          "49473d837721621a93f89f963ac481333f71ac89"
+        ],
+        "fixedAt": "2026-07-03T12:20:02.119Z",
+        "by": "shakeebshaan",
+        "appCommit": "e4d2db57af70ee71b5597692c6b054702157ba81",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Plate calculator verified shipped in commit 3630d733. Red/Green color scheme implemented per owner directive. Feature deployed to alpha track v176/1.8.6."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-03T04:56:44.551Z",
+          "event": "reopened",
+          "note": "Add all plates and number of plates and custome plate weights",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Feature shipped (commit 942da9cc): PlateCalculatorSheet wired into the live-workout set editor via a plate icon next to the KG stepper. Greedy per-side breakdown with colored plates + bar diagram, bar-weight picker (20/15/10/7.5/6kg) persisted in Preferences, nearest-loadable hint for impossible weights. Capture: live Barbell Bench Press set at 80kg showing 'bar 20kg + per side 25+5' - taken in a real workout session (QA account provisioned a Friday session, then restored). 7/7 calcPlates unit tests green.",
+            "imagePath": "images/i-20260702-plc8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-plc8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "07077e7239be261538d33b57672c2bd03eceaed9",
+            "imageCommits": [
+              "07077e7239be261538d33b57672c2bd03eceaed9"
+            ],
+            "fixedAt": "2026-07-03T03:29:32.037Z",
+            "by": "shakeebshaan",
+            "appCommit": "942da9cc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Live in-app capture of the exact requested feature (plate icon on set row -> bottom sheet with per-side breakdown + bar picker); unit tests cover greedy math"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T06:21:03.427Z",
+          "event": "reopened",
+          "note": "Use the Red and Green scheme red side will be the left side and dream will be the right side so the right side will be the plates on the left side and greens ad will be on the right side and user at a plate or the custom late that gets added to the marble so like we need to have some interview to design the one you have looks boring and actually let's create beautiful design matching I also want you to go on a side quest and funds a small your eyes where we can improve and if the found something then give me the five design to shotguns for it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Reopen items all shipped: the plate breakdown now shows a count on every plate badge (e.g. 1x 25 kg, 1x 5 kg), a new plate editor (gear icon in the sheet) lists all standard plates (25/20/15/10/5/2.5/1.25) as tap-to-toggle chips, and custom plate weights can be added (e.g. 0.5 kg) or removed - the set persists via Preferences and drives the breakdown.",
+            "imagePath": "images/i-20260702-plc8-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260702-plc8-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "053b89e946b98211be47782969adbe636379e038",
+            "imageCommits": [
+              "053b89e946b98211be47782969adbe636379e038"
+            ],
+            "fixedAt": "2026-07-03T05:23:41.719Z",
+            "by": "shakeebshaan",
+            "appCommit": "5d789595",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Verified live in the workout set editor: counts on all badges, full plate roster toggles, custom 0.5kg plate added+used - exactly the reopen ask"
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "D",
+      "reviewRepliedAt": "2026-07-03T11:15:00.607Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-03T12:51:13.103Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-03T12:51:13.103Z"
     }
   ]
 }
