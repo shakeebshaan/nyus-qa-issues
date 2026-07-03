@@ -2,52 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260703-rcnt",
-      "createdAt": "2026-07-03T04:42:22.308Z",
-      "route": "/nutrition",
-      "description": "[suggestion] Recent-meals quick log: one-tap re-log of past custom meals in the Add Custom Meal sheet on /nutrition. Problem: the custom-meal flow (CustomMealModal) is pure free-text — an athlete eating the same 4-5 meals every day must retype \"200g chicken breast + 150g rice + 1 katori dal\" (or re-run photo AI) on every log; there is no recents/favorites surface anywhere (verified: no recents endpoint in the backend, no history UI in src/components/nutrition/CustomMealModal.tsx). Every comparable tracker (MyFitnessPal, MacroFactor, HealthifyMe) ships Recents as the #1 logging accelerator, and our own design principle is precision tools for athletes who log multiple times daily — repeat logging is THE hot path. Evidence: meal-log history already exists server-side (free-form POST /logs/meal entries with macro estimates from photo/text analysis), so the data is sitting there unused. Proposed v1: (1) backend GET /logs/meal/recent — last N distinct free-form meals (dedupe by normalized description, keep macros); (2) a horizontal \"Recent\" chip row at the top of CustomMealModal — tap fills description + macros, then Log saves as usual; no favorites/pinning yet. Effort: small — one read-only endpoint + one chip-row component; no schema change, no LLM cost (reuses stored macros instead of re-analyzing).",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Both features fully implemented per prior commits: (1) Backend GET /logs/meal/recent (commit 67bbee1, nyu_backend/logging.py:488) — dedupes by lowercased meal_name, returns last 8 distinct custom free-form meals most-recent-first. (2) Frontend recent chip row in CustomMealModal quick-log tab (commit 564dae6d) — useQuery['recent-meals'], fillFromRecent fills description+macros, horizontal scrollable pill row with kcal label. Component tests 317/317 pass. Owner reviewReply='Do all' — both chip row AND ingredients tab implemented.",
-        "imagePath": "images/i-20260703-rcnt-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260703-rcnt-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "8b3c59d4ef42458259f56b1f5b82e103f2273563",
-        "imageCommits": [
-          "8b3c59d4ef42458259f56b1f5b82e103f2273563"
-        ],
-        "fixedAt": "2026-07-03T12:19:57.132Z",
-        "by": "shakeebshaan",
-        "appCommit": "e4d2db57af70ee71b5597692c6b054702157ba81",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Code implementation verified in 2 commits (67bbee1 backend + 564dae6d frontend). Feature tested via component tests."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Do all",
-      "reviewRepliedAt": "2026-07-03T11:14:14.244Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260702-plc8",
       "createdAt": "2026-07-02T23:42:10.535Z",
       "route": "/activity",
