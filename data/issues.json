@@ -522,30 +522,8 @@
         "578156f8e04d75ce4e7cc90b0fe6e0e5d295fea5"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Done in full: roster expanded to 40 coaches (backend dbaaabd) - the 20 originals plus 19 new distinct identities with goals/diets/bios (Zara stays deactivated as Meera's near-duplicate; her existing users keep her). All 39 active coaches now have hand-authored, visibly distinct photoreal portraits live on prod (ages 20s-50s, silver-haired Veda, turbaned Kabir, shaved-head Atlas, glasses, builds, wardrobe/backgrounds all vary). Coach assigning refined: goal/diet/language scoring builds the candidate set (diet hard-filter first), random pick among the equally-best so assignments spread across the bigger roster; 25/25 roster tests green. Capture: the full 39-coach grid from live prod URLs.",
-        "imagePath": "images/i-20260702-20e7-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260702-20e7-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "cd559c6896f5a52239cc8723e361df807564ef77",
-        "imageCommits": [
-          "cd559c6896f5a52239cc8723e361df807564ef77"
-        ],
-        "fixedAt": "2026-07-03T04:04:14.188Z",
-        "by": "shakeebshaan",
-        "appCommit": "dc5a0c65",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Grid renders every active coach from prod - visibly distinct; roster+scoring shipped and unit-tested on the backend (dbaaabd), portraits 40/40 generated with 0 failures"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-02T18:12:10.176Z",
@@ -602,6 +580,35 @@
               "score": 100,
               "bar": 100,
               "note": "Zara absent from active roster; regenerated grid shows 20 clearly distinct coaches - the lookalike class of bug is structurally gone (unique authored looks, not random pools)"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T06:29:10.055Z",
+          "event": "reopened",
+          "note": "Make sure all women coaches have hairs and looks women and will have the existing coaches which were there before we did something to make them Indian so those American looking gorgeous with this 14 new poster that you have added and give them which are more Indian now they look from South Bombay",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Done in full: roster expanded to 40 coaches (backend dbaaabd) - the 20 originals plus 19 new distinct identities with goals/diets/bios (Zara stays deactivated as Meera's near-duplicate; her existing users keep her). All 39 active coaches now have hand-authored, visibly distinct photoreal portraits live on prod (ages 20s-50s, silver-haired Veda, turbaned Kabir, shaved-head Atlas, glasses, builds, wardrobe/backgrounds all vary). Coach assigning refined: goal/diet/language scoring builds the candidate set (diet hard-filter first), random pick among the equally-best so assignments spread across the bigger roster; 25/25 roster tests green. Capture: the full 39-coach grid from live prod URLs.",
+            "imagePath": "images/i-20260702-20e7-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260702-20e7-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "cd559c6896f5a52239cc8723e361df807564ef77",
+            "imageCommits": [
+              "cd559c6896f5a52239cc8723e361df807564ef77"
+            ],
+            "fixedAt": "2026-07-03T04:04:14.188Z",
+            "by": "shakeebshaan",
+            "appCommit": "dc5a0c65",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Grid renders every active coach from prod - visibly distinct; roster+scoring shipped and unit-tested on the backend (dbaaabd), portraits 40/40 generated with 0 failures"
             }
           }
         }
