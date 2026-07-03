@@ -9137,6 +9137,82 @@
       "resolvedAt": "2026-07-02T18:13:44.719Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-02T18:13:44.719Z"
+    },
+    {
+      "id": "i-20260702-3696",
+      "createdAt": "2026-07-02T15:01:32.984Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260702-3696.jpg",
+      "imageCommit": "c7edbfa00aa63d2174f8f12801ad1562e4d0774c",
+      "imagePaths": [
+        "images/i-20260702-3696.jpg"
+      ],
+      "imageCommits": [
+        "c7edbfa00aa63d2174f8f12801ad1562e4d0774c"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause of 'all looks same': every portrait shared one recipe - the same teal rim light, same framing, same athletic build, near-identical dark hair and a narrow 20s-30s age range, so the roster read as clones at avatar size. Replaced the hash-pool recipe with a HAND-AUTHORED look per coach (backend 0658603): ages now span early-20s to ~50, with a silver-haired senior coach (Veda), a Sikh coach with turban and salt-and-pepper beard (Kabir), a shaved-head powerlifter (Atlas), glasses (Amira), pixie crop (Tara), blunt bob (Mei), headband (Maya), mustache (Diego), and per-coach wardrobe colour, background tone and lighting. All 20 regenerated on prod (0 failures), all Indian per your earlier directive. Grid = the live roster.",
+        "imagePath": "images/i-20260702-3696-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260702-3696-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0ed6084452efa03a31259c885b681ea95e5992d0",
+        "imageCommits": [
+          "0ed6084452efa03a31259c885b681ea95e5992d0"
+        ],
+        "fixedAt": "2026-07-02T22:37:44.203Z",
+        "by": "shakeebshaan",
+        "appCommit": "50cde599",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "20/20 portraits regenerated with per-coach authored differentiators that survive a 40px avatar; grid shows no two coaches alike; all Indian; no text on garments"
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-02T18:12:17.598Z",
+          "event": "reopened",
+          "note": "all looks same",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "All 20 active coach portraits regenerated with an Indian-looking recipe (gpt-image-1 on prod, 0 failures): the who-line now specifies an Indian person, skin tones span the realistic South Asian range and hair pools favour dark Indian styles. Grid shows the full live roster served from nyus.in. Recipe change in backend feceb39.",
+            "imagePath": "images/i-20260702-3696-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-3696-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "d0e084eff5acdc7fcea9b1758f9f2784d85814ac",
+            "imageCommits": [
+              "d0e084eff5acdc7fcea9b1758f9f2784d85814ac"
+            ],
+            "fixedAt": "2026-07-02T17:56:09.321Z",
+            "by": "shakeebshaan",
+            "appCommit": "85c1dfe7",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Every portrait in the grid is the regenerated live file; all read clearly as Indian, varied, photoreal, no text artifacts"
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "resolvedAt": "2026-07-03T02:42:47.187Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-03T02:42:47.187Z"
     }
   ]
 }
