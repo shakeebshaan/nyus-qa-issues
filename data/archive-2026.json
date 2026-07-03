@@ -10249,6 +10249,52 @@
       "resolvedAt": "2026-07-03T13:19:51.262Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-03T13:19:51.262Z"
+    },
+    {
+      "id": "i-20260703-adc0",
+      "createdAt": "2026-07-03T13:56:26.650Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260703-adc0.jpg",
+      "imageCommit": "0b44229837aa4c7e6d773d75e719b8e6c3a76a0d",
+      "imagePaths": [
+        "images/i-20260703-adc0.jpg"
+      ],
+      "imageCommits": [
+        "0b44229837aa4c7e6d773d75e719b8e6c3a76a0d"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: BLOCK_REQUIRED_FIELDS[meal_swap] in response_parser.py checked for field names 'original_meal'+'date' but the show_meal_swap tool schema sends 'current_meal_name'+'assigned_date' — mismatch caused every meal_swap block to silently fail validation and be dropped; coach text 'I've shown swaps' appeared but no card ever rendered. Fix: (1) corrected BLOCK_REQUIRED_FIELDS to ['alternatives','meal_number','current_meal_name'] in response_parser.py; (2) added [assigned_id=N] annotation to meal context lines in context_assembler.py so LLM can supply current_meal_id; (3) made alternatives[].meal_id and current_meal_id optional in coach_tools.py + types.ts — when meal_id=0 the card renders but hides the Accept button to avoid a 404; (4) stable keys + isSuggestionOnly guard in MealSwapBlock.tsx. Screenshot: live capture of actual React MealSwapBlock component via /dev/chat-block/meal-swap dev route — shows 'Swap a meal' card with replacing meal, 3 alternatives with signed macro deltas (CAL/P/C/F), and Accept swap buttons rendering correctly.",
+        "imagePath": "images/i-20260703-adc0-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260703-adc0-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "55e79aa093428ade8c1fa36ee8fa19532b8397a7",
+        "imageCommits": [
+          "55e79aa093428ade8c1fa36ee8fa19532b8397a7"
+        ],
+        "fixedAt": "2026-07-03T14:24:10.169Z",
+        "by": "shakeebshaan",
+        "appCommit": "757287b2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Component renders correctly end-to-end in live React app. Root cause precisely identified and fixed. All 4 layers patched: validation schema, coach context, tool definition, frontend types+render. Screenshot is live React component capture via dev preview route."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-03T17:59:25.335Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-03T17:59:25.335Z"
     }
   ]
 }
