@@ -9213,6 +9213,82 @@
       "resolvedAt": "2026-07-03T02:42:47.187Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-03T02:42:47.187Z"
+    },
+    {
+      "id": "i-20260702-0f27",
+      "createdAt": "2026-07-02T14:22:37.256Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260702-0f27.jpg",
+      "imageCommit": "840c9ebcaf0d097f2d17c459d78d1ef4c9c06716",
+      "imagePaths": [
+        "images/i-20260702-0f27.jpg"
+      ],
+      "imageCommits": [
+        "840c9ebcaf0d097f2d17c459d78d1ef4c9c06716"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Yes - Metrics is working. The board Metrics tab runs on real data: 118 of 126 KPIs live (8 awaiting owner-side setup like Play Reporting API), collector refreshes hourly (last run 22 min before this capture), and the LIVE Razorpay revenue now flows in - 'Paid revenue (live)' shows Rs 5596 real money with the paid funnel (30 signups -> 4 paid). Screenshot = the live Metrics tab.",
+        "imagePath": "images/i-20260702-0f27-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260702-0f27-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8fd110733ed2a45ce1afb1b97419a6c106c98672",
+        "imageCommits": [
+          "8fd110733ed2a45ce1afb1b97419a6c106c98672"
+        ],
+        "fixedAt": "2026-07-02T22:23:26.311Z",
+        "by": "shakeebshaan",
+        "appCommit": "50cde599",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Reopen asked if Metrics works: verified collector task running, metrics.json fresh at 22:00Z, live board tab renders real KPIs incl. live paid revenue"
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-02T18:12:39.145Z",
+          "event": "reopened",
+          "note": "matric is also working now ?",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Live Razorpay keys already set in backend .env before this issue was filed (rzp_live_T8fIiH5P4vaIBT + secret). Payment flow live. ChoosePlan screenshot confirms paid tiers available.",
+            "imagePath": "images/i-20260702-0f27-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-0f27-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4557095b25b8207ac6af179f5140bc8737739417",
+            "imageCommits": [
+              "4557095b25b8207ac6af179f5140bc8737739417"
+            ],
+            "fixedAt": "2026-07-02T17:52:21.873Z",
+            "by": "shakeebshaan",
+            "appCommit": "beab445e3a3d3f5fcbfc6302257d4a2730b22eec",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Verified live keys on prod server via SSH. No code change needed — keys were already configured prior to this issue."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "resolvedAt": "2026-07-03T02:42:59.458Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-03T02:42:59.458Z"
     }
   ]
 }
