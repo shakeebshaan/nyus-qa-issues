@@ -18,7 +18,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIX SHIPPED (5d789595 frontend + 67bbee1 backend): Backend GET /logs/meal/recent returns last 8 distinct free-form meal logs deduped by normalised name (skipped/null excluded). Frontend CustomMealModal shows horizontal chip row labelled 'Recent' above the textarea — tap fills description+macros for instant re-log. Screenshot shows the modal with a real recent chip ('smoothie bowl with banana... 300kcal') from QA account. FULL GATE BLOCKED: npm run test:unit exits 1 on worker-OOM (infra issue). Recommend: scope loop.json testCommand to vitest unit subset to unblock resolves.",
+      "reviewedAt": "2026-07-03T05:15:58.020Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260703-b52e",
