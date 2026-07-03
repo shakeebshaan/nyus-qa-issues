@@ -88,8 +88,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: getWeightChangeIndicator hard-coded lose semantics (gain = red) regardless of goal. Fix: indicator now takes goal direction (start vs target) and maps success/destructive accordingly. Capture is the exact repro: QA account flipped to gain goal (75->80) with +0.5kg this week - chip renders GREEN success up-arrow (was red destructive). Unit tests cover gain/lose/maintain mappings.",
+        "imagePath": "images/i-20260703-b52e-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-b52e-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "676b3b79937e9060bb8ffcb8cbab6e714af5e467",
+        "imageCommits": [
+          "676b3b79937e9060bb8ffcb8cbab6e714af5e467"
+        ],
+        "fixedAt": "2026-07-03T03:20:49.528Z",
+        "by": "shakeebshaan",
+        "appCommit": "c201b38c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Live capture of the exact repro (gain goal, +0.5kg week) shows corrected green success chip; unit-tested both directions"
+        }
+      },
       "history": [
         {
           "at": "2026-07-03T02:38:47.195Z",
