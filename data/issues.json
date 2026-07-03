@@ -828,12 +828,32 @@
         "8f02faad3cd0716ef4c2846184ea7287ed165a62"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: 'Active subs' hero counted ALL subscription rows (incl. free-trial users) showing misleading 126. Fix (fd9ecff): renamed to 'Active (incl. trial)' + added separate 'Paid subscribers' hero (paid_subs: amount_paid>0 + razorpay_id, test accounts excluded = 4). metrics-collect.mjs updated; fresh metrics collected 2026-07-03.",
+        "imagePath": "images/i-20260703-b100-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260703-b100-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "dc0128e55d00dff64a298b5611729e55b7563613",
+        "imageCommits": [
+          "dc0128e55d00dff64a298b5611729e55b7563613"
+        ],
+        "fixedAt": "2026-07-03T11:51:17.408Z",
+        "by": "shakeebshaan",
+        "appCommit": "564dae6d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Board code fix correct; paid_subs = 4 from live data; clear separation of trial vs paid users"
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED (commit fd9ecff in nyus-qa-issues): Root cause — 'Active subs: 126' counted free-trial users (status=active/trialing). Fix: (1) hero label renamed to 'Active (incl. trial)', (2) new 'Paid subscribers' hero shows paid_subs (amount_paid>0 + razorpay_payment_id present + non-test users), (3) orange TEST MODE banner when razorpay_mode=test. Next metrics-collect run will pick up paid_subs. If Razorpay key is test-mode, the banner will confirm 0 real paid users clearly.",
-      "reviewedAt": "2026-07-03T11:31:57.091Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     }
   ]
