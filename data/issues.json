@@ -61,30 +61,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Yes - fixed and verified. Root cause: the weekly change chip hard-coded lose-goal colors (any gain = red). Fix (commit c201b38c): goal direction is derived from start vs target weight and the chip colors follow it - a gain-goal user gaining on plan now sees a green up chip. Proof shot: gain-goal account (start 75 to goal 80) with +0.5 kg this week shows the GREEN up chip; 12 unit tests cover both goal directions.",
-        "imagePath": "images/i-20260703-b52e-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260703-b52e-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "8280191fc6f0f6290f1b22a72ddf088726c00da3",
-        "imageCommits": [
-          "8280191fc6f0f6290f1b22a72ddf088726c00da3"
-        ],
-        "fixedAt": "2026-07-03T05:23:59.932Z",
-        "by": "shakeebshaan",
-        "appCommit": "c201b38c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Reproduced the exact repro from the issue (target>start, +0.5kg week) on a provisioned account - chip renders green success up-arrow; dashboard.constants.test.ts 12/12 green"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-03T02:38:47.195Z",
@@ -141,6 +119,35 @@
               "score": 100,
               "bar": 100,
               "note": "Live capture of the exact repro (gain goal, +0.5kg week) shows corrected green success chip; unit-tested both directions"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T06:19:13.286Z",
+          "event": "reopened",
+          "note": "Check whether we have the all the streaks working so we need to simulate forever user that they have logged every mail and then the streaks are happening they break the streak the course message pops up that you have broken history you can get back to the streak by just login in adding the waste of something like that so the coach has the streak mini to stimulate the streak for a user to know that streaks are working and will also awards and bachelors for the streaks you have three different streaks in the weekly progress page so when the user locks the weight they got one string for weight and they get the first and if they love the meals they will getting the second in that weekly page and if they mark the activity workout then they also got the third string so for 3 stick we will count as one for the day and updated on the monthly and weekly progress tracking update based that we have also we need to track the all the three category string working by simulating it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Yes - fixed and verified. Root cause: the weekly change chip hard-coded lose-goal colors (any gain = red). Fix (commit c201b38c): goal direction is derived from start vs target weight and the chip colors follow it - a gain-goal user gaining on plan now sees a green up chip. Proof shot: gain-goal account (start 75 to goal 80) with +0.5 kg this week shows the GREEN up chip; 12 unit tests cover both goal directions.",
+            "imagePath": "images/i-20260703-b52e-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260703-b52e-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "8280191fc6f0f6290f1b22a72ddf088726c00da3",
+            "imageCommits": [
+              "8280191fc6f0f6290f1b22a72ddf088726c00da3"
+            ],
+            "fixedAt": "2026-07-03T05:23:59.932Z",
+            "by": "shakeebshaan",
+            "appCommit": "c201b38c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Reproduced the exact repro from the issue (target>start, +0.5kg week) on a provisioned account - chip renders green success up-arrow; dashboard.constants.test.ts 12/12 green"
             }
           }
         }
