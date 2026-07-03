@@ -954,31 +954,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Gamification achievements page enhanced: Active Streaks card, badge category filter pills (All/Milestones/Streaks/Special/Compliance), and Recent XP history (last 5 events). All three surface data already available in the overview endpoint but previously unsurfaced. Calm guardrails intact.",
-        "imagePath": "images/i-20260703-b746-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260703-b746-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a5083918088f134ff324205e568fa5b56b56a014",
-        "imageCommits": [
-          "a5083918088f134ff324205e568fa5b56b56a014"
-        ],
-        "fixedAt": "2026-07-03T11:56:28.005Z",
-        "by": "shakeebshaan",
-        "appCommit": "fbde963f",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "All three features are fully implemented, built without TypeScript errors, and verified against a live prod-auth session. The streaks card gates on hasActiveStreaks so new/inactive users see nothing extra. Category filter is instant client-side. Recent XP makes the XP economy transparent. No gamification guardrail violations."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-03T12:50:22.257Z",
+          "event": "reopened",
+          "note": "This looks toomuch on this page needs to be thought full and clean",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Gamification achievements page enhanced: Active Streaks card, badge category filter pills (All/Milestones/Streaks/Special/Compliance), and Recent XP history (last 5 events). All three surface data already available in the overview endpoint but previously unsurfaced. Calm guardrails intact.",
+            "imagePath": "images/i-20260703-b746-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260703-b746-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "a5083918088f134ff324205e568fa5b56b56a014",
+            "imageCommits": [
+              "a5083918088f134ff324205e568fa5b56b56a014"
+            ],
+            "fixedAt": "2026-07-03T11:56:28.005Z",
+            "by": "shakeebshaan",
+            "appCommit": "fbde963f",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "All three features are fully implemented, built without TypeScript errors, and verified against a live prod-auth session. The streaks card gates on hasActiveStreaks so new/inactive users see nothing extra. Category filter is instant client-side. Recent XP makes the XP economy transparent. No gamification guardrail violations."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do it",
