@@ -19,10 +19,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "EWMA trend line shipped in commit 6b0a2756 (LogWeight.Chart.tsx: switched AreaChart → ComposedChart, added computeEwma() with alpha=0.25/7-day, bold trend Line over faded raw Area; LogWeight.tsx: trend caption 'Daily weight · bold line = trend' + rate-per-week stat below chart). Screenshot in tmp/i-20260703-wtnd-fix.png shows LogWeight page loaded. Chart renders when user has ≥3 weight log entries (QA account has 2-day streak so chart base renders, EWMA line activates at 3). Cannot resolve: testGate=true but npm run test:unit exits 1 on worker-OOM. Owner: flip testGate=false to close.",
       "reviewedAt": "2026-07-03T08:54:37.777Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Done?",
+      "reviewRepliedAt": "2026-07-03T11:13:35.268Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260703-rcnt",
