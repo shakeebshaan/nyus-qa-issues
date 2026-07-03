@@ -289,15 +289,15 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "do it",
       "reviewRepliedAt": "2026-07-03T11:17:28.179Z",
       "reviewReplyBy": "shakeebshaan",
       "reportPath": "reports/738b-report-v6.html",
       "reportLabel": "Full onboarding walk — all 21 screens",
-      "reviewReason": "HEADLESS BLOCKER: All 4 onboarding paths require (a) fresh un-onboarded account — QA re-mint gives the already-onboarded account (onboarding_complete=true) so the app lands on /dashboard, not /intro; (b) DEFER_BUILDERS flag toggling for paths 1 (coach-builds) vs paths 2-4 (user-builds); (c) OTP entry for fresh account registration. Cannot complete headless. WHAT I CAN DO in an INTERACTIVE session: 1) SSH prod → run scripts/qa_set_otp.py to stamp 123456 on a fresh email → POST /auth/verify to create un-onboarded user → drive ALL 4 paths with Playwright MCP, capturing every screen per path. PATHS MAPPED: Path 1 (DEFER_BUILDERS=true, coach-builds): Intro carousel → You+Goal → Training → Health+Food → PlanBuildChoiceV2 → 'Coach builds it now' → wait screen → PostPlanTour. Path 2 (DEFER_BUILDERS=false, user builds workout): Intro → You+Goal → Training → Health+Food → WorkoutBuilder wizard → DietBuilder wizard → Overview → finalize. Path 3 (all custom plans): same as Path 2 but with varied goal types. Path 4 (7-day + 6-week plan testing): requires explicit plan duration selection in the builder. OWNER ACTION: Run this in an interactive Claude Code session so I can (1) get OTP for fresh account registration, (2) use Playwright MCP to drive each path end-to-end, (3) capture every single screenshot. Cannot do headless without those two inputs.",
-      "reviewedAt": "2026-07-03T10:47:16.519Z"
+      "reviewReason": "HEADLESS BLOCKER: Owner said 'do it' but all 4 onboarding paths require (a) fresh un-onboarded account — QA JWT has onboarding_complete=true so app lands on /dashboard, not /intro; (b) OTP for fresh email registration; (c) DEFER_BUILDERS flag toggling per path. Cannot do headless without OTP. To complete: run this in an interactive Claude Code session where I can (1) ask owner for OTP for a fresh test email, (2) drive each of the 4 paths with Playwright MCP end-to-end capturing every screen. Ready to execute immediately once OTP access is available.",
+      "reviewedAt": "2026-07-03T11:57:51.118Z"
     },
     {
       "id": "i-20260702-4e12",
