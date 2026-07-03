@@ -597,9 +597,32 @@
         "3892c06b57990dc4dbc65dfb2f711c5990a68369"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: 269 tmp/ binary files (15+ MB: coach portraits, fix screenshots, downloaded issue images) were committed to the public qa-issues repo despite tmp/ being in .gitignore. GitHub Pages artifact size caused 'syncing_files -> Deployment failed, try again later' on every push. Fix: git rm -r --cached tmp/ to untrack all tmp/ blobs. Future pushes to tmp/ are now correctly ignored. Commit b8190f6.",
+        "imagePath": "images/i-20260703-fc4d-fix-r1.jpg",
+        "imagePaths": [
+          "images/i-20260703-fc4d-fix-r1.jpg"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "40a359d24fd422c710451eda1c13b0d0890a3ecb",
+        "imageCommits": [
+          "40a359d24fd422c710451eda1c13b0d0890a3ecb"
+        ],
+        "fixedAt": "2026-07-03T13:30:18.953Z",
+        "by": "shakeebshaan",
+        "appCommit": "b8190f6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root cause identified and fixed: Pages deploy was failing because 15+ MB of tmp/ binaries were tracked in the public repo. Untracking 269 files removes the bloat. Issue was structural/recurring, not transient. Fix is permanent."
+        }
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
