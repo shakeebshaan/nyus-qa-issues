@@ -9551,6 +9551,55 @@
       "resolvedAt": "2026-07-03T12:48:57.980Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-03T12:48:57.980Z"
+    },
+    {
+      "id": "i-20260703-wtnd",
+      "createdAt": "2026-07-03T05:41:27.466Z",
+      "route": "/log-weight",
+      "description": "[suggestion] Weight trend line + weekly rate on the /log-weight chart. Problem: the chart plots raw daily scale weights only, and daily weight swings 0.5-1.5 kg from water/sodium/glycogen - an athlete on a cut sees a fake 1 kg overnight jump, reads it as a stall, and panic-adjusts (or quits logging); data-literate users expect the smoothed number, not the noise. Evidence: LogWeight.tsx / LogWeight.Chart render only raw daily points plus a weekly-averages toggle - no smoothed trend series, no rate-of-change anywhere in src (grep: zero hits for moving average / kg-per-week). Every serious competitor ships this (MacroFactor trend weight, Happy Scale, Withings), and our brand line is precision over encouragement - showing raw noise without the trend is the opposite. Proposed v1 (frontend-only, no backend change): (1) compute a 7-day exponentially-weighted moving average client-side from the existing daily_weight_history payload; (2) draw it as a second smooth line over the existing recharts AreaChart in daily view (raw points fade to dots); (3) one caption line under the chart: Trend 72.4 kg, -0.35 kg/week - with an on-pace/off-pace tint vs the plan target rate already known from the goal. Same chart component is reused by /weight-history-chart so both routes get it. Effort: small - one pure math helper + chart series + caption; re-run affected flow captures.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "EWMA trend line implemented and verified live. Chart shows bold trend line over faded area (raw daily weights). Caption: 'Trend 71.9 kg 0.00 kg/wk' + 'Daily weight · bold line = trend'. computeEwma (alpha=2/8, 7-day EWMA) renders when data.length>=3. Rate-of-change caption shows kg/week vs plan target.",
+        "imagePath": "images/i-20260703-wtnd-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260703-wtnd-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "927c8c657cf4a758af7dc40c28a7e352cb0012ba",
+        "imageCommits": [
+          "927c8c657cf4a758af7dc40c28a7e352cb0012ba"
+        ],
+        "fixedAt": "2026-07-03T12:17:18.490Z",
+        "by": "shakeebshaan",
+        "appCommit": "e4d2db57af70ee71b5597692c6b054702157ba81",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Trend line visible on prod QA account. Caption shows pace and trend weight. Feature matches proposal exactly."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Done?",
+      "reviewRepliedAt": "2026-07-03T11:13:35.268Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-03T12:50:39.341Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-03T12:50:39.341Z"
     }
   ]
 }
