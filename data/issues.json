@@ -143,30 +143,8 @@
         "066eea22bf88f9ba19433361e744dc88b0f113a0"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause of 'screenshot not visible': the 35-screen report is 1.05MB and GitHub's JSON contents API returns EMPTY content for files over 1MB, so the board rendered a blank report. Fixed the board to fetch reports via the raw media type (works to 100MB) - board commit a035f4b. Verified on the LIVE board: the full walkthrough now renders (proof shot = report open with all screens). No app change needed; the walkthrough itself (fresh account, every screen incl. built meals/workouts) was already captured.",
-        "imagePath": "images/i-20260701-738b-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260701-738b-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "23c05bfe38924ed0d55adc78d32797232d754d57",
-        "imageCommits": [
-          "23c05bfe38924ed0d55adc78d32797232d754d57"
-        ],
-        "fixedAt": "2026-07-02T22:19:30.397Z",
-        "by": "shakeebshaan",
-        "appCommit": "50cde599",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Reopen was a board rendering bug (1MB API limit) - root-caused, patched, and verified rendering on the live board with a screenshot of the open report"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-02T14:57:06.772Z",
@@ -229,6 +207,35 @@
               "score": 100,
               "bar": 100,
               "note": "Every screen captured on a fresh user incl. built meal + workout data as asked; 35-shot report attached"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T03:10:59.137Z",
+          "event": "reopened",
+          "note": "Make sure we have all the paths here, for onboarding",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause of 'screenshot not visible': the 35-screen report is 1.05MB and GitHub's JSON contents API returns EMPTY content for files over 1MB, so the board rendered a blank report. Fixed the board to fetch reports via the raw media type (works to 100MB) - board commit a035f4b. Verified on the LIVE board: the full walkthrough now renders (proof shot = report open with all screens). No app change needed; the walkthrough itself (fresh account, every screen incl. built meals/workouts) was already captured.",
+            "imagePath": "images/i-20260701-738b-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260701-738b-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "23c05bfe38924ed0d55adc78d32797232d754d57",
+            "imageCommits": [
+              "23c05bfe38924ed0d55adc78d32797232d754d57"
+            ],
+            "fixedAt": "2026-07-02T22:19:30.397Z",
+            "by": "shakeebshaan",
+            "appCommit": "50cde599",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Reopen was a board rendering bug (1MB API limit) - root-caused, patched, and verified rendering on the live board with a screenshot of the open report"
             }
           }
         }
