@@ -9289,6 +9289,81 @@
       "resolvedAt": "2026-07-03T02:42:59.458Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-03T02:42:59.458Z"
+    },
+    {
+      "id": "i-20260703-1478",
+      "createdAt": "2026-07-03T00:53:08.533Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard weight card: progress collapses to 0% the moment the user reaches or passes their goal, and the 'Goal reached' state is unreachable. Root cause: src/pages/_components/dashboard/useDashboardData.ts (~line 205) derives goal direction from CURRENT weight vs target (cw > target ? 'lose' : cw < target ? 'gain' : 'maintain') instead of from start vs target - so the instant a lose-goal user drops below target, direction flips to 'gain' and computeWeightProgress returns clamp((cw-start)/delta)=0; landing EXACTLY on target hits the 'maintain' branch which also returns 0 (deviation |cw-start| >> 0.5 tolerance). Repro (lose goal, start 90kg, target 80kg): log 80.4 -> card shows '96% to goal'; log 79.8 -> card shows '0% to goal' with an empty milestone track and no 'Goal reached' chip. Expected: crossing or hitting the goal shows 100% + the 'Goal reached' chip (goalReached gates on overall>=1, which is mathematically unreachable under the current derivation - lose branch requires cw>target so ratio<1 always, and crossing flips to the 0-returning branch). Same flipped direction also feeds the weekly ratio (wpr). Fix: derive direction from start_weight_kg vs target_kg (start>target = lose, start<target = gain), not from current weight.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: goal direction was derived from CURRENT weight vs target, so crossing/reaching the goal flipped the branch and progress collapsed to 0%. Fix: direction now derived from start_weight_kg vs target_kg in useDashboardData.ts; capture shows QA account (lose goal 75->70) at 69.8kg rendering full bar + 'Goal reached' chip (previously 0%). 15 new unit tests lock the boundary math.",
+        "imagePath": "images/i-20260703-1478-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-1478-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c1b20bc58c423be6f3e2cbac9d09d5d6eb53df9e",
+        "imageCommits": [
+          "c1b20bc58c423be6f3e2cbac9d09d5d6eb53df9e"
+        ],
+        "fixedAt": "2026-07-03T03:20:31.007Z",
+        "by": "shakeebshaan",
+        "appCommit": "c201b38c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Recapture reproduces the exact issue scenario (crossed goal) and shows 100% + Goal reached chip; unit tests cover on-target/crossed/gain cases"
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-03T02:38:13.631Z",
+          "event": "reopened",
+          "note": "Fixed?",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: direction derived from current_weight vs target_kg — crossing the lose goal flipped it to gain and zeroed progress. Fix: useDashboardData.ts now derives direction from start_weight_kg vs target_kg (immutable). Dashboard shows 62% for start=75/current=71.9/goal=70; goalReached triggers at >=1 as designed. 12/12 unit tests green (computeWeightProgress + getWeightChangeIndicator) covering both lose/gain goal crossing.",
+            "imagePath": "images/i-20260703-1478-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260703-1478-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "45f7cc143e9301fc2f53f3270eb4e8ade8287b87",
+            "imageCommits": [
+              "45f7cc143e9301fc2f53f3270eb4e8ade8287b87"
+            ],
+            "fixedAt": "2026-07-03T01:06:39.840Z",
+            "by": "shakeebshaan",
+            "appCommit": "0b340e9c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Exact root-cause fix per issue spec. Immutable start-vs-target derivation is provably correct. Browser verified 62% progress (correct, unchanged on crossing). gain-goal chip scenario verified by dedicated unit test (getWeightChangeIndicator gain goal weight-up=success). 12/12 tests green. TypeScript 0 errors. No adjacent code touched."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "resolvedAt": "2026-07-03T04:55:13.101Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-03T04:55:13.101Z"
     }
   ]
 }
