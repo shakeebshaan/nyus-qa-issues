@@ -66,31 +66,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: getWeightChangeIndicator used hardcoded lose semantics (down=green, up=red) regardless of goal. Fix: function now takes direction param (default 'lose'); for gain-goal users up=success/green, down=destructive/red. Same direction derivation fix from start_weight_kg vs target_kg (i-20260703-1478 same commit) ensures direction is consistent. 4/4 chip-color unit tests green for both goal types.",
-        "imagePath": "images/i-20260703-b52e-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260703-b52e-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "53f06a73fe232d5976e59450c08b77436fc6f31a",
-        "imageCommits": [
-          "53f06a73fe232d5976e59450c08b77436fc6f31a"
-        ],
-        "fixedAt": "2026-07-03T01:07:07.079Z",
-        "by": "shakeebshaan",
-        "appCommit": "0b340e9c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Complete fix: dashboard.constants.ts getWeightChangeIndicator now takes direction param. useDashboardData.ts passes computed direction to it. Unit tests explicitly assert: gain+up=text-success, gain+down=text-destructive, lose+down=text-success, lose+up=text-destructive. Both lose and gain scenarios now semantically correct."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-03T02:38:47.195Z",
+          "event": "reopened",
+          "note": "Fixed?",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: getWeightChangeIndicator used hardcoded lose semantics (down=green, up=red) regardless of goal. Fix: function now takes direction param (default 'lose'); for gain-goal users up=success/green, down=destructive/red. Same direction derivation fix from start_weight_kg vs target_kg (i-20260703-1478 same commit) ensures direction is consistent. 4/4 chip-color unit tests green for both goal types.",
+            "imagePath": "images/i-20260703-b52e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260703-b52e-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "53f06a73fe232d5976e59450c08b77436fc6f31a",
+            "imageCommits": [
+              "53f06a73fe232d5976e59450c08b77436fc6f31a"
+            ],
+            "fixedAt": "2026-07-03T01:07:07.079Z",
+            "by": "shakeebshaan",
+            "appCommit": "0b340e9c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Complete fix: dashboard.constants.ts getWeightChangeIndicator now takes direction param. useDashboardData.ts passes computed direction to it. Unit tests explicitly assert: gain+up=text-success, gain+down=text-destructive, lose+down=text-success, lose+up=text-destructive. Both lose and gain scenarios now semantically correct."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
