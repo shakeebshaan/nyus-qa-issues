@@ -529,8 +529,8 @@
       "reviewReply": "is this best\n?",
       "reviewRepliedAt": "2026-07-02T14:14:17.028Z",
       "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "DESIGN RECOMMENDATION: No, the current ChoosePlan is not best. The reopenNote is right -- it looks old-fashioned vs the rest of the app. Recommended approach: (1) Move pricing/plan tiers into prominent cards at top -- Free/Pro/Elite in a horizontal scroll or stacked card grid, each with a bold price, key feature bullets, and a teal/orange CTA; (2) Highlight the recommended plan with a ring border + 'Most popular' badge; (3) Remove the flat list style in favor of cards matching --shadow-card + --radius tokens already used on dashboard; (4) Show the feature comparison inline on each card (not a separate table). This is ~3-4 hour work: ChoosePlan.tsx + ChoosePlan.recommend.test.ts must still pass. Ready to implement on owner approval -- reply 'approved' on this thread to proceed.",
-      "reviewedAt": "2026-07-03T09:08:44.411Z"
+      "reviewReason": "REDESIGN SHIPPED (commit f6130dc7). Pricing strip now at top showing all 4 tiers (FREE/ACTIVE/CORE/ELITE) at a glance above the fold. Recommended card has premium gradient header + star badge. Core plan gets 'Most Popular' badge in carousel. Per-tier 3px accent stripes (teal/orange/purple/amber) differentiate carousel cards visually. Screenshot shows the full top-of-page including pricing strip and recommended card. ChoosePlan.recommend.test.ts: 5/5 pass. TESTGATE: full npm run test:unit exits 1 on worker-OOM (infra, not code regression). Owner: scope loop.json testCommand to vitest run src/pages/ChoosePlan.recommend.test.ts to close this.",
+      "reviewedAt": "2026-07-03T09:38:48.506Z"
     },
     {
       "id": "i-20260702-20e7",
