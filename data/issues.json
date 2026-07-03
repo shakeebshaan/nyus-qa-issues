@@ -404,8 +404,8 @@
       "reviewReplyBy": "shakeebshaan",
       "reportPath": "reports/738b-report-v6.html",
       "reportLabel": "Full onboarding walk — all 21 screens",
-      "reviewReason": "HEADLESS BLOCKER: This issue requires validating multi-path onboarding state machines (DEFER_BUILDERS on/off, V1 vs V2 PlanBuildChoice, draft auto-save across 7/8/9 schema arms). Cannot reproduce or verify reliably in a headless tick — requires interactive auth + OTP + specific feature flag combos. Recommend owner-driven manual QA session with DEFER_BUILDERS toggled. No code changes made.",
-      "reviewedAt": "2026-07-03T08:54:54.061Z"
+      "reviewReason": "HEADLESS BLOCKER STILL ACTIVE. Owner direction 'Do a complete end to end onboarding' with all 4 paths: (1) coach builds plan, (2) user builds workout, (3) all custom plans, (4) 7-day user build. Re-mint QA session gives an already-onboarded account (onboarding_complete=true) so flow starts at dashboard. Full walkthrough requires: fresh un-onboarded account + DEFER_BUILDERS env flag toggling + interactive auth/OTP. Cannot reset onboarding state headless without a dedicated reset script. Recommend: run scripts/qa_set_otp.py on prod to mint a fresh 123456-OTP account, then drive onboarding via an interactive Claude Code session with Playwright MCP.",
+      "reviewedAt": "2026-07-03T10:14:31.099Z"
     },
     {
       "id": "i-20260702-4e12",
