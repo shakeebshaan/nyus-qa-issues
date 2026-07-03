@@ -416,13 +416,13 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "2",
       "reviewRepliedAt": "2026-07-03T11:16:59.089Z",
       "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "DESIGN ASSESSMENT + PLAN: To answer 'is this best?' — no, the current card carousel is good structurally but can be elevated. The owner's reopenNote says 'looks old fashion and don't have the field of the entire application and design language.' Three concrete options I can implement: OPTION A (recommended) — Full visual language refresh: replace the card carousel with a tier comparison grid that matches the app's teal/orange/purple domain tokens; pricing shown as large hero number with per-month equivalent; recommended card has a bold teal gradient header with goal-badge chip; feature rows use dot-icons rather than checkmarks. OPTION B — Compact horizontal scroll: slim horizontal pill cards (like Spotify Premium tiers); swipe to explore; recommended card pops with a ring glow; features collapsed behind a 'See all' expand. OPTION C — Design shotgun (12 concepts): generate 12 UI screenshots of different ChoosePlan layouts at 390px, capture as HTML report, attach inline to board. To proceed I need owner to: (1) pick A/B/C, OR (2) confirm 'just do the shotgun (C)' — then I build all 12 and attach as a private HTML report. Cannot capture ChoosePlan headless — QA account has active subscription so the route redirects. Recommend running the redesign in an interactive session where you can see the live preview.",
-      "reviewedAt": "2026-07-03T10:46:36.428Z"
+      "reviewReason": "CANNOT VERIFY HEADLESSLY: QA account has active subscription so /choose-plan redirects to /dashboard. Current state: page already has Option B elements (horizontal pricing strip, recommended card, carousel). Option B implementation plan: (1) add glowing teal ring-shadow to recommended carousel card; (2) collapse feature list to 2 items + See all toggle on each card; (3) make pricing number larger and more prominent in card header; (4) update plan card header gradient. Can implement in 30min but needs interactive visual verification on a fresh/unauthenticated session. Owner: run this in an interactive Claude Code session where you can see the live preview.",
+      "reviewedAt": "2026-07-03T11:35:10.196Z"
     },
     {
       "id": "i-20260702-20e7",
