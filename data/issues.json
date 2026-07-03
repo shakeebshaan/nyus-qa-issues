@@ -16,8 +16,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: goal direction was derived from CURRENT weight vs target, so crossing/reaching the goal flipped the branch and progress collapsed to 0%. Fix: direction now derived from start_weight_kg vs target_kg in useDashboardData.ts; capture shows QA account (lose goal 75->70) at 69.8kg rendering full bar + 'Goal reached' chip (previously 0%). 15 new unit tests lock the boundary math.",
+        "imagePath": "images/i-20260703-1478-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-1478-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c1b20bc58c423be6f3e2cbac9d09d5d6eb53df9e",
+        "imageCommits": [
+          "c1b20bc58c423be6f3e2cbac9d09d5d6eb53df9e"
+        ],
+        "fixedAt": "2026-07-03T03:20:31.007Z",
+        "by": "shakeebshaan",
+        "appCommit": "c201b38c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Recapture reproduces the exact issue scenario (crossed goal) and shows 100% + Goal reached chip; unit tests cover on-target/crossed/gain cases"
+        }
+      },
       "history": [
         {
           "at": "2026-07-03T02:38:13.631Z",
