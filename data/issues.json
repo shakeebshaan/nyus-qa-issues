@@ -648,8 +648,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Separate ongoing content machine loop — needs a dedicated scheduled loop (separate from the QA fix loop) running on a cron schedule to: research trending topics, generate 30+ SEO articles/month, publish to nyus.in/blog, optimize for AI discovery (SGE/Perplexity/ChatGPT citations). This loop needs owner to configure: article budget/month, categories to cover, call-to-action for each article, and whether to auto-publish or queue for review. The existing gen-blog.mjs infrastructure can be extended. Recommend: separate Claude Code session dedicated to content operations.",
-      "reviewedAt": "2026-07-03T14:00:05.917Z",
+      "reviewReason": "Blog machine loop implemented: scripts/blog-machine.mjs in NYUSLANDING repo. Reads uncovered keyword gaps from marketing/keywords.json (1306 gaps), calls OpenAI gpt-4o-mini to generate Indian-context fitness articles, assembles static HTML via existing gen-seo-articles.mjs patterns, updates sitemap-blog.xml, commits+pushes to GitHub, pings IndexNow. Run: node scripts/blog-machine.mjs --count N. Cost: ~0.05-0.10/article. Deployed to NYUSLANDING main (commit 98b545cb). Owner action needed: schedule as cron (weekly) on dev machine or Windows Task Scheduler. Suggested: 7 articles/week = 30/month = 1.50-3.00 USD.",
+      "reviewedAt": "2026-07-03T14:21:38.211Z",
       "reviewedBy": "shakeebshaan"
     },
     {
