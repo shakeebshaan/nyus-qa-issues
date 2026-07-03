@@ -9901,6 +9901,62 @@
       "resolvedAt": "2026-07-03T12:52:50.382Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-03T12:52:50.382Z"
+    },
+    {
+      "id": "i-20260703-b746",
+      "createdAt": "2026-07-03T06:56:34.675Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-03T12:50:22.257Z",
+          "event": "reopened",
+          "note": "This looks toomuch on this page needs to be thought full and clean",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Gamification achievements page enhanced: Active Streaks card, badge category filter pills (All/Milestones/Streaks/Special/Compliance), and Recent XP history (last 5 events). All three surface data already available in the overview endpoint but previously unsurfaced. Calm guardrails intact.",
+            "imagePath": "images/i-20260703-b746-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260703-b746-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "a5083918088f134ff324205e568fa5b56b56a014",
+            "imageCommits": [
+              "a5083918088f134ff324205e568fa5b56b56a014"
+            ],
+            "fixedAt": "2026-07-03T11:56:28.005Z",
+            "by": "shakeebshaan",
+            "appCommit": "fbde963f",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "All three features are fully implemented, built without TypeScript errors, and verified against a live prod-auth session. The streaks card gates on hasActiveStreaks so new/inactive users see nothing extra. Category filter is instant client-side. Recent XP makes the XP economy transparent. No gamification guardrail violations."
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Do it",
+      "reviewRepliedAt": "2026-07-03T11:11:33.106Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "GAMIFICATION IMPROVEMENTS COMMITTED (eda8fe76): (1) check-in days streak added to Active Streaks (4th column in grid). (2) Milestones section shows total_prs + perfect_weeks from overview.stats. (3) Recent XP activity section shows last 5 XP-earning actions (source, date, +XP badge). All within calm guardrails: no persistent XP bar in chrome, no +XP popups on routine taps, new sections only appear on /achievements dedicated screen. Screenshot shows Recent XP rendering live with 'Badge: First Meal +25 XP'. testGate=true prevents resolve.",
+      "reviewedAt": "2026-07-03T12:15:42.982Z",
+      "resolvedAt": "2026-07-03T12:54:18.343Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-03T12:54:18.343Z"
     }
   ]
 }
