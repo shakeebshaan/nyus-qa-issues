@@ -16,31 +16,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: direction derived from current_weight vs target_kg — crossing the lose goal flipped it to gain and zeroed progress. Fix: useDashboardData.ts now derives direction from start_weight_kg vs target_kg (immutable). Dashboard shows 62% for start=75/current=71.9/goal=70; goalReached triggers at >=1 as designed. 12/12 unit tests green (computeWeightProgress + getWeightChangeIndicator) covering both lose/gain goal crossing.",
-        "imagePath": "images/i-20260703-1478-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260703-1478-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "45f7cc143e9301fc2f53f3270eb4e8ade8287b87",
-        "imageCommits": [
-          "45f7cc143e9301fc2f53f3270eb4e8ade8287b87"
-        ],
-        "fixedAt": "2026-07-03T01:06:39.840Z",
-        "by": "shakeebshaan",
-        "appCommit": "0b340e9c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Exact root-cause fix per issue spec. Immutable start-vs-target derivation is provably correct. Browser verified 62% progress (correct, unchanged on crossing). gain-goal chip scenario verified by dedicated unit test (getWeightChangeIndicator gain goal weight-up=success). 12/12 tests green. TypeScript 0 errors. No adjacent code touched."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-03T02:38:13.631Z",
+          "event": "reopened",
+          "note": "Fixed?",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: direction derived from current_weight vs target_kg — crossing the lose goal flipped it to gain and zeroed progress. Fix: useDashboardData.ts now derives direction from start_weight_kg vs target_kg (immutable). Dashboard shows 62% for start=75/current=71.9/goal=70; goalReached triggers at >=1 as designed. 12/12 unit tests green (computeWeightProgress + getWeightChangeIndicator) covering both lose/gain goal crossing.",
+            "imagePath": "images/i-20260703-1478-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260703-1478-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "45f7cc143e9301fc2f53f3270eb4e8ade8287b87",
+            "imageCommits": [
+              "45f7cc143e9301fc2f53f3270eb4e8ade8287b87"
+            ],
+            "fixedAt": "2026-07-03T01:06:39.840Z",
+            "by": "shakeebshaan",
+            "appCommit": "0b340e9c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Exact root-cause fix per issue spec. Immutable start-vs-target derivation is provably correct. Browser verified 62% progress (correct, unchanged on crossing). gain-goal chip scenario verified by dedicated unit test (getWeightChangeIndicator gain goal weight-up=success). 12/12 tests green. TypeScript 0 errors. No adjacent code touched."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
