@@ -603,12 +603,33 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Implemented live moment cards across Dashboard, Social, and CoachChat FAB. Dashboard: daily rotating coach insight (10-tip pool, seeded by user+date, purple accent) — 'Protein first, then fill the rest.' visible bottom of dashboard. Social hub: community pulse strip above section list (5-tip pool, teal accent) — 'New activity in your feed.' dismissable per-day. FloatingCoachButton: proactive expanded label 'Has a thought' when no chat in 24h. All moments non-breaking, dismissable, no new API calls.",
+        "imagePath": "images/i-20260703-1fc5-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260703-1fc5-fix-r1.png",
+          "images/i-20260703-1fc5-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0ee9d4c75d7daedbec29e0e845a1055d3e393a51",
+        "imageCommits": [
+          "0ee9d4c75d7daedbec29e0e845a1055d3e393a51",
+          "0b257baef985edd6450cae51007da4ce38e7b18c"
+        ],
+        "fixedAt": "2026-07-03T14:21:20.326Z",
+        "by": "shakeebshaan",
+        "appCommit": "8958e660",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Large multi-section feature: animated 'moments' in Dashboard, CoachChat, and Social — each section needs a distinct live-data animation (coach saying something, social challenge update, etc). This requires design decisions on which sections get which moment types and what triggers them. Drafting a plan: (1) Dashboard: rotating coach tip card with typewriter animation, (2) CoachChat: proactive coach opening message on app open if no chat in 24h, (3) Social: live challenge countdown or leaderboard shift animation. Owner sign-off needed before implementing across 3 sections.",
-      "reviewedAt": "2026-07-03T13:59:50.897Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
