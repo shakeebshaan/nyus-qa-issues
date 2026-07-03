@@ -114,31 +114,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Feature shipped (commit 942da9cc): PlateCalculatorSheet wired into the live-workout set editor via a plate icon next to the KG stepper. Greedy per-side breakdown with colored plates + bar diagram, bar-weight picker (20/15/10/7.5/6kg) persisted in Preferences, nearest-loadable hint for impossible weights. Capture: live Barbell Bench Press set at 80kg showing 'bar 20kg + per side 25+5' - taken in a real workout session (QA account provisioned a Friday session, then restored). 7/7 calcPlates unit tests green.",
-        "imagePath": "images/i-20260702-plc8-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260702-plc8-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "07077e7239be261538d33b57672c2bd03eceaed9",
-        "imageCommits": [
-          "07077e7239be261538d33b57672c2bd03eceaed9"
-        ],
-        "fixedAt": "2026-07-03T03:29:32.037Z",
-        "by": "shakeebshaan",
-        "appCommit": "942da9cc",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Live in-app capture of the exact requested feature (plate icon on set row -> bottom sheet with per-side breakdown + bar picker); unit tests cover greedy math"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-03T04:56:44.551Z",
+          "event": "reopened",
+          "note": "Add all plates and number of plates and custome plate weights",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Feature shipped (commit 942da9cc): PlateCalculatorSheet wired into the live-workout set editor via a plate icon next to the KG stepper. Greedy per-side breakdown with colored plates + bar diagram, bar-weight picker (20/15/10/7.5/6kg) persisted in Preferences, nearest-loadable hint for impossible weights. Capture: live Barbell Bench Press set at 80kg showing 'bar 20kg + per side 25+5' - taken in a real workout session (QA account provisioned a Friday session, then restored). 7/7 calcPlates unit tests green.",
+            "imagePath": "images/i-20260702-plc8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-plc8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "07077e7239be261538d33b57672c2bd03eceaed9",
+            "imageCommits": [
+              "07077e7239be261538d33b57672c2bd03eceaed9"
+            ],
+            "fixedAt": "2026-07-03T03:29:32.037Z",
+            "by": "shakeebshaan",
+            "appCommit": "942da9cc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Live in-app capture of the exact requested feature (plate icon on set row -> bottom sheet with per-side breakdown + bar picker); unit tests cover greedy math"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Fix the issue and implement the features",
