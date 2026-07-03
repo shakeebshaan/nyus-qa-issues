@@ -438,8 +438,30 @@
         "8f02faad3cd0716ef4c2846184ea7287ed165a62"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed metrics board paid revenue display. Root cause: 7 pre-launch test subscriptions (owner's own gmail.com accounts, Dec 2025-Mar 2026 + gmail.comn typo domain) were counting as live paid revenue (razorpay_mode=live, amount_paid>0). Fix: (1) added gmail.comn to TEST_EMAIL_DOMAINS in metrics_db.py, (2) added post-launch date filter (>=2026-05-15, Play Store alpha launch) to paid_revenue_live and paid_subs queries. Reran collector: paid_revenue_live=0, paid_subs=0. Board updated to show correct Rs0.",
+        "imagePath": "images/i-20260703-b100-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-b100-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0b6286d42f686049ddf6f18465c80d11653da1ce",
+        "imageCommits": [
+          "0b6286d42f686049ddf6f18465c80d11653da1ce"
+        ],
+        "fixedAt": "2026-07-03T13:02:30.706Z",
+        "by": "shakeebshaan",
+        "appCommit": "58f6c5811a7187b631bd60e66ece493ac7e728c9",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root cause fully identified (pre-launch owner test payments mis-classified as live). Fix verified on prod: paid_revenue_live=0, paid_subs=0 confirmed via direct DB query. Metrics collector reran and published corrected data to private board. No app regression possible (backend reporting layer only)."
+        }
+      },
       "history": [
         {
           "at": "2026-07-03T12:42:36.001Z",
