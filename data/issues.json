@@ -602,8 +602,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Concerns fixed, re-audited: 1000/1000 plans now clean (was 998), 0 safety-rail violations, worst macro-vs-kcal deviation 19.0% -> 0.4%. Root cause of the last 2: obese (BMI 40+) users on floored ~1400 kcal targets got 2.0 g/kg total-bodyweight protein that, with the 130g CNS carb floor + minimum fat, overshot the budget - protein now reconciles to the remaining kcal (never below 1.2 g/kg). Backend c6565cb deployed + health-verified; 136/136 nutrition tests. Full re-audit report attached (button above). Remaining flags are informational: RED-S detection working as designed (123), soft water-goal on 120kg+ profiles (11).",
+        "imagePath": "images/i-20260702-1e0a-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260702-1e0a-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "efa3144c91c9b90a6dd847198a30bf907a6893ff",
+        "imageCommits": [
+          "efa3144c91c9b90a6dd847198a30bf907a6893ff"
+        ],
+        "fixedAt": "2026-07-03T03:50:51.109Z",
+        "by": "shakeebshaan",
+        "appCommit": "c6565cb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Re-ran the same seeded 1k sim on prod post-fix: 0 violations, dev 0.4% max; before/after table for both offenders in the attached report"
+        }
+      },
       "history": [
         {
           "at": "2026-07-03T02:40:35.828Z",
