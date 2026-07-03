@@ -1546,10 +1546,13 @@ function renderMetrics(d, hist) {
     return `<div class="m-hero" style="--ha:${accent}"><div class="mh-top"><span class="mh-l">${esc(label)}</span>${delta}</div><div class="mh-v">${unit === "$" ? esc(unit) : ""}${value == null ? "–" : esc(String(value))}${unit && unit !== "$" ? `<span class="mh-u">${esc(unit)}</span>` : ""}</div>${svgSpark(series, accent)}</div>`;
   };
   let html = `<div class="m-head"><div class="m-pills"><span class="mp live">${s.live ?? "–"} live</span><span class="mp awa">${s.awaiting ?? "–"} awaiting</span><span class="mp">${s.total ?? "–"} tracked</span></div><div class="m-meta">Real data · ${fmtDate(d.generatedAt)} · ${esc(srcs)} · ${d.periodDays || 30}d window${hist.length ? ` · ${hist.length}d history` : ""}</div></div>`;
-  html += `<div class="m-heroes">`
+  const rzpMode = findVal("finance", "razorpay_mode");
+  const rzpTestBanner = rzpMode === "test" ? `<div style="background:#fef3c7;border:1px solid #f59e0b;color:#92400e;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;margin-bottom:10px">⚠ Razorpay is in TEST MODE — all payment figures below reflect test transactions, not real money.</div>` : "";
+  html += rzpTestBanner + `<div class="m-heroes">`
     + hero(CPAL[0], "Total users", findVal("product_growth", "users_total"), "", "users_total")
     + hero(CPAL[4], "Monthly active", findVal("product_growth", "mau"), "", "mau")
-    + hero(CPAL[1], "Active subs", findVal("finance", "active_subs"), "", "active_subs")
+    + hero(CPAL[1], "Active (incl. trial)", findVal("finance", "active_subs"), "", "active_subs")
+    + hero(CPAL[5] || CPAL[3], "Paid subscribers", findVal("finance", "paid_subs"), "", "paid_subs")
     + hero(CPAL[3], "Paid revenue (live) ₹", findVal("finance", "paid_revenue_live"), "", "paid_revenue_live")
     + hero(CPAL[2], "AI cost 30d", findVal("ai", "ai_cost_30d"), "$", "ai_cost")
     + `</div>`;
