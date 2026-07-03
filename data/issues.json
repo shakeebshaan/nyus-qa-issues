@@ -1046,31 +1046,39 @@
         "8f02faad3cd0716ef4c2846184ea7287ed165a62"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: 'Active subs' hero counted ALL subscription rows (incl. free-trial users) showing misleading 126. Fix (fd9ecff): renamed to 'Active (incl. trial)' + added separate 'Paid subscribers' hero (paid_subs: amount_paid>0 + razorpay_id, test accounts excluded = 4). metrics-collect.mjs updated; fresh metrics collected 2026-07-03.",
-        "imagePath": "images/i-20260703-b100-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260703-b100-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "dc0128e55d00dff64a298b5611729e55b7563613",
-        "imageCommits": [
-          "dc0128e55d00dff64a298b5611729e55b7563613"
-        ],
-        "fixedAt": "2026-07-03T11:51:17.408Z",
-        "by": "shakeebshaan",
-        "appCommit": "564dae6d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Board code fix correct; paid_subs = 4 from live data; clear separation of trial vs paid users"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-03T12:42:36.001Z",
+          "event": "reopened",
+          "note": "Paid revenue is zero",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: 'Active subs' hero counted ALL subscription rows (incl. free-trial users) showing misleading 126. Fix (fd9ecff): renamed to 'Active (incl. trial)' + added separate 'Paid subscribers' hero (paid_subs: amount_paid>0 + razorpay_id, test accounts excluded = 4). metrics-collect.mjs updated; fresh metrics collected 2026-07-03.",
+            "imagePath": "images/i-20260703-b100-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260703-b100-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "dc0128e55d00dff64a298b5611729e55b7563613",
+            "imageCommits": [
+              "dc0128e55d00dff64a298b5611729e55b7563613"
+            ],
+            "fixedAt": "2026-07-03T11:51:17.408Z",
+            "by": "shakeebshaan",
+            "appCommit": "564dae6d",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Board code fix correct; paid_subs = 4 from live data; clear separation of trial vs paid users"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan"
     }
