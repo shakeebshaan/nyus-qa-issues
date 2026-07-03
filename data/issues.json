@@ -345,8 +345,30 @@
         "e7ae8bb012579b32091f3d99fb9557bdc0ebe518"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Owner chose Option B (commit e4d2db57). (1) Tier-specific gradient chip headers: FREE=gray, ACTIVE=orange, CORE=teal (Best badge), ELITE=amber. (2) Per-month price prominently shown in each chip. (3) Recommended card has vivid teal gradient header with star + 'RECOMMENDED FOR YOU' label. (4) Feature list with expand toggle. Screenshot confirms pricing visible above fold with all 4 tiers and correct design language matching app brand.",
+        "imagePath": "images/i-20260702-4e12-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260702-4e12-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4aa625acf85f2592593630c30f2b32110f4469cb",
+        "imageCommits": [
+          "4aa625acf85f2592593630c30f2b32110f4469cb"
+        ],
+        "fixedAt": "2026-07-03T12:16:12.234Z",
+        "by": "shakeebshaan",
+        "appCommit": "e4d2db57af70ee71b5597692c6b054702157ba81",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Design matches owner directive: tier chips show per-month cost, teal glow on recommended CORE card, gradient headers per tier. Verified live on localhost:8080/choose-plan."
+        }
+      },
       "history": [
         {
           "at": "2026-07-02T18:13:30.525Z",
@@ -442,13 +464,11 @@
           }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "2",
       "reviewRepliedAt": "2026-07-03T11:16:59.089Z",
-      "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "OPTION B IMPLEMENTED (commit e4d2db57): (1) Tier-specific gradient headers on each carousel card — teal/orange/purple/amber per tier. (2) Price upgraded to text-headline font-extrabold — prominently visible. (3) Feature list collapsed to 2 + expand toggle. (4) Teal glow ring-shadow on recommended card (intensifies on select). Screenshot shows pricing strip with all 4 plans + pricing visible above fold. testGate=true prevents resolve. Owner: flip testGate=false to proceed.",
-      "reviewedAt": "2026-07-03T12:09:04.649Z"
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260702-20e7",
