@@ -97,7 +97,10 @@
           }
         }
       ],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIX ALREADY SHIPPED (c201b38c): getWeightChangeIndicator now receives direction param derived from start_weight vs target_weight (start>target=lose, start<target=gain). Gain-goal users who gain weight now correctly see green arrow; lose-goal users who lose weight see green. UNIT TESTS: 12/12 pass (vitest run dashboard.constants.test.ts) — gain goal weight-up=success and gain goal weight-down=destructive both covered. Dashboard screenshot showing weight card attached. FULL GATE BLOCKED: npm run test:unit exits 1 on worker-OOM (infra issue). Recommend: verify visually on a gain-goal account, or scope loop.json testCommand.",
+      "reviewedAt": "2026-07-03T05:15:38.061Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260702-plc8",
