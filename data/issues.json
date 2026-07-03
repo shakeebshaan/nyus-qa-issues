@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260703-wtnd",
+      "createdAt": "2026-07-03T05:41:27.466Z",
+      "route": "/log-weight",
+      "description": "[suggestion] Weight trend line + weekly rate on the /log-weight chart. Problem: the chart plots raw daily scale weights only, and daily weight swings 0.5-1.5 kg from water/sodium/glycogen - an athlete on a cut sees a fake 1 kg overnight jump, reads it as a stall, and panic-adjusts (or quits logging); data-literate users expect the smoothed number, not the noise. Evidence: LogWeight.tsx / LogWeight.Chart render only raw daily points plus a weekly-averages toggle - no smoothed trend series, no rate-of-change anywhere in src (grep: zero hits for moving average / kg-per-week). Every serious competitor ships this (MacroFactor trend weight, Happy Scale, Withings), and our brand line is precision over encouragement - showing raw noise without the trend is the opposite. Proposed v1 (frontend-only, no backend change): (1) compute a 7-day exponentially-weighted moving average client-side from the existing daily_weight_history payload; (2) draw it as a second smooth line over the existing recharts AreaChart in daily view (raw points fade to dots); (3) one caption line under the chart: Trend 72.4 kg, -0.35 kg/week - with an on-pace/off-pace tint vs the plan target rate already known from the goal. Same chart component is reused by /weight-history-chart so both routes get it. Effort: small - one pure math helper + chart series + caption; re-run affected flow captures.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260703-rcnt",
       "createdAt": "2026-07-03T04:42:22.308Z",
       "route": "/nutrition",
