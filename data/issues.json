@@ -830,7 +830,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED (commit fd9ecff in nyus-qa-issues): Root cause — 'Active subs: 126' counted free-trial users (status=active/trialing). Fix: (1) hero label renamed to 'Active (incl. trial)', (2) new 'Paid subscribers' hero shows paid_subs (amount_paid>0 + razorpay_payment_id present + non-test users), (3) orange TEST MODE banner when razorpay_mode=test. Next metrics-collect run will pick up paid_subs. If Razorpay key is test-mode, the banner will confirm 0 real paid users clearly.",
+      "reviewedAt": "2026-07-03T11:31:57.091Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
