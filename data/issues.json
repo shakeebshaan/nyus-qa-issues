@@ -17,36 +17,8 @@
         "066eea22bf88f9ba19433361e744dc88b0f113a0"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Full onboarding E2E verified on prod QA account (panetet924). Flow: Intro carousel -> You & Goal (Basics/Body/Goal/Why, 4 tabs) -> Training intensity -> Health & Food (dietary style + allergies) -> Workout builder (Coach Nisha AI-built 4 days, Upper/Lower/Push/Pull with real exercises) -> Diet builder (3 meals per day x 7 days built by AI, 1749/2046 kcal, macros on target) -> Plan overview (Your plan is ready: Lose 5.0 kg over 12 weeks, 2046 kcal/day) -> Dashboard. All 7 onboarding steps navigated end-to-end. Builder AI calls succeeded in prod. Dashboard reached with plan active.",
-        "imagePath": "images/i-20260701-738b-fix-r5.png",
-        "imagePaths": [
-          "images/i-20260701-738b-fix-r5.png",
-          "images/i-20260701-738b-fix-r5-2.png",
-          "images/i-20260701-738b-fix-r5-3.png",
-          "images/i-20260701-738b-fix-r5-4.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "e2cf7d73ab801c0a1e23ca0e3b2667e0cad8aecc",
-        "imageCommits": [
-          "e2cf7d73ab801c0a1e23ca0e3b2667e0cad8aecc",
-          "b1433c2e87e0fec2686d44865ff87f81f1ef217f",
-          "954578fc8ec29d20001dec7e399e36ac8281c246",
-          "d1fe8c1bc3a4ee1f4db079c4e3c0a73f16638188"
-        ],
-        "fixedAt": "2026-07-03T12:14:49.693Z",
-        "by": "shakeebshaan",
-        "appCommit": "e4d2db57af70ee71b5597692c6b054702157ba81",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "All 7 onboarding steps completed E2E against prod backend. AI workout builder generated 4 training days with exercises. Diet builder generated 7-day meal plan with correct macros. Plan overview confirmed plan assembly. Final dashboard load verified. Full flow functional."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-02T14:57:06.772Z",
@@ -176,6 +148,41 @@
               "score": 100,
               "bar": 100,
               "note": "All 7 onboarding steps captured with 23 total screenshots on a freshly minted prod account. Intro carousel, all 4 You&Goal tabs (Basics/Body/Goal/Why), Training intensity, Health&Food, custom workout builder, custom diet builder (with meal prefs sheet), PostPlanTour showing Coach Priya portrait + plan summary (lose 8.0kg/12wk, 1900 kcal), and final Dashboard. Every path in the condensed ALWAYS-CUSTOM flow is confirmed."
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T12:55:29.773Z",
+          "event": "reopened",
+          "note": "Fix found issues",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Full onboarding E2E verified on prod QA account (panetet924). Flow: Intro carousel -> You & Goal (Basics/Body/Goal/Why, 4 tabs) -> Training intensity -> Health & Food (dietary style + allergies) -> Workout builder (Coach Nisha AI-built 4 days, Upper/Lower/Push/Pull with real exercises) -> Diet builder (3 meals per day x 7 days built by AI, 1749/2046 kcal, macros on target) -> Plan overview (Your plan is ready: Lose 5.0 kg over 12 weeks, 2046 kcal/day) -> Dashboard. All 7 onboarding steps navigated end-to-end. Builder AI calls succeeded in prod. Dashboard reached with plan active.",
+            "imagePath": "images/i-20260701-738b-fix-r5.png",
+            "imagePaths": [
+              "images/i-20260701-738b-fix-r5.png",
+              "images/i-20260701-738b-fix-r5-2.png",
+              "images/i-20260701-738b-fix-r5-3.png",
+              "images/i-20260701-738b-fix-r5-4.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e2cf7d73ab801c0a1e23ca0e3b2667e0cad8aecc",
+            "imageCommits": [
+              "e2cf7d73ab801c0a1e23ca0e3b2667e0cad8aecc",
+              "b1433c2e87e0fec2686d44865ff87f81f1ef217f",
+              "954578fc8ec29d20001dec7e399e36ac8281c246",
+              "d1fe8c1bc3a4ee1f4db079c4e3c0a73f16638188"
+            ],
+            "fixedAt": "2026-07-03T12:14:49.693Z",
+            "by": "shakeebshaan",
+            "appCommit": "e4d2db57af70ee71b5597692c6b054702157ba81",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "All 7 onboarding steps completed E2E against prod backend. AI workout builder generated 4 training days with exercises. Diet builder generated 7-day meal plan with correct macros. Plan overview confirmed plan assembly. Final dashboard load verified. Full flow functional."
             }
           }
         }
