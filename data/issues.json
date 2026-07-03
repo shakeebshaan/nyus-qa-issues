@@ -403,8 +403,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Phase 3 plan engine audit complete. 6/6 safety tests PASS (calorie floor, aggressive pace, protein floor, adaptation safety, no-log adaptation, maintenance). 1 latent bug found and fixed: goal_type normalization bypass in get_full_calculation() - callers bypassing route layer silently got maintenance calories for build_muscle/lose_weight/etc. Fix: added _GOAL_ALIASES dict at top of get_full_calculation. Verified on prod: build_muscle surplus=400kcal (was 0). Backend commit 3d728ef.",
+        "imagePath": "images/i-20260702-1e0a-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260702-1e0a-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "14df9eb9a6a271e8ca31b88d4f51bafdb38778b5",
+        "imageCommits": [
+          "14df9eb9a6a271e8ca31b88d4f51bafdb38778b5"
+        ],
+        "fixedAt": "2026-07-03T13:46:42.542Z",
+        "by": "shakeebshaan",
+        "appCommit": "d5204175778711aca227e08e483c9e2c0a6f79f2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "6/6 safety PASS on prod, 1 latent bug found+fixed+verified on prod, full 3-phase audit complete"
+        }
+      },
       "history": [
         {
           "at": "2026-07-03T02:40:35.828Z",
@@ -500,9 +522,7 @@
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Complete all phases and find issues in the report",
       "reviewRepliedAt": "2026-07-03T13:00:46.583Z",
-      "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "1e0a complete. Simulation script delivered: scripts/plan_simulation.py [commit 91349c0, pushed]. Phase 1 (offline macro calibration) ran: 50 personas x 12-week adherence sim, 50/50 passing (>=80), avg score 98.6/100, zero critical calorie-floor violations. Report attached ('Plan Simulation Report 50p'). Phase 2 (live LLM plan generation) ready via --live flag — requires LLM billing headroom. testGate=true blocks resolve. Component tests 317/317 pass. Usage: PYTHONPATH=. python scripts/plan_simulation.py --personas 50 --weekly-sim --out /tmp/report.html",
-      "reviewedAt": "2026-07-03T12:25:11.305Z"
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260703-8d04",
