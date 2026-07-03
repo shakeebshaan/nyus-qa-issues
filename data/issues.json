@@ -317,13 +317,15 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "do it",
       "reviewRepliedAt": "2026-07-03T11:17:28.179Z",
       "reviewReplyBy": "shakeebshaan",
       "reportPath": "reports/738b-report-v6.html",
-      "reportLabel": "Full onboarding walk — all 21 screens"
+      "reportLabel": "Full onboarding walk — all 21 screens",
+      "reviewReason": "HEADLESS BLOCKER: All 4 onboarding paths (coach-builds-all, user-builds-workout, user-builds-custom-all, user-builds-7-day) require fresh un-onboarded accounts with OTP verification — impossible headless. To complete: interactive session where owner provides OTP for a fresh email, then Playwright MCP drives each path end-to-end capturing every screen. QA JWT account has onboarding_complete=true so app lands on /dashboard. Four separate fresh accounts needed (or single account reset via DB). Ready to execute immediately in an interactive Claude Code session.",
+      "reviewedAt": "2026-07-03T12:16:50.639Z"
     },
     {
       "id": "i-20260702-4e12",
