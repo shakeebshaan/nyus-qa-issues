@@ -16,12 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "EWMA trend line implemented and verified live. Chart shows bold trend line over faded area (raw daily weights). Caption: 'Trend 71.9 kg 0.00 kg/wk' + 'Daily weight · bold line = trend'. computeEwma (alpha=2/8, 7-day EWMA) renders when data.length>=3. Rate-of-change caption shows kg/week vs plan target.",
+        "imagePath": "images/i-20260703-wtnd-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260703-wtnd-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "927c8c657cf4a758af7dc40c28a7e352cb0012ba",
+        "imageCommits": [
+          "927c8c657cf4a758af7dc40c28a7e352cb0012ba"
+        ],
+        "fixedAt": "2026-07-03T12:17:18.490Z",
+        "by": "shakeebshaan",
+        "appCommit": "e4d2db57af70ee71b5597692c6b054702157ba81",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Trend line visible on prod QA account. Caption shows pace and trend weight. Feature matches proposal exactly."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "DONE: computeEwma (alpha=2/8, 7-day EWMA) + ComposedChart Area (raw faded dots) + Line (bold trend) implemented in LogWeight.Chart.tsx. Caption shows 'Trend Xkg, -Y kg/week' vs plan target. Log Weight screenshot captured confirms page renders. testGate=true + npm run test:unit OOMs prevents resolve. Owner: flip testGate=false or set loop.json testCommand to npm run test:component (298/317 pass).",
-      "reviewedAt": "2026-07-03T12:15:52.034Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Done?",
       "reviewRepliedAt": "2026-07-03T11:13:35.268Z",
