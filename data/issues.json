@@ -862,7 +862,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix shipped in commit 6b0a2756 (StrengthStrip.tsx: <section> → <motion.section> with opacity/y entrance+exit; Activity.tsx: wrapped in <AnimatePresence> so first PR smoothly fades in instead of layout-jumping). Screenshot in tmp/i-20260703-ac39-fix.png shows Personal Bests section with badges + PR card rendered. Cannot resolve: testGate=true but npm run test:unit exits 1 on worker-OOM (infra, not code regression). Owner: please flip testGate=false or confirm passing run.",
+      "reviewedAt": "2026-07-03T08:54:07.517Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260703-b746",
