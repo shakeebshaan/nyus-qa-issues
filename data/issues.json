@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260703-rcnt",
+      "createdAt": "2026-07-03T04:42:22.308Z",
+      "route": "/nutrition",
+      "description": "[suggestion] Recent-meals quick log: one-tap re-log of past custom meals in the Add Custom Meal sheet on /nutrition. Problem: the custom-meal flow (CustomMealModal) is pure free-text — an athlete eating the same 4-5 meals every day must retype \"200g chicken breast + 150g rice + 1 katori dal\" (or re-run photo AI) on every log; there is no recents/favorites surface anywhere (verified: no recents endpoint in the backend, no history UI in src/components/nutrition/CustomMealModal.tsx). Every comparable tracker (MyFitnessPal, MacroFactor, HealthifyMe) ships Recents as the #1 logging accelerator, and our own design principle is precision tools for athletes who log multiple times daily — repeat logging is THE hot path. Evidence: meal-log history already exists server-side (free-form POST /logs/meal entries with macro estimates from photo/text analysis), so the data is sitting there unused. Proposed v1: (1) backend GET /logs/meal/recent — last N distinct free-form meals (dedupe by normalized description, keep macros); (2) a horizontal \"Recent\" chip row at the top of CustomMealModal — tap fills description + macros, then Log saves as usual; no favorites/pinning yet. Effort: small — one read-only endpoint + one chip-row component; no schema change, no LLM cost (reuses stored macros instead of re-analyzing).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260703-1478",
       "createdAt": "2026-07-03T00:53:08.533Z",
       "route": "/dashboard",
