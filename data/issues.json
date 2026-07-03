@@ -836,7 +836,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix shipped in commit 6b0a2756 (useNutritionData.tsx: onMutate now calls queryClient.setQueryData to flip is_eaten immediately — instant checkbox response before server round-trip). Screenshot in tmp/i-20260703-0afb-fix.png shows Yogurt & Almonds checked instantly. Cannot resolve: testGate=true but npm run test:unit exits 1 on worker-OOM (infra issue, not a code regression — real unit suite is 266 files). Owner: please flip testGate=false or confirm passing test run to close.",
+      "reviewedAt": "2026-07-03T08:53:52.396Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260703-ac39",
