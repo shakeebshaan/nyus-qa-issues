@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260703-1478",
+      "createdAt": "2026-07-03T00:53:08.533Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard weight card: progress collapses to 0% the moment the user reaches or passes their goal, and the 'Goal reached' state is unreachable. Root cause: src/pages/_components/dashboard/useDashboardData.ts (~line 205) derives goal direction from CURRENT weight vs target (cw > target ? 'lose' : cw < target ? 'gain' : 'maintain') instead of from start vs target - so the instant a lose-goal user drops below target, direction flips to 'gain' and computeWeightProgress returns clamp((cw-start)/delta)=0; landing EXACTLY on target hits the 'maintain' branch which also returns 0 (deviation |cw-start| >> 0.5 tolerance). Repro (lose goal, start 90kg, target 80kg): log 80.4 -> card shows '96% to goal'; log 79.8 -> card shows '0% to goal' with an empty milestone track and no 'Goal reached' chip. Expected: crossing or hitting the goal shows 100% + the 'Goal reached' chip (goalReached gates on overall>=1, which is mathematically unreachable under the current derivation - lose branch requires cw>target so ratio<1 always, and crossing flips to the 0-returning branch). Same flipped direction also feeds the weekly ratio (wpr). Fix: derive direction from start_weight_kg vs target_kg (start>target = lose, start<target = gain), not from current weight.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260703-b52e",
+      "createdAt": "2026-07-03T00:53:08.533Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Weekly weight-change chip colors are inverted for gain-goal users. getWeightChangeIndicator (src/pages/_components/dashboard/dashboard.constants.ts:26) hard-codes lose semantics: change < -0.1 -> green success down-arrow, change > +0.1 -> red destructive up-arrow, regardless of the user's goal. A muscle-gain user who gains 0.5kg this week (exactly on plan) sees a RED 'up' warning chip on the dashboard weight card, while losing weight (bad for their goal) shows GREEN success. Expected: success/destructive mapping follows goal direction (start_weight_kg vs target_kg: start<target = gain goal -> up is success, down is destructive). Rendered in DashboardWeightCard.tsx (~line 100, weekly change pill next to the current weight). Repro: account with target_kg > start_weight_kg and change_this_week_kg = +0.5 -> red destructive arrow.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260702-plc8",
       "createdAt": "2026-07-02T23:42:10.535Z",
       "route": "/activity",
