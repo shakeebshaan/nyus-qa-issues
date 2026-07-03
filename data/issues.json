@@ -724,30 +724,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Concerns fixed, re-audited: 1000/1000 plans now clean (was 998), 0 safety-rail violations, worst macro-vs-kcal deviation 19.0% -> 0.4%. Root cause of the last 2: obese (BMI 40+) users on floored ~1400 kcal targets got 2.0 g/kg total-bodyweight protein that, with the 130g CNS carb floor + minimum fat, overshot the budget - protein now reconciles to the remaining kcal (never below 1.2 g/kg). Backend c6565cb deployed + health-verified; 136/136 nutrition tests. Full re-audit report attached (button above). Remaining flags are informational: RED-S detection working as designed (123), soft water-goal on 120kg+ profiles (11).",
-        "imagePath": "images/i-20260702-1e0a-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260702-1e0a-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "efa3144c91c9b90a6dd847198a30bf907a6893ff",
-        "imageCommits": [
-          "efa3144c91c9b90a6dd847198a30bf907a6893ff"
-        ],
-        "fixedAt": "2026-07-03T03:50:51.109Z",
-        "by": "shakeebshaan",
-        "appCommit": "c6565cb",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Re-ran the same seeded 1k sim on prod post-fix: 0 violations, dev 0.4% max; before/after table for both offenders in the attached report"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-03T02:40:35.828Z",
@@ -775,6 +753,35 @@
               "score": 100,
               "bar": 100,
               "note": "1000 seeded profiles vs live engine; found+fixed a real macro-coherence bug and verified all safety rails (kcal floors, pace, volume, steps) hold at 0 violations; reproducible harness committed"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T06:27:29.822Z",
+          "event": "reopened",
+          "note": "Give me the result for this what happened after these 1000 simulation and also we will need be nating 10000 more such simulation from the open AI calls to create the simulated plan to have 10000 more plans and also judge how different users have different weekly data so we also be updating their plan weekly so that AP and needs to be tested and we need to have the data where the coach takes there weekly locks and updated and adjust their next week data and sometimes user will not at here to the that plan or the exercise or workout and have a worst weak so we need to add all the users the different all the plan and not all users have the same means for like 60 weeks of 50 weeks or 12 weeks so sometimes user want to change the the change the mails midway like after 2 weeks they are getting bored or they have added some different ingredients is day is not same for all users some users may have some extra chocolate or some it ice cream so I need all the variance and how coach generate a solid plan so that they are on there on track and have the have the perfect plans you will be generating 10000 plans for n number of weeks based on the user goals and then create overall School compared to what is expected from the court from real life coach and what is expected from the high court so there need to be a closed reason and even better than the human coach with experience of more than 20 years aming for that accuracy so while doing this you will be facing from challenges and having different issues and learning the data how the API responding and you will learn from those things and we will have a score from which we will be improving from 0 to 100 and the hundred is better the hundred score is better than a human coach for 20 years of experience he had navigate everything and make sure that all his users have achieve what they want in the road also one thing user may change their hole duration and if they lower if the blow up their plan then let's they have made a progress of 10 kg due to some location or something they have been of track and now they have to read to they work and now the plan of 12 weeks have been updated to 20 or 30 weeks so we need to have all such data for this 10000 plans weak by week for different users and from the learning we will be upgrading our vacant system for coaching and then have a score for the first short will aim for more than 60 by 100 you will be editing until please",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Concerns fixed, re-audited: 1000/1000 plans now clean (was 998), 0 safety-rail violations, worst macro-vs-kcal deviation 19.0% -> 0.4%. Root cause of the last 2: obese (BMI 40+) users on floored ~1400 kcal targets got 2.0 g/kg total-bodyweight protein that, with the 130g CNS carb floor + minimum fat, overshot the budget - protein now reconciles to the remaining kcal (never below 1.2 g/kg). Backend c6565cb deployed + health-verified; 136/136 nutrition tests. Full re-audit report attached (button above). Remaining flags are informational: RED-S detection working as designed (123), soft water-goal on 120kg+ profiles (11).",
+            "imagePath": "images/i-20260702-1e0a-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260702-1e0a-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "efa3144c91c9b90a6dd847198a30bf907a6893ff",
+            "imageCommits": [
+              "efa3144c91c9b90a6dd847198a30bf907a6893ff"
+            ],
+            "fixedAt": "2026-07-03T03:50:51.109Z",
+            "by": "shakeebshaan",
+            "appCommit": "c6565cb",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Re-ran the same seeded 1k sim on prod post-fix: 0 violations, dev 0.4% max; before/after table for both offenders in the attached report"
             }
           }
         }
