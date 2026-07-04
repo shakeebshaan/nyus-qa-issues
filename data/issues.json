@@ -431,7 +431,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix SHIPPED (ea1ccfb3, pushed to main). Root cause: MomentCard used role='button' div — unreliable on Capacitor. Fixed: restructured to two sibling native <button> elements (content area + dismiss), added 'YOUR COACH' label, expand-on-tap with 'Tap to read more' hint, full text on expand. Verified visually (screenshot attached). GATE BLOCKER: testGate=true but no component tests exist for MomentCard and npm run test:unit is infra-blocked (OOM). Request: please scope loop.json testCommand to a unit subset (e.g. npm run test:component) or resolve manually.",
+      "reviewedAt": "2026-07-04T22:50:46.537Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-6c85",
