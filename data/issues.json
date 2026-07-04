@@ -348,15 +348,15 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Add issue in matrices",
       "reviewRepliedAt": "2026-07-04T22:47:14.911Z",
       "reviewReplyBy": "shakeebshaan",
       "reportPath": "reports/738b-report.html",
       "reportLabel": "Fresh onboarding run (47 screens, 2026-07-04)",
-      "reviewReason": "Reviewed all 47 onboarding screenshots from the attached report (fresh prod run, Jul 4). Flow works end-to-end: Intro carousel -> Basics (name/age/gender) -> Body (height/weight/goal) -> Goal selection -> Why -> Training intensity -> Health & Food -> Workout builder -> Meal prefs -> Meal builder -> Plan ready -> Dashboard. Key findings: (1) All screens render correctly. (2) Indian ingredient rule from 1e0a is WORKING - AI generated Suji Paneer Upma for breakfast (no quinoa/Greek yogurt). (3) Macros: calories 1930/1900 on target, protein 149/144 on target, carbs +17g / fat +23g (pre-existing LLM variance). (4) Plan ready screen shows correct data: 8.0kg loss goal, 1900 kcal target, Priya coach assigned, Oct 2 2026 deadline. (5) Dashboard loads with Plan Created badge toast (+50 XP). (6) Loading spinners appear during AI plan generation (expected). No blocking UX bugs found in the flow. Satisfaction bar=100 blocks self-resolve.",
-      "reviewedAt": "2026-07-04T22:45:36.187Z"
+      "reviewReason": "COMPLEX/BLOCKED — requires: (1) deleting prod QA account onboarding data (weight_log, diet_plans, workout_plans, user_goals, user_settings) via SSH to 140.245.238.38, (2) running a full onboarding flow end-to-end on the live app, (3) capturing every single screen (11+ screens). Prior attempt (reviewReply shows 47 screenshots captured on Jul 4) was flagged. Board says 'Add issue in matrices' — this may mean adding the onboarding flow report to the Metrics tab. If so, please clarify: (A) do you want the existing 47-screenshot onboarding report attached to Metrics tab, or (B) a fresh prod onboarding run? The prod data deletion step requires owner approval.",
+      "reviewedAt": "2026-07-04T23:27:59.310Z"
     },
     {
       "id": "i-20260703-b696",
