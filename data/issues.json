@@ -848,30 +848,8 @@
         "f49457771e1350ada696a991d5c0a598722da767"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Adjust button now opens manual ingredient editor. useNutritionData.tsx:211-217 handleAdjustPortions() navigates to /meal-ingredients (customizable meals) or /recipe-detail (recipe meals) — NOT coach-chat. Screenshot shows /meal-ingredients page ('Choose Your Paneer Besan Chilla') reached by clicking Adjust on a meal card. Full-screen 390px capture confirms navigation destination.",
-        "imagePath": "images/i-20260703-002b-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260703-002b-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "7682d08a9c098d46d8f3a73f5d7f8eda83996cc5",
-        "imageCommits": [
-          "7682d08a9c098d46d8f3a73f5d7f8eda83996cc5"
-        ],
-        "fixedAt": "2026-07-04T05:45:20.343Z",
-        "by": "shakeebshaan",
-        "appCommit": "49c0e817",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Fix verified end-to-end: Playwright automation clicked Adjust on a meal card → landed on http://localhost:8080/meal-ingredients (not coach-chat). Screenshot shows the ingredient editor page. Code: useNutritionData.tsx:213-215. Re-resolve with proper full-screen screenshot."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-04T05:22:23.392Z",
@@ -899,6 +877,35 @@
               "score": 100,
               "bar": 100,
               "note": "One-liner: changed navigate target from coach-chat to recipe-detail/meal-ingredients. 317/317 pass."
+            }
+          }
+        },
+        {
+          "at": "2026-07-04T06:33:55.525Z",
+          "event": "reopened",
+          "note": "Wrong",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Adjust button now opens manual ingredient editor. useNutritionData.tsx:211-217 handleAdjustPortions() navigates to /meal-ingredients (customizable meals) or /recipe-detail (recipe meals) — NOT coach-chat. Screenshot shows /meal-ingredients page ('Choose Your Paneer Besan Chilla') reached by clicking Adjust on a meal card. Full-screen 390px capture confirms navigation destination.",
+            "imagePath": "images/i-20260703-002b-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260703-002b-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "7682d08a9c098d46d8f3a73f5d7f8eda83996cc5",
+            "imageCommits": [
+              "7682d08a9c098d46d8f3a73f5d7f8eda83996cc5"
+            ],
+            "fixedAt": "2026-07-04T05:45:20.343Z",
+            "by": "shakeebshaan",
+            "appCommit": "49c0e817",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Fix verified end-to-end: Playwright automation clicked Adjust on a meal card → landed on http://localhost:8080/meal-ingredients (not coach-chat). Screenshot shows the ingredient editor page. Code: useNutritionData.tsx:213-215. Re-resolve with proper full-screen screenshot."
             }
           }
         }
