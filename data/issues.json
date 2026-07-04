@@ -531,10 +531,13 @@
           }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Fix fully implemented and deployed. Visual verification blocked: QA account (panetet924@tatefarm.com) has zero diet plans — Nutrition page shows empty state so Adjust button cannot be demonstrated via headless capture. Code proof: (1) Backend POST /diet/log-modification now accepts {assigned_meal_id, scale} shorthand — computes ingredient modifications from recipe (commit 1ee9ace, deployed). (2) Frontend: Adjust button opens bottom Sheet with Slider 25-200%, calls scaleMeal mutation on Apply (Nutrition.tsx + useNutritionData.tsx + nutrition.service.ts, commit 43765386). TypeScript clean. Owner should verify by tapping Adjust on any meal card in the app — the bottom Sheet should slide up with the Slider.",
       "reviewedAt": "2026-07-04T07:22:50.901Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "what else find",
+      "reviewRepliedAt": "2026-07-04T08:48:21.681Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-f5ec",
