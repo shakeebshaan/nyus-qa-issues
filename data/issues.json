@@ -260,30 +260,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Phase 3 plan engine audit complete. 6/6 safety tests PASS (calorie floor, aggressive pace, protein floor, adaptation safety, no-log adaptation, maintenance). 1 latent bug found and fixed: goal_type normalization bypass in get_full_calculation() - callers bypassing route layer silently got maintenance calories for build_muscle/lose_weight/etc. Fix: added _GOAL_ALIASES dict at top of get_full_calculation. Verified on prod: build_muscle surplus=400kcal (was 0). Backend commit 3d728ef.",
-        "imagePath": "images/i-20260702-1e0a-fix-r4.png",
-        "imagePaths": [
-          "images/i-20260702-1e0a-fix-r4.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "14df9eb9a6a271e8ca31b88d4f51bafdb38778b5",
-        "imageCommits": [
-          "14df9eb9a6a271e8ca31b88d4f51bafdb38778b5"
-        ],
-        "fixedAt": "2026-07-03T13:46:42.542Z",
-        "by": "shakeebshaan",
-        "appCommit": "d5204175778711aca227e08e483c9e2c0a6f79f2",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "6/6 safety PASS on prod, 1 latent bug found+fixed+verified on prod, full 3-phase audit complete"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-03T02:40:35.828Z",
@@ -369,6 +347,35 @@
               "score": 100,
               "bar": 100,
               "note": "Phase 1 delivered: 100 personas, 98.3/100 avg score, 100% pass rate. Report uploaded (private). Phase 2 scale to 10k blocked on owner budget approval (~\\ LLM cost)."
+            }
+          }
+        },
+        {
+          "at": "2026-07-04T06:35:20.618Z",
+          "event": "reopened",
+          "note": "Whats left",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Phase 3 plan engine audit complete. 6/6 safety tests PASS (calorie floor, aggressive pace, protein floor, adaptation safety, no-log adaptation, maintenance). 1 latent bug found and fixed: goal_type normalization bypass in get_full_calculation() - callers bypassing route layer silently got maintenance calories for build_muscle/lose_weight/etc. Fix: added _GOAL_ALIASES dict at top of get_full_calculation. Verified on prod: build_muscle surplus=400kcal (was 0). Backend commit 3d728ef.",
+            "imagePath": "images/i-20260702-1e0a-fix-r4.png",
+            "imagePaths": [
+              "images/i-20260702-1e0a-fix-r4.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "14df9eb9a6a271e8ca31b88d4f51bafdb38778b5",
+            "imageCommits": [
+              "14df9eb9a6a271e8ca31b88d4f51bafdb38778b5"
+            ],
+            "fixedAt": "2026-07-03T13:46:42.542Z",
+            "by": "shakeebshaan",
+            "appCommit": "d5204175778711aca227e08e483c9e2c0a6f79f2",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "6/6 safety PASS on prod, 1 latent bug found+fixed+verified on prod, full 3-phase audit complete"
             }
           }
         }
