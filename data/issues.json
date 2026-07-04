@@ -37,7 +37,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED: LeaderboardView now uses currentUserRankCard useMemo — in group scope it derives rank/score_label from the re-ranked groupResults entry (so it shows group-relative rank #N matching the highlighted row) instead of leaderboardData.current_user_rank (absolute global rank). Card hidden if user absent from group board. Code: LeaderboardView.tsx lines 215-222. Commit fa1b9684. TypeScript clean. loop.mjs verify GREEN. BLOCKED: satisfaction bar=100 prevents self-resolve. QA account has no partner group so My Group toggle is not visible — fix is code-verified. Please resolve manually or lower satisfaction slider for code fixes.",
+      "reviewedAt": "2026-07-04T18:35:44.936Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-9f3d",
