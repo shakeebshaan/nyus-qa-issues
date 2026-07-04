@@ -1106,7 +1106,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix SHIPPED (app 70c7659c, pushed main). Root cause: on ChoosePlan the pricing-chip strip uses overflow-x-auto; when one overflow axis is auto CSS forces the other (overflow-y) to clip, so the recommended chip's 'Best' badge at -top-2 was cut off. Added pt-3 to the scroll row to reserve vertical room. Verified via typecheck. GATE BLOCKER: satisfaction bar=100 + QA JWT revoked (401) blocks clean authed recapture. Please resolve after verifying the Best badge is fully visible.",
+      "reviewedAt": "2026-07-04T23:24:21.471Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-0e7f",
