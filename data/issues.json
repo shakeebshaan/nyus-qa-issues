@@ -603,8 +603,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Context-aware moments: useDashboardMoment picks ACTIVITY_BEHIND pool (activityProgress 0%) showing 'The hardest part is starting. After 5 minutes it gets easier.' useCoachMoment now wired to teal nudge card -> /coach-chat when >24h since last chat. 5 context pools + 15-entry generic fallback. TS clean. commit f207eef7.",
+        "imagePath": "images/i-20260703-1fc5-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-1fc5-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bb1783635ea3bec3273b2cdad2b9d4f9acde7963",
+        "imageCommits": [
+          "bb1783635ea3bec3273b2cdad2b9d4f9acde7963"
+        ],
+        "fixedAt": "2026-07-04T06:02:14.155Z",
+        "by": "shakeebshaan",
+        "appCommit": "f207eef7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Context-aware moment renders correctly based on live overview data; coach nudge card added but correctly suppressed when last_coach_chat recent; all pools verified."
+        }
+      },
       "history": [
         {
           "at": "2026-07-04T05:25:55.750Z",
