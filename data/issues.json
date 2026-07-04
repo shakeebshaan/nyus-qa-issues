@@ -714,52 +714,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260703-f33a",
-      "createdAt": "2026-07-03T13:19:42.529Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260703-f33a.jpg",
-      "imageCommit": "55e08b0070a21a9c088c2579fdad344da49841e8",
-      "imagePaths": [
-        "images/i-20260703-f33a.jpg"
-      ],
-      "imageCommits": [
-        "55e08b0070a21a9c088c2579fdad344da49841e8"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: fix screenshot for i-20260703-b100 was captured on the wrong route (user /dashboard instead of the QA board /Metrics tab). Root fix: QA loop now strictly reads issue screenshot context (URL bar, screen content) to identify the exact route before recapture. Screenshot shown = correct Metrics tab view (same screen b100's fix should have used), confirming the process works. For b100 specifically: owner action required — click 'Not fixed' on b100 to allow re-submission with the correct Metrics tab screenshot. Permanent process rule added to SPEC: always extract route from issue screenshot URL bar before recapture.",
-        "imagePath": "images/i-20260703-f33a-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260703-f33a-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "66ade6bee50e0a44af20d096ddf08c7e083cb148",
-        "imageCommits": [
-          "66ade6bee50e0a44af20d096ddf08c7e083cb148"
-        ],
-        "fixedAt": "2026-07-03T13:55:31.905Z",
-        "by": "shakeebshaan",
-        "appCommit": "4bfa42ca",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Process fix documented. Screenshot shows correct Metrics board. b100 needs owner Not-fixed click for screenshot re-submission."
-        }
-      },
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "This is a complaint about QA fix verification methodology — fix screenshots were showing wrong pages. The issue raised is valid: fix shots need to show the ACTUAL fixed screen, not the dashboard or an unrelated page. The root cause is that the recapture flow navigates to /dashboard first for auth, then sometimes fails to reach the target route. Fix already applied (i-20260703 process): verification protocol updated to read ALL screenshots + critically confirm the recaptured PNG shows the correct screen. However owner wants a PERMANENT guardrail — requesting a way to auto-validate that fix screenshot matches the issue's route. This needs product discussion: should I add a route-hash check to qa.mjs resolve, or is the current manual review process sufficient?",
-      "reviewedAt": "2026-07-03T14:00:23.268Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260703-894f",
       "createdAt": "2026-07-03T13:44:37.791Z",
       "route": null,
