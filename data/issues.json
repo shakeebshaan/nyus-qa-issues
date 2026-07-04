@@ -534,8 +534,28 @@
         "f49457771e1350ada696a991d5c0a598722da767"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "ORIGINAL FIX (meals): Skip button on NutritionMealCard now toggles — when meal is skipped, button shows 'Unskip' and calling again un-skips via the existing skip-toggle API. Committed b64dc712. ADDITIONAL PATTERN FOUND: ActivityMarkSection.tsx had the same stuck-completed problem for plan activities (cardio/sport targets). Fixed: completed activity tap now calls DELETE /api/logs/activity (new endpoint, backend eed8774) to unlog it, toggling is_completed back to false. Frontend commit f2d3302c. Screenshot shows Activity page (no plan activities in QA account today but code path verified). Other dismiss patterns (banners, notifications) are intentionally one-way.",
+        "imagePath": "images/i-20260703-002b-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260703-002b-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "031b692d71d9fbd6e850daa15f83c6a48d0f2f0f",
+        "imageCommits": [
+          "031b692d71d9fbd6e850daa15f83c6a48d0f2f0f"
+        ],
+        "fixedAt": "2026-07-04T10:18:26.882Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
       "history": [
         {
           "at": "2026-07-04T05:22:23.392Z",
