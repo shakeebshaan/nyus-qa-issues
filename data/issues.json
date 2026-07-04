@@ -1014,7 +1014,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Two parts: (1) 'Not able to add the weight' — the Save may be failing on the LogWeight screen; note a revoked/expired token returns 401 on the weight POST, which would exactly present as 'can't add weight' (QA JWT is currently revoked). Needs authed repro to separate a real save bug from the auth 401. (2) 'write the entire UI from scratch' is a redesign = product/design call. Flagging for owner: confirm auth + desired redesign scope.",
+      "reviewedAt": "2026-07-04T23:26:31.104Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-8ebd",
