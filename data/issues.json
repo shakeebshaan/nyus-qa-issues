@@ -531,9 +531,9 @@
           }
         }
       ],
-      "needsReview": false,
-      "reviewReason": "Fix fully implemented and deployed. Visual verification blocked: QA account (panetet924@tatefarm.com) has zero diet plans — Nutrition page shows empty state so Adjust button cannot be demonstrated via headless capture. Code proof: (1) Backend POST /diet/log-modification now accepts {assigned_meal_id, scale} shorthand — computes ingredient modifications from recipe (commit 1ee9ace, deployed). (2) Frontend: Adjust button opens bottom Sheet with Slider 25-200%, calls scaleMeal mutation on Apply (Nutrition.tsx + useNutritionData.tsx + nutrition.service.ts, commit 43765386). TypeScript clean. Owner should verify by tapping Adjust on any meal card in the app — the bottom Sheet should slide up with the Slider.",
-      "reviewedAt": "2026-07-04T07:22:50.901Z",
+      "needsReview": true,
+      "reviewReason": "FIX DONE (commit 87960bba): Adjust slider now shows live macro preview (kcal/protein/carbs/fat) that updates in real-time as the slider moves, solving the 'Wrong' feedback — users can see actual values like 504 kcal / 42g P at 80% without mental math. Color-coded teal (reduction) / orange (increase). Screenshot attached. GATE BLOCKED: scoped test run (Nutrition.page.test.tsx) fails on pre-existing 'useAuth must be used within an AuthProvider' infrastructure rot — 15/29 pass, same failures exist on main before this commit. Recommend: set loop.json testCommand to 'npm run test:unit' (unit-only, not e2e) or fix the Nutrition test AuthProvider wrapper. Never faked --tests pass.",
+      "reviewedAt": "2026-07-04T09:12:04.220Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "what else find",
       "reviewRepliedAt": "2026-07-04T08:48:21.681Z",
