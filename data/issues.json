@@ -499,8 +499,30 @@
         "7b4efebed8072a660f2f9e8a83bbbcff48c5452a"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "QuickActionsBlock buttons redesigned: gradient teal fill for primary actions, muted secondary style for dismissal (I'll add later), larger touch targets (min-h-52px, py-3), h-5 w-5 icons, shadow-card + hover states. Log-a-walk teal gradient clearly distinct from I'll-add-later grey muted. Screenshot proves both button types render with correct hierarchy on 390px viewport. Commit 43765386.",
+        "imagePath": "images/i-20260703-894f-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260703-894f-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "eb74ee964aa9371a168e0b3aeb02f0c56dd8e5f3",
+        "imageCommits": [
+          "eb74ee964aa9371a168e0b3aeb02f0c56dd8e5f3"
+        ],
+        "fixedAt": "2026-07-04T07:21:33.290Z",
+        "by": "shakeebshaan",
+        "appCommit": "43765386a275f147e99dd6a3e3b69424b3a9c050",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Issue was flat/minimal button styling. Fix fully addresses: primary buttons (Log a walk, Redesign my split) get gradient teal fill with shadow-card; secondary/dismissal buttons (I'll add later) get muted bg — precise primary-vs-secondary hierarchy as per design system. Screenshot confirms both types render correctly."
+        }
+      },
       "history": [
         {
           "at": "2026-07-04T05:22:36.453Z",
