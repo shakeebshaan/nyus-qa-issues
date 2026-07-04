@@ -511,13 +511,13 @@
       ],
       "reportPath": "reports/1e0a-v4-final.html",
       "reportLabel": "Iteration 2 Live Sim — 97.3/100 (30 personas, all A-grade)",
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "fix more push more",
       "reviewRepliedAt": "2026-07-04T15:03:04.071Z",
       "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "97.3/100 avg Phase 2 LLM score achieved (30/30 A grade, was 90/100 pre-iteration). 4 root causes fixed: (1) protein targets raised to ISSN/NSCA 2023 values, (2) directional PROTEIN audit (OVER vs LOW), (3) LLM retry pass eliminates KCAL_LOW, (4) vegan quinoa examples. Quality trajectory: 66->88->95->94.1->97.3. Remaining minor issues: KCAL_DRIFT (4, -5pts each) and EXOTIC-quinoa (3, -10pts) from LLM non-compliance. Satisfaction bar is set to 100 — please lower to 97 to allow resolve, or confirm 97.3/100 is acceptable.",
-      "reviewedAt": "2026-07-04T12:26:26.015Z"
+      "reviewReason": "Live sim now 98.5/100 (Phase-2 v2 prompt hardening BE b917a47; 30/30 personas A-grade). The last ~1.5pts are inherent LLM non-compliance (occasional KCAL_DRIFT + exotic-ingredient leakage) - not fixable by more prompt tuning, and re-running the 1,000-plan sim each tick burns OpenAI billing (account-wide 429 risk). A true 100 needs a DETERMINISTIC backend post-processor (reject/regen meals whose names contain banned exotic tokens + final per-day kcal clamp) - a real, unit-testable BE change worth its own scoped tick. DECISION: (a) approve building that deterministic guard, or (b) lower the satisfaction bar to 97 to resolve at current 98.5. Bar is pinned at 100 so no fix can post honestly today.",
+      "reviewedAt": "2026-07-04T17:21:15.538Z"
     },
     {
       "id": "i-20260703-b696",
