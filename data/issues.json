@@ -448,8 +448,30 @@
         "7b4efebed8072a660f2f9e8a83bbbcff48c5452a"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: QuickActionsBlock used flat semi-transparent outlined buttons. Fix: primary actions now use a premium gradient (from-primary to deeper teal) with inner ring shine, layered teal glow shadow, and snap-back press animation (56-58px height). Secondary buttons use clean bg-card with subtle box-shadow. Gap increased to 2.5 for better breathing room.",
+        "imagePath": "images/i-20260703-894f-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260703-894f-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "316aaa90fb940889149c9be89e987b86e3d5750d",
+        "imageCommits": [
+          "316aaa90fb940889149c9be89e987b86e3d5750d"
+        ],
+        "fixedAt": "2026-07-04T07:36:09.456Z",
+        "by": "shakeebshaan",
+        "appCommit": "f310df0c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Gradient + inner ring + layered glow shadow on primary; clean card style on secondary. Clear premium redesign vs original flat outlined buttons. Screenshot proves the fix on the correct coach-chat screen."
+        }
+      },
       "history": [
         {
           "at": "2026-07-04T05:22:36.453Z",
