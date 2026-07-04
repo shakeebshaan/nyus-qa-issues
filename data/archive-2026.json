@@ -11166,6 +11166,32 @@
       "resolvedAt": "2026-07-04T11:46:25.891Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-04T11:46:25.891Z"
+    },
+    {
+      "id": "i-20260704-c2b7",
+      "createdAt": "2026-07-04T18:05:11Z",
+      "route": "/social",
+      "description": "[bug-hunt] Leaderboard \"My Group\" scope shows a contradictory rank for the current user. WHERE: src/components/LeaderboardView.tsx. WHAT: When a user has a partner group, the Global leaderboard shows a global/group scope toggle. In group scope the list is re-ranked group-relative (groupResults maps entry.rank = i+1, line ~205) so the top group member becomes #1. But the \"Your Rank\" card at the top (line ~332) unconditionally renders leaderboardData.current_user_rank.rank/score_label, which is the ABSOLUTE GLOBAL rank returned by the backend — it is never re-ranked for group scope. EXPECTED: in \"My Group\" scope the \"Your Rank\" card should show the user’s group-relative rank (matching their highlighted row in the list). ACTUAL: the card shows e.g. \"Your Rank #38\" (global) while the user’s highlighted row in the same list reads #2 (group). Two different ranks for the same user on one screen. REPRO: Social → Leaderboard → Global tab → (be in a partner group where you rank outside global top of that board) → tap \"My Group\" → compare the top \"Your Rank\" card number vs your highlighted row number. FIX: hide or recompute the current_user_rank card when scope===\"group\" (derive it from the re-ranked groupResults entry where is_current_user).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED: LeaderboardView now uses currentUserRankCard useMemo — in group scope it derives rank/score_label from the re-ranked groupResults entry (so it shows group-relative rank #N matching the highlighted row) instead of leaderboardData.current_user_rank (absolute global rank). Card hidden if user absent from group board. Code: LeaderboardView.tsx lines 215-222. Commit fa1b9684. TypeScript clean. loop.mjs verify GREEN. BLOCKED: satisfaction bar=100 prevents self-resolve. QA account has no partner group so My Group toggle is not visible — fix is code-verified. Please resolve manually or lower satisfaction slider for code fixes.",
+      "reviewedAt": "2026-07-04T18:35:44.936Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-04T22:01:10.581Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-04T22:01:10.581Z"
     }
   ]
 }
