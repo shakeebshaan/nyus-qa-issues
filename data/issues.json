@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260704-if01",
+      "createdAt": "2026-07-04T23:46:11.538Z",
+      "route": "/nutrition",
+      "description": "[suggestion] Live 16:8 intermittent-fasting timer on the Nutrition page. USER PROBLEM: the app already lets users flag a fasting day (Vrat / Full fast / 16:8 window) but that is a STATIC boolean banner -- it only pauses meal reminders. It does not tell the user where they are IN the fast, which is the whole point of intermittent fasting: how long have I fasted, and when does my eating window open/close? Without a live count, 16:8 is unusable and users abandon it. EVIDENCE: FastingBanner in src/pages/Nutrition.tsx (~lines 47-100) offers a '16:8 window' type but renders no timer/countdown -- a grep shows zero fasting-timer / eating-window code, so the live feature is a genuine gap, not a duplicate. Intermittent fasting is a headline retention feature in every major tracker used in India (HealthifyMe, Zero, Fastic), and vrat/fasting is already culturally central to this India audience (the app even ships a 'Vrat / fruit-only' fast type). V1 SCOPE: when the user picks the '16:8 window' fast type, capture the fast-start timestamp and show a calm circular progress ring (reuse the existing teal ring vocabulary) with 'Xh Ym fasted', the eating-window open time, and a state label (Fasting / Eating window open). Client-side only, NO backend: persist fastStart + window config in localStorage keyed by date; the ring updates from a 1-min interval; the existing 'End fast' button clears it. Skip push reminders and fast history in v1. EFFORT: roughly 1-2 days frontend, no backend, no schema -- extends the fasting toggle already on Nutrition.",
+      "descPrivate": false,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260704-gl01",
       "createdAt": "2026-07-04T22:39:39.375Z",
       "route": "/diet-plan",
