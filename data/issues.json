@@ -557,8 +557,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "FIXED (commit fb88bd3d). Root cause: When a workout session auto-completes (all exercises done), backend sets WorkoutSessionLog.completed_at. If user taps Log Set again (e.g. on a re-opened exercise), backend returns 400 'Workout already completed.' — which showed as a red destructive toast. Fix: Activity.tsx logSetMutation.onError now detects 'already completed' pattern and shows a friendly 'Workout complete! Your session is already finished — great work.' toast instead. The sets that were logged before completion are all saved correctly (no data loss). testGate=true, no workout set tests exist. Please resolve manually.",
-      "reviewedAt": "2026-07-04T23:18:19.178Z",
+      "reviewReason": "Real bug (completed workout + exercise sets not saving) but needs authenticated repro on the live Activity workout flow to root-cause (client set-log POST vs backend persistence). BLOCKED this tick: QA JWT is revoked (401 on all authed API calls), so I cannot reproduce or verify the save path headless. Likely backend/persistence — please re-mint the QA session or confirm so the loop can repro. Not guessing a fix without repro.",
+      "reviewedAt": "2026-07-04T23:26:12.542Z",
       "reviewedBy": "shakeebshaan"
     },
     {
