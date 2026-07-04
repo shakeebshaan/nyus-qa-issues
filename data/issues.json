@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260704-a3f1",
+      "createdAt": "2026-07-04T17:40:57.393Z",
+      "route": "/nutrition",
+      "description": "[suggestion] \"Close the gap\" macro-budget snack card on the Nutrition screen. WHAT: below the day’s meal list, once some meals are logged and there is a meaningful shortfall, show one calm card — e.g. “You’re 420 kcal and 28g protein under today’s target” — with 1–3 India-friendly snack suggestions sized to fit the remaining budget, each with a one-tap Log button that reuses the existing meal-log path. PROBLEM: users (esp. India-heavy vegetarian base) routinely end the day under their protein/kcal target but the app only shows the number — it never tells them WHAT small thing to eat to close it, so the gap just persists. EVIDENCE: Nutrition already computes targetCalories/effectiveTarget + consumed (rings on Dashboard/DailyFocus), so ‘remaining’ is free; comparable trackers (HealthifyMe, MyFitnessPal) surface ‘X kcal remaining’ with quick-add picks; owner has repeatedly asked (i-20260701-738b review notes) that the plan feel actionable and motivating, not just informational. V1 SCOPE: new card component on /nutrition, gated on remaining kcal > ~150 and afternoon/evening; suggestions in v1 come with NO new LLM cost — filter a small curated high-protein Indian snack table (dal, curd, roasted chana, paneer cubes, boiled egg/sprouts, whey) + the user’s own saved/custom ingredients to fit remaining kcal, rank by protein-fit; one-tap Log uses existing endpoint (macros known). No backend change required for v1 (static table client-side); optional personalized-suggestion endpoint later. EFFORT: ~1–2 days FE, minimal/no BE.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260701-738b",
       "createdAt": "2026-07-01T21:35:01.769Z",
       "route": null,
