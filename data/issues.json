@@ -35,7 +35,11 @@
         "auto"
       ],
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "DEPLOY BLOCKER: article committed + pushed to NYUSLANDING repo (commit 1998eef) but live URL is 404 because DEPLOY_SSH_KEY repo secret is unset in GitHub Actions (deploy.yml skips the scp step). To fix: set the DEPLOY_SSH_KEY secret in the nyus-qa-issues or NYUSLANDING repo settings to the private key that can SSH into 140.245.238.38, then the deploy.yml workflow will run scp static/blog/ to Oracle host automatically. Alternative: owner runs manual scp from their machine. This is an infrastructure/secret configuration issue, not a code bug.",
+      "reviewedAt": "2026-07-04T23:42:22.182Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260701-738b",
