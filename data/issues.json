@@ -585,8 +585,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Add Food bottom sheet (CustomMealModal) shows content cut off behind the bottom nav in the screenshot, but code-wise the modal backdrop is z-50 and BottomNav is z-40 (modal is above nav), so the reported overlap isn't reproducible from the source alone — a stacking-context/transform interaction is likely. Needs live authed repro on the diet Add-Food flow to root-cause. BLOCKED: QA JWT revoked (401) + no diet plan on QA acct. Not guessing a z-index/padding change blind.",
-      "reviewedAt": "2026-07-04T23:26:21.943Z",
+      "reviewReason": "AMBIGUOUS — description 'Hidden ui' doesn't specify what is hidden. The screenshot shows the Add Food bottom sheet (CustomMealModal.tsx) with Quick Log/Ingredients tabs. Possible interpretations: (1) Quick Log tab content not visible when selected; (2) the sheet itself is too short, cutting off content; (3) something behind the sheet overlay is being hidden unintentionally. Need owner to clarify: what specifically is hidden? Which tab, which screen, what action triggers the hidden state?",
+      "reviewedAt": "2026-07-04T23:27:35.194Z",
       "reviewedBy": "shakeebshaan"
     },
     {
