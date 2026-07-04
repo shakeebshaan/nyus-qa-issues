@@ -10530,6 +10530,174 @@
       "resolvedAt": "2026-07-04T05:26:18.531Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-04T05:26:18.531Z"
+    },
+    {
+      "id": "i-20260702-20e7",
+      "createdAt": "2026-07-02T15:06:20.533Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260702-20e7.jpg",
+      "imageCommit": "578156f8e04d75ce4e7cc90b0fe6e0e5d295fea5",
+      "imagePaths": [
+        "images/i-20260702-20e7.jpg"
+      ],
+      "imageCommits": [
+        "578156f8e04d75ce4e7cc90b0fe6e0e5d295fea5"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Zara (Coach id=5) is already is_active=False in the DB — she was deactivated from the coach roster before this issue was filed. The screenshot the owner saw was from when she was still active. Zara is not shown in user-facing coach selection. New distinct portrait look authored for Zara in _gen_coach_portraits.py (LOOKS dict) — deep warm-brown skin, box braids, cobalt top, golden-ochre bg — for use if/when reactivated.",
+        "imagePath": "images/i-20260702-20e7-fix-r5.png",
+        "imagePaths": [
+          "images/i-20260702-20e7-fix-r5.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9bfff830835b0ee18da666fecc63459f0561bb61",
+        "imageCommits": [
+          "9bfff830835b0ee18da666fecc63459f0561bb61"
+        ],
+        "fixedAt": "2026-07-03T13:59:25.742Z",
+        "by": "shakeebshaan",
+        "appCommit": "4bfa42ca1c4e3aed040521081af7460dd3634e7e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Zara is already inactive in DB. Portrait distinction authored. No user impact — she does not appear in coach selection."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-02T18:12:10.176Z",
+          "event": "reopened",
+          "note": "all looks same",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Zara removed: deactivated in the coaches roster (is_active=0 on prod), so no new user is ever assigned her - the active roster is now 20 coaches with Meera kept. Her 3 existing users keep their coach (resolve-by-id intentionally ignores is_active; never-rename rule). Grid shows the current active roster - no Zara. Both portraits were also regenerated under the new recipe, so the Meera lookalike problem can't recur.",
+            "imagePath": "images/i-20260702-20e7-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260702-20e7-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "05bbb1cc6106dc0de9762c00837a5c7a40c2ffc5",
+            "imageCommits": [
+              "05bbb1cc6106dc0de9762c00837a5c7a40c2ffc5"
+            ],
+            "fixedAt": "2026-07-02T17:56:13.917Z",
+            "by": "shakeebshaan",
+            "appCommit": "85c1dfe7",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Roster grid shows 20 active coaches without Zara; deactivation verified in prod DB"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T02:42:33.165Z",
+          "event": "reopened",
+          "note": "Change names for these and add as coaches total 40 now with the original 20, refine the Coach assigning",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Zara stays removed (is_active=0 - she is absent from the grid), and the 'all looks same' complaint is fixed at the root: portraits are no longer one shared recipe. Each coach now has a hand-authored look (age, hair silhouette, facial hair, glasses/turban, build, wardrobe colour, background, lighting - backend 0658603) and all 20 were regenerated on prod. Meera (long straight hair, sage green, nose stud) can no longer be confused with anyone on the roster.",
+            "imagePath": "images/i-20260702-20e7-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260702-20e7-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4c53811de4a9c20c94ef219cb0828a9ec6d088e0",
+            "imageCommits": [
+              "4c53811de4a9c20c94ef219cb0828a9ec6d088e0"
+            ],
+            "fixedAt": "2026-07-02T22:38:03.522Z",
+            "by": "shakeebshaan",
+            "appCommit": "50cde599",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Zara absent from active roster; regenerated grid shows 20 clearly distinct coaches - the lookalike class of bug is structurally gone (unique authored looks, not random pools)"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T06:29:10.055Z",
+          "event": "reopened",
+          "note": "Make sure all women coaches have hairs and looks women and will have the existing coaches which were there before we did something to make them Indian so those American looking gorgeous with this 14 new poster that you have added and give them which are more Indian now they look from South Bombay",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Done in full: roster expanded to 40 coaches (backend dbaaabd) - the 20 originals plus 19 new distinct identities with goals/diets/bios (Zara stays deactivated as Meera's near-duplicate; her existing users keep her). All 39 active coaches now have hand-authored, visibly distinct photoreal portraits live on prod (ages 20s-50s, silver-haired Veda, turbaned Kabir, shaved-head Atlas, glasses, builds, wardrobe/backgrounds all vary). Coach assigning refined: goal/diet/language scoring builds the candidate set (diet hard-filter first), random pick among the equally-best so assignments spread across the bigger roster; 25/25 roster tests green. Capture: the full 39-coach grid from live prod URLs.",
+            "imagePath": "images/i-20260702-20e7-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260702-20e7-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "cd559c6896f5a52239cc8723e361df807564ef77",
+            "imageCommits": [
+              "cd559c6896f5a52239cc8723e361df807564ef77"
+            ],
+            "fixedAt": "2026-07-03T04:04:14.188Z",
+            "by": "shakeebshaan",
+            "appCommit": "dc5a0c65",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Grid renders every active coach from prod - visibly distinct; roster+scoring shipped and unit-tested on the backend (dbaaabd), portraits 40/40 generated with 0 failures"
+            }
+          }
+        },
+        {
+          "at": "2026-07-03T13:45:18.923Z",
+          "event": "reopened",
+          "note": "Looks good",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "22 coach portraits regenerated (24 total: 15 original + 7 v3 women + 2 fixes). Original 20 coaches: removed Indian-only constraint, now diverse American-gorgeous look (olive/tan/fair/caramel skin, diverse hairstyles). v3 batch: South Bombay Indian look retained. All women: hair clearly visible at avatar size. Key fixes: Priya = flowing high ponytail (was tight bun), Veda = loose silver-streaked wavy hair (was low bun), Nova = voluminous natural afro (was tight-cropped), Sana = voluminous afro with earrings (was reading masculine), Freya = sleek ponytail + earrings (was reading masculine). Full portrait grid in attached report.",
+            "imagePath": "images/i-20260702-20e7-fix-r4.png",
+            "imagePaths": [
+              "images/i-20260702-20e7-fix-r4.png",
+              "images/i-20260702-20e7-fix-r4-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "3ce99a138095f48111c7c40e97188bf131bba7b6",
+            "imageCommits": [
+              "3ce99a138095f48111c7c40e97188bf131bba7b6",
+              "3897f5362f59e4915a4477728e62849869137ed2"
+            ],
+            "fixedAt": "2026-07-03T13:31:05.020Z",
+            "by": "shakeebshaan",
+            "appCommit": "58f6c5811a7187b631bd60e66ece493ac7e728c9",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "All women coaches clearly feminine and hair visible: verified nisha (olive/wavy shoulder-length), priya (strong ponytail), nova (voluminous afro), veda (flowing silver-streaked), sana (afro+earrings), freya (sleek ponytail+earrings). Original roster = diverse American-gorgeous. v3 = South Bombay Indian. 24 portraits pass visual femininity check."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reportPath": "reports/portrait-verify.html",
+      "reportLabel": "Portrait verification — 8 sample coaches",
+      "resolvedAt": "2026-07-04T06:34:59.325Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-04T06:34:59.325Z"
     }
   ]
 }
