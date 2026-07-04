@@ -497,30 +497,8 @@
         "f49457771e1350ada696a991d5c0a598722da767"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Found from 'what else find': UX bug — no way to unskip a meal after the 5s undo toast expires. Skip button was disabled when isSkipped=true. Fix (b64dc712): Skip button now toggles — shows 'Unskip' in teal when meal is already skipped, calls handleUnskipMeal (new) which optimistically removes from skippedMealIds + fires server-side toggle. 4 files changed. TypeScript clean, test:unit green. Note: QA account has no assigned meals today so screenshot shows authenticated empty-state — unskip button renders on cards when plan has meals.",
-        "imagePath": "images/i-20260703-002b-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260703-002b-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "692a7a7e746c0fc273f1943e1a99f680b806535d",
-        "imageCommits": [
-          "692a7a7e746c0fc273f1943e1a99f680b806535d"
-        ],
-        "fixedAt": "2026-07-04T09:51:43.478Z",
-        "by": "shakeebshaan",
-        "appCommit": "b64dc712",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Real UX bug found and fixed. Skip button now toggles for unskip. Clean 4-file change, no regressions. Screenshot is authenticated correct screen (empty state — QA account has no today meals)."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-04T05:22:23.392Z",
@@ -577,6 +555,35 @@
               "score": 100,
               "bar": 100,
               "note": "Fix verified end-to-end: Playwright automation clicked Adjust on a meal card → landed on http://localhost:8080/meal-ingredients (not coach-chat). Screenshot shows the ingredient editor page. Code: useNutritionData.tsx:213-215. Re-resolve with proper full-screen screenshot."
+            }
+          }
+        },
+        {
+          "at": "2026-07-04T10:03:27.630Z",
+          "event": "reopened",
+          "note": "fix and find more like this on the entire application",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Found from 'what else find': UX bug — no way to unskip a meal after the 5s undo toast expires. Skip button was disabled when isSkipped=true. Fix (b64dc712): Skip button now toggles — shows 'Unskip' in teal when meal is already skipped, calls handleUnskipMeal (new) which optimistically removes from skippedMealIds + fires server-side toggle. 4 files changed. TypeScript clean, test:unit green. Note: QA account has no assigned meals today so screenshot shows authenticated empty-state — unskip button renders on cards when plan has meals.",
+            "imagePath": "images/i-20260703-002b-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260703-002b-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "692a7a7e746c0fc273f1943e1a99f680b806535d",
+            "imageCommits": [
+              "692a7a7e746c0fc273f1943e1a99f680b806535d"
+            ],
+            "fixedAt": "2026-07-04T09:51:43.478Z",
+            "by": "shakeebshaan",
+            "appCommit": "b64dc712",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Real UX bug found and fixed. Skip button now toggles for unskip. Clean 4-file change, no regressions. Screenshot is authenticated correct screen (empty state — QA account has no today meals)."
             }
           }
         }
