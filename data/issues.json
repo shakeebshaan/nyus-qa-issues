@@ -729,8 +729,30 @@
         "7b4efebed8072a660f2f9e8a83bbbcff48c5452a"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Button visual hierarchy confirmed. Secondary/dismissal buttons (I'll add later) get bg-transparent + text-muted-foreground (computed: rgb(73,90,86) muted gray-green, transparent bg) vs primary buttons (Log a walk) get bg-primary/5 + text-primary-text (computed: oklab teal, rgba(23,130,105,0.05) teal-tinted bg). QuickActionsBlock.tsx:62-80 regex matches 'later'. Full-screen 390px screenshot shows coach chat with correct button hierarchy.",
+        "imagePath": "images/i-20260703-894f-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-894f-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "435f673887624a6b70145a2266c036595a9f6615",
+        "imageCommits": [
+          "435f673887624a6b70145a2266c036595a9f6615"
+        ],
+        "fixedAt": "2026-07-04T05:45:04.114Z",
+        "by": "shakeebshaan",
+        "appCommit": "49c0e817",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Fix fully verified: computed CSS colors differ (teal vs muted-gray-green), DOM classes correct, 28/28 QuickActionsBlock tests pass. Re-resolve with proper full-screen 390px screenshot replacing the insufficient previous capture."
+        }
+      },
       "history": [
         {
           "at": "2026-07-04T05:22:36.453Z",
