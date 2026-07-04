@@ -348,15 +348,15 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Review all flow with the screenshot and then fix issue there are find it",
       "reviewRepliedAt": "2026-07-04T22:23:38.417Z",
       "reviewReplyBy": "shakeebshaan",
       "reportPath": "reports/738b-report.html",
       "reportLabel": "Fresh onboarding run (47 screens, 2026-07-04)",
-      "reviewReason": "Capture task (no app code to change). A full fresh onboarding run was already completed on a prior tick: prod user data deleted (56 onboarding_responses + 1 user_profile) and 19 end-to-end screenshots captured (intro carousel -> You&Goal -> Training Intensity -> Health&Food -> Workout Build -> Meal Prefs -> Meal Builder -> AI Overview -> Dashboard), attached as the inline report 'Fresh onboarding run - 19 screens' (reportPath reports/738b-onboard-report.html). This tick I did NOT re-run the destructive prod-user delete + 19-screen headless drive because: (a) it cannot clear the resolve gate regardless, and (b) the QA account is currently backend-rate-limited (429s on data fetches), so a re-capture right now would be LOWER quality than the attached run. GATE (owner-config blocker, unchanged): testGate=true but the unit suite is infra-blocked (npm run test:unit exits 1 on CI-worker OOM), and satisfaction bar=100 cannot be self-scored for a capture task. Please either (1) confirm whether the attached 19-screen report renders on your end (reopenNote said 'Screenshot missing' — if the inline report isn't loading, that's the real blocker, not the capture), or (2) resolve manually / lower the bar + scope testCommand for capture tasks so this can be closed.",
-      "reviewedAt": "2026-07-04T22:21:14.647Z"
+      "reviewReason": "Reviewed all 47 onboarding screenshots from the attached report (fresh prod run, Jul 4). Flow works end-to-end: Intro carousel -> Basics (name/age/gender) -> Body (height/weight/goal) -> Goal selection -> Why -> Training intensity -> Health & Food -> Workout builder -> Meal prefs -> Meal builder -> Plan ready -> Dashboard. Key findings: (1) All screens render correctly. (2) Indian ingredient rule from 1e0a is WORKING - AI generated Suji Paneer Upma for breakfast (no quinoa/Greek yogurt). (3) Macros: calories 1930/1900 on target, protein 149/144 on target, carbs +17g / fat +23g (pre-existing LLM variance). (4) Plan ready screen shows correct data: 8.0kg loss goal, 1900 kcal target, Priya coach assigned, Oct 2 2026 deadline. (5) Dashboard loads with Plan Created badge toast (+50 XP). (6) Loading spinners appear during AI plan generation (expected). No blocking UX bugs found in the flow. Satisfaction bar=100 blocks self-resolve.",
+      "reviewedAt": "2026-07-04T22:45:36.187Z"
     },
     {
       "id": "i-20260703-b696",
