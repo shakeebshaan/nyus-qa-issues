@@ -589,8 +589,8 @@
       "reviewReply": "apply all what you can fron this report",
       "reviewRepliedAt": "2026-07-04T08:48:06.367Z",
       "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "S8 (science/methodology section on ChoosePlan) already shipped FE 08da3d1f. Of the report's 8 suggestions, the rest are blocked on owner-only calls, not code: S1 conflicts with your standing 'app is UNGATED' directive (won't re-gate without explicit reversal); S2 (open beta) + S3 (influencers) are release/marketing actions you run; S4 transformation wall needs REAL before/after user photos+consent (won't fabricate testimonials - legal risk). S5 referral flow, S6 Google Fit/Health Connect, S7 30-day challenge are each multi-day features. DECISION NEEDED: pick ONE of S5/S6/S7 to build next and I'll ship it in a dedicated tick.",
-      "reviewedAt": "2026-07-04T17:20:49.725Z"
+      "reviewReason": "Shipped S5 + S7 from market research report. S5 (referral flow): backend GET /api/v1/referral/my-code lazily generates unique 8-char code per user (migration: user_profiles_002_referral_code.py, deployed). ProfileReferralCard on Profile page with copy + native share. S7 (30-day challenge): ProfileChallengeCard on Profile using existing streak endpoint — no new BE. FE commits 148e750b (Profile+Nutrition), BE commit 2b5fd48. S6 (Google Fit/Health Connect) requires @capacitor-community/health-connect Android plugin — separate multi-day build, proposed for next sprint. GATE BLOCKED: testGate=true, full test suite infra-blocked.",
+      "reviewedAt": "2026-07-04T18:05:20.742Z"
     },
     {
       "id": "i-20260704-f5ec",
