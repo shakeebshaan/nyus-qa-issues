@@ -579,7 +579,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Add Food bottom sheet (CustomMealModal) shows content cut off behind the bottom nav in the screenshot, but code-wise the modal backdrop is z-50 and BottomNav is z-40 (modal is above nav), so the reported overlap isn't reproducible from the source alone — a stacking-context/transform interaction is likely. Needs live authed repro on the diet Add-Food flow to root-cause. BLOCKED: QA JWT revoked (401) + no diet plan on QA acct. Not guessing a z-index/padding change blind.",
+      "reviewedAt": "2026-07-04T23:26:21.943Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-8871",
