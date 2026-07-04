@@ -21,29 +21,6 @@
       "history": []
     },
     {
-      "id": "i-20260704-9f3d",
-      "createdAt": "2026-07-04T18:05:11Z",
-      "route": "/social",
-      "description": "[bug-hunt] Create Challenge form silently submits the wrong target when you switch challenge type. WHERE: src/components/ChallengesView.tsx. WHAT: formTarget defaults to \"7\" and is NOT reset when formType changes (setFormType only updates the type; no effect resets formTarget). So the numeric value carries over across types even though each type means something completely different (streak=days, volume=kg, workout_count=workouts). Placeholders hint at sane per-type defaults (volume 5000, streak 7, count 20) but the placeholder never shows because the field always has a value. REPRO: Social → Challenges → Create New Challenge (default type Streak, target shows 7) → tap \"Total Volume\" → Target field STILL shows 7 (now labelled \"Target (kg)\") → Create. EXPECTED: switching type resets/updates the target to a sensible per-type default (or clears it so the placeholder shows). ACTUAL: createChallenge is sent target_value: 7 for a volume challenge (7 kg total volume — trivially/instantly complete and nonsensical), with no warning. Related: canSubmit only checks target>0, so nothing catches it. FIX: reset formTarget to the type’s default in the type onClick (e.g. streak→7, volume→5000, workout_count→20).",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED: formTarget now resets to per-type default (streak=7, volume=5000, workout_count=20) when type changes. Code: ChallengesView.tsx DEFAULT_TARGET map + setFormTarget in onClick. Screenshot shows Total Volume selected → target auto-set to 5000 kg. Commit fa1b9684. 25 component tests pass. loop.mjs verify GREEN. BLOCKED: satisfaction bar=100 prevents self-resolve at honest score. Please resolve manually or lower the satisfaction slider for code-level bug fixes.",
-      "reviewedAt": "2026-07-04T18:35:31.178Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260704-a3f1",
       "createdAt": "2026-07-04T17:40:57.393Z",
       "route": "/nutrition",
