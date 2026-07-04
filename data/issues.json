@@ -471,7 +471,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix SHIPPED (783006c5, pushed to main). Root cause: WaterTrackerCard.tsx used new Date().toISOString().slice(0,10) (UTC date) for the 'already celebrated' localStorage key, but todayLocal() is used everywhere else — a ~5.5h IST window daily where UTC date differs from local date caused alreadyCelebrated() to return false on remount, re-triggering celebration every visit after the goal was met. Fixed: key now uses todayLocal() to match user's perceived day. Verified via code. GATE BLOCKER: testGate=true but no WaterTrackerCard tests exist, and npm run test:unit is infra-blocked (OOM). QA account has no diet plan so WaterTracker not visually capturable. Request: scope loop.json testCommand or resolve manually.",
+      "reviewedAt": "2026-07-04T22:51:01.766Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-8087",
