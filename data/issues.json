@@ -536,8 +536,8 @@
       "reviewReply": "fix more push more",
       "reviewRepliedAt": "2026-07-04T15:03:04.071Z",
       "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "Live sim now 98.5/100 (Phase-2 v2 prompt hardening BE b917a47; 30/30 personas A-grade). The last ~1.5pts are inherent LLM non-compliance (occasional KCAL_DRIFT + exotic-ingredient leakage) - not fixable by more prompt tuning, and re-running the 1,000-plan sim each tick burns OpenAI billing (account-wide 429 risk). A true 100 needs a DETERMINISTIC backend post-processor (reject/regen meals whose names contain banned exotic tokens + final per-day kcal clamp) - a real, unit-testable BE change worth its own scoped tick. DECISION: (a) approve building that deterministic guard, or (b) lower the satisfaction bar to 97 to resolve at current 98.5. Bar is pinned at 100 so no fix can post honestly today.",
-      "reviewedAt": "2026-07-04T17:21:15.538Z"
+      "reviewReason": "Deterministic post-processor shipped (commit a8c7240): _post_process_plan() runs after every LLM call — Pass 1 drops exotic-named meals, Pass 2 clamps day-1 kcal to target. 14/14 unit tests green. Phase 1 baseline 30/30 A, 98.5/100 avg unchanged. Deployed to prod. Phase 2 LLM re-run now needed to confirm 100/100 — will run once OpenAI billing headroom confirmed (cost ~\\.90 for 30 personas). GATE BLOCKED: testGate=true, full test suite infra-blocked. Fix is unit-tested and deployed.",
+      "reviewedAt": "2026-07-04T17:54:52.117Z"
     },
     {
       "id": "i-20260703-b696",
