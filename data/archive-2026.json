@@ -10295,6 +10295,54 @@
       "resolvedAt": "2026-07-03T17:59:25.335Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-03T17:59:25.335Z"
+    },
+    {
+      "id": "i-20260703-2db8",
+      "createdAt": "2026-07-03T13:43:39.583Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260703-2db8-0.jpg",
+      "imageCommit": "c8b619befc79336ce17600804c42ab5d5ff9bee8",
+      "imagePaths": [
+        "images/i-20260703-2db8-0.jpg",
+        "images/i-20260703-2db8-1.jpg"
+      ],
+      "imageCommits": [
+        "c8b619befc79336ce17600804c42ab5d5ff9bee8",
+        "8fefb083a8564b37260d028beca5d80bdfdc4de3"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Water goal celebration (confetti + sound) now fires only once per day. Root cause: WaterTrackerCard remounts on navigation (away + back), and on remount the data loads from 0 triggering false-to-true on reached. Fix: localStorage key nyus_water_celebrated_YYYY-MM-DD persists across remounts; prevReached initializes to true if already celebrated today.",
+        "imagePath": "images/i-20260703-2db8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260703-2db8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "87b73744707ddfe0859d6151ef300c76c5b6ee27",
+        "imageCommits": [
+          "87b73744707ddfe0859d6151ef300c76c5b6ee27"
+        ],
+        "fixedAt": "2026-07-03T13:55:27.467Z",
+        "by": "shakeebshaan",
+        "appCommit": "4bfa42ca1c4e3aed040521081af7460dd3634e7e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "localStorage persistence across remounts. 317/317 component tests pass."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-04T05:23:01.761Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-04T05:23:01.761Z"
     }
   ]
 }
