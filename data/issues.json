@@ -592,30 +592,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Created 2 HTML reports per reopenNote: (1) User Health & Progress Report — dark-themed personal dashboard with SVG weight journey bar, 7-day compliance grid, calorie breakdown (BMR/TDEE/Target), upcoming workouts (2) Platform Intelligence Report — 18-feature matrix with category/status, 5 open QA issues, tech stack, deployment status. Both attached as private inline reports on board. Real prod API data (profile, overview, weight history, weekly progress).",
-        "imagePath": "images/i-20260704-f5ec-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260704-f5ec-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f252d3a28fe7e1486bf825461c87c6a57f973d28",
-        "imageCommits": [
-          "f252d3a28fe7e1486bf825461c87c6a57f973d28"
-        ],
-        "fixedAt": "2026-07-04T09:46:18.360Z",
-        "by": "shakeebshaan",
-        "appCommit": "87960bba",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Fully satisfies reopenNote: 2 HTML reports created, attached as private inline docs, use real prod data, professional design."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-04T08:33:21.501Z",
@@ -643,6 +621,35 @@
               "score": 100,
               "bar": 100,
               "note": "10 distinct report categories covering every available data signal from prod DB. Real numbers queried live from prod (203 users, 127 subs, 7879 LLM logs, 28359 recipes, etc.). Actionable recommendations in each section. Comprehensive single-document compendium as requested."
+            }
+          }
+        },
+        {
+          "at": "2026-07-04T10:02:18.645Z",
+          "event": "reopened",
+          "note": "pin this beside matrics \"NYUS Platform\nIntelligence Report\n\"",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Created 2 HTML reports per reopenNote: (1) User Health & Progress Report — dark-themed personal dashboard with SVG weight journey bar, 7-day compliance grid, calorie breakdown (BMR/TDEE/Target), upcoming workouts (2) Platform Intelligence Report — 18-feature matrix with category/status, 5 open QA issues, tech stack, deployment status. Both attached as private inline reports on board. Real prod API data (profile, overview, weight history, weekly progress).",
+            "imagePath": "images/i-20260704-f5ec-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260704-f5ec-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "f252d3a28fe7e1486bf825461c87c6a57f973d28",
+            "imageCommits": [
+              "f252d3a28fe7e1486bf825461c87c6a57f973d28"
+            ],
+            "fixedAt": "2026-07-04T09:46:18.360Z",
+            "by": "shakeebshaan",
+            "appCommit": "87960bba",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Fully satisfies reopenNote: 2 HTML reports created, attached as private inline docs, use real prod data, professional design."
             }
           }
         }
