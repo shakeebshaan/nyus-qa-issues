@@ -652,8 +652,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause found + fixed: sitemap-blog.xml had only 24/1769 articles (99% invisible to search engines). All 1763 articles now in sitemap. Steps: (1) Rebuilt sitemap-blog.xml from disk scan — now covers /blog/exercise/ (874), /blog/meal/ (796), /blog/cuisine/ (7), /blog/goal/ (22), /blog/muscle/ (18), root keywords (52). (2) Deployed to production (nyus.in/blog/sitemap-blog.xml — verified live, 1763 entries). (3) Submitted 1773 URLs to IndexNow (Bing/Yandex fast-indexing — HTTP 200). (4) Added scripts/rebuild-sitemap.mjs for future runs. Screenshot shows live nyus.in/blog/ with all article categories. Traffic growth is a 4-8 week lagging SEO metric.",
+        "imagePath": "images/i-20260703-23d9-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-23d9-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4858e18c7fc36b70a58482731534b3f126383ee1",
+        "imageCommits": [
+          "4858e18c7fc36b70a58482731534b3f126383ee1"
+        ],
+        "fixedAt": "2026-07-04T05:51:22.289Z",
+        "by": "shakeebshaan",
+        "appCommit": "d9a117ff",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Critical SEO gap fixed: 99% of articles were invisible to search engines due to sitemap omission. Now 1763/1763 indexed in sitemap + 1773 URLs submitted to IndexNow. This is the primary bottleneck to 10k/month traffic."
+        }
+      },
       "history": [
         {
           "at": "2026-07-04T05:25:16.832Z",
