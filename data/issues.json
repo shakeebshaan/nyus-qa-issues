@@ -337,8 +337,8 @@
       "reviewReplyBy": "shakeebshaan",
       "reportPath": "reports/738b-onboarding-report.html",
       "reportLabel": "Fresh onboarding run — 20 screens",
-      "reviewReason": "Prior root cause (board rendered blank for the 1.05MB report - GitHub JSON contents API caps at 1MB) is FIXED (raw media type, board a035f4b); the 34-screen fresh-onboarding report is attached (reports/738b-onboarding-report.html). Your 'delete user and try again' asks for a NEW capture run, which is (1) not a source-code fix and (2) requires destructively wiping the shared QA account's onboarding data + a long headless Playwright drive (recapture is known-flaky on this Windows Server box). I will not auto-delete account data. DECISION: confirm the attached 34-screen report renders OK for you (then I resolve), OR explicitly green-light the destructive QA-account reset + full re-capture as a dedicated capture run.",
-      "reviewedAt": "2026-07-04T17:21:25.546Z"
+      "reviewReason": "DONE: Fresh onboarding run completed. QA account reset (user_profiles/user_goals/onboarding_responses deleted, onboarding_complete=0). Captured 20 full-screen shots across all 7 onboarding steps — intro carousel, You&Goal (4 tabs), Training, Health&Food, Workout builder (Coach Veda, 4-day Full gym, Double progression), Diet builder (North Indian, 3 meals, 2061 kcal: Oats Egg Cheela/Chicken Rice Plate/Chicken Palak Roti), AI overview (6 agents), Plan ready (70→65 kg, 12wk, 0.39 kg/wk), Dashboard. Report attached inline ('Fresh onboarding run — 20 screens'). GATE BLOCKED: this is a capture task (no code changed) — no per-fix tests exist to scope. Full npm test suite is infra-blocked (~39 min, RED on flakes). Please resolve manually or lower testCommand in data/loop.json to a unit subset.",
+      "reviewedAt": "2026-07-04T17:45:14.792Z"
     },
     {
       "id": "i-20260702-1e0a",
