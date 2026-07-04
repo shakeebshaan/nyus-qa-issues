@@ -610,10 +610,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Frontend NaN hardened + pushed (app commit 21c05d06): coach Log Meal block no longer renders 'NaN kcal' / bare 'kcal' when a food item lacks nutrition; it now falls back to 'Nutrition unavailable'. CORE complaint ('coach sections don't have accurate data/context') is backend: the coach LLM emits Log Meal items with missing calories/macros, so the data itself is absent. Real fix = backend prompt/tooling must populate kcal+P/C/F for every food option in a Log Meal block + feed real user context; backend change + prod deploy, owner-scope. Board proof also blocked: QA account has no diet plan, so diet/coach screens render only a spinner in headless recapture.",
       "reviewedAt": "2026-07-04T23:04:12.569Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Fix more issues in this",
+      "reviewRepliedAt": "2026-07-04T23:16:18.287Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-7ae8",
