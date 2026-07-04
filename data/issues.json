@@ -391,49 +391,6 @@
       "reviewedAt": "2026-07-03T13:54:51.337Z"
     },
     {
-      "id": "i-20260703-8d04",
-      "createdAt": "2026-07-03T13:03:34.633Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260703-8d04.jpg",
-      "imageCommit": "c19c9f3658f81d2266df31a8f6fa1c1dfd7f7c4a",
-      "imagePaths": [
-        "images/i-20260703-8d04.jpg"
-      ],
-      "imageCommits": [
-        "c19c9f3658f81d2266df31a8f6fa1c1dfd7f7c4a"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: 16 pre-launch disposable email domains and 8 owner/test gmail.com accounts were missing from TEST_EMAIL_DOMAINS/TEST_EMAILS in metrics_db.py, so 29 accounts appeared as live users in the acquisition funnel. Fix: 2026-07-03 DB audit added all missing domains (nyspring.com, fpxnet.com, ryzid.com, homephit.com, kinws.com, etc.) + all pre-launch gmail.com test accounts. Funnel now shows '0 live users yet — everything on record is a test account'; paid revenue live = 0. All 202+ pre-launch accounts correctly excluded. Metrics start clean after launch. Backend commit d581a1b.",
-        "imagePath": "images/i-20260703-8d04-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260703-8d04-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "bf6e00befc59375eca2ec200ecf4a2c767c7ab92",
-        "imageCommits": [
-          "bf6e00befc59375eca2ec200ecf4a2c767c7ab92"
-        ],
-        "fixedAt": "2026-07-03T13:39:26.731Z",
-        "by": "shakeebshaan",
-        "appCommit": "d581a1b",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Verified: board Metrics tab shows 0 live users, 0 paid revenue. DB audit comprehensive — all 41 test domains now excluded. Screenshot proves the funnel message and paid=0."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260703-1fc5",
       "createdAt": "2026-07-03T13:07:13.876Z",
       "route": null,
