@@ -10820,6 +10820,80 @@
       "resolvedAt": "2026-07-04T06:45:09.685Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-04T06:45:09.685Z"
+    },
+    {
+      "id": "i-20260703-1fc5",
+      "createdAt": "2026-07-03T13:07:13.876Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Context-aware moments: useDashboardMoment picks ACTIVITY_BEHIND pool (activityProgress 0%) showing 'The hardest part is starting. After 5 minutes it gets easier.' useCoachMoment now wired to teal nudge card -> /coach-chat when >24h since last chat. 5 context pools + 15-entry generic fallback. TS clean. commit f207eef7.",
+        "imagePath": "images/i-20260703-1fc5-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260703-1fc5-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bb1783635ea3bec3273b2cdad2b9d4f9acde7963",
+        "imageCommits": [
+          "bb1783635ea3bec3273b2cdad2b9d4f9acde7963"
+        ],
+        "fixedAt": "2026-07-04T06:02:14.155Z",
+        "by": "shakeebshaan",
+        "appCommit": "f207eef7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Context-aware moment renders correctly based on live overview data; coach nudge card added but correctly suppressed when last_coach_chat recent; all pools verified."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-04T05:25:55.750Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Implemented live moment cards across Dashboard, Social, and CoachChat FAB. Dashboard: daily rotating coach insight (10-tip pool, seeded by user+date, purple accent) — 'Protein first, then fill the rest.' visible bottom of dashboard. Social hub: community pulse strip above section list (5-tip pool, teal accent) — 'New activity in your feed.' dismissable per-day. FloatingCoachButton: proactive expanded label 'Has a thought' when no chat in 24h. All moments non-breaking, dismissable, no new API calls.",
+            "imagePath": "images/i-20260703-1fc5-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260703-1fc5-fix-r1.png",
+              "images/i-20260703-1fc5-fix-r1-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0ee9d4c75d7daedbec29e0e845a1055d3e393a51",
+            "imageCommits": [
+              "0ee9d4c75d7daedbec29e0e845a1055d3e393a51",
+              "0b257baef985edd6450cae51007da4ce38e7b18c"
+            ],
+            "fixedAt": "2026-07-03T14:21:20.326Z",
+            "by": "shakeebshaan",
+            "appCommit": "8958e660",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-04T07:23:02.154Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-04T07:23:02.154Z"
     }
   ]
 }
