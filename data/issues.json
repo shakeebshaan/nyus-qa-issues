@@ -1199,7 +1199,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED (commit 7c754458). Two-part fix: (1) Backend logging.py: added _clean_name() regex helper that strips AI-generated UUID hex fragments from stored food names (e.g. 'MCT Oil 8032d43c0334' -> 'MCT Oil', 'Onion (Raw) 2839205d8290' -> 'Onion (Raw)'). Applied to both user CustomIngredient and global Ingredient results in GET /logs/meal/custom-ingredients. (2) Frontend CustomMealModal.tsx: import cleanFoodName from custom-plan.service and apply it to every item in the queryFn result map — belt-and-suspenders guard. Both deployed to prod. TypeScript clean (tsc --noEmit passed). testGate=true — please resolve.",
+      "reviewedAt": "2026-07-04T23:59:42.923Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-c8c9",
