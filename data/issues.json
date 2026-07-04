@@ -538,31 +538,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "All-Reports Compendium generated: 10 report categories with live prod data. R1 User Growth (203 users, 40 new/7d, 57% onboarding); R2 Engagement (6 DAU, 18 MAU, retention alarm); R3 Feature Usage (28k recipes, weight-logging 7.8x/user, meal-logging 2x/user low); R4 AI Coach (2080 msgs, 7879 LLM calls, 3.8x ratio - high retry rate); R5 Plan Quality (66/100 score, 34% issue rate); R6 Subscription (127 active, 62% conversion); R7 Recipe Library (28,359 recipes); R8 Gamification (255 badges, 1.3/user); R9 System Health (all green except threading mode); R10 Strategic Opportunities (top 5 actions). Full inline report attached to board.",
-        "imagePath": "images/i-20260704-f5ec-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260704-f5ec-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "519039fab01382d80f5a404d307abf1aa2682578",
-        "imageCommits": [
-          "519039fab01382d80f5a404d307abf1aa2682578"
-        ],
-        "fixedAt": "2026-07-04T07:37:35.863Z",
-        "by": "shakeebshaan",
-        "appCommit": "f310df0cc20f052ed36c7835a20c094b5160e90a",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "10 distinct report categories covering every available data signal from prod DB. Real numbers queried live from prod (203 users, 127 subs, 7879 LLM logs, 28359 recipes, etc.). Actionable recommendations in each section. Comprehensive single-document compendium as requested."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-04T08:33:21.501Z",
+          "event": "reopened",
+          "note": "create this as html report also 2 htmls",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "All-Reports Compendium generated: 10 report categories with live prod data. R1 User Growth (203 users, 40 new/7d, 57% onboarding); R2 Engagement (6 DAU, 18 MAU, retention alarm); R3 Feature Usage (28k recipes, weight-logging 7.8x/user, meal-logging 2x/user low); R4 AI Coach (2080 msgs, 7879 LLM calls, 3.8x ratio - high retry rate); R5 Plan Quality (66/100 score, 34% issue rate); R6 Subscription (127 active, 62% conversion); R7 Recipe Library (28,359 recipes); R8 Gamification (255 badges, 1.3/user); R9 System Health (all green except threading mode); R10 Strategic Opportunities (top 5 actions). Full inline report attached to board.",
+            "imagePath": "images/i-20260704-f5ec-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-f5ec-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "519039fab01382d80f5a404d307abf1aa2682578",
+            "imageCommits": [
+              "519039fab01382d80f5a404d307abf1aa2682578"
+            ],
+            "fixedAt": "2026-07-04T07:37:35.863Z",
+            "by": "shakeebshaan",
+            "appCommit": "f310df0cc20f052ed36c7835a20c094b5160e90a",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "10 distinct report categories covering every available data signal from prod DB. Real numbers queried live from prod (203 users, 127 subs, 7879 LLM logs, 28359 recipes, etc.). Actionable recommendations in each section. Comprehensive single-document compendium as requested."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "reportPath": "reports/f5ec-reports-hub.html",
       "reportLabel": "NYUS Complete Reports Hub",
       "needsReview": false
