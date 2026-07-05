@@ -12608,6 +12608,50 @@
       "resolvedAt": "2026-07-05T22:54:40.675Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-05T22:54:40.675Z"
+    },
+    {
+      "id": "i-20260705-91cf",
+      "createdAt": "2026-07-05T22:00:23.623Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Scrolling coach chat wipes in-progress interactive-block input (production only).\n\nCoachChatMessageList virtualizes rows when VITE_COACH_CHAT_VIRTUALIZE=true - which .env.production line 24 enables (dev default is off) - with overscan: 6. TanStack Virtual UNMOUNTS rows that scroll past the overscan window, and every interactive block keeps its form state in component-local useState: WorkoutTrackerBlock set reps/weights/completed checkboxes, DailyCheckinBlock weight/water/sleep/mood, MultiSelectBlock selections, WaterLoggerBlock tapped increments. Only the completed/active status is lifted to the parent (blockStatuses in CoachChat.tsx); draft input is not.\n\nSo a user mid-workout who has checked off 3 sets and adjusted weights in a workout_tracker block, scrolls up ~7+ messages to re-read the coach's instructions, then scrolls back down, finds the tracker silently reset to its planned defaults - every checked set and edited value gone. Same for a half-filled daily check-in.\n\nExpected: in-progress block input survives scrolling (persist draft state per blockKey outside the virtualized row, e.g. a parent-level map/ref cache alongside blockStatuses, keyed the same way).\nActual: offscreen unmount discards it.\n\nRepro (needs prod flag): build/serve with VITE_COACH_CHAT_VIRTUALIZE=true, open a coach chat long enough to scroll, get a workout_tracker block at the bottom, check 2-3 sets WITHOUT submitting, scroll to the top of the thread, scroll back down - checked sets are cleared. Dev builds (flag off) do not reproduce, which is why QA misses it.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Thread cacheKey (= blockKey) from MessageBlockSlot through InteractiveBlock to each block. WorkoutTrackerBlock and DailyCheckinBlock use module-level Maps (_exerciseStateCache, _checkinDraftCache) keyed by cacheKey. useEffect writes state to cache on every change; useState initializer reads from cache on remount. Commit 17b12af8.",
+        "imagePath": "images/i-20260705-91cf-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-91cf-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1201cfcf35c1d5a946449283792dec6181fe7544",
+        "imageCommits": [
+          "1201cfcf35c1d5a946449283792dec6181fe7544"
+        ],
+        "fixedAt": "2026-07-05T22:11:37.992Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Code fix: BlockProps.cacheKey, InteractiveBlock passes it to Component, MessageBlockSlot passes cacheKey={blockKey}. WorkoutTrackerBlock: _exerciseStateCache.get(cacheKey) in useState init + useEffect writes back. DailyCheckinBlock same pattern. Proxy screenshot (VITE_COACH_CHAT_VIRTUALIZE=true is prod-only flag)."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-05T22:55:36.247Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-05T22:55:36.247Z"
     }
   ]
 }
