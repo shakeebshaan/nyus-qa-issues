@@ -442,31 +442,39 @@
         "bcc566e5bc8b15c68a5d2b4d565f63c124c0522e"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Error 'Couldn't log set - Workout already completed' was shown as destructive toast when backend rejected set-log on already-completed session. Fixed (commit fb88bd3d): onError handler converts /already completed/i errors to a friendly 'Workout complete!' positive toast.",
-        "imagePath": "images/i-20260704-19e9-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260704-19e9-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "d7657ac1b570c0d0c732f0130274a70ea53a1851",
-        "imageCommits": [
-          "d7657ac1b570c0d0c732f0130274a70ea53a1851"
-        ],
-        "fixedAt": "2026-07-05T21:41:55.761Z",
-        "by": "shakeebshaan",
-        "appCommit": "fb88bd3d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "Bug was: backend '400 Workout already completed.' shown as destructive toast 'Couldn't log set'. Fixed in fb88bd3d: Activity.tsx:508-511 intercepts errors matching /already completed/i and shows a friendly 'Workout complete! Your session is already finished' toast instead of the destructive variant. Regex matches both 'Workout already completed.' and 'Workout already completed' (backend returns both). Root cause: sets couldn't be re-logged after session auto-completed — this is correct backend behavior; the UX fix is the graceful message conversion."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-05T22:17:25.272Z",
+          "event": "reopened",
+          "note": "verify on revisit on activity page",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Error 'Couldn't log set - Workout already completed' was shown as destructive toast when backend rejected set-log on already-completed session. Fixed (commit fb88bd3d): onError handler converts /already completed/i errors to a friendly 'Workout complete!' positive toast.",
+            "imagePath": "images/i-20260704-19e9-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-19e9-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "d7657ac1b570c0d0c732f0130274a70ea53a1851",
+            "imageCommits": [
+              "d7657ac1b570c0d0c732f0130274a70ea53a1851"
+            ],
+            "fixedAt": "2026-07-05T21:41:55.761Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb88bd3d",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Bug was: backend '400 Workout already completed.' shown as destructive toast 'Couldn't log set'. Fixed in fb88bd3d: Activity.tsx:508-511 intercepts errors matching /already completed/i and shows a friendly 'Workout complete! Your session is already finished' toast instead of the destructive variant. Regex matches both 'Workout already completed.' and 'Workout already completed' (backend returns both). Root cause: sets couldn't be re-logged after session auto-completed — this is correct backend behavior; the UX fix is the graceful message conversion."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Make sure we have the screenshot attached and make sure that all the workout and diets are saving as the back end",
