@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Weekly weigh-in reminder was wired to workout toggle instead of progress toggle. Already fixed in f178eb35: separate applyProgressReminders() helper controls WEIGH_IN, wired to progress_updates_enabled toggle and recovery effect.",
+        "imagePath": "images/i-20260705-b3e7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-b3e7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6871ea489b617936d58d45e22b7e099fbe9af314",
+        "imageCommits": [
+          "6871ea489b617936d58d45e22b7e099fbe9af314"
+        ],
+        "fixedAt": "2026-07-05T21:37:38.873Z",
+        "by": "shakeebshaan",
+        "appCommit": "f178eb35",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Bug already fixed in f178eb35. Code confirmed: applyWorkoutReminders() (line 78-96) handles only REMINDER_IDS.WORKOUT. applyProgressReminders() (line 100-119) is a separate helper that exclusively handles REMINDER_IDS.WEIGH_IN and is wired to progress_updates_enabled toggle (line 242-243). Recovery effect also checks prefs.progress_updates_enabled for WEIGH_IN (line 301-302). Separation is complete and correct."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260705-4f2c",
