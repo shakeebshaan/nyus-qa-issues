@@ -103,48 +103,6 @@
       "history": []
     },
     {
-      "id": "i-20260705-b3e7",
-      "createdAt": "2026-07-05T21:09:46.665Z",
-      "route": "/notification-preferences",
-      "description": "[bug-hunt] Weekly weigh-in reminder is wired to the WRONG preference toggle. The Sunday weigh-in local notification (REMINDER_IDS.WEIGH_IN, Android channel 'progress_updates') is scheduled and cancelled inside applyWorkoutReminders() in src/pages/NotificationPreferences.tsx (~line 79-104), so it is controlled by the \"Workout Reminders\" switch instead of \"Progress Updates\".\n\nEXPECTED: turning OFF \"Progress Updates\" stops the weekly weigh-in nudge (its channel + content are progress, not workout); turning OFF \"Workout Reminders\" stops only workout nudges.\n\nACTUAL: (1) user turns OFF \"Progress Updates\" -> Sunday 8am weigh-in reminder still fires (it is only cancelled when workout_reminders_enabled goes false). (2) user turns OFF \"Workout Reminders\" but keeps \"Progress Updates\" ON -> weigh-in reminder is silently cancelled too. The mount-time recovery effect (~line 258-269) has the same coupling: it re-schedules WEIGH_IN whenever workout_reminders_enabled is true, even if progress_updates_enabled is false, so the wrong state self-heals back on every visit to the page.\n\nREPRO (native build): 1) open /notification-preferences with push on, all categories on 2) toggle \"Progress Updates\" OFF 3) adb shell dumpsys notification (or wait until Sunday 8:00) -> pending intent id 1030 'Weekly weigh-in' still scheduled on the progress_updates channel the user just disabled.\n\nFIX DIRECTION: schedule/cancel WEIGH_IN from the progress_updates_enabled toggle (own applyProgressReminders helper), and mirror that in the recovery effect.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Weekly weigh-in reminder was wired to workout toggle instead of progress toggle. Already fixed in f178eb35: separate applyProgressReminders() helper controls WEIGH_IN, wired to progress_updates_enabled toggle and recovery effect.",
-        "imagePath": "images/i-20260705-b3e7-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260705-b3e7-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "6871ea489b617936d58d45e22b7e099fbe9af314",
-        "imageCommits": [
-          "6871ea489b617936d58d45e22b7e099fbe9af314"
-        ],
-        "fixedAt": "2026-07-05T21:37:38.873Z",
-        "by": "shakeebshaan",
-        "appCommit": "f178eb35",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "Bug already fixed in f178eb35. Code confirmed: applyWorkoutReminders() (line 78-96) handles only REMINDER_IDS.WORKOUT. applyProgressReminders() (line 100-119) is a separate helper that exclusively handles REMINDER_IDS.WEIGH_IN and is wired to progress_updates_enabled toggle (line 242-243). Recovery effect also checks prefs.progress_updates_enabled for WEIGH_IN (line 301-302). Separation is complete and correct."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260705-ex01",
       "createdAt": "2026-07-05T20:42:45.465Z",
       "route": "/activity",
