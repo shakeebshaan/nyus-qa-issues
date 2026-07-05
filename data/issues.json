@@ -58,9 +58,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Quiet hours not applied to local device reminders. Already fixed in f178eb35: quiet_hours change triggers re-schedule of all local reminders via each apply* helper; each helper checks isInQuietWindow() and cancels reminders that fall in the quiet window.",
+        "imagePath": "images/i-20260705-4f2c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-4f2c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "67f5e2994529a89f267e4f6bf8f733d599a3d65b",
+        "imageCommits": [
+          "67f5e2994529a89f267e4f6bf8f733d599a3d65b"
+        ],
+        "fixedAt": "2026-07-05T21:37:54.815Z",
+        "by": "shakeebshaan",
+        "appCommit": "f178eb35",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Bug already fixed in f178eb35. Code confirmed: quiet_hours change handler (line 244-251) re-applies ALL local reminders with the new quiet config (applyMealReminders, applyWorkoutReminders, applyProgressReminders all called with updated 'quiet' param). Each apply* function calls isInQuietWindow() and cancels the reminder if it falls in the window. Device schedule is updated immediately on quiet_hours_* field change, matching server-side suppression semantics."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260705-ex01",
