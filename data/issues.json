@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260705-e956",
+      "createdAt": "2026-07-05T00:11:29.595Z",
+      "route": "/notifications",
+      "description": "[bug-hunt] In-app Notifications list has dead taps + wrong icons for several backend notification types.\n\nROOT CAUSE: src/pages/Notifications.tsx type vocabulary (getIconForType, getColorForType, handleNotificationClick switch) is out of sync with the `type` strings the backend actually writes to the notifications table via create_notification/send_notification.\n\nThe FE switch only handles: workout_completed, coach_message, admin_message, support_message, weekly_report, daily_summary, diet_reminder, ai_weekly_insight, friend_request, streak_update, plan_update, weekly_review.\n\nBut the backend emits these in-app row types (verified in nyu_backend): meal_reminder, workout_reminder, streak_risk (behavior_triggers.py - dispatched with NO meta_data, so no meta_data.link fallback), health_score_changed (scheduler_jobs.py), kudos_received (kudos_routes.py), weekly_review_reminder, mental_health_checkin, partner_session_skipped_fomo.\n\nNone of those match the FE switch, so in handleNotificationClick `link` is undefined and the switch hits `default: break` -> tapping the card marks it read but navigates NOWHERE. They also miss getIconForType/getColorForType -> render a generic grey Bell instead of a Flame/Dumbbell/Utensils icon.\n\nEXPECTED: tapping a streak_risk notification goes to /daily-focus, meal_reminder -> /nutrition, workout_reminder -> /activity, health_score_changed -> /health-score, kudos_received -> /social (matching the push pushNotificationActionPerformed handler in src/capacitor/push.ts, which routes these correctly). Icons should match type.\nACTUAL: dead tap + generic bell icon.\n\nREPRO: trigger any behavior notification (e.g. let a >=3 day streak lapse to fire streak_risk, or wait for the midday meal_reminder job) -> open /notifications -> the row shows a plain grey bell -> tap it -> nothing happens (row just marks read).\n\nFIX: align Notifications.tsx type handling with the backend type set (and with push.ts). Note push.ts also uses `health_score_delta` while backend writes `health_score_changed` - a second mismatch to reconcile.",
+      "author": "shakeebshaan",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260704-if01",
       "createdAt": "2026-07-04T23:46:11.538Z",
       "route": "/nutrition",
