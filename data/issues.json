@@ -16,9 +16,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "DailyCheckinBlock now tracks touched fields (Set<string>). handleSubmit only includes water_ml/sleep_hours/mood when the user has actually interacted with that field - same omit-when-untouched pattern as weight. Also respects data.fields array from backend to render only coach-requested fields. Commit 17b12af8.",
+        "imagePath": "images/i-20260705-7d2a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-7d2a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "64c5fde1d1b0276695d184e4c80865aa9e7e0699",
+        "imageCommits": [
+          "64c5fde1d1b0276695d184e4c80865aa9e7e0699"
+        ],
+        "fixedAt": "2026-07-05T22:10:57.653Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Code fix in DailyCheckinBlock.tsx: touched Set tracks user interactions; handleSubmit guards: ..(touched.has('water') && {water_ml}), ..(touched.has('sleep') && {sleep_hours}), ..(touched.has('mood') && {mood}). showField() respects data.fields. Proxy screenshot (coach chat blocks require live native session)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260705-91cf",
