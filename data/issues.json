@@ -554,8 +554,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "FIXED (commit 6dbdcc18). Design direction chosen: soft outlined buttons for all unselected actions (bg-card + border-border/60), teal gradient only on the SELECTED action. Rationale: all 4 teal gradient blocks competed visually with the coach message, making buttons feel like primary CTAs rather than suggestions. Outlined style reads as tappable options without demanding attention. Spacing reduced: py-3/min-h-48px (was py-4/min-h-58px). Icon circles muted (bg-primary/10) until selected. testGate=true. Please resolve or redirect design if you want a different look.",
-      "reviewedAt": "2026-07-04T23:27:16.250Z",
+      "reviewReason": "Coach message fired at 3:55 AM local time — likely the APScheduler proactive message job dispatching at wrong local hour due to UTC vs IST offset. The scheduler runs in UTC; if the job is scheduled for 8am IST, it fires at 2:30am UTC which is 8am IST. But at 3:55am IST that would be ~10:25pm UTC the day before, suggesting a timezone offset bug. Owner-scope to fix (requires scheduler job timezone review in scheduler_jobs.py). Filed for tracking.",
+      "reviewedAt": "2026-07-05T00:03:00.629Z",
       "reviewedBy": "shakeebshaan"
     },
     {
