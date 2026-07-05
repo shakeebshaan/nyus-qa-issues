@@ -1082,8 +1082,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Two issues: (1) Progress photo timestamp shows July 5 when it was taken on July 4 (off-by-one date — likely UTC vs IST). (2) Associated weight shows 24.2 kg (implausibly low for adult). The 24.2 kg may be the same value from the Log Weight screen (5505 issue) where the slider default is wrong. Both bugs need investigation.",
-      "reviewedAt": "2026-07-05T00:04:05.149Z",
+      "reviewReason": "Code review: The date display logic uses new Date(iso).toLocaleDateString('en-IN', ...) with a UTC 'Z' timestamp from backend. This correctly displays in the user's device timezone. For IST users, the conversion is correct. The only scenario where it could show Jul 5 instead of Jul 4 is if the upload occurred between 00:00-05:30 IST on July 5 (which the UTC backend stores as July 4). In that case, the frontend CORRECTLY shows July 5 (the user's local date). Cannot reproduce an actual off-by-one without more context. Owner: could this be a case where the photo was uploaded between midnight and 5:30 AM IST on July 5? Also please confirm the 24.2 kg weight issue — if that's showing, it suggests the WeightLog has an unrealistic value from the Log Weight slider default bug (related to i-20260704-5505 which was already fixed).",
+      "reviewedAt": "2026-07-05T00:16:52.604Z",
       "reviewedBy": "shakeebshaan"
     },
     {
