@@ -251,50 +251,6 @@
       "history": []
     },
     {
-      "id": "i-20260704-st01",
-      "createdAt": "2026-07-04T22:32:48.076Z",
-      "route": null,
-      "description": "[content] Published: How Many Steps a Day to Lose Weight? (India) — https://nyus.in/blog/how-many-steps-a-day-to-lose-weight-india.html. Ideas added: 3. Escalated: 0 filed. Evidence-based steps/weight-loss guide (Lancet 2022 meta-analysis, 10k-step myth, NEAT); backlinked from TDEE guide + blog index; sitemap rebuilt to 1766. CAVEAT: committed+pushed (1998eef) but live URL currently 404 — CI deploy is inert (DEPLOY_SSH_KEY repo secret unset, deploy.yml skips), so publish is git-only until the secret is set or a human runs manual scp of static/blog to the Oracle host. IndexNow deliberately NOT submitted (would push a 404). Deploy blocker queued in loop memory; ESCALATIONS.md write is permission-blocked (sensitive file).",
-      "descPrivate": false,
-      "author": "shakeebshaan",
-      "imagePaths": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "fix": {
-        "description": "Root cause: DEPLOY_SSH_KEY GitHub Actions secret unset, so CI scp step was skipped. Fix: SSHed to prod, git pull on ~/NYUSLANDING (all new articles + sitemaps synced), cp -r ~/NYUSLANDING/static/* ~/nyus-landing/ deployed 1772 blog articles. Article https://nyus.in/blog/how-many-steps-a-day-to-lose-weight-india.html returns HTTP 200 with correct title and structured data.",
-        "imagePath": "images/i-20260704-st01-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260704-st01-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "21f1891c16b6d4fcfbdc44a5e2665b43f0f6f4fd",
-        "imageCommits": [
-          "21f1891c16b6d4fcfbdc44a5e2665b43f0f6f4fd"
-        ],
-        "fixedAt": "2026-07-05T21:43:01.029Z",
-        "by": "shakeebshaan",
-        "appCommit": "8ba049da",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 97,
-          "bar": 95,
-          "note": "Article fully live at correct URL with SEO metadata intact. 1772 total blog files deployed. Direct HTTP 200 from prod server confirmed. Screenshot shows correct article content."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "You have the connection to the vacant server to the back end server so do SH into that server for deployment like you do with all the bag and deployments the live website is in the back ends server itself",
-      "reviewRepliedAt": "2026-07-05T12:06:04.150Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260704-fc5f",
       "createdAt": "2026-07-04T22:22:50.155Z",
       "route": null,
