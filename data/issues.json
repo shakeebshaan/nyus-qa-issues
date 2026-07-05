@@ -138,12 +138,12 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Backend check already in place (commit 783006c5). WaterTrackerCard now calls GET /nutrition/water/celebration on mount and checks UserHealthProfile.water_goal_celebrated_date (backend field, survives app reinstall + localStorage clear). The alreadyCelebrated() check is: localStorage.getItem(todayKey) === '1' || backendCelebrated. On celebration, calls POST /nutrition/water/celebration to persist the date server-side. Both checks use the user's local date (not UTC) to avoid IST mismatch window. The backend route at app/routes/nutrition.py:324 was already deployed. testGate=true. Please resolve manually.",
       "reviewedAt": "2026-07-04T23:20:33.923Z",
       "reviewedBy": "shakeebshaan",
-      "reviewReply": "Had check from backend also",
-      "reviewRepliedAt": "2026-07-04T22:54:33.295Z",
+      "reviewReply": "Sure we have added a check on the back and also so once the daily water in the goal is it don't show the animation so right now the issue is every time I refresh the diet page it shows animation with the sound it should only happened one when the goal is reache",
+      "reviewRepliedAt": "2026-07-05T12:04:28.514Z",
       "reviewReplyBy": "shakeebshaan"
     },
     {
