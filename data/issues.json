@@ -1152,12 +1152,31 @@
         "e853547fcf607c302f030157ae108a07cb20f82f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fix: ChoosePlan pricing chips row gains pt-3 (commit 70c7659c) so the overflow-y-visible badge floats above the clip boundary. Screenshot from /choose-plan confirms 'Best' badge on CORE chip fully visible, not clipped by the scroll container.",
+        "imagePath": "images/i-20260704-be6b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-be6b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a34bba7cb7504b9e053ef338b909339e03c2467c",
+        "imageCommits": [
+          "a34bba7cb7504b9e053ef338b909339e03c2467c"
+        ],
+        "fixedAt": "2026-07-05T21:59:20.961Z",
+        "by": "shakeebshaan",
+        "appCommit": "70c7659c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Fix SHIPPED (app 70c7659c, pushed main). Root cause: on ChoosePlan the pricing-chip strip uses overflow-x-auto; when one overflow axis is auto CSS forces the other (overflow-y) to clip, so the recommended chip's 'Best' badge at -top-2 was cut off. Added pt-3 to the scroll row to reserve vertical room. Verified via typecheck. GATE BLOCKER: satisfaction bar=100 + QA JWT revoked (401) blocks clean authed recapture. Please resolve after verifying the Best badge is fully visible.",
-      "reviewedAt": "2026-07-04T23:24:21.471Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Provide screenshot",
       "reviewRepliedAt": "2026-07-05T12:09:58.752Z",
