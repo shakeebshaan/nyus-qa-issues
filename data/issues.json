@@ -195,12 +195,32 @@
         "b542c5c3420a2ac9708ca16160a1d16d7398479c"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Water animation fired on every page visit due to async race: waterMl data arriving before backendCelebrated query resolved re-triggered the false->true edge. Fixed (commit 2fc0691b): added useEffect that sets prevReached.current=true whenever backendCelebrated is true, pre-arming the gate before data arrives.",
+        "imagePath": "images/i-20260704-7a5d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-7a5d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "da3f3ef5381bfbf61df5f52ed37cbe7219514d6c",
+        "imageCommits": [
+          "da3f3ef5381bfbf61df5f52ed37cbe7219514d6c"
+        ],
+        "fixedAt": "2026-07-05T21:31:06.677Z",
+        "by": "shakeebshaan",
+        "appCommit": "2fc0691b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Behavioral bug — no visual difference before/after. Fix is a useEffect(backendCelebrated) that pre-arms the prevReached ref before waterMl data arrives, closing the async race that caused false-positive animation on remount. Code verified correct in WaterTrackerCard.tsx:123-125. Nutrition page loads correctly (screenshot). No regression."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Backend check already in place (commit 783006c5). WaterTrackerCard now calls GET /nutrition/water/celebration on mount and checks UserHealthProfile.water_goal_celebrated_date (backend field, survives app reinstall + localStorage clear). The alreadyCelebrated() check is: localStorage.getItem(todayKey) === '1' || backendCelebrated. On celebration, calls POST /nutrition/water/celebration to persist the date server-side. Both checks use the user's local date (not UTC) to avoid IST mismatch window. The backend route at app/routes/nutrition.py:324 was already deployed. testGate=true. Please resolve manually.",
-      "reviewedAt": "2026-07-04T23:20:33.923Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Sure we have added a check on the back and also so once the daily water in the goal is it don't show the animation so right now the issue is every time I refresh the diet page it shows animation with the sound it should only happened one when the goal is reache",
       "reviewRepliedAt": "2026-07-05T12:04:28.514Z",
