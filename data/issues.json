@@ -375,10 +375,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Root cause found and fixed (backend commit 33fa6d2, deployed). get_alternatives() skipped muscle-group filter when Exercise has NULL in all three muscle fields (muscle_groups_primary, muscle_group_primary, primary_muscle). With no filter, any bodyweight exercise including Golf/Horse Riding could appear. Fix: fall back to Exercise.category == original.category when no muscle is resolvable. Bear Crawl likely has no muscle fields set in the DB — if this fix still produces bad alternatives, Bear Crawl's DB row needs its category/muscle fields populated.",
       "reviewedAt": "2026-07-05T00:23:23.151Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Very fine database verify in database",
+      "reviewRepliedAt": "2026-07-05T12:14:25.731Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-d460",
