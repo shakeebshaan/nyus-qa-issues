@@ -973,7 +973,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Profile photo upload fails with toast 'Photo saved locally — Upload will retry next time you change it'. The /users/me/avatar endpoint is not implemented in the backend (code comment in ProfileIdentityCard.tsx says 'TODO: wire to canonical avatar-upload endpoint when it exists'). This is a known unimplemented feature — no backend avatar endpoint exists. The error is expected. Owner-scope: implement PUT/POST /users/me/avatar backend endpoint.",
+      "reviewedAt": "2026-07-05T00:03:42.372Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-90dc",
