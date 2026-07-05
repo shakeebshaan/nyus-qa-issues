@@ -12419,6 +12419,51 @@
       "resolvedAt": "2026-07-05T22:30:49.645Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-05T22:30:49.645Z"
+    },
+    {
+      "id": "i-20260705-4f2c",
+      "createdAt": "2026-07-05T21:09:46.665Z",
+      "route": "/notification-preferences",
+      "description": "[bug-hunt] Quiet Hours are never applied to device-local reminders — the toggle's promise (\"No push during sleep\") only holds for server FCM push. Backend suppression works (is_in_quiet_hours() in app/services/notification_service.py gates every server send), but all local reminders scheduled via src/lib/localNotifications.ts (meal x3, workout, weigh-in) use plain LocalNotifications.schedule({on:{hour,minute}}) with no quiet-hours check, and nothing re-schedules or cancels them when the user changes quiet_hours_start/end or toggles quiet hours on /notification-preferences.\n\nEXPECTED: with Quiet Hours enabled (e.g. 12:00-14:00 for a night-shift user, or any window overlapping a default reminder slot), no notification fires inside the window — the settings card says \"No push during sleep\" with no exception noted.\n\nACTUAL: a lunch reminder hard-coded to 13:00 (DEFAULT_REMINDER_TIMES in NotificationPreferences.tsx) fires at 13:00 even when quiet hours are 12:00-14:00. Same for breakfast 8:00 / dinner 19:00 / workout 7:00 / weigh-in Sun 8:00 vs any user-set window covering them. Editing the quiet-hours time inputs PUTs the pref to the server but triggers zero local re-scheduling (update() in NotificationPreferences.tsx only reacts to meal/workout/push toggles), so the device schedule and the stated preference silently diverge.\n\nREPRO (native build): 1) enable Meal Reminders 2) enable Quiet Hours and set 12:00-14:00 3) wait for 13:00 -> 'Lunch time' local notification fires inside the quiet window.\n\nFIX DIRECTION: when quiet_hours_* change (or on the mount recovery pass), skip/re-schedule local reminders whose fire time falls inside the window, or shift them to quiet_hours_end — matching the server-side suppression semantics.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Quiet hours not applied to local device reminders. Already fixed in f178eb35: quiet_hours change triggers re-schedule of all local reminders via each apply* helper; each helper checks isInQuietWindow() and cancels reminders that fall in the quiet window.",
+        "imagePath": "images/i-20260705-4f2c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-4f2c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "67f5e2994529a89f267e4f6bf8f733d599a3d65b",
+        "imageCommits": [
+          "67f5e2994529a89f267e4f6bf8f733d599a3d65b"
+        ],
+        "fixedAt": "2026-07-05T21:37:54.815Z",
+        "by": "shakeebshaan",
+        "appCommit": "f178eb35",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Bug already fixed in f178eb35. Code confirmed: quiet_hours change handler (line 244-251) re-applies ALL local reminders with the new quiet config (applyMealReminders, applyWorkoutReminders, applyProgressReminders all called with updated 'quiet' param). Each apply* function calls isInQuietWindow() and cancels the reminder if it falls in the window. Device schedule is updated immediately on quiet_hours_* field change, matching server-side suppression semantics."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-05T22:31:15.366Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-05T22:31:15.366Z"
     }
   ]
 }
