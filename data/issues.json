@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260705-b3e7",
+      "createdAt": "2026-07-05T21:09:46.665Z",
+      "route": "/notification-preferences",
+      "description": "[bug-hunt] Weekly weigh-in reminder is wired to the WRONG preference toggle. The Sunday weigh-in local notification (REMINDER_IDS.WEIGH_IN, Android channel 'progress_updates') is scheduled and cancelled inside applyWorkoutReminders() in src/pages/NotificationPreferences.tsx (~line 79-104), so it is controlled by the \"Workout Reminders\" switch instead of \"Progress Updates\".\n\nEXPECTED: turning OFF \"Progress Updates\" stops the weekly weigh-in nudge (its channel + content are progress, not workout); turning OFF \"Workout Reminders\" stops only workout nudges.\n\nACTUAL: (1) user turns OFF \"Progress Updates\" -> Sunday 8am weigh-in reminder still fires (it is only cancelled when workout_reminders_enabled goes false). (2) user turns OFF \"Workout Reminders\" but keeps \"Progress Updates\" ON -> weigh-in reminder is silently cancelled too. The mount-time recovery effect (~line 258-269) has the same coupling: it re-schedules WEIGH_IN whenever workout_reminders_enabled is true, even if progress_updates_enabled is false, so the wrong state self-heals back on every visit to the page.\n\nREPRO (native build): 1) open /notification-preferences with push on, all categories on 2) toggle \"Progress Updates\" OFF 3) adb shell dumpsys notification (or wait until Sunday 8:00) -> pending intent id 1030 'Weekly weigh-in' still scheduled on the progress_updates channel the user just disabled.\n\nFIX DIRECTION: schedule/cancel WEIGH_IN from the progress_updates_enabled toggle (own applyProgressReminders helper), and mirror that in the recovery effect.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260705-4f2c",
+      "createdAt": "2026-07-05T21:09:46.665Z",
+      "route": "/notification-preferences",
+      "description": "[bug-hunt] Quiet Hours are never applied to device-local reminders — the toggle's promise (\"No push during sleep\") only holds for server FCM push. Backend suppression works (is_in_quiet_hours() in app/services/notification_service.py gates every server send), but all local reminders scheduled via src/lib/localNotifications.ts (meal x3, workout, weigh-in) use plain LocalNotifications.schedule({on:{hour,minute}}) with no quiet-hours check, and nothing re-schedules or cancels them when the user changes quiet_hours_start/end or toggles quiet hours on /notification-preferences.\n\nEXPECTED: with Quiet Hours enabled (e.g. 12:00-14:00 for a night-shift user, or any window overlapping a default reminder slot), no notification fires inside the window — the settings card says \"No push during sleep\" with no exception noted.\n\nACTUAL: a lunch reminder hard-coded to 13:00 (DEFAULT_REMINDER_TIMES in NotificationPreferences.tsx) fires at 13:00 even when quiet hours are 12:00-14:00. Same for breakfast 8:00 / dinner 19:00 / workout 7:00 / weigh-in Sun 8:00 vs any user-set window covering them. Editing the quiet-hours time inputs PUTs the pref to the server but triggers zero local re-scheduling (update() in NotificationPreferences.tsx only reacts to meal/workout/push toggles), so the device schedule and the stated preference silently diverge.\n\nREPRO (native build): 1) enable Meal Reminders 2) enable Quiet Hours and set 12:00-14:00 3) wait for 13:00 -> 'Lunch time' local notification fires inside the quiet window.\n\nFIX DIRECTION: when quiet_hours_* change (or on the mount recovery pass), skip/re-schedule local reminders whose fire time falls inside the window, or shift them to quiet_hours_end — matching the server-side suppression semantics.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260705-ex01",
       "createdAt": "2026-07-05T20:42:45.465Z",
       "route": "/activity",
