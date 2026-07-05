@@ -278,10 +278,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "FIXED (commit fb88bd3d, pushed to main). Root cause: (1) NutritionMealCard used <label><Checkbox> — on Android Capacitor the label click propagated to the Radix button triggering both OS native touch haptic AND our Haptics.selectionChanged(), giving double vibration. (2) check-pop animation had scale(1.2) overshoot that looked like a flash on the pink circle. Fix: replaced label+Checkbox with a native <button> that renders the check circle directly + fires triggerHaptic('light') once in onClick. Updated check-pop keyframe to gentle scale(0.75->1) with opacity fade — no overshoot. testGate=true, no NutritionMealCard tests exist. Please resolve manually.",
       "reviewedAt": "2026-07-04T23:18:05.420Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Verified you need to verify it",
+      "reviewRepliedAt": "2026-07-05T12:11:51.728Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-4acd",
