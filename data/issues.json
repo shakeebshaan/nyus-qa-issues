@@ -1247,7 +1247,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED (commit 7c754458). ProfileIdentityCard.tsx: removed the BRONZE/SILVER/GOLD/PLATINUM tier pill from the Profile Trophy Case preview. The tier label span (class='inline-flex ... font-bold uppercase') was rendered unconditionally on all badges in the profile view. Removed per design rule: 'Tiers (bronze/silver/gold/platinum) appear only in the /achievements gallery.' The trophy case still shows badge icon + badge name — just no tier overlay. TypeScript clean. testGate=true — please resolve.",
+      "reviewedAt": "2026-07-04T23:59:59.851Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-5793",
