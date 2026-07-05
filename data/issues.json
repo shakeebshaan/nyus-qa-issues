@@ -699,7 +699,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Coach context says '1/3 meals logged' but the embedded Today's Meals block shows all 3 meals as Eaten. Root cause: coach context (meal count) is built at message-send time, while the interactive meal block fetches live data. If the user logs meals between coach message generation and viewing, the text is stale. This is an inherent async issue — partial fix: update the coach context build to fetch meal count closer to response time. Owner-scope: backend llm_service.py context assembly.",
+      "reviewedAt": "2026-07-05T00:03:11.797Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-4b3a",
