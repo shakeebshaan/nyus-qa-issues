@@ -12652,6 +12652,50 @@
       "resolvedAt": "2026-07-05T22:55:36.247Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-05T22:55:36.247Z"
+    },
+    {
+      "id": "i-20260705-7d2a",
+      "createdAt": "2026-07-05T22:00:23.623Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Daily Check-in block wipes already-logged water and fabricates sleep/mood on submit.\n\nThe coach-chat daily_checkin block (src/components/blocks/DailyCheckinBlock.tsx) seeds water=0, sleep=7h, mood=3 from a `data.defaults` field the backend never sends (the show_daily_checkin tool schema in app/services/coach_tools.py only has `date`/`fields`/`previous_values` - no `defaults`), and handleSubmit ALWAYS includes water_ml, sleep_hours and mood in the payload. Only weight has an omit-when-untouched guard (`...(weight > 0 && {...})`).\n\nBackend POST /logs/daily `_apply_daily_fields` (app/routes/logging.py) sets every present non-null field, so a check-in submitted without touching water overwrites the day's water_intake_liters with 0 - silently wiping water the user logged earlier via the Nutrition page - and writes sleep_hours=7 + energy_rating=6 (mood 3 x2) that the user never entered.\n\nCompounding: the block ignores the backend's required `fields` array entirely - a coach-requested weight-only check-in still renders and submits all 4 fields.\n\nExpected: untouched fields are omitted from the payload (same pattern as weight), and the form respects data.fields.\nActual: water zeroed, sleep/mood fabricated on every submit.\n\nRepro: 1) Log ~2L water on /nutrition. 2) In coach chat, get a daily_checkin block (ask coach for a check-in). 3) Enter only weight, tap Submit Check-in. 4) GET /logs/daily for today: water_intake_liters is 0 and sleep_hours is 7.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "DailyCheckinBlock now tracks touched fields (Set<string>). handleSubmit only includes water_ml/sleep_hours/mood when the user has actually interacted with that field - same omit-when-untouched pattern as weight. Also respects data.fields array from backend to render only coach-requested fields. Commit 17b12af8.",
+        "imagePath": "images/i-20260705-7d2a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-7d2a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "64c5fde1d1b0276695d184e4c80865aa9e7e0699",
+        "imageCommits": [
+          "64c5fde1d1b0276695d184e4c80865aa9e7e0699"
+        ],
+        "fixedAt": "2026-07-05T22:10:57.653Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Code fix in DailyCheckinBlock.tsx: touched Set tracks user interactions; handleSubmit guards: ..(touched.has('water') && {water_ml}), ..(touched.has('sleep') && {sleep_hours}), ..(touched.has('mood') && {mood}). showField() respects data.fields. Proxy screenshot (coach chat blocks require live native session)."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-05T22:55:42.114Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-05T22:55:42.114Z"
     }
   ]
 }
