@@ -222,12 +222,32 @@
         "d0deb2b71c260f8d57315f55e9ddca3444b97813"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fasting day selector was showing icon-only buttons. Fixed: removed icons, text-only compact chips. Screenshot confirms chips render as text labels only.",
+        "imagePath": "images/i-20260704-8087-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-8087-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "75dfe873c6a9510076471ba137759f73827d9f80",
+        "imageCommits": [
+          "75dfe873c6a9510076471ba137759f73827d9f80"
+        ],
+        "fixedAt": "2026-07-05T21:22:18.980Z",
+        "by": "shakeebshaan",
+        "appCommit": "2fc0691b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Screenshot directly shows text-only fasting chips (Vrat/fruit-only, Full fast, 16:8 window) with no icons. Root cause fixed at source (removed icon elements from chip buttons). Complete proof."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "FIXED (commit fb88bd3d). Fasting day selector redesigned: removed icons from buttons (cleaner), reduced to text-only compact chips (px-2.5 py-1 rounded-full), label text changed from 'Mark as fasting day:' to shorter 'Fasting day:', buttons grouped in a nested flex row. The active fasting-day banner (teal card) is unchanged. testGate=true. Please resolve manually.",
-      "reviewedAt": "2026-07-04T23:18:34.604Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Provide screenshot",
       "reviewRepliedAt": "2026-07-05T12:15:12.646Z",
