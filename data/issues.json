@@ -57,9 +57,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Thread cacheKey (= blockKey) from MessageBlockSlot through InteractiveBlock to each block. WorkoutTrackerBlock and DailyCheckinBlock use module-level Maps (_exerciseStateCache, _checkinDraftCache) keyed by cacheKey. useEffect writes state to cache on every change; useState initializer reads from cache on remount. Commit 17b12af8.",
+        "imagePath": "images/i-20260705-91cf-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-91cf-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1201cfcf35c1d5a946449283792dec6181fe7544",
+        "imageCommits": [
+          "1201cfcf35c1d5a946449283792dec6181fe7544"
+        ],
+        "fixedAt": "2026-07-05T22:11:37.992Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Code fix: BlockProps.cacheKey, InteractiveBlock passes it to Component, MessageBlockSlot passes cacheKey={blockKey}. WorkoutTrackerBlock: _exerciseStateCache.get(cacheKey) in useState init + useEffect writes back. DailyCheckinBlock same pattern. Proxy screenshot (VITE_COACH_CHAT_VIRTUALIZE=true is prod-only flag)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260705-c86c",
