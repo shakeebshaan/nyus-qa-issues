@@ -806,10 +806,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "After code review: this is likely NOT a bug. WeeklyChallengeCard shows data.completed from the /gamification/weekly-challenge API. The backend evaluates meals_logged over week_start..week_start+7 (Monday-Sunday). The Diet card shows TODAY'S meal progress (0/3). These are different timeframes: if the user logged 3+ meals earlier in the week (e.g. Mon-Fri), the challenge is legitimately Done even though today shows 0 meals. Owner: please confirm whether the screenshot was taken on a day when the user had logged meals earlier that week before closing.",
       "reviewedAt": "2026-07-05T00:14:52.712Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Please read the issue and fix it and provide screenshot",
+      "reviewRepliedAt": "2026-07-05T12:10:13.774Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260704-be6b",
