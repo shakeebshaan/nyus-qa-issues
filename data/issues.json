@@ -744,8 +744,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Exercise swap suggestions for Bear Crawl (core/bodyweight) return Golf, Horse Riding (trotting), Pilates — completely wrong muscle group. The swap algorithm appears to lack muscle-group filtering. Fix needed in backend exercise swap logic (likely in app/ or llm_service.py). This is a known category of issue — the swap should filter to the same primary muscle group and movement pattern.",
-      "reviewedAt": "2026-07-05T00:03:16.641Z",
+      "reviewReason": "Root cause found and fixed (backend commit 33fa6d2, deployed). get_alternatives() skipped muscle-group filter when Exercise has NULL in all three muscle fields (muscle_groups_primary, muscle_group_primary, primary_muscle). With no filter, any bodyweight exercise including Golf/Horse Riding could appear. Fix: fall back to Exercise.category == original.category when no muscle is resolvable. Bear Crawl likely has no muscle fields set in the DB — if this fix still produces bad alternatives, Bear Crawl's DB row needs its category/muscle fields populated.",
+      "reviewedAt": "2026-07-05T00:23:23.151Z",
       "reviewedBy": "shakeebshaan"
     },
     {
