@@ -1010,12 +1010,32 @@
         "c101aabf1ac4f26f145e62b4a027096b12322778"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Profile Trophy Case was showing tier label both inside tile and below. Fixed (commit 53eaa21a): removed in-tile label; tier label appears only below the badge name in the footer row.",
+        "imagePath": "images/i-20260704-53a4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-53a4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "faab4175e2b54f4fae0cf6b9c2076befa75bc0cf",
+        "imageCommits": [
+          "faab4175e2b54f4fae0cf6b9c2076befa75bc0cf"
+        ],
+        "fixedAt": "2026-07-05T21:31:50.009Z",
+        "by": "shakeebshaan",
+        "appCommit": "53eaa21a",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Screenshot shows badges with tier label ONLY below the tile (BRONZE / Plan Created etc), not duplicated inside the tile artwork. Clean separation confirmed — badge image area has no overlaid text."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Fix is now committed (1904d205) — removed the absolute-positioned inside-tile tier span that previous commits missed. TROPHY_TIER type also cleaned up to remove unused label field. Tier labels confirmed absent from Profile Trophy Case.",
-      "reviewedAt": "2026-07-05T00:13:19.798Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Please read the issue and fix it",
       "reviewRepliedAt": "2026-07-05T12:09:24.939Z",
