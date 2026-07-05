@@ -302,12 +302,12 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Owner said 'Fix more issues in this'. Applied two backend fixes (commit 072330d): (1) response_parser.py: added normalization that defaults calories/protein/carbs/fat/qty_g to 0 for every suggested_food item in meal_logger blocks — prevents any future NaN even if the LLM omits macro fields. (2) coach_tools.py: updated show_meal_logger tool schema to mark calories/protein/carbs/fat as REQUIRED with explicit instruction 'estimate if exact values are unknown, never omit these fields — a missing calories value shows NaN kcal to the user'. Both fixes deployed to prod. The frontend fallback 'Nutrition unavailable' (commit 21c05d06) is also in place as a safety net. testGate=true — please resolve.",
       "reviewedAt": "2026-07-04T23:58:01.731Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Fix more issues in this",
-      "reviewRepliedAt": "2026-07-04T23:16:18.287Z",
+      "reviewRepliedAt": "2026-07-05T12:11:27.869Z",
       "reviewReplyBy": "shakeebshaan"
     },
     {
