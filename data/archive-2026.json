@@ -11641,6 +11641,33 @@
       "resolvedAt": "2026-07-05T11:52:29.307Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-05T11:52:29.307Z"
+    },
+    {
+      "id": "i-20260704-5c67",
+      "createdAt": "2026-07-04T23:05:59.056Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-5c67.jpg",
+      "imageCommit": "8fee86a6a71c4ccfc904b0fea92b08475041aaa1",
+      "imagePaths": [
+        "images/i-20260704-5c67.jpg"
+      ],
+      "imageCommits": [
+        "8fee86a6a71c4ccfc904b0fea92b08475041aaa1"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix SHIPPED (app f878edbd, pushed main). Root cause: ProfileHydrationSection GOAL_MAX was 5000ml, hard-capping the daily water goal at 5L so the + button disabled at 5. Raised cap to 8000ml (8L, a safe ceiling for athletes; step still 250ml). Verified via typecheck. GATE BLOCKER: satisfaction bar=100 blocks self-resolve and QA JWT is revoked (401 on capture) so authenticated recapture of the Profile>Hydration stepper is blocked. Please resolve after verifying + goal now increments past 5L.",
+      "reviewedAt": "2026-07-04T23:24:17.449Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-05T11:52:55.819Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-05T11:52:55.819Z"
     }
   ]
 }
