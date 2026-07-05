@@ -768,9 +768,31 @@
         "d65118ece11f515a8a75f56ddfc6fccd341b4f51"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Non-blocking 5s optimistic save: handleStartCustomPlan fires a 5s setTimeout; if save+finalize takes longer, setShowTour(true) opens the PostPlanTour immediately. Commit 50fc92ac.",
+        "imagePath": "images/i-20260704-4e18-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-4e18-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "be2b5de248ded76a0fd399436527b796a65485e2",
+        "imageCommits": [
+          "be2b5de248ded76a0fd399436527b796a65485e2"
+        ],
+        "fixedAt": "2026-07-05T22:01:26.174Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Code fix in OnboardingFlow.tsx: optimisticTimer fires setShowTour after 5s so user is never blocked. Fast paths clear the timer. Background-fail handled by handleFinish fallback."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260704-5c82",
