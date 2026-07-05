@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260705-7d2a",
+      "createdAt": "2026-07-05T22:00:23.623Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Daily Check-in block wipes already-logged water and fabricates sleep/mood on submit.\n\nThe coach-chat daily_checkin block (src/components/blocks/DailyCheckinBlock.tsx) seeds water=0, sleep=7h, mood=3 from a `data.defaults` field the backend never sends (the show_daily_checkin tool schema in app/services/coach_tools.py only has `date`/`fields`/`previous_values` - no `defaults`), and handleSubmit ALWAYS includes water_ml, sleep_hours and mood in the payload. Only weight has an omit-when-untouched guard (`...(weight > 0 && {...})`).\n\nBackend POST /logs/daily `_apply_daily_fields` (app/routes/logging.py) sets every present non-null field, so a check-in submitted without touching water overwrites the day's water_intake_liters with 0 - silently wiping water the user logged earlier via the Nutrition page - and writes sleep_hours=7 + energy_rating=6 (mood 3 x2) that the user never entered.\n\nCompounding: the block ignores the backend's required `fields` array entirely - a coach-requested weight-only check-in still renders and submits all 4 fields.\n\nExpected: untouched fields are omitted from the payload (same pattern as weight), and the form respects data.fields.\nActual: water zeroed, sleep/mood fabricated on every submit.\n\nRepro: 1) Log ~2L water on /nutrition. 2) In coach chat, get a daily_checkin block (ask coach for a check-in). 3) Enter only weight, tap Submit Check-in. 4) GET /logs/daily for today: water_intake_liters is 0 and sleep_hours is 7.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260705-91cf",
+      "createdAt": "2026-07-05T22:00:23.623Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Scrolling coach chat wipes in-progress interactive-block input (production only).\n\nCoachChatMessageList virtualizes rows when VITE_COACH_CHAT_VIRTUALIZE=true - which .env.production line 24 enables (dev default is off) - with overscan: 6. TanStack Virtual UNMOUNTS rows that scroll past the overscan window, and every interactive block keeps its form state in component-local useState: WorkoutTrackerBlock set reps/weights/completed checkboxes, DailyCheckinBlock weight/water/sleep/mood, MultiSelectBlock selections, WaterLoggerBlock tapped increments. Only the completed/active status is lifted to the parent (blockStatuses in CoachChat.tsx); draft input is not.\n\nSo a user mid-workout who has checked off 3 sets and adjusted weights in a workout_tracker block, scrolls up ~7+ messages to re-read the coach's instructions, then scrolls back down, finds the tracker silently reset to its planned defaults - every checked set and edited value gone. Same for a half-filled daily check-in.\n\nExpected: in-progress block input survives scrolling (persist draft state per blockKey outside the virtualized row, e.g. a parent-level map/ref cache alongside blockStatuses, keyed the same way).\nActual: offscreen unmount discards it.\n\nRepro (needs prod flag): build/serve with VITE_COACH_CHAT_VIRTUALIZE=true, open a coach chat long enough to scroll, get a workout_tracker block at the bottom, check 2-3 sets WITHOUT submitting, scroll to the top of the thread, scroll back down - checked sets are cleared. Dev builds (flag off) do not reproduce, which is why QA misses it.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260705-c86c",
       "createdAt": "2026-07-05T21:41:26.654Z",
       "route": null,
