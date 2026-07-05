@@ -608,8 +608,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "AMBIGUOUS — description 'Hidden ui' doesn't specify what is hidden. The screenshot shows the Add Food bottom sheet (CustomMealModal.tsx) with Quick Log/Ingredients tabs. Possible interpretations: (1) Quick Log tab content not visible when selected; (2) the sheet itself is too short, cutting off content; (3) something behind the sheet overlay is being hidden unintentionally. Need owner to clarify: what specifically is hidden? Which tab, which screen, what action triggers the hidden state?",
-      "reviewedAt": "2026-07-04T23:27:35.194Z",
+      "reviewReason": "Fish Dal Rice shown as 'Snack' in Add Food sheet but 'Dinner' in Diet tab for the same meal slot. The Add Food ingredient search uses a different meal slot label lookup than the Diet tab list. Likely a meal_type labeling inconsistency between the CustomMealModal meal_number assignment and the Diet tab's slot rendering. Needs investigation of how meal_number -> meal_type mapping works in both paths.",
+      "reviewedAt": "2026-07-05T00:03:06.652Z",
       "reviewedBy": "shakeebshaan"
     },
     {
