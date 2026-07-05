@@ -1202,8 +1202,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Dashboard shows 'Log at least 3 meals ✓ Done' while Diet card shows 0/3 meals logged. WeeklyChallengeCard.tsx renders data.completed from /gamification/weekly-challenge API. The backend gamification_service.py is returning completed=true incorrectly. Likely checking the wrong date window (e.g. checking last week's data instead of current week). Needs investigation of the weekly challenge completion logic in gamification_service.py.",
-      "reviewedAt": "2026-07-05T00:03:59.525Z",
+      "reviewReason": "After code review: this is likely NOT a bug. WeeklyChallengeCard shows data.completed from the /gamification/weekly-challenge API. The backend evaluates meals_logged over week_start..week_start+7 (Monday-Sunday). The Diet card shows TODAY'S meal progress (0/3). These are different timeframes: if the user logged 3+ meals earlier in the week (e.g. Mon-Fri), the challenge is legitimately Done even though today shows 0 meals. Owner: please confirm whether the screenshot was taken on a day when the user had logged meals earlier that week before closing.",
+      "reviewedAt": "2026-07-05T00:14:52.712Z",
       "reviewedBy": "shakeebshaan"
     },
     {
