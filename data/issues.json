@@ -13,12 +13,35 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Implemented snap-meal photo analysis un-gated for all users. Root cause: the existing camera button in CustomMealModal (already shipped with photo analysis infrastructure) had a PRO subscription gate on /ai/analyze-meal-photo; free users got 403 → routed to choose-plan. Fix: (1) Backend plan_builder_routes.py: removed Subscription.query check from /ai/analyze-meal-photo; all authenticated users can snap meals now, cost bounded by gpt-4o-mini low-detail + 25-req/day llm_rate_limit_buckets cap (meal_photo domain). (2) Frontend CustomMealModal: removed PRO badge, updated button to 'Snap meal — AI identifies it', updated description copy, updated low-confidence toast to 'Best guess — please check macros', removed 403→choose-plan handler. Screenshot shows /nutrition page (fasting day active hides the Log Custom Meal trigger button + fixed-in-scroll-container makes modal hard to screenshot; Playwright eval confirmed modal text: 'Snap meal — AI identifies it' with 0 PRO badges).",
+        "imagePath": "images/i-20260706-sn4p-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260706-sn4p-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "58abeb43e1029b107184f7855da032a82c735fcb",
+        "imageCommits": [
+          "58abeb43e1029b107184f7855da032a82c735fcb"
+        ],
+        "fixedAt": "2026-07-06T23:20:32.080Z",
+        "by": "shakeebshaan",
+        "appCommit": "7d1ec54e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 85,
+          "bar": 80,
+          "note": "Core implementation complete: subscription gate removed backend + PRO badge removed frontend. Rate limiting (25/day) still in place. Screenshot is the closest faithful proof — modal trigger is hidden on fasting day; DOM evaluate confirmed correct button text and 0 PRO badges."
+        }
+      },
       "history": [],
       "id": "i-20260706-sn4p",
       "route": "/nutrition",
-      "description": "[suggestion] Snap-to-log: photograph your plate and the coach AI estimates the dish + macros, prefilled into the custom-meal form for one-tap confirm. USER PROBLEM: logging a home-cooked Indian meal today means typing free-text into CustomMealModal and guessing macros yourself - the single highest-friction step in daily use; mixed thalis/curries are hard to name, so meals go unlogged and adherence data rots. EVIDENCE: zero photo/camera path exists anywhere in the nutrition flow (no camera refs in src/pages/Nutrition.tsx or src/components/nutrition/), while Capacitor Camera is already installed (progress-photos suggestion i-20260702-ppht shipped) and the backend already runs LLM infrastructure (llm_service.py) - and this is the flagship logging feature of every India competitor (HealthifyMe Snap, MyFitnessPal meal scan). V1 SCOPE: a 'Snap meal' button in the /nutrition add-meal sheet -> camera/gallery via Capacitor Camera -> client-side compress -> POST /api/v1/nutrition/photo-analyze (backend vision-LLM call returning dish name + calories/protein/carbs/fat estimate + confidence) -> prefills CustomMealModal for user edit/confirm before save (never auto-logs; low-confidence results say 'best guess - please check'). Reuse existing llm_rate_limit_buckets for rate limiting; keep it un-gated (logging is core, not premium). EFFORT: ~2-3 days full-stack (one backend endpoint + vision prompt, camera + prefill wiring on Nutrition, QA capture)."
+      "description": "[suggestion] Snap-to-log: photograph your plate and the coach AI estimates the dish + macros, prefilled into the custom-meal form for one-tap confirm. USER PROBLEM: logging a home-cooked Indian meal today means typing free-text into CustomMealModal and guessing macros yourself - the single highest-friction step in daily use; mixed thalis/curries are hard to name, so meals go unlogged and adherence data rots. EVIDENCE: zero photo/camera path exists anywhere in the nutrition flow (no camera refs in src/pages/Nutrition.tsx or src/components/nutrition/), while Capacitor Camera is already installed (progress-photos suggestion i-20260702-ppht shipped) and the backend already runs LLM infrastructure (llm_service.py) - and this is the flagship logging feature of every India competitor (HealthifyMe Snap, MyFitnessPal meal scan). V1 SCOPE: a 'Snap meal' button in the /nutrition add-meal sheet -> camera/gallery via Capacitor Camera -> client-side compress -> POST /api/v1/nutrition/photo-analyze (backend vision-LLM call returning dish name + calories/protein/carbs/fat estimate + confidence) -> prefills CustomMealModal for user edit/confirm before save (never auto-logs; low-confidence results say 'best guess - please check'). Reuse existing llm_rate_limit_buckets for rate limiting; keep it un-gated (logging is core, not premium). EFFORT: ~2-3 days full-stack (one backend endpoint + vision prompt, camera + prefill wiring on Nutrition, QA capture).",
+      "needsReview": false
     },
     {
       "createdAt": "2026-07-06T18:10:41.867Z",
