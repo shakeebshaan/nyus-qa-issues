@@ -58,9 +58,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: delete button had opacity-0 group-hover:opacity-100 making it invisible on touch. Fix: removed hover-only visibility, button is always shown; upgraded from w-7/h-7 (28px) to w-11/h-11 (44px) touch target per project rules. QA account has no photos so empty state shown — delete button appears on each photo thumbnail when photos exist.",
+        "imagePath": "images/i-20260706-0e77-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260706-0e77-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2236c94a45f6e5eaa67418615f5e6c1a4b9bb8de",
+        "imageCommits": [
+          "2236c94a45f6e5eaa67418615f5e6c1a4b9bb8de"
+        ],
+        "fixedAt": "2026-07-06T02:18:52.805Z",
+        "by": "shakeebshaan",
+        "appCommit": "c90fabe3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Code fix is surgical and complete. Empty state shown since QA account has no photos; the invisible-button root cause (opacity-0) is definitively removed."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260705-be1f",
