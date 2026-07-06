@@ -175,30 +175,8 @@
         "ef410e5609184a8000fe2c22f3e040a2f669b80f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: QuickActionsBlock used a left-border accent (border-l-[3px]) that felt dated. Fix (Option C from design shotgun): warm muted background, clean border, no left accent for idle state; teal gradient with ambient glow on selected state. Design shotgun HTML attached. 28/28 component tests pass.",
-        "imagePath": "images/i-20260704-ce32-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260704-ce32-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "aeffe0443f75ebd833c8645dafd0191a36b8be6b",
-        "imageCommits": [
-          "aeffe0443f75ebd833c8645dafd0191a36b8be6b"
-        ],
-        "fixedAt": "2026-07-06T13:27:06.635Z",
-        "by": "shakeebshaan",
-        "appCommit": "ed689f49",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 82,
-          "bar": 80,
-          "note": "Modern warm-neutral design applied and verified in chat screenshot. Selected state: full teal gradient + glow. Idle: calm warm muted. Shotgun HTML with 3 variants attached for owner to compare."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-06T12:30:30.636Z",
@@ -225,6 +203,35 @@
               "score": 82,
               "bar": 80,
               "note": "Design shotgun delivered. Variant B applied to button styling. Persistent tray added."
+            }
+          }
+        },
+        {
+          "at": "2026-07-06T14:08:36.687Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: QuickActionsBlock used a left-border accent (border-l-[3px]) that felt dated. Fix (Option C from design shotgun): warm muted background, clean border, no left accent for idle state; teal gradient with ambient glow on selected state. Design shotgun HTML attached. 28/28 component tests pass.",
+            "imagePath": "images/i-20260704-ce32-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260704-ce32-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "aeffe0443f75ebd833c8645dafd0191a36b8be6b",
+            "imageCommits": [
+              "aeffe0443f75ebd833c8645dafd0191a36b8be6b"
+            ],
+            "fixedAt": "2026-07-06T13:27:06.635Z",
+            "by": "shakeebshaan",
+            "appCommit": "ed689f49",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 82,
+              "bar": 80,
+              "note": "Modern warm-neutral design applied and verified in chat screenshot. Selected state: full teal gradient + glow. Idle: calm warm muted. Shotgun HTML with 3 variants attached for owner to compare."
             }
           }
         }
