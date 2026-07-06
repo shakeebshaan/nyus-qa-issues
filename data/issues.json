@@ -1238,12 +1238,32 @@
         "541590e82f24bf98f5040b0c378ee9bd24a947f6"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Added 'What's included' section listing 6 Pro plan features (AI coach, workout plan, diet plan, progress tracking, weekly insights, plan auto-adjustments) with icons+checkmarks. Renders only for active subscribers. Commit a0bc400e.",
+        "imagePath": "images/i-20260704-0e7f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-0e7f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "32ed51a76a1ec5e8eebfdc81175d13dd1fd49163",
+        "imageCommits": [
+          "32ed51a76a1ec5e8eebfdc81175d13dd1fd49163"
+        ],
+        "fixedAt": "2026-07-06T03:09:18.176Z",
+        "by": "shakeebshaan",
+        "appCommit": "a0bc400e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Directly addresses sparse page complaint. All 6 plan features listed with teal-branded icons, matches premium restraint aesthetic. Only gap is no 'change plan' CTA for upgrades."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "'Subscriptions should show the second page' — needs a product/design call on what the second page contains (full plan comparison? paged carousel of plan cards on ChoosePlan/Subscription?) plus authed repro. Ambiguous scope; flagging for owner direction rather than guessing. Also BLOCKED for repro: QA JWT revoked (401).",
-      "reviewedAt": "2026-07-04T23:26:26.343Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Please read the issue and fix it",
       "reviewRepliedAt": "2026-07-05T12:09:35.041Z",
