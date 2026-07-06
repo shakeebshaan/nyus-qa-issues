@@ -107,16 +107,36 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
+      "status": "fixed",
       "tags": [
         "suggestion",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "Live 16:8 fasting timer shipped on Nutrition: picking '16:8 window' starts a circular teal progress ring with Xh Ym fasted, eating-window-open time, state label (Fasting / Eating window open) and % progress strip. Client-side, persisted per-day in localStorage; End fast clears it. Follow-up commit fixed the ring rendering invisibly (raw teal-* classes were absent from compiled CSS - swapped to the d-teal token scale).",
+        "imagePath": "images/i-20260704-if01-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-if01-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f0538f47eba589712d77a67e240e6f5f2977ca7d",
+        "imageCommits": [
+          "f0538f47eba589712d77a67e240e6f5f2977ca7d"
+        ],
+        "fixedAt": "2026-07-06T02:09:36.698Z",
+        "by": "shakeebshaan",
+        "appCommit": "9f13ca37",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 97,
+          "bar": 95,
+          "note": "Recapture shows the live ring (5h 37m, 35%, window opens 12:30 pm) - exactly the v1 scope in the card"
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Feature request for live 16:8 intermittent fasting timer (circular ring + Xh Ym countdown). Valid gap — FastingBanner has no timer. Scoped to 1-2 days frontend, no backend needed. Owner: prioritize vs current work? This is a new feature, not a bug fix.",
-      "reviewedAt": "2026-07-05T00:26:58.130Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Implement",
       "reviewRepliedAt": "2026-07-05T11:49:22.643Z",
