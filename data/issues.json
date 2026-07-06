@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: displayMeasurement used toFixed(1) causing inch steps to drift (0.30/0.60/0.80 instead of 0.25/0.50/0.75). Fix: toFixed(2) in Measurements.tsx displayMeasurement useMemo. Screenshot shows exact 0.25 increments in inch mode.",
+        "imagePath": "images/i-20260706-3f91-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260706-3f91-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a79770ab4997aa9232ecad7123ef2ba68affc2a9",
+        "imageCommits": [
+          "a79770ab4997aa9232ecad7123ef2ba68affc2a9"
+        ],
+        "fixedAt": "2026-07-06T02:18:34.507Z",
+        "by": "shakeebshaan",
+        "appCommit": "c90fabe3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Precise root-cause fix verified visually — exact 0.25 increments confirmed. Complete fix with zero regressions."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260706-0e77",
