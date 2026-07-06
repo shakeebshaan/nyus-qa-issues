@@ -41,7 +41,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix shipped in commit 39d18447: MealSuggestionSwiper context prop now spreads loadBuilderDraft()?.mealPrefs ?? {} alongside diet_type/goal/allergies, matching the pattern in handleCoachBuildAll/handleCoachBuildMeal. This means (a) dislikes/cuisine/spice/cooktime are sent to the backend so suggestions respect prefs, and (b) the mealDeckKey matches the enriched key that was warmed at mount, eliminating the ~14s LLM roundtrip. Code is one-line spread change (grep+tsc verified). No unit tests for this component. Full gate infra-blocked headless - same as i-20260706-9b3c. Owner: scope testCommand in loop.json to unlock auto-resolve.",
+      "reviewedAt": "2026-07-06T17:17:45.097Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260705-c86c",
