@@ -118,6 +118,8 @@
   .badge.reopened { background: hsl(0 80% 95%); color: hsl(0 55% 40%); }
   .badge.archived { background: hsl(40 15% 92%); color: var(--muted); }
   .badge.review { background: hsl(263 60% 95%); color: hsl(263 50% 42%); }
+  /* Owner replied with direction — Claude should act, not re-flag */
+  .badge.replied { background: hsl(166 55% 92%); color: hsl(166 70% 28%); }
   /* "Needs your review" banner on a flagged card */
   .review-note {
     margin: 10px 0 0; padding: 10px 12px; border-radius: 10px;
@@ -1022,14 +1024,15 @@ function cardHtml(it, archived) {
   const reopened = it.status === "open" && (it.history || []).some((h) => h.event === "reopened");
   const lastReopen = reopened ? it.history.filter((h) => h.event === "reopened").slice(-1)[0] : null;
   const needsReview = it.status === "open" && it.needsReview;
-  // Lifecycle labels (QA flow 2026-06-13): Submitted → In review → Resolved,
-  // with Re-fix when the user sends a fix back as "not fixed".
+  // Lifecycle labels. Issues with a reviewReply show "Act on this" (teal) so
+  // it's clear the owner has given direction and Claude should fix, not re-flag.
   const badge = archived
     ? `<span class="badge fixed">Resolved</span>`
     : it.status === "fixed"
       ? `<span class="badge review">In review</span>`
-      : needsReview ? `<span class="badge review">User review</span>`
-        : reopened ? `<span class="badge reopened">Re-fix</span>` : `<span class="badge open">Submitted</span>`;
+      : needsReview && it.reviewReply ? `<span class="badge replied">Act on this</span>`
+        : needsReview ? `<span class="badge review">Needs direction</span>`
+          : reopened ? `<span class="badge reopened">Re-fix</span>` : `<span class="badge open">Submitted</span>`;
 
   // Previous fixes accumulate as the user rejects ("not fixed") and Claude
   // re-fixes — surfaced as a collapsed dropdown so the current fix stays primary.
@@ -1062,13 +1065,24 @@ function cardHtml(it, archived) {
          <button class="vbtn reject" type="button" data-notfixed="${esc(it.id)}">✗ Not fixed</button>
        </div>`}`
     : needsReview
-      ? `<div class="review-note"><b>Needs your review.</b><br>${formatDesc(it.reviewReason || "Blocked — see notes.", it.id)}</div>
-         ${responseHtml}
-         ${prevHtml}
-         ${archived ? reopenVerdict : `<div class="verdict">
-           <button class="vbtn respond" type="button" data-respond="${esc(it.id)}">↩ Respond</button>
-           <button class="vbtn resolve" type="button" data-resolve="${esc(it.id)}">✓ Resolve</button>
-         </div>`}`
+      ? (it.reviewReply
+          ? `${responseHtml}
+             <details class="prevfix" style="margin-top:10px"><summary>Why it was flagged</summary>
+               <div class="review-note" style="margin-top:8px">${formatDesc(it.reviewReason || "Flagged for review.", it.id)}</div>
+             </details>
+             ${prevHtml}
+             ${archived ? reopenVerdict : `<div class="verdict">
+               <button class="vbtn respond" type="button" data-respond="${esc(it.id)}">↩ Reply</button>
+               <button class="vbtn resolve" type="button" data-resolve="${esc(it.id)}">✓ Resolve</button>
+             </div>`}`
+          : `<div class="review-note"><b>Awaiting your direction.</b><br>${formatDesc(it.reviewReason || "Blocked — see notes.", it.id)}</div>
+             ${responseHtml}
+             ${prevHtml}
+             ${archived ? reopenVerdict : `<div class="verdict">
+               <button class="vbtn respond" type="button" data-respond="${esc(it.id)}">↩ Respond</button>
+               <button class="vbtn resolve" type="button" data-resolve="${esc(it.id)}">✓ Resolve</button>
+             </div>`}`
+        )
       : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
        <div class="await"><span><span class="w">🔧</span>${reopened ? "Awaiting re-fix" : "Awaiting fix"}<br><span style="font-size:12px;opacity:.7">Claude will post the ${reopened ? "re-" : ""}fixed screenshot here</span></span></div>
        ${responseHtml}
@@ -1098,7 +1112,7 @@ function cardHtml(it, archived) {
         ${tagsHtml}
       </div>
       <div class="side">
-        <h3>${needsReview ? "Status" : it.status === "fixed" ? "Proposed fix" : "Fix"} <span class="iid">${esc(it.id)}</span>${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
+        <h3>${needsReview && it.reviewReply ? "Owner's direction" : needsReview ? "Status" : it.status === "fixed" ? "Proposed fix" : "Fix"} <span class="iid">${esc(it.id)}</span>${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
         ${right}
       </div>
     </div>
@@ -1117,15 +1131,23 @@ function renderTagbar(issues) {
 }
 function render() {
   const all = db?.issues || [];
-  // Order: needs-review first, then other open, then fixed; newest within each.
-  const rank = (i) => (i.status === "open" && i.needsReview ? 0 : i.status === "open" ? 1 : 2);
+  // Order: owner-replied (has direction) first, then needsReview, then submitted, then fixed.
+  const rank = (i) => (
+    i.status === "open" && i.needsReview && i.reviewReply ? 0
+    : i.status === "open" && i.needsReview ? 1
+    : i.status === "open" ? 2
+    : 3
+  );
   const sorted = [...all].sort(
     (a, b) => rank(a) - rank(b) || (b.createdAt || "").localeCompare(a.createdAt || ""),
   );
   const open = all.filter((i) => i.status === "open").length;
   const review = all.filter((i) => i.status === "open" && i.needsReview).length;
+  const replied = all.filter((i) => i.status === "open" && i.needsReview && i.reviewReply).length;
   const inReview = all.length - open;
-  $("chip-open").textContent = review ? `${open} to fix · ${review} review` : `${open} to fix`;
+  $("chip-open").textContent = replied
+    ? `${open} open · ${replied} act-on-this · ${review - replied} pending`
+    : review ? `${open} to fix · ${review} pending direction` : `${open} to fix`;
   $("chip-fixed").textContent = `${inReview} in review`;
   renderTagbar(sorted);
   const visible = activeTag ? sorted.filter((it) => tagsFor(it).includes(activeTag)) : sorted;
