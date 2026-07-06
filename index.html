@@ -1092,7 +1092,7 @@ function cardHtml(it, archived) {
         ${tagsHtml}
       </div>
       <div class="side">
-        <h3>${needsReview ? "Status" : it.status === "fixed" ? "Proposed fix" : "Fix"} ${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
+        <h3>${needsReview ? "Status" : it.status === "fixed" ? "Proposed fix" : "Fix"} <span class="iid">${esc(it.id)}</span>${it.fix?.fixedAt ? `<span class="when">${fmtDate(it.fix.fixedAt)}</span>` : ""}</h3>
         ${right}
       </div>
     </div>
