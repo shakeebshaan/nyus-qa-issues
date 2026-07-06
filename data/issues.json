@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-06T18:10:41.867Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20260706-a7d2",
+      "route": "/goal-change",
+      "description": "[bug-hunt] Change Goal shows a false \"Couldn't load your plan / Check your connection\" error whenever the user has NO ACTIVE plan (e.g. plan is paused) - and the paused-plan path can never work anyway. WHERE: src/pages/GoalChangeWizard.tsx ~638-661: planService.getActivePlan() unwraps `/plans/active` which returns 200 + data:null when there is no active plan (documented in the sibling guard at src/pages/PlanPauseScreen.tsx:70-76). The .then does `plan.id` on null -> TypeError -> falls into .catch where `err.response.status` is undefined -> loadError='failure' -> full-screen \"Couldn't load your plan / Check your connection and try again\" whose 'Try again' is window.location.reload(), which reloads into the same error forever. The 'missing' empty state (\"No active plan / Create a plan\") only triggers on a legacy 404 that this endpoint no longer sends. TWO ENTRY POINTS HIT IT: (1) Profile -> Change Goal is UNCONDITIONAL (ProfilePlanManagement.tsx:52 - not gated on hasActivePlan, unlike Pause/Resume below it); (2) PlanResumeScreen's expired-plan warning CTA 'Update goal instead' (PlanResumeScreen.tsx:180-184) is shown ONLY to paused users - and even if the wizard did load a plan id, backend change_goal rejects non-active plans with 400 'Can only change goal on an active plan' (nyu_backend app/routes/plans.py:663), so that CTA is a guaranteed dead end for its only audience. EXPECTED: null active plan -> the existing 'missing' empty state (No active plan / Create a plan); the resume-screen CTA should resume first or route somewhere that works for a paused plan. ACTUAL: misleading network-error screen + infinite reload loop. REPRO: have an active plan -> Profile -> Pause Plan -> complete pause -> Profile -> Change Goal (or /plan-resume with an expired window -> 'Update goal instead') -> 'Couldn't load your plan, check your connection'. FIX SHAPE: guard `plan?.id == null` -> setLoadError('missing') (mirror PlanPauseScreen:74); gate or reroute the two entry points for paused users."
+    },
+    {
+      "createdAt": "2026-07-06T18:10:41.867Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20260706-5e19",
+      "route": "/plan-pause",
+      "description": "[bug-hunt] Pausing a plan promises \"reminders paused\" but device-local reminders keep firing every day while paused. WHERE: src/pages/PlanPauseScreen.tsx ~222 - intro copy says \"Your streak will be frozen and reminders paused until you're ready to resume\", but handlePause (~91-121) only calls planService.pausePlan() and navigates; nothing touches local notifications. src/lib/localNotifications.ts has ZERO references to pause/plan status, and no caller cancels the daily workout reminder or the Sunday weigh-in reminder on pause (grep: pausePlan is referenced only by plan.service.ts + PlanPauseScreen). Backend-side pushes DO honor the pause (daily_report + daily_inactivity_push both filter FitnessPlan status='active'), so this is specifically the on-device LocalNotifications schedule. EXPECTED: after pausing, no workout/weigh-in reminders until resume (that is the literal promise on the pause screen). ACTUAL: the phone keeps buzzing \"time to work out\" every scheduled day of the pause - exactly what a user on vacation/injured (the pause reasons offered) asked to stop. REPRO (device/emulator build): enable workout reminders in /notification-preferences -> Profile -> Pause Plan -> wait for the next reminder time: local notification still fires while the plan is paused. FIX SHAPE: on successful pause, cancel the plan-linked local reminders (workout + weigh-in ids in localNotifications.ts); on resume, re-apply from saved preferences (same recovery path NotificationPreferences already uses). NOT a duplicate of i-20260705-4f2c (quiet hours) or i-20260705-b3e7 (wrong toggle): this is the pause lifecycle never touching local schedules at all."
+    },
+    {
+      "createdAt": "2026-07-06T18:10:41.867Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20260706-c3b8",
+      "route": "/profile",
+      "description": "[bug-hunt] Right after pausing (or resuming) a plan, the Profile plan-management section shows the WRONG entry points: \"Pause Plan\" still visible (leads to a dead end) and \"Resume Plan\" hidden - and Profile is the ONLY place in the app that links to /plan-resume. WHERE: src/pages/_components/profile/ProfilePlanManagement.tsx:20-33 caches [\"active-plan\"] and [\"paused-plan\"] with staleTime 60s; PlanPauseScreen/PlanResumeScreen mutate via planService.pausePlan/resumePlan directly and NEVER invalidate those keys (grep \"active-plan|paused-plan\" across src: only ProfilePlanManagement + BodyComposition read them; zero invalidateQueries anywhere). EXPECTED: after \"Plan paused\" success, returning to Profile shows Resume Plan (and hides Pause Plan). ACTUAL: within the 60s staleTime (the whole pause flow takes well under that) Profile re-renders from cache: Pause Plan still shown - tapping it opens /plan-pause which now finds no active plan and dead-ends at \"No active plan to pause\"; Resume Plan is absent, so the just-paused user has NO path to /plan-resume until the cache staleness window passes AND the profile remounts. Same inversion after resume (Resume lingers, Pause hidden). REPRO: Profile -> Pause Plan -> pick reason -> Pause My Plan -> toast \"Plan paused\" -> back to Profile within a minute: section still offers Pause Plan and no Resume Plan. FIX SHAPE: invalidate [\"active-plan\"] + [\"paused-plan\"] (useQueryClient) in both success paths - or convert pause/resume to useMutation with onSuccess invalidation."
+    },
+    {
       "id": "i-20260706-9b3c",
       "createdAt": "2026-07-06T16:39:00.453Z",
       "route": "/onboarding",
