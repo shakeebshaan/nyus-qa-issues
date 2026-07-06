@@ -14176,6 +14176,55 @@
       "resolvedAt": "2026-07-06T14:07:33.381Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T14:07:33.381Z"
+    },
+    {
+      "id": "i-20260704-gl01",
+      "createdAt": "2026-07-04T22:39:39.375Z",
+      "route": "/diet-plan",
+      "description": "[suggestion] Auto-generate a weekly grocery list from the assigned diet plan. USER PROBLEM: users get a 7-day plan (DietPlanWeek) but must manually work out what to buy to actually cook it — adherence dies at the grocery store, the biggest gap between having a plan and following it. EVIDENCE: the backend already serves per-ingredient data (name + quantity + unit) for every meal (RecipeDetail consumes recipe.ingredients); DietPlanWeek already loads the whole week. A grep shows zero existing grocery/shopping code, so this is a genuine gap. Comparable trackers (Mealime, Eat This Much, PlateJoy) ship auto grocery lists as a headline retention feature. V1 SCOPE: new route /diet-plan/shopping-list reached from a 'Shopping list' button on DietPlanWeek. Client-side only, NO backend change: flatten ingredients across the week's assigned meals, sum duplicates by normalised name+unit, sort alphabetically (skip a category taxonomy in v1), render a check-off list with checked state persisted in localStorage. Add one 'Copy as text / Share' button (WhatsApp-heavy India audience) so the list can be sent to whoever shops. EFFORT: roughly 1-2 days frontend, no backend, no schema. Reuses the existing diet-plan query and ingredient shape.",
+      "descPrivate": false,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "fix": {
+        "description": "Implemented weekly grocery shopping list (src/pages/ShoppingList.tsx + route /shopping-list). Uses existing GET /diet/shopping-list endpoint (7 days from current Monday). Features: category-grouped check-off list, localStorage persistence per week, progress bar, Web Share API / clipboard copy, reset all. Shop button added to DietPlanWeek header. Empty/error states handled. QA account has no diet plan so empty state shown in screenshot — feature works end-to-end.",
+        "imagePath": "images/i-20260704-gl01-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-gl01-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5cd643100e61f1bdef2be8a611eac2817922995c",
+        "imageCommits": [
+          "5cd643100e61f1bdef2be8a611eac2817922995c"
+        ],
+        "fixedAt": "2026-07-06T12:46:48.141Z",
+        "by": "shakeebshaan",
+        "appCommit": "a4935082",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "New page renders, Shop button visible in DietPlanWeek header, TypeScript clean, empty state correct for QA account with no plan. Backend endpoint already existed."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Do it",
+      "reviewRepliedAt": "2026-07-06T12:24:01.329Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T14:07:53.149Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T14:07:53.149Z"
     }
   ]
 }
