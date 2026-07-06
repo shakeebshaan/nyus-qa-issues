@@ -14691,6 +14691,52 @@
       "resolvedAt": "2026-07-06T14:11:11.312Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T14:11:11.312Z"
+    },
+    {
+      "id": "i-20260706-4ea7",
+      "createdAt": "2026-07-06T16:39:00.453Z",
+      "route": "/onboarding",
+      "description": "[bug-hunt] Per-meal 'Suggest' swiper ignores the user's saved meal preferences (food dislikes, cuisine, spice, cook time) AND misses the prefetched deck, causing a cold ~14s 'Cooking up ideas...' wait. WHERE: src/pages/onboarding/custom/CustomDietBuilder.tsx ~1500-1504 - MealSuggestionSwiper gets context={diet_type, goal, allergies} only, while every other AI path (handleCoachBuildAll ~664, handleCoachBuildMeal ~822, and the mount prefetch ~572 via buildDietPrefetchBodies) spreads loadBuilderDraft()?.mealPrefs into context. mealDeckKey (custom-plan.service.ts ~271) includes cuisine_preferences/cook_time/spice_level/food_dislikes in the cache key. EXPECTED: after the user answers the MealPrefsSheet (every 'build it all' entry opens it and answers persist in the builder draft), tapping 'Suggest' on a meal should (a) respect those answers - e.g. food_dislikes='paneer' must not surface paneer meals - and (b) hit the enriched deck that was just warmed. ACTUAL: the swiper requests the BASELINE key: suggestions disregard dislikes/cuisine/spice (backend never receives them), and since the mount prefetch warmed the ENRICHED key, the baseline request is a cache miss -> fresh LLM round-trip (~14s) despite QA i-20260612-0b73's instant-open guarantee. Note suggestMealCached's baseline-fallback (~466) only works the other direction (enriched request served from baseline deck), never baseline-request-from-enriched-deck. REPRO: onboarding diet builder -> 'Coach builds all meals' -> answer prefs incl. a dislike -> after build, tap 'Suggest' on any meal: spinner ~14s and cards can include the disliked food. FIX SHAPE: pass {...context, ...(loadBuilderDraft()?.mealPrefs ?? {})} to the swiper context (mirror handleCoachBuildMeal).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: MealSuggestionSwiper context omitted the saved mealPrefs, so suggestions ignored dislikes/cuisine/spice AND keyed the baseline deck while the mount prefetch warmed the enriched deck (cold ~14s LLM wait). Fix: spread loadBuilderDraft()?.mealPrefs into the swiper context (mirrors handleCoachBuildMeal) - verified: card opens from the warm deck in ~0.2s and the network request now carries cuisine_preferences/cook_time/spice_level. Follow-up caught in verification: batch-warmed deck items nest macros under macros{} so cards rendered 'P NaNg'; suggestMealsBatch now flattens them (screenshot shows real 597.9 kcal / P 50g chips).",
+        "imagePath": "images/i-20260706-4ea7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260706-4ea7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e686270be5bfcdfc1fd4704dd92eb86d48dba15c",
+        "imageCommits": [
+          "e686270be5bfcdfc1fd4704dd92eb86d48dba15c"
+        ],
+        "fixedAt": "2026-07-06T17:38:57.290Z",
+        "by": "shakeebshaan",
+        "appCommit": "a853ee75",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Instant deck-hit + prefs-in-request proven via captured network body; NaN regression the key-switch would have shipped was caught and fixed in the same pass"
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T20:24:03.419Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T20:24:03.419Z"
     }
   ]
 }
