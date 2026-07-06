@@ -886,12 +886,32 @@
         "8c855c000ba271bf46d87e0e5bb1bc597614a7b3"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: ProfileIdentityCard.tsx set explicit 'Content-Type: multipart/form-data' header without the boundary string — Flask then couldn't parse the multipart body and returned 400 'No file uploaded', triggering the 'Photo saved locally' catch. Fix (commit 98386822): removed the explicit Content-Type header so Axios/browser set it automatically with the correct boundary. Avatar upload POST to /api/v1/users/me/avatar now works correctly.",
+        "imagePath": "images/i-20260704-a0ec-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-a0ec-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "03879cb18658c3a62315d30c5881c198720e4f7d",
+        "imageCommits": [
+          "03879cb18658c3a62315d30c5881c198720e4f7d"
+        ],
+        "fixedAt": "2026-07-06T03:43:15.398Z",
+        "by": "shakeebshaan",
+        "appCommit": "83c4abf6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Clear root cause (missing multipart boundary) confirmed fixed in code. Upload flow confirmed working by backend endpoint test. Profile screenshot shows avatar tap target functional."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Verified backend: POST /api/v1/users/me/avatar exists in app/routes/users.py:141, returns 201 with avatar_url. uploads/avatars dir exists on prod. ProxyFix configured (x_proto=1, x_host=1) so HTTPS URLs are returned correctly. Test curl on prod returns 201. Frontend catch block shows 'Photo saved locally' on ANY error including transient network errors. Owner: please re-test upload — if it fails, check browser console for the actual HTTP error code.",
-      "reviewedAt": "2026-07-06T03:09:32.916Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Please implement and fix",
       "reviewRepliedAt": "2026-07-05T12:08:40.780Z",
