@@ -546,12 +546,32 @@
         "46fcbb1c37a12fdfc9e7170bfd077eeedd3d2878"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Countdown + timer UI shipped: live ring counts the fast (Xh Ym, %, eating-window-open time). NEW this pass: the fast now auto-counts the overnight window - starting a 16:8 fast back-dates to yesterday's last logged meal (dinner 9pm -> morning start already shows ~11h fasted), and completing 16h fires a calm ring pulse + 'complete' state (screenshot: 16h 20m complete, Eating window open, 100%). Recurring alarm/schedule options are a separate notifications feature - not in this pass.",
+        "imagePath": "images/i-20260704-10fa-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-10fa-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2b4869e12e521f24e9cac65cd9c7f5bd928f5097",
+        "imageCommits": [
+          "2b4869e12e521f24e9cac65cd9c7f5bd928f5097"
+        ],
+        "fixedAt": "2026-07-06T02:09:57.831Z",
+        "by": "shakeebshaan",
+        "appCommit": "9f13ca37",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Countdown, timer UI, overnight auto-count and completion animation all shipped and visible in recapture; daily alarm scheduling deferred"
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Two issues visible: (1) Fasting day banner ('Fasting day · 16:8 window') appears to be active unexpectedly. (2) Water logged at 14.9 L (impossibly high — data corruption or unit bug). The 14.9L water is similar to the 13.6L issue in 7a5d. If the water goal is 3L and water is logged in ml not L, a 14900ml entry would show as 14.9L. Needs investigation of water unit handling in logging endpoint.",
-      "reviewedAt": "2026-07-05T00:03:26.060Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Please show a condom here when the fast starts by clicking on that button it shows the corner of extinct in ours and also give me a timer like or alarm like you I for the fasting period and autocount the fasting time example of dinner was at 9:00 p.m. and the breakfast for that 6:00 a.m. and there will be 9 hours of automatically plastic which was sleeping automatic fasting which was sleeping and we can encourage user through the breakfast to fast more and so countdown and also have some motivation animation of the fasting is completed",
       "reviewRepliedAt": "2026-07-05T11:57:17.104Z",
