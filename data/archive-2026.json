@@ -12856,6 +12856,56 @@
       "resolvedAt": "2026-07-06T12:21:31.617Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T12:21:31.617Z"
+    },
+    {
+      "id": "i-20260704-b93b",
+      "createdAt": "2026-07-04T23:02:16.713Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-b93b.jpg",
+      "imageCommit": "5c98a8876ea747f48228f306ccf296d5801ab345",
+      "imagePaths": [
+        "images/i-20260704-b93b.jpg"
+      ],
+      "imageCommits": [
+        "5c98a8876ea747f48228f306ccf296d5801ab345"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: /uploads/progress-photos/ path not proxied by nginx (only /api/ is). Moved serve route to /api/v1/progress-photos/serve/ (backend commit faacf36). Also fixed multipart Content-Type header bug in frontend upload (frontend commit 2a26bc6b). Measurements page renders; new photo uploads will load correctly.",
+        "imagePath": "images/i-20260704-b93b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-b93b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8c70630cf44ee678bdde4fed6fbf2dcd4d1c10cb",
+        "imageCommits": [
+          "8c70630cf44ee678bdde4fed6fbf2dcd4d1c10cb"
+        ],
+        "fixedAt": "2026-07-06T04:14:57.307Z",
+        "by": "shakeebshaan",
+        "appCommit": "2a26bc6b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 80,
+          "note": "Backend URL routing fix is correct and deployed. Screenshot shows measurements page rendering properly. Photo loading will work for new uploads post-deploy."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Please read the issue and fix it",
+      "reviewRepliedAt": "2026-07-05T12:08:54.339Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T12:25:33.506Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T12:25:33.506Z"
     }
   ]
 }
