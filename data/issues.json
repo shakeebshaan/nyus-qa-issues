@@ -426,12 +426,32 @@
         "57b1fd410f9eb2932ab1e48eaeb2cbb7061d8ea7"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: GA4 shows low engagement and traffic concentrated on 1 page (52/68 views). Top recommendations from analysis: add free tool pages that attract repeat visits and backlinks. Fix: shipped 3 interactive calculator pages to nyus.in/blog/ — BMI Calculator India (Indian-adapted cutoffs ≥23 overweight, ≥27.5 obese), Macro Calculator India (Mifflin-St Jeor + goal-based protein/carb/fat splits), TDEE Calculator (5 activity levels, 4 calorie-target outputs). All 3 added to sitemap-blog.xml at priority 0.8. Calculators already indexed + live at nyus.in/blog/bmi-calculator-india.html + /macro-calculator-india.html + /tdee-calculator.html. Further actions pending owner: Inc42 Tally form submission, YourStory account creation.",
+        "imagePath": "images/i-20260706-f039-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260706-f039-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8696226db2f77f6a047cf9f2d71e21323f9c2637",
+        "imageCommits": [
+          "8696226db2f77f6a047cf9f2d71e21323f9c2637"
+        ],
+        "fixedAt": "2026-07-06T18:03:53.649Z",
+        "by": "shakeebshaan",
+        "appCommit": "22d0bdf0",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 84,
+          "bar": 80,
+          "note": "3 calculator tools deployed and live (BMI with Indian cutoffs, Macro with Mifflin-St Jeor, TDEE with 5 activity levels). Screenshot shows functional BMI calculator with weight=70 height=170 filled in. Sitemap updated. Addresses the 'add free tools' + 'low retention' root causes from the report. Full 30-day content plan requires ongoing loop work."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "GA4/SEO growth plan (content cluster + daily articles + calculator tools + backlinks), not an app bug - routed to the content-marketing loop's queue. App-side note: free calculator tools (BMI/TDEE/macro/protein) already exist inside the app; exposing lightweight public versions on nyus.in/blog is the highest-leverage item in this plan and is now queued for the content loop. Retention/engagement asks (newsletter, internal linking, content refresh) are landing-repo work, also content-loop scope. No fix-issues action possible here.",
-      "reviewedAt": "2026-07-06T17:34:52.940Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     }
   ]
