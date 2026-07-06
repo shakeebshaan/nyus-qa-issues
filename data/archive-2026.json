@@ -12748,6 +12748,32 @@
       "resolvedAt": "2026-07-06T03:10:25.801Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T03:10:25.801Z"
+    },
+    {
+      "id": "i-20260706-5b18",
+      "createdAt": "2026-07-06T02:25:32.906Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] water_logger chat block shows \"NaN ml\" and submits NaN when the LLM payload omits current_ml.\n\nWHERE: src/components/blocks/WaterLoggerBlock.tsx:18 seeds useState(data.current_ml) with no fallback. The same file explicitly treats target_ml as untrusted (\"target_ml is untrusted LLM-block output and can arrive as 0 or missing\", line 21-23 guard), but current_ml gets no such guard.\n\nACTUAL when current_ml is missing: header renders \"undefined ml\"; first +250 tap computes undefined + 250 = NaN -> \"NaN ml\", and Math.min(NaN, 10000) keeps it NaN forever; progress stuck at 0%; Save submits water_ml: NaN, which PASSES the typeof === 'number' check in transformWaterLog (src/lib/block-transformers.ts:199-200), so water_intake_liters = NaN goes to POST /logs/daily (serializes to null) — corrupt daily-log upsert.\nEXPECTED: missing/non-numeric current_ml treated as 0 ml, exactly like the existing target_ml guard.\n\nREPRO: render a water_logger block whose data lacks current_ml (dev fixture / /dev/chat-block-gallery with {target_ml: 3000}) -> tap +250 -> display reads \"NaN ml\"; Save fires the NaN payload.\n\nFIX: useState(typeof data.current_ml === 'number' ? data.current_ml : 0).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Code fix committed (772a87b3): WaterLoggerBlock now guards NaN (safeCurrentMl = typeof data.current_ml === 'number' ? data.current_ml : 0) and uses module-level _waterDraftCache keyed on cacheKey. Draft persists across virtual-scroll unmount/remount. Visual confirmation requires a water-logger block in live chat.",
+      "reviewedAt": "2026-07-06T02:54:58.920Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T03:10:43.082Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T03:10:43.082Z"
     }
   ]
 }
