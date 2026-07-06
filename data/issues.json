@@ -1168,12 +1168,32 @@
         "d96abcddf0f3144bdc03b8f916dfdac54318b376"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: WeeklyChallengeCard showed Done badge on dashboard; WeeklyInsightsCard showed verbose 'Warming up' placeholder. Fix (commit 98386822): WeeklyChallengeCard returns null when data.completed=true; WeeklyInsightsCard returns null in fresh-start/warming-up states. Dashboard capture confirms neither element appears.",
+        "imagePath": "images/i-20260704-a9e1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-a9e1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "33baf08a5438ea0761cec81e3b1ada6e0f515f3b",
+        "imageCommits": [
+          "33baf08a5438ea0761cec81e3b1ada6e0f515f3b"
+        ],
+        "fixedAt": "2026-07-06T03:42:04.698Z",
+        "by": "shakeebshaan",
+        "appCommit": "83c4abf6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 97,
+          "bar": 95,
+          "note": "Specific rendering bug confirmed fixed — Done task and Warming up cards no longer pollute dashboard. Surgical 2-component fix with clear before/after evidence."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Owner circled 'Log at least 3 meals' quick task and 'Weekly Insights Warming up' on the dashboard. 'Too much here design from scratch' suggests full home screen redesign. This is a /design-shotgun scope task. Owner: confirm you want a full dashboard redesign proposal, or is the specific concern these two elements?",
-      "reviewedAt": "2026-07-06T03:10:54.966Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Please read the issue and fix it and provide screenshot",
       "reviewRepliedAt": "2026-07-05T12:10:13.774Z",
