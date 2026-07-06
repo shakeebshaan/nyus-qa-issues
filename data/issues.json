@@ -950,8 +950,30 @@
         "77e34c5f132cd87eaf19d59857d4230d03adf07d"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: measurement stepper displayed 0.0 (toFixed(1)) making it look stuck; plus background refetch reset. Fix: toFixed(2) display + userEdited ref guard. Screenshot: full-screen Measurements page showing 0.00 input ready, + and - buttons, Save measurement CTA — page fully loaded, no skeleton.",
+        "imagePath": "images/i-20260704-0140-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-0140-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ab9a8c18b2fc845397eb2081d7d9645e1df04a35",
+        "imageCommits": [
+          "ab9a8c18b2fc845397eb2081d7d9645e1df04a35"
+        ],
+        "fixedAt": "2026-07-06T02:19:27.614Z",
+        "by": "shakeebshaan",
+        "appCommit": "c90fabe3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Full-screen capture of measurements page in loaded state. Stepper now correctly increments without reset."
+        }
+      },
       "history": [
         {
           "at": "2026-07-05T22:39:31.957Z",
