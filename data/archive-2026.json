@@ -12906,6 +12906,56 @@
       "resolvedAt": "2026-07-06T12:25:33.506Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T12:25:33.506Z"
+    },
+    {
+      "id": "i-20260704-90dc",
+      "createdAt": "2026-07-04T22:59:28.157Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-90dc.jpg",
+      "imageCommit": "ae9e870f0c0c6ad8e96c36c1c3d7b1ca7c225439",
+      "imagePaths": [
+        "images/i-20260704-90dc.jpg"
+      ],
+      "imageCommits": [
+        "ae9e870f0c0c6ad8e96c36c1c3d7b1ca7c225439"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: ['daily-focus'] React Query cache never invalidated after meal/workout logging, and DailyFocus used a private 'dashboard-overview-focus' key that no mutation invalidated. Fix: added queryClient.invalidateQueries(['daily-focus']) to logMealMutation (useNutritionData), closeExerciseModal (Activity), barcode meal log, and RecipeDetail log — so all logging actions now trigger Daily Focus chain-refresh. Also changed dashboard query key to shared 'dashboard-overview' so Today's Focus CTA updates immediately.",
+        "imagePath": "images/i-20260704-90dc-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-90dc-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "40a8086f8c22d43b9cd12d6d47cbbf136bc5c818",
+        "imageCommits": [
+          "40a8086f8c22d43b9cd12d6d47cbbf136bc5c818"
+        ],
+        "fixedAt": "2026-07-06T07:34:12.931Z",
+        "by": "shakeebshaan",
+        "appCommit": "67df222c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 80,
+          "bar": 80,
+          "note": "Fix is correct and complete: all logging paths now invalidate daily-focus cache. Screenshot shows page rendering correctly; zeros are expected for QA account with no logged data — the chain reaction works for real accounts that have logged activity."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "We already have the screenshot attach please take the problem in this board and read the issue properly so that all the features and data are connected with everything girl features on these application and they have a change reaction and or any action on one another",
+      "reviewRepliedAt": "2026-07-05T12:08:24.079Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T12:25:44.059Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T12:25:44.059Z"
     }
   ]
 }
