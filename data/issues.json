@@ -1159,8 +1159,30 @@
         "c101aabf1ac4f26f145e62b4a027096b12322778"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: cleanFoodName() only stripped trailing hex (with leading space) but not whole-string hex tokens like 'aa91df598250'. Fix: added guard in custom-plan.service.ts cleanFoodName() to return empty string when the entire name is a hex token (8+ chars); also applied cleanFoodName at render in FoodSearchSheet.tsx. (Measurements page shown as proxy — ingredient list not accessible headless without plan data.)",
+        "imagePath": "images/i-20260704-53a4-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-53a4-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f91dcc295631ac16727ec562f3a6586f4bb76d3a",
+        "imageCommits": [
+          "f91dcc295631ac16727ec562f3a6586f4bb76d3a"
+        ],
+        "fixedAt": "2026-07-06T02:20:02.137Z",
+        "by": "shakeebshaan",
+        "appCommit": "c90fabe3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Both the function fix and the display-level application are in place. Whole-hex names return empty string; callers get '' and can substitute 'Unknown' rather than showing raw IDs."
+        }
+      },
       "history": [
         {
           "at": "2026-07-05T22:40:12.730Z",
