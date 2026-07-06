@@ -609,12 +609,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Added missing feature entry points to Profile. Progress section: +Weekly Progress, +Weekly Meal Plan, +Workout History, +Coach Chat. Body section: +Weight History. All routes already existed (/weekly-progress, /diet-plan-week, /workout-history, /coach-chat, /weight-history-chart). Screenshot shows the updated Progress section with all 6 links visible.",
+        "imagePath": "images/i-20260704-ea8b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-ea8b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "66e5226bebe62ca73b51b67803b6996977c26585",
+        "imageCommits": [
+          "66e5226bebe62ca73b51b67803b6996977c26585"
+        ],
+        "fixedAt": "2026-07-06T12:50:53.206Z",
+        "by": "shakeebshaan",
+        "appCommit": "6d46874d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 80,
+          "note": "Screenshot shows Progress section with Weekly Progress, Daily Focus, Achievements, Weekly Meal Plan, Workout History, Coach Chat. Body section also shows new Weight History link. Clean render, no regressions."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "No image attached. 'Connect everything every single features from profile' is too broad. Profile already links to Notifications, Subscription, Notification Settings, Connected Devices, Social, Achievements, Daily Focus, Data Export. Owner: which specific feature is disconnected from Profile?",
-      "reviewedAt": "2026-07-06T03:12:29.030Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Connect all features like weeklyprogeess with weight logging coach chat etc etc",
       "reviewRepliedAt": "2026-07-06T12:23:19.733Z",
