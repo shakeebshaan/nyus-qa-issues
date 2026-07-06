@@ -14783,6 +14783,61 @@
       "resolvedAt": "2026-07-06T20:24:14.676Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T20:24:14.676Z"
+    },
+    {
+      "id": "i-20260705-8287",
+      "createdAt": "2026-07-05T12:19:06.010Z",
+      "route": "/like like this pic create five more loops",
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: 3 loops (security-review, data-review, board-monitor) were missing from the fleet. Fix: all 3 are now registered — prompt files in .claude/nyus-loops/prompts/ + Windows Scheduled Tasks in \\NYUS-Loops\\, model policy fable (primary) -> opus@xhigh (fallback) already implemented in runner.ps1. security-review runs weekly Sun 03:17 (OWASP A-E rotate); data-review runs daily 03:47 (orphans/nutrition/gamification/subscription/import-quality rotate); board-monitor runs every 2h :07 (scans reviewReply, synthesizes learnings into SPEC.md/RETRO-LOG.md). Fleet is now 18 active loops + watchdog.",
+        "imagePath": "images/i-20260705-8287-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-8287-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f383ff903f070b9c1508c78b9e7089a5532221fb",
+        "imageCommits": [
+          "f383ff903f070b9c1508c78b9e7089a5532221fb"
+        ],
+        "fixedAt": "2026-07-06T17:42:08.461Z",
+        "by": "shakeebshaan",
+        "appCommit": "a853ee75",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "All 3 missing loops created with full prompt files, registered Windows Scheduled Tasks, and correct model policy (fable->opus). Screenshot shows all 18 loops Ready. Owner reply (fable not available -> opus fallback) was already the runner.ps1 policy before the reply; confirmed now."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "if the fable is not available then use opus as fallback",
+      "reviewRepliedAt": "2026-07-06T14:04:40.947Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reportPath": "reports/loops-spec-8287.html",
+      "reportLabel": "QA Loop Specs (Loops 1-6)",
+      "reviewReplyImagePaths": [
+        "images/i-20260705-8287-reply.jpg"
+      ],
+      "reviewReplyImageCommits": [
+        "81d77fcf0fc4151254f0e8e642c8ce20bf8b80c5"
+      ],
+      "reviewReplyImagePrivate": true,
+      "resolvedAt": "2026-07-06T20:27:30.203Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T20:27:30.203Z"
     }
   ]
 }
