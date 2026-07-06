@@ -18,7 +18,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix is shipped in commit 39d18447. CustomDietBuilder weight chip confirmed showing 154.3 lbs (screenshot attached) for an imperial user - was hardcoded kg. PlanReadyOverview Goal card labels and pace also updated with same isImperial pattern (grep+tsc verified). No unit tests exist for onboarding/custom/* components so scoped vitest finds no files. Full npm test gate is infra-blocked in headless (39min, RED on e2e/contract/a11y infra). Owner action: scope loop.json testCommand to a unit-only subset (e.g. npm run test:component or vitest run src/) so the gate passes headless, then I can auto-resolve. Fix is real and correct.",
+      "reviewedAt": "2026-07-06T17:17:26.799Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260706-4ea7",
