@@ -88,8 +88,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: delete button had opacity-0 group-hover:opacity-100 making it invisible on touch devices. Fix (c90fabe3 src/components/measurements/ProgressPhotos.tsx): removed opacity-0, button now always visible with bg-black/50, upgraded to w-11 h-11 (44x44px touch target). QA account has no photos so delete button can't be shown directly — screenshot shows measurements/progress-photos section rendering correctly with fix confirmed in code.",
+        "imagePath": "images/i-20260706-0e77-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260706-0e77-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "609beb89e69340b481a184f254db7950931416f8",
+        "imageCommits": [
+          "609beb89e69340b481a184f254db7950931416f8"
+        ],
+        "fixedAt": "2026-07-06T12:38:43.067Z",
+        "by": "shakeebshaan",
+        "appCommit": "72e945c8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "Code fix confirmed (no opacity-0 in current ProgressPhotos.tsx). Screenshot shows measurements page with progress photos section. Cannot show delete button without photos in QA account — stated explicitly per SPEC."
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T12:25:02.741Z",
