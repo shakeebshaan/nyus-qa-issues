@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-06T22:43:30.585Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20260706-sn4p",
+      "route": "/nutrition",
+      "description": "[suggestion] Snap-to-log: photograph your plate and the coach AI estimates the dish + macros, prefilled into the custom-meal form for one-tap confirm. USER PROBLEM: logging a home-cooked Indian meal today means typing free-text into CustomMealModal and guessing macros yourself - the single highest-friction step in daily use; mixed thalis/curries are hard to name, so meals go unlogged and adherence data rots. EVIDENCE: zero photo/camera path exists anywhere in the nutrition flow (no camera refs in src/pages/Nutrition.tsx or src/components/nutrition/), while Capacitor Camera is already installed (progress-photos suggestion i-20260702-ppht shipped) and the backend already runs LLM infrastructure (llm_service.py) - and this is the flagship logging feature of every India competitor (HealthifyMe Snap, MyFitnessPal meal scan). V1 SCOPE: a 'Snap meal' button in the /nutrition add-meal sheet -> camera/gallery via Capacitor Camera -> client-side compress -> POST /api/v1/nutrition/photo-analyze (backend vision-LLM call returning dish name + calories/protein/carbs/fat estimate + confidence) -> prefills CustomMealModal for user edit/confirm before save (never auto-logs; low-confidence results say 'best guess - please check'). Reuse existing llm_rate_limit_buckets for rate limiting; keep it un-gated (logging is core, not premium). EFFORT: ~2-3 days full-stack (one backend endpoint + vision prompt, camera + prefill wiring on Nutrition, QA capture)."
+    },
+    {
       "createdAt": "2026-07-06T18:10:41.867Z",
       "author": "shakeebshaan",
       "tags": [
