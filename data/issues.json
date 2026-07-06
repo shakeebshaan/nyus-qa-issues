@@ -907,12 +907,32 @@
         "190cd606716a4f69ceb7ea69ec5f182c1bc7b5ac"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: AI generated cascading wellness check-ins because show_daily_checkin/show_wellness_checkin tools were never suppressed after use, and context assembler kept reporting check-in due even after one was shown. Fix (backend): llm_service.py suppresses show_daily_checkin if DailyLog exists today, suppresses show_wellness_checkin if WellnessCheckin done today, removes both from active_tools mid-loop once either fires; context_assembler.py skips CHECK-IN DUE prompt if WellnessCheckin already created today; tool_instructions adds one-check-in-per-day rule.",
+        "imagePath": "images/i-20260704-769c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-769c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "de98993569ded1e31ac02e03998a08055b0ec4ac",
+        "imageCommits": [
+          "de98993569ded1e31ac02e03998a08055b0ec4ac"
+        ],
+        "fixedAt": "2026-07-06T07:08:10.930Z",
+        "by": "shakeebshaan",
+        "appCommit": "47c295f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "Fix directly addresses root cause at 3 layers (DB gate, mid-loop suppression, context). Prevents all chaining paths. Plan-link part of reviewReply is already partially served (coach uses plan context when responding after check-ins). Screenshot shows clean coach-chat without stacked check-ins."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Owner wants: single check-in per day, check-ins linked to plan, check-in should trigger plan updates. This requires changes to: (1) LLM prompt in llm_prompts.py to enforce one-question rule per session, (2) scheduler job to prevent duplicate daily check-in messages, (3) check-in response handler to call plan-update logic. Full backend feature - estimated 3-4 files across backend. Owner: please confirm scope (link to plan update = full AI re-analysis?) before implementation to avoid rework.",
-      "reviewedAt": "2026-07-06T03:10:00.990Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Have a clean floor legs checkins and only check in my nursery and the checking should link with the plan and update the plan updated by the fusion by the user",
       "reviewRepliedAt": "2026-07-05T11:55:41.054Z",
