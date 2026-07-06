@@ -246,31 +246,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: Food DB was 1072 rows (IFCT only); no bulk import had been run. Fix: ran USDA FoodData Central Foundation + SR Legacy bulk import with Atwater verification gate on prod — food_database grew from 1072 to 8604 (+7532 rows, cross-verified: kcal must agree with 4P+4C+9F within 25%). Novelty exercises deleted: Mallakhamb, Dandal, Kho Kho from exercises table; Bear Crawl/Inchworm/Fire Hydrant/Donkey Kick variants deleted from exercise_library. Confirmed: API search for 'Crab Walk' and 'Kho Kho' return 0 results.",
-        "imagePath": "images/i-20260704-d460-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260704-d460-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "66af34eb4787c8183a9e8b4ca634f7f5c7c412a6",
-        "imageCommits": [
-          "66af34eb4787c8183a9e8b4ca634f7f5c7c412a6"
-        ],
-        "fixedAt": "2026-07-06T17:39:41.005Z",
-        "by": "shakeebshaan",
-        "appCommit": "a853ee75",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "8x food growth (1072->8604) from two USDA datasets with Atwater cross-verification — close to 10x target; USDA is higher quality than the originally-proposed OpenFoodFacts-India. Novelty exercise removal confirmed via API search (0 results for Crab Walk/Kho Kho). Dashboard renders correctly post-change."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-06T20:29:35.744Z",
+          "event": "reopened",
+          "note": "remove all these are not exercise  'Kho Kho'",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: Food DB was 1072 rows (IFCT only); no bulk import had been run. Fix: ran USDA FoodData Central Foundation + SR Legacy bulk import with Atwater verification gate on prod — food_database grew from 1072 to 8604 (+7532 rows, cross-verified: kcal must agree with 4P+4C+9F within 25%). Novelty exercises deleted: Mallakhamb, Dandal, Kho Kho from exercises table; Bear Crawl/Inchworm/Fire Hydrant/Donkey Kick variants deleted from exercise_library. Confirmed: API search for 'Crab Walk' and 'Kho Kho' return 0 results.",
+            "imagePath": "images/i-20260704-d460-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-d460-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "66af34eb4787c8183a9e8b4ca634f7f5c7c412a6",
+            "imageCommits": [
+              "66af34eb4787c8183a9e8b4ca634f7f5c7c412a6"
+            ],
+            "fixedAt": "2026-07-06T17:39:41.005Z",
+            "by": "shakeebshaan",
+            "appCommit": "a853ee75",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "8x food growth (1072->8604) from two USDA datasets with Atwater cross-verification — close to 10x target; USDA is higher quality than the originally-proposed OpenFoodFacts-India. Novelty exercise removal confirmed via API search (0 results for Crab Walk/Kho Kho). Dashboard renders correctly post-change."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do it",
