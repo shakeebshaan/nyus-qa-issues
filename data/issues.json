@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260706-3f91",
+      "createdAt": "2026-07-06T01:37:29.582Z",
+      "route": "/measurements",
+      "description": "[bug-hunt] Measurements value input rounds everything to 1 decimal, so quarter-inch steps are impossible and the displayed value drifts from what gets saved.\n\nWHERE: src/pages/Measurements.tsx — displayMeasurement (line ~339) is parseFloat((measurement/2.54).toFixed(1)) in inch mode (1-decimal), but getStep() is 0.25 inch and the +/- handlers (lines ~561/570) compute the next value FROM the rounded display: setMeasurementFromDisplay(displayMeasurement + 0.25).\n\nACTUAL: (1) In inch mode, tapping + from 0 shows 0.3 -> 0.6 -> 0.8 -> 1.1 ... — uneven jumps, never the promised 0.25 increments, because each tap re-derives from the 1-decimal-rounded display. (2) Typing a 2-decimal value snaps: type 36.25 -> input immediately rewrites to 36.3. (3) Display vs saved diverge: after taps the label can read 0.80 inch while the canonical cm value saved to the backend is 2.159 cm = 0.85 inch (Save uses the unrounded 'measurement' state, line ~309). Same class of mismatch in cm mode: typing 40.25 cm shows 40.3 but saves 40.25.\n\nEXPECTED: display keeps 2 decimals (matching the 0.25 step and the '0.00' placeholder/label which already use toFixed(2)); +/- should step the canonical value, not the rounded display, so the shown number always equals the saved number.\n\nREPRO: /measurements -> toggle unit to 'inch' -> tap + three times from empty -> observe 0.30 / 0.60 / 0.80 instead of 0.25 / 0.50 / 0.75. Or type 36.25 in the value field -> it snaps to 36.3.\n\nNOTE: distinct from i-20260704-22f4/0140 (stepper reset on background refetch — already fixed via userEdited ref); this is the display-rounding feedback loop.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260706-0e77",
+      "createdAt": "2026-07-06T01:37:29.582Z",
+      "route": "/measurements",
+      "description": "[bug-hunt] Progress Photos: delete button is invisible and unreachable-by-sight on touch devices — it only appears on mouse hover, yet the app's primary platform is Android/Capacitor.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx (~line 252): the per-photo trash button is 'opacity-0 group-hover:opacity-100 focus-visible:opacity-100'. Touch devices have no hover, so the control never becomes visible.\n\nACTUAL: on a phone there is NO visible way to delete a progress photo. Worse, the invisible button still receives taps (opacity-0 keeps pointer events), so tapping the top-right corner of a photo thumbnail opens the 'Delete photo?' dialog with no visible trigger — a hidden destructive control. The button is also 28x28px (w-7 h-7), violating the project's 44x44px touch-target rule.\n\nEXPECTED: delete affordance always visible on touch (e.g. persistent small overlay button, or long-press/menu), min 44x44 target.\n\nREPRO: open /measurements on a touch device (or Playwright mobile emulation, no hover) with at least 1 progress photo -> no delete icon visible on any thumbnail; tap the top-right corner of a thumbnail -> Delete confirmation appears out of nowhere.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260705-be1f",
       "createdAt": "2026-07-05T22:31:41.402Z",
       "route": null,
