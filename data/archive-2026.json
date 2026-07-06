@@ -13702,6 +13702,52 @@
       "resolvedAt": "2026-07-06T12:30:40.631Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T12:30:40.631Z"
+    },
+    {
+      "id": "i-20260706-3390",
+      "createdAt": "2026-07-06T12:32:33.269Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260706-3390.jpg",
+      "imageCommit": "56919fd8ca4da95426c942a7cb2f7d54573fa4c2",
+      "imagePaths": [
+        "images/i-20260706-3390.jpg"
+      ],
+      "imageCommits": [
+        "56919fd8ca4da95426c942a7cb2f7d54573fa4c2"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: ProfileReferralCard used navigator.share (Web Share API) which doesn't reliably open the native OS share sheet in Capacitor WebView. Fix: now uses @capacitor/share on native platforms (Capacitor.isNativePlatform()), falling back to navigator.share on web. 'Share with a friend' button now opens native share sheet on Android/iOS.",
+        "imagePath": "images/i-20260706-3390-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260706-3390-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0e9f0e21c1b7bcb28afab530ac9f60a53f5fd866",
+        "imageCommits": [
+          "0e9f0e21c1b7bcb28afab530ac9f60a53f5fd866"
+        ],
+        "fixedAt": "2026-07-06T13:26:38.198Z",
+        "by": "shakeebshaan",
+        "appCommit": "ed689f49",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 85,
+          "bar": 80,
+          "note": "Correct fix - Capacitor Share plugin used for native, navigator.share fallback for web. Button visible and working."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-06T14:06:07.410Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T14:06:07.410Z"
     }
   ]
 }
