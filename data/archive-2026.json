@@ -12956,6 +12956,58 @@
       "resolvedAt": "2026-07-06T12:25:44.059Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T12:25:44.059Z"
+    },
+    {
+      "id": "i-20260704-a0ec",
+      "createdAt": "2026-07-04T22:57:52.123Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-a0ec-0.jpg",
+      "imageCommit": "4e30e5093970d6bca760a9e1a80b66375edae222",
+      "imagePaths": [
+        "images/i-20260704-a0ec-0.jpg",
+        "images/i-20260704-a0ec-1.jpg"
+      ],
+      "imageCommits": [
+        "4e30e5093970d6bca760a9e1a80b66375edae222",
+        "8c855c000ba271bf46d87e0e5bb1bc597614a7b3"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: ProfileIdentityCard.tsx set explicit 'Content-Type: multipart/form-data' header without the boundary string — Flask then couldn't parse the multipart body and returned 400 'No file uploaded', triggering the 'Photo saved locally' catch. Fix (commit 98386822): removed the explicit Content-Type header so Axios/browser set it automatically with the correct boundary. Avatar upload POST to /api/v1/users/me/avatar now works correctly.",
+        "imagePath": "images/i-20260704-a0ec-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-a0ec-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "03879cb18658c3a62315d30c5881c198720e4f7d",
+        "imageCommits": [
+          "03879cb18658c3a62315d30c5881c198720e4f7d"
+        ],
+        "fixedAt": "2026-07-06T03:43:15.398Z",
+        "by": "shakeebshaan",
+        "appCommit": "83c4abf6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Clear root cause (missing multipart boundary) confirmed fixed in code. Upload flow confirmed working by backend endpoint test. Profile screenshot shows avatar tap target functional."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Please implement and fix",
+      "reviewRepliedAt": "2026-07-05T12:08:40.780Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T12:26:02.289Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T12:26:02.289Z"
     }
   ]
 }
