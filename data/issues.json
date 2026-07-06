@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260706-7a2c",
+      "createdAt": "2026-07-06T02:25:32.906Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach chat: MealLogger / WaterLogger / ActivityLogger / MeasurementInput blocks lose all in-progress input when scrolled off-screen in the virtualized message list.\n\nWHERE: production enables VITE_COACH_CHAT_VIRTUALIZE=true (.env.production:24), so the chat list (@tanstack/react-virtual, overscan 6) UNMOUNTS rows that leave the render window. DailyCheckinBlock and WorkoutTrackerBlock were given module-level draft caches keyed on the cacheKey prop for exactly this bug (commit 17b12af8 \"virtual scroll state wipe\"), but the other four logging blocks keep drafts in plain useState and ignore the cacheKey that InteractiveBlock.tsx:113 already passes them:\n- src/components/blocks/MealLoggerBlock.tsx — selectedItems + search reset (half-built meal with 3 foods vanishes)\n- src/components/blocks/WaterLoggerBlock.tsx — current (tapped +250/+500 total) resets to data.current_ml\n- src/components/blocks/ActivityLoggerBlock.tsx — selectedActivity / duration / intensity reset\n- src/components/blocks/MeasurementInputBlock.tsx — typed values + local submitted flag reset\n\nEXPECTED: drafts survive scrolling up a long thread and back down (as they already do for daily_checkin and workout_tracker).\nACTUAL: block remounts pristine; user input silently discarded.\n\nREPRO: prod build (or dev with VITE_COACH_CHAT_VIRTUALIZE=true) -> coach chat with 20+ messages containing a meal_logger block -> add 2-3 foods -> scroll up well past the 6-row overscan -> scroll back: selection is empty. Same for the other three blocks.\n\nFIX SHAPE: reuse the WorkoutTrackerBlock pattern (module-level Map keyed on cacheKey, restore in useState initializer, persist via useEffect).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260706-c4d9",
+      "createdAt": "2026-07-06T02:25:32.906Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] measurement_input chat block re-logs stale measurements: every field is prefilled with the PREVIOUS value and Save is enabled with zero user input.\n\nWHERE: src/components/blocks/MeasurementInputBlock.tsx:26-32 seeds values from field.current_value (the user's previous measurement), and hasValues (line 53) is true as soon as any prefilled value > 0 — so \"Save Measurements\" is enabled immediately. transformMeasurementLog (src/lib/block-transformers.ts:146-168) only filters values <= 0, so every carried-over number is POSTed to /logs/measurement.\n\nACTUAL: (a) one tap on Save with no input writes a full duplicate of the previous measurement set dated today; (b) editing only waist still submits chest/hip/biceps/etc as \"new\" measurements with old values. Both pollute measurement history and flatten trend charts with phantom same-value entries.\nEXPECTED: inputs start empty (the \"Previous: X cm\" hint under each field already shows the old value — prefilling duplicates it), Save disabled until the user types at least one measurement, and only user-entered fields logged.\n\nREPRO: in coach chat receive a measurement_input block as a user with prior measurements -> tap \"Save Measurements\" without touching any field -> a new measurement entry for today is created with yesterday's numbers (visible on /measurements history).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260706-5b18",
+      "createdAt": "2026-07-06T02:25:32.906Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] water_logger chat block shows \"NaN ml\" and submits NaN when the LLM payload omits current_ml.\n\nWHERE: src/components/blocks/WaterLoggerBlock.tsx:18 seeds useState(data.current_ml) with no fallback. The same file explicitly treats target_ml as untrusted (\"target_ml is untrusted LLM-block output and can arrive as 0 or missing\", line 21-23 guard), but current_ml gets no such guard.\n\nACTUAL when current_ml is missing: header renders \"undefined ml\"; first +250 tap computes undefined + 250 = NaN -> \"NaN ml\", and Math.min(NaN, 10000) keeps it NaN forever; progress stuck at 0%; Save submits water_ml: NaN, which PASSES the typeof === 'number' check in transformWaterLog (src/lib/block-transformers.ts:199-200), so water_intake_liters = NaN goes to POST /logs/daily (serializes to null) — corrupt daily-log upsert.\nEXPECTED: missing/non-numeric current_ml treated as 0 ml, exactly like the existing target_ml guard.\n\nREPRO: render a water_logger block whose data lacks current_ml (dev fixture / /dev/chat-block-gallery with {target_ml: 3000}) -> tap +250 -> display reads \"NaN ml\"; Save fires the NaN payload.\n\nFIX: useState(typeof data.current_ml === 'number' ? data.current_ml : 0).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260706-3f91",
       "createdAt": "2026-07-06T01:37:29.582Z",
       "route": "/measurements",
