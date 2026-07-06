@@ -13172,6 +13172,86 @@
       "resolvedAt": "2026-07-06T12:26:35.652Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T12:26:35.652Z"
+    },
+    {
+      "id": "i-20260704-5505",
+      "createdAt": "2026-07-04T22:43:27.181Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-5505.jpg",
+      "imageCommit": "06bbc517d2b14ca820d4b62f4e169a655e4e6ce9",
+      "imagePaths": [
+        "images/i-20260704-5505.jpg"
+      ],
+      "imageCommits": [
+        "06bbc517d2b14ca820d4b62f4e169a655e4e6ce9"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "The 'line' in the original screenshot is the weight entry ruler/slider (the horizontal scale with a tick mark indicator). This is an intentional UI element for weight selection, not a bug. Full-screen log-weight page captured showing correct layout: weight value, kg/lb toggle, ruler slider, Goal Progress card, Save & Track CTA.",
+        "imagePath": "images/i-20260704-5505-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-5505-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "030751bbae6c780464743d810048a2fb89e33ae2",
+        "imageCommits": [
+          "030751bbae6c780464743d810048a2fb89e33ae2"
+        ],
+        "fixedAt": "2026-07-06T02:23:38.626Z",
+        "by": "shakeebshaan",
+        "appCommit": "c90fabe3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Full-screen correct screenshot provided. The circled element was the weight ruler — a feature, not a defect."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-05T22:28:55.206Z",
+          "event": "reopened",
+          "note": "correct screenshot\nplease for all issues",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Log Weight page showed a diagonal line across the weight card (2-3 data points rendering as a straight diagonal streak). Fixed (commit 08cd029c): sparkline suppressed until >=4 weight log points exist.",
+            "imagePath": "images/i-20260704-5505-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-5505-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "de8f7dcd0a738da7e6a79972c6b0dd33b40eb132",
+            "imageCommits": [
+              "de8f7dcd0a738da7e6a79972c6b0dd33b40eb132"
+            ],
+            "fixedAt": "2026-07-05T21:50:06.154Z",
+            "by": "shakeebshaan",
+            "appCommit": "08cd029c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Fixed in commit 08cd029c: LogWeight.tsx:348 returns null for the sparkline when fewer than 4 data points exist. With 2-3 points, the EWMA trend rendered as a single diagonal streak across the card (looked like a glitch). Now the sparkline only appears when there are enough points to show a meaningful trend curve."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Please read the issue and fix it",
+      "reviewRepliedAt": "2026-07-05T12:10:28.875Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T12:26:59.857Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T12:26:59.857Z"
     }
   ]
 }
