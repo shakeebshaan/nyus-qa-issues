@@ -268,8 +268,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: previous fix removed 9 specific novelty exercises but left 30+ sport/game entries (Cricket, Football/Soccer, Basketball, Volleyball, Tennis, Badminton, Wrestling, Squash, Rugby, Handball) in exercises table with is_neat_activity=0 (visible in picker). Fix: ran comprehensive cleanup deleting all sport/game entries (26 hard-deleted, 4 soft-deleted via deleted_at), added deleted_at col to Exercise SQLAlchemy model, and added .filter(deleted_at IS NULL) to exercises_search so soft-deleted rows are excluded from all queries including name searches. Verified on prod: cricket/kho_kho/football/badminton all return 0 results; volleyball returns 1 (Spike approach jumps - legitimate plyometric drill, intentionally kept). Backend commit efa29eb deployed.",
+        "imagePath": "images/i-20260704-d460-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-d460-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1390d7887690eeec05a84a6438be6272f3269959",
+        "imageCommits": [
+          "1390d7887690eeec05a84a6438be6272f3269959"
+        ],
+        "fixedAt": "2026-07-06T22:17:10.678Z",
+        "by": "shakeebshaan",
+        "appCommit": "efa29eb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "All sport/game entries confirmed 0 via live API calls. Legitimate exercises (boxing training, swimming, cycling, running) preserved. deleted_at model + filter ensures future soft-deletes also apply to search."
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T20:29:35.744Z",
