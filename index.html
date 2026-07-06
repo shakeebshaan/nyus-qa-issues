@@ -247,6 +247,12 @@
     background: hsl(40 20% 94%); border: 1px solid var(--line);
     display: grid; place-items: center; overflow: hidden; cursor: zoom-in; padding: 0;
   }
+  .no-shot {
+    width: 100%; padding: 20px 16px; border-radius: 12px; border: 1.5px dashed var(--line);
+    background: hsl(40 15% 96%); color: var(--muted); font-size: 13px; font-weight: 500;
+    text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px;
+    min-height: 72px;
+  }
   .shot img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .desc { margin: 10px 2px 0; font-size: 14.5px; white-space: pre-wrap; word-break: break-word; }
   /* 831e: structured description — step list + option radios */
@@ -1081,7 +1087,7 @@ function cardHtml(it, archived) {
     <div class="sides">
       <div class="side">
         <h3>Issue</h3>
-        ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot", it.imagePrivate)}
+        ${shotsHtml(it.imagePaths || [it.imagePath], it.imageCommits || [it.imageCommit], "issue screenshot", it.imagePrivate) || `<div class="no-shot">📝 Text only — no screenshot</div>`}
         ${it.descPrivate
           ? `<p class="desc" data-priv-desc-id="${esc(it.id)}">${token ? "Loading…" : "🔒 Private — connect your token to view"}</p>`
           : formatDesc(it.description, it.id)}
