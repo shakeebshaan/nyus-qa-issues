@@ -59,49 +59,6 @@
       "description": "[bug-hunt] Right after pausing (or resuming) a plan, the Profile plan-management section shows the WRONG entry points: \"Pause Plan\" still visible (leads to a dead end) and \"Resume Plan\" hidden - and Profile is the ONLY place in the app that links to /plan-resume. WHERE: src/pages/_components/profile/ProfilePlanManagement.tsx:20-33 caches [\"active-plan\"] and [\"paused-plan\"] with staleTime 60s; PlanPauseScreen/PlanResumeScreen mutate via planService.pausePlan/resumePlan directly and NEVER invalidate those keys (grep \"active-plan|paused-plan\" across src: only ProfilePlanManagement + BodyComposition read them; zero invalidateQueries anywhere). EXPECTED: after \"Plan paused\" success, returning to Profile shows Resume Plan (and hides Pause Plan). ACTUAL: within the 60s staleTime (the whole pause flow takes well under that) Profile re-renders from cache: Pause Plan still shown - tapping it opens /plan-pause which now finds no active plan and dead-ends at \"No active plan to pause\"; Resume Plan is absent, so the just-paused user has NO path to /plan-resume until the cache staleness window passes AND the profile remounts. Same inversion after resume (Resume lingers, Pause hidden). REPRO: Profile -> Pause Plan -> pick reason -> Pause My Plan -> toast \"Plan paused\" -> back to Profile within a minute: section still offers Pause Plan and no Resume Plan. FIX SHAPE: invalidate [\"active-plan\"] + [\"paused-plan\"] (useQueryClient) in both success paths - or convert pause/resume to useMutation with onSuccess invalidation."
     },
     {
-      "id": "i-20260706-9b3c",
-      "createdAt": "2026-07-06T16:39:00.453Z",
-      "route": "/onboarding",
-      "description": "[bug-hunt] Imperial users see their weight in kg across the plan builders and plan overview - unit_preference is ignored. WHERE: src/pages/onboarding/custom/CustomDietBuilder.tsx ~line 264 (weightLabel = fmtKg(v), rendered as '{weightLabel} kg' chip at ~1241) and src/pages/onboarding/custom/PlanReadyOverview.tsx ~362-383 (Goal card: fmtKg(current)/fmtKg(goal) with hardcoded 'Current kg'/'Goal kg' labels) + ~340 ('Weekly pace ... kg/week'). EXPECTED: onboarding Body Stats offers 'lbs / in' (unit_preference='imperial', Screen3_BodyStats/Screen2_BodyGoal both convert input via KG_TO_LB), so a user who picked lbs and typed 165 lbs should keep seeing lbs downstream, like Screen3's delta display and LogWeight already do. ACTUAL: the very next screens (diet builder weight chip, plan-ready Goal Progress card, Weekly pace) render raw kg - the 165 lbs user sees '74.8 kg', which reads like a wrong number. fmtKg is NOT unit-aware despite the comment in CustomDietBuilder claiming it is; data.unit_preference is available in both components' props and simply unused. REPRO: onboarding -> Body Stats -> pick 'lbs / in' -> weight 165 lbs, goal 143 lbs -> continue to the diet builder (weight chip '74.8 kg') and to the plan overview (Goal card '74.8 / 64.9' labeled kg). FIX SHAPE: branch on data.unit_preference==='imperial' to convert with KG_TO_LB and label lbs (same pattern as Screen3_BodyStats weightDelta display).",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: every screen after Body Stats rendered raw kg - fmtKg was not unit-aware and data.unit_preference was never read. Fix: imperial branch (same KG_TO_LB pattern as Screen3_BodyStats) across the diet-builder weight chip, PlanReadyOverview Goal card + weekly pace, Screen9 build-animation lines (biometrics / calibrating / Safety Validator), the coach insight, PostPlanTour pace + Your Goal card, and calcOnboardingStats.goalLabel. Verified by driving full onboarding with lbs/in selected: chip shows 154.3 lbs, tour shows Current/Goal lbs + 0.86 lbs/week (left=builder chip, right=plan-ready tour).",
-        "imagePath": "images/i-20260706-9b3c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260706-9b3c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "151b3b4a888c7a3adc01d358276474fa7bfcd19b",
-        "imageCommits": [
-          "151b3b4a888c7a3adc01d358276474fa7bfcd19b"
-        ],
-        "fixedAt": "2026-07-06T17:38:36.796Z",
-        "by": "shakeebshaan",
-        "appCommit": "5e7f762f",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 80,
-          "note": "End-to-end drive proves lbs on every downstream surface incl. ones the issue didn't list (build animation, goalLabel); metric/mixed users unchanged (85 unit tests green)"
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260705-c86c",
       "createdAt": "2026-07-05T21:41:26.654Z",
       "route": null,
