@@ -2,29 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260706-7a2c",
-      "createdAt": "2026-07-06T02:25:32.906Z",
-      "route": "/coach-chat",
-      "description": "[bug-hunt] Coach chat: MealLogger / WaterLogger / ActivityLogger / MeasurementInput blocks lose all in-progress input when scrolled off-screen in the virtualized message list.\n\nWHERE: production enables VITE_COACH_CHAT_VIRTUALIZE=true (.env.production:24), so the chat list (@tanstack/react-virtual, overscan 6) UNMOUNTS rows that leave the render window. DailyCheckinBlock and WorkoutTrackerBlock were given module-level draft caches keyed on the cacheKey prop for exactly this bug (commit 17b12af8 \"virtual scroll state wipe\"), but the other four logging blocks keep drafts in plain useState and ignore the cacheKey that InteractiveBlock.tsx:113 already passes them:\n- src/components/blocks/MealLoggerBlock.tsx — selectedItems + search reset (half-built meal with 3 foods vanishes)\n- src/components/blocks/WaterLoggerBlock.tsx — current (tapped +250/+500 total) resets to data.current_ml\n- src/components/blocks/ActivityLoggerBlock.tsx — selectedActivity / duration / intensity reset\n- src/components/blocks/MeasurementInputBlock.tsx — typed values + local submitted flag reset\n\nEXPECTED: drafts survive scrolling up a long thread and back down (as they already do for daily_checkin and workout_tracker).\nACTUAL: block remounts pristine; user input silently discarded.\n\nREPRO: prod build (or dev with VITE_COACH_CHAT_VIRTUALIZE=true) -> coach chat with 20+ messages containing a meal_logger block -> add 2-3 foods -> scroll up well past the 6-row overscan -> scroll back: selection is empty. Same for the other three blocks.\n\nFIX SHAPE: reuse the WorkoutTrackerBlock pattern (module-level Map keyed on cacheKey, restore in useState initializer, persist via useEffect).",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Code fix committed (772a87b3): MealLoggerBlock + ActivityLoggerBlock now use module-level _mealDraftCache/_activityDraftCache keyed on cacheKey prop. State survives virtual-scroll unmount/remount identically to WorkoutTrackerBlock pattern. Visual proof requires specific LLM payloads that cannot be triggered headless. Owner: verify by scrolling past meal/activity blocks in live chat.",
-      "reviewedAt": "2026-07-06T02:54:48.129Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260706-c4d9",
       "createdAt": "2026-07-06T02:25:32.906Z",
       "route": "/coach-chat",
