@@ -752,12 +752,32 @@
         "02d853407e840e1afb2bd48189f003dbae707298"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "RecipeDetail now shows meal food image. Root cause: Recipe.image_url had dead Pollinations URLs (402); backend fix (commit 5f62957) clears dead URLs and falls back to Meal.image_url which has the worker-saved image. Screenshot shows RecipeDetail hero loading the correct food photo from /uploads/catalog-images/recipe/.",
+        "imagePath": "images/i-20260704-5c82-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-5c82-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e23e118a5bcb4ce621a61657ed969cdd1e682413",
+        "imageCommits": [
+          "e23e118a5bcb4ce621a61657ed969cdd1e682413"
+        ],
+        "fixedAt": "2026-07-06T04:40:58.886Z",
+        "by": "shakeebshaan",
+        "appCommit": "5f62957",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 80,
+          "note": "Screenshot confirms RecipeDetail renders real food photo in the hero. Code fix in backend RecipeDetailResource.get() clears dead URLs and prefers Meal.image_url."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Code fix committed 772a87b3: RecipeDetail now prefers meal.image_url over recipe.image_url, and uses subjectType='meal' so AsyncImage shows the pool placeholder photo (same as diet list). QA account has no accessible diet plan meals to navigate into RecipeDetail for visual proof. Owner: tap any meal card in the Diet tab and verify the photo inside matches the card.",
-      "reviewedAt": "2026-07-06T03:12:03.000Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Please fix the issue images not showing we need to show the same image on the mail card as well as inside the mail meal",
       "reviewRepliedAt": "2026-07-05T11:57:49.499Z",
