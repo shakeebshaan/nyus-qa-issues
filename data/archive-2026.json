@@ -13869,6 +13869,81 @@
       "resolvedAt": "2026-07-06T14:06:25.166Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T14:06:25.166Z"
+    },
+    {
+      "id": "i-20260706-0e77",
+      "createdAt": "2026-07-06T01:37:29.582Z",
+      "route": "/measurements",
+      "description": "[bug-hunt] Progress Photos: delete button is invisible and unreachable-by-sight on touch devices — it only appears on mouse hover, yet the app's primary platform is Android/Capacitor.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx (~line 252): the per-photo trash button is 'opacity-0 group-hover:opacity-100 focus-visible:opacity-100'. Touch devices have no hover, so the control never becomes visible.\n\nACTUAL: on a phone there is NO visible way to delete a progress photo. Worse, the invisible button still receives taps (opacity-0 keeps pointer events), so tapping the top-right corner of a photo thumbnail opens the 'Delete photo?' dialog with no visible trigger — a hidden destructive control. The button is also 28x28px (w-7 h-7), violating the project's 44x44px touch-target rule.\n\nEXPECTED: delete affordance always visible on touch (e.g. persistent small overlay button, or long-press/menu), min 44x44 target.\n\nREPRO: open /measurements on a touch device (or Playwright mobile emulation, no hover) with at least 1 progress photo -> no delete icon visible on any thumbnail; tap the top-right corner of a thumbnail -> Delete confirmation appears out of nowhere.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: delete button had opacity-0 group-hover:opacity-100 making it invisible on touch devices. Fix (c90fabe3 src/components/measurements/ProgressPhotos.tsx): removed opacity-0, button now always visible with bg-black/50, upgraded to w-11 h-11 (44x44px touch target). QA account has no photos so delete button can't be shown directly — screenshot shows measurements/progress-photos section rendering correctly with fix confirmed in code.",
+        "imagePath": "images/i-20260706-0e77-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260706-0e77-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "609beb89e69340b481a184f254db7950931416f8",
+        "imageCommits": [
+          "609beb89e69340b481a184f254db7950931416f8"
+        ],
+        "fixedAt": "2026-07-06T12:38:43.067Z",
+        "by": "shakeebshaan",
+        "appCommit": "72e945c8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "Code fix confirmed (no opacity-0 in current ProgressPhotos.tsx). Screenshot shows measurements page with progress photos section. Cannot show delete button without photos in QA account — stated explicitly per SPEC."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-06T12:25:02.741Z",
+          "event": "reopened",
+          "note": "Fixed?",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: delete button had opacity-0 group-hover:opacity-100 making it invisible on touch. Fix: removed hover-only visibility, button is always shown; upgraded from w-7/h-7 (28px) to w-11/h-11 (44px) touch target per project rules. QA account has no photos so empty state shown — delete button appears on each photo thumbnail when photos exist.",
+            "imagePath": "images/i-20260706-0e77-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260706-0e77-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "2236c94a45f6e5eaa67418615f5e6c1a4b9bb8de",
+            "imageCommits": [
+              "2236c94a45f6e5eaa67418615f5e6c1a4b9bb8de"
+            ],
+            "fixedAt": "2026-07-06T02:18:52.805Z",
+            "by": "shakeebshaan",
+            "appCommit": "c90fabe3",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Code fix is surgical and complete. Empty state shown since QA account has no photos; the invisible-button root cause (opacity-0) is definitively removed."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "resolvedAt": "2026-07-06T14:06:29.431Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T14:06:29.431Z"
     }
   ]
 }
