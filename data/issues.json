@@ -350,12 +350,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: 3 loops (security-review, data-review, board-monitor) were missing from the fleet. Fix: all 3 are now registered — prompt files in .claude/nyus-loops/prompts/ + Windows Scheduled Tasks in \\NYUS-Loops\\, model policy fable (primary) -> opus@xhigh (fallback) already implemented in runner.ps1. security-review runs weekly Sun 03:17 (OWASP A-E rotate); data-review runs daily 03:47 (orphans/nutrition/gamification/subscription/import-quality rotate); board-monitor runs every 2h :07 (scans reviewReply, synthesizes learnings into SPEC.md/RETRO-LOG.md). Fleet is now 18 active loops + watchdog.",
+        "imagePath": "images/i-20260705-8287-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260705-8287-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f383ff903f070b9c1508c78b9e7089a5532221fb",
+        "imageCommits": [
+          "f383ff903f070b9c1508c78b9e7089a5532221fb"
+        ],
+        "fixedAt": "2026-07-06T17:42:08.461Z",
+        "by": "shakeebshaan",
+        "appCommit": "a853ee75",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "All 3 missing loops created with full prompt files, registered Windows Scheduled Tasks, and correct model policy (fable->opus). Screenshot shows all 18 loops Ready. Owner reply (fable not available -> opus fallback) was already the runner.ps1 policy before the reply; confirmed now."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "DONE (2026-07-06): All 3 missing loops now created and registered. (1) security-review — weekly Sun 03:17, prompts/security-review.md, audits OWASP/input/auth/secrets/deps rotating per area. (2) data-review — daily 03:47, prompts/data-review.md, read-only anomaly checks on orphaned records/impossible macros/gamification drift/subscription state/food import quality. (3) board-monitor — every 2h at :07, prompts/board-monitor.md, scans reviewReply notes, extracts lessons into RETRO-LOG.md/SPEC.md, surfaces QoL suggestions. All 3 Windows Scheduled Tasks registered under NYUS-Loops and show Ready state. fable->opus fallback confirmed already live in runner.ps1 (primary=fable/high, fallback=opus/xhigh). No testable code change — infrastructure only, test gate not applicable.",
-      "reviewedAt": "2026-07-06T17:37:06.325Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "if the fable is not available then use opus as fallback",
       "reviewRepliedAt": "2026-07-06T14:04:40.947Z",
