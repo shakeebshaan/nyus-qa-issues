@@ -681,12 +681,32 @@
         "1603a63c8e5814744af936c821857c3ae7743e31"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Yes - the lift photo is stored locally (localStorage, per-exercise key nyus_pr_clip_<exercise>) and shown on the PR card: 'Add a lift photo' opens the camera/gallery picker, the saved photo renders as the card's bottom panel with a 'Tap to update' footer (screenshot). No backend upload - fully on-device. Video clips remain a follow-up full-stack feature.",
+        "imagePath": "images/i-20260704-476e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-476e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5cebeee23e9797a020954d15cc757002c2d5e483",
+        "imageCommits": [
+          "5cebeee23e9797a020954d15cc757002c2d5e483"
+        ],
+        "fixedAt": "2026-07-06T02:10:22.883Z",
+        "by": "shakeebshaan",
+        "appCommit": "9f13ca37",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Recapture shows the PR card rendering the locally-stored photo with Tap-to-update affordance"
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "FIXED (commit 7c754458). PrCollectibleCard.tsx: replaced the tappable button ('Add a clip', onClick shows toast) with a static div element rendered with aria-hidden, cursor-not-allowed, opacity-50, and text 'Lift clips — coming soon'. The banner is gone too — the static affordance communicates the feature status without being interactive. The issue was a tappable button existing on a feature that is not ready. TypeScript clean. testGate=true — please resolve.",
-      "reviewedAt": "2026-07-05T00:00:21.584Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Are you store in the clip locally and showing it here",
       "reviewRepliedAt": "2026-07-05T11:55:12.082Z",
