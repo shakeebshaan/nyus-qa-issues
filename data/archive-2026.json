@@ -13381,6 +13381,86 @@
       "resolvedAt": "2026-07-06T12:28:20.380Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T12:28:20.380Z"
+    },
+    {
+      "id": "i-20260704-53a4",
+      "createdAt": "2026-07-04T23:12:38.467Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-53a4.jpg",
+      "imageCommit": "c101aabf1ac4f26f145e62b4a027096b12322778",
+      "imagePaths": [
+        "images/i-20260704-53a4.jpg"
+      ],
+      "imageCommits": [
+        "c101aabf1ac4f26f145e62b4a027096b12322778"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: cleanFoodName() only stripped trailing hex (with leading space) but not whole-string hex tokens like 'aa91df598250'. Fix: added guard in custom-plan.service.ts cleanFoodName() to return empty string when the entire name is a hex token (8+ chars); also applied cleanFoodName at render in FoodSearchSheet.tsx. (Measurements page shown as proxy — ingredient list not accessible headless without plan data.)",
+        "imagePath": "images/i-20260704-53a4-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-53a4-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f91dcc295631ac16727ec562f3a6586f4bb76d3a",
+        "imageCommits": [
+          "f91dcc295631ac16727ec562f3a6586f4bb76d3a"
+        ],
+        "fixedAt": "2026-07-06T02:20:02.137Z",
+        "by": "shakeebshaan",
+        "appCommit": "c90fabe3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Both the function fix and the display-level application are in place. Whole-hex names return empty string; callers get '' and can substitute 'Unknown' rather than showing raw IDs."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-05T22:40:12.730Z",
+          "event": "reopened",
+          "note": "wrong issue update",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Profile Trophy Case was showing tier label both inside tile and below. Fixed (commit 53eaa21a): removed in-tile label; tier label appears only below the badge name in the footer row.",
+            "imagePath": "images/i-20260704-53a4-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-53a4-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "faab4175e2b54f4fae0cf6b9c2076befa75bc0cf",
+            "imageCommits": [
+              "faab4175e2b54f4fae0cf6b9c2076befa75bc0cf"
+            ],
+            "fixedAt": "2026-07-05T21:31:50.009Z",
+            "by": "shakeebshaan",
+            "appCommit": "53eaa21a",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95,
+              "note": "Screenshot shows badges with tier label ONLY below the tile (BRONZE / Plan Created etc), not duplicated inside the tile artwork. Clean separation confirmed — badge image area has no overlaid text."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Please read the issue and fix it",
+      "reviewRepliedAt": "2026-07-05T12:09:24.939Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T12:28:23.979Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T12:28:23.979Z"
     }
   ]
 }
