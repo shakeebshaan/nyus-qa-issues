@@ -284,12 +284,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Issues without screenshots rendered an invisible empty slot in the Issue column — no visual indicator that the card was text-only. Fix (board commit f38c29b): shotsHtml now falls back to a dashed 'Text only — no screenshot' placeholder badge when imagePaths is empty; .no-shot CSS class adds consistent styling. Screenshot shows before/after comparison. Board deployed to GitHub Pages.",
+        "imagePath": "images/i-20260704-6c85-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-6c85-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "491f8643e9448a4a0ff5c0ce346d4a492be775b2",
+        "imageCommits": [
+          "491f8643e9448a4a0ff5c0ce346d4a492be775b2"
+        ],
+        "fixedAt": "2026-07-06T03:50:06.010Z",
+        "by": "shakeebshaan",
+        "appCommit": "83c4abf6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 95,
+          "note": "Clear functional regression fixed with minimal targeted change. Before/after screenshot confirms text-only issues are now immediately readable."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Board QoL improvements are meta-work on the QA tooling itself. From reviewReply: (1) issues without images should still be readable, (2) lots of issues need triaging. Both noted. Board UX improvements require changes to nyus-qa-issues/index.html — owner-scope. Will continue triaging all issues this tick.",
-      "reviewedAt": "2026-07-06T03:12:07.169Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "We have the description for the issue and there is a problem in this board when we don't submit any images at the issues is not read properly we need to fix that and the issue is there a lot of issues on this board so we need to fix everything and add all the quality of life fixes for this board once done make sure all this features and the future features are in the snapfish Temple snap fix template",
       "reviewRepliedAt": "2026-07-05T12:03:27.757Z",
