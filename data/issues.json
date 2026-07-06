@@ -1,340 +1,326 @@
 {
-    "version":  1,
-    "issues":  [
-                   {
-                       "id":  "i-20260706-9b3c",
-                       "createdAt":  "2026-07-06T16:39:00.453Z",
-                       "route":  "/onboarding",
-                       "description":  "[bug-hunt] Imperial users see their weight in kg across the plan builders and plan overview - unit_preference is ignored. WHERE: src/pages/onboarding/custom/CustomDietBuilder.tsx ~line 264 (weightLabel = fmtKg(v), rendered as \u0027{weightLabel} kg\u0027 chip at ~1241) and src/pages/onboarding/custom/PlanReadyOverview.tsx ~362-383 (Goal card: fmtKg(current)/fmtKg(goal) with hardcoded \u0027Current kg\u0027/\u0027Goal kg\u0027 labels) + ~340 (\u0027Weekly pace ... kg/week\u0027). EXPECTED: onboarding Body Stats offers \u0027lbs / in\u0027 (unit_preference=\u0027imperial\u0027, Screen3_BodyStats/Screen2_BodyGoal both convert input via KG_TO_LB), so a user who picked lbs and typed 165 lbs should keep seeing lbs downstream, like Screen3\u0027s delta display and LogWeight already do. ACTUAL: the very next screens (diet builder weight chip, plan-ready Goal Progress card, Weekly pace) render raw kg - the 165 lbs user sees \u002774.8 kg\u0027, which reads like a wrong number. fmtKg is NOT unit-aware despite the comment in CustomDietBuilder claiming it is; data.unit_preference is available in both components\u0027 props and simply unused. REPRO: onboarding -\u003e Body Stats -\u003e pick \u0027lbs / in\u0027 -\u003e weight 165 lbs, goal 143 lbs -\u003e continue to the diet builder (weight chip \u002774.8 kg\u0027) and to the plan overview (Goal card \u002774.8 / 64.9\u0027 labeled kg). FIX SHAPE: branch on data.unit_preference===\u0027imperial\u0027 to convert with KG_TO_LB and label lbs (same pattern as Screen3_BodyStats weightDelta display).",
-                       "author":  "shakeebshaan",
-                       "tags":  [
-                                    "bug-hunt",
-                                    "auto"
-                                ],
-                       "imagePath":  null,
-                       "imageCommit":  null,
-                       "imagePaths":  [
-
-                                      ],
-                       "imageCommits":  [
-
-                                        ],
-                       "imagePrivate":  false,
-                       "status":  "open",
-                       "fix":  null,
-                       "history":  [
-
-                                   ]
-                   },
-                   {
-                       "id":  "i-20260706-4ea7",
-                       "createdAt":  "2026-07-06T16:39:00.453Z",
-                       "route":  "/onboarding",
-                       "description":  "[bug-hunt] Per-meal \u0027Suggest\u0027 swiper ignores the user\u0027s saved meal preferences (food dislikes, cuisine, spice, cook time) AND misses the prefetched deck, causing a cold ~14s \u0027Cooking up ideas...\u0027 wait. WHERE: src/pages/onboarding/custom/CustomDietBuilder.tsx ~1500-1504 - MealSuggestionSwiper gets context={diet_type, goal, allergies} only, while every other AI path (handleCoachBuildAll ~664, handleCoachBuildMeal ~822, and the mount prefetch ~572 via buildDietPrefetchBodies) spreads loadBuilderDraft()?.mealPrefs into context. mealDeckKey (custom-plan.service.ts ~271) includes cuisine_preferences/cook_time/spice_level/food_dislikes in the cache key. EXPECTED: after the user answers the MealPrefsSheet (every \u0027build it all\u0027 entry opens it and answers persist in the builder draft), tapping \u0027Suggest\u0027 on a meal should (a) respect those answers - e.g. food_dislikes=\u0027paneer\u0027 must not surface paneer meals - and (b) hit the enriched deck that was just warmed. ACTUAL: the swiper requests the BASELINE key: suggestions disregard dislikes/cuisine/spice (backend never receives them), and since the mount prefetch warmed the ENRICHED key, the baseline request is a cache miss -\u003e fresh LLM round-trip (~14s) despite QA i-20260612-0b73\u0027s instant-open guarantee. Note suggestMealCached\u0027s baseline-fallback (~466) only works the other direction (enriched request served from baseline deck), never baseline-request-from-enriched-deck. REPRO: onboarding diet builder -\u003e \u0027Coach builds all meals\u0027 -\u003e answer prefs incl. a dislike -\u003e after build, tap \u0027Suggest\u0027 on any meal: spinner ~14s and cards can include the disliked food. FIX SHAPE: pass {...context, ...(loadBuilderDraft()?.mealPrefs ?? {})} to the swiper context (mirror handleCoachBuildMeal).",
-                       "author":  "shakeebshaan",
-                       "tags":  [
-                                    "bug-hunt",
-                                    "auto"
-                                ],
-                       "imagePath":  null,
-                       "imageCommit":  null,
-                       "imagePaths":  [
-
-                                      ],
-                       "imageCommits":  [
-
-                                        ],
-                       "imagePrivate":  false,
-                       "status":  "open",
-                       "fix":  null,
-                       "history":  [
-
-                                   ]
-                   },
-                   {
-                       "id":  "i-20260705-c86c",
-                       "createdAt":  "2026-07-05T21:41:26.654Z",
-                       "route":  null,
-                       "description":  "[discovery] Outlets added: 3. Pitch-ready: Inc42 (Startup Spotlight). Escalated: 0 (ESCALATIONS.md write permission-blocked, 7th consecutive tick; pitch durable in landing repo marketing/DISCOVERY_KIT.md + pending-escalation memory). New outlets: Inc42 (route VERIFIED: inc42.com/startup-submission Tally form + editor@inc42.com for guest columns), Entrackr (real outlet, no public tips email on own site — route unverified), The Indian Startup Show podcast (real, official site TLS cert broken, directory contacts paywalled — route unverified). Dead ends logged: Healthshots (no contribute page), StartupTalky (write-for-us 404). Kit total: 6 outlets. Owner action: submit Inc42 pitch via Tally form; also AIM pitch (07-04) still unsent.",
-                       "author":  "shakeebshaan",
-                       "tags":  [
-                                    "discovery",
-                                    "auto"
-                                ],
-                       "imagePath":  null,
-                       "imageCommit":  null,
-                       "imagePaths":  [
-
-                                      ],
-                       "imageCommits":  [
-
-                                        ],
-                       "imagePrivate":  false,
-                       "status":  "open",
-                       "fix":  null,
-                       "history":  [
-
-                                   ],
-                       "needsReview":  false,
-                       "reviewReason":  "[discovery] Pitch outlets noted (Inc42 etc). Not a QA/app issue — belongs in business tracker.",
-                       "reviewedAt":  "2026-07-06T03:13:56.161Z",
-                       "reviewedBy":  "shakeebshaan",
-                       "reviewReply":  "Generate htmls and link here, and send the pitch from support@nyus.in email",
-                       "reviewRepliedAt":  "2026-07-06T14:03:10.590Z",
-                       "reviewReplyBy":  "shakeebshaan",
-                       "reportPath":  "reports/discovery-kit-c86c.html",
-                       "reportLabel":  "PR Discovery Kit"
-                   },
-                   {
-                       "id":  "i-20260704-6c85",
-                       "createdAt":  "2026-07-04T22:24:30.742Z",
-                       "route":  null,
-                       "description":  "",
-                       "descPrivate":  true,
-                       "author":  "shakeebshaan",
-                       "imagePath":  null,
-                       "imageCommit":  null,
-                       "imagePaths":  [
-
-                                      ],
-                       "imageCommits":  [
-
-                                        ],
-                       "imagePrivate":  false,
-                       "status":  "fixed",
-                       "fix":  {
-                                   "description":  "Board QoL shipped: (1) text-only issues now render correctly - description is the hero at 15.5px/1.6 with a compact \u0027Text only - no screenshot\u0027 pill instead of a large empty dashed box; (2) live search bar filters by id/description/route (Esc clears); (3) click-to-copy issue ID; (4) route-pill overflow ellipsis + shotsHtml null-path guard. All features also ported into the snapfix template (commit febf581) so future boards inherit them.",
-                                   "imagePath":  "images/i-20260704-6c85-fix-r2.png",
-                                   "imagePaths":  [
-                                                      "images/i-20260704-6c85-fix-r2.png"
-                                                  ],
-                                   "imagePrivate":  true,
-                                   "imageCommit":  "86906e854029ab120378fbf99104155a531a1cea",
-                                   "imageCommits":  [
-                                                        "86906e854029ab120378fbf99104155a531a1cea"
-                                                    ],
-                                   "fixedAt":  "2026-07-06T16:23:52.495Z",
-                                   "by":  "shakeebshaan",
-                                   "appCommit":  "415b6d5",
-                                   "tests":  {
-                                                 "passed":  true
-                                             },
-                                   "judge":  {
-                                                 "score":  85,
-                                                 "bar":  80,
-                                                 "note":  "Live board screenshot confirms search bar + compact text-only badge + working tag/filter chips render; template synced per owner ask"
-                                             }
-                               },
-                       "history":  [
-                                       {
-                                           "at":  "2026-07-06T12:29:29.874Z",
-                                           "event":  "reopened",
-                                           "note":  "No screenshot",
-                                           "by":  "shakeebshaan",
-                                           "previousFix":  {
-                                                               "description":  "Root cause: Issues without screenshots rendered an invisible empty slot in the Issue column — no visual indicator that the card was text-only. Fix (board commit f38c29b): shotsHtml now falls back to a dashed \u0027Text only — no screenshot\u0027 placeholder badge when imagePaths is empty; .no-shot CSS class adds consistent styling. Screenshot shows before/after comparison. Board deployed to GitHub Pages.",
-                                                               "imagePath":  "images/i-20260704-6c85-fix-r1.png",
-                                                               "imagePaths":  [
-                                                                                  "images/i-20260704-6c85-fix-r1.png"
-                                                                              ],
-                                                               "imagePrivate":  true,
-                                                               "imageCommit":  "491f8643e9448a4a0ff5c0ce346d4a492be775b2",
-                                                               "imageCommits":  [
-                                                                                    "491f8643e9448a4a0ff5c0ce346d4a492be775b2"
-                                                                                ],
-                                                               "fixedAt":  "2026-07-06T03:50:06.010Z",
-                                                               "by":  "shakeebshaan",
-                                                               "appCommit":  "83c4abf6",
-                                                               "tests":  {
-                                                                             "passed":  true
-                                                                         },
-                                                               "judge":  {
-                                                                             "score":  96,
-                                                                             "bar":  95,
-                                                                             "note":  "Clear functional regression fixed with minimal targeted change. Before/after screenshot confirms text-only issues are now immediately readable."
-                                                                         }
-                                                           }
-                                       }
-                                   ],
-                       "needsReview":  false,
-                       "reviewedBy":  "shakeebshaan",
-                       "reviewReply":  "We have the description for the issue and there is a problem in this board when we don\u0027t submit any images at the issues is not read properly we need to fix that and the issue is there a lot of issues on this board so we need to fix everything and add all the quality of life fixes for this board once done make sure all this features and the future features are in the snapfish Temple snap fix template",
-                       "reviewRepliedAt":  "2026-07-05T12:03:27.757Z",
-                       "reviewReplyBy":  "shakeebshaan"
-                   },
-                   {
-                       "id":  "i-20260704-ce32",
-                       "createdAt":  "2026-07-04T22:28:10.795Z",
-                       "route":  null,
-                       "description":  "",
-                       "descPrivate":  true,
-                       "author":  "shakeebshaan",
-                       "imagePath":  "images/i-20260704-ce32.jpg",
-                       "imageCommit":  "ef410e5609184a8000fe2c22f3e040a2f669b80f",
-                       "imagePaths":  [
-                                          "images/i-20260704-ce32.jpg"
-                                      ],
-                       "imageCommits":  [
-                                            "ef410e5609184a8000fe2c22f3e040a2f669b80f"
-                                        ],
-                       "imagePrivate":  true,
-                       "status":  "fixed",
-                       "fix":  {
-                                   "description":  "Implemented Option A (owner pick from design shotgun): coach quick-actions are now pill gradient chips - rounded-full, soft teal gradient fill, teal ring, circular icon badge, 48px min touch target, consistent 10px grid gap. Selected state keeps the solid teal fill.",
-                                   "imagePath":  "images/i-20260704-ce32-fix-r3.png",
-                                   "imagePaths":  [
-                                                      "images/i-20260704-ce32-fix-r3.png"
-                                                  ],
-                                   "imagePrivate":  true,
-                                   "imageCommit":  "21d71d6c947d2ddf14a01719e4d3ca67f00388cc",
-                                   "imageCommits":  [
-                                                        "21d71d6c947d2ddf14a01719e4d3ca67f00388cc"
-                                                    ],
-                                   "fixedAt":  "2026-07-06T16:17:09.847Z",
-                                   "by":  "shakeebshaan",
-                                   "appCommit":  "c160cfd8",
-                                   "tests":  {
-                                                 "passed":  true
-                                             },
-                                   "judge":  {
-                                                 "score":  88,
-                                                 "bar":  80,
-                                                 "note":  "Recapture shows Option A pills exactly as approved: gradient chips, icon badges, even spacing; behavior (selection, orphan span, a11y) untouched"
-                                             }
-                               },
-                       "history":  [
-                                       {
-                                           "at":  "2026-07-06T12:30:30.636Z",
-                                           "event":  "reopened",
-                                           "note":  "Button design is old fashion",
-                                           "by":  "shakeebshaan",
-                                           "previousFix":  {
-                                                               "description":  "Design shotgun: 3 variants generated (Compact Pills/Icon Accent Cards/Full-Width Stacked). Variant B implemented: left-aligned layout, teal icon circle (rounded-xl), 3px left accent border, 52px min-height. Persistent quick-action tray added above composer. Commit: cf1a5501",
-                                                               "imagePath":  "images/i-20260704-ce32-fix-r1.png",
-                                                               "imagePaths":  [
-                                                                                  "images/i-20260704-ce32-fix-r1.png"
-                                                                              ],
-                                                               "imagePrivate":  true,
-                                                               "imageCommit":  "e384206e7965df949ecb1a0c27f9869b694d859c",
-                                                               "imageCommits":  [
-                                                                                    "e384206e7965df949ecb1a0c27f9869b694d859c"
-                                                                                ],
-                                                               "fixedAt":  "2026-07-06T04:10:29.383Z",
-                                                               "by":  "shakeebshaan",
-                                                               "tests":  {
-                                                                             "passed":  true
-                                                                         },
-                                                               "judge":  {
-                                                                             "score":  82,
-                                                                             "bar":  80,
-                                                                             "note":  "Design shotgun delivered. Variant B applied to button styling. Persistent tray added."
-                                                                         }
-                                                           }
-                                       },
-                                       {
-                                           "at":  "2026-07-06T14:08:36.687Z",
-                                           "event":  "reopened",
-                                           "note":  null,
-                                           "by":  "shakeebshaan",
-                                           "previousFix":  {
-                                                               "description":  "Root cause: QuickActionsBlock used a left-border accent (border-l-[3px]) that felt dated. Fix (Option C from design shotgun): warm muted background, clean border, no left accent for idle state; teal gradient with ambient glow on selected state. Design shotgun HTML attached. 28/28 component tests pass.",
-                                                               "imagePath":  "images/i-20260704-ce32-fix-r2.png",
-                                                               "imagePaths":  [
-                                                                                  "images/i-20260704-ce32-fix-r2.png"
-                                                                              ],
-                                                               "imagePrivate":  true,
-                                                               "imageCommit":  "aeffe0443f75ebd833c8645dafd0191a36b8be6b",
-                                                               "imageCommits":  [
-                                                                                    "aeffe0443f75ebd833c8645dafd0191a36b8be6b"
-                                                                                ],
-                                                               "fixedAt":  "2026-07-06T13:27:06.635Z",
-                                                               "by":  "shakeebshaan",
-                                                               "appCommit":  "ed689f49",
-                                                               "tests":  {
-                                                                             "passed":  true
-                                                                         },
-                                                               "judge":  {
-                                                                             "score":  82,
-                                                                             "bar":  80,
-                                                                             "note":  "Modern warm-neutral design applied and verified in chat screenshot. Selected state: full teal gradient + glow. Idle: calm warm muted. Shotgun HTML with 3 variants attached for owner to compare."
-                                                                         }
-                                                           }
-                                       }
-                                   ],
-                       "needsReview":  false,
-                       "reviewedBy":  "shakeebshaan",
-                       "reviewReply":  "Option A",
-                       "reviewRepliedAt":  "2026-07-06T14:08:56.643Z",
-                       "reviewReplyBy":  "shakeebshaan",
-                       "reportPath":  "reports/ce32-design-shotgun.html",
-                       "reportLabel":  "Design Shotgun (3 variants)"
-                   },
-                   {
-                       "id":  "i-20260704-d460",
-                       "createdAt":  "2026-07-04T22:41:37.516Z",
-                       "route":  null,
-                       "description":  "",
-                       "descPrivate":  true,
-                       "author":  "shakeebshaan",
-                       "imagePath":  null,
-                       "imageCommit":  null,
-                       "imagePaths":  [
-
-                                      ],
-                       "imageCommits":  [
-
-                                        ],
-                       "imagePrivate":  false,
-                       "status":  "open",
-                       "fix":  null,
-                       "history":  [
-
-                                   ],
-                       "needsReview":  true,
-                       "reviewReason":  "DISCOVERY DONE (2026-07-06), execution blocked headless - need your call + a deploy. Current state: foods live in backend table food_database (seed_food_database.py = 500 verified IFCT/USDA staples) PLUS a ~104k-row ingredients table PLUS a USDA-FDC-\u003eOpenFoodFacts miss-path fallback (public_food_lookup.py) that already gives near-unlimited coverage on demand. Exercises = exercises table (seed_exercises.py, 223 rows) + a parallel 873-row exercise_library (yuhonas). The picker\u0027s /exercises/search ALREADY hides NEAT/sport/flexibility/duration + program-junk by default, so awkward rows (Sitting, Fidgeting, Washing Dishes, Temple visit, Crab Walk, Bear Crawl, etc.) don\u0027t surface unless a user name-searches them. THREE blockers stop me finishing headless: (1) \u002710x to verified-from-multiple-sources\u0027 - I won\u0027t fabricate ~4500 macros; needs a data source decision (bulk-import curated OpenFoodFacts-India + IFCT2017, or stage USDA). (2) Any add/remove only hits PROD after a backend deploy (ssh/plink), which this headless loop is barred from - so even a good migration sits until you deploy. (3) \u0027don\u0027t add bodyweight exercises\u0027 is ambiguous - deleting real bodyweight staples (push-ups/squats/lunges) would break home/no-equipment plans; I read it as \u0027drop the novelty ones\u0027 (Crab Walk/Bear Crawl/Inchworm/Fire Hydrant/Donkey Kick/Mallakhamb/Dandal/Kho Kho/Kabaddi). CONFIRM: (a) which - novelty-only or all bodyweight? (b) approve OpenFoodFacts-India bulk import for the 10x? Then I\u0027ll write the migration (add verified foods + delete novelty exercises) in one PR; you deploy.",
-                       "reviewedAt":  "2026-07-06T16:24:52.868Z",
-                       "reviewedBy":  "shakeebshaan",
-                       "reviewReply":  "Do it",
-                       "reviewRepliedAt":  "2026-07-06T14:01:46.024Z",
-                       "reviewReplyBy":  "shakeebshaan"
-                   },
-                   {
-                       "id":  "i-20260705-8287",
-                       "createdAt":  "2026-07-05T12:19:06.010Z",
-                       "route":  "/like like this pic create five more loops",
-                       "description":  "",
-                       "descPrivate":  true,
-                       "author":  "shakeebshaan",
-                       "imagePath":  null,
-                       "imageCommit":  null,
-                       "imagePaths":  [
-
-                                      ],
-                       "imageCommits":  [
-
-                                        ],
-                       "imagePrivate":  false,
-                       "status":  "open",
-                       "fix":  null,
-                       "history":  [
-
-                                   ],
-                       "needsReview":  true,
-                       "reviewReason":  "Loop fleet AUDIT (2026-07-06): 14 active loops + watchdog already run (fix-issues, bug-hunt, feature-ideas, health-check-fix, repo-maintainer, growth-metrics, content-marketing, press-kit, discovery-kit, nightly-changelog, docs-sweep, coverage-push, test-stabilizer, quality-streak). Your fallback directive IS live: runner.ps1 uses fable primary -\u003e opus (xhigh) fallback on any usage limit; skips only when both are limited. GAP vs your ask = 3 missing named loops: (1) security/pen-test review, (2) data-review, (3) board-monitor/learning-retro. I wrote headless-safe prompts for all 3, but creating them requires writing under C:\\\\Users\\\\Administrator\\\\.claude\\\\nyus-loops\\\\ (prompt files + loops.json) and registering Windows Scheduled Tasks -- both are permission-gated \u0027sensitive\u0027 paths that the headless loop is blocked from touching. Owner action: run the 3 prompt-file creates + Register-ScheduledTask on your machine (I can hand you the exact PS1 + prompt text), or grant the loop write access to .claude\\\\nyus-loops. Per-model routing (haiku=small/deploy, sonnet=search) is NOT in the runner today -- only fable-\u003eopus; adding tiered routing is a runner.ps1 change, also owner-approved-only.",
-                       "reviewedAt":  "2026-07-06T16:22:04.323Z",
-                       "reviewedBy":  "shakeebshaan",
-                       "reviewReply":  "if the fable is not available then use opus as fallback",
-                       "reviewRepliedAt":  "2026-07-06T14:04:40.947Z",
-                       "reviewReplyBy":  "shakeebshaan",
-                       "reportPath":  "reports/loops-spec-8287.html",
-                       "reportLabel":  "QA Loop Specs (Loops 1-6)",
-                       "reviewReplyImagePaths":  [
-                                                     "images/i-20260705-8287-reply.jpg"
-                                                 ],
-                       "reviewReplyImageCommits":  [
-                                                       "81d77fcf0fc4151254f0e8e642c8ce20bf8b80c5"
-                                                   ],
-                       "reviewReplyImagePrivate":  true
-                   }
-               ]
+  "version": 1,
+  "issues": [
+    {
+      "id": "i-20260706-9b3c",
+      "createdAt": "2026-07-06T16:39:00.453Z",
+      "route": "/onboarding",
+      "description": "[bug-hunt] Imperial users see their weight in kg across the plan builders and plan overview - unit_preference is ignored. WHERE: src/pages/onboarding/custom/CustomDietBuilder.tsx ~line 264 (weightLabel = fmtKg(v), rendered as '{weightLabel} kg' chip at ~1241) and src/pages/onboarding/custom/PlanReadyOverview.tsx ~362-383 (Goal card: fmtKg(current)/fmtKg(goal) with hardcoded 'Current kg'/'Goal kg' labels) + ~340 ('Weekly pace ... kg/week'). EXPECTED: onboarding Body Stats offers 'lbs / in' (unit_preference='imperial', Screen3_BodyStats/Screen2_BodyGoal both convert input via KG_TO_LB), so a user who picked lbs and typed 165 lbs should keep seeing lbs downstream, like Screen3's delta display and LogWeight already do. ACTUAL: the very next screens (diet builder weight chip, plan-ready Goal Progress card, Weekly pace) render raw kg - the 165 lbs user sees '74.8 kg', which reads like a wrong number. fmtKg is NOT unit-aware despite the comment in CustomDietBuilder claiming it is; data.unit_preference is available in both components' props and simply unused. REPRO: onboarding -> Body Stats -> pick 'lbs / in' -> weight 165 lbs, goal 143 lbs -> continue to the diet builder (weight chip '74.8 kg') and to the plan overview (Goal card '74.8 / 64.9' labeled kg). FIX SHAPE: branch on data.unit_preference==='imperial' to convert with KG_TO_LB and label lbs (same pattern as Screen3_BodyStats weightDelta display).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260706-4ea7",
+      "createdAt": "2026-07-06T16:39:00.453Z",
+      "route": "/onboarding",
+      "description": "[bug-hunt] Per-meal 'Suggest' swiper ignores the user's saved meal preferences (food dislikes, cuisine, spice, cook time) AND misses the prefetched deck, causing a cold ~14s 'Cooking up ideas...' wait. WHERE: src/pages/onboarding/custom/CustomDietBuilder.tsx ~1500-1504 - MealSuggestionSwiper gets context={diet_type, goal, allergies} only, while every other AI path (handleCoachBuildAll ~664, handleCoachBuildMeal ~822, and the mount prefetch ~572 via buildDietPrefetchBodies) spreads loadBuilderDraft()?.mealPrefs into context. mealDeckKey (custom-plan.service.ts ~271) includes cuisine_preferences/cook_time/spice_level/food_dislikes in the cache key. EXPECTED: after the user answers the MealPrefsSheet (every 'build it all' entry opens it and answers persist in the builder draft), tapping 'Suggest' on a meal should (a) respect those answers - e.g. food_dislikes='paneer' must not surface paneer meals - and (b) hit the enriched deck that was just warmed. ACTUAL: the swiper requests the BASELINE key: suggestions disregard dislikes/cuisine/spice (backend never receives them), and since the mount prefetch warmed the ENRICHED key, the baseline request is a cache miss -> fresh LLM round-trip (~14s) despite QA i-20260612-0b73's instant-open guarantee. Note suggestMealCached's baseline-fallback (~466) only works the other direction (enriched request served from baseline deck), never baseline-request-from-enriched-deck. REPRO: onboarding diet builder -> 'Coach builds all meals' -> answer prefs incl. a dislike -> after build, tap 'Suggest' on any meal: spinner ~14s and cards can include the disliked food. FIX SHAPE: pass {...context, ...(loadBuilderDraft()?.mealPrefs ?? {})} to the swiper context (mirror handleCoachBuildMeal).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260705-c86c",
+      "createdAt": "2026-07-05T21:41:26.654Z",
+      "route": null,
+      "description": "[discovery] Outlets added: 3. Pitch-ready: Inc42 (Startup Spotlight). Escalated: 0 (ESCALATIONS.md write permission-blocked, 7th consecutive tick; pitch durable in landing repo marketing/DISCOVERY_KIT.md + pending-escalation memory). New outlets: Inc42 (route VERIFIED: inc42.com/startup-submission Tally form + editor@inc42.com for guest columns), Entrackr (real outlet, no public tips email on own site — route unverified), The Indian Startup Show podcast (real, official site TLS cert broken, directory contacts paywalled — route unverified). Dead ends logged: Healthshots (no contribute page), StartupTalky (write-for-us 404). Kit total: 6 outlets. Owner action: submit Inc42 pitch via Tally form; also AIM pitch (07-04) still unsent.",
+      "author": "shakeebshaan",
+      "tags": [
+        "discovery",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": false,
+      "reviewReason": "[discovery] Pitch outlets noted (Inc42 etc). Not a QA/app issue — belongs in business tracker.",
+      "reviewedAt": "2026-07-06T03:13:56.161Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Generate htmls and link here, and send the pitch from support@nyus.in email",
+      "reviewRepliedAt": "2026-07-06T14:03:10.590Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reportPath": "reports/discovery-kit-c86c.html",
+      "reportLabel": "PR Discovery Kit"
+    },
+    {
+      "id": "i-20260704-6c85",
+      "createdAt": "2026-07-04T22:24:30.742Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "Board QoL shipped: (1) text-only issues now render correctly - description is the hero at 15.5px/1.6 with a compact 'Text only - no screenshot' pill instead of a large empty dashed box; (2) live search bar filters by id/description/route (Esc clears); (3) click-to-copy issue ID; (4) route-pill overflow ellipsis + shotsHtml null-path guard. All features also ported into the snapfix template (commit febf581) so future boards inherit them.",
+        "imagePath": "images/i-20260704-6c85-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-6c85-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "86906e854029ab120378fbf99104155a531a1cea",
+        "imageCommits": [
+          "86906e854029ab120378fbf99104155a531a1cea"
+        ],
+        "fixedAt": "2026-07-06T16:23:52.495Z",
+        "by": "shakeebshaan",
+        "appCommit": "415b6d5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 85,
+          "bar": 80,
+          "note": "Live board screenshot confirms search bar + compact text-only badge + working tag/filter chips render; template synced per owner ask"
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-06T12:29:29.874Z",
+          "event": "reopened",
+          "note": "No screenshot",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: Issues without screenshots rendered an invisible empty slot in the Issue column — no visual indicator that the card was text-only. Fix (board commit f38c29b): shotsHtml now falls back to a dashed 'Text only — no screenshot' placeholder badge when imagePaths is empty; .no-shot CSS class adds consistent styling. Screenshot shows before/after comparison. Board deployed to GitHub Pages.",
+            "imagePath": "images/i-20260704-6c85-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-6c85-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "491f8643e9448a4a0ff5c0ce346d4a492be775b2",
+            "imageCommits": [
+              "491f8643e9448a4a0ff5c0ce346d4a492be775b2"
+            ],
+            "fixedAt": "2026-07-06T03:50:06.010Z",
+            "by": "shakeebshaan",
+            "appCommit": "83c4abf6",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95,
+              "note": "Clear functional regression fixed with minimal targeted change. Before/after screenshot confirms text-only issues are now immediately readable."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "We have the description for the issue and there is a problem in this board when we don't submit any images at the issues is not read properly we need to fix that and the issue is there a lot of issues on this board so we need to fix everything and add all the quality of life fixes for this board once done make sure all this features and the future features are in the snapfish Temple snap fix template",
+      "reviewRepliedAt": "2026-07-05T12:03:27.757Z",
+      "reviewReplyBy": "shakeebshaan"
+    },
+    {
+      "id": "i-20260704-ce32",
+      "createdAt": "2026-07-04T22:28:10.795Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-ce32.jpg",
+      "imageCommit": "ef410e5609184a8000fe2c22f3e040a2f669b80f",
+      "imagePaths": [
+        "images/i-20260704-ce32.jpg"
+      ],
+      "imageCommits": [
+        "ef410e5609184a8000fe2c22f3e040a2f669b80f"
+      ],
+      "imagePrivate": true,
+      "status": "fixed",
+      "fix": {
+        "description": "Implemented Option A (owner pick from design shotgun): coach quick-actions are now pill gradient chips - rounded-full, soft teal gradient fill, teal ring, circular icon badge, 48px min touch target, consistent 10px grid gap. Selected state keeps the solid teal fill.",
+        "imagePath": "images/i-20260704-ce32-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260704-ce32-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "21d71d6c947d2ddf14a01719e4d3ca67f00388cc",
+        "imageCommits": [
+          "21d71d6c947d2ddf14a01719e4d3ca67f00388cc"
+        ],
+        "fixedAt": "2026-07-06T16:17:09.847Z",
+        "by": "shakeebshaan",
+        "appCommit": "c160cfd8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "Recapture shows Option A pills exactly as approved: gradient chips, icon badges, even spacing; behavior (selection, orphan span, a11y) untouched"
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-06T12:30:30.636Z",
+          "event": "reopened",
+          "note": "Button design is old fashion",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Design shotgun: 3 variants generated (Compact Pills/Icon Accent Cards/Full-Width Stacked). Variant B implemented: left-aligned layout, teal icon circle (rounded-xl), 3px left accent border, 52px min-height. Persistent quick-action tray added above composer. Commit: cf1a5501",
+            "imagePath": "images/i-20260704-ce32-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-ce32-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e384206e7965df949ecb1a0c27f9869b694d859c",
+            "imageCommits": [
+              "e384206e7965df949ecb1a0c27f9869b694d859c"
+            ],
+            "fixedAt": "2026-07-06T04:10:29.383Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 82,
+              "bar": 80,
+              "note": "Design shotgun delivered. Variant B applied to button styling. Persistent tray added."
+            }
+          }
+        },
+        {
+          "at": "2026-07-06T14:08:36.687Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: QuickActionsBlock used a left-border accent (border-l-[3px]) that felt dated. Fix (Option C from design shotgun): warm muted background, clean border, no left accent for idle state; teal gradient with ambient glow on selected state. Design shotgun HTML attached. 28/28 component tests pass.",
+            "imagePath": "images/i-20260704-ce32-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260704-ce32-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "aeffe0443f75ebd833c8645dafd0191a36b8be6b",
+            "imageCommits": [
+              "aeffe0443f75ebd833c8645dafd0191a36b8be6b"
+            ],
+            "fixedAt": "2026-07-06T13:27:06.635Z",
+            "by": "shakeebshaan",
+            "appCommit": "ed689f49",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 82,
+              "bar": 80,
+              "note": "Modern warm-neutral design applied and verified in chat screenshot. Selected state: full teal gradient + glow. Idle: calm warm muted. Shotgun HTML with 3 variants attached for owner to compare."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Option A",
+      "reviewRepliedAt": "2026-07-06T14:08:56.643Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reportPath": "reports/ce32-design-shotgun.html",
+      "reportLabel": "Design Shotgun (3 variants)"
+    },
+    {
+      "id": "i-20260704-d460",
+      "createdAt": "2026-07-04T22:41:37.516Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "DISCOVERY DONE (2026-07-06), execution blocked headless - need your call + a deploy. Current state: foods live in backend table food_database (seed_food_database.py = 500 verified IFCT/USDA staples) PLUS a ~104k-row ingredients table PLUS a USDA-FDC->OpenFoodFacts miss-path fallback (public_food_lookup.py) that already gives near-unlimited coverage on demand. Exercises = exercises table (seed_exercises.py, 223 rows) + a parallel 873-row exercise_library (yuhonas). The picker's /exercises/search ALREADY hides NEAT/sport/flexibility/duration + program-junk by default, so awkward rows (Sitting, Fidgeting, Washing Dishes, Temple visit, Crab Walk, Bear Crawl, etc.) don't surface unless a user name-searches them. THREE blockers stop me finishing headless: (1) '10x to verified-from-multiple-sources' - I won't fabricate ~4500 macros; needs a data source decision (bulk-import curated OpenFoodFacts-India + IFCT2017, or stage USDA). (2) Any add/remove only hits PROD after a backend deploy (ssh/plink), which this headless loop is barred from - so even a good migration sits until you deploy. (3) 'don't add bodyweight exercises' is ambiguous - deleting real bodyweight staples (push-ups/squats/lunges) would break home/no-equipment plans; I read it as 'drop the novelty ones' (Crab Walk/Bear Crawl/Inchworm/Fire Hydrant/Donkey Kick/Mallakhamb/Dandal/Kho Kho/Kabaddi). CONFIRM: (a) which - novelty-only or all bodyweight? (b) approve OpenFoodFacts-India bulk import for the 10x? Then I'll write the migration (add verified foods + delete novelty exercises) in one PR; you deploy.",
+      "reviewedAt": "2026-07-06T16:24:52.868Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Do it",
+      "reviewRepliedAt": "2026-07-06T14:01:46.024Z",
+      "reviewReplyBy": "shakeebshaan"
+    },
+    {
+      "id": "i-20260705-8287",
+      "createdAt": "2026-07-05T12:19:06.010Z",
+      "route": "/like like this pic create five more loops",
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Loop fleet AUDIT (2026-07-06): 14 active loops + watchdog already run (fix-issues, bug-hunt, feature-ideas, health-check-fix, repo-maintainer, growth-metrics, content-marketing, press-kit, discovery-kit, nightly-changelog, docs-sweep, coverage-push, test-stabilizer, quality-streak). Your fallback directive IS live: runner.ps1 uses fable primary -> opus (xhigh) fallback on any usage limit; skips only when both are limited. GAP vs your ask = 3 missing named loops: (1) security/pen-test review, (2) data-review, (3) board-monitor/learning-retro. I wrote headless-safe prompts for all 3, but creating them requires writing under C:\\\\Users\\\\Administrator\\\\.claude\\\\nyus-loops\\\\ (prompt files + loops.json) and registering Windows Scheduled Tasks -- both are permission-gated 'sensitive' paths that the headless loop is blocked from touching. Owner action: run the 3 prompt-file creates + Register-ScheduledTask on your machine (I can hand you the exact PS1 + prompt text), or grant the loop write access to .claude\\\\nyus-loops. Per-model routing (haiku=small/deploy, sonnet=search) is NOT in the runner today -- only fable->opus; adding tiered routing is a runner.ps1 change, also owner-approved-only.",
+      "reviewedAt": "2026-07-06T16:22:04.323Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "if the fable is not available then use opus as fallback",
+      "reviewRepliedAt": "2026-07-06T14:04:40.947Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reportPath": "reports/loops-spec-8287.html",
+      "reportLabel": "QA Loop Specs (Loops 1-6)",
+      "reviewReplyImagePaths": [
+        "images/i-20260705-8287-reply.jpg"
+      ],
+      "reviewReplyImageCommits": [
+        "81d77fcf0fc4151254f0e8e642c8ce20bf8b80c5"
+      ],
+      "reviewReplyImagePrivate": true
+    },
+    {
+      "id": "i-20260706-f039",
+      "createdAt": "2026-07-06T17:06:17.749Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260706-f039.jpg",
+      "imageCommit": "57b1fd410f9eb2932ab1e48eaeb2cbb7061d8ea7",
+      "imagePaths": [
+        "images/i-20260706-f039.jpg"
+      ],
+      "imageCommits": [
+        "57b1fd410f9eb2932ab1e48eaeb2cbb7061d8ea7"
+      ],
+      "imagePrivate": true,
+      "status": "open",
+      "fix": null,
+      "history": []
+    }
+  ]
 }
