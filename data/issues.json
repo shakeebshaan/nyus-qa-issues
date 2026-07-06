@@ -112,29 +112,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260705-ex01",
-      "createdAt": "2026-07-05T20:42:45.465Z",
-      "route": "/activity",
-      "description": "[suggestion] Exercise form-cue sheet: tap any exercise in a workout to see 3-4 concise form cues, common mistakes, and a breathing tip. USER PROBLEM: during a live workout the athlete sees only exercise name + sets×reps×RPE — zero guidance on how to actually perform the movement. Beginners (the walking_only/light tiers the app explicitly provisions for) either guess (injury + bad results) or leave the workout screen to ask the coach chat / Google, which kills the session flow and burns LLM rate-limit budget on a static question. EVIDENCE: a repo-wide grep finds NO instruction/video/form-cue content anywhere — the exercise catalog carries only equipment/sets/reps/RPE (ExercisePickerSheet, getAlternatives), and Activity.tsx's live-workout card renders no info affordance. Every comparable tracker (Hevy, Strong, Fitbod, cult.fit) ships per-exercise how-to as table stakes. V1 SCOPE: an info icon on the exercise card in the live workout (Activity.tsx) and in NextSessionPreview opens a calm bottom sheet with: 3-4 form cues, 2 common mistakes, 1 breathing tip. Content is LLM-generated ONCE per exercise server-side and cached in a new exercise_form_cues table (exercise_id → JSON), served via GET /api/v1/exercises/<id>/form-cues; first-request-generates, then cached forever — so LLM cost is one call per distinct exercise ever, not per user. No video, no images, no personalization in v1. EFFORT: ~2 days full-stack (1 endpoint + 1 table + migration; 1 bottom-sheet component + 2 tap targets). Zero impact on existing flows if the endpoint 404s (sheet just doesn't open).",
-      "descPrivate": false,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "[suggestion] Exercise form-cue sheet per exercise. Interesting feature — requires exercise form data in DB + UI in workout tracker. Backlog.",
-      "reviewedAt": "2026-07-06T03:13:31.643Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260704-if01",
       "createdAt": "2026-07-04T23:46:11.538Z",
       "route": "/nutrition",
