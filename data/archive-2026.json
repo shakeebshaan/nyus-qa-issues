@@ -14521,6 +14521,88 @@
       "resolvedAt": "2026-07-06T14:10:15.430Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T14:10:15.430Z"
+    },
+    {
+      "id": "i-20260704-fc5f",
+      "createdAt": "2026-07-04T22:22:50.155Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-fc5f-0.jpg",
+      "imageCommit": "493771c4b284a0c5dca7399a42b5f4c37d6ee3e3",
+      "imagePaths": [
+        "images/i-20260704-fc5f-0.jpg",
+        "images/i-20260704-fc5f-1.jpg"
+      ],
+      "imageCommits": [
+        "493771c4b284a0c5dca7399a42b5f4c37d6ee3e3",
+        "368cbc979b384b78643cf672b8ebf109846df9c2"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: dashboard showed two separate MomentCard components in sequence. Fix (StackedMomentCards): top card full-size; remaining cards peek as thin strips below it; '+1 more tip · dismiss to reveal' hint; dismiss top reveals next. Coach voice + personalized context kept.",
+        "imagePath": "images/i-20260704-fc5f-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-fc5f-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7bc1c90c6cbb9539e6ae4f9bdd8b3ad816f4ffd4",
+        "imageCommits": [
+          "7bc1c90c6cbb9539e6ae4f9bdd8b3ad816f4ffd4"
+        ],
+        "fixedAt": "2026-07-06T13:26:00.702Z",
+        "by": "shakeebshaan",
+        "appCommit": "ed689f49",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 82,
+          "bar": 80,
+          "note": "Stacking implemented as requested. Visual deck effect with peek strips + count hint. Content is coach-voice, context-driven."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-06T12:30:04.306Z",
+          "event": "reopened",
+          "note": "Stack them instead of showing all",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: MomentCard had no expand/collapse on tap. Fix (commit ea1bcfb3): MomentCard toggles expanded/collapsed on tap when no onTap prop is set — collapsed shows single-line + 'Tap to read more', expanded shows full text + 'Tap to collapse'. Dashboard.tsx adds showCoachLabel=true so 'YOUR COACH' label shows in purple. Screenshot proves both states work.",
+            "imagePath": "images/i-20260704-fc5f-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-fc5f-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "2bfe37b9248b7486947afa9cd59da0363b6c827a",
+            "imageCommits": [
+              "2bfe37b9248b7486947afa9cd59da0363b6c827a"
+            ],
+            "fixedAt": "2026-07-06T02:20:19.224Z",
+            "by": "shakeebshaan",
+            "appCommit": "c90fabe3",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95,
+              "note": "Screenshot shows expanded state with YOUR COACH label + full tip text + Tap to collapse. Collapsed state confirmed in separate capture. Toggle behavior verified end-to-end."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Show me screenshots",
+      "reviewRepliedAt": "2026-07-05T12:01:39.327Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T14:10:21.716Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T14:10:21.716Z"
     }
   ]
 }
