@@ -171,31 +171,39 @@
         "368cbc979b384b78643cf672b8ebf109846df9c2"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: MomentCard had no expand/collapse on tap. Fix (commit ea1bcfb3): MomentCard toggles expanded/collapsed on tap when no onTap prop is set — collapsed shows single-line + 'Tap to read more', expanded shows full text + 'Tap to collapse'. Dashboard.tsx adds showCoachLabel=true so 'YOUR COACH' label shows in purple. Screenshot proves both states work.",
-        "imagePath": "images/i-20260704-fc5f-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260704-fc5f-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "2bfe37b9248b7486947afa9cd59da0363b6c827a",
-        "imageCommits": [
-          "2bfe37b9248b7486947afa9cd59da0363b6c827a"
-        ],
-        "fixedAt": "2026-07-06T02:20:19.224Z",
-        "by": "shakeebshaan",
-        "appCommit": "c90fabe3",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 96,
-          "bar": 95,
-          "note": "Screenshot shows expanded state with YOUR COACH label + full tip text + Tap to collapse. Collapsed state confirmed in separate capture. Toggle behavior verified end-to-end."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-06T12:30:04.306Z",
+          "event": "reopened",
+          "note": "Stack them instead of showing all",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: MomentCard had no expand/collapse on tap. Fix (commit ea1bcfb3): MomentCard toggles expanded/collapsed on tap when no onTap prop is set — collapsed shows single-line + 'Tap to read more', expanded shows full text + 'Tap to collapse'. Dashboard.tsx adds showCoachLabel=true so 'YOUR COACH' label shows in purple. Screenshot proves both states work.",
+            "imagePath": "images/i-20260704-fc5f-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-fc5f-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "2bfe37b9248b7486947afa9cd59da0363b6c827a",
+            "imageCommits": [
+              "2bfe37b9248b7486947afa9cd59da0363b6c827a"
+            ],
+            "fixedAt": "2026-07-06T02:20:19.224Z",
+            "by": "shakeebshaan",
+            "appCommit": "c90fabe3",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 95,
+              "note": "Screenshot shows expanded state with YOUR COACH label + full tip text + Tap to collapse. Collapsed state confirmed in separate capture. Toggle behavior verified end-to-end."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Show me screenshots",
