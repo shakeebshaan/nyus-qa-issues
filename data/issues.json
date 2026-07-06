@@ -237,8 +237,30 @@
         "368cbc979b384b78643cf672b8ebf109846df9c2"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: dashboard showed two separate MomentCard components in sequence. Fix (StackedMomentCards): top card full-size; remaining cards peek as thin strips below it; '+1 more tip · dismiss to reveal' hint; dismiss top reveals next. Coach voice + personalized context kept.",
+        "imagePath": "images/i-20260704-fc5f-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-fc5f-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7bc1c90c6cbb9539e6ae4f9bdd8b3ad816f4ffd4",
+        "imageCommits": [
+          "7bc1c90c6cbb9539e6ae4f9bdd8b3ad816f4ffd4"
+        ],
+        "fixedAt": "2026-07-06T13:26:00.702Z",
+        "by": "shakeebshaan",
+        "appCommit": "ed689f49",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 82,
+          "bar": 80,
+          "note": "Stacking implemented as requested. Visual deck effect with peek strips + count hint. Content is coach-voice, context-driven."
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T12:30:04.306Z",
