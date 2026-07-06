@@ -41,8 +41,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Board QoL shipped: (1) text-only issues now render correctly - description is the hero at 15.5px/1.6 with a compact 'Text only - no screenshot' pill instead of a large empty dashed box; (2) live search bar filters by id/description/route (Esc clears); (3) click-to-copy issue ID; (4) route-pill overflow ellipsis + shotsHtml null-path guard. All features also ported into the snapfix template (commit febf581) so future boards inherit them.",
+        "imagePath": "images/i-20260704-6c85-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-6c85-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "86906e854029ab120378fbf99104155a531a1cea",
+        "imageCommits": [
+          "86906e854029ab120378fbf99104155a531a1cea"
+        ],
+        "fixedAt": "2026-07-06T16:23:52.495Z",
+        "by": "shakeebshaan",
+        "appCommit": "415b6d5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 85,
+          "bar": 80,
+          "note": "Live board screenshot confirms search bar + compact text-only badge + working tag/filter chips render; template synced per owner ask"
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T12:29:29.874Z",
