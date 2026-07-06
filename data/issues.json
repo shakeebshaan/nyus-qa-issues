@@ -2,29 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260706-c4d9",
-      "createdAt": "2026-07-06T02:25:32.906Z",
-      "route": "/coach-chat",
-      "description": "[bug-hunt] measurement_input chat block re-logs stale measurements: every field is prefilled with the PREVIOUS value and Save is enabled with zero user input.\n\nWHERE: src/components/blocks/MeasurementInputBlock.tsx:26-32 seeds values from field.current_value (the user's previous measurement), and hasValues (line 53) is true as soon as any prefilled value > 0 — so \"Save Measurements\" is enabled immediately. transformMeasurementLog (src/lib/block-transformers.ts:146-168) only filters values <= 0, so every carried-over number is POSTed to /logs/measurement.\n\nACTUAL: (a) one tap on Save with no input writes a full duplicate of the previous measurement set dated today; (b) editing only waist still submits chest/hip/biceps/etc as \"new\" measurements with old values. Both pollute measurement history and flatten trend charts with phantom same-value entries.\nEXPECTED: inputs start empty (the \"Previous: X cm\" hint under each field already shows the old value — prefilling duplicates it), Save disabled until the user types at least one measurement, and only user-entered fields logged.\n\nREPRO: in coach chat receive a measurement_input block as a user with prior measurements -> tap \"Save Measurements\" without touching any field -> a new measurement entry for today is created with yesterday's numbers (visible on /measurements history).",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Code fix committed (772a87b3): MeasurementInputBlock now seeds all values at 0 (not from current_value), so Save button stays disabled until user types. Also adds _measurementDraftCache for virtual-scroll state preservation. current_value shown as hint text only ('Previous: X cm'). Visual confirmation requires a measurement-input block in live chat.",
-      "reviewedAt": "2026-07-06T02:55:10.617Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260706-5b18",
       "createdAt": "2026-07-06T02:25:32.906Z",
       "route": "/coach-chat",
