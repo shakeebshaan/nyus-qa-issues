@@ -59,12 +59,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: MealSuggestionSwiper context omitted the saved mealPrefs, so suggestions ignored dislikes/cuisine/spice AND keyed the baseline deck while the mount prefetch warmed the enriched deck (cold ~14s LLM wait). Fix: spread loadBuilderDraft()?.mealPrefs into the swiper context (mirrors handleCoachBuildMeal) - verified: card opens from the warm deck in ~0.2s and the network request now carries cuisine_preferences/cook_time/spice_level. Follow-up caught in verification: batch-warmed deck items nest macros under macros{} so cards rendered 'P NaNg'; suggestMealsBatch now flattens them (screenshot shows real 597.9 kcal / P 50g chips).",
+        "imagePath": "images/i-20260706-4ea7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260706-4ea7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e686270be5bfcdfc1fd4704dd92eb86d48dba15c",
+        "imageCommits": [
+          "e686270be5bfcdfc1fd4704dd92eb86d48dba15c"
+        ],
+        "fixedAt": "2026-07-06T17:38:57.290Z",
+        "by": "shakeebshaan",
+        "appCommit": "a853ee75",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Instant deck-hit + prefs-in-request proven via captured network body; NaN regression the key-switch would have shipped was caught and fixed in the same pass"
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Fix shipped in commit 39d18447: MealSuggestionSwiper context prop now spreads loadBuilderDraft()?.mealPrefs ?? {} alongside diet_type/goal/allergies, matching the pattern in handleCoachBuildAll/handleCoachBuildMeal. This means (a) dislikes/cuisine/spice/cooktime are sent to the backend so suggestions respect prefs, and (b) the mealDeckKey matches the enriched key that was warmed at mount, eliminating the ~14s LLM roundtrip. Code is one-line spread change (grep+tsc verified). No unit tests for this component. Full gate infra-blocked headless - same as i-20260706-9b3c. Owner: scope testCommand in loop.json to unlock auto-resolve.",
-      "reviewedAt": "2026-07-06T17:17:45.097Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
