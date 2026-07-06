@@ -1018,6 +1018,7 @@ function shotsHtml(paths, commits, altBase, isPrivate) {
   return `<div class="shots-grid">${paths.map((p, i) => shotHtml(p, commits?.[i] ?? commits?.[0], `${altBase} ${i + 1}`, isPrivate)).join("")}</div>`;
 }
 let activeTag = null;  // current tag filter (null = all)
+let searchQuery = "";  // live text search
 
 /* Tags for an issue: explicit `tags` if set, else keyword-derived from the
    route + description so the filter is useful even before issues are tagged. */
@@ -1118,7 +1119,7 @@ function cardHtml(it, archived) {
       ${badge}
       ${it.route ? `<span class="route-pill">${esc(it.route)}</span>` : ""}
       <span class="meta">${archived ? "resolved " + fmtDate(it.archivedAt) : fmtDate(it.createdAt)}</span>
-      <span class="iid">${esc(it.id)}</span>
+      <span class="iid" title="Click to copy ID" role="button" tabindex="0">${esc(it.id)}</span>
     </div>
     <div class="sides">
       <div class="side">
@@ -1172,11 +1173,21 @@ function render() {
     : review ? `${open} to fix · ${review} pending direction` : `${open} to fix`;
   $("chip-fixed").textContent = `${inReview} in review`;
   renderTagbar(sorted);
-  const visible = activeTag ? sorted.filter((it) => tagsFor(it).includes(activeTag)) : sorted;
+  let visible = activeTag ? sorted.filter((it) => tagsFor(it).includes(activeTag)) : sorted;
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    visible = visible.filter((it) =>
+      it.id.toLowerCase().includes(q) ||
+      (it.description || "").toLowerCase().includes(q) ||
+      (it.route || "").toLowerCase().includes(q)
+    );
+  }
   $("list").innerHTML = visible.length
     ? visible.map((it) => cardHtml(it)).join("")
     : all.length
-      ? `<div class="empty"><b>No issues with "${esc(activeTag)}"</b>Clear the filter to see all.</div>`
+      ? searchQuery
+        ? `<div class="search-empty">No issues match "<b>${esc(searchQuery)}</b>"</div>`
+        : `<div class="empty"><b>No issues with "${esc(activeTag)}"</b>Clear the filter to see all.</div>`
       : `<div class="empty"><b>No issues yet</b>File the first one above — it shows up here with an "awaiting fix" slot.</div>`;
   resolvePrivImages();
   resolvePrivDescriptions();
@@ -1313,6 +1324,14 @@ $("clear-all").addEventListener("click", () => {
 });
 
 $("desc").addEventListener("input", updateSubmit);
+
+$("search").addEventListener("input", () => {
+  searchQuery = $("search").value.trim();
+  render();
+});
+$("search").addEventListener("keydown", (ev) => {
+  if (ev.key === "Escape") { $("search").value = ""; searchQuery = ""; render(); }
+});
 
 $("form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
@@ -1486,6 +1505,18 @@ $("loop-save").addEventListener("click", async (ev) => {
     toast(e.message || "Couldn't save loop settings.", 4200);
   } finally {
     btn.disabled = false;
+  }
+});
+
+/* ── click-to-copy issue ID ───────────────────────────── */
+document.addEventListener("click", (ev) => {
+  const iid = ev.target.closest(".iid");
+  if (iid) {
+    const text = iid.textContent.trim();
+    if (text) {
+      navigator.clipboard.writeText(text).then(() => toast("Copied: " + text)).catch(() => toast(text));
+    }
+    return;
   }
 });
 
