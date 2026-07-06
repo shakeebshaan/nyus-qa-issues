@@ -460,12 +460,31 @@
         "fd2fa063998baed62c6063e1d3e3863e63a66a58"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Removed incorrect paddingTop: env(safe-area-inset-top) from Add Food bottom sheet inner div — was adding ~34px dead space at top on Android. Added correct paddingBottom for safe-area-bottom. Expanded search results area from max-h-[200px] to max-h-[320px]. Commit: 89909388. Owner verify: open Diet tab, tap Log Custom Meal, switch to Ingredients — sheet has more space.",
+        "imagePath": "images/i-20260704-d64d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-d64d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "cd0aede41caf82b1bc675fceea2d1844b699d91d",
+        "imageCommits": [
+          "cd0aede41caf82b1bc675fceea2d1844b699d91d"
+        ],
+        "fixedAt": "2026-07-06T04:12:16.626Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 80,
+          "bar": 80,
+          "note": "Root cause (wrong safe-area padding) fixed. Verification requires real device/diet plan."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "CSS fix committed (89909388): removed incorrect paddingTop: env(safe-area-inset-top) from the bottom sheet inner div — on Android this was adding ~34px dead space at the top, reducing visible sheet height. Replaced with paddingBottom: max(env(safe-area-inset-bottom), 8px) for correct bottom safe-area clearance. Also expanded search results from max-h-[200px] to max-h-[320px] for more ingredient results visible. Visual proof blocked: QA account has no diet plan so Add Food sheet cannot be triggered headlessly. Owner: verify on real app — open Diet tab, tap Log Custom Meal, switch to Ingredients tab; the sheet should now have noticeably more space and the search results area is taller.",
-      "reviewedAt": "2026-07-06T03:17:09.135Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "The you I return on this please fix the you I for the ingredients u i u x",
       "reviewRepliedAt": "2026-07-05T12:07:38.547Z",
