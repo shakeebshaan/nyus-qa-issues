@@ -1050,12 +1050,32 @@
         "ae9e870f0c0c6ad8e96c36c1c3d7b1ca7c225439"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: ['daily-focus'] React Query cache never invalidated after meal/workout logging, and DailyFocus used a private 'dashboard-overview-focus' key that no mutation invalidated. Fix: added queryClient.invalidateQueries(['daily-focus']) to logMealMutation (useNutritionData), closeExerciseModal (Activity), barcode meal log, and RecipeDetail log — so all logging actions now trigger Daily Focus chain-refresh. Also changed dashboard query key to shared 'dashboard-overview' so Today's Focus CTA updates immediately.",
+        "imagePath": "images/i-20260704-90dc-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-90dc-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "40a8086f8c22d43b9cd12d6d47cbbf136bc5c818",
+        "imageCommits": [
+          "40a8086f8c22d43b9cd12d6d47cbbf136bc5c818"
+        ],
+        "fixedAt": "2026-07-06T07:34:12.931Z",
+        "by": "shakeebshaan",
+        "appCommit": "67df222c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 80,
+          "bar": 80,
+          "note": "Fix is correct and complete: all logging paths now invalidate daily-focus cache. Screenshot shows page rendering correctly; zeros are expected for QA account with no logged data — the chain reaction works for real accounts that have logged activity."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Investigated the Daily Focus screenshot (all zeros). The zeros are expected for the QA test account which has no logged data — the same page for real users with logged data shows actual streaks/stats. The page correctly shows TODAY'S FOCUS: Log breakfast (derived from their real plan), which confirms data IS flowing. The /api/v1/focus/{year}/{month} endpoint aggregates DailyLog/streaks/achievements per month. What IS connected already: logging meals invalidates nutrition queries, completing workouts updates activity streaks, daily check-ins update wellness streaks. The 'connect all features with chain reaction' direction is a product scope question: (1) does a specific data action (e.g. logging weight) NOT reflect somewhere it should? (2) Should Daily Focus auto-refresh when data is logged elsewhere (React Query cache invalidation)? Please name one specific example of a broken chain — e.g. 'I logged a meal but my nutrition streak stayed 0' — so I can trace the exact bug. Screenshots of a real account where the data IS logged but not shown would confirm it's a bug vs expected behavior for a fresh account.",
-      "reviewedAt": "2026-07-06T07:10:25.193Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "We already have the screenshot attach please take the problem in this board and read the issue properly so that all the features and data are connected with everything girl features on these application and they have a change reaction and or any action on one another",
       "reviewRepliedAt": "2026-07-05T12:08:24.079Z",
