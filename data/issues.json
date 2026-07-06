@@ -1079,30 +1079,8 @@
         "7c677cf55dfab1d2cd5a5db1af62fbbc0c2c1cdf"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: displayMeasurement used toFixed(1) rounding causing step drift (fixed in c90fabe3 with toFixed(2)). The background-refetch reset was fixed earlier via userEdited ref. Screenshot shows 3 taps from 0 → 1.5cm (3 x 0.5 = 1.5 exact, no reset).",
-        "imagePath": "images/i-20260704-22f4-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260704-22f4-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "92eb7a6320b81c124f2181b45b6c7a2ced32b85b",
-        "imageCommits": [
-          "92eb7a6320b81c124f2181b45b6c7a2ced32b85b"
-        ],
-        "fixedAt": "2026-07-06T02:19:11.557Z",
-        "by": "shakeebshaan",
-        "appCommit": "c90fabe3",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 95,
-          "note": "Stepper confirmed working: 0 -> 0.5 -> 1.0 -> 1.5cm with no reset. Both the refetch-reset and rounding fixes are in place."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-05T22:38:07.136Z",
@@ -1130,6 +1108,35 @@
               "score": 95,
               "bar": 95,
               "note": "Screenshot shows Body Measurements page with + button visible and stepper at 0.00 (initial state). Fix adds userEdited ref (Measurements.tsx) that guards re-seed on background refetch — once user taps + or -, the ref blocks subsequent allTypeHistories-triggered seedFromLatest calls. Reset on type/part change. Code fix is targeted and correct."
+            }
+          }
+        },
+        {
+          "at": "2026-07-06T12:25:44.084Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: displayMeasurement used toFixed(1) rounding causing step drift (fixed in c90fabe3 with toFixed(2)). The background-refetch reset was fixed earlier via userEdited ref. Screenshot shows 3 taps from 0 → 1.5cm (3 x 0.5 = 1.5 exact, no reset).",
+            "imagePath": "images/i-20260704-22f4-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260704-22f4-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "92eb7a6320b81c124f2181b45b6c7a2ced32b85b",
+            "imageCommits": [
+              "92eb7a6320b81c124f2181b45b6c7a2ced32b85b"
+            ],
+            "fixedAt": "2026-07-06T02:19:11.557Z",
+            "by": "shakeebshaan",
+            "appCommit": "c90fabe3",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Stepper confirmed working: 0 -> 0.5 -> 1.0 -> 1.5cm with no reset. Both the refetch-reset and rounding fixes are in place."
             }
           }
         }
