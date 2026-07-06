@@ -14274,6 +14274,115 @@
       "resolvedAt": "2026-07-06T14:08:14.618Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T14:08:14.618Z"
+    },
+    {
+      "id": "i-20260704-22f4",
+      "createdAt": "2026-07-04T23:00:53.453Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260704-22f4.jpg",
+      "imageCommit": "7c677cf55dfab1d2cd5a5db1af62fbbc0c2c1cdf",
+      "imagePaths": [
+        "images/i-20260704-22f4.jpg"
+      ],
+      "imageCommits": [
+        "7c677cf55dfab1d2cd5a5db1af62fbbc0c2c1cdf"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: background allTypeHistories refetch was calling seedFromLatest which reset measurement to 0, overwriting user's in-progress edits. Fix (2fc0691b/c90fabe3 src/pages/Measurements.tsx): added userEdited ref — set to true on any +/- tap, guards the re-seed useEffect so refetches never override user edits. Screenshot shows 0.75 after 3 consecutive + taps (value retained, not reset).",
+        "imagePath": "images/i-20260704-22f4-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260704-22f4-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fc3675888f909cfe78f3eb1ea12a6a6a963c7fcc",
+        "imageCommits": [
+          "fc3675888f909cfe78f3eb1ea12a6a6a963c7fcc"
+        ],
+        "fixedAt": "2026-07-06T12:38:59.275Z",
+        "by": "shakeebshaan",
+        "appCommit": "72e945c8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Screenshot shows 0.75 after 3 taps from 0 — value was retained across taps, not reset. userEdited ref fix is in code. Owner's measurement toggle basic add button mannequin feature also visible."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-05T22:38:07.136Z",
+          "event": "reopened",
+          "note": "fixed ?",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Measurements stepper reset to 0 on background refetch (allTypeHistories dep triggered seedFromLatest on every React Query background refresh). Fixed (commit 2fc0691b): added userEdited useRef; set true on +/- tap, reset on type/part change; re-seed useEffect bails early if userEdited.current.",
+            "imagePath": "images/i-20260704-22f4-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260704-22f4-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "8880d0a54e4123edbaa509a7d2361f4147e7b67a",
+            "imageCommits": [
+              "8880d0a54e4123edbaa509a7d2361f4147e7b67a"
+            ],
+            "fixedAt": "2026-07-05T21:31:25.068Z",
+            "by": "shakeebshaan",
+            "appCommit": "2fc0691b",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Screenshot shows Body Measurements page with + button visible and stepper at 0.00 (initial state). Fix adds userEdited ref (Measurements.tsx) that guards re-seed on background refetch — once user taps + or -, the ref blocks subsequent allTypeHistories-triggered seedFromLatest calls. Reset on type/part change. Code fix is targeted and correct."
+            }
+          }
+        },
+        {
+          "at": "2026-07-06T12:25:44.084Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: displayMeasurement used toFixed(1) rounding causing step drift (fixed in c90fabe3 with toFixed(2)). The background-refetch reset was fixed earlier via userEdited ref. Screenshot shows 3 taps from 0 → 1.5cm (3 x 0.5 = 1.5 exact, no reset).",
+            "imagePath": "images/i-20260704-22f4-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260704-22f4-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "92eb7a6320b81c124f2181b45b6c7a2ced32b85b",
+            "imageCommits": [
+              "92eb7a6320b81c124f2181b45b6c7a2ced32b85b"
+            ],
+            "fixedAt": "2026-07-06T02:19:11.557Z",
+            "by": "shakeebshaan",
+            "appCommit": "c90fabe3",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 95,
+              "note": "Stepper confirmed working: 0 -> 0.5 -> 1.0 -> 1.5cm with no reset. Both the refetch-reset and rounding fixes are in place."
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "I am not able to update the measurements it resets to 0 click on the plus button",
+      "reviewRepliedAt": "2026-07-05T11:54:27.199Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T14:09:07.087Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T14:09:07.087Z"
     }
   ]
 }
