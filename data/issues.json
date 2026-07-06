@@ -16,8 +16,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: displayMeasurement used toFixed(1) creating a feedback loop where each tap re-derived from the rounded display, breaking 0.25-inch steps. Fix (c90fabe3): changed to toFixed(2) for both cm and inch modes; +/- now steps the canonical cm value via setMeasurementFromDisplay — verified 3 taps from 0 show 0.25/0.50/0.75 in screenshot.",
+        "imagePath": "images/i-20260706-3f91-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260706-3f91-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "63ea0d99339a509dcc7c44c32a4ade4c66ecfe22",
+        "imageCommits": [
+          "63ea0d99339a509dcc7c44c32a4ade4c66ecfe22"
+        ],
+        "fixedAt": "2026-07-06T12:38:25.790Z",
+        "by": "shakeebshaan",
+        "appCommit": "72e945c8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 80,
+          "note": "Screenshot directly shows 0.75 after 3 taps in inch mode (correct 0.25/0.50/0.75). Code change verified in c90fabe3. Measurement tests 13/13 green."
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T12:24:38.842Z",
