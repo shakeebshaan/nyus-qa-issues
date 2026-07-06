@@ -328,8 +328,30 @@
         "bcc566e5bc8b15c68a5d2b4d565f63c124c0522e"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Sets ARE saving: original screenshots show 'Set logged. Set 2: 10 reps x 20kg' success toast (img-3). The 'Workout already completed' error in img-2 is correct server-side behavior when trying to add sets to a finalized session — not a save failure. Activity page confirms workout plan is loaded (6 exercises, sets 0/18 targets). No code change needed; behavior is correct.",
+        "imagePath": "images/i-20260704-19e9-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260704-19e9-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "71134627c7e8ff9a8e4779d876e2906a31bf7374",
+        "imageCommits": [
+          "71134627c7e8ff9a8e4779d876e2906a31bf7374"
+        ],
+        "fixedAt": "2026-07-06T02:22:27.690Z",
+        "by": "shakeebshaan",
+        "appCommit": "c90fabe3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 95,
+          "note": "Issue misread as a save failure; the screenshots themselves prove saving works (Set logged toast in img-3). Completed-session error is expected."
+        }
+      },
       "history": [
         {
           "at": "2026-07-05T22:17:25.272Z",
