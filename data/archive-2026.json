@@ -13332,6 +13332,55 @@
       "resolvedAt": "2026-07-06T12:27:07.855Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-06T12:27:07.855Z"
+    },
+    {
+      "id": "i-20260704-if01",
+      "createdAt": "2026-07-04T23:46:11.538Z",
+      "route": "/nutrition",
+      "description": "[suggestion] Live 16:8 intermittent-fasting timer on the Nutrition page. USER PROBLEM: the app already lets users flag a fasting day (Vrat / Full fast / 16:8 window) but that is a STATIC boolean banner -- it only pauses meal reminders. It does not tell the user where they are IN the fast, which is the whole point of intermittent fasting: how long have I fasted, and when does my eating window open/close? Without a live count, 16:8 is unusable and users abandon it. EVIDENCE: FastingBanner in src/pages/Nutrition.tsx (~lines 47-100) offers a '16:8 window' type but renders no timer/countdown -- a grep shows zero fasting-timer / eating-window code, so the live feature is a genuine gap, not a duplicate. Intermittent fasting is a headline retention feature in every major tracker used in India (HealthifyMe, Zero, Fastic), and vrat/fasting is already culturally central to this India audience (the app even ships a 'Vrat / fruit-only' fast type). V1 SCOPE: when the user picks the '16:8 window' fast type, capture the fast-start timestamp and show a calm circular progress ring (reuse the existing teal ring vocabulary) with 'Xh Ym fasted', the eating-window open time, and a state label (Fasting / Eating window open). Client-side only, NO backend: persist fastStart + window config in localStorage keyed by date; the ring updates from a 1-min interval; the existing 'End fast' button clears it. Skip push reminders and fast history in v1. EFFORT: roughly 1-2 days frontend, no backend, no schema -- extends the fasting toggle already on Nutrition.",
+      "descPrivate": false,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "fix": {
+        "description": "Live 16:8 fasting timer shipped on Nutrition: picking '16:8 window' starts a circular teal progress ring with Xh Ym fasted, eating-window-open time, state label (Fasting / Eating window open) and % progress strip. Client-side, persisted per-day in localStorage; End fast clears it. Follow-up commit fixed the ring rendering invisibly (raw teal-* classes were absent from compiled CSS - swapped to the d-teal token scale).",
+        "imagePath": "images/i-20260704-if01-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260704-if01-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f0538f47eba589712d77a67e240e6f5f2977ca7d",
+        "imageCommits": [
+          "f0538f47eba589712d77a67e240e6f5f2977ca7d"
+        ],
+        "fixedAt": "2026-07-06T02:09:36.698Z",
+        "by": "shakeebshaan",
+        "appCommit": "9f13ca37",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 97,
+          "bar": 95,
+          "note": "Recapture shows the live ring (5h 37m, 35%, window opens 12:30 pm) - exactly the v1 scope in the card"
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Implement",
+      "reviewRepliedAt": "2026-07-05T11:49:22.643Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-06T12:28:20.380Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-06T12:28:20.380Z"
     }
   ]
 }
