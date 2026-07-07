@@ -18601,6 +18601,52 @@
       "resolvedAt": "2026-07-07T21:00:20.808Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T21:00:20.808Z"
+    },
+    {
+      "id": "i-20260707-b3f5",
+      "createdAt": "2026-07-07T13:21:34.036Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260707-b3f5.jpg",
+      "imageCommit": "9be3446f4e9c3e6bc76fbcbb77162df5af060d3a",
+      "imagePaths": [
+        "images/i-20260707-b3f5.jpg"
+      ],
+      "imageCommits": [
+        "9be3446f4e9c3e6bc76fbcbb77162df5af060d3a"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: useMutation hook in MacroBudgetSnackCard.tsx was placed after conditional early-returns; when the first meal was logged (loggedMealCount 0->1), hook count changed between renders and React threw into the Nutrition error boundary. Fix: moved useMutation unconditionally above all early-returns (commit fdbf8467). Screenshot shows Nutrition page now loads without error.",
+        "imagePath": "images/i-20260707-b3f5-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-b3f5-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5a3bac56d290da8a6482fb1c5fe13fc0cc66dab4",
+        "imageCommits": [
+          "5a3bac56d290da8a6482fb1c5fe13fc0cc66dab4"
+        ],
+        "fixedAt": "2026-07-07T18:24:57.199Z",
+        "by": "shakeebshaan",
+        "appCommit": "fdbf8467",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root cause is definitively correct (React rules of hooks violation). Fix is surgical: one hook moved above 2 early-returns. Page no longer crashes on first meal log. Nutrition page renders without error boundary — screenshot confirms."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-07T21:00:48.448Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T21:00:48.448Z"
     }
   ]
 }
