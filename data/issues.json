@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260707-e7b2",
+      "createdAt": "2026-07-07T09:53:21.563Z",
+      "route": "/profile",
+      "description": "[bug-hunt] A failed data export locks the user out of exporting for 24 hours - the once-per-day rate-limit slot is consumed BEFORE the email is sent, so the error toast's \"Please try again later\" advice is impossible to follow.\n\nEXPECTED: the 1-per-24h export limit should only count SUCCESSFUL exports. If the email send fails (Resend outage, RESEND_API_KEY missing, transient network error), the user should be able to retry immediately - the 500 response literally says \"Could not send export email. Please try again later.\"\nACTUAL: backend app/routes/profile.py export_user_data (~line 1183-1190) stamps _export_rate[user_id] = now BEFORE building the ZIP or sending the email. Every failure path after that point (user-not-found 404, RESEND_API_KEY-not-set 500 at ~1279, resend.Emails.send exception 500 at ~1295) leaves the slot burned. The user's retry then hits the 429 branch (\"Data export is limited to once per day. Try again in ~24 hour(s).\") even though NO email was ever sent. Net effect: one transient Resend hiccup = no data export for that user for a full day, with contradictory error copy.\n\nREPRO (server-side, deterministic): 1) Temporarily unset RESEND_API_KEY (or point resend at an invalid key). 2) As any user, tap Profile -> \"Export my data\" -> request 500s with \"Could not send export email. Please try again later.\" 3) Restore the key and tap again within 24h -> 429 \"limited to once per day\" - the retry is blocked despite zero successful exports.\n\nFIX SHAPE: move the _export_rate[user_id] = now stamp to just before the final success return (after resend.Emails.send succeeds), keeping the read/check at the top.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260707-3a9c",
+      "createdAt": "2026-07-07T09:53:21.563Z",
+      "route": "/profile",
+      "description": "[bug-hunt] Second \"Export my data\" tap in the same day shows a false \"Export failed / Something went wrong\" error - the server's real once-per-day message is swallowed, so users think the feature is broken.\n\nEXPECTED: when the backend responds 429 with the explicit message \"Data export is limited to once per day. Try again in ~N hour(s).\", the toast should show that message so the user knows their first export worked and when they can retry.\nACTUAL: src/pages/_components/profile/ProfilePreferencesCard.tsx handleExportAll (~line 56-75) catches ALL errors and shows the hardcoded toast 'Export failed / Something went wrong. Please try again later.' It never reads e.response.data.error, and the api-client response interceptor (src/lib/api-client.ts) has no global 4xx message surface either. So a user who exported this morning and taps again in the evening sees a destructive-styled \"Export failed... try again later\" toast; retrying keeps \"failing\". Nothing tells them the daily limit exists or that their first export already arrived by email.\n\nREPRO: 1) Profile -> tap \"Export my data\" -> success toast + email arrives. 2) Tap \"Export my data\" again -> backend returns 429 {success:false, error:\"Data export is limited to once per day. Try again in ~24 hour(s).\"} but the UI shows \"Export failed / Something went wrong. Please try again later.\" (verify the 429 in devtools Network tab).\n\nFIX SHAPE: in the catch, read (e as AxiosError).response?.data?.error and use it as the toast description when present (non-destructive variant for 429); keep the generic copy only as fallback.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260707-dk73",
       "createdAt": "2026-07-07T09:42:11.418Z",
       "route": null,
