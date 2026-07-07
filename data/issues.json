@@ -110,8 +110,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: RecipeDetail's target-kcal renormalizer ran unconditionally, so a saved Half portion was re-inflated to full size on the recipe screen (and tapping Save persisted the undo). Fix (backend 7918ff3, deployed to prod): the renormalizer is skipped whenever the ingredients came from a UserMealModification - saved portions render as saved everywhere.",
+        "imagePath": "images/i-20260707-92c5-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-92c5-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "54f3020508c0d63ed5e166105c0893b258caa737",
+        "imageCommits": [
+          "54f3020508c0d63ed5e166105c0893b258caa737"
+        ],
+        "fixedAt": "2026-07-07T13:25:02.855Z",
+        "by": "shakeebshaan",
+        "appCommit": "7918ff3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 87,
+          "bar": 80,
+          "note": "Recipe screen and nutrition card now agree on scaled portions; backend guard deployed and verified healthy"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:00:48.298Z",
