@@ -21,48 +21,6 @@
       "history": []
     },
     {
-      "id": "i-20260707-e7b2",
-      "createdAt": "2026-07-07T09:53:21.563Z",
-      "route": "/profile",
-      "description": "[bug-hunt] A failed data export locks the user out of exporting for 24 hours - the once-per-day rate-limit slot is consumed BEFORE the email is sent, so the error toast's \"Please try again later\" advice is impossible to follow.\n\nEXPECTED: the 1-per-24h export limit should only count SUCCESSFUL exports. If the email send fails (Resend outage, RESEND_API_KEY missing, transient network error), the user should be able to retry immediately - the 500 response literally says \"Could not send export email. Please try again later.\"\nACTUAL: backend app/routes/profile.py export_user_data (~line 1183-1190) stamps _export_rate[user_id] = now BEFORE building the ZIP or sending the email. Every failure path after that point (user-not-found 404, RESEND_API_KEY-not-set 500 at ~1279, resend.Emails.send exception 500 at ~1295) leaves the slot burned. The user's retry then hits the 429 branch (\"Data export is limited to once per day. Try again in ~24 hour(s).\") even though NO email was ever sent. Net effect: one transient Resend hiccup = no data export for that user for a full day, with contradictory error copy.\n\nREPRO (server-side, deterministic): 1) Temporarily unset RESEND_API_KEY (or point resend at an invalid key). 2) As any user, tap Profile -> \"Export my data\" -> request 500s with \"Could not send export email. Please try again later.\" 3) Restore the key and tap again within 24h -> 429 \"limited to once per day\" - the retry is blocked despite zero successful exports.\n\nFIX SHAPE: move the _export_rate[user_id] = now stamp to just before the final success return (after resend.Emails.send succeeds), keeping the read/check at the top.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: _export_rate[user_id] = now was stamped BEFORE the email send, so any failure path (missing RESEND_API_KEY, resend exception) consumed the daily slot without sending an email. Fix: moved the stamp to after resend.Emails.send() succeeds, so failed exports never burn the rate-limit slot. Backend: app/routes/profile.py commit f2b1ce5, deployed to prod.",
-        "imagePath": "images/i-20260707-e7b2-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-e7b2-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a5bafd7222483d438017415bdb8453fcfe8afae7",
-        "imageCommits": [
-          "a5bafd7222483d438017415bdb8453fcfe8afae7"
-        ],
-        "fixedAt": "2026-07-07T10:06:41.593Z",
-        "by": "shakeebshaan",
-        "appCommit": "070651c6",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 80,
-          "note": "Surgical 2-line move directly resolves the described race. Root cause matches bug report exactly. Screenshot shows /profile with Export button rendered (can't capture the rate-limit failure state directly — it requires a failed Resend call). Backend deployed and health-verified."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260707-3a9c",
       "createdAt": "2026-07-07T09:53:21.563Z",
       "route": "/profile",
