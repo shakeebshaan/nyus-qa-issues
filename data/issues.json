@@ -399,10 +399,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Fix is SHIPPED and VERIFIED (see screenshot). Full-stack implementation complete: (1) coach_language ENUM column added to user_health_profiles via idempotent migration coach_lang_001 — deployed and applied on prod 2026-07-07; (2) PUT /profile accepts coach_language, GET /profile/basic-info returns it; (3) llm_service.py gather_user_context extracts it into context; (4) llm_prompts.py build_chat_system_prompt injects LANGUAGE block when non-english; (5) weekly_review.py _generate_ai_review injects language note; (6) Frontend: ProfilePreferencesCard has English/Hinglish/hindi pill buttons, saves via PUT /profile, invalidates query cache, shows toast. Frontend commit 67274861, backend commit 0b74a60. testGate (npm run test:unit) is infra-blocked on this machine (exits 1, --dir vitest-4 is a no-op); no existing tests cover the changed files (purely additive). Recommend scoping loop.json testCommand to npm run test:component or a vitest pattern to unblock future resolves.",
       "reviewedAt": "2026-07-07T08:12:31.790Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "We need to do this on the entire application also",
+      "reviewRepliedAt": "2026-07-07T12:59:38.292Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-7d3a",
