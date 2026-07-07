@@ -1263,7 +1263,10 @@
         }
       ],
       "description": "[bug-hunt] FAQ hardcodes the ₹49 founder offer even after it expires. Repro: open /choose-plan when the launch offer is inactive (LAUNCH_OFFER remaining==0 / window closed → _launch_offer_status active:false, backend.py ~2188). The offer banner and the monthly card correctly hide/reset to ₹499, but the FAQ answer for 'What about the launch offer?' still reads 'While our founder offer is live, your first month is ₹49 (90% off ₹499)...' and the tier-explainer FAQ repeats it (FAQ_ITEMS, ChoosePlan.tsx ~190, ~201-203). These strings are static and never gated on launchOffer?.active. Expected: when the offer is inactive, don't advertise ₹49 first month (users will expect it at checkout and be charged ₹499). Actual: FAQ makes a live-offer pricing promise the app won't honor. Fix: conditionally render/omit the offer FAQ (and the '₹49 first month' clause) based on launchOffer?.active.",
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED in commit c345d2fc: launch-offer FAQ entry is no longer in the static FAQ_ITEMS array; it is dynamically inserted via faqItems memo only when launchOffer?.active is true, using live prices. tsc clean.",
+      "reviewedAt": "2026-07-07T14:16:24.324Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-f2a9",
