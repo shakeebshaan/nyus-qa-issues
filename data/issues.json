@@ -356,9 +356,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Model usage: (1) Headless tick.ps1 (this fix loop) = claude-sonnet-4-6 — Fable cannot run headless (exits 1). (2) Interactive Claude Code session = Fable 5 (settings.json). (3) All other loops via runner.ps1 = Fable as primary, Opus as fallback on rate-limit. Recent commits show Co-Authored-By: Claude Fable 5 from interactive sessions. This tick uses sonnet-4-6.",
+        "imagePath": "images/i-20260707-c3b9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-c3b9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2eb66cab03224563c45a9179a921b3801cafad6f",
+        "imageCommits": [
+          "2eb66cab03224563c45a9179a921b3801cafad6f"
+        ],
+        "fixedAt": "2026-07-07T23:16:44.710Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Informational question answered completely. Model policy documented in tick.ps1 and runner.ps1 comments."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260707-f54a",
