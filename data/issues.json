@@ -1301,30 +1301,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Shipped: 'Snap meal - AI identifies it' in the nutrition add-meal sheet - camera/gallery via Capacitor Camera, backend vision analysis prefills the custom-meal form for edit/confirm (never auto-logs). Un-gated for all users; rate-limited via the existing llm_rate_limit_buckets.",
-        "imagePath": "images/i-20260706-sn4p-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260706-sn4p-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a584764f493e9272c9e816853292e938808472ed",
-        "imageCommits": [
-          "a584764f493e9272c9e816853292e938808472ed"
-        ],
-        "fixedAt": "2026-07-07T13:25:40.262Z",
-        "by": "shakeebshaan",
-        "appCommit": "7d1ec54e",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "Capture shows the Snap meal button + AI analyze path live in the add-meal sheet"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:05:14.889Z",
@@ -1352,6 +1330,35 @@
               "score": 85,
               "bar": 80,
               "note": "Core implementation complete: subscription gate removed backend + PRO badge removed frontend. Rate limiting (25/day) still in place. Screenshot is the closest faithful proof — modal trigger is hidden on fasting day; DOM evaluate confirmed correct button text and 0 PRO badges."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:27:58.933Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Shipped: 'Snap meal - AI identifies it' in the nutrition add-meal sheet - camera/gallery via Capacitor Camera, backend vision analysis prefills the custom-meal form for edit/confirm (never auto-logs). Un-gated for all users; rate-limited via the existing llm_rate_limit_buckets.",
+            "imagePath": "images/i-20260706-sn4p-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260706-sn4p-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "a584764f493e9272c9e816853292e938808472ed",
+            "imageCommits": [
+              "a584764f493e9272c9e816853292e938808472ed"
+            ],
+            "fixedAt": "2026-07-07T13:25:40.262Z",
+            "by": "shakeebshaan",
+            "appCommit": "7d1ec54e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "Capture shows the Snap meal button + AI analyze path live in the add-meal sheet"
             }
           }
         }
