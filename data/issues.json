@@ -4,8 +4,30 @@
     {
       "id": "i-20260707-b1a9",
       "createdAt": "2026-07-07T19:39:06.185Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: initI18n() called with explicit lng:'en', bypassing LanguageDetector and overwriting nyus_locale on every boot. Fix (8e2e5a0a): config.ts initI18n() spreads lng only when arg is provided; main.tsx calls initI18n() with no argument, letting detector read nyus_locale from localStorage. Screenshot shows full Profile page in Hindi - language persists across reload.",
+        "imagePath": "images/i-20260707-b1a9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-b1a9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c71a3182262822163abdcfd89c7b9427f62be187",
+        "imageCommits": [
+          "c71a3182262822163abdcfd89c7b9427f62be187"
+        ],
+        "fixedAt": "2026-07-07T23:14:39.385Z",
+        "by": "shakeebshaan",
+        "appCommit": "9c12cca1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Fix precisely matches auto-diagnosed root cause. Screenshot confirms app running in Hindi with language persisted. Code is correct per i18next semantics."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,8 @@
       "imageCommits": [],
       "imagePrivate": false,
       "route": null,
-      "description": "[bug-hunt] Language choice from the startup picker is DESTROYED on every app restart - app always reverts to English. Root cause: main.tsx calls initI18n() with no arg, and config.ts defaults lng=DEFAULT_LOCALE(en), passing an explicit lng:'en' to i18next.init(). Per i18next semantics, an explicit lng bypasses LanguageDetector entirely (stored nyus_locale is never read), AND because detection.caches=['localStorage'], the boot-time changeLanguage('en') REWRITES nyus_locale back to 'en', permanently erasing the user's Hindi/Hinglish choice. Reproduced empirically with the repo's i18next 23.16.8: localStorage nyus_locale='hi' + init with lng:'en' -> language=en and nyus_locale overwritten to 'en'; same init WITHOUT lng -> language=hi, storage intact. Expected: pick Hindi once, app stays Hindi forever. Actual: Hindi only until next launch; picker never re-shows (nyus_lang_picker_shown), so user is stuck in English. Fix: drop the lng option from init (let detector resolve), or pass getStoredLocale() ?? undefined. Files: src/main.tsx:21, src/i18n/config.ts:66-76 (lng param + supportedLngs), src/pages/LanguagePicker.tsx:11-14. Introduced 5f79d6b2 (i18n P1)."
+      "description": "[bug-hunt] Language choice from the startup picker is DESTROYED on every app restart - app always reverts to English. Root cause: main.tsx calls initI18n() with no arg, and config.ts defaults lng=DEFAULT_LOCALE(en), passing an explicit lng:'en' to i18next.init(). Per i18next semantics, an explicit lng bypasses LanguageDetector entirely (stored nyus_locale is never read), AND because detection.caches=['localStorage'], the boot-time changeLanguage('en') REWRITES nyus_locale back to 'en', permanently erasing the user's Hindi/Hinglish choice. Reproduced empirically with the repo's i18next 23.16.8: localStorage nyus_locale='hi' + init with lng:'en' -> language=en and nyus_locale overwritten to 'en'; same init WITHOUT lng -> language=hi, storage intact. Expected: pick Hindi once, app stays Hindi forever. Actual: Hindi only until next launch; picker never re-shows (nyus_lang_picker_shown), so user is stuck in English. Fix: drop the lng option from init (let detector resolve), or pass getStoredLocale() ?? undefined. Files: src/main.tsx:21, src/i18n/config.ts:66-76 (lng param + supportedLngs), src/pages/LanguagePicker.tsx:11-14. Introduced 5f79d6b2 (i18n P1).",
+      "needsReview": false
     },
     {
       "id": "i-20260707-514b",
