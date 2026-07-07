@@ -17167,6 +17167,91 @@
       "resolvedAt": "2026-07-07T14:23:35.616Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:23:35.616Z"
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:00:48.298Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: RecipeDetailResource applied the target-kcal renormalizer unconditionally, including when ingredients came from a UserMealModification. After a 0.5x portion scale, current_kcal deviated >5% from target, triggering a 2x rescale that undid the user's choice. Fix (backend.py): added from_modification flag; renormalizer now skipped when a user modification was the data source.",
+            "imagePath": "images/i-20260707-92c5-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-92c5-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "d8c4b2a63a3bab504e24bfaf8dc8a8789d318d55",
+            "imageCommits": [
+              "d8c4b2a63a3bab504e24bfaf8dc8a8789d318d55"
+            ],
+            "fixedAt": "2026-07-07T09:37:16.755Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb33dc7c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Minimal one-flag guard. Precisely prevents renormalizer from overriding user-authored portion scales. Backend deployed to prod and healthy."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:30:37.507Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: RecipeDetail's target-kcal renormalizer ran unconditionally, so a saved Half portion was re-inflated to full size on the recipe screen (and tapping Save persisted the undo). Fix (backend 7918ff3, deployed to prod): the renormalizer is skipped whenever the ingredients came from a UserMealModification - saved portions render as saved everywhere.",
+            "imagePath": "images/i-20260707-92c5-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-92c5-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "54f3020508c0d63ed5e166105c0893b258caa737",
+            "imageCommits": [
+              "54f3020508c0d63ed5e166105c0893b258caa737"
+            ],
+            "fixedAt": "2026-07-07T13:25:02.855Z",
+            "by": "shakeebshaan",
+            "appCommit": "7918ff3",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 87,
+              "bar": 80,
+              "note": "Recipe screen and nutrition card now agree on scaled portions; backend guard deployed and verified healthy"
+            }
+          }
+        }
+      ],
+      "id": "i-20260707-92c5",
+      "createdAt": "2026-07-07T09:09:41.124Z",
+      "route": "/recipe-detail",
+      "description": "[bug-hunt] After scaling a meal's portion (e.g. Half), the recipe page shows the ORIGINAL full-size quantities - the calorie-target renormalizer overwrites the user's saved portion scale, and tapping Save persists the undo.\n\nEXPECTED: a saved portion scale (UserMealModification written by POST /diet/log-modification {scale:0.5}) renders as saved everywhere; the target-kcal safety net should only normalize the pristine recipe expansion, never user-authored modifications.\nACTUAL: RecipeDetailResource builds ingredients from the user's modification (backend.py:7038-7053), then unconditionally applies the target-kcal renormalizer (backend.py:7077-7096): after a 0.5x scale, current_kcal is ~50% of meal.calories_kcal, deviation >5%, so every quantity+macro is rescaled x2 - right back to full size. Meanwhile the nutrition card (daily diet GET) uses the halved quantities directly, so the two screens contradict each other. If the user believes the recipe screen and taps \"Save Meal Changes\", the re-inflated quantities are persisted and their portion choice is silently destroyed.\n\nREPRO: Nutrition -> meal -> portion sheet -> scale to Half (card macros halve, correct) -> tap meal -> Recipe -> ingredient quantities + header macros are back at FULL size (wrong) -> tap \"Save Meal Changes\" -> nutrition card jumps back to full portions.\n\nWHERE: backend.py RecipeDetailResource ~7077 (renormalizer has no \"user modification present\" guard). FIX: skip target-kcal rescaling when ingredients_data came from a UserMealModification.",
+      "needsReview": true,
+      "reviewReason": "FIXED in backend: RecipeDetailResource now sets from_modification=True when ingredients_data comes from a UserMealModification, and skips calorie renormalization when from_modification is True (backend.py line 7083). Confirmed deployed on prod via grep.",
+      "reviewedAt": "2026-07-07T14:23:04.831Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:23:52.321Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:23:52.321Z"
     }
   ]
 }
