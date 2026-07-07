@@ -367,8 +367,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the logout sweep cleared nyus_gam_level but not nyus_gam_milestones, so the next account on a shared device inherited the previous user's milestone latch (suppressing their own celebrations until they exceeded the old totals). Fix: the milestone seen-map is now swept on logout alongside the other gamification keys.",
+        "imagePath": "images/i-20260707-7d3a-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-7d3a-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0da2a5faf92ea891c3c834c0d184acb0ace7043c",
+        "imageCommits": [
+          "0da2a5faf92ea891c3c834c0d184acb0ace7043c"
+        ],
+        "fixedAt": "2026-07-07T13:23:53.286Z",
+        "by": "shakeebshaan",
+        "appCommit": "dfd0d22e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 86,
+          "bar": 80,
+          "note": "Key now in sweepPrefixes; capture shows clean logged-out Welcome state after sweep"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:03:33.156Z",
