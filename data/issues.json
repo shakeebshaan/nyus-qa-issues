@@ -2094,31 +2094,39 @@
         "c7e911e762aa63045b2c177d10c6e31fdef07a5a"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "The circled blank gray bubble was a block-carrier message with empty text: the chat bubble painted its background shell even with nothing to show. Fix: bubbles with no text no longer render at all (blocks + timestamp still do), and the meals block shows a proper 'No meals scheduled' empty state instead of a blank card. The circled quick-action pills were also redesigned this tick (single-line Option A chips, see i-20260704-ce32).",
-        "imagePath": "images/i-20260707-9752-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-9752-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "9638f27eddca2127a9cefb640f45f55bbc0b8f07",
-        "imageCommits": [
-          "9638f27eddca2127a9cefb640f45f55bbc0b8f07"
-        ],
-        "fixedAt": "2026-07-07T13:39:43.318Z",
-        "by": "shakeebshaan",
-        "appCommit": "763779b6",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 84,
-          "bar": 80,
-          "note": "Live chat bottom now clean: no empty shells, styled empty-state card, single-line pills; 6/6 virtual-list tests + 28/28 block tests pass"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:50:19.816Z",
+          "event": "reopened",
+          "note": "Still looks bad news new smart good-looking ui",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "The circled blank gray bubble was a block-carrier message with empty text: the chat bubble painted its background shell even with nothing to show. Fix: bubbles with no text no longer render at all (blocks + timestamp still do), and the meals block shows a proper 'No meals scheduled' empty state instead of a blank card. The circled quick-action pills were also redesigned this tick (single-line Option A chips, see i-20260704-ce32).",
+            "imagePath": "images/i-20260707-9752-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-9752-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "9638f27eddca2127a9cefb640f45f55bbc0b8f07",
+            "imageCommits": [
+              "9638f27eddca2127a9cefb640f45f55bbc0b8f07"
+            ],
+            "fixedAt": "2026-07-07T13:39:43.318Z",
+            "by": "shakeebshaan",
+            "appCommit": "763779b6",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 84,
+              "bar": 80,
+              "note": "Live chat bottom now clean: no empty shells, styled empty-state card, single-line pills; 6/6 virtual-list tests + 28/28 block tests pass"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
