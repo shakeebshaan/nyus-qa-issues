@@ -629,8 +629,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Code fix shipped (commit 794ae811): (1) MealSwapAlternative cards converted from <div> to native <button> - whole card is now tappable per CLAUDE.md rules. (2) Zero-delta macro badges (P 0g, C 0g) are now filtered out - only non-zero deltas are shown, so options with no protein/carb change display just their CAL and F badges cleanly. Visual proof requires a swap suggestion in the QA chat history, which needs a live AI interaction. Fix is code-verified and TypeScript clean.",
-      "reviewedAt": "2026-07-07T18:30:27.833Z",
+      "reviewReason": "Frontend fix committed (794ae811): delta badges now filtered .filter(b => b.value !== 0) so P 0g, C 0g vanish from swap cards. Can't reproduce swap block headlessly (requires active chat session with coach-sent swap). Fix is in MealSwapBlock.tsx:172.",
+      "reviewedAt": "2026-07-07T19:10:32.013Z",
       "reviewedBy": "shakeebshaan"
     },
     {
