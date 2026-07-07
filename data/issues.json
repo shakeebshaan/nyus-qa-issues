@@ -1783,8 +1783,30 @@
         "ef410e5609184a8000fe2c22f3e040a2f669b80f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause of the 'looks bad' reopens: long LLM labels wrapped to 2-3 lines inside rounded-full pills, ballooning them into fat ovals - nothing like the approved Option A mock (sleek single-line pills). Fix: pills are now content-sized chips that flow and wrap as WHOLE pills - a label never breaks onto a second line; Option A sizing restored (13px/600 label, 20px icon badge, 44px touch target). Screenshot is the live coach chat.",
+        "imagePath": "images/i-20260704-ce32-fix-r5.png",
+        "imagePaths": [
+          "images/i-20260704-ce32-fix-r5.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bd1901cc6105f8680f42da223d653cc52cf13883",
+        "imageCommits": [
+          "bd1901cc6105f8680f42da223d653cc52cf13883"
+        ],
+        "fixedAt": "2026-07-07T13:35:10.876Z",
+        "by": "shakeebshaan",
+        "appCommit": "7f4e2ec3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 86,
+          "bar": 80,
+          "note": "Live chat shows single-line Option A pills for the exact labels that ballooned before (Redesign my split / Keep current split); 28/28 component tests pass"
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T12:30:30.636Z",
