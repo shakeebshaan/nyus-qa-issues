@@ -157,31 +157,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: _unmatched rows had no macros yet the frontend showed an amber prompt demanding the user set a quantity - but liveTotals used (calories ?? 0) so editing did nothing, and save dropped the row. Fix (RecipeDetail.tsx): removed the amber Estimate-set-quantity text, aria-invalid, and amber background highlight for _unmatched rows. Rows still render with name visible; no longer demands input it cannot act on.",
-        "imagePath": "images/i-20260707-7fa3-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-7fa3-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "7aed1e9cce95c96dfb33ab6cc7b5f8e6bf027a6d",
-        "imageCommits": [
-          "7aed1e9cce95c96dfb33ab6cc7b5f8e6bf027a6d"
-        ],
-        "fixedAt": "2026-07-07T09:37:40.922Z",
-        "by": "shakeebshaan",
-        "appCommit": "fb33dc7c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "Removes deceptive UX. Clean removal of three UI elements that were misleading users. TypeScript clean, no console errors."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:01:23.898Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: _unmatched rows had no macros yet the frontend showed an amber prompt demanding the user set a quantity - but liveTotals used (calories ?? 0) so editing did nothing, and save dropped the row. Fix (RecipeDetail.tsx): removed the amber Estimate-set-quantity text, aria-invalid, and amber background highlight for _unmatched rows. Rows still render with name visible; no longer demands input it cannot act on.",
+            "imagePath": "images/i-20260707-7fa3-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-7fa3-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "7aed1e9cce95c96dfb33ab6cc7b5f8e6bf027a6d",
+            "imageCommits": [
+              "7aed1e9cce95c96dfb33ab6cc7b5f8e6bf027a6d"
+            ],
+            "fixedAt": "2026-07-07T09:37:40.922Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb33dc7c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "Removes deceptive UX. Clean removal of three UI elements that were misleading users. TypeScript clean, no console errors."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "id": "i-20260707-7fa3",
       "createdAt": "2026-07-07T09:09:41.124Z",
       "route": "/recipe-detail",
