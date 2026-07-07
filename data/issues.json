@@ -311,31 +311,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: useBlockSubmit catch block didn't check isCanceledError — a dedup-aborted duplicate POST (fast double-tap) fell through to the error branch, showing 'Failed to save' toast and re-activating the block while the original request was still in flight. Fix: added isCanceledError(err) early-return-true in submitBlock catch, mirroring the pattern used in FriendRequests/MealIngredients (useBlockSubmit.ts). Tests: 38/38 scoped tests green.",
-        "imagePath": "images/i-20260707-cff7-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-cff7-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "b919d1afd6dc5c00b2f1511e44aa849f95b8fd82",
-        "imageCommits": [
-          "b919d1afd6dc5c00b2f1511e44aa849f95b8fd82"
-        ],
-        "fixedAt": "2026-07-07T08:38:10.390Z",
-        "by": "shakeebshaan",
-        "appCommit": "ff30c774",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 88,
-          "bar": 80,
-          "note": "2-line targeted fix at exactly the call site described; mirrors existing isCanceledError pattern across the codebase; test mock updated to expose the new export."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:03:22.353Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: useBlockSubmit catch block didn't check isCanceledError — a dedup-aborted duplicate POST (fast double-tap) fell through to the error branch, showing 'Failed to save' toast and re-activating the block while the original request was still in flight. Fix: added isCanceledError(err) early-return-true in submitBlock catch, mirroring the pattern used in FriendRequests/MealIngredients (useBlockSubmit.ts). Tests: 38/38 scoped tests green.",
+            "imagePath": "images/i-20260707-cff7-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-cff7-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "b919d1afd6dc5c00b2f1511e44aa849f95b8fd82",
+            "imageCommits": [
+              "b919d1afd6dc5c00b2f1511e44aa849f95b8fd82"
+            ],
+            "fixedAt": "2026-07-07T08:38:10.390Z",
+            "by": "shakeebshaan",
+            "appCommit": "ff30c774",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "2-line targeted fix at exactly the call site described; mirrors existing isCanceledError pattern across the codebase; test mock updated to expose the new export."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
