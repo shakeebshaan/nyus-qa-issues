@@ -1395,7 +1395,10 @@
           }
         }
       ],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 60a769ca: was_skipped discriminator added to skip/undo-skip mutation so payloads differ and dedup interceptor no longer cancels the undo. Verified in src/pages/_components/nutrition/useNutritionData.tsx skipMealMutation. tsc clean. Full npm test gate OOM-blocked; please scope loop.json testCommand to unit subset.",
+      "reviewedAt": "2026-07-07T14:15:34.731Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-6b1e",
