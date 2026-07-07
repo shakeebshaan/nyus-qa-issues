@@ -16530,6 +16530,111 @@
       "resolvedAt": "2026-07-07T14:22:15.757Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:22:15.757Z"
+    },
+    {
+      "id": "i-20260707-cff7",
+      "createdAt": "2026-07-07T08:24:19.477Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Fast double-tap on a coach-chat logging block shows a false \"Failed to save\" error and re-opens the block even though the log SAVED - inviting a retap that creates a duplicate entry. Same canceled-duplicate class as the fixed i-20260707-8d4c (nutrition skip/undo), but in useBlockSubmit which never adopted the isCanceledError guard.\n\nEXPECTED: a dedup-aborted duplicate mutation is a no-op (the original request is still in flight and succeeds) - per the isCanceledError contract in src/lib/api-client.ts ~85-97, which FriendRequests, MealIngredients, UserSearch and useNutritionData all follow.\nACTUAL: useBlockSubmit.submitBlock's catch (src/hooks/useBlockSubmit.ts ~160-192) classifies errors only as isOffline = !navigator.onLine || message==='Network Error'; a dedup-canceled duplicate (code ERR_CANCELED, message 'canceled' - thrown by the api-client mutation-dedup interceptor for an identical in-flight POST) falls through to the \"Real API error\" branch: setBlockStatus('active') + destructive \"Failed to save / Please try again\" toast + error haptic. Sequence on a fast double-tap (both taps land before the optimistic 'completed' re-render disables the block): tap1 sets completed + POST /logs/meal in flight; tap2 sets completed, its identical POST is instantly aborted by the dedup interceptor -> catch rolls the block BACK to active and toasts \"Failed to save\"; tap1 then resolves successfully (meal IS in the DB) but the block stays active with an error toast. User taps again -> second meal-log row (double calories in daily totals). Applies to all six block types (meal_logger, workout_tracker, water_logger, daily_checkin, measurement_input, activity_logger).\n\nREPRO: coach chat -> any meal-logger block -> tap Log twice within ~100ms (or CPU-throttle to widen the render gap). Observe: \"Failed to save\" destructive toast + block re-activates, while the network tab shows the first POST /logs/meal returning 200 and the meal appears in Nutrition. Tap the block's Log again -> duplicate entry.\n\nWHERE: src/hooks/useBlockSubmit.ts catch block. FIX: first check isCanceledError(err) and return true (treat as success/no-op, leave block completed), mirroring the eaten-toggle fix.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "isCanceledError check prevents double-tap false errors in useBlockSubmit. Commit 682ee669.",
+        "imagePath": "images/i-20260707-cff7-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-cff7-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "701f379cf96f1844bd8c036eff89015446449771",
+        "imageCommits": [
+          "701f379cf96f1844bd8c036eff89015446449771"
+        ],
+        "fixedAt": "2026-07-07T14:14:22.472Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:03:22.353Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: useBlockSubmit catch block didn't check isCanceledError — a dedup-aborted duplicate POST (fast double-tap) fell through to the error branch, showing 'Failed to save' toast and re-activating the block while the original request was still in flight. Fix: added isCanceledError(err) early-return-true in submitBlock catch, mirroring the pattern used in FriendRequests/MealIngredients (useBlockSubmit.ts). Tests: 38/38 scoped tests green.",
+            "imagePath": "images/i-20260707-cff7-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-cff7-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "b919d1afd6dc5c00b2f1511e44aa849f95b8fd82",
+            "imageCommits": [
+              "b919d1afd6dc5c00b2f1511e44aa849f95b8fd82"
+            ],
+            "fixedAt": "2026-07-07T08:38:10.390Z",
+            "by": "shakeebshaan",
+            "appCommit": "ff30c774",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "2-line targeted fix at exactly the call site described; mirrors existing isCanceledError pattern across the codebase; test mock updated to expose the new export."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:27:20.412Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: useBlockSubmit treated dedup-canceled duplicate POSTs as real failures - a fast double-tap on any logging block showed a false 'Failed to save' toast and re-armed the block, inviting a duplicate entry. Fix: isCanceledError is now treated as a success no-op (the original request completes), matching the api-client contract the other callers follow; block stays completed.",
+            "imagePath": "images/i-20260707-cff7-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-cff7-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4d9b39f6819a810fbcc10ef65b98306c46ca5fa9",
+            "imageCommits": [
+              "4d9b39f6819a810fbcc10ef65b98306c46ca5fa9"
+            ],
+            "fixedAt": "2026-07-07T13:24:43.650Z",
+            "by": "shakeebshaan",
+            "appCommit": "682ee669",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 87,
+              "bar": 80,
+              "note": "Same guard the sibling callers use; unit test added for the mock; capture shows a settled chat with an interactive block"
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 682ee669: useBlockSubmit catch checks isCanceledError(err) first and returns true so dedup-canceled double-tap stays completed, no false Failed-to-save toast.",
+      "reviewedAt": "2026-07-07T14:18:10.517Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:22:24.816Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:22:24.816Z"
     }
   ]
 }
