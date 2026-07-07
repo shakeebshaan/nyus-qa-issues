@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260707-dexp",
+      "createdAt": "2026-07-07T08:41:18.222Z",
+      "route": "/profile",
+      "description": "[suggestion] Download my data: a one-tap 'Export my data' action in Profile that emails the user a ZIP of CSVs (weight logs, meals, workouts, measurements, chat-free).\n\nUSER PROBLEM: NYUS publicly claims GDPR/DPDP compliance on nyus.in/faq, and DPDP grants users a right to access their data - but the app ships account DELETION with zero data ACCESS/portability. Data-literate athletes (our stated persona) expect their history to be portable; MyFitnessPal paywalls CSV export, so free export is also a trust differentiator.\n\nEVIDENCE: /account-deletion + /delete-account routes exist; grep for export/download/csv in Profile.tsx returns nothing; FAQ legal-claims exposure already flagged to owner (memory 2026-06). Cronometer/Strava/MFP all ship export.\n\nV1 SCOPE: (1) backend POST /api/v1/account/export - queries weight_log, meal logs, workout sessions, measurements for the user, writes CSVs, zips, emails via the existing Resend integration (same infra as the nightly DB-backup email), rate-limited 1/day; (2) frontend: one button + confirm dialog in the Profile account section, success toast 'Check your email'. No in-app file download, no PDF, no chat history in v1.\n\nEFFORT: ~1 day (mostly backend; email + CSV plumbing already exists).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260707-5872",
       "createdAt": "2026-07-07T08:24:19.477Z",
       "route": "/",
