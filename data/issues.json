@@ -59,29 +59,6 @@
       "description": "[bug-hunt] App language is a one-shot irreversible choice - no UI anywhere to change it after first launch. The startup LanguagePicker renders only while nyus_lang_picker_shown is unset (App.tsx:629); after markPickerShown() it can never be reached again. Grep confirms DISPLAY_LOCALES/setAppLocale are referenced ONLY by the one-shot picker, and Profile > Preferences has just the COACH language toggle (ProfilePreferencesCard.tsx), not app/UI language. The ?lng= querystring override is useless inside the Capacitor native app. Expected: language changeable in Profile settings (config.ts:24 even documents 'Add an entry to the language picker in Profile' as a required step). Actual: tap Skip or pick the wrong language on first launch and you are permanently locked in - only remedy is clear-app-data/reinstall. Repro: first launch -> Skip, use English -> look for any language setting in Profile/preferences -> none exists. Fix: add an App language row to ProfilePreferencesCard using DISPLAY_LOCALES + setAppLocale. Related to (but distinct from) the boot-revert bug filed this tick."
     },
     {
-      "id": "i-20260707-6e2a",
-      "createdAt": "2026-07-07T18:54:34.086Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "route": "/health-score",
-      "description": "[bug-hunt] Health Score quiz answer \">3X Day\" (tea/coffee) is silently scored 50 (neutral) instead of 30 — the heaviest tea/coffee drinker gets NO penalty. Root cause: backend app/services/health_score.py _safe_quiz_score() normalizes the incoming value with `.lower().replace(' ', '_')` (norm '>3X Day' -> '>3x_day'), then tries to match it against QUIZ_SCORE_TABLE keys. Direct lookup fails (key is literal '>3X Day'). The case-insensitive fallback compares `k.lower() == norm`, i.e. '>3x day' (key lowercased, space NOT underscored) vs '>3x_day' (value with underscore) — space vs underscore never match, so it falls through to `return 50`. Every other value matches because none of them contain a space; '>3X Day' (frontend value for tea_coffee's 'More than 3x per day' option, src/lib/healthScoreQuestions.ts:76) is the ONLY table key with a space, so it's the only one that breaks. Expected: 30 (per QUIZ_SCORE_TABLE['tea_coffee']). Actual: 50. Verified by replicating _safe_quiz_score in isolation: 'never'->70, '1xWeek'->90, '2-3xWeek'->80, '>3X Day'->50 (should be 30). Fix: normalize the table key the same way in the fallback (compare `k.lower().replace(' ', '_') == norm`), OR change the frontend value + table key to a space-free token like '>3x_day' (keep both repos in sync). Impact: inflates the Nutrition/Eat pillar for high-caffeine users.",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Already fixed in backend commit 856ef68. The _safe_quiz_score() fallback at line 134 of health_score.py already normalizes BOTH sides (k.lower().replace(' ','_') == norm), so '>3X Day' -> '>3x_day' matches the table key correctly. Score for tea_coffee '>3X Day' now correctly returns 30 (not 50). testGate=true blocks resolve — recommend owner scope loop.json testCommand to a unit subset.",
-      "reviewedAt": "2026-07-07T19:17:08.320Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260707-9f4b",
       "createdAt": "2026-07-07T18:54:34.086Z",
       "author": "shakeebshaan",
