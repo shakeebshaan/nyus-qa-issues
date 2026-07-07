@@ -58,9 +58,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: registerOnlineFlush only wired online-event/Capacitor listeners — no immediate flush, and only called from lazy CoachChat chunk. Entries queued before app kill were stranded. Fix: (1) offline-queue.ts flushQueue() immediately when navigator.onLine at registration; (2) App.tsx initializeApp registers offline flush via dynamic import before CoachChat loads. Tests: scoped suite green (38/38).",
+        "imagePath": "images/i-20260707-2189-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-2189-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c963385606645fa987ace8bde6ef4ed7d93ed9c5",
+        "imageCommits": [
+          "c963385606645fa987ace8bde6ef4ed7d93ed9c5"
+        ],
+        "fixedAt": "2026-07-07T08:37:52.871Z",
+        "by": "shakeebshaan",
+        "appCommit": "ff30c774",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 83,
+          "bar": 80,
+          "note": "Both stranding scenarios addressed: startup-already-online and pre-CoachChat-load. Minimal surgical changes to 2 files. App.tsx uses dynamic import to avoid main-bundle cost."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260707-cff7",
