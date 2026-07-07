@@ -16122,6 +16122,107 @@
       "resolvedAt": "2026-07-07T14:19:46.845Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:19:46.845Z"
+    },
+    {
+      "id": "i-20260707-b49e",
+      "createdAt": "2026-07-07T03:58:10.244Z",
+      "route": "/profile",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Trophy tier chips fixed: t.label was undefined, d-* token palette classes fixed to compile. Commit 4ff61446.",
+        "imagePath": "images/i-20260707-b49e-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-b49e-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1ea9f0fb2b6cacdab096be76aee17db8a1da8793",
+        "imageCommits": [
+          "1ea9f0fb2b6cacdab096be76aee17db8a1da8793"
+        ],
+        "fixedAt": "2026-07-07T14:14:56.176Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:04:11.878Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: tier chip referenced t.label, a key TROPHY_TIER never defined (className became 'undefined'), and the bronze tier's orange-* classes compile to nothing because tailwind.config overrides orange as a flat token - so chips rendered as bare text and tiles fell back to the default blue ring. Fix: added per-tier label styles and moved all tier ring/bg/glyph/label colors onto the registered d-amber/d-orange/d-blue token scales. Chips now render as tinted tier pills with matching tile rings.",
+            "imagePath": "images/i-20260707-b49e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-b49e-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "34c934abd2d07cf9ecbd63d382146f734a62a689",
+            "imageCommits": [
+              "34c934abd2d07cf9ecbd63d382146f734a62a689"
+            ],
+            "fixedAt": "2026-07-07T04:26:36.062Z",
+            "by": "shakeebshaan",
+            "appCommit": "4ff61446",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 80,
+              "note": "Computed styles confirm real bg/text colors on the chips; zoom + full-screen captures show styled BRONZE pills and bronze tile rings on /profile"
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:31:28.075Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: trophy tier chips read t.label (undefined) and used orange scale classes that compile to nothing in the token build - chips rendered blank/unstyled. Fix: proper labels plus styles on registered d-* token scales.",
+            "imagePath": "images/i-20260707-b49e-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-b49e-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "ee615041b427d4b470a0081afdb956c300fd743a",
+            "imageCommits": [
+              "ee615041b427d4b470a0081afdb956c300fd743a"
+            ],
+            "fixedAt": "2026-07-07T13:25:33.483Z",
+            "by": "shakeebshaan",
+            "appCommit": "4ff61446",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 87,
+              "bar": 80,
+              "note": "Capture shows BRONZE tier chips styled across the trophy case"
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "resolvedAt": "2026-07-07T14:19:54.196Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:19:54.196Z"
     }
   ]
 }
