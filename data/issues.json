@@ -211,31 +211,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: checkAuth set isAuthenticated=false on expired token without trying the 60-day refresh — users away 14-60 days hit OTP. Fix: async IIFE in checkAuth; when isAuthenticated()=false but REFRESH_TOKEN exists, await checkAndRefreshToken() before clearing session (AuthContext.tsx). Tests: scoped vitest suite green (38/38).",
-        "imagePath": "images/i-20260707-5872-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-5872-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "543c190e608d92389ea4e926e37db6114f348827",
-        "imageCommits": [
-          "543c190e608d92389ea4e926e37db6114f348827"
-        ],
-        "fixedAt": "2026-07-07T08:37:31.820Z",
-        "by": "shakeebshaan",
-        "appCommit": "ff30c774",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "Minimal async-IIFE restructure hits the exact dead-code path described; no side effects; matches the fix described in the issue."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:01:48.830Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: checkAuth set isAuthenticated=false on expired token without trying the 60-day refresh — users away 14-60 days hit OTP. Fix: async IIFE in checkAuth; when isAuthenticated()=false but REFRESH_TOKEN exists, await checkAndRefreshToken() before clearing session (AuthContext.tsx). Tests: scoped vitest suite green (38/38).",
+            "imagePath": "images/i-20260707-5872-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-5872-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "543c190e608d92389ea4e926e37db6114f348827",
+            "imageCommits": [
+              "543c190e608d92389ea4e926e37db6114f348827"
+            ],
+            "fixedAt": "2026-07-07T08:37:31.820Z",
+            "by": "shakeebshaan",
+            "appCommit": "ff30c774",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "Minimal async-IIFE restructure hits the exact dead-code path described; no side effects; matches the fix described in the issue."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
