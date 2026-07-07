@@ -409,30 +409,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: useBlockSubmit treated dedup-canceled duplicate POSTs as real failures - a fast double-tap on any logging block showed a false 'Failed to save' toast and re-armed the block, inviting a duplicate entry. Fix: isCanceledError is now treated as a success no-op (the original request completes), matching the api-client contract the other callers follow; block stays completed.",
-        "imagePath": "images/i-20260707-cff7-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260707-cff7-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "4d9b39f6819a810fbcc10ef65b98306c46ca5fa9",
-        "imageCommits": [
-          "4d9b39f6819a810fbcc10ef65b98306c46ca5fa9"
-        ],
-        "fixedAt": "2026-07-07T13:24:43.650Z",
-        "by": "shakeebshaan",
-        "appCommit": "682ee669",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 87,
-          "bar": 80,
-          "note": "Same guard the sibling callers use; unit test added for the mock; capture shows a settled chat with an interactive block"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:03:22.353Z",
@@ -460,6 +438,35 @@
               "score": 88,
               "bar": 80,
               "note": "2-line targeted fix at exactly the call site described; mirrors existing isCanceledError pattern across the codebase; test mock updated to expose the new export."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:27:20.412Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: useBlockSubmit treated dedup-canceled duplicate POSTs as real failures - a fast double-tap on any logging block showed a false 'Failed to save' toast and re-armed the block, inviting a duplicate entry. Fix: isCanceledError is now treated as a success no-op (the original request completes), matching the api-client contract the other callers follow; block stays completed.",
+            "imagePath": "images/i-20260707-cff7-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-cff7-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4d9b39f6819a810fbcc10ef65b98306c46ca5fa9",
+            "imageCommits": [
+              "4d9b39f6819a810fbcc10ef65b98306c46ca5fa9"
+            ],
+            "fixedAt": "2026-07-07T13:24:43.650Z",
+            "by": "shakeebshaan",
+            "appCommit": "682ee669",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 87,
+              "bar": 80,
+              "note": "Same guard the sibling callers use; unit test added for the mock; capture shows a settled chat with an interactive block"
             }
           }
         }
