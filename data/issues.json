@@ -878,31 +878,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: FastingBanner.initStart only fetched yesterday's logs, ignoring any meals eaten today — so if user ate breakfast today before activating 16:8, the timer back-dated to yesterday's dinner (16h+ ago) and instantly showed 'fast complete'. Fix: initStart now fetches both today+yesterday in parallel via Promise.all, combines meal_logs from both, and picks the max last-eaten timestamp across the full set. A meal eaten today after the would-be start is now correctly used as the actual fast start.",
-        "imagePath": "images/i-20260707-6b1e-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-6b1e-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "5cff7e437ef65c5fe94778ff319bd07535a479b9",
-        "imageCommits": [
-          "5cff7e437ef65c5fe94778ff319bd07535a479b9"
-        ],
-        "fixedAt": "2026-07-07T03:04:00.132Z",
-        "by": "shakeebshaan",
-        "appCommit": "60a769ca",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 80,
-          "note": "Fix matches exact root cause and fix direction. Both day fetches are parallel (Promise.all — no added latency). Combines and filters by !skipped && logged_at. 20h recency guard unchanged. localStorage key unchanged — existing timers continue working. Handles offline gracefully (catch block sets start=now)."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:05:06.285Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: FastingBanner.initStart only fetched yesterday's logs, ignoring any meals eaten today — so if user ate breakfast today before activating 16:8, the timer back-dated to yesterday's dinner (16h+ ago) and instantly showed 'fast complete'. Fix: initStart now fetches both today+yesterday in parallel via Promise.all, combines meal_logs from both, and picks the max last-eaten timestamp across the full set. A meal eaten today after the would-be start is now correctly used as the actual fast start.",
+            "imagePath": "images/i-20260707-6b1e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-6b1e-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "5cff7e437ef65c5fe94778ff319bd07535a479b9",
+            "imageCommits": [
+              "5cff7e437ef65c5fe94778ff319bd07535a479b9"
+            ],
+            "fixedAt": "2026-07-07T03:04:00.132Z",
+            "by": "shakeebshaan",
+            "appCommit": "60a769ca",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 80,
+              "note": "Fix matches exact root cause and fix direction. Both day fetches are parallel (Promise.all — no added latency). Combines and filters by !skipped && logged_at. 20h recency guard unchanged. localStorage key unchanged — existing timers continue working. Handles offline gracefully (catch block sets start=now)."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
