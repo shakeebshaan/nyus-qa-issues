@@ -1043,30 +1043,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: FAQ strings hardcoded the Rs49 founder offer regardless of live offer state, promising pricing checkout would not honor. Fix: the launch-offer FAQ renders only while the offer is active and prices are pulled dynamically from the live offer status.",
-        "imagePath": "images/i-20260707-c9d2-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260707-c9d2-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "690acceb9f9426543e63cd126c28284f37b081ee",
-        "imageCommits": [
-          "690acceb9f9426543e63cd126c28284f37b081ee"
-        ],
-        "fixedAt": "2026-07-07T13:23:46.685Z",
-        "by": "shakeebshaan",
-        "appCommit": "c345d2fc",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 88,
-          "bar": 80,
-          "note": "Capture shows the FAQ list with no Rs49 promise while offer inactive; offer-active state keeps the entry"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:04:49.748Z",
@@ -1094,6 +1072,35 @@
               "score": 88,
               "bar": 80,
               "note": "Stale pricing promise can no longer render; verified FAQ list with offer inactive, entry absent + prices now live-sourced when active"
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:30:56.566Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: FAQ strings hardcoded the Rs49 founder offer regardless of live offer state, promising pricing checkout would not honor. Fix: the launch-offer FAQ renders only while the offer is active and prices are pulled dynamically from the live offer status.",
+            "imagePath": "images/i-20260707-c9d2-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-c9d2-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "690acceb9f9426543e63cd126c28284f37b081ee",
+            "imageCommits": [
+              "690acceb9f9426543e63cd126c28284f37b081ee"
+            ],
+            "fixedAt": "2026-07-07T13:23:46.685Z",
+            "by": "shakeebshaan",
+            "appCommit": "c345d2fc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Capture shows the FAQ list with no Rs49 promise while offer inactive; offer-active state keeps the entry"
             }
           }
         }
