@@ -64,7 +64,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED in backend commit 856ef68 (deployed 2026-07-07). Root cause confirmed: _body_comp_pillar used (delta_kg / weight) / 4.0 assuming exactly 28-day gap, but 'earlier' could be ANY log >28 days old (no upper bound). Fix: compute days_apart = max(1, (latest.logged_at - earlier.logged_at).days) and use (days_apart / 7.0) as the divisor. A user whose older log was 100 days ago was seeing 3.5x-inflated weekly rate, classifying them as crash-dieting when they were on a healthy steady loss. QA account has no weight logs so can't screenshot the change.",
+      "reviewedAt": "2026-07-07T19:03:19.310Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-dk7q",
