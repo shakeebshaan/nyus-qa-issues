@@ -59,29 +59,6 @@
       "description": "[bug-hunt] App language is a one-shot irreversible choice - no UI anywhere to change it after first launch. The startup LanguagePicker renders only while nyus_lang_picker_shown is unset (App.tsx:629); after markPickerShown() it can never be reached again. Grep confirms DISPLAY_LOCALES/setAppLocale are referenced ONLY by the one-shot picker, and Profile > Preferences has just the COACH language toggle (ProfilePreferencesCard.tsx), not app/UI language. The ?lng= querystring override is useless inside the Capacitor native app. Expected: language changeable in Profile settings (config.ts:24 even documents 'Add an entry to the language picker in Profile' as a required step). Actual: tap Skip or pick the wrong language on first launch and you are permanently locked in - only remedy is clear-app-data/reinstall. Repro: first launch -> Skip, use English -> look for any language setting in Profile/preferences -> none exists. Fix: add an App language row to ProfilePreferencesCard using DISPLAY_LOCALES + setAppLocale. Related to (but distinct from) the boot-revert bug filed this tick."
     },
     {
-      "id": "i-20260707-c1d7",
-      "createdAt": "2026-07-07T18:54:34.086Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "route": "/health-score",
-      "description": "[bug-hunt] Health Score Body-Comp pillar weight-trajectory divides by a fixed /4.0 regardless of the actual gap between weigh-ins, so users with sparse weight logs get mis-classified as crash-dieting. In backend app/services/health_score.py _body_comp_pillar(): `earlier` is selected as the most recent WeightLog that is AT LEAST 28 days old (`WeightLog.logged_at <= now-28d`, order desc, first) — there is NO lower bound on how old it is. Then `weekly_pct = (delta_kg / earlier.weight_kg) / 4.0  # rough weekly avg` assumes the gap is exactly 4 weeks. If the user's previous weigh-in was, say, 100 days ago, /4.0 overstates the weekly rate ~3.5x. Repro: user weighs 80kg today and their only older log is 88kg from 100 days ago -> delta -8kg, code computes weekly_pct = (-8/88)/4 = -0.0227 -> hits `weekly_pct < -0.01` -> trajectory = -10 ('too fast', crash-diet penalty). Actual healthy rate over 100 days is -8/88/(100/7) = -0.0064 (~0.64%/wk, on-track). So a healthy, steady loser is penalized as if crash-dieting, and conversely a real fast loss over a short recent gap could be under-penalized. Expected: compute weekly_pct using the real elapsed days between `earlier.logged_at` and `latest.logged_at` (delta_kg / weight / (days/7)), not a hardcoded 4 weeks. Impact: up to -10 (or wrong-signed) points on the 15-weight Body-Comp pillar for anyone whose weigh-ins aren't ~monthly.",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Already fixed in backend commit 856ef68. _body_comp_pillar() now uses actual elapsed days: days_apart = max(1, (latest.logged_at - earlier.logged_at).days) then weekly_pct = delta / weight / (days_apart / 7.0). A user with 100-day gap is no longer mislabeled as crash-dieting. testGate=true blocks resolve — recommend scoping testCommand to unit subset.",
-      "reviewedAt": "2026-07-07T19:17:43.816Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260707-dk7q",
       "createdAt": "2026-07-07T18:42:20.840Z",
       "author": "shakeebshaan",
