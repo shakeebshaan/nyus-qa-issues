@@ -88,8 +88,30 @@
     {
       "id": "i-20260707-dcd5",
       "createdAt": "2026-07-07T19:39:06.185Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Profile > Preferences only had coach_language toggle; no App language row existed. Fix (8e2e5a0a): ProfilePreferencesCard now has an App language section using DISPLAY_LOCALES and setAppLocale (same fn used by the startup picker). Screenshot shows App language row in PREFERENCES & DATA with English/Hinglish/Hindi buttons, Hindi currently selected.",
+        "imagePath": "images/i-20260707-dcd5-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-dcd5-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0b5dba60dc76965a0066176dc3aead4f3225be1e",
+        "imageCommits": [
+          "0b5dba60dc76965a0066176dc3aead4f3225be1e"
+        ],
+        "fixedAt": "2026-07-07T23:15:15.242Z",
+        "by": "shakeebshaan",
+        "appCommit": "9c12cca1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Section is visible in Profile with correct locales. Teal color matches domain token. Tap updates i18n locale via setAppLocale."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -102,7 +124,8 @@
       "imageCommits": [],
       "imagePrivate": false,
       "route": "/profile",
-      "description": "[bug-hunt] App language is a one-shot irreversible choice - no UI anywhere to change it after first launch. The startup LanguagePicker renders only while nyus_lang_picker_shown is unset (App.tsx:629); after markPickerShown() it can never be reached again. Grep confirms DISPLAY_LOCALES/setAppLocale are referenced ONLY by the one-shot picker, and Profile > Preferences has just the COACH language toggle (ProfilePreferencesCard.tsx), not app/UI language. The ?lng= querystring override is useless inside the Capacitor native app. Expected: language changeable in Profile settings (config.ts:24 even documents 'Add an entry to the language picker in Profile' as a required step). Actual: tap Skip or pick the wrong language on first launch and you are permanently locked in - only remedy is clear-app-data/reinstall. Repro: first launch -> Skip, use English -> look for any language setting in Profile/preferences -> none exists. Fix: add an App language row to ProfilePreferencesCard using DISPLAY_LOCALES + setAppLocale. Related to (but distinct from) the boot-revert bug filed this tick."
+      "description": "[bug-hunt] App language is a one-shot irreversible choice - no UI anywhere to change it after first launch. The startup LanguagePicker renders only while nyus_lang_picker_shown is unset (App.tsx:629); after markPickerShown() it can never be reached again. Grep confirms DISPLAY_LOCALES/setAppLocale are referenced ONLY by the one-shot picker, and Profile > Preferences has just the COACH language toggle (ProfilePreferencesCard.tsx), not app/UI language. The ?lng= querystring override is useless inside the Capacitor native app. Expected: language changeable in Profile settings (config.ts:24 even documents 'Add an entry to the language picker in Profile' as a required step). Actual: tap Skip or pick the wrong language on first launch and you are permanently locked in - only remedy is clear-app-data/reinstall. Repro: first launch -> Skip, use English -> look for any language setting in Profile/preferences -> none exists. Fix: add an App language row to ProfilePreferencesCard using DISPLAY_LOCALES + setAppLocale. Related to (but distinct from) the boot-revert bug filed this tick.",
+      "needsReview": false
     },
     {
       "id": "i-20260707-dk7q",
