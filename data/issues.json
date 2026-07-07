@@ -964,8 +964,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: /plans/active returns 200+null for paused plans; GoalChangeWizard called plan.id on null -> fake 'Couldn't load your plan' network-error screen with an infinite reload loop; Profile's Change Goal was ungated and the resume-screen CTA dead-ended. Fix: null plan now renders the 'No active plan' empty state, Change Goal is gated on an active plan, and the expired-plan CTA resumes first then routes to /goal-change.",
+        "imagePath": "images/i-20260706-a7d2-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260706-a7d2-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c92642b4907454d63051a277b4a363726df91f62",
+        "imageCommits": [
+          "c92642b4907454d63051a277b4a363726df91f62"
+        ],
+        "fixedAt": "2026-07-07T13:22:10.158Z",
+        "by": "shakeebshaan",
+        "appCommit": "a308b056",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "Wizard loads cleanly for active plan; paused path now hits empty state not network error; both entry points gated"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:05:34.434Z",
