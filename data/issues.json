@@ -1025,31 +1025,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: handlePause in PlanPauseScreen never touched device-local notifications, so the daily workout and weekly weigh-in LocalNotifications kept firing despite the on-screen promise 'reminders paused'. Fix: created src/lib/reminderSync.ts with pausePlanReminders() (cancels WORKOUT + WEIGH_IN reminder IDs) and resumePlanReminders() (re-applies from saved prefs via notificationsService.getPreferences()). handlePause calls void pausePlanReminders() after successful pause; handleResume calls void resumePlanReminders() after successful resume. Meal reminders are intentionally left untouched (eating isn't paused). Backend-side pushes already honoured pause via plan-status filter. Screenshot shows Pause Plan screen with the 'reminders paused' promise -- the code behind now fulfils it on-device.",
-        "imagePath": "images/i-20260706-5e19-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260706-5e19-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0a3b125256387e4cc277c20893bcd769b8edbfea",
-        "imageCommits": [
-          "0a3b125256387e4cc277c20893bcd769b8edbfea"
-        ],
-        "fixedAt": "2026-07-06T23:06:13.109Z",
-        "by": "shakeebshaan",
-        "appCommit": "a308b056",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 80,
-          "note": "New reminderSync.ts module created with pause/resume lifecycle hooks wired into both screens. Covers workout and weigh-in channels; meal reminders left intact per spec. Fire-and-forget so it can't break the pause flow on devices where LocalNotifications is unavailable."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:05:44.829Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: handlePause in PlanPauseScreen never touched device-local notifications, so the daily workout and weekly weigh-in LocalNotifications kept firing despite the on-screen promise 'reminders paused'. Fix: created src/lib/reminderSync.ts with pausePlanReminders() (cancels WORKOUT + WEIGH_IN reminder IDs) and resumePlanReminders() (re-applies from saved prefs via notificationsService.getPreferences()). handlePause calls void pausePlanReminders() after successful pause; handleResume calls void resumePlanReminders() after successful resume. Meal reminders are intentionally left untouched (eating isn't paused). Backend-side pushes already honoured pause via plan-status filter. Screenshot shows Pause Plan screen with the 'reminders paused' promise -- the code behind now fulfils it on-device.",
+            "imagePath": "images/i-20260706-5e19-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260706-5e19-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0a3b125256387e4cc277c20893bcd769b8edbfea",
+            "imageCommits": [
+              "0a3b125256387e4cc277c20893bcd769b8edbfea"
+            ],
+            "fixedAt": "2026-07-06T23:06:13.109Z",
+            "by": "shakeebshaan",
+            "appCommit": "a308b056",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 80,
+              "note": "New reminderSync.ts module created with pause/resume lifecycle hooks wired into both screens. Covers workout and weigh-in channels; meal reminders left intact per spec. Fire-and-forget so it can't break the pause flow on devices where LocalNotifications is unavailable."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "id": "i-20260706-5e19",
       "route": "/plan-pause",
       "description": "[bug-hunt] Pausing a plan promises \"reminders paused\" but device-local reminders keep firing every day while paused. WHERE: src/pages/PlanPauseScreen.tsx ~222 - intro copy says \"Your streak will be frozen and reminders paused until you're ready to resume\", but handlePause (~91-121) only calls planService.pausePlan() and navigates; nothing touches local notifications. src/lib/localNotifications.ts has ZERO references to pause/plan status, and no caller cancels the daily workout reminder or the Sunday weigh-in reminder on pause (grep: pausePlan is referenced only by plan.service.ts + PlanPauseScreen). Backend-side pushes DO honor the pause (daily_report + daily_inactivity_push both filter FitnessPlan status='active'), so this is specifically the on-device LocalNotifications schedule. EXPECTED: after pausing, no workout/weigh-in reminders until resume (that is the literal promise on the pause screen). ACTUAL: the phone keeps buzzing \"time to work out\" every scheduled day of the pause - exactly what a user on vacation/injured (the pause reasons offered) asked to stop. REPRO (device/emulator build): enable workout reminders in /notification-preferences -> Profile -> Pause Plan -> wait for the next reminder time: local notification still fires while the plan is paused. FIX SHAPE: on successful pause, cancel the plan-linked local reminders (workout + weigh-in ids in localNotifications.ts); on resume, re-apply from saved preferences (same recovery path NotificationPreferences already uses). NOT a duplicate of i-20260705-4f2c (quiet hours) or i-20260705-b3e7 (wrong toggle): this is the pause lifecycle never touching local schedules at all.",
