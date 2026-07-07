@@ -727,31 +727,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the 'What about the launch offer?' FAQ was static copy in FAQ_ITEMS, promising 'first month is Rs49' regardless of offer state. Fix: the offer entry is now inserted at render time only while launchOffer?.active, with prices sourced from the live offer status (offer_price/regular_price); offer inactive -> no offer FAQ. Proof: with the offer inactive, 'How do payments work?' is directly followed by 'Is my health data private?' - the offer entry is gone.",
-        "imagePath": "images/i-20260707-c9d2-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-c9d2-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "4e11b00b29551c816bc3e71cf28d27ae0cfe3ca1",
-        "imageCommits": [
-          "4e11b00b29551c816bc3e71cf28d27ae0cfe3ca1"
-        ],
-        "fixedAt": "2026-07-07T03:32:50.158Z",
-        "by": "shakeebshaan",
-        "appCommit": "c345d2fc",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 88,
-          "bar": 80,
-          "note": "Stale pricing promise can no longer render; verified FAQ list with offer inactive, entry absent + prices now live-sourced when active"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:04:49.748Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the 'What about the launch offer?' FAQ was static copy in FAQ_ITEMS, promising 'first month is Rs49' regardless of offer state. Fix: the offer entry is now inserted at render time only while launchOffer?.active, with prices sourced from the live offer status (offer_price/regular_price); offer inactive -> no offer FAQ. Proof: with the offer inactive, 'How do payments work?' is directly followed by 'Is my health data private?' - the offer entry is gone.",
+            "imagePath": "images/i-20260707-c9d2-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-c9d2-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4e11b00b29551c816bc3e71cf28d27ae0cfe3ca1",
+            "imageCommits": [
+              "4e11b00b29551c816bc3e71cf28d27ae0cfe3ca1"
+            ],
+            "fixedAt": "2026-07-07T03:32:50.158Z",
+            "by": "shakeebshaan",
+            "appCommit": "c345d2fc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Stale pricing promise can no longer render; verified FAQ list with offer inactive, entry absent + prices now live-sourced when active"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "description": "[bug-hunt] FAQ hardcodes the ₹49 founder offer even after it expires. Repro: open /choose-plan when the launch offer is inactive (LAUNCH_OFFER remaining==0 / window closed → _launch_offer_status active:false, backend.py ~2188). The offer banner and the monthly card correctly hide/reset to ₹499, but the FAQ answer for 'What about the launch offer?' still reads 'While our founder offer is live, your first month is ₹49 (90% off ₹499)...' and the tier-explainer FAQ repeats it (FAQ_ITEMS, ChoosePlan.tsx ~190, ~201-203). These strings are static and never gated on launchOffer?.active. Expected: when the offer is inactive, don't advertise ₹49 first month (users will expect it at checkout and be charged ₹499). Actual: FAQ makes a live-offer pricing promise the app won't honor. Fix: conditionally render/omit the offer FAQ (and the '₹49 first month' clause) based on launchOffer?.active.",
       "needsReview": false
     },
