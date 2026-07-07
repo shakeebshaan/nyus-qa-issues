@@ -283,8 +283,30 @@
         "96373816cd6d0d52a4c88d9d84c4fcfd5161ae9a"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen fix: expanded the metrics summary block to cover every tracked metric with day-over-day deltas. Now shows: Total users, New today/7d/30d, DAU/WAU/MAU, Activation rate, Stickiness (DAU/MAU %), Retention D1/D7/D30, Active plans, Paid subscribers, Paid revenue, Workouts completed 7d, Meals logged 7d, Meal logging adoption %, AI cost 30d. Each metric shows a colored delta arrow vs previous snapshot. Grid layout (auto-fill 200px cols) fits all metrics without overflow.",
+        "imagePath": "images/i-20260707-a671-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-a671-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9d60a8f4c5a311a41fcc519a9b3e275d5e66ed28",
+        "imageCommits": [
+          "9d60a8f4c5a311a41fcc519a9b3e275d5e66ed28"
+        ],
+        "fixedAt": "2026-07-07T23:17:04.594Z",
+        "by": "shakeebshaan",
+        "appCommit": "7de8171",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Every metric from the board screenshot is now in the summary block with delta indicators. Grid layout handles all metrics cleanly."
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T21:00:05.921Z",
