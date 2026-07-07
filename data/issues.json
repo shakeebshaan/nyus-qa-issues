@@ -828,31 +828,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: skipMealMutation sent identical request body (assigned_meal_id+skip:true) for both skip and undo — the api-client dedup interceptor aborted the undo while the original was in-flight, leaving the meal skipped server-side despite 'Skip undone' toast. Fix: added was_skipped bool (prior state at tap time) to the mutation payload, mirroring the was_eaten fix already on logMealMutation. Skip sends was_skipped:false; undo/unskip sends was_skipped:true — bodies differ, no dedup collision.",
-        "imagePath": "images/i-20260707-8d4c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-8d4c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "2c68d5d6f8a9eb36f4af413e196a475ef99b6c98",
-        "imageCommits": [
-          "2c68d5d6f8a9eb36f4af413e196a475ef99b6c98"
-        ],
-        "fixedAt": "2026-07-07T03:03:42.335Z",
-        "by": "shakeebshaan",
-        "appCommit": "60a769ca",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 80,
-          "note": "Precise fix matching the exact root cause and fix direction in the issue. was_skipped discriminator added to mutationFn, handleSkipMeal, toast undo handler, and handleUnskipMeal. api.ts updated with the optional field. Mirrors the was_eaten pattern already proven on logMealMutation. No adjacent code touched."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:05:00.540Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: skipMealMutation sent identical request body (assigned_meal_id+skip:true) for both skip and undo — the api-client dedup interceptor aborted the undo while the original was in-flight, leaving the meal skipped server-side despite 'Skip undone' toast. Fix: added was_skipped bool (prior state at tap time) to the mutation payload, mirroring the was_eaten fix already on logMealMutation. Skip sends was_skipped:false; undo/unskip sends was_skipped:true — bodies differ, no dedup collision.",
+            "imagePath": "images/i-20260707-8d4c-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-8d4c-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "2c68d5d6f8a9eb36f4af413e196a475ef99b6c98",
+            "imageCommits": [
+              "2c68d5d6f8a9eb36f4af413e196a475ef99b6c98"
+            ],
+            "fixedAt": "2026-07-07T03:03:42.335Z",
+            "by": "shakeebshaan",
+            "appCommit": "60a769ca",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 80,
+              "note": "Precise fix matching the exact root cause and fix direction in the issue. was_skipped discriminator added to mutationFn, handleSkipMeal, toast undo handler, and handleUnskipMeal. api.ts updated with the optional field. Mirrors the was_eaten pattern already proven on logMealMutation. No adjacent code touched."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
