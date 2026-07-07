@@ -16740,6 +16740,111 @@
       "resolvedAt": "2026-07-07T14:22:42.712Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:22:42.712Z"
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Recipe split-id save corruption fixed. No more stale plan data on re-split. Commit fb33dc7c.",
+        "imagePath": "images/i-20260707-4d7e-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-4d7e-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a9cccf8f69cddf091bdca5f43bcd53d4b2a57213",
+        "imageCommits": [
+          "a9cccf8f69cddf091bdca5f43bcd53d4b2a57213"
+        ],
+        "fixedAt": "2026-07-07T14:17:00.036Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:00:30.826Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: handleSaveChanges sent string IDs like 42-0 for combined-ingredient split rows; backend _safe_int rejected them so every split part was dropped on save and macros zeroed. Fix (RecipeDetail.tsx): handleSaveChanges now aggregates split-part rows by parent integer ID and sums quantities before posting, so backend write+read paths receive valid integer ingredient_ids.",
+            "imagePath": "images/i-20260707-4d7e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-4d7e-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "260143fb1b30717fb157cc1ed6792317fd796f7a",
+            "imageCommits": [
+              "260143fb1b30717fb157cc1ed6792317fd796f7a"
+            ],
+            "fixedAt": "2026-07-07T09:36:57.697Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb33dc7c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Root cause precisely identified and fixed. Split-ID aggregation makes combined-ingredient saves round-trip losslessly. TypeScript clean, zero console errors."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:27:10.169Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: combined-ingredient rows carry synthetic string ids ('42-0') which the FE sent verbatim as ingredient_id; both backend read paths drop non-numeric ids, so 'Save Meal Changes' silently zeroed the meal's macros. Fix: on save the FE aggregates split parts back onto the parent numeric ingredient_id - the round-trip is lossless and a no-edit save changes nothing.",
+            "imagePath": "images/i-20260707-4d7e-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-4d7e-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4adcdcfb9b37aacd95a330e827d9434063e97f51",
+            "imageCommits": [
+              "4adcdcfb9b37aacd95a330e827d9434063e97f51"
+            ],
+            "fixedAt": "2026-07-07T13:24:50.136Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb33dc7c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Capture shows recipe detail with intact macros + numeric-id ingredient rows and the Save CTA"
+            }
+          }
+        }
+      ],
+      "id": "i-20260707-4d7e",
+      "createdAt": "2026-07-07T09:09:41.124Z",
+      "route": "/recipe-detail",
+      "description": "[bug-hunt] Saving recipe changes on a combined-ingredient meal silently corrupts the day's macros - every split ingredient row is dropped server-side because its id isn't numeric.\n\nEXPECTED: \"Save Meal Changes\" round-trips the ingredient list losslessly; saving with no edits changes nothing.\nACTUAL: backend RecipeDetailResource._expand_combined (backend.py:6900) splits combined ingredient names on with/and/&/+ (\"Rice with Dal & Salad\") into part rows whose ids are STRINGS like \"42-0\",\"42-1\". RecipeDetail.tsx handleSaveChanges (~148-160) sends those ids verbatim as ingredient_id, and POST /diet/log-modification stores the payload raw with no id validation (backend.py:7320). Both consumers then reject string ids via _safe_int: the daily diet GET (backend.py:6695-6709) builds ingredient_source only from int-id rows, so every split part contributes ZERO macros - a meal whose rows were all combined-name splits collapses to 0 kcal on the nutrition card and logs 0 consumed macros when eaten; the recipe GET (backend.py:7038-7054) skips them too, so the user's quantity edits/removals vanish on next open (falls back to the pristine recipe when nothing usable remains). The backend comment at 7042 already calls these ids \"a frontend keying artifact\" and skips them defensively - but the frontend still sends them and the write path still accepts them.\n\nREPRO: Nutrition -> open a meal whose recipe contains a combined ingredient name (any \"X with Y\" / \"A and B\") -> tap the meal -> Recipe -> tap \"Save Meal Changes\" (no edits needed) -> toast \"Recipe updated for today\" -> back on Nutrition the meal's calories/macros drop (only non-split rows still count); reopen the recipe -> edits/state gone.\n\nWHERE: src/pages/RecipeDetail.tsx handleSaveChanges (sends string ids); backend.py LogMealModificationResource (stores unvalidated) + daily-diet GET ~6695 + RecipeDetailResource ~7042 (both skip string ids). FIX direction: send the parent ingredient_id with aggregated quantity from the FE, or make the backend accept/persist part-ids consistently on both read paths.",
+      "needsReview": true,
+      "reviewReason": "FIXED in commit fb33dc7c: handleSaveChanges now aggregates split-part ids (42-1 style) back to parent integer id before POST, so the backend read+write paths persist all ingredient rows correctly.",
+      "reviewedAt": "2026-07-07T14:18:18.583Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:22:51.158Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:22:51.158Z"
     }
   ]
 }
