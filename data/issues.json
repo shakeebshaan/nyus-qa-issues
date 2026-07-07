@@ -21,48 +21,6 @@
       "history": []
     },
     {
-      "id": "i-20260707-3a9c",
-      "createdAt": "2026-07-07T09:53:21.563Z",
-      "route": "/profile",
-      "description": "[bug-hunt] Second \"Export my data\" tap in the same day shows a false \"Export failed / Something went wrong\" error - the server's real once-per-day message is swallowed, so users think the feature is broken.\n\nEXPECTED: when the backend responds 429 with the explicit message \"Data export is limited to once per day. Try again in ~N hour(s).\", the toast should show that message so the user knows their first export worked and when they can retry.\nACTUAL: src/pages/_components/profile/ProfilePreferencesCard.tsx handleExportAll (~line 56-75) catches ALL errors and shows the hardcoded toast 'Export failed / Something went wrong. Please try again later.' It never reads e.response.data.error, and the api-client response interceptor (src/lib/api-client.ts) has no global 4xx message surface either. So a user who exported this morning and taps again in the evening sees a destructive-styled \"Export failed... try again later\" toast; retrying keeps \"failing\". Nothing tells them the daily limit exists or that their first export already arrived by email.\n\nREPRO: 1) Profile -> tap \"Export my data\" -> success toast + email arrives. 2) Tap \"Export my data\" again -> backend returns 429 {success:false, error:\"Data export is limited to once per day. Try again in ~24 hour(s).\"} but the UI shows \"Export failed / Something went wrong. Please try again later.\" (verify the 429 in devtools Network tab).\n\nFIX SHAPE: in the catch, read (e as AxiosError).response?.data?.error and use it as the toast description when present (non-destructive variant for 429); keep the generic copy only as fallback.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: handleExportAll catch block showed a hardcoded generic error toast for ALL failures, never reading the server's error message. Fix: in ProfilePreferencesCard.tsx, the catch now reads (e as AxiosError).response?.data?.error via axios.isAxiosError(); a 429 shows 'Already exported today' (default variant) with the server's specific hours-remaining message; other errors fall back to the generic destructive toast. Frontend: src/pages/_components/profile/ProfilePreferencesCard.tsx commit 070651c6.",
-        "imagePath": "images/i-20260707-3a9c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-3a9c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "8f900843aaaee53e55e5a84857b7813cf6638f01",
-        "imageCommits": [
-          "8f900843aaaee53e55e5a84857b7813cf6638f01"
-        ],
-        "fixedAt": "2026-07-07T10:06:58.394Z",
-        "by": "shakeebshaan",
-        "appCommit": "070651c6",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 88,
-          "bar": 80,
-          "note": "Targeted fix reads server error message for 429 instead of showing generic copy. TSC clean. Screenshot shows /profile with Export button rendered — can't capture the 429 toast directly (requires a second same-day export), but the code change is unambiguous and correct."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260707-dk73",
       "createdAt": "2026-07-07T09:42:11.418Z",
       "route": null,
