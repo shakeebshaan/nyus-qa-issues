@@ -107,31 +107,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: RecipeDetailResource applied the target-kcal renormalizer unconditionally, including when ingredients came from a UserMealModification. After a 0.5x portion scale, current_kcal deviated >5% from target, triggering a 2x rescale that undid the user's choice. Fix (backend.py): added from_modification flag; renormalizer now skipped when a user modification was the data source.",
-        "imagePath": "images/i-20260707-92c5-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-92c5-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "d8c4b2a63a3bab504e24bfaf8dc8a8789d318d55",
-        "imageCommits": [
-          "d8c4b2a63a3bab504e24bfaf8dc8a8789d318d55"
-        ],
-        "fixedAt": "2026-07-07T09:37:16.755Z",
-        "by": "shakeebshaan",
-        "appCommit": "fb33dc7c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 88,
-          "bar": 80,
-          "note": "Minimal one-flag guard. Precisely prevents renormalizer from overriding user-authored portion scales. Backend deployed to prod and healthy."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:00:48.298Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: RecipeDetailResource applied the target-kcal renormalizer unconditionally, including when ingredients came from a UserMealModification. After a 0.5x portion scale, current_kcal deviated >5% from target, triggering a 2x rescale that undid the user's choice. Fix (backend.py): added from_modification flag; renormalizer now skipped when a user modification was the data source.",
+            "imagePath": "images/i-20260707-92c5-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-92c5-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "d8c4b2a63a3bab504e24bfaf8dc8a8789d318d55",
+            "imageCommits": [
+              "d8c4b2a63a3bab504e24bfaf8dc8a8789d318d55"
+            ],
+            "fixedAt": "2026-07-07T09:37:16.755Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb33dc7c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Minimal one-flag guard. Precisely prevents renormalizer from overriding user-authored portion scales. Backend deployed to prod and healthy."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "id": "i-20260707-92c5",
       "createdAt": "2026-07-07T09:09:41.124Z",
       "route": "/recipe-detail",
