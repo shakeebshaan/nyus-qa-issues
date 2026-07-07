@@ -590,31 +590,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: no per-exercise progression chart existed anywhere in the app. Fix: (1) Backend — GET /api/v1/strength/exercise-progression?exercise_id=N (logging.py strength_bp) queries SetLog per session, returns top-set weight+reps+Epley e1RM, up to 90 chronological data points; (2) ExerciseProgressionSheet (src/components/activity/ExerciseProgressionSheet.tsx) — shadcn bottom-sheet with dual Recharts line chart (teal=top-set weight, orange dashed=est. 1RM) + stats row; (3) StrengthStrip tap now opens the progression sheet. Backend deployed + health verified 401. /activity page renders cleanly with zero JS errors.",
-        "imagePath": "images/i-20260707-e1rm-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-e1rm-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ad9bdb403290e1a927c15646ca77f5809ae1a995",
-        "imageCommits": [
-          "ad9bdb403290e1a927c15646ca77f5809ae1a995"
-        ],
-        "fixedAt": "2026-07-07T04:11:13.589Z",
-        "by": "shakeebshaan",
-        "appCommit": "76af9244",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 82,
-          "bar": 80,
-          "note": "V1 scope fully delivered: backend endpoint live + frontend chart sheet wired. QA acct has no strength PRs so StrengthStrip is hidden (by-design). -18 for no in-action chart screenshot."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:09:23.399Z",
+          "event": "reopened",
+          "note": "Fix this",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: no per-exercise progression chart existed anywhere in the app. Fix: (1) Backend — GET /api/v1/strength/exercise-progression?exercise_id=N (logging.py strength_bp) queries SetLog per session, returns top-set weight+reps+Epley e1RM, up to 90 chronological data points; (2) ExerciseProgressionSheet (src/components/activity/ExerciseProgressionSheet.tsx) — shadcn bottom-sheet with dual Recharts line chart (teal=top-set weight, orange dashed=est. 1RM) + stats row; (3) StrengthStrip tap now opens the progression sheet. Backend deployed + health verified 401. /activity page renders cleanly with zero JS errors.",
+            "imagePath": "images/i-20260707-e1rm-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-e1rm-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "ad9bdb403290e1a927c15646ca77f5809ae1a995",
+            "imageCommits": [
+              "ad9bdb403290e1a927c15646ca77f5809ae1a995"
+            ],
+            "fixedAt": "2026-07-07T04:11:13.589Z",
+            "by": "shakeebshaan",
+            "appCommit": "76af9244",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 82,
+              "bar": 80,
+              "note": "V1 scope fully delivered: backend endpoint live + frontend chart sheet wired. QA acct has no strength PRs so StrengthStrip is hidden (by-design). -18 for no in-action chart screenshot."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
