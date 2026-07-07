@@ -15609,6 +15609,111 @@
       "resolvedAt": "2026-07-07T14:17:52.500Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:17:52.500Z"
+    },
+    {
+      "id": "i-20260707-b3f8",
+      "createdAt": "2026-07-07T03:09:02.305Z",
+      "route": "/choose-plan?manage=1",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Trial manage screen shows 'Trial ends' instead of 'Next charge' for free trial users. Commit 4a765d2e.",
+        "imagePath": "images/i-20260707-b3f8-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-b3f8-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5c3b0cfa710d1304b67497be83f0ef21c77fc2d3",
+        "imageCommits": [
+          "5c3b0cfa710d1304b67497be83f0ef21c77fc2d3"
+        ],
+        "fixedAt": "2026-07-07T14:15:53.753Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:04:40.725Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the Current-subscription block derived its line solely from subscription_end_date, which the trial row also sets - trial users saw 'Next charge: <date>' for a charge that never happens (trials expire lazily; premium just locks). Fix: the date label is now 'Trial ends' when user.is_trial and 'Next charge' only for paid subscribers. Proof: trial user on /choose-plan?manage=1 shows 'Trial ends: Jul 30, 2026'.",
+            "imagePath": "images/i-20260707-b3f8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-b3f8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "bb12e868bbbe45a8e750a4e06627072c0ebd87ec",
+            "imageCommits": [
+              "bb12e868bbbe45a8e750a4e06627072c0ebd87ec"
+            ],
+            "fixedAt": "2026-07-07T03:32:31.749Z",
+            "by": "shakeebshaan",
+            "appCommit": "4a765d2e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 80,
+              "note": "False billing claim removed; verified on manage screen with trial user - 'Trial ends' renders, 'Next charge' absent"
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:28:49.776Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the manage screen derived 'Next charge' solely from subscription_end_date, which trial rows also set - promising a charge that never happens. Fix: trial users now see 'Trial ends: <date>' instead of a false billing line.",
+            "imagePath": "images/i-20260707-b3f8-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-b3f8-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "fc85adddc048ceb86aa71426b64002454759eda8",
+            "imageCommits": [
+              "fc85adddc048ceb86aa71426b64002454759eda8"
+            ],
+            "fixedAt": "2026-07-07T13:23:39.576Z",
+            "by": "shakeebshaan",
+            "appCommit": "4a765d2e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 80,
+              "note": "Capture shows 'Trial ends: Jul 30, 2026' framing for the trial account - no false charge promise"
+            }
+          }
+        }
+      ],
+      "description": "[bug-hunt] Trial users on the manage screen see a false 'Next charge' billing line. Repro: as a user in the 30-day free trial (is_trial=true, subscription_active=true, no payment — a Subscription row with amount_paid=0/plan_id=null per entitlement.py), open /choose-plan?manage=1. The anti-repurchase redirect intentionally does NOT bounce trial users (ChoosePlan.tsx ~476), so the 'Current subscription' block renders. nextChargeLabel is derived solely from user.subscription_end_date (which the trial row DOES set), so it shows 'Next charge: <trial end date>' (ChoosePlan.tsx ~801-817, ~1304-1322). Expected: trials never get charged (they expire lazily; premium just locks), so show trial-expiry framing, not a charge date. Actual: the UI promises a charge that will never happen — misleading billing claim. Fix: gate the 'Next charge' block on !user.is_trial, or label it 'Trial ends' when is_trial.",
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 4a765d2e: nextChargeLabel block now shows 'Trial ends' (not 'Next charge') when user.is_trial is true. Verified at ChoosePlan.tsx line 1358. tsc clean.",
+      "reviewedAt": "2026-07-07T14:16:13.262Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:18:18.704Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:18:18.704Z"
     }
   ]
 }
