@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260707-5872",
+      "createdAt": "2026-07-07T08:24:19.477Z",
+      "route": "/",
+      "description": "[bug-hunt] Users who were away 14-60 days are forced to re-login (OTP) even though their refresh token is still valid for up to 60 days - the \"refresh expired token at startup\" path is dead code.\n\nEXPECTED: on app open with an expired access token but a stored refresh token, the app attempts POST /auth/refresh (backend refresh tokens live 60 days - JWT_REFRESH_TOKEN_EXPIRES=timedelta(days=60), backend.py:215, and the endpoint needs only refresh_token in the body). Only if THAT fails should the user land on the login screen.\nACTUAL: authService.isAuthenticated() (src/services/auth.service.ts ~334) returns false for an expired access token with the comment \"Don't trigger refresh here - let checkAuth handle it\" - but AuthContext.checkAuth (src/contexts/AuthContext.tsx ~57-86) only calls checkAndRefreshToken() INSIDE the \"if (authenticated)\" branch. When authenticated=false the else branch just clears the user. So the isExpired -> refreshToken(true) branch inside checkAndRefreshToken (auth.service.ts ~291) is unreachable from cold start, and a user idle >14 days is dumped to Welcome and must re-do email OTP despite holding a perfectly refreshable session. The 14-day access expiry (TOKEN_EXPIRY_DURATION, src/lib/api-config.ts:36) vs 60-day refresh window makes this a real user-facing logout for anyone returning after a 2-8 week break - exactly the lapsed users the app wants back frictionlessly.\n\nREPRO (dev): 1) Login normally. 2) In devtools set nyus_token_expiry to Date.now()-1000 (simulates >14 days idle; refresh token untouched and still valid). 3) Reload the app. Observed: instant redirect to Welcome/login, no POST /auth/refresh in the network tab. Expected: silent refresh, user stays logged in.\n\nWHERE: src/contexts/AuthContext.tsx checkAuth (refresh call gated on authenticated===true) + src/services/auth.service.ts isAuthenticated/checkAndRefreshToken. FIX: in checkAuth, when isAuthenticated() is false but a refresh token exists, await authService.refreshToken(true) and re-evaluate before rendering the logged-out state.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260707-2189",
+      "createdAt": "2026-07-07T08:24:19.477Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Offline-queued logs can be stranded forever: the \"Saved offline - your log will sync when you reconnect\" promise only holds if the user later gets an offline->online TRANSITION while the coach-chat chunk is loaded. There is no flush on app start (or on module init), so logs queued before an app kill never sync on relaunch.\n\nEXPECTED: pending entries in the nyus_offline_queue IndexedDB store are flushed on app/session start when the network is available, and whenever connectivity is regained.\nACTUAL: flushQueue() is only ever invoked from the two listeners registered by registerOnlineFlush (src/lib/offline-queue.ts ~234-264): window 'online' and Capacitor Network 'networkStatusChange'. Both fire only on a connectivity CHANGE - neither fires at startup when the device is already online. Nothing calls flushQueue on app boot. Worse, registerOnlineFlush runs at module top-level of src/hooks/useBlockSubmit.ts (~36), and useBlockSubmit is only imported by CoachChat, which is React.lazy (src/App.tsx:76) - so in a fresh session even the listeners don't exist until the user opens coach chat. Two concrete stranding scenarios: (a) user logs a meal in the subway (\"Saved offline\" toast), kills the app, relaunches at home on Wi-Fi - no transition event, log sits in IndexedDB indefinitely while dashboard/nutrition show it missing; (b) enqueue also triggers on axios \"Network Error\" while navigator.onLine stays true (server blip/DNS/CORS) - no offline->online transition will EVER fire, so the entry never sends. Entries also silently expire after 10 failed attempts, so a stranded-then-flapping connection can drop the log entirely.\n\nREPRO (dev): 1) Open coach chat, DevTools Network -> Offline, complete a meal-logger block -> \"Saved offline\" toast; verify entry in IndexedDB nyus_offline_queue/pending_logs. 2) Close the tab (or kill the app). 3) Reopen the app online, navigate anywhere incl. coach chat. Observed: entry still in IndexedDB, no POST to /logs/meal, meal never appears. Only toggling Offline->Online in the SAME session flushes it.\n\nWHERE: src/lib/offline-queue.ts registerOnlineFlush + src/hooks/useBlockSubmit.ts module scope. FIX: call flushQueue(sender) once at registration time when navigator.onLine (belt: also on Capacitor resume), and register the flush from app-level code (e.g. App.tsx mount) instead of inside the lazy chat chunk.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260707-cff7",
+      "createdAt": "2026-07-07T08:24:19.477Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Fast double-tap on a coach-chat logging block shows a false \"Failed to save\" error and re-opens the block even though the log SAVED - inviting a retap that creates a duplicate entry. Same canceled-duplicate class as the fixed i-20260707-8d4c (nutrition skip/undo), but in useBlockSubmit which never adopted the isCanceledError guard.\n\nEXPECTED: a dedup-aborted duplicate mutation is a no-op (the original request is still in flight and succeeds) - per the isCanceledError contract in src/lib/api-client.ts ~85-97, which FriendRequests, MealIngredients, UserSearch and useNutritionData all follow.\nACTUAL: useBlockSubmit.submitBlock's catch (src/hooks/useBlockSubmit.ts ~160-192) classifies errors only as isOffline = !navigator.onLine || message==='Network Error'; a dedup-canceled duplicate (code ERR_CANCELED, message 'canceled' - thrown by the api-client mutation-dedup interceptor for an identical in-flight POST) falls through to the \"Real API error\" branch: setBlockStatus('active') + destructive \"Failed to save / Please try again\" toast + error haptic. Sequence on a fast double-tap (both taps land before the optimistic 'completed' re-render disables the block): tap1 sets completed + POST /logs/meal in flight; tap2 sets completed, its identical POST is instantly aborted by the dedup interceptor -> catch rolls the block BACK to active and toasts \"Failed to save\"; tap1 then resolves successfully (meal IS in the DB) but the block stays active with an error toast. User taps again -> second meal-log row (double calories in daily totals). Applies to all six block types (meal_logger, workout_tracker, water_logger, daily_checkin, measurement_input, activity_logger).\n\nREPRO: coach chat -> any meal-logger block -> tap Log twice within ~100ms (or CPU-throttle to widen the render gap). Observe: \"Failed to save\" destructive toast + block re-activates, while the network tab shows the first POST /logs/meal returning 200 and the meal appears in Nutrition. Tap the block's Log again -> duplicate entry.\n\nWHERE: src/hooks/useBlockSubmit.ts catch block. FIX: first check isCanceledError(err) and return true (treat as success/no-op, leave block completed), mirroring the eaten-toggle fix.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260707-lng1",
       "createdAt": "2026-07-07T05:41:23.835Z",
       "author": "shakeebshaan",
