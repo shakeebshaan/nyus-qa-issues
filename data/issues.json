@@ -1538,30 +1538,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: pause/resume never invalidated the 60s-stale ['active-plan']/['paused-plan'] queries, so Profile kept showing Pause after pausing and hid the only path to Resume. Fix: both success paths invalidate the two query keys - Profile swaps Pause<->Resume immediately.",
-        "imagePath": "images/i-20260706-c3b8-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260706-c3b8-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "80b67ae48a570f0c5f179695586d0c93513b5c28",
-        "imageCommits": [
-          "80b67ae48a570f0c5f179695586d0c93513b5c28"
-        ],
-        "fixedAt": "2026-07-07T13:22:23.787Z",
-        "by": "shakeebshaan",
-        "appCommit": "a308b056",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 87,
-          "bar": 80,
-          "note": "Screenshot shows correct Change Goal + Pause entries from fresh cache; invalidation removes the stale-window inversion"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:05:54.488Z",
@@ -1589,6 +1567,35 @@
               "score": 91,
               "bar": 80,
               "note": "Direct fix to the stated root cause: both mutation success paths now invalidate both plan cache keys. No stale state possible after pause or resume."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:28:22.607Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: pause/resume never invalidated the 60s-stale ['active-plan']/['paused-plan'] queries, so Profile kept showing Pause after pausing and hid the only path to Resume. Fix: both success paths invalidate the two query keys - Profile swaps Pause<->Resume immediately.",
+            "imagePath": "images/i-20260706-c3b8-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260706-c3b8-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "80b67ae48a570f0c5f179695586d0c93513b5c28",
+            "imageCommits": [
+              "80b67ae48a570f0c5f179695586d0c93513b5c28"
+            ],
+            "fixedAt": "2026-07-07T13:22:23.787Z",
+            "by": "shakeebshaan",
+            "appCommit": "a308b056",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 87,
+              "bar": 80,
+              "note": "Screenshot shows correct Change Goal + Pause entries from fresh cache; invalidation removes the stale-window inversion"
             }
           }
         }
