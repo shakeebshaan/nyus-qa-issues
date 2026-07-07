@@ -59,29 +59,6 @@
       "description": "[bug-hunt] App language is a one-shot irreversible choice - no UI anywhere to change it after first launch. The startup LanguagePicker renders only while nyus_lang_picker_shown is unset (App.tsx:629); after markPickerShown() it can never be reached again. Grep confirms DISPLAY_LOCALES/setAppLocale are referenced ONLY by the one-shot picker, and Profile > Preferences has just the COACH language toggle (ProfilePreferencesCard.tsx), not app/UI language. The ?lng= querystring override is useless inside the Capacitor native app. Expected: language changeable in Profile settings (config.ts:24 even documents 'Add an entry to the language picker in Profile' as a required step). Actual: tap Skip or pick the wrong language on first launch and you are permanently locked in - only remedy is clear-app-data/reinstall. Repro: first launch -> Skip, use English -> look for any language setting in Profile/preferences -> none exists. Fix: add an App language row to ProfilePreferencesCard using DISPLAY_LOCALES + setAppLocale. Related to (but distinct from) the boot-revert bug filed this tick."
     },
     {
-      "id": "i-20260707-9f4b",
-      "createdAt": "2026-07-07T18:54:34.086Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "route": "/health-score",
-      "description": "[bug-hunt] Health Score Nutrition pillar 'macro balance' component is effectively a constant 55 for every normal user — it compares PER-MEAL average calories against DAILY calorie thresholds. In backend app/services/health_score.py _nutrition_pillar(): `cals = [int(m.total_calories) for m in non_skipped ...]` collects per-MEAL calories (MealLog has meal_number + one row per meal per day, db_models.py:1569-1577 — total_calories is a single meal's calories, not a daily total). Then `avg = sum(cals)/len(cals)` is the average calories PER MEAL (~300-800 kcal for real meals), and it's tested with `if avg < 1100 or avg > 3500: macro_score = 55` / `elif avg < 1300 or avg > 3000: macro_score = 75`. Since a typical meal is well under 1100 kcal, `avg < 1100` is almost always true -> macro_score is pinned at 55 for essentially all users, regardless of whether their actual DAILY intake is healthy. To ever reach macro_score=100 a user would need per-meal average >=1300 kcal (e.g. ~5200 kcal/day over 4 meals) — backwards. Repro: log 4 meals/day at ~500 kcal each (2000 kcal/day, healthy) -> per-meal avg 500 < 1100 -> macro_score=55 (treated as if dangerously under-eating). Expected: aggregate calories BY log_date, then average the DAILY totals before comparing to the 1100-3500 daily band. Actual: raw per-meal average compared to daily thresholds. Impact: the 20% macro component of the nutrition live_score is a near-constant penalty for everyone.",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Already fixed in backend commit 856ef68. _nutrition_pillar() now aggregates calories BY log_date (day_cals dict) before comparing daily totals to the 1100-3500 band. A user with 4x500kcal meals/day correctly gets avg=2000 (healthy) instead of per-meal avg=500 (<1100 band, wrong). Comment on the fix: '# Aggregate per-day totals before comparing to daily calorie thresholds.' testGate=true blocks resolve — recommend scoping testCommand.",
-      "reviewedAt": "2026-07-07T19:17:25.441Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260707-c1d7",
       "createdAt": "2026-07-07T18:54:34.086Z",
       "author": "shakeebshaan",
