@@ -361,7 +361,10 @@
           }
         }
       ],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 682ee669: AuthContext.checkAuth now attempts authService.checkAndRefreshToken() when isAuthenticated()=false AND a refresh token exists, before clearing the user. 14-60 day returning users stay logged in silently. tsc clean.",
+      "reviewedAt": "2026-07-07T14:16:45.664Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-2189",
