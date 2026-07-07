@@ -41,7 +41,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED in backend commit 856ef68 (deployed 2026-07-07). Root cause confirmed: _nutrition_pillar was collecting per-meal calories (~300-800 kcal) and comparing the per-meal average to daily thresholds (1100-3500), so avg always <1100 -> macro_score=55 for everyone. Fix: aggregate calories by log_date using a day_cals dict, then compute average of DAILY totals before comparing. QA account has no meal data so can't screenshot change — owner can verify by logging 3+ meals/day and checking that macro_score stops being pinned at 55.",
+      "reviewedAt": "2026-07-07T19:03:04.294Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-c1d7",
