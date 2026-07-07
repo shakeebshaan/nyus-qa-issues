@@ -16324,6 +16324,109 @@
       "resolvedAt": "2026-07-07T14:20:12.463Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:20:12.463Z"
+    },
+    {
+      "id": "i-20260707-e4c8",
+      "createdAt": "2026-07-07T04:40:12.883Z",
+      "route": "/choose-plan",
+      "description": "[bug-hunt] Full-screen milestone overlay (30/100/365-day streak, perfect week) can fire atop pre-app screens (OTP /verify, /choose-plan, onboarding): MilestoneWatcher has NO isPreAppRoute gate, unlike both sibling watchers.\n\nLevelUpWatcher and BadgeWatcher explicitly suppress celebrations on pre-app routes - QA i-20260618-bcb7 (level-up confetti on the OTP screen) and i-20260617-8ef2 (badge toast atop the builder) fixed exactly this class. MilestoneWatcher.tsx is mounted app-wide in App.tsx right beside them (~line 830) but celebrates the moment settled overview data crosses a band, on ANY route - it never imports isPreAppRoute and has no useLocation at all.\n\nEXPECTED: milestone overlays never fire on '/', '/verify', '/onboarding*', '/choose-plan' (absorb silently like LevelUpWatcher, still syncing the seen-map).\nACTUAL/REPRO: existing user whose tracking streak crossed 30 overnight (seen-map at {tracking:0}) opens /choose-plan?manage=1 from Profile to manage their subscription -> LevelUpWatcher's throttled navigation refetch settles the overview -> full-screen '30 Day streak' celebration plays over the plan-management screen. Same on /verify right after OTP flips isAuthenticated on re-login (the seen-map survives logout - companion issue i-20260707-7d3a), and atop the onboarding builder for a perfect_weeks increment.\n\nWHERE: src/components/gamification/MilestoneWatcher.tsx (~line 87 effect). FIX: mirror LevelUpWatcher - useLocation + skip the setQueue push when isPreAppRoute(pathname), but still writeSeen so pre-app crossings are absorbed, not replayed.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "MilestoneWatcher checks isPreAppRoute(pathname) before queuing toasts. Milestones suppressed on /choose-plan and pre-app routes. Commit dfd0d22e.",
+        "imagePath": "images/i-20260707-e4c8-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-e4c8-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8bc24e1b2c9aac961809431a5701701b10f6acad",
+        "imageCommits": [
+          "8bc24e1b2c9aac961809431a5701701b10f6acad"
+        ],
+        "fixedAt": "2026-07-07T14:14:49.157Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:03:43.882Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: MilestoneWatcher had no isPreAppRoute gate (no useLocation), unlike siblings LevelUpWatcher/BadgeWatcher, so full-screen streak/perfect-week overlays could fire on /, /verify, /onboarding*, /choose-plan. Fix (dfd0d22e): mirrored LevelUpWatcher - pre-app crossings still write the seen-map (absorbed, never replayed) but skip the queue push. E2E-verified on dev: forced a 30-day tracking crossing via intercepted overview on /choose-plan?manage=1 - zero overlay elements, seen-map absorbed to 30 (screenshot = clean plan-management screen).",
+            "imagePath": "images/i-20260707-e4c8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-e4c8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4a5dbadce681a94ba5e70b6f7fba34e2e068c3d0",
+            "imageCommits": [
+              "4a5dbadce681a94ba5e70b6f7fba34e2e068c3d0"
+            ],
+            "fixedAt": "2026-07-07T05:20:18.829Z",
+            "by": "shakeebshaan",
+            "appCommit": "dfd0d22e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 80,
+              "note": "Forced-crossing e2e repro on /choose-plan shows suppression + silent absorption; 40/40 scoped tests incl. 3 pre-app suppression cases; loop.mjs verify MET."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:27:36.156Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: MilestoneWatcher had no pre-app route gate (unlike its LevelUp/Badge siblings), so full-screen streak celebrations could fire atop OTP, /choose-plan, and onboarding. Fix: crossings on pre-app routes are absorbed silently - the seen-map still syncs so they are not replayed later.",
+            "imagePath": "images/i-20260707-e4c8-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-e4c8-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "39e13656322320d316d872f64330da72474d69c6",
+            "imageCommits": [
+              "39e13656322320d316d872f64330da72474d69c6"
+            ],
+            "fixedAt": "2026-07-07T13:23:59.983Z",
+            "by": "shakeebshaan",
+            "appCommit": "dfd0d22e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 87,
+              "bar": 80,
+              "note": "Mirrors the proven isPreAppRoute pattern from the two sibling watchers; capture shows /choose-plan rendering with no overlay"
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:21:55.038Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:21:55.038Z"
     }
   ]
 }
