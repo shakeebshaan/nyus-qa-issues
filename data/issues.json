@@ -171,48 +171,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260707-a392",
-      "createdAt": "2026-07-07T13:13:10.322Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Per-page QA guardian fleet is live: 8 loops (page-dashboard, page-nutrition, page-activity, page-onboarding, page-profile, page-progress, page-coach-chat, page-achievements) registered as Windows Scheduled Tasks under NYUS-Loops, all Ready with next-run times (first fires tonight 23:31). Each tick: state-file dedupe -> auth + dev server -> discover (static source read + 390x844 runtime capture + UI-vs-API data-accuracy cross-check, the 'improve accuracy' ask) -> fix root cause (max 2/tick, committed+pushed) -> file bigger finds to this board -> append state. Specs in .claude/nyus-loops/prompts/page-*.md, registered in loops.json (29 loops) + README. One deliberate change vs the approved proposal: cadence staggered 4h/8h/12h instead of */30-60min because the fleet runner serializes ticks with a global lock - three */30 page loops would starve fix-issues/bug-hunt; stagger still covers every page multiple times daily. Reply here if you want the original faster cadence.",
-        "imagePath": "images/i-20260707-a392-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-a392-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a53fe7c9312cdb695bad8e7b24b83109af924c94",
-        "imageCommits": [
-          "a53fe7c9312cdb695bad8e7b24b83109af924c94"
-        ],
-        "fixedAt": "2026-07-07T23:25:09.773Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "All 8 main pages covered (owner asked dashboard/diet/activity/onboarding + so on); tasks verified Ready in Task Scheduler with real next-run times; specs implement discover+accuracy+fix exactly as approved. Cadence deviation documented and reversible."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "do it",
-      "reviewRepliedAt": "2026-07-07T20:55:21.807Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260707-da4e",
       "createdAt": "2026-07-07T13:33:09.815Z",
       "route": null,
