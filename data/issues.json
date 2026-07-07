@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260707-e1rm",
+      "createdAt": "2026-07-07T03:42:15.780Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "route": "/activity",
+      "description": "[suggestion] Per-exercise strength progression chart: tap any exercise in Personal Records (or Workout History) and see a line chart of your top-set weight and estimated 1RM over time.\n\nUSER PROBLEM: NYUS targets data-literate athletes \"tracking performance metrics\", and body weight already has a full trend chart (/weight-history-chart) — but lifts have NO trajectory view anywhere. PersonalRecords shows only the current best number and WorkoutHistory is a flat session list, so a user who benched for 3 months cannot see whether they're actually progressing. That trend view is THE core retention surface in every serious strength app (Hevy, Strong, Boostcamp all ship it), and our brand promise is \"precision tools\" for exactly this user.\n\nEVIDENCE: all the data already exists — SetLog rows power the exercise-PR leaderboard, /strength/summary returns per-exercise all-time bests + predicted_1rm, and getPreviousCycleData already queries per-exercise history. Zero new logging is required; we're just not visualizing data we already store. QA strength account renders these surfaces today.\n\nV1 SCOPE: (1) backend endpoint GET /api/v1/activity/exercise-progression?exercise_id= returning per-session {date, top_set_weight_kg, top_set_reps, e1rm} from SetLog (Epley formula, same as predicted_1rm); (2) frontend bottom-sheet with a Recharts line chart (reuse weight-history-chart patterns + teal/orange tokens), opened by tapping an exercise row in PersonalRecords; sparkline-free rows stay unchanged. No filters, no date-range picker, no export in v1.\n\nEFFORT: ~1 day full-stack (one read-only endpoint + one sheet component + chart reuse).",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260707-a1c4",
       "createdAt": "2026-07-07T03:09:02.305Z",
       "route": "/choose-plan",
