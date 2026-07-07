@@ -1059,7 +1059,10 @@
         }
       ],
       "description": "[bug-hunt] Launch-offer checkout dead-ends with a generic error when the ₹49 offer expires or was already claimed mid-session. Repro: open /choose-plan while the founder offer is active (launchOffer cached at mount), then either (a) the offer sells out / the offer window closes, or (b) you already claimed ₹49 once before. Tap Subscribe on the Active/monthly card. createRazorpayOrder POSTs the monthly tier; backend RazorpayCreateOrderResource returns HTTP 409 with {error:'Launch offer expired'|'Launch offer already claimed', message:'...refresh to see current pricing'} (backend.py ~2425-2445). Expected: surface the backend message and prompt a refresh so the user sees the real ₹499 price and can retry. Actual: handleRazorpayPayment's catch shows the generic 'Couldn't start payment' toast with err.message (ChoosePlan.tsx ~706-715) — the 409 body's message is on err.response.data.message, never read, so the user gets a vague failure and the stale ₹49 UI stays. No path to recover without a full reload.",
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 58ce8817: handleRazorpayPayment catch now reads err.response.data.message/error first; 409 specifically shows the backend message + triggers fetchPlansAndOffer() to refresh pricing. tsc clean.",
+      "reviewedAt": "2026-07-07T14:16:07.553Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-b3f8",
