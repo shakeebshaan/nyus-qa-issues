@@ -196,30 +196,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: unmatched ingredient rows demanded a quantity ('Estimate - set quantity', amber + aria-invalid) that fed neither the totals nor any save path - a dead control. Fix: the deceptive prompt is removed; rows without macro data no longer demand input they cannot use.",
-        "imagePath": "images/i-20260707-7fa3-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260707-7fa3-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "e1529dcf0c3ec2f592249c1373f4f06c90e14325",
-        "imageCommits": [
-          "e1529dcf0c3ec2f592249c1373f4f06c90e14325"
-        ],
-        "fixedAt": "2026-07-07T13:24:56.544Z",
-        "by": "shakeebshaan",
-        "appCommit": "fb33dc7c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "No more amber dead prompt in the ingredient list; users are never asked for input that is silently dropped"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:01:23.898Z",
@@ -247,6 +225,35 @@
               "score": 85,
               "bar": 80,
               "note": "Removes deceptive UX. Clean removal of three UI elements that were misleading users. TypeScript clean, no console errors."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:30:42.962Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: unmatched ingredient rows demanded a quantity ('Estimate - set quantity', amber + aria-invalid) that fed neither the totals nor any save path - a dead control. Fix: the deceptive prompt is removed; rows without macro data no longer demand input they cannot use.",
+            "imagePath": "images/i-20260707-7fa3-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-7fa3-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e1529dcf0c3ec2f592249c1373f4f06c90e14325",
+            "imageCommits": [
+              "e1529dcf0c3ec2f592249c1373f4f06c90e14325"
+            ],
+            "fixedAt": "2026-07-07T13:24:56.544Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb33dc7c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "No more amber dead prompt in the ingredient list; users are never asked for input that is silently dropped"
             }
           }
         }
