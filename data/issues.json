@@ -18,7 +18,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix shipped in dfd0d22e. Root cause: AuthContext.tsx logout sweepPrefixes listed nyus_gam_level but not nyus_gam_milestones, so the milestone seen-map survived logout and was inherited by the next user. Fix: added 'nyus_gam_milestones' to sweepPrefixes — the key is now cleared on every logout alongside nyus_gam_level. Scoped tests green (40/40 MilestoneWatcher.test.tsx + AuthContext.context.test.tsx). Note: loop.json testCommand 'npm run test:unit' finds no test files (pre-existing no-op, --dir test glob mismatch) — recommend owner scope testCommand to 'npx vitest run test/' or specific suites.",
+      "reviewedAt": "2026-07-07T05:04:11.237Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-e4c8",
