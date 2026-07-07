@@ -778,31 +778,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: _evaluate_streak() never consulted DailyLog.fasting_day, so full/vrat days scored max 0.70 (< 0.75 threshold) — guaranteed miss. Fix: _collect_daily_data now exposes fasting_day+fasting_type; _evaluate_streak auto-maintains streak for full/vrat days (streak+1, milestone XP, weekly freeze), honouring the banner promise. 16:8 users score normally (they eat within window). Backend deployed to prod.",
-        "imagePath": "images/i-20260707-f2a9-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-f2a9-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "17d5eb0a141c9df5bcb58a48ca8183f06da65c67",
-        "imageCommits": [
-          "17d5eb0a141c9df5bcb58a48ca8183f06da65c67"
-        ],
-        "fixedAt": "2026-07-07T03:03:23.558Z",
-        "by": "shakeebshaan",
-        "appCommit": "60a769ca",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 80,
-          "note": "Complete fix: both the data-collection gap (fasting_day/fasting_type not exposed) and the scoring logic gap (no exemption) are addressed. Auto-maintain correctly increments streak, awards milestone XP idempotently, and calls weekly freeze rollup. Intermittent fasting correctly excluded. Code matches exact fix direction in the issue."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:04:55.821Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: _evaluate_streak() never consulted DailyLog.fasting_day, so full/vrat days scored max 0.70 (< 0.75 threshold) — guaranteed miss. Fix: _collect_daily_data now exposes fasting_day+fasting_type; _evaluate_streak auto-maintains streak for full/vrat days (streak+1, milestone XP, weekly freeze), honouring the banner promise. 16:8 users score normally (they eat within window). Backend deployed to prod.",
+            "imagePath": "images/i-20260707-f2a9-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-f2a9-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "17d5eb0a141c9df5bcb58a48ca8183f06da65c67",
+            "imageCommits": [
+              "17d5eb0a141c9df5bcb58a48ca8183f06da65c67"
+            ],
+            "fixedAt": "2026-07-07T03:03:23.558Z",
+            "by": "shakeebshaan",
+            "appCommit": "60a769ca",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 80,
+              "note": "Complete fix: both the data-collection gap (fasting_day/fasting_type not exposed) and the scoring logic gap (no exemption) are addressed. Auto-maintain correctly increments streak, awards milestone XP idempotently, and calls weekly freeze rollup. Intermittent fasting correctly excluded. Code matches exact fix direction in the issue."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
