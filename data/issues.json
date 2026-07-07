@@ -593,8 +593,30 @@
         "c7e911e762aa63045b2c177d10c6e31fdef07a5a"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Bottom of chat redesigned: empty gray bubbles are never painted anymore (block messages render without a bubble shell), and the old 4-button strip is replaced by a single + launcher that opens a compact quick-action menu. The message bar is now the only thing at the bottom.",
+        "imagePath": "images/i-20260707-9752-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-9752-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ede5d815ba6f4f514a149a6fee2943ec529ed6a5",
+        "imageCommits": [
+          "ede5d815ba6f4f514a149a6fee2943ec529ed6a5"
+        ],
+        "fixedAt": "2026-07-07T14:35:57.106Z",
+        "by": "shakeebshaan",
+        "appCommit": "c935d3b6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Empty-bubble root cause fixed (763779b6) + bottom bar redesigned per direction; verified live"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:50:19.816Z",
