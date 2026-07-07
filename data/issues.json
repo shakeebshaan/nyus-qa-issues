@@ -41,7 +41,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fix shipped in dfd0d22e. Root cause: MilestoneWatcher.tsx had no isPreAppRoute gate, unlike sibling LevelUpWatcher and BadgeWatcher — useLocation was absent, so overlays could fire on /, /verify, /onboarding*, /choose-plan. Fix: added useLocation + isPreAppRoute import (mirroring LevelUpWatcher pattern); pre-app crossings now write the seen-map but skip the queue push, absorbing milestones silently. Celebrations begin cleanly on the first in-app screen. Scoped tests green (40/40) including 3 new pre-app suppression cases. Note: loop.json testCommand 'npm run test:unit' finds no files (pre-existing no-op) — recommend scoping to 'npx vitest run test/'.",
+      "reviewedAt": "2026-07-07T05:04:24.360Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-551c",
