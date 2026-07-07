@@ -16635,6 +16635,111 @@
       "resolvedAt": "2026-07-07T14:22:24.816Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:22:24.816Z"
+    },
+    {
+      "id": "i-20260707-2189",
+      "createdAt": "2026-07-07T08:24:19.477Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Offline-queued logs can be stranded forever: the \"Saved offline - your log will sync when you reconnect\" promise only holds if the user later gets an offline->online TRANSITION while the coach-chat chunk is loaded. There is no flush on app start (or on module init), so logs queued before an app kill never sync on relaunch.\n\nEXPECTED: pending entries in the nyus_offline_queue IndexedDB store are flushed on app/session start when the network is available, and whenever connectivity is regained.\nACTUAL: flushQueue() is only ever invoked from the two listeners registered by registerOnlineFlush (src/lib/offline-queue.ts ~234-264): window 'online' and Capacitor Network 'networkStatusChange'. Both fire only on a connectivity CHANGE - neither fires at startup when the device is already online. Nothing calls flushQueue on app boot. Worse, registerOnlineFlush runs at module top-level of src/hooks/useBlockSubmit.ts (~36), and useBlockSubmit is only imported by CoachChat, which is React.lazy (src/App.tsx:76) - so in a fresh session even the listeners don't exist until the user opens coach chat. Two concrete stranding scenarios: (a) user logs a meal in the subway (\"Saved offline\" toast), kills the app, relaunches at home on Wi-Fi - no transition event, log sits in IndexedDB indefinitely while dashboard/nutrition show it missing; (b) enqueue also triggers on axios \"Network Error\" while navigator.onLine stays true (server blip/DNS/CORS) - no offline->online transition will EVER fire, so the entry never sends. Entries also silently expire after 10 failed attempts, so a stranded-then-flapping connection can drop the log entirely.\n\nREPRO (dev): 1) Open coach chat, DevTools Network -> Offline, complete a meal-logger block -> \"Saved offline\" toast; verify entry in IndexedDB nyus_offline_queue/pending_logs. 2) Close the tab (or kill the app). 3) Reopen the app online, navigate anywhere incl. coach chat. Observed: entry still in IndexedDB, no POST to /logs/meal, meal never appears. Only toggling Offline->Online in the SAME session flushes it.\n\nWHERE: src/lib/offline-queue.ts registerOnlineFlush + src/hooks/useBlockSubmit.ts module scope. FIX: call flushQueue(sender) once at registration time when navigator.onLine (belt: also on Capacitor resume), and register the flush from app-level code (e.g. App.tsx mount) instead of inside the lazy chat chunk.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Offline queue flushed on app startup. Stranded logs now sync on reconnect/next launch. Commit 682ee669.",
+        "imagePath": "images/i-20260707-2189-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-2189-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "313af591a5af42e6bc88614565adfd672ce46d1d",
+        "imageCommits": [
+          "313af591a5af42e6bc88614565adfd672ce46d1d"
+        ],
+        "fixedAt": "2026-07-07T14:14:13.919Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:02:34.740Z",
+          "event": "reopened",
+          "note": "Fix this",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: registerOnlineFlush only wired online-event/Capacitor listeners — no immediate flush, and only called from lazy CoachChat chunk. Entries queued before app kill were stranded. Fix: (1) offline-queue.ts flushQueue() immediately when navigator.onLine at registration; (2) App.tsx initializeApp registers offline flush via dynamic import before CoachChat loads. Tests: scoped suite green (38/38).",
+            "imagePath": "images/i-20260707-2189-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-2189-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "c963385606645fa987ace8bde6ef4ed7d93ed9c5",
+            "imageCommits": [
+              "c963385606645fa987ace8bde6ef4ed7d93ed9c5"
+            ],
+            "fixedAt": "2026-07-07T08:37:52.871Z",
+            "by": "shakeebshaan",
+            "appCommit": "ff30c774",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 83,
+              "bar": 80,
+              "note": "Both stranding scenarios addressed: startup-already-online and pre-CoachChat-load. Minimal surgical changes to 2 files. App.tsx uses dynamic import to avoid main-bundle cost."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:31:16.348Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the offline queue only flushed on online-TRANSITION events whose listeners lived inside the lazy coach-chat chunk - logs queued before an app kill stranded in IndexedDB forever. Fix: flush registration moved to app-level mount and fires immediately when the device is already online (plus on Capacitor resume), so queued logs sync on every launch.",
+            "imagePath": "images/i-20260707-2189-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-2189-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "8039a0dfe9fb2952dcc07ba43364ed82ee8ecc87",
+            "imageCommits": [
+              "8039a0dfe9fb2952dcc07ba43364ed82ee8ecc87"
+            ],
+            "fixedAt": "2026-07-07T13:24:36.911Z",
+            "by": "shakeebshaan",
+            "appCommit": "682ee669",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 86,
+              "bar": 80,
+              "note": "Startup flush is app-level and unconditional-on-online; 'saved offline' promise now holds across app restarts"
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 682ee669: registerOnlineFlush called at App.tsx startup-mount; function immediately flushes when navigator.onLine=true. Stranded entries sync on app open.",
+      "reviewedAt": "2026-07-07T14:17:50.294Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:22:42.712Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:22:42.712Z"
     }
   ]
 }
