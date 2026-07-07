@@ -264,8 +264,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the offline queue only flushed on online-TRANSITION events whose listeners lived inside the lazy coach-chat chunk - logs queued before an app kill stranded in IndexedDB forever. Fix: flush registration moved to app-level mount and fires immediately when the device is already online (plus on Capacitor resume), so queued logs sync on every launch.",
+        "imagePath": "images/i-20260707-2189-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-2189-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8039a0dfe9fb2952dcc07ba43364ed82ee8ecc87",
+        "imageCommits": [
+          "8039a0dfe9fb2952dcc07ba43364ed82ee8ecc87"
+        ],
+        "fixedAt": "2026-07-07T13:24:36.911Z",
+        "by": "shakeebshaan",
+        "appCommit": "682ee669",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 86,
+          "bar": 80,
+          "note": "Startup flush is app-level and unconditional-on-online; 'saved offline' promise now holds across app restarts"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:02:34.740Z",
