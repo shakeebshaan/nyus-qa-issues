@@ -1459,30 +1459,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: pausePlan only called the API - device-local workout + weigh-in reminders kept firing daily during the pause despite the on-screen promise. Fix: reminder scheduling extracted to src/lib/reminderSync.ts; pause cancels the plan-linked local reminders, resume re-applies them from saved preferences.",
-        "imagePath": "images/i-20260706-5e19-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260706-5e19-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "96b6283f08bd753498b1efd7a49194fefc0f4c72",
-        "imageCommits": [
-          "96b6283f08bd753498b1efd7a49194fefc0f4c72"
-        ],
-        "fixedAt": "2026-07-07T13:22:17.197Z",
-        "by": "shakeebshaan",
-        "appCommit": "a308b056",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 86,
-          "bar": 80,
-          "note": "Pause now honors its literal promise - local reminders cancelled on pause, restored on resume; quiet-hours logic unchanged"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:05:44.829Z",
@@ -1510,6 +1488,35 @@
               "score": 90,
               "bar": 80,
               "note": "New reminderSync.ts module created with pause/resume lifecycle hooks wired into both screens. Covers workout and weigh-in channels; meal reminders left intact per spec. Fire-and-forget so it can't break the pause flow on devices where LocalNotifications is unavailable."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:28:14.515Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: pausePlan only called the API - device-local workout + weigh-in reminders kept firing daily during the pause despite the on-screen promise. Fix: reminder scheduling extracted to src/lib/reminderSync.ts; pause cancels the plan-linked local reminders, resume re-applies them from saved preferences.",
+            "imagePath": "images/i-20260706-5e19-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260706-5e19-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "96b6283f08bd753498b1efd7a49194fefc0f4c72",
+            "imageCommits": [
+              "96b6283f08bd753498b1efd7a49194fefc0f4c72"
+            ],
+            "fixedAt": "2026-07-07T13:22:17.197Z",
+            "by": "shakeebshaan",
+            "appCommit": "a308b056",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 86,
+              "bar": 80,
+              "note": "Pause now honors its literal promise - local reminders cancelled on pause, restored on resume; quiet-hours logic unchanged"
             }
           }
         }
