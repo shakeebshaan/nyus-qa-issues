@@ -538,9 +538,6 @@
         <button type="button" class="report-cta" data-report-path="reports/1e0a-sim-v2.html" data-report-label="Plan sim v2 — Phase 1: 30/30" data-date="2026-07-02T10:00:00Z">
           📄 Plan Sim v2 <span class="arr">→</span><span class="rpt-ago"></span>
         </button>
-        <button type="button" class="report-cta" data-report-path="reports/749f-report-full.html" data-report-label="Design Report 2026-07-03" data-date="2026-07-02T10:00:00Z">
-          📄 Design Report Jul 3 <span class="arr">→</span><span class="rpt-ago"></span>
-        </button>
         <button type="button" class="report-cta" data-report-path="reports/fd1e-report.html" data-report-label="Onboarding Walk Report" data-date="2026-06-25T10:00:00Z">
           📄 Onboarding Walk <span class="arr">→</span><span class="rpt-ago"></span>
         </button>
@@ -550,26 +547,8 @@
         <button type="button" class="report-cta" data-report-path="reports/portrait-verify.html" data-report-label="Portrait verification — 8 sample coaches" data-date="2026-07-02T10:00:00Z">
           📄 Coach Portraits <span class="arr">→</span><span class="rpt-ago"></span>
         </button>
-        <button type="button" class="report-cta" data-report-path="reports/i-20260701-9783-shotgun.html" data-report-label="10 Design Shotgun — Build Wait Screen" data-date="2026-07-01T10:00:00Z">
-          📄 Design Shotgun (10 variants) <span class="arr">→</span><span class="rpt-ago"></span>
-        </button>
-        <button type="button" class="report-cta" data-report-path="reports/i-20260630-2346-shotgun.html" data-report-label="7 Design Variants" data-date="2026-06-30T10:00:00Z">
-          📄 7 Design Variants <span class="arr">→</span><span class="rpt-ago"></span>
-        </button>
-        <button type="button" class="report-cta" data-report-path="reports/mealcard-designs.html" data-report-label="4 Meal-Card Designs" data-date="2026-06-28T10:00:00Z">
-          📄 Meal-Card Designs <span class="arr">→</span><span class="rpt-ago"></span>
-        </button>
         <button type="button" class="report-cta" data-report-path="reports/mt-misc-owner-guide.html" data-report-label="Metrics Setup Guide" data-date="2026-06-28T10:00:00Z">
           📄 Metrics Setup Guide <span class="arr">→</span><span class="rpt-ago"></span>
-        </button>
-        <button type="button" class="report-cta" data-report-path="reports/a11c-proof.html" data-report-label="Contrast Fix Proof (before/after)" data-date="2026-06-28T10:00:00Z">
-          📄 Contrast Fix Proof <span class="arr">→</span><span class="rpt-ago"></span>
-        </button>
-        <button type="button" class="report-cta" data-report-path="reports/ce32-design-shotgun.html" data-report-label="Design Shotgun (3 variants, ce32)" data-date="2026-07-04T10:00:00Z">
-          📄 Design Shotgun (3 variants) <span class="arr">→</span><span class="rpt-ago"></span>
-        </button>
-        <button type="button" class="report-cta" data-report-path="reports/i-20260629-2f18-designs-report.html" data-report-label="3 Designs — Pick A/B/C" data-date="2026-06-29T10:00:00Z">
-          📄 3 Designs A/B/C <span class="arr">→</span><span class="rpt-ago"></span>
         </button>
         <button type="button" class="report-cta" data-report-path="reports/2026-06-28.html" data-report-label="Full Board Report Jun 28" data-date="2026-06-28T10:00:00Z">
           📄 Board Report Jun 28 <span class="arr">→</span><span class="rpt-ago"></span>
@@ -1710,23 +1689,50 @@ function renderMetrics(d, hist) {
     const delta = deltaChip(key, value, "hd");
     return `<div class="m-hero" style="--ha:${accent}"><div class="mh-top"><span class="mh-l">${esc(label)}</span>${delta}</div><div class="mh-v">${unit === "$" ? esc(unit) : ""}${value == null ? "–" : esc(String(value))}${unit && unit !== "$" ? `<span class="mh-u">${esc(unit)}</span>` : ""}</div>${svgSpark(series, accent)}</div>`;
   };
-  // Data summary paragraph (i-20260707-a671)
+  // Data summary paragraph (i-20260707-a671 reopen: cover every metric + deltas)
   const totalUsers = findVal("product_growth", "users_total");
   const mau = findVal("product_growth", "mau");
+  const wau = findVal("product_growth", "wau");
   const dau = findVal("product_growth", "dau");
+  const newUsersToday = findVal("product_growth", "new_users_today");
+  const newUsers7d = findVal("product_growth", "new_users_7d");
+  const newUsers30d = findVal("product_growth", "new_users_30d");
+  const activationRate = findVal("product_growth", "activation_rate");
+  const stickiness = findVal("product_growth", "stickiness");
+  const retD1 = findVal("product_growth", "retention_d1");
+  const retD7 = findVal("product_growth", "retention_d7");
+  const retD30 = findVal("product_growth", "retention_d30");
+  const workouts7d = findVal("product_growth", "workouts_7d");
+  const meals7d = findVal("product_growth", "meals_7d");
+  const featureAdoption = findVal("product_growth", "feature_adoption_meal_logging");
   const aiCost = findVal("ai", "ai_cost_30d");
   const paidSubs = findVal("finance", "paid_subs");
   const activeSubs = findVal("finance", "active_subs");
-  const prevUsers = prevOf("users_total"), prevMau = prevOf("mau");
-  const userGrowth = (totalUsers != null && prevUsers != null && prevUsers > 0) ? ((totalUsers - prevUsers) / prevUsers * 100).toFixed(1) : null;
-  const summaryParts = [];
-  if (totalUsers != null) summaryParts.push(`${totalUsers} total users${userGrowth != null ? ` (${userGrowth > 0 ? "+" : ""}${userGrowth}% vs yesterday)` : ""}`);
-  if (mau != null) summaryParts.push(`${mau} monthly active`);
-  if (dau != null && mau != null && mau > 0) summaryParts.push(`${(dau/mau*100).toFixed(1)}% DAU/MAU stickiness`);
-  if (activeSubs != null) summaryParts.push(`${activeSubs} on active plans`);
-  if (paidSubs != null) summaryParts.push(`${paidSubs} paid`);
-  if (aiCost != null) summaryParts.push(`$${aiCost} AI cost (30d)`);
-  const summaryHtml = summaryParts.length ? `<div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.6;color:var(--fg)"><span style="font-weight:700;color:var(--accent)">Summary · </span>${esc(summaryParts.join(" · "))}</div>` : "";
+  const paidRevenue = findVal("finance", "paid_revenue_live");
+  const fmtDelta = (curr, key) => { const prev = prevOf(key); if (prev == null || curr == null) return ""; const d = +(curr - prev).toFixed(2); if (!d) return ""; return ` <span style="color:${d>0?"var(--accent)":"#d6453d"};font-size:11px">${d>0?"▲":"▼"}${Math.abs(d)}</span>`; };
+  const pct = v => v != null ? `${(+v).toFixed(1)}%` : null;
+  const rows = [];
+  if (totalUsers != null) rows.push(`<b>Total users:</b> ${totalUsers}${fmtDelta(totalUsers,"users_total")}`);
+  if (newUsersToday != null) rows.push(`<b>New today:</b> ${newUsersToday}${fmtDelta(newUsersToday,"new_users_today")}`);
+  if (newUsers7d != null) rows.push(`<b>New (7d):</b> ${newUsers7d}${fmtDelta(newUsers7d,"new_users_7d")}`);
+  if (newUsers30d != null) rows.push(`<b>New (30d):</b> ${newUsers30d}${fmtDelta(newUsers30d,"new_users_30d")}`);
+  if (dau != null) rows.push(`<b>DAU:</b> ${dau}${fmtDelta(dau,"dau")}`);
+  if (wau != null) rows.push(`<b>WAU:</b> ${wau}${fmtDelta(wau,"wau")}`);
+  if (mau != null) rows.push(`<b>MAU:</b> ${mau}${fmtDelta(mau,"mau")}`);
+  if (activationRate != null) rows.push(`<b>Activation rate:</b> ${pct(activationRate)}${fmtDelta(activationRate,"activation_rate")}`);
+  const stickyVal = (dau != null && mau != null && mau > 0) ? (dau/mau*100).toFixed(1) : stickiness;
+  if (stickyVal != null) rows.push(`<b>Stickiness (DAU/MAU):</b> ${stickyVal}%${fmtDelta(stickiness,"stickiness")}`);
+  if (retD1 != null) rows.push(`<b>Retention D1:</b> ${pct(retD1)}${fmtDelta(retD1,"retention_d1")}`);
+  if (retD7 != null) rows.push(`<b>Retention D7:</b> ${pct(retD7)}${fmtDelta(retD7,"retention_d7")}`);
+  if (retD30 != null) rows.push(`<b>Retention D30:</b> ${pct(retD30)}${fmtDelta(retD30,"retention_d30")}`);
+  if (activeSubs != null) rows.push(`<b>Active plans (incl. trial):</b> ${activeSubs}${fmtDelta(activeSubs,"active_subs")}`);
+  if (paidSubs != null) rows.push(`<b>Paid subscribers:</b> ${paidSubs}${fmtDelta(paidSubs,"paid_subs")}`);
+  if (paidRevenue != null) rows.push(`<b>Paid revenue (live):</b> ₹${paidRevenue}${fmtDelta(paidRevenue,"paid_revenue_live")}`);
+  if (workouts7d != null) rows.push(`<b>Workouts completed (7d):</b> ${workouts7d}${fmtDelta(workouts7d,"workouts_7d")}`);
+  if (meals7d != null) rows.push(`<b>Meals logged (7d):</b> ${meals7d}${fmtDelta(meals7d,"meals_7d")}`);
+  if (featureAdoption != null) rows.push(`<b>Meal logging adoption:</b> ${pct(featureAdoption)} of MAU${fmtDelta(featureAdoption,"feature_adoption_meal_logging")}`);
+  if (aiCost != null) rows.push(`<b>AI cost (30d):</b> $${aiCost}${fmtDelta(aiCost,"ai_cost_30d")}`);
+  const summaryHtml = rows.length ? `<div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:12px;line-height:1.8;color:var(--fg)"><div style="font-weight:700;color:var(--accent);font-size:13px;margin-bottom:6px">📊 Data Summary</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px 16px">${rows.map(r=>`<div>${r}</div>`).join("")}</div></div>` : "";
   let html = `<div class="m-head"><div class="m-pills"><span class="mp live">${s.live ?? "–"} live</span><span class="mp awa">${s.awaiting ?? "–"} awaiting</span><span class="mp">${s.total ?? "–"} tracked</span></div><div class="m-meta">Real data · ${fmtDate(d.generatedAt)} · ${esc(srcs)} · ${d.periodDays || 30}d window${hist.length ? ` · ${hist.length}d history` : ""}</div></div>${summaryHtml}`;
   const rzpMode = findVal("finance", "razorpay_mode");
   const rzpTestBanner = rzpMode === "test" ? `<div style="background:#fef3c7;border:1px solid #f59e0b;color:#92400e;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;margin-bottom:10px">⚠ Razorpay is in TEST MODE — all payment figures below reflect test transactions, not real money.</div>` : "";
