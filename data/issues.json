@@ -1088,30 +1088,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: backend _evaluate_streak never read DailyLog.fasting_day - on a full/vrat fast the day score was mathematically capped at 0.70 (<0.75 threshold), so every fasting day was a guaranteed streak miss despite the banner promise. Fix (backend 725dcb5, deployed to prod): fasting days are streak-neutral - they cannot break the streak or burn a freeze; daily-focus diet streak exempted too.",
-        "imagePath": "images/i-20260707-f2a9-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260707-f2a9-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f03b723ee4d214db8839e53a3c402a28fdff4a33",
-        "imageCommits": [
-          "f03b723ee4d214db8839e53a3c402a28fdff4a33"
-        ],
-        "fixedAt": "2026-07-07T13:22:50.132Z",
-        "by": "shakeebshaan",
-        "appCommit": "725dcb5",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "Backend logic fix deployed; banner promise now true - fasting day cannot reset streak; screenshot shows the fasting-day surface"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:04:55.821Z",
@@ -1139,6 +1117,35 @@
               "score": 95,
               "bar": 80,
               "note": "Complete fix: both the data-collection gap (fasting_day/fasting_type not exposed) and the scoring logic gap (no exemption) are addressed. Auto-maintain correctly increments streak, awards milestone XP idempotently, and calls weekly freeze rollup. Intermittent fasting correctly excluded. Code matches exact fix direction in the issue."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:28:41.112Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: backend _evaluate_streak never read DailyLog.fasting_day - on a full/vrat fast the day score was mathematically capped at 0.70 (<0.75 threshold), so every fasting day was a guaranteed streak miss despite the banner promise. Fix (backend 725dcb5, deployed to prod): fasting days are streak-neutral - they cannot break the streak or burn a freeze; daily-focus diet streak exempted too.",
+            "imagePath": "images/i-20260707-f2a9-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-f2a9-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "f03b723ee4d214db8839e53a3c402a28fdff4a33",
+            "imageCommits": [
+              "f03b723ee4d214db8839e53a3c402a28fdff4a33"
+            ],
+            "fixedAt": "2026-07-07T13:22:50.132Z",
+            "by": "shakeebshaan",
+            "appCommit": "725dcb5",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "Backend logic fix deployed; banner promise now true - fasting day cannot reset streak; screenshot shows the fasting-day surface"
             }
           }
         }
