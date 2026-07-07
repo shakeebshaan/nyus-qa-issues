@@ -18507,6 +18507,55 @@
       "resolvedAt": "2026-07-07T20:56:58.515Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T20:56:58.515Z"
+    },
+    {
+      "id": "i-20260707-lng1",
+      "createdAt": "2026-07-07T05:41:23.835Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "route": "/coach-chat",
+      "description": "[suggestion] Coach speaks your language: a \"Coach language\" preference (English / Hinglish / हिन्दी) that makes AI coach chat replies and weekly insights come back in the user's chosen language.\n\nUSER PROBLEM: NYUS is India-focused, but the AI coach — the product's centerpiece and the premium tier's main selling point — replies only in English. Many Indian users think and type in Hinglish (\"aaj do roti aur dal khaya, kitna protein hua?\"); the model understands them fine but always answers in formal English, which reads distant and drops less-fluent users out of the chat habit entirely. Competitor parity: HealthifyMe's Ria coach supports Hindi + regional languages and markets that hard.\n\nEVIDENCE: zero language/locale preference exists anywhere in the frontend (grep for hindi/hinglish/preferred_language/i18n across src = no product matches); coach prompts in llm_prompts.py are English-only. Users already CAN write Hinglish to the coach today — we just never reply in kind, so the gap is purely one missing preference + one prompt line.\n\nPROPOSED V1: (1) \"Coach language\" row in Profile preferences (English / Hinglish / Hindi), saved as a user pref; (2) inject one line into the coach-chat + weekly-insights system prompts: \"Reply in <lang>; keep numbers, food names, and exercise names unchanged\"; (3) scope = /coach-chat messages + weekly insight text ONLY — app UI stays English (no i18n project), and plan wizards stay English in v1 (their inline option-extraction regexes assume English structure).\n\nEFFORT: small — ~1 day full-stack: one Profile preferences row, one backend pref column (or prefs JSON key), one prompt injection point. Purely additive; trivial to remove if it underwhelms.",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "P1 shipped: animated startup language picker (English / Hinglish / हिन्दी) shown on first app open. Stores choice in localStorage (nyus_locale). Hindi + Hinglish locale files added with full translation of all existing en.json keys. P2 (translate core daily loop strings) + P3 (onboarding) continue in subsequent ticks.",
+        "imagePath": "images/i-20260707-lng1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-lng1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e8bb2df34b86a82ad172af4c46acb1010c7fc905",
+        "imageCommits": [
+          "e8bb2df34b86a82ad172af4c46acb1010c7fc905"
+        ],
+        "fixedAt": "2026-07-07T19:19:51.231Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Screenshot confirms animated language picker with 3 options, NYUS logo, Hindi subtitle, Continue + Skip buttons. Clean on 390px viewport."
+        }
+      },
+      "history": [],
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "translate all strings and make sure in future also if we add somthing we have the translation and on the application start show prompt choose language with nice animated ui",
+      "reviewRepliedAt": "2026-07-07T13:56:33.363Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "Status update: Startup language picker DONE (App.tsx:289, LanguagePicker.tsx). i18next provider wired. En/Hinglish/Hindi locales exist. Profile section translated. Dashboard/Nutrition/Activity/Onboarding = P2-P4 (300+ strings). Starting P2 this tick: translating dashboard + nutrition visible strings. Board will resolve when all core screens covered.",
+      "reviewedAt": "2026-07-07T19:20:55.296Z",
+      "resolvedAt": "2026-07-07T20:57:09.010Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T20:57:09.010Z"
     }
   ]
 }
