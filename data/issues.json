@@ -18,7 +18,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED in backend commit 856ef68 (deployed 2026-07-07). Root cause confirmed: _safe_quiz_score alias loop compared k.lower() vs norm (which had spaces replaced with underscores), so '>3X Day' -> k.lower()='>3x day' != norm='>3x_day'. Fix: normalize k the same way (k.lower().replace(' ','_').replace('/','_') == norm). QA account has no quiz data so can't screenshot score change — owner can verify by submitting '>3X Day' for tea_coffee and checking that the tea_coffee score is 30 not 50.",
+      "reviewedAt": "2026-07-07T19:02:48.041Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-9f4b",
