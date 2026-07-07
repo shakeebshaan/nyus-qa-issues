@@ -56,9 +56,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: tier chip referenced t.label, a key TROPHY_TIER never defined (className became 'undefined'), and the bronze tier's orange-* classes compile to nothing because tailwind.config overrides orange as a flat token - so chips rendered as bare text and tiles fell back to the default blue ring. Fix: added per-tier label styles and moved all tier ring/bg/glyph/label colors onto the registered d-amber/d-orange/d-blue token scales. Chips now render as tinted tier pills with matching tile rings.",
+        "imagePath": "images/i-20260707-b49e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-b49e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "34c934abd2d07cf9ecbd63d382146f734a62a689",
+        "imageCommits": [
+          "34c934abd2d07cf9ecbd63d382146f734a62a689"
+        ],
+        "fixedAt": "2026-07-07T04:26:36.062Z",
+        "by": "shakeebshaan",
+        "appCommit": "4ff61446",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Computed styles confirm real bg/text colors on the chips; zoom + full-screen captures show styled BRONZE pills and bronze tile rings on /profile"
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260707-e1rm",
