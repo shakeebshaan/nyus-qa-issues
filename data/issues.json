@@ -688,8 +688,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the manage screen derived 'Next charge' solely from subscription_end_date, which trial rows also set - promising a charge that never happens. Fix: trial users now see 'Trial ends: <date>' instead of a false billing line.",
+        "imagePath": "images/i-20260707-b3f8-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-b3f8-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fc85adddc048ceb86aa71426b64002454759eda8",
+        "imageCommits": [
+          "fc85adddc048ceb86aa71426b64002454759eda8"
+        ],
+        "fixedAt": "2026-07-07T13:23:39.576Z",
+        "by": "shakeebshaan",
+        "appCommit": "4a765d2e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Capture shows 'Trial ends: Jul 30, 2026' framing for the trial account - no false charge promise"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:04:40.725Z",
