@@ -191,30 +191,8 @@
         "ef410e5609184a8000fe2c22f3e040a2f669b80f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Redesigned per your direction: the persistent Workout/Weight/Meal/Plan button row is GONE. The chat bottom is now one clean bar - a + launcher, the message box, and send. Tapping + opens a small animated menu with the 4 shortcuts (Log workout / Log weight / Log meal / My plan), so nothing crowds the bottom lip anymore.",
-        "imagePath": "images/i-20260704-ce32-fix-r6.png",
-        "imagePaths": [
-          "images/i-20260704-ce32-fix-r6.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "4e57b7fbe20c47e272164b26db0758b37ffb29b9",
-        "imageCommits": [
-          "4e57b7fbe20c47e272164b26db0758b37ffb29b9"
-        ],
-        "fixedAt": "2026-07-07T14:35:27.678Z",
-        "by": "shakeebshaan",
-        "appCommit": "c935d3b6",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Implements exactly the requested direction (no buttons, single clean input bar); verified live at 390x844, menu + navigation work"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-06T12:30:30.636Z",
@@ -363,6 +341,35 @@
               "score": 86,
               "bar": 80,
               "note": "Live chat shows single-line Option A pills for the exact labels that ballooned before (Redesign my split / Keep current split); 28/28 component tests pass"
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T15:14:27.780Z",
+          "event": "reopened",
+          "note": "The button looks badmint different way for that",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Redesigned per your direction: the persistent Workout/Weight/Meal/Plan button row is GONE. The chat bottom is now one clean bar - a + launcher, the message box, and send. Tapping + opens a small animated menu with the 4 shortcuts (Log workout / Log weight / Log meal / My plan), so nothing crowds the bottom lip anymore.",
+            "imagePath": "images/i-20260704-ce32-fix-r6.png",
+            "imagePaths": [
+              "images/i-20260704-ce32-fix-r6.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4e57b7fbe20c47e272164b26db0758b37ffb29b9",
+            "imageCommits": [
+              "4e57b7fbe20c47e272164b26db0758b37ffb29b9"
+            ],
+            "fixedAt": "2026-07-07T14:35:27.678Z",
+            "by": "shakeebshaan",
+            "appCommit": "c935d3b6",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Implements exactly the requested direction (no buttons, single clean input bar); verified live at 390x844, menu + navigation work"
             }
           }
         }
