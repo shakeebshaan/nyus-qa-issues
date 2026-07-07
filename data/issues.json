@@ -59,12 +59,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: MilestoneWatcher had no isPreAppRoute gate (no useLocation), unlike siblings LevelUpWatcher/BadgeWatcher, so full-screen streak/perfect-week overlays could fire on /, /verify, /onboarding*, /choose-plan. Fix (dfd0d22e): mirrored LevelUpWatcher - pre-app crossings still write the seen-map (absorbed, never replayed) but skip the queue push. E2E-verified on dev: forced a 30-day tracking crossing via intercepted overview on /choose-plan?manage=1 - zero overlay elements, seen-map absorbed to 30 (screenshot = clean plan-management screen).",
+        "imagePath": "images/i-20260707-e4c8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-e4c8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4a5dbadce681a94ba5e70b6f7fba34e2e068c3d0",
+        "imageCommits": [
+          "4a5dbadce681a94ba5e70b6f7fba34e2e068c3d0"
+        ],
+        "fixedAt": "2026-07-07T05:20:18.829Z",
+        "by": "shakeebshaan",
+        "appCommit": "dfd0d22e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Forced-crossing e2e repro on /choose-plan shows suppression + silent absorption; 40/40 scoped tests incl. 3 pre-app suppression cases; loop.mjs verify MET."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Fix shipped in dfd0d22e. Root cause: MilestoneWatcher.tsx had no isPreAppRoute gate, unlike sibling LevelUpWatcher and BadgeWatcher — useLocation was absent, so overlays could fire on /, /verify, /onboarding*, /choose-plan. Fix: added useLocation + isPreAppRoute import (mirroring LevelUpWatcher pattern); pre-app crossings now write the seen-map but skip the queue push, absorbing milestones silently. Celebrations begin cleanly on the first in-app screen. Scoped tests green (40/40) including 3 new pre-app suppression cases. Note: loop.json testCommand 'npm run test:unit' finds no files (pre-existing no-op) — recommend scoping to 'npx vitest run test/'.",
-      "reviewedAt": "2026-07-07T05:04:24.360Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
