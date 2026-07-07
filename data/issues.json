@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: _export_rate[user_id] = now was stamped BEFORE the email send, so any failure path (missing RESEND_API_KEY, resend exception) consumed the daily slot without sending an email. Fix: moved the stamp to after resend.Emails.send() succeeds, so failed exports never burn the rate-limit slot. Backend: app/routes/profile.py commit f2b1ce5, deployed to prod.",
+        "imagePath": "images/i-20260707-e7b2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-e7b2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a5bafd7222483d438017415bdb8453fcfe8afae7",
+        "imageCommits": [
+          "a5bafd7222483d438017415bdb8453fcfe8afae7"
+        ],
+        "fixedAt": "2026-07-07T10:06:41.593Z",
+        "by": "shakeebshaan",
+        "appCommit": "070651c6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Surgical 2-line move directly resolves the described race. Root cause matches bug report exactly. Screenshot shows /profile with Export button rendered (can't capture the rate-limit failure state directly — it requires a failed Resend call). Backend deployed and health-verified."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260707-3a9c",
