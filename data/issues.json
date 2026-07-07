@@ -857,8 +857,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Shipped: tap any Personal-bests exercise to open a progression bottom-sheet - line chart of top-set weight + estimated 1RM (Epley) per session, powered by new GET /api/v1/activity/exercise-progression (backend a79c89b, deployed). Screenshot shows the sheet open for Barbell Back Squat (current PR header + chart area; QA account has 1 logged session so the designed 'log 2+ sessions' empty state shows).",
+        "imagePath": "images/i-20260707-e1rm-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-e1rm-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3ef6cbf65e139175b10fa98e2b08c75bcc0ce0c2",
+        "imageCommits": [
+          "3ef6cbf65e139175b10fa98e2b08c75bcc0ce0c2"
+        ],
+        "fixedAt": "2026-07-07T13:43:29.758Z",
+        "by": "shakeebshaan",
+        "appCommit": "76af9244",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 83,
+          "bar": 80,
+          "note": "Feature end-to-end live: PR row tap opens sheet, endpoint returns per-session e1rm series, chart renders with 2+ sessions; empty state is the designed one"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:09:23.399Z",
