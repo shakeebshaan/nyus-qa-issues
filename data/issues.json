@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20260707-4d7e",
+      "createdAt": "2026-07-07T09:09:41.124Z",
+      "route": "/recipe-detail",
+      "description": "[bug-hunt] Saving recipe changes on a combined-ingredient meal silently corrupts the day's macros - every split ingredient row is dropped server-side because its id isn't numeric.\n\nEXPECTED: \"Save Meal Changes\" round-trips the ingredient list losslessly; saving with no edits changes nothing.\nACTUAL: backend RecipeDetailResource._expand_combined (backend.py:6900) splits combined ingredient names on with/and/&/+ (\"Rice with Dal & Salad\") into part rows whose ids are STRINGS like \"42-0\",\"42-1\". RecipeDetail.tsx handleSaveChanges (~148-160) sends those ids verbatim as ingredient_id, and POST /diet/log-modification stores the payload raw with no id validation (backend.py:7320). Both consumers then reject string ids via _safe_int: the daily diet GET (backend.py:6695-6709) builds ingredient_source only from int-id rows, so every split part contributes ZERO macros - a meal whose rows were all combined-name splits collapses to 0 kcal on the nutrition card and logs 0 consumed macros when eaten; the recipe GET (backend.py:7038-7054) skips them too, so the user's quantity edits/removals vanish on next open (falls back to the pristine recipe when nothing usable remains). The backend comment at 7042 already calls these ids \"a frontend keying artifact\" and skips them defensively - but the frontend still sends them and the write path still accepts them.\n\nREPRO: Nutrition -> open a meal whose recipe contains a combined ingredient name (any \"X with Y\" / \"A and B\") -> tap the meal -> Recipe -> tap \"Save Meal Changes\" (no edits needed) -> toast \"Recipe updated for today\" -> back on Nutrition the meal's calories/macros drop (only non-split rows still count); reopen the recipe -> edits/state gone.\n\nWHERE: src/pages/RecipeDetail.tsx handleSaveChanges (sends string ids); backend.py LogMealModificationResource (stores unvalidated) + daily-diet GET ~6695 + RecipeDetailResource ~7042 (both skip string ids). FIX direction: send the parent ingredient_id with aggregated quantity from the FE, or make the backend accept/persist part-ids consistently on both read paths."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20260707-92c5",
+      "createdAt": "2026-07-07T09:09:41.124Z",
+      "route": "/recipe-detail",
+      "description": "[bug-hunt] After scaling a meal's portion (e.g. Half), the recipe page shows the ORIGINAL full-size quantities - the calorie-target renormalizer overwrites the user's saved portion scale, and tapping Save persists the undo.\n\nEXPECTED: a saved portion scale (UserMealModification written by POST /diet/log-modification {scale:0.5}) renders as saved everywhere; the target-kcal safety net should only normalize the pristine recipe expansion, never user-authored modifications.\nACTUAL: RecipeDetailResource builds ingredients from the user's modification (backend.py:7038-7053), then unconditionally applies the target-kcal renormalizer (backend.py:7077-7096): after a 0.5x scale, current_kcal is ~50% of meal.calories_kcal, deviation >5%, so every quantity+macro is rescaled x2 - right back to full size. Meanwhile the nutrition card (daily diet GET) uses the halved quantities directly, so the two screens contradict each other. If the user believes the recipe screen and taps \"Save Meal Changes\", the re-inflated quantities are persisted and their portion choice is silently destroyed.\n\nREPRO: Nutrition -> meal -> portion sheet -> scale to Half (card macros halve, correct) -> tap meal -> Recipe -> ingredient quantities + header macros are back at FULL size (wrong) -> tap \"Save Meal Changes\" -> nutrition card jumps back to full portions.\n\nWHERE: backend.py RecipeDetailResource ~7077 (renormalizer has no \"user modification present\" guard). FIX: skip target-kcal rescaling when ingredients_data came from a UserMealModification."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20260707-7fa3",
+      "createdAt": "2026-07-07T09:09:41.124Z",
+      "route": "/recipe-detail",
+      "description": "[bug-hunt] The amber \"Estimate - set quantity\" prompt on unmatched ingredient rows is a dead control: entering a quantity changes nothing on screen and is never saved anywhere.\n\nEXPECTED: a control that demands input (amber highlight + aria-invalid until a value is typed) does something with that value - feeds the header totals and persists with Save.\nACTUAL: rows flagged _unmatched arrive from the backend with NO macros (calories null - backend.py:7010-7018, the public-food-lookup miss branch). RecipeDetail.tsx liveTotals (~96-112) computes (ing.calories ?? 0) * scale = 0 for them, so typing a quantity leaves the header kcal/macros completely unchanged. On save the row is either filtered out entirely (ing.id == null guard, RecipeDetail.tsx:150) or carries a string part-id \"N-idx\" that both backend read paths reject via _safe_int - so the quantity the user was explicitly told to set is dropped on every path. The user is prompted, complies, and nothing happens: no recalc, no persistence, no effect on the day's macros.\n\nREPRO: open a recipe containing an ingredient the public food lookup misses (row shows amber \"Estimate - set quantity\", quantity input highlighted) -> type 150 -> header totals unchanged -> \"Save Meal Changes\" -> reopen recipe -> value gone, prompt back.\n\nWHERE: src/pages/RecipeDetail.tsx (liveTotals fallback + save filter) + backend.py _expand_combined unmatched branch (~7011). FIX direction: either attach a per-100g estimate (parent-ingredient prorated macros already exist one branch above, ~6999) so quantity edits recalc + persist, or stop demanding input on rows that can't use it."
+    },
+    {
       "id": "i-20260707-dexp",
       "createdAt": "2026-07-07T08:41:18.222Z",
       "route": "/profile",
