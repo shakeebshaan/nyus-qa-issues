@@ -538,10 +538,10 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
-      "reviewReason": "Loop DESIGNED + spec written: daily 'analytics-insights' loop that pulls real GA4 (property 518021566) + private app-KPI metrics, writes a consultant-style report (strengths / fixes / star ratings / overall score / 30-day plan, honest deltas vs previous run) and files it to this board as a private inline report on a [content] card. Full prompt + one-time install steps saved at nyus-qa-issues/tmp/analytics-insights-loop.md. BLOCKER: this headless session is permission-blocked from writing into C:\\Users\\Administrator\\.claude\\nyus-loops (prompts/ + loops.json + schtasks registration) - needs one interactive run (or owner) to execute the 3 install steps at the bottom of that file. Everything else is ready.",
-      "reviewedAt": "2026-07-07T13:51:49.264Z",
+      "reviewReason": "READY TO INSTALL. The spec + prompt are in nyus-qa-issues/tmp/analytics-insights-loop.md. Three steps (must run in an INTERACTIVE session with write access to C:\\Users\\Administrator\\.claude\\nyus-loops): (1) copy prompt: Copy-Item 'C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\analytics-insights-loop.md' 'C:\\Users\\Administrator\\.claude\\nyus-loops\\prompts\\analytics-insights.md' (2) add entry to C:\\Users\\Administrator\\.claude\\nyus-loops\\loops.json: {slug:'analytics-insights', cwd:'C:\\Users\\Administrator\\Desktop\\NYUS CODE\\NYUSLANDING', schedule:'daily 07:03', source:'owner i-20260706-f039'} (3) schtasks /create /tn '\\NYUS-Loops\\analytics-insights' /sc daily /st 07:03 /tr 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\Users\\Administrator\\.claude\\nyus-loops\\runner.ps1 -Slug analytics-insights' /f. After registering: run manually once to confirm a report posts to the board.",
+      "reviewedAt": "2026-07-07T19:03:45.190Z",
       "reviewReply": "What to do tell me I will do it",
       "reviewRepliedAt": "2026-07-07T13:57:37.635Z",
       "reviewReplyBy": "shakeebshaan"
