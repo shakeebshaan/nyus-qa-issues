@@ -778,30 +778,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: trophy tier chips read t.label (undefined) and used orange scale classes that compile to nothing in the token build - chips rendered blank/unstyled. Fix: proper labels plus styles on registered d-* token scales.",
-        "imagePath": "images/i-20260707-b49e-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260707-b49e-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ee615041b427d4b470a0081afdb956c300fd743a",
-        "imageCommits": [
-          "ee615041b427d4b470a0081afdb956c300fd743a"
-        ],
-        "fixedAt": "2026-07-07T13:25:33.483Z",
-        "by": "shakeebshaan",
-        "appCommit": "4ff61446",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 87,
-          "bar": 80,
-          "note": "Capture shows BRONZE tier chips styled across the trophy case"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:04:11.878Z",
@@ -829,6 +807,35 @@
               "score": 90,
               "bar": 80,
               "note": "Computed styles confirm real bg/text colors on the chips; zoom + full-screen captures show styled BRONZE pills and bronze tile rings on /profile"
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:31:28.075Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: trophy tier chips read t.label (undefined) and used orange scale classes that compile to nothing in the token build - chips rendered blank/unstyled. Fix: proper labels plus styles on registered d-* token scales.",
+            "imagePath": "images/i-20260707-b49e-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-b49e-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "ee615041b427d4b470a0081afdb956c300fd743a",
+            "imageCommits": [
+              "ee615041b427d4b470a0081afdb956c300fd743a"
+            ],
+            "fixedAt": "2026-07-07T13:25:33.483Z",
+            "by": "shakeebshaan",
+            "appCommit": "4ff61446",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 87,
+              "bar": 80,
+              "note": "Capture shows BRONZE tier chips styled across the trophy case"
             }
           }
         }
