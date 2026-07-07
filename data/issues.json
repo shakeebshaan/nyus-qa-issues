@@ -616,8 +616,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the 409 'Launch offer expired/already claimed' response body was never read - checkout showed a generic 'Couldn't start payment' toast and left the stale Rs49 UI with no recovery path. Fix: the backend message is surfaced and a 409 auto-refreshes offer status + pricing in place (banner: 'Pricing has changed - the monthly plan is Rs499').",
+        "imagePath": "images/i-20260707-a1c4-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-a1c4-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "439a114433ed90703a06573f033f236d63a33fb4",
+        "imageCommits": [
+          "439a114433ed90703a06573f033f236d63a33fb4"
+        ],
+        "fixedAt": "2026-07-07T13:23:32.740Z",
+        "by": "shakeebshaan",
+        "appCommit": "58ce8817",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 80,
+          "note": "Capture shows the exact recovery UX: clear banner + refreshed Rs499 card, retry works without reload"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:04:23.725Z",
