@@ -1075,31 +1075,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: PlanPauseScreen and PlanResumeScreen mutated plan state via planService without invalidating the ['active-plan'] and ['paused-plan'] React Query caches; ProfilePlanManagement's 60s staleTime meant Pause/Resume buttons stayed inverted until the cache expired. Fix: both screens now call queryClient.invalidateQueries for both keys in their success handlers (onSuccess path in handlePause/handleResume), so Profile immediately reflects the new plan state after pause or resume. Screenshot shows Plan Management section with Change Goal + Pause Plan correctly visible for an active-plan user.",
-        "imagePath": "images/i-20260706-c3b8-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260706-c3b8-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "379ca4f3f3db916292d68483970c4b9f4a88eddc",
-        "imageCommits": [
-          "379ca4f3f3db916292d68483970c4b9f4a88eddc"
-        ],
-        "fixedAt": "2026-07-06T23:05:55.634Z",
-        "by": "shakeebshaan",
-        "appCommit": "a308b056",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 91,
-          "bar": 80,
-          "note": "Direct fix to the stated root cause: both mutation success paths now invalidate both plan cache keys. No stale state possible after pause or resume."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:05:54.488Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: PlanPauseScreen and PlanResumeScreen mutated plan state via planService without invalidating the ['active-plan'] and ['paused-plan'] React Query caches; ProfilePlanManagement's 60s staleTime meant Pause/Resume buttons stayed inverted until the cache expired. Fix: both screens now call queryClient.invalidateQueries for both keys in their success handlers (onSuccess path in handlePause/handleResume), so Profile immediately reflects the new plan state after pause or resume. Screenshot shows Plan Management section with Change Goal + Pause Plan correctly visible for an active-plan user.",
+            "imagePath": "images/i-20260706-c3b8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260706-c3b8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "379ca4f3f3db916292d68483970c4b9f4a88eddc",
+            "imageCommits": [
+              "379ca4f3f3db916292d68483970c4b9f4a88eddc"
+            ],
+            "fixedAt": "2026-07-06T23:05:55.634Z",
+            "by": "shakeebshaan",
+            "appCommit": "a308b056",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 91,
+              "bar": 80,
+              "note": "Direct fix to the stated root cause: both mutation success paths now invalidate both plan cache keys. No stale state possible after pause or resume."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "id": "i-20260706-c3b8",
       "route": "/profile",
       "description": "[bug-hunt] Right after pausing (or resuming) a plan, the Profile plan-management section shows the WRONG entry points: \"Pause Plan\" still visible (leads to a dead end) and \"Resume Plan\" hidden - and Profile is the ONLY place in the app that links to /plan-resume. WHERE: src/pages/_components/profile/ProfilePlanManagement.tsx:20-33 caches [\"active-plan\"] and [\"paused-plan\"] with staleTime 60s; PlanPauseScreen/PlanResumeScreen mutate via planService.pausePlan/resumePlan directly and NEVER invalidate those keys (grep \"active-plan|paused-plan\" across src: only ProfilePlanManagement + BodyComposition read them; zero invalidateQueries anywhere). EXPECTED: after \"Plan paused\" success, returning to Profile shows Resume Plan (and hides Pause Plan). ACTUAL: within the 60s staleTime (the whole pause flow takes well under that) Profile re-renders from cache: Pause Plan still shown - tapping it opens /plan-pause which now finds no active plan and dead-ends at \"No active plan to pause\"; Resume Plan is absent, so the just-paused user has NO path to /plan-resume until the cache staleness window passes AND the profile remounts. Same inversion after resume (Resume lingers, Pause hidden). REPRO: Profile -> Pause Plan -> pick reason -> Pause My Plan -> toast \"Plan paused\" -> back to Profile within a minute: section still offers Pause Plan and no Resume Plan. FIX SHAPE: invalidate [\"active-plan\"] + [\"paused-plan\"] (useQueryClient) in both success paths - or convert pause/resume to useMutation with onSuccess invalidation.",
