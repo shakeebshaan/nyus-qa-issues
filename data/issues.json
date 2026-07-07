@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260707-7d3a",
+      "createdAt": "2026-07-07T04:40:12.883Z",
+      "route": null,
+      "description": "[bug-hunt] Milestone celebrations leak across accounts on a shared device: logout sweeps the level cache (nyus_gam_level) but NOT the milestone seen-map (nyus_gam_milestones), and the key is not user-scoped.\n\nEXPECTED: after logout, the next account starts with a fresh milestone baseline - same treatment as nyus_gam_level and the user-scoped nyus_kudos_given:<id> keys that the sweep exists for.\nACTUAL: src/contexts/AuthContext.tsx logout sweepPrefixes (~line 178) lists 'nyus_gam_level' but MilestoneWatcher's MILESTONES_SEEN_KEY 'nyus_gam_milestones' does not match that prefix and survives logout. User B inherits user A's {tracking, perfect_weeks} latch, and because writeSeen keeps the max (monotonic latch), B's own milestones are permanently suppressed until they EXCEED A's totals - e.g. after A leaves at {tracking:100, perfect_weeks:12}, B never sees a 30-day or 100-day streak overlay, and no perfect-week celebration until week 13.\n\nREPRO: 1) Login as user A, cross a 30-day tracking streak (overlay fires, localStorage nyus_gam_milestones={tracking:30,...}). 2) Logout (key survives - verify in devtools). 3) Login as user B on the same device and cross a 30-day streak. Nothing fires (30 is not > 30).\n\nWHERE: src/components/gamification/MilestoneWatcher.tsx (MILESTONES_SEEN_KEY) + src/contexts/AuthContext.tsx logout sweep. FIX: add 'nyus_gam_milestones' to sweepPrefixes (or user-scope the key).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260707-e4c8",
+      "createdAt": "2026-07-07T04:40:12.883Z",
+      "route": "/choose-plan",
+      "description": "[bug-hunt] Full-screen milestone overlay (30/100/365-day streak, perfect week) can fire atop pre-app screens (OTP /verify, /choose-plan, onboarding): MilestoneWatcher has NO isPreAppRoute gate, unlike both sibling watchers.\n\nLevelUpWatcher and BadgeWatcher explicitly suppress celebrations on pre-app routes - QA i-20260618-bcb7 (level-up confetti on the OTP screen) and i-20260617-8ef2 (badge toast atop the builder) fixed exactly this class. MilestoneWatcher.tsx is mounted app-wide in App.tsx right beside them (~line 830) but celebrates the moment settled overview data crosses a band, on ANY route - it never imports isPreAppRoute and has no useLocation at all.\n\nEXPECTED: milestone overlays never fire on '/', '/verify', '/onboarding*', '/choose-plan' (absorb silently like LevelUpWatcher, still syncing the seen-map).\nACTUAL/REPRO: existing user whose tracking streak crossed 30 overnight (seen-map at {tracking:0}) opens /choose-plan?manage=1 from Profile to manage their subscription -> LevelUpWatcher's throttled navigation refetch settles the overview -> full-screen '30 Day streak' celebration plays over the plan-management screen. Same on /verify right after OTP flips isAuthenticated on re-login (the seen-map survives logout - companion issue i-20260707-7d3a), and atop the onboarding builder for a perfect_weeks increment.\n\nWHERE: src/components/gamification/MilestoneWatcher.tsx (~line 87 effect). FIX: mirror LevelUpWatcher - useLocation + skip the setQueue push when isPreAppRoute(pathname), but still writeSeen so pre-app crossings are absorbed, not replayed.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260707-551c",
       "createdAt": "2026-07-07T03:58:10.244Z",
       "route": "/profile",
