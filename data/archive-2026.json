@@ -16427,6 +16427,109 @@
       "resolvedAt": "2026-07-07T14:21:55.038Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:21:55.038Z"
+    },
+    {
+      "id": "i-20260707-7d3a",
+      "createdAt": "2026-07-07T04:40:12.883Z",
+      "route": null,
+      "description": "[bug-hunt] Milestone celebrations leak across accounts on a shared device: logout sweeps the level cache (nyus_gam_level) but NOT the milestone seen-map (nyus_gam_milestones), and the key is not user-scoped.\n\nEXPECTED: after logout, the next account starts with a fresh milestone baseline - same treatment as nyus_gam_level and the user-scoped nyus_kudos_given:<id> keys that the sweep exists for.\nACTUAL: src/contexts/AuthContext.tsx logout sweepPrefixes (~line 178) lists 'nyus_gam_level' but MilestoneWatcher's MILESTONES_SEEN_KEY 'nyus_gam_milestones' does not match that prefix and survives logout. User B inherits user A's {tracking, perfect_weeks} latch, and because writeSeen keeps the max (monotonic latch), B's own milestones are permanently suppressed until they EXCEED A's totals - e.g. after A leaves at {tracking:100, perfect_weeks:12}, B never sees a 30-day or 100-day streak overlay, and no perfect-week celebration until week 13.\n\nREPRO: 1) Login as user A, cross a 30-day tracking streak (overlay fires, localStorage nyus_gam_milestones={tracking:30,...}). 2) Logout (key survives - verify in devtools). 3) Login as user B on the same device and cross a 30-day streak. Nothing fires (30 is not > 30).\n\nWHERE: src/components/gamification/MilestoneWatcher.tsx (MILESTONES_SEEN_KEY) + src/contexts/AuthContext.tsx logout sweep. FIX: add 'nyus_gam_milestones' to sweepPrefixes (or user-scope the key).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "nyus_gam_level + nyus_gam_milestones added to sweepPrefixes in AuthContext. Cleared on logout. Commit dfd0d22e.",
+        "imagePath": "images/i-20260707-7d3a-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-7d3a-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c30320323873950967ccf835876e445d10572d78",
+        "imageCommits": [
+          "c30320323873950967ccf835876e445d10572d78"
+        ],
+        "fixedAt": "2026-07-07T14:14:42.298Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:03:33.156Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: AuthContext logout sweepPrefixes listed nyus_gam_level but not MilestoneWatcher's nyus_gam_milestones, so user A's monotonic milestone latch survived logout and permanently suppressed user B's celebrations on a shared device. Fix (dfd0d22e): added nyus_gam_milestones to sweepPrefixes. E2E-verified on dev: seeded {tracking:100,perfect_weeks:12}, drove the real Profile - Logout - confirm flow, key is null after logout (screenshot = clean post-logout login screen).",
+            "imagePath": "images/i-20260707-7d3a-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-7d3a-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "6b92c9c7706b7d382889ed150d8a91a9068e6b6d",
+            "imageCommits": [
+              "6b92c9c7706b7d382889ed150d8a91a9068e6b6d"
+            ],
+            "fixedAt": "2026-07-07T05:19:56.878Z",
+            "by": "shakeebshaan",
+            "appCommit": "dfd0d22e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 92,
+              "bar": 80,
+              "note": "E2E repro of the exact issue scenario passes: seeded latch swept on real UI logout; 40/40 scoped unit tests green; loop.mjs verify MET."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:27:28.166Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the logout sweep cleared nyus_gam_level but not nyus_gam_milestones, so the next account on a shared device inherited the previous user's milestone latch (suppressing their own celebrations until they exceeded the old totals). Fix: the milestone seen-map is now swept on logout alongside the other gamification keys.",
+            "imagePath": "images/i-20260707-7d3a-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-7d3a-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0da2a5faf92ea891c3c834c0d184acb0ace7043c",
+            "imageCommits": [
+              "0da2a5faf92ea891c3c834c0d184acb0ace7043c"
+            ],
+            "fixedAt": "2026-07-07T13:23:53.286Z",
+            "by": "shakeebshaan",
+            "appCommit": "dfd0d22e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 86,
+              "bar": 80,
+              "note": "Key now in sweepPrefixes; capture shows clean logged-out Welcome state after sweep"
+            }
+          }
+        }
+      ],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:22:15.757Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:22:15.757Z"
     }
   ]
 }
