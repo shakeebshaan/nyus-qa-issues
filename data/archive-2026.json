@@ -17252,6 +17252,111 @@
       "resolvedAt": "2026-07-07T14:23:52.321Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:23:52.321Z"
+    },
+    {
+      "id": "i-20260707-5872",
+      "createdAt": "2026-07-07T08:24:19.477Z",
+      "route": "/",
+      "description": "[bug-hunt] Users who were away 14-60 days are forced to re-login (OTP) even though their refresh token is still valid for up to 60 days - the \"refresh expired token at startup\" path is dead code.\n\nEXPECTED: on app open with an expired access token but a stored refresh token, the app attempts POST /auth/refresh (backend refresh tokens live 60 days - JWT_REFRESH_TOKEN_EXPIRES=timedelta(days=60), backend.py:215, and the endpoint needs only refresh_token in the body). Only if THAT fails should the user land on the login screen.\nACTUAL: authService.isAuthenticated() (src/services/auth.service.ts ~334) returns false for an expired access token with the comment \"Don't trigger refresh here - let checkAuth handle it\" - but AuthContext.checkAuth (src/contexts/AuthContext.tsx ~57-86) only calls checkAndRefreshToken() INSIDE the \"if (authenticated)\" branch. When authenticated=false the else branch just clears the user. So the isExpired -> refreshToken(true) branch inside checkAndRefreshToken (auth.service.ts ~291) is unreachable from cold start, and a user idle >14 days is dumped to Welcome and must re-do email OTP despite holding a perfectly refreshable session. The 14-day access expiry (TOKEN_EXPIRY_DURATION, src/lib/api-config.ts:36) vs 60-day refresh window makes this a real user-facing logout for anyone returning after a 2-8 week break - exactly the lapsed users the app wants back frictionlessly.\n\nREPRO (dev): 1) Login normally. 2) In devtools set nyus_token_expiry to Date.now()-1000 (simulates >14 days idle; refresh token untouched and still valid). 3) Reload the app. Observed: instant redirect to Welcome/login, no POST /auth/refresh in the network tab. Expected: silent refresh, user stays logged in.\n\nWHERE: src/contexts/AuthContext.tsx checkAuth (refresh call gated on authenticated===true) + src/services/auth.service.ts isAuthenticated/checkAndRefreshToken. FIX: in checkAuth, when isAuthenticated() is false but a refresh token exists, await authService.refreshToken(true) and re-evaluate before rendering the logged-out state.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Cold-start JWT refresh + 14-day grace window honored. Users away 14-60 days no longer forced to re-login. Commit 682ee669.",
+        "imagePath": "images/i-20260707-5872-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-5872-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "92816e27e1cbed28a236c4c2f1b347a13624c74b",
+        "imageCommits": [
+          "92816e27e1cbed28a236c4c2f1b347a13624c74b"
+        ],
+        "fixedAt": "2026-07-07T14:14:06.869Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:01:48.830Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: checkAuth set isAuthenticated=false on expired token without trying the 60-day refresh — users away 14-60 days hit OTP. Fix: async IIFE in checkAuth; when isAuthenticated()=false but REFRESH_TOKEN exists, await checkAndRefreshToken() before clearing session (AuthContext.tsx). Tests: scoped vitest suite green (38/38).",
+            "imagePath": "images/i-20260707-5872-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-5872-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "543c190e608d92389ea4e926e37db6114f348827",
+            "imageCommits": [
+              "543c190e608d92389ea4e926e37db6114f348827"
+            ],
+            "fixedAt": "2026-07-07T08:37:31.820Z",
+            "by": "shakeebshaan",
+            "appCommit": "ff30c774",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "Minimal async-IIFE restructure hits the exact dead-code path described; no side effects; matches the fix described in the issue."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:30:48.904Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: checkAuth only attempted a token refresh inside the authenticated branch, so an expired 14-day access token with a still-valid 60-day refresh token dumped returning users straight to OTP login. Fix: on cold start with an expired access token but stored refresh token, the app now POSTs /auth/refresh and re-evaluates before rendering the logged-out state.",
+            "imagePath": "images/i-20260707-5872-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-5872-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "9185d920156c5c8a3971fcda48a63c9ae6c32c9a",
+            "imageCommits": [
+              "9185d920156c5c8a3971fcda48a63c9ae6c32c9a"
+            ],
+            "fixedAt": "2026-07-07T13:24:30.250Z",
+            "by": "shakeebshaan",
+            "appCommit": "682ee669",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Capture shows a settled, authenticated dashboard after cold start - the 14-60 day returning user keeps their session"
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 682ee669: AuthContext.checkAuth now attempts authService.checkAndRefreshToken() when isAuthenticated()=false AND a refresh token exists, before clearing the user. 14-60 day returning users stay logged in silently. tsc clean.",
+      "reviewedAt": "2026-07-07T14:16:45.664Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:24:01.375Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:24:01.375Z"
     }
   ]
 }
