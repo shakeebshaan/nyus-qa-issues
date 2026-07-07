@@ -17603,6 +17603,85 @@
       "resolvedAt": "2026-07-07T15:14:57.509Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T15:14:57.509Z"
+    },
+    {
+      "id": "i-20260707-9752",
+      "createdAt": "2026-07-07T13:03:04.844Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260707-9752.jpg",
+      "imageCommit": "c7e911e762aa63045b2c177d10c6e31fdef07a5a",
+      "imagePaths": [
+        "images/i-20260707-9752.jpg"
+      ],
+      "imageCommits": [
+        "c7e911e762aa63045b2c177d10c6e31fdef07a5a"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Bottom of chat redesigned: empty gray bubbles are never painted anymore (block messages render without a bubble shell), and the old 4-button strip is replaced by a single + launcher that opens a compact quick-action menu. The message bar is now the only thing at the bottom.",
+        "imagePath": "images/i-20260707-9752-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-9752-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ede5d815ba6f4f514a149a6fee2943ec529ed6a5",
+        "imageCommits": [
+          "ede5d815ba6f4f514a149a6fee2943ec529ed6a5"
+        ],
+        "fixedAt": "2026-07-07T14:35:57.106Z",
+        "by": "shakeebshaan",
+        "appCommit": "c935d3b6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Empty-bubble root cause fixed (763779b6) + bottom bar redesigned per direction; verified live"
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:50:19.816Z",
+          "event": "reopened",
+          "note": "Still looks bad news new smart good-looking ui",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "The circled blank gray bubble was a block-carrier message with empty text: the chat bubble painted its background shell even with nothing to show. Fix: bubbles with no text no longer render at all (blocks + timestamp still do), and the meals block shows a proper 'No meals scheduled' empty state instead of a blank card. The circled quick-action pills were also redesigned this tick (single-line Option A chips, see i-20260704-ce32).",
+            "imagePath": "images/i-20260707-9752-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-9752-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "9638f27eddca2127a9cefb640f45f55bbc0b8f07",
+            "imageCommits": [
+              "9638f27eddca2127a9cefb640f45f55bbc0b8f07"
+            ],
+            "fixedAt": "2026-07-07T13:39:43.318Z",
+            "by": "shakeebshaan",
+            "appCommit": "763779b6",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 84,
+              "bar": 80,
+              "note": "Live chat bottom now clean: no empty shells, styled empty-state card, single-line pills; 6/6 virtual-list tests + 28/28 block tests pass"
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "FIXED in same commit b2cf617d: CoachChatComposer.tsx now uses a + launcher sheet for quick actions. The old pill row that caused the bottom UI clutter is gone.",
+      "reviewedAt": "2026-07-07T14:38:25.366Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T15:15:27.393Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T15:15:27.393Z"
     }
   ]
 }
