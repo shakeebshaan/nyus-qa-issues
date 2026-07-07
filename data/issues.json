@@ -1972,30 +1972,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Food DB grew ~15x: 8,925 foods live on prod (8,354 bulk-imported from USDA FoodData Central with real lab macros, Atwater energy-consistency gate rejecting inconsistent rows; plus Nutritionix + IFCT-2017 Indian foods) and all imported foods are categorized so they surface in the picker. Exercise library cleaned to 2,164 entries - novelty/sport-game and awkward entries soft-deleted and filtered from search. Screenshot: 'kefir' (previously missing) now returns real USDA dairy entries with macros in the meal builder.",
-        "imagePath": "images/i-20260704-d460-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260704-d460-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "92ead24b1727a554aa5263ae258e54ad097bf812",
-        "imageCommits": [
-          "92ead24b1727a554aa5263ae258e54ad097bf812"
-        ],
-        "fixedAt": "2026-07-07T13:46:59.905Z",
-        "by": "shakeebshaan",
-        "appCommit": "a5580ab",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "Prod counts verified via DB (8,925 foods by source usda/nutritionix/ifct2017); picker search proves end-user visibility; macros are source-verified + Atwater-gated"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-06T20:29:35.744Z",
@@ -2052,6 +2030,35 @@
               "score": 88,
               "bar": 80,
               "note": "All sport/game entries confirmed 0 via live API calls. Legitimate exercises (boxing training, swimming, cycling, running) preserved. deleted_at model + filter ensures future soft-deletes also apply to search."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:48:41.054Z",
+          "event": "reopened",
+          "note": "Show me a random sample list",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Food DB grew ~15x: 8,925 foods live on prod (8,354 bulk-imported from USDA FoodData Central with real lab macros, Atwater energy-consistency gate rejecting inconsistent rows; plus Nutritionix + IFCT-2017 Indian foods) and all imported foods are categorized so they surface in the picker. Exercise library cleaned to 2,164 entries - novelty/sport-game and awkward entries soft-deleted and filtered from search. Screenshot: 'kefir' (previously missing) now returns real USDA dairy entries with macros in the meal builder.",
+            "imagePath": "images/i-20260704-d460-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260704-d460-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "92ead24b1727a554aa5263ae258e54ad097bf812",
+            "imageCommits": [
+              "92ead24b1727a554aa5263ae258e54ad097bf812"
+            ],
+            "fixedAt": "2026-07-07T13:46:59.905Z",
+            "by": "shakeebshaan",
+            "appCommit": "a5580ab",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "Prod counts verified via DB (8,925 foods by source usda/nutritionix/ifct2017); picker search proves end-user visibility; macros are source-verified + Atwater-gated"
             }
           }
         }
