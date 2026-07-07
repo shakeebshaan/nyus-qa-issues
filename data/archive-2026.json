@@ -18032,6 +18032,33 @@
       "resolvedAt": "2026-07-07T20:54:03.230Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T20:54:03.230Z"
+    },
+    {
+      "id": "i-20260707-9825",
+      "createdAt": "2026-07-07T13:20:16.830Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260707-9825.jpg",
+      "imageCommit": "93ecd51663442837edc6065c6451bfc6d471bc1b",
+      "imagePaths": [
+        "images/i-20260707-9825.jpg"
+      ],
+      "imageCommits": [
+        "93ecd51663442837edc6065c6451bfc6d471bc1b"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fixes shipped: backend c18f5da computes weekly_volume_target_kg = prior_week x 1.05 (fallback: current_week projected forward). Frontend e9fe3e44 reads the field. QA account shows 'no target set' because it has no prior-week volume (< 10kg) — correct for a test account. Real users who have logged workouts will see a target. Deployed to prod.",
+      "reviewedAt": "2026-07-07T19:10:26.505Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T20:55:04.518Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T20:55:04.518Z"
     }
   ]
 }
