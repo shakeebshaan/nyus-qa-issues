@@ -15130,6 +15130,91 @@
       "resolvedAt": "2026-07-07T13:49:49.701Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T13:49:49.701Z"
+    },
+    {
+      "id": "i-20260707-6b1e",
+      "createdAt": "2026-07-07T00:09:20.438Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] 16:8 fasting timer can start at \"16h fasted / Eating window open\" even though the user ate TODAY — overnight back-dating only looks at yesterday's meals.\n\nEXPECTED: starting a 16:8 fast counts fasted time since the user's LAST meal — including anything eaten today — or from now.\nACTUAL: FastingBanner's initStart (src/pages/Nutrition.tsx ~lines 70-88) back-dates the fast start to yesterday's last logged meal whenever it's within 20h, but it only fetches YESTERDAY's daily logs (loggingService.getDailyLogs(yesterday)) and never checks today's meal logs. Concrete failure: user logged dinner yesterday 8:00 PM, logged breakfast today 9:00 AM, then taps the \"16:8 window\" chip at noon. Code sets start = yesterday 8 PM (16h ago, < 20h) → the ring instantly renders \"16h 0m / complete ✓\", \"Eating window open\", 100% of fasting window — while the user actually ate 3 hours ago. The fast-complete celebration pulse fires immediately too. Any meal logged today (before or after activating the fast) is ignored for the timer's entire lifetime because the start is frozen into localStorage (nyus_fast_start_<date>) on first render.\n\nREPRO: 1) log any meal as eaten this morning on /nutrition, 2) ensure yesterday has an eaten meal logged in the evening, 3) tap Fasting day → \"16:8 window\" → banner immediately shows the fast complete instead of ~3h elapsed. FIX DIRECTION: also fetch today's logs and use max(last eaten meal across yesterday+today); if the user ate today after the would-be start, back-date to today's last meal instead.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:05:06.285Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: FastingBanner.initStart only fetched yesterday's logs, ignoring any meals eaten today — so if user ate breakfast today before activating 16:8, the timer back-dated to yesterday's dinner (16h+ ago) and instantly showed 'fast complete'. Fix: initStart now fetches both today+yesterday in parallel via Promise.all, combines meal_logs from both, and picks the max last-eaten timestamp across the full set. A meal eaten today after the would-be start is now correctly used as the actual fast start.",
+            "imagePath": "images/i-20260707-6b1e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-6b1e-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "5cff7e437ef65c5fe94778ff319bd07535a479b9",
+            "imageCommits": [
+              "5cff7e437ef65c5fe94778ff319bd07535a479b9"
+            ],
+            "fixedAt": "2026-07-07T03:04:00.132Z",
+            "by": "shakeebshaan",
+            "appCommit": "60a769ca",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 95,
+              "bar": 80,
+              "note": "Fix matches exact root cause and fix direction. Both day fetches are parallel (Promise.all — no added latency). Combines and filters by !skipped && logged_at. 20h recency guard unchanged. localStorage key unchanged — existing timers continue working. Handles offline gracefully (catch block sets start=now)."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:28:33.276Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the 16:8 timer back-dated the fast start to yesterday's last meal without ever checking today's logs - logging breakfast then starting a fast could instantly show '16h fasted / complete'. Fix: start time now uses the latest eaten meal across yesterday AND today, so time-since-last-meal is always real.",
+            "imagePath": "images/i-20260707-6b1e-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-6b1e-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "af5a0b2f308b2e494d70e6ad489a498cc7fca08a",
+            "imageCommits": [
+              "af5a0b2f308b2e494d70e6ad489a498cc7fca08a"
+            ],
+            "fixedAt": "2026-07-07T13:23:03.510Z",
+            "by": "shakeebshaan",
+            "appCommit": "60a769ca",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 84,
+              "bar": 80,
+              "note": "Timer can no longer claim a complete fast right after eating; fasting chips shown in capture"
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 60a769ca: FastingBanner now fetches BOTH yesterday+today logs and uses max(last eaten meal across both days) to backdate the 16:8 start, preventing a stale yesterday-evening backdate when the user ate this morning. tsc clean. Full npm test gate OOM-blocked.",
+      "reviewedAt": "2026-07-07T14:15:44.369Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T14:16:29.143Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:16:29.143Z"
     }
   ]
 }
