@@ -38,8 +38,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: combined-ingredient rows carry synthetic string ids ('42-0') which the FE sent verbatim as ingredient_id; both backend read paths drop non-numeric ids, so 'Save Meal Changes' silently zeroed the meal's macros. Fix: on save the FE aggregates split parts back onto the parent numeric ingredient_id - the round-trip is lossless and a no-edit save changes nothing.",
+        "imagePath": "images/i-20260707-4d7e-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-4d7e-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4adcdcfb9b37aacd95a330e827d9434063e97f51",
+        "imageCommits": [
+          "4adcdcfb9b37aacd95a330e827d9434063e97f51"
+        ],
+        "fixedAt": "2026-07-07T13:24:50.136Z",
+        "by": "shakeebshaan",
+        "appCommit": "fb33dc7c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "Capture shows recipe detail with intact macros + numeric-id ingredient rows and the Save CTA"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:00:30.826Z",
