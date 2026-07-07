@@ -440,8 +440,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: MilestoneWatcher had no pre-app route gate (unlike its LevelUp/Badge siblings), so full-screen streak celebrations could fire atop OTP, /choose-plan, and onboarding. Fix: crossings on pre-app routes are absorbed silently - the seen-map still syncs so they are not replayed later.",
+        "imagePath": "images/i-20260707-e4c8-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-e4c8-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "39e13656322320d316d872f64330da72474d69c6",
+        "imageCommits": [
+          "39e13656322320d316d872f64330da72474d69c6"
+        ],
+        "fixedAt": "2026-07-07T13:23:59.983Z",
+        "by": "shakeebshaan",
+        "appCommit": "dfd0d22e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 87,
+          "bar": 80,
+          "note": "Mirrors the proven isPreAppRoute pattern from the two sibling watchers; capture shows /choose-plan rendering with no overlay"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:03:43.882Z",
