@@ -1211,30 +1211,8 @@
         "ef410e5609184a8000fe2c22f3e040a2f669b80f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: pill buttons had py-3/min-h-48px/22px badge making them oversized. Fix: py-2/min-h-44px/18px badge/12px text/gap-2; pill gradient style kept. 44px touch floor preserved (WCAG AA). 28/28 component tests pass.",
-        "imagePath": "images/i-20260704-ce32-fix-r4.png",
-        "imagePaths": [
-          "images/i-20260704-ce32-fix-r4.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "eb946e8c470af4c56c1046d3b62b20fdc06534c0",
-        "imageCommits": [
-          "eb946e8c470af4c56c1046d3b62b20fdc06534c0"
-        ],
-        "fixedAt": "2026-07-06T22:05:34.967Z",
-        "by": "shakeebshaan",
-        "appCommit": "bf17e424",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 85,
-          "bar": 80,
-          "note": "Size visibly reduced (48->44px height, less padding); pill gradient + teal ring style intact; screenshot shows compact pills in live chat. 3rd reopen was specifically 'too big' - addressed directly."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-06T12:30:30.636Z",
@@ -1327,6 +1305,35 @@
           "imageCommits": [
             "b8ee711ab3a97fc5ebe9036540544c59b093beb9"
           ]
+        },
+        {
+          "at": "2026-07-07T13:07:22.955Z",
+          "event": "reopened",
+          "note": "The implementation is different and looks bad",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: pill buttons had py-3/min-h-48px/22px badge making them oversized. Fix: py-2/min-h-44px/18px badge/12px text/gap-2; pill gradient style kept. 44px touch floor preserved (WCAG AA). 28/28 component tests pass.",
+            "imagePath": "images/i-20260704-ce32-fix-r4.png",
+            "imagePaths": [
+              "images/i-20260704-ce32-fix-r4.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "eb946e8c470af4c56c1046d3b62b20fdc06534c0",
+            "imageCommits": [
+              "eb946e8c470af4c56c1046d3b62b20fdc06534c0"
+            ],
+            "fixedAt": "2026-07-06T22:05:34.967Z",
+            "by": "shakeebshaan",
+            "appCommit": "bf17e424",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 85,
+              "bar": 80,
+              "note": "Size visibly reduced (48->44px height, less padding); pill gradient + teal ring style intact; screenshot shows compact pills in live chat. 3rd reopen was specifically 'too big' - addressed directly."
+            }
+          }
         }
       ],
       "needsReview": false,
