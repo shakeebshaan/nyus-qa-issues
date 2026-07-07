@@ -1202,30 +1202,8 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: skip and undo-skip sent byte-identical request bodies, so the api-client dedup interceptor aborted the undo while the original skip was still in flight - 'Skip undone' toast but the meal stayed skipped server-side. Fix: skip payload now carries the current skipped state as a discriminator (mirrors the earlier was_eaten fix) so skip and undo are never collapsed.",
-        "imagePath": "images/i-20260707-8d4c-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260707-8d4c-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0b99d70f1d00a073570003cafa40b2693fa32d96",
-        "imageCommits": [
-          "0b99d70f1d00a073570003cafa40b2693fa32d96"
-        ],
-        "fixedAt": "2026-07-07T13:22:57.047Z",
-        "by": "shakeebshaan",
-        "appCommit": "60a769ca",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 84,
-          "bar": 80,
-          "note": "Same class as the fixed eaten-toggle bug, same proven fix pattern; QA account has no diet plan today so capture shows the nutrition surface, fix is payload-level"
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-07T13:05:00.540Z",
@@ -1253,6 +1231,35 @@
               "score": 95,
               "bar": 80,
               "note": "Precise fix matching the exact root cause and fix direction in the issue. was_skipped discriminator added to mutationFn, handleSkipMeal, toast undo handler, and handleUnskipMeal. api.ts updated with the optional field. Mirrors the was_eaten pattern already proven on logMealMutation. No adjacent code touched."
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:31:03.744Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: skip and undo-skip sent byte-identical request bodies, so the api-client dedup interceptor aborted the undo while the original skip was still in flight - 'Skip undone' toast but the meal stayed skipped server-side. Fix: skip payload now carries the current skipped state as a discriminator (mirrors the earlier was_eaten fix) so skip and undo are never collapsed.",
+            "imagePath": "images/i-20260707-8d4c-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-8d4c-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0b99d70f1d00a073570003cafa40b2693fa32d96",
+            "imageCommits": [
+              "0b99d70f1d00a073570003cafa40b2693fa32d96"
+            ],
+            "fixedAt": "2026-07-07T13:22:57.047Z",
+            "by": "shakeebshaan",
+            "appCommit": "60a769ca",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 84,
+              "bar": 80,
+              "note": "Same class as the fixed eaten-toggle bug, same proven fix pattern; QA account has no diet plan today so capture shows the nutrition surface, fix is payload-level"
             }
           }
         }
