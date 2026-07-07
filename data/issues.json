@@ -42,8 +42,30 @@
         "ef410e5609184a8000fe2c22f3e040a2f669b80f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: quick-action shortcuts in CoachChatComposer were rendered as pill buttons (then + launcher), both still button-style. Owner direction: 'Remove the buttons and make it text link in clear'. Fix: removed + button and launcher panel entirely; replaced with an always-visible horizontal row of text links (Log workout · Log weight · Log meal · My plan) above the input bar. Pure text-link style using domain-purple color, no background or border.",
+        "imagePath": "images/i-20260704-ce32-fix-r7.png",
+        "imagePaths": [
+          "images/i-20260704-ce32-fix-r7.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "28364c7598c34647bd1c51e6dadf4df539edacbd",
+        "imageCommits": [
+          "28364c7598c34647bd1c51e6dadf4df539edacbd"
+        ],
+        "fixedAt": "2026-07-07T18:25:28.226Z",
+        "by": "shakeebshaan",
+        "appCommit": "ad75c8af",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Screenshot clearly shows the 4 text links (Log workout, Log weight, Log meal, My plan) above the message input bar with no button styling. Exactly matches owner direction: text links, in the clear, always visible. Fix is clean: 67 lines removed, 22 added, no regressions."
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T12:30:30.636Z",
@@ -238,9 +260,7 @@
       "reviewReplyImageCommits": [
         "c9a7b5440603399cb121d37d471cc7a1aa23fd22"
       ],
-      "reviewReplyImagePrivate": true,
-      "reviewReason": "FIXED: CoachChatComposer replaced the old persistent pill row with a + launcher (commit b2cf617d). Pills no longer clutter the bottom bar; quick-action shortcuts live behind the + icon so the composer area is a single clean input bar.",
-      "reviewedAt": "2026-07-07T14:38:20.351Z"
+      "reviewReplyImagePrivate": true
     },
     {
       "id": "i-20260704-d460",
