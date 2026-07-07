@@ -15405,6 +15405,108 @@
       "resolvedAt": "2026-07-07T14:17:07.225Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T14:17:07.225Z"
+    },
+    {
+      "id": "i-20260707-c9d2",
+      "createdAt": "2026-07-07T03:09:02.305Z",
+      "route": "/choose-plan",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "FAQ launch-offer section gated on live offer status. Prices are dynamic. Commit c345d2fc.",
+        "imagePath": "images/i-20260707-c9d2-fix-r3.png",
+        "imagePaths": [
+          "images/i-20260707-c9d2-fix-r3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3b0a2cfabad49e4ee348392b9437511c3de5f811",
+        "imageCommits": [
+          "3b0a2cfabad49e4ee348392b9437511c3de5f811"
+        ],
+        "fixedAt": "2026-07-07T14:16:01.108Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-07T13:04:49.748Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the 'What about the launch offer?' FAQ was static copy in FAQ_ITEMS, promising 'first month is Rs49' regardless of offer state. Fix: the offer entry is now inserted at render time only while launchOffer?.active, with prices sourced from the live offer status (offer_price/regular_price); offer inactive -> no offer FAQ. Proof: with the offer inactive, 'How do payments work?' is directly followed by 'Is my health data private?' - the offer entry is gone.",
+            "imagePath": "images/i-20260707-c9d2-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-c9d2-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "4e11b00b29551c816bc3e71cf28d27ae0cfe3ca1",
+            "imageCommits": [
+              "4e11b00b29551c816bc3e71cf28d27ae0cfe3ca1"
+            ],
+            "fixedAt": "2026-07-07T03:32:50.158Z",
+            "by": "shakeebshaan",
+            "appCommit": "c345d2fc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Stale pricing promise can no longer render; verified FAQ list with offer inactive, entry absent + prices now live-sourced when active"
+            }
+          }
+        },
+        {
+          "at": "2026-07-07T13:30:56.566Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: FAQ strings hardcoded the Rs49 founder offer regardless of live offer state, promising pricing checkout would not honor. Fix: the launch-offer FAQ renders only while the offer is active and prices are pulled dynamically from the live offer status.",
+            "imagePath": "images/i-20260707-c9d2-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260707-c9d2-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "690acceb9f9426543e63cd126c28284f37b081ee",
+            "imageCommits": [
+              "690acceb9f9426543e63cd126c28284f37b081ee"
+            ],
+            "fixedAt": "2026-07-07T13:23:46.685Z",
+            "by": "shakeebshaan",
+            "appCommit": "c345d2fc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Capture shows the FAQ list with no Rs49 promise while offer inactive; offer-active state keeps the entry"
+            }
+          }
+        }
+      ],
+      "description": "[bug-hunt] FAQ hardcodes the ₹49 founder offer even after it expires. Repro: open /choose-plan when the launch offer is inactive (LAUNCH_OFFER remaining==0 / window closed → _launch_offer_status active:false, backend.py ~2188). The offer banner and the monthly card correctly hide/reset to ₹499, but the FAQ answer for 'What about the launch offer?' still reads 'While our founder offer is live, your first month is ₹49 (90% off ₹499)...' and the tier-explainer FAQ repeats it (FAQ_ITEMS, ChoosePlan.tsx ~190, ~201-203). These strings are static and never gated on launchOffer?.active. Expected: when the offer is inactive, don't advertise ₹49 first month (users will expect it at checkout and be charged ₹499). Actual: FAQ makes a live-offer pricing promise the app won't honor. Fix: conditionally render/omit the offer FAQ (and the '₹49 first month' clause) based on launchOffer?.active.",
+      "needsReview": false,
+      "resolvedAt": "2026-07-07T14:17:27.102Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T14:17:27.102Z"
     }
   ]
 }
