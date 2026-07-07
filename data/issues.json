@@ -487,31 +487,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: card called loggingService.getStreakInfo(), but that method lives on reportService (Vite never typechecks, so the runtime TypeError silently killed the query and the challenge stayed dead at 0/30 with no styling). Fix: wired to reportService.getStreakInfo() and swapped the dead orange/teal-500 palette classes (overridden as flat tokens in tailwind.config) for the registered d-orange/d-teal token scales. Verified live: /reports/streak returns 200 and the card renders the real streak value.",
-        "imagePath": "images/i-20260707-551c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-551c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0dbb4d47e5ab1607c986e48519bf0251cb541c57",
-        "imageCommits": [
-          "0dbb4d47e5ab1607c986e48519bf0251cb541c57"
-        ],
-        "fixedAt": "2026-07-07T04:26:17.674Z",
-        "by": "shakeebshaan",
-        "appCommit": "bf9c1082",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 88,
-          "bar": 80,
-          "note": "Streak query proven live (200 + rendered value), icon/ring/bar colors restored; full-screen capture shows the working card on /profile"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:04:01.796Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: card called loggingService.getStreakInfo(), but that method lives on reportService (Vite never typechecks, so the runtime TypeError silently killed the query and the challenge stayed dead at 0/30 with no styling). Fix: wired to reportService.getStreakInfo() and swapped the dead orange/teal-500 palette classes (overridden as flat tokens in tailwind.config) for the registered d-orange/d-teal token scales. Verified live: /reports/streak returns 200 and the card renders the real streak value.",
+            "imagePath": "images/i-20260707-551c-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-551c-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0dbb4d47e5ab1607c986e48519bf0251cb541c57",
+            "imageCommits": [
+              "0dbb4d47e5ab1607c986e48519bf0251cb541c57"
+            ],
+            "fixedAt": "2026-07-07T04:26:17.674Z",
+            "by": "shakeebshaan",
+            "appCommit": "bf9c1082",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Streak query proven live (200 + rendered value), icon/ring/bar colors restored; full-screen capture shows the working card on /profile"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
