@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260707-f2a9",
+      "createdAt": "2026-07-07T00:09:20.438Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Fasting-day banner promises \"Skipped meals won't affect your streak today\" — but the backend streak engine has NO fasting exemption, so a full/vrat fasting day is a GUARANTEED streak miss.\n\nEXPECTED: marking today as a fasting day (full or vrat) protects the plan streak, as the banner explicitly promises.\nACTUAL: the nightly daily-report job scores the day with zero fasting awareness and the day mathematically cannot pass. In backend app/services/daily_report.py _evaluate_streak(), day_score = calories-within-15% (0.30) + workout (0.25) + steps (0.20) + water (0.15) + all-meals-logged (0.10), threshold 0.75. On a full fast: calories_consumed=0 fails the \"cal > 0\" guard so the calorie component is 0.0, and meals_logged < meals_per_day so logging is 0.0 — maximum possible score is 0.70 < 0.75. streak_maintained=False every fasting day; two fasting days back-to-back (or one fast + one ordinary miss) resets current_streak to 0 or silently burns a banked streak freeze. grep confirms DailyLog.fasting_day is only read in ONE place backend-wide: notification_jobs.py (meal-reminder suppression). No streak/report/daily-focus code consults it. The frontend comment in src/pages/Nutrition.tsx (~line 392, \"Skipped meals on fasting days do not affect streak (backend)\") asserts a backend behavior that does not exist.\n\nREPRO: 1) user with an active streak taps \"Full fast\" on /nutrition (banner appears with the promise), logs no meals, 2) after the nightly report job, DailyReport.streak_maintained=false for that date; do it twice consecutively and FitnessPlan.current_streak resets to 0 (or a freeze is consumed). FIX DIRECTION: in _evaluate_streak / generate_daily_report, treat a fasting_day DailyLog as streak-neutral (pause, like a single miss that can't reset/burn freezes) or auto-maintain, and similarly exempt the daily-focus diet streak.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260707-8d4c",
+      "createdAt": "2026-07-07T00:09:20.438Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Undoing a meal skip within the request round-trip silently does nothing — \"Skip undone\" toast shows but the meal stays skipped on the server.\n\nEXPECTED: tapping Undo on the \"Meal skipped\" toast un-skips the meal (skip is a server-side toggle, so firing the endpoint again should persist the undo).\nACTUAL: skip and undo-skip send BYTE-IDENTICAL request bodies — nutritionService.logMeal({ assigned_meal_id, skip: true }) both times (src/pages/_components/nutrition/useNutritionData.tsx, skipMealMutation ~line 240, undo handler ~line 275, handleUnskipMeal ~line 286). The api-client mutation dedup interceptor keys on method+url+body and ABORTS the new duplicate while the original is in flight (src/lib/api-client.ts ~line 99-108). So if the user taps Undo while the original skip POST is still in flight (easy on mobile latency — the toast appears instantly, optimistically), the undo request is aborted, and skipMealMutation.onError deliberately ignores canceled errors (isCanceledError early-return, no rollback). Net result: UI shows the meal restored + \"Skip undone\" toast, server keeps skipped_at set; the next diet-plan refetch (triggered by the ORIGINAL skip's onSuccess invalidation) flips the meal back to skipped in front of the user.\n\nNOTE: the sibling logMealMutation in the SAME file explicitly fixed this exact class for the eaten-toggle by forwarding was_eaten \"so a log and its undo produce distinct request bodies and aren't collapsed by the api-client dedup interceptor\" (~line 113-117). The skip toggle was missed. FIX DIRECTION: include a discriminator in the skip payload (e.g. currently-skipped state, mirroring was_eaten) so skip and undo bodies differ.\n\nREPRO: throttle network (Slow 3G), tap Skip on a meal, immediately tap Undo on the toast → watch the second POST get aborted in devtools; after refetch the meal is skipped again despite \"Skip undone\".",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260707-6b1e",
+      "createdAt": "2026-07-07T00:09:20.438Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] 16:8 fasting timer can start at \"16h fasted / Eating window open\" even though the user ate TODAY — overnight back-dating only looks at yesterday's meals.\n\nEXPECTED: starting a 16:8 fast counts fasted time since the user's LAST meal — including anything eaten today — or from now.\nACTUAL: FastingBanner's initStart (src/pages/Nutrition.tsx ~lines 70-88) back-dates the fast start to yesterday's last logged meal whenever it's within 20h, but it only fetches YESTERDAY's daily logs (loggingService.getDailyLogs(yesterday)) and never checks today's meal logs. Concrete failure: user logged dinner yesterday 8:00 PM, logged breakfast today 9:00 AM, then taps the \"16:8 window\" chip at noon. Code sets start = yesterday 8 PM (16h ago, < 20h) → the ring instantly renders \"16h 0m / complete ✓\", \"Eating window open\", 100% of fasting window — while the user actually ate 3 hours ago. The fast-complete celebration pulse fires immediately too. Any meal logged today (before or after activating the fast) is ignored for the timer's entire lifetime because the start is frozen into localStorage (nyus_fast_start_<date>) on first render.\n\nREPRO: 1) log any meal as eaten this morning on /nutrition, 2) ensure yesterday has an eaten meal logged in the evening, 3) tap Fasting day → \"16:8 window\" → banner immediately shows the fast complete instead of ~3h elapsed. FIX DIRECTION: also fetch today's logs and use max(last eaten meal across yesterday+today); if the user ate today after the would-be start, back-date to today's last meal instead.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "createdAt": "2026-07-06T22:43:30.585Z",
       "author": "shakeebshaan",
       "tags": [
