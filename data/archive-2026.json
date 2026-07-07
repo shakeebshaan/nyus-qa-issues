@@ -15029,6 +15029,32 @@
       "resolvedAt": "2026-07-07T12:59:56.230Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-07T12:59:56.230Z"
+    },
+    {
+      "id": "i-20260707-plt1",
+      "createdAt": "2026-07-07T10:34:06.045Z",
+      "route": null,
+      "description": "[content] Published: Weight Loss Plateau: Why the Scale Stopped Moving — and What to Change — https://nyus.in/blog/weight-loss-plateau-india.html. Ideas added: 3. Escalated: 1.\n\nCommitted 81e47795 to main (post + belly-fat backlink + blog index + sitemap rebuild). NOTE: live URL currently 404 — DEPLOY_SSH_KEY still unset so the deploy workflow skips, and the undocumented box-side sync is stale since ~2026-07-04 (how-to-lose-belly-fat-india.html from 07-05 is ALSO still 404 while the live blog index already links it). IndexNow deferred for both URLs until they verify live. Escalated this tick: Quora + r/IndianFitness answer-seeding proposal (ESCALATIONS.md 2026-07-07T11:00Z). New backlog ideas: Indian breakfast comparison (idli/dosa/poha/upma), best dinner time for weight loss.",
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIX DEPLOYED AND VERIFIED: both articles now return HTTP 200 (weight-loss-plateau-india.html and how-to-lose-belly-fat-india.html). Root cause: NYUSLANDING repo had commits since 2026-07-06 that were never synced to prod (deploy workflow DEPLOY_SSH_KEY unset). Fix: SCP'd both articles + updated blog/index.html + blog/sitemap-blog.xml to prod; removed stale root /sitemap-blog.xml. Screenshot shows live article rendering at https://nyus.in/blog/weight-loss-plateau-india.html. INFRA BLOCK: loop.mjs verify fails on this machine because qa.config.json (in nyus-qa-issues repo) has app.repo='../nyus-well-tracker-00146a-75469' which resolves to 'NYUS CODE/nyus-well-tracker-00146a-75469' — that path does not exist on the Administrator dev machine (no NYUS CODE dir). npm run test:unit exits 0 when run directly from the correct frontend path. Recommend: update qa.config.json app.repo to use an absolute USERPROFILE-relative path OR scope loop.json testCommand to npm run test:component to unblock future resolves on this machine.",
+      "reviewedAt": "2026-07-07T13:06:49.408Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-07T13:10:58.204Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-07T13:10:58.204Z"
     }
   ]
 }
