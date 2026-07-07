@@ -911,8 +911,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the 16:8 timer back-dated the fast start to yesterday's last meal without ever checking today's logs - logging breakfast then starting a fast could instantly show '16h fasted / complete'. Fix: start time now uses the latest eaten meal across yesterday AND today, so time-since-last-meal is always real.",
+        "imagePath": "images/i-20260707-6b1e-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-6b1e-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "af5a0b2f308b2e494d70e6ad489a498cc7fca08a",
+        "imageCommits": [
+          "af5a0b2f308b2e494d70e6ad489a498cc7fca08a"
+        ],
+        "fixedAt": "2026-07-07T13:23:03.510Z",
+        "by": "shakeebshaan",
+        "appCommit": "60a769ca",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 84,
+          "bar": 80,
+          "note": "Timer can no longer claim a complete fast right after eating; fasting chips shown in capture"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:05:06.285Z",
