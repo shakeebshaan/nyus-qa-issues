@@ -974,6 +974,11 @@ async function resolvePrivDescriptions() {
 async function resolvePrivImages() {
   const imgs = document.querySelectorAll("img[data-priv-path]:not(.priv-loaded)");
   for (const img of imgs) {
+    // Skip PDF/doc paths — they're rendered as links, not images (cb4a).
+    if (img.dataset.privPath && (img.dataset.privPath.endsWith('.pdf') || img.dataset.privPath.endsWith('.doc'))) {
+      img.classList.add("priv-loaded");
+      continue;
+    }
     img.classList.add("priv-loaded"); // mark immediately to prevent double-fetch
     const uri = await fetchPrivImage(img.dataset.privPath);
     if (uri) {
@@ -1058,6 +1063,15 @@ function renderSkeleton() {
   ).join("");
 }
 function shotHtml(path, commit, alt, isPrivate) {
+  // PDF/document attachments render as a link, not an image box (cb4a).
+  if (path && (path.endsWith('.pdf') || path.endsWith('.doc') || path.endsWith('.docx'))) {
+    const fname = path.split('/').pop();
+    if (isPrivate) {
+      return `<button type="button" class="doc-attach report-cta" data-report-path="${esc(path)}" data-report-label="${esc(alt)}">📄 ${esc(fname)} <span class="arr">→</span></button>`;
+    }
+    const u = rawUrl(path, commit);
+    return `<a class="doc-attach" href="${esc(u)}" target="_blank" rel="noopener">📄 ${esc(fname)} <span class="arr">→</span></a>`;
+  }
   if (isPrivate) {
     return `<button class="shot" type="button" data-full="" aria-label="Enlarge ${esc(alt)}"><img data-priv-path="${esc(path)}" alt="${esc(alt)}" src="" /></button>`;
   }
