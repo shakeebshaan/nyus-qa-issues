@@ -1161,7 +1161,10 @@
         }
       ],
       "description": "[bug-hunt] Trial users on the manage screen see a false 'Next charge' billing line. Repro: as a user in the 30-day free trial (is_trial=true, subscription_active=true, no payment — a Subscription row with amount_paid=0/plan_id=null per entitlement.py), open /choose-plan?manage=1. The anti-repurchase redirect intentionally does NOT bounce trial users (ChoosePlan.tsx ~476), so the 'Current subscription' block renders. nextChargeLabel is derived solely from user.subscription_end_date (which the trial row DOES set), so it shows 'Next charge: <trial end date>' (ChoosePlan.tsx ~801-817, ~1304-1322). Expected: trials never get charged (they expire lazily; premium just locks), so show trial-expiry framing, not a charge date. Actual: the UI promises a charge that will never happen — misleading billing claim. Fix: gate the 'Next charge' block on !user.is_trial, or label it 'Trial ends' when is_trial.",
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED in commit 4a765d2e: nextChargeLabel block now shows 'Trial ends' (not 'Next charge') when user.is_trial is true. Verified at ChoosePlan.tsx line 1358. tsc clean.",
+      "reviewedAt": "2026-07-07T14:16:13.262Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-c9d2",
