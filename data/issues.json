@@ -559,7 +559,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Backend fix deployed (prod commit c18f5da): added fallback volume target for users without prior-week data. When prior week < 10 kg, now projects current-week rolling volume forward to a full week × 1.05. QA account has 0 workout sessions this week so fallback still shows 'no target set' (0 >= 10 is false). Owner's account (which had 800 kg today) should now see a projected weekly target on next app refresh. 'Dynamic volume record on recovery' part is a separate feature (show volume PR on NextSessionPreview) - needs a design decision before implementing.",
+      "reviewedAt": "2026-07-07T18:38:13.609Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260707-b3f5",
