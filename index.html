@@ -220,6 +220,7 @@
   .report-cta:hover { border-color: var(--accent); }
   .report-cta:active { opacity: .7; }
   .report-cta .arr { font-size: 15px; line-height: 1; }
+  .report-cta .rpt-ago { font-size: 11px; font-weight: 400; opacity: .65; }
   #arch h2 {
     font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
     color: var(--muted); margin: 18px 2px 12px;
@@ -515,17 +516,70 @@
 
   <!-- Metrics dashboard (real data from the private store; token-gated like reports). -->
   <section id="metrics-view" hidden>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-      <button type="button" class="report-cta" data-report-path="reports/f5ec-report-2-platform.html" data-report-label="NYUS Platform Intelligence Report">
-        📄 NYUS Platform Intelligence Report <span class="arr">→</span>
-      </button>
-      <button type="button" class="report-cta" data-report-path="reports/b696-market-report-v2.html" data-report-label="NYUS Market Research &amp; Revenue Report">
-        📄 NYUS Market Research &amp; Revenue Report <span class="arr">→</span>
-      </button>
-      <button type="button" class="report-cta" data-report-path="reports/738b-report.html" data-report-label="Fresh onboarding run (47 screens, 2026-07-04)">
-        📄 Fresh Onboarding Run (47 screens) <span class="arr">→</span>
-      </button>
+    <!-- Reports panel (i-20260707-3471: all reports; i-20260707-80dc: timestamps) -->
+    <div id="reports-panel" style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">📊 Intelligence &amp; Reports</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <button type="button" class="report-cta" data-report-path="reports/f5ec-report-2-platform.html" data-report-label="NYUS Platform Intelligence Report" data-date="2026-07-04T10:00:00Z">
+          📄 Platform Intelligence <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/b696-market-report-v2.html" data-report-label="NYUS Market Research &amp; Revenue Report" data-date="2026-07-03T10:00:00Z">
+          📄 Market Research &amp; Revenue <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/738b-report.html" data-report-label="Fresh Onboarding Run (47 screens, 2026-07-04)" data-date="2026-07-01T10:00:00Z">
+          📄 Onboarding Run (47 screens) <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/loops-spec-8287.html" data-report-label="QA Loop Specs (Loops 1-6)" data-date="2026-07-05T10:00:00Z">
+          📄 QA Loop Specs <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/c86c-pitches-day2.html" data-report-label="Press Pitches - YourStory + Entrackr (July 6)" data-date="2026-07-06T10:00:00Z">
+          📄 Press Pitches (Jul 6) <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/1e0a-sim-v2.html" data-report-label="Plan sim v2 — Phase 1: 30/30" data-date="2026-07-02T10:00:00Z">
+          📄 Plan Sim v2 <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/749f-report-full.html" data-report-label="Design Report 2026-07-03" data-date="2026-07-02T10:00:00Z">
+          📄 Design Report Jul 3 <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/fd1e-report.html" data-report-label="Onboarding Walk Report" data-date="2026-06-25T10:00:00Z">
+          📄 Onboarding Walk <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/i-20260628-dfd5-report-v8.html" data-report-label="Coaching Audit v8" data-date="2026-06-28T10:00:00Z">
+          📄 Coaching Audit v8 <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/portrait-verify.html" data-report-label="Portrait verification — 8 sample coaches" data-date="2026-07-02T10:00:00Z">
+          📄 Coach Portraits <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/i-20260701-9783-shotgun.html" data-report-label="10 Design Shotgun — Build Wait Screen" data-date="2026-07-01T10:00:00Z">
+          📄 Design Shotgun (10 variants) <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/i-20260630-2346-shotgun.html" data-report-label="7 Design Variants" data-date="2026-06-30T10:00:00Z">
+          📄 7 Design Variants <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/mealcard-designs.html" data-report-label="4 Meal-Card Designs" data-date="2026-06-28T10:00:00Z">
+          📄 Meal-Card Designs <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/mt-misc-owner-guide.html" data-report-label="Metrics Setup Guide" data-date="2026-06-28T10:00:00Z">
+          📄 Metrics Setup Guide <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/a11c-proof.html" data-report-label="Contrast Fix Proof (before/after)" data-date="2026-06-28T10:00:00Z">
+          📄 Contrast Fix Proof <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/ce32-design-shotgun.html" data-report-label="Design Shotgun (3 variants, ce32)" data-date="2026-07-04T10:00:00Z">
+          📄 Design Shotgun (3 variants) <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/i-20260629-2f18-designs-report.html" data-report-label="3 Designs — Pick A/B/C" data-date="2026-06-29T10:00:00Z">
+          📄 3 Designs A/B/C <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+        <button type="button" class="report-cta" data-report-path="reports/2026-06-28.html" data-report-label="Full Board Report Jun 28" data-date="2026-06-28T10:00:00Z">
+          📄 Board Report Jun 28 <span class="arr">→</span><span class="rpt-ago"></span>
+        </button>
+      </div>
     </div>
+    <!-- Board stats panel (i-20260707-8d76: statistics) -->
+    <div id="board-stats-panel" style="margin-bottom:14px"></div>
+    <!-- Running loops panel (i-20260707-da4e) -->
+    <div id="loops-panel" style="margin-bottom:14px"></div>
     <div id="metrics-body"><div class="rv-state">Loading metrics…</div></div>
   </section>
 
@@ -539,8 +593,8 @@
         <div class="thumbs-footer"><button type="button" class="clear-all-btn" id="clear-all">Remove all</button></div>
       </div>
       <label class="pick" id="pick">
-        <input type="file" id="file" accept="image/*" multiple hidden />
-        <span id="pick-inner">📷 &nbsp;Upload screenshots <span class="hint" style="font-style:italic">optional · tap to pick · or paste (Ctrl+V)</span></span>
+        <input type="file" id="file" accept="image/*,application/pdf,.pdf" multiple hidden />
+        <span id="pick-inner">📷 &nbsp;Upload screenshots or PDF <span class="hint" style="font-style:italic">optional · tap to pick · or paste (Ctrl+V)</span></span>
       </label>
       <div class="field">
         <label for="route">Screen / route <span style="font-weight:400">(optional — e.g. /nutrition)</span></label>
@@ -1278,18 +1332,21 @@ function renderPickZone() {
   if (hasPicks) {
     $("thumb-grid").innerHTML = pickedFiles.map((f, i) => {
       const url = URL.createObjectURL(f);
-      return `<div class="thumb"><img src="${url}" alt="preview ${i + 1}" /><button class="rm-img" type="button" data-idx="${i}" aria-label="Remove image ${i + 1}">✕</button></div>`;
+      const inner = f.type === "application/pdf"
+        ? `<div style="width:64px;height:64px;border-radius:8px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="font-size:24px">📄</span><span style="font-size:9px;color:var(--muted);font-weight:600">PDF</span></div>`
+        : `<img src="${url}" alt="preview ${i + 1}" />`;
+      return `<div class="thumb">${inner}<button class="rm-img" type="button" data-idx="${i}" aria-label="Remove file ${i + 1}">✕</button></div>`;
     }).join("");
     $("pick").classList.add("add-more");
     $("pick-inner").innerHTML = `➕ &nbsp;Add more screenshots<span class="hint">tap · paste (Ctrl+V)</span>`;
   } else {
     $("pick").classList.remove("add-more");
-    $("pick-inner").innerHTML = `📷 &nbsp;Upload screenshots <span class="hint" style="font-style:italic">optional · tap to pick · or paste (Ctrl+V)</span>`;
+    $("pick-inner").innerHTML = `📷 &nbsp;Upload screenshots or PDF <span class="hint" style="font-style:italic">optional · tap to pick · or paste (Ctrl+V)</span>`;
   }
 }
 
 function addPickedFile(f) {
-  if (!f || !f.type.startsWith("image/")) return;
+  if (!f || (!f.type.startsWith("image/") && f.type !== "application/pdf")) return;
   pickedFiles.push(f);
   renderPickZone();
   updateSubmit();
@@ -1344,13 +1401,15 @@ $("form").addEventListener("submit", async (ev) => {
       Array.from(crypto.getRandomValues(new Uint8Array(2)), (b) => b.toString(16).padStart(2, "0")).join("");
     const imagePaths = [], imageCommits = [];
     for (let i = 0; i < pickedFiles.length; i++) {
-      $("submit-label").textContent = `Uploading image ${i + 1} of ${pickedFiles.length}…`;
-      const blob = await compress(pickedFiles[i]);
+      $("submit-label").textContent = `Uploading file ${i + 1} of ${pickedFiles.length}…`;
+      const isPdf = pickedFiles[i].type === "application/pdf";
+      const blob = isPdf ? pickedFiles[i] : await compress(pickedFiles[i]);
       const b64 = await blobToB64(blob);
-      if (b64.length > 5_000_000) throw new Error(`Image ${i + 1} too large even after compression.`);
+      if (b64.length > 5_000_000) throw new Error(`File ${i + 1} too large.`);
       const suffix = pickedFiles.length > 1 ? `-${i}` : "";
-      const imgRes = await putPrivFile(`images/${id}${suffix}.jpg`, b64, `issue ${id}: screenshot ${i + 1}`);
-      imagePaths.push(`images/${id}${suffix}.jpg`);
+      const ext = isPdf ? "pdf" : "jpg";
+      const imgRes = await putPrivFile(`images/${id}${suffix}.${ext}`, b64, `issue ${id}: file ${i + 1}`);
+      imagePaths.push(`images/${id}${suffix}.${ext}`);
       imageCommits.push(imgRes.commit?.sha || "");
     }
     let route = $("route").value.trim();
@@ -1637,7 +1696,24 @@ function renderMetrics(d, hist) {
     const delta = deltaChip(key, value, "hd");
     return `<div class="m-hero" style="--ha:${accent}"><div class="mh-top"><span class="mh-l">${esc(label)}</span>${delta}</div><div class="mh-v">${unit === "$" ? esc(unit) : ""}${value == null ? "–" : esc(String(value))}${unit && unit !== "$" ? `<span class="mh-u">${esc(unit)}</span>` : ""}</div>${svgSpark(series, accent)}</div>`;
   };
-  let html = `<div class="m-head"><div class="m-pills"><span class="mp live">${s.live ?? "–"} live</span><span class="mp awa">${s.awaiting ?? "–"} awaiting</span><span class="mp">${s.total ?? "–"} tracked</span></div><div class="m-meta">Real data · ${fmtDate(d.generatedAt)} · ${esc(srcs)} · ${d.periodDays || 30}d window${hist.length ? ` · ${hist.length}d history` : ""}</div></div>`;
+  // Data summary paragraph (i-20260707-a671)
+  const totalUsers = findVal("product_growth", "users_total");
+  const mau = findVal("product_growth", "mau");
+  const dau = findVal("product_growth", "dau");
+  const aiCost = findVal("ai", "ai_cost_30d");
+  const paidSubs = findVal("finance", "paid_subs");
+  const activeSubs = findVal("finance", "active_subs");
+  const prevUsers = prevOf("users_total"), prevMau = prevOf("mau");
+  const userGrowth = (totalUsers != null && prevUsers != null && prevUsers > 0) ? ((totalUsers - prevUsers) / prevUsers * 100).toFixed(1) : null;
+  const summaryParts = [];
+  if (totalUsers != null) summaryParts.push(`${totalUsers} total users${userGrowth != null ? ` (${userGrowth > 0 ? "+" : ""}${userGrowth}% vs yesterday)` : ""}`);
+  if (mau != null) summaryParts.push(`${mau} monthly active`);
+  if (dau != null && mau != null && mau > 0) summaryParts.push(`${(dau/mau*100).toFixed(1)}% DAU/MAU stickiness`);
+  if (activeSubs != null) summaryParts.push(`${activeSubs} on active plans`);
+  if (paidSubs != null) summaryParts.push(`${paidSubs} paid`);
+  if (aiCost != null) summaryParts.push(`$${aiCost} AI cost (30d)`);
+  const summaryHtml = summaryParts.length ? `<div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.6;color:var(--fg)"><span style="font-weight:700;color:var(--accent)">Summary · </span>${esc(summaryParts.join(" · "))}</div>` : "";
+  let html = `<div class="m-head"><div class="m-pills"><span class="mp live">${s.live ?? "–"} live</span><span class="mp awa">${s.awaiting ?? "–"} awaiting</span><span class="mp">${s.total ?? "–"} tracked</span></div><div class="m-meta">Real data · ${fmtDate(d.generatedAt)} · ${esc(srcs)} · ${d.periodDays || 30}d window${hist.length ? ` · ${hist.length}d history` : ""}</div></div>${summaryHtml}`;
   const rzpMode = findVal("finance", "razorpay_mode");
   const rzpTestBanner = rzpMode === "test" ? `<div style="background:#fef3c7;border:1px solid #f59e0b;color:#92400e;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;margin-bottom:10px">⚠ Razorpay is in TEST MODE — all payment figures below reflect test transactions, not real money.</div>` : "";
   html += rzpTestBanner + `<div class="m-heroes">`
@@ -1686,9 +1762,60 @@ function renderMetrics(d, hist) {
   }
   body.innerHTML = html;
 }
+function renderBoardStats() {
+  const panel = document.getElementById("board-stats-panel");
+  if (!panel) return;
+  const issues = db?.issues || [];
+  const openCount = issues.filter(i => i.status === "open").length;
+  const inReview = issues.filter(i => i.status === "fixed").length;
+  const needsOwner = issues.filter(i => i.needsReview).length;
+  // Rough fix rate from the loop satisfaction bar
+  const sat = loop?.satisfaction ?? 100;
+  const lastTick = loop?.updatedAt ? fmtDate(loop.updatedAt) : "–";
+  panel.innerHTML = `<div class="m-chart">
+    <h4>Board Statistics</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;text-align:center;margin-bottom:8px">
+      <div><div style="font-size:26px;font-weight:800;color:#e2731f">${openCount}</div><div style="font-size:11px;color:var(--muted)">Open</div></div>
+      <div><div style="font-size:26px;font-weight:800;color:var(--accent)">${inReview}</div><div style="font-size:11px;color:var(--muted)">In Review</div></div>
+      <div><div style="font-size:26px;font-weight:800;color:#7c5cdb">${needsOwner}</div><div style="font-size:11px;color:var(--muted)">Owner Pending</div></div>
+      <div><div style="font-size:26px;font-weight:800;color:var(--muted)">${sat}</div><div style="font-size:11px;color:var(--muted)">Judge Bar</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted)">Loop settings last updated: ${lastTick}</div>
+  </div>`;
+}
+async function renderLoopsPanel() {
+  const panel = document.getElementById("loops-panel");
+  if (!panel) return;
+  let loopsData = null;
+  try { loopsData = await fetchPrivJson("data/loops.json"); } catch { /* ok */ }
+  const loops = loopsData?.loops || [
+    { name: "QA Fix Loop", purpose: "Find open board issues → root-cause → patch → screenshot → resolve. Runs every 30 min.", schedule: "*/30 * * * *", lastFired: window._loopUpdatedAt || null, status: "active" },
+    { name: "Analytics Insights Loop", purpose: "Pull GA4 + prod-DB KPIs → consultant-style report → file to board. Daily.", schedule: "0 9 * * *", lastFired: null, status: "pending setup" }
+  ];
+  const rows = loops.map(l => {
+    const ago = l.lastFired ? fmtDate(l.lastFired) : "–";
+    const statusColor = l.status === "active" ? "var(--accent)" : l.status === "error" ? "#d6453d" : "var(--muted)";
+    return `<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px">${esc(l.name)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${esc(l.purpose)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Schedule: <code>${esc(l.schedule)}</code> · Last run: ${ago}</div>
+      </div>
+      <div style="shrink:0;font-size:11px;font-weight:700;color:${statusColor};white-space:nowrap;padding-top:2px">${esc(l.status)}</div>
+    </div>`;
+  }).join("");
+  panel.innerHTML = `<div class="m-chart"><h4>Running Loops</h4>${rows || "<div style='color:var(--muted);font-size:12px'>No loops configured.</div>"}</div>`;
+}
 async function showMetrics() {
   if (metricsLoaded) return;
   const [d, hist] = await Promise.all([fetchPrivMetrics(), fetchPrivJson("data/metrics-history.json")]);
+  renderBoardStats();
+  await renderLoopsPanel();
+  // Update report timestamps (i-20260707-80dc)
+  document.querySelectorAll(".report-cta[data-date]").forEach(btn => {
+    const span = btn.querySelector(".rpt-ago");
+    if (span) span.textContent = " · " + fmtDate(btn.dataset.date);
+  });
   renderMetrics(d, hist);
   metricsLoaded = true;
 }
