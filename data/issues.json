@@ -58,9 +58,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: handleExportAll catch block showed a hardcoded generic error toast for ALL failures, never reading the server's error message. Fix: in ProfilePreferencesCard.tsx, the catch now reads (e as AxiosError).response?.data?.error via axios.isAxiosError(); a 429 shows 'Already exported today' (default variant) with the server's specific hours-remaining message; other errors fall back to the generic destructive toast. Frontend: src/pages/_components/profile/ProfilePreferencesCard.tsx commit 070651c6.",
+        "imagePath": "images/i-20260707-3a9c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-3a9c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8f900843aaaee53e55e5a84857b7813cf6638f01",
+        "imageCommits": [
+          "8f900843aaaee53e55e5a84857b7813cf6638f01"
+        ],
+        "fixedAt": "2026-07-07T10:06:58.394Z",
+        "by": "shakeebshaan",
+        "appCommit": "070651c6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 88,
+          "bar": 80,
+          "note": "Targeted fix reads server error message for 429 instead of showing generic copy. TSC clean. Screenshot shows /profile with Export button rendered — can't capture the 429 toast directly (requires a second same-day export), but the code change is unambiguous and correct."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260707-dk73",
