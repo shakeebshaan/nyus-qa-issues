@@ -57,31 +57,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: handleSaveChanges sent string IDs like 42-0 for combined-ingredient split rows; backend _safe_int rejected them so every split part was dropped on save and macros zeroed. Fix (RecipeDetail.tsx): handleSaveChanges now aggregates split-part rows by parent integer ID and sums quantities before posting, so backend write+read paths receive valid integer ingredient_ids.",
-        "imagePath": "images/i-20260707-4d7e-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-4d7e-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "260143fb1b30717fb157cc1ed6792317fd796f7a",
-        "imageCommits": [
-          "260143fb1b30717fb157cc1ed6792317fd796f7a"
-        ],
-        "fixedAt": "2026-07-07T09:36:57.697Z",
-        "by": "shakeebshaan",
-        "appCommit": "fb33dc7c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 88,
-          "bar": 80,
-          "note": "Root cause precisely identified and fixed. Split-ID aggregation makes combined-ingredient saves round-trip losslessly. TypeScript clean, zero console errors."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:00:30.826Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: handleSaveChanges sent string IDs like 42-0 for combined-ingredient split rows; backend _safe_int rejected them so every split part was dropped on save and macros zeroed. Fix (RecipeDetail.tsx): handleSaveChanges now aggregates split-part rows by parent integer ID and sums quantities before posting, so backend write+read paths receive valid integer ingredient_ids.",
+            "imagePath": "images/i-20260707-4d7e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-4d7e-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "260143fb1b30717fb157cc1ed6792317fd796f7a",
+            "imageCommits": [
+              "260143fb1b30717fb157cc1ed6792317fd796f7a"
+            ],
+            "fixedAt": "2026-07-07T09:36:57.697Z",
+            "by": "shakeebshaan",
+            "appCommit": "fb33dc7c",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 88,
+              "bar": 80,
+              "note": "Root cause precisely identified and fixed. Split-ID aggregation makes combined-ingredient saves round-trip losslessly. TypeScript clean, zero console errors."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "id": "i-20260707-4d7e",
       "createdAt": "2026-07-07T09:09:41.124Z",
       "route": "/recipe-detail",
