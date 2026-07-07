@@ -563,8 +563,8 @@
       ],
       "needsReview": true,
       "reviewedBy": "shakeebshaan",
-      "reviewReason": "READY TO INSTALL. The spec + prompt are in nyus-qa-issues/tmp/analytics-insights-loop.md. Three steps (must run in an INTERACTIVE session with write access to C:\\Users\\Administrator\\.claude\\nyus-loops): (1) copy prompt: Copy-Item 'C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\analytics-insights-loop.md' 'C:\\Users\\Administrator\\.claude\\nyus-loops\\prompts\\analytics-insights.md' (2) add entry to C:\\Users\\Administrator\\.claude\\nyus-loops\\loops.json: {slug:'analytics-insights', cwd:'C:\\Users\\Administrator\\Desktop\\NYUS CODE\\NYUSLANDING', schedule:'daily 07:03', source:'owner i-20260706-f039'} (3) schtasks /create /tn '\\NYUS-Loops\\analytics-insights' /sc daily /st 07:03 /tr 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\Users\\Administrator\\.claude\\nyus-loops\\runner.ps1 -Slug analytics-insights' /f. After registering: run manually once to confirm a report posts to the board.",
-      "reviewedAt": "2026-07-07T19:03:45.190Z",
+      "reviewReason": "3 one-time install steps (run interactively, takes ~2 min):\n\n1. Copy spec: copy $QA_REPO\\tmp\\analytics-insights-loop.md C:\\Users\\Administrator\\.claude\\nyus-loops\\prompts\\analytics-insights.md\n\n2. Add to loops.json (edit C:\\Users\\Administrator\\.claude\\nyus-loops\\loops.json, add entry):\n   { slug: analytics-insights, cwd: C:\\\\Users\\\\Administrator\\\\Desktop\\\\NYUS",
+      "reviewedAt": "2026-07-07T19:11:36.812Z",
       "reviewReply": "What to do tell me I will do it",
       "reviewRepliedAt": "2026-07-07T13:57:37.635Z",
       "reviewReplyBy": "shakeebshaan"
