@@ -386,31 +386,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: AuthContext logout sweepPrefixes listed nyus_gam_level but not MilestoneWatcher's nyus_gam_milestones, so user A's monotonic milestone latch survived logout and permanently suppressed user B's celebrations on a shared device. Fix (dfd0d22e): added nyus_gam_milestones to sweepPrefixes. E2E-verified on dev: seeded {tracking:100,perfect_weeks:12}, drove the real Profile - Logout - confirm flow, key is null after logout (screenshot = clean post-logout login screen).",
-        "imagePath": "images/i-20260707-7d3a-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-7d3a-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "6b92c9c7706b7d382889ed150d8a91a9068e6b6d",
-        "imageCommits": [
-          "6b92c9c7706b7d382889ed150d8a91a9068e6b6d"
-        ],
-        "fixedAt": "2026-07-07T05:19:56.878Z",
-        "by": "shakeebshaan",
-        "appCommit": "dfd0d22e",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 80,
-          "note": "E2E repro of the exact issue scenario passes: seeded latch swept on real UI logout; 40/40 scoped unit tests green; loop.mjs verify MET."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-07T13:03:33.156Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: AuthContext logout sweepPrefixes listed nyus_gam_level but not MilestoneWatcher's nyus_gam_milestones, so user A's monotonic milestone latch survived logout and permanently suppressed user B's celebrations on a shared device. Fix (dfd0d22e): added nyus_gam_milestones to sweepPrefixes. E2E-verified on dev: seeded {tracking:100,perfect_weeks:12}, drove the real Profile - Logout - confirm flow, key is null after logout (screenshot = clean post-logout login screen).",
+            "imagePath": "images/i-20260707-7d3a-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-7d3a-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "6b92c9c7706b7d382889ed150d8a91a9068e6b6d",
+            "imageCommits": [
+              "6b92c9c7706b7d382889ed150d8a91a9068e6b6d"
+            ],
+            "fixedAt": "2026-07-07T05:19:56.878Z",
+            "by": "shakeebshaan",
+            "appCommit": "dfd0d22e",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 92,
+              "bar": 80,
+              "note": "E2E repro of the exact issue scenario passes: seeded latch swept on real UI logout; 40/40 scoped unit tests green; loop.mjs verify MET."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
