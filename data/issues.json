@@ -644,8 +644,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the profile 30-Day Challenge card called loggingService.getStreakInfo (which does not exist) and used dead orange/teal-500 palette classes the token build compiles to nothing - the card rendered dead/unstyled. Fix: wired to the live streak via reportService and moved styles onto registered d-* token scales; regression test added.",
+        "imagePath": "images/i-20260707-551c-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-551c-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "546d9726d11bd16cb359d1701332d7a42e3dffeb",
+        "imageCommits": [
+          "546d9726d11bd16cb359d1701332d7a42e3dffeb"
+        ],
+        "fixedAt": "2026-07-07T13:25:26.769Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf9c1082",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 86,
+          "bar": 80,
+          "note": "Capture shows the challenge card live ('0 of 30 days - 30 days to go') with styled progress"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T13:04:01.796Z",
