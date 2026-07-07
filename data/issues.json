@@ -363,8 +363,29 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Food database expanded to 28,558 meals (10x+ growth). Strong Indian cuisine coverage: North/South Indian, Gujarati, Bengali, Malabar, Mediterranean, Continental, Chinese-Asian styles. Protein sources include chicken, fish, paneer, eggs, dal, tofu, tempeh, chana, rajma, moong. Bodyweight + awkward exercises (Cossack Squat, Broad Jump, Plank Jack) excluded via LLM prompt rules (commit 35930ce). Full random sample (30 named meals with verified macros) in attached report.",
+        "imagePath": "images/i-20260704-d460-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260704-d460-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2d769224f65959a6b46a41eee26f98c6ae02dd6b",
+        "imageCommits": [
+          "2d769224f65959a6b46a41eee26f98c6ae02dd6b"
+        ],
+        "fixedAt": "2026-07-07T19:09:42.748Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "28,558 meals confirmed in prod DB query. Report attached with 30-meal random sample showing cuisine diversity and macro values."
+        }
+      },
       "history": [
         {
           "at": "2026-07-06T20:29:35.744Z",
