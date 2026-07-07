@@ -374,12 +374,31 @@
         "00ab4e292a356ee8e159ee0966d8d9a45b734ecc"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Lead-outreach loop is LIVE: scheduled 3x daily (09:20/14:20/19:20, first tick tomorrow 09:20). Each tick discovers leads from PUBLIC data per your direction (funding news for India fitness/health startups, gym-chain + corporate-wellness partnership pages, D2C nutrition brands, fitness creators, accelerators), verifies addresses with the email-waterfall free checks, writes a short personalized pitch, and sends from support@nyus.in via Resend - sending verified with a real test email to your inbox (id b759b1e1, check support@chartraiders.com). Every send is logged: outreach/SENT-LOG.md + ledger.json + ONE daily summary card to this board. Guardrails are enforced in code by send-pitch.mjs (the only send path): hard 10/day cap, never the same address twice, suppression list (any 'stop' reply gets suppressed), mandatory opt-out line + NYUS identity in every body, published-emails-only. Note: the waterfall's paid API keys (MillionVerifier/Prospeo/Blitz) are not on this machine - the loop therefore only emails addresses actually published by the recipient (no guessed permutations, no bounce risk); drop the 3 keys into .agents/skills/email-waterfall/.env to enable permutation-guessing later.",
+        "imagePath": "images/i-20260707-4b08-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-4b08-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3ee8f401beb56ffc9d0551429e141b57ae080d73",
+        "imageCommits": [
+          "3ee8f401beb56ffc9d0551429e141b57ae080d73"
+        ],
+        "fixedAt": "2026-07-07T23:33:53.012Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Loop created+scheduled (3 tasks Ready), Resend sending proven with a real delivered email from support@nyus.in, 10/day target = enforced cap, complete send logging in place, all owner-reply requirements (public-data discovery, support@nyus.in, Resend, logging) covered. Screenshot shows schedule + real send id + code-enforced refusals."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Lead loop needs owner input on 3 things before building: (1) contacts source — where should leads come from? (LinkedIn search? Apollo export? Manual CSV?) The waterfall tool reads contacts.csv (first_name,last_name,domain columns); it needs a leads list to work on. (2) Send-from email — what email address/sender should the automated emails come from? Need SMTP creds or API key for sending. (3) Email body template — the waterfall tool finds email addresses but doesn't send email itself; sending needs a separate outreach tool. Current tools/email-waterfall only verifies emails. Provide the contacts source and send-from info and the loop can be built.",
-      "reviewedAt": "2026-07-07T19:04:00.819Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Find the public data linked search etc where ever there are go to websites possible search for names etc new old what gave funding in news etc and continuously pitch to everyone aim for 10 per day and log all the emails every sent from support@nyus.in etc \n\nsend email from the resend etc",
       "reviewRepliedAt": "2026-07-07T20:53:14.126Z",
