@@ -96,13 +96,36 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: _unmatched rows had no macros yet the frontend showed an amber prompt demanding the user set a quantity - but liveTotals used (calories ?? 0) so editing did nothing, and save dropped the row. Fix (RecipeDetail.tsx): removed the amber Estimate-set-quantity text, aria-invalid, and amber background highlight for _unmatched rows. Rows still render with name visible; no longer demands input it cannot act on.",
+        "imagePath": "images/i-20260707-7fa3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260707-7fa3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7aed1e9cce95c96dfb33ab6cc7b5f8e6bf027a6d",
+        "imageCommits": [
+          "7aed1e9cce95c96dfb33ab6cc7b5f8e6bf027a6d"
+        ],
+        "fixedAt": "2026-07-07T09:37:40.922Z",
+        "by": "shakeebshaan",
+        "appCommit": "fb33dc7c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 85,
+          "bar": 80,
+          "note": "Removes deceptive UX. Clean removal of three UI elements that were misleading users. TypeScript clean, no console errors."
+        }
+      },
       "history": [],
       "id": "i-20260707-7fa3",
       "createdAt": "2026-07-07T09:09:41.124Z",
       "route": "/recipe-detail",
-      "description": "[bug-hunt] The amber \"Estimate - set quantity\" prompt on unmatched ingredient rows is a dead control: entering a quantity changes nothing on screen and is never saved anywhere.\n\nEXPECTED: a control that demands input (amber highlight + aria-invalid until a value is typed) does something with that value - feeds the header totals and persists with Save.\nACTUAL: rows flagged _unmatched arrive from the backend with NO macros (calories null - backend.py:7010-7018, the public-food-lookup miss branch). RecipeDetail.tsx liveTotals (~96-112) computes (ing.calories ?? 0) * scale = 0 for them, so typing a quantity leaves the header kcal/macros completely unchanged. On save the row is either filtered out entirely (ing.id == null guard, RecipeDetail.tsx:150) or carries a string part-id \"N-idx\" that both backend read paths reject via _safe_int - so the quantity the user was explicitly told to set is dropped on every path. The user is prompted, complies, and nothing happens: no recalc, no persistence, no effect on the day's macros.\n\nREPRO: open a recipe containing an ingredient the public food lookup misses (row shows amber \"Estimate - set quantity\", quantity input highlighted) -> type 150 -> header totals unchanged -> \"Save Meal Changes\" -> reopen recipe -> value gone, prompt back.\n\nWHERE: src/pages/RecipeDetail.tsx (liveTotals fallback + save filter) + backend.py _expand_combined unmatched branch (~7011). FIX direction: either attach a per-100g estimate (parent-ingredient prorated macros already exist one branch above, ~6999) so quantity edits recalc + persist, or stop demanding input on rows that can't use it."
+      "description": "[bug-hunt] The amber \"Estimate - set quantity\" prompt on unmatched ingredient rows is a dead control: entering a quantity changes nothing on screen and is never saved anywhere.\n\nEXPECTED: a control that demands input (amber highlight + aria-invalid until a value is typed) does something with that value - feeds the header totals and persists with Save.\nACTUAL: rows flagged _unmatched arrive from the backend with NO macros (calories null - backend.py:7010-7018, the public-food-lookup miss branch). RecipeDetail.tsx liveTotals (~96-112) computes (ing.calories ?? 0) * scale = 0 for them, so typing a quantity leaves the header kcal/macros completely unchanged. On save the row is either filtered out entirely (ing.id == null guard, RecipeDetail.tsx:150) or carries a string part-id \"N-idx\" that both backend read paths reject via _safe_int - so the quantity the user was explicitly told to set is dropped on every path. The user is prompted, complies, and nothing happens: no recalc, no persistence, no effect on the day's macros.\n\nREPRO: open a recipe containing an ingredient the public food lookup misses (row shows amber \"Estimate - set quantity\", quantity input highlighted) -> type 150 -> header totals unchanged -> \"Save Meal Changes\" -> reopen recipe -> value gone, prompt back.\n\nWHERE: src/pages/RecipeDetail.tsx (liveTotals fallback + save filter) + backend.py _expand_combined unmatched branch (~7011). FIX direction: either attach a per-100g estimate (parent-ingredient prorated macros already exist one branch above, ~6999) so quantity edits recalc + persist, or stop demanding input on rows that can't use it.",
+      "needsReview": false
     },
     {
       "id": "i-20260707-dexp",
