@@ -7,8 +7,8 @@
       "history": [],
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto"
+        "social",
+        "fixed-awaiting-verify"
       ],
       "imagePath": null,
       "imageCommit": null,
@@ -18,7 +18,11 @@
       "createdAt": "2026-07-08T10:37:18Z",
       "id": "i-20260708-5a3d",
       "route": "/social",
-      "description": "[bug-hunt] Leaderboard 'My Group' scope gets STUCK with no way back to Global after you leave your last partner group. LeaderboardView.tsx renders the Global/'My Group' scope toggle ONLY when hasAnyGroup (line 273: `{hasAnyGroup && (...)}`), but the selected `scope` state ('group') is never reset when the partnerGroups list becomes empty. Expected: with no groups, scope should fall back to 'global'. Actual: the toggle unmounts while scope stays 'group', freezing the board. Repro: (1) be in >=1 partner group; open Social -> Leaderboard -> the Global/'My Group' toggle appears; tap 'My Group'. (2) Leave/delete your last partner group from the Partners hub (or pull-to-refresh after leaving -> handleRefresh invalidates ['partner-groups'], staleTime 60s, refetches empty). (3) hasAnyGroup flips false so the scope toggle UNMOUNTS while scope is still 'group'; displayedResults = groupResults filters visibleResults to groupMemberIds which is now just {yourself}, so the board freezes showing only you (or the 'No group members on this board yet' empty state) with NO toggle to return to Global. Fix: derive effectiveScope = hasAnyGroup ? scope : 'global' (or a useEffect that resets scope to 'global' when !hasAnyGroup)."
+      "description": "[bug-hunt] Leaderboard 'My Group' scope gets STUCK with no way back to Global after you leave your last partner group. LeaderboardView.tsx renders the Global/'My Group' scope toggle ONLY when hasAnyGroup (line 273: `{hasAnyGroup && (...)}`), but the selected `scope` state ('group') is never reset when the partnerGroups list becomes empty. Expected: with no groups, scope should fall back to 'global'. Actual: the toggle unmounts while scope stays 'group', freezing the board. Repro: (1) be in >=1 partner group; open Social -> Leaderboard -> the Global/'My Group' toggle appears; tap 'My Group'. (2) Leave/delete your last partner group from the Partners hub (or pull-to-refresh after leaving -> handleRefresh invalidates ['partner-groups'], staleTime 60s, refetches empty). (3) hasAnyGroup flips false so the scope toggle UNMOUNTS while scope is still 'group'; displayedResults = groupResults filters visibleResults to groupMemberIds which is now just {yourself}, so the board freezes showing only you (or the 'No group members on this board yet' empty state) with NO toggle to return to Global. Fix: derive effectiveScope = hasAnyGroup ? scope : 'global' (or a useEffect that resets scope to 'global' when !hasAnyGroup).",
+      "needsReview": true,
+      "reviewReason": "FIXED in src (commit a8c45de1, pushed to main) + passing regression test (test/LeaderboardView.scope.test.tsx). Root cause exactly as filed: scope state stayed 'group' after the Global/My Group toggle unmounted (it renders only under hasAnyGroup), stranding the board filtered to a now-empty group with no way back. Fix derives effectiveScope = hasAnyGroup ? scope : 'global' so leaving your last group falls back to Global and the board can't freeze. Not auto-resolving with a screenshot: live satisfaction bar is 100 and this is a multi-step interaction/edge state (be in a group -> tap My Group -> leave last group) that a single headless /social capture cannot faithfully prove, and the QA account can't be provisioned into that group state headlessly. Please verify on-device or confirm resolve.",
+      "reviewedAt": "2026-07-08T10:49:35.238Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "status": "open",
