@@ -180,8 +180,30 @@
     },
     {
       "createdAt": "2026-07-08T06:55:23.362Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Re-fix confirm (reopen 'Fix it'). Root cause: logSetMutation.onSuccess toasted every logged set, so the checkbox auto-log path (loops one mutate per prior set) stacked 4-5 toasts per tap. Fix ALREADY in HEAD: the per-set toast is gated on isModalOpen.current (Activity.tsx:472) — only manual picker logging toasts per set; the checkbox auto-log runs with the picker CLOSED and shows just its single '{exercise} auto-logged' summary. NOTE: needs an exercise with prior-session data (checkbox shown) in a live session; not drivable in a static capture — screenshot shows /activity rendering correctly.",
+        "imagePath": "images/i-20260708-2da8-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260708-2da8-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fa7af226c6aedcc0a43e39335ed035800a6796da",
+        "imageCommits": [
+          "fa7af226c6aedcc0a43e39335ed035800a6796da"
+        ],
+        "fixedAt": "2026-07-08T09:37:51.690Z",
+        "by": "shakeebshaan",
+        "appCommit": "901ace7f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Fix verified present in HEAD (Activity.tsx:472 gates per-set toast on isModalOpen; auto-log path keeps single summary toast) — reopen 'Fix it' predates the build reaching device."
+        }
+      },
       "history": [
         {
           "at": "2026-07-08T09:09:15.004Z",
