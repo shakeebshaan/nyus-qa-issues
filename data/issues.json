@@ -44,8 +44,30 @@
       "needsReview": false
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: StackedMomentCards.tsx reset expansion via useLayoutEffect keyed on [moments], but Dashboard rebuilds the moments array (new identity) every commit, so the effect re-ran after EVERY parent render (CSAT timer, useCoachMoment async setState, react-query refetch, pull-to-refresh) and snapped any expanded coach tip back to line-clamp-2. Fix: key the reset effect on the content (joined sectionIds) instead of array identity, so expansion resets only when the actual moment set changes. Proof: regression test test/StackedMomentCards.expand.test.tsx proves expansion survives an identical-content array rebuild and still resets when the set changes. This is a pure render-timing bug with no static visual signature; the shot confirms the dashboard/coach deck renders cleanly.",
+        "imagePath": "images/i-20260708-e7c9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-e7c9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "942580cfc2819222f3b0e5e1d47befa50bcef978",
+        "imageCommits": [
+          "942580cfc2819222f3b0e5e1d47befa50bcef978"
+        ],
+        "fixedAt": "2026-07-08T11:34:43.975Z",
+        "by": "shakeebshaan",
+        "appCommit": "a360a050",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Precise root cause, minimal one-line dependency-key fix, regression test covers persist + reset, tsc clean."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "imagePath": null,
@@ -60,7 +82,8 @@
       "createdAt": "2026-07-08T11:26:20Z",
       "id": "i-20260708-e7c9",
       "route": "/dashboard",
-      "description": "[bug-hunt] Dashboard coach-tip “Tap to read more” expansion collapses itself on any dashboard re-render, so long coach tips cannot be read expanded. ROOT CAUSE: StackedMomentCards.tsx:43-45 runs `useLayoutEffect(() => setExpanded(false), [moments])` to reset expansion when the moment set changes. But the `moments` prop is a BRAND-NEW array on every Dashboard render — Dashboard.tsx:397-435 rebuilds `const items: MomentItem[] = []` inside an inline IIFE each render and passes it straight to <StackedMomentCards moments={items}>. So the `[moments]` dependency changes every commit, the effect runs after EVERY parent render (not only when content changes), and `setExpanded(false)` fires each time. Any Dashboard re-render — the CSAT 4s timer (Dashboard.tsx:162-169), useCoachMoment’s async liveData setState (useMoments.ts:184-195), a react-query background refetch, or pull-to-refresh (handleRefresh) — snaps an expanded tip back to collapsed (line-clamp-2). EXPECTED: once the user taps “Tap to read more,” the tip stays expanded until they collapse it. ACTUAL: it re-collapses on the next parent re-render. REPRO: (1) open /dashboard where the top coach tip is long enough to clamp (shows “Tap to read more” at StackedMomentCards.tsx:144-148). (2) tap the tip to expand. (3) pull-to-refresh (or just wait for a background query refetch / the CSAT timer). → the tip collapses back on its own. FIX: reset expansion only when the moment set actually changes (e.g. key the effect on the joined sectionIds string, not the array identity), or useMemo the `items` array in Dashboard so `moments` is referentially stable across renders."
+      "description": "[bug-hunt] Dashboard coach-tip “Tap to read more” expansion collapses itself on any dashboard re-render, so long coach tips cannot be read expanded. ROOT CAUSE: StackedMomentCards.tsx:43-45 runs `useLayoutEffect(() => setExpanded(false), [moments])` to reset expansion when the moment set changes. But the `moments` prop is a BRAND-NEW array on every Dashboard render — Dashboard.tsx:397-435 rebuilds `const items: MomentItem[] = []` inside an inline IIFE each render and passes it straight to <StackedMomentCards moments={items}>. So the `[moments]` dependency changes every commit, the effect runs after EVERY parent render (not only when content changes), and `setExpanded(false)` fires each time. Any Dashboard re-render — the CSAT 4s timer (Dashboard.tsx:162-169), useCoachMoment’s async liveData setState (useMoments.ts:184-195), a react-query background refetch, or pull-to-refresh (handleRefresh) — snaps an expanded tip back to collapsed (line-clamp-2). EXPECTED: once the user taps “Tap to read more,” the tip stays expanded until they collapse it. ACTUAL: it re-collapses on the next parent re-render. REPRO: (1) open /dashboard where the top coach tip is long enough to clamp (shows “Tap to read more” at StackedMomentCards.tsx:144-148). (2) tap the tip to expand. (3) pull-to-refresh (or just wait for a background query refetch / the CSAT timer). → the tip collapses back on its own. FIX: reset expansion only when the moment set actually changes (e.g. key the effect on the joined sectionIds string, not the array identity), or useMemo the `items` array in Dashboard so `moments` is referentially stable across renders.",
+      "needsReview": false
     },
     {
       "status": "open",
