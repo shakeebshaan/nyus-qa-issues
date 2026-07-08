@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T06:55:23.362Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-2ea5",
+      "route": "/activity",
+      "description": "[bug-hunt] Live workout player declares a set the \"final set\" based purely on set NUMBER, not on whether all target sets were actually logged. In ExerciseWheelPicker.handleLogSet (src/components/ExerciseWheelPicker.tsx:341) it fires onSetComplete(true) whenever setData.set_number === targetSets, with no check that sets 1..targetSets-1 were logged. Activity.handleSetComplete (src/pages/Activity.tsx:672) then advances to the next exercise or declares the whole workout done. Two demonstrable symptoms from the same root cause:\n\n(A) OUT-OF-ORDER LOG -> premature completion. Repro: open an exercise whose target is 3 sets (e.g. 3x8-10), tap the Set 3 row to activate it, and log it FIRST (reverse-pyramid / top-set-first is common for the strength persona this app targets). Expected: nothing special; sets 1-2 still pending. Actual: onSetComplete(true) fires -> if more exercises remain, the \"Set complete - Next up\" banner pops prompting the user to move on; if this is the last exercise, \"Workout complete\" + confetti + completion sound fire with only 1 of 3 sets logged.\n\n(B) EDIT-AFTER-COMPLETE -> celebration replays. Repro: log all 3 sets of the LAST exercise normally (workout-complete banner shows, confetti + sound fire once - correct). The picker stays mounted/open above the banner. Tap the already-logged Set 3 row -> the editor expands -> tap \"Update\". Expected: a silent value update. Actual: handleLogSet runs again with set_number === targetSets -> onSetComplete(true) -> Activity.handleSetComplete else-branch unconditionally re-runs setShowWorkoutCelebration(true) + playCompleteCue(), so the confetti overlay and completion sound REPLAY on every edit of the final set.\n\nFix: gate completion on distinct logged target sets covering 1..target_sets (count reached), not on set_number equality; and skip re-firing the celebration when showWorkoutComplete is already true."
+    },
+    {
+      "createdAt": "2026-07-08T06:55:23.362Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-2da8",
+      "route": "/activity",
+      "description": "[bug-hunt] Quick-complete checkbox auto-log spams one toast per set (4-5 stacked toasts from a single tap), breaking the calm-design \"no popups on routine taps\" rule. logSetMutation.onSuccess (src/pages/Activity.tsx:464-469) unconditionally shows a \"Set logged. Set N: X reps x Ykg\" toast for EVERY logged set. Activity.handleCheckboxToggle (src/pages/Activity.tsx:759-766) loops over the previous session's sets and calls logSetMutation.mutateAsync once per set, then fires an extra \"{exercise} auto-logged\" toast.\n\nRepro: on /activity, find an exercise that has prior-session data (so the quick-complete checkbox is shown, not the manual \"+\" button), tap the checkbox once. Expected: a single confirmation toast. Actual: for a 4-set exercise the user gets 4x \"Set logged...\" toasts PLUS the \"{exercise} auto-logged\" toast = 5 stacked toasts from one tap.\n\nFix: suppress the per-set onSuccess toast on the auto-log path (e.g. thread a silent flag through the mutation variables, or only toast when the picker is actually open), keeping just the single \"auto-logged\" summary toast."
+    },
+    {
       "createdAt": "2026-07-08T06:39:38.000Z",
       "status": "open",
       "fix": null,
