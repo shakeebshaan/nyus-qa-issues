@@ -434,8 +434,30 @@
         "00ab4e292a356ee8e159ee0966d8d9a45b734ecc"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen asked for a report + email metrics. Done: (1) Report — attached 'Outreach report' (inline on board): the lead-finding + daily send loop, 10 emails already sent via Resend from support@nyus.in (Planet Fitness/Equinox/Crunch/Orangetheory/F45/Barry's/solidcore/Blink/Anytime/Strava), 68 leads queued, 10/day cap, 0 failures. (2) Metrics — new 'Outreach & Email' category in metrics-collect.mjs (emails sent all-time/today, daily cap, leads queue, failures, last send, reply-rate=awaiting Resend webhook); collector re-run, live on the board Metrics tab. Loop enforces 10/day cap + suppression + STOP opt-out in code (daily-loop.mjs). Sender = support@nyus.in via Resend as requested.",
+        "imagePath": "images/i-20260707-4b08-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260707-4b08-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1e46c8dc574d7f8f1ff3feedff2ae893fe9d12a2",
+        "imageCommits": [
+          "1e46c8dc574d7f8f1ff3feedff2ae893fe9d12a2"
+        ],
+        "fixedAt": "2026-07-08T01:24:08.822Z",
+        "by": "shakeebshaan",
+        "appCommit": "df75e514",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "metrics live (10 sent/68 queued real data); report renders inline"
+        }
+      },
       "history": [
         {
           "at": "2026-07-07T23:58:11.150Z",
