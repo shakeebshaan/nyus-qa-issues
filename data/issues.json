@@ -3,8 +3,30 @@
   "issues": [
     {
       "createdAt": "2026-07-08T05:41:22.728Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Added voice dictation to the two highest-frequency text surfaces, reusing the existing useSpeechInput hook (no new deps/backend). Meal quick-log (CustomMealModal Quick Log tab) now has a mic in the 'describe what you ate' box; the CoachChatComposer has a mic beside Send. Same live-transcript pattern as the plan builder (partials stream, final commits on stop). New appSpeechLocale() sets the recognition locale from the app language (en->en-IN, hi/hinglish->hi-IN) so home-cooked Indian meals ('2 roti, 1 katori dal') transcribe well. Mic hidden when speech isn't supported. Proof shows both mics on their live screens.",
+        "imagePath": "images/i-20260708-v1ce-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-v1ce-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5c481da0e98d023036974bcdbf064df443f46e96",
+        "imageCommits": [
+          "5c481da0e98d023036974bcdbf064df443f46e96"
+        ],
+        "fixedAt": "2026-07-08T06:13:58.102Z",
+        "by": "shakeebshaan",
+        "appCommit": "e6609570",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Every item in the issue's V1 SCOPE is met: mic + useSpeechInput dropped into both target components; transcript flows through the existing free-text /logs/meal + coach send paths (no backend change); app language passed as speech locale via new appSpeechLocale() (en-IN/hi-IN); button hidden when supported=false; no new deps/permissions. tsc clean; CustomMealModal 20/20 + CoachChat 25/25 green; loop.mjs verify green. Both mics visually verified on their live authenticated screens (combined proof). Live audio-to-text itself relies on the already production-proven hook (same one shipped in the plan builder) and can't be exercised in a headless browser."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
