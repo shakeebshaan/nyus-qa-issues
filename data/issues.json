@@ -3,8 +3,30 @@
   "issues": [
     {
       "createdAt": "2026-07-08T05:24:55.012Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: cancel soft-cancels (status='canceled') but intentionally keeps current_period_end in the future, yet both entitlement reads gated on status=='active' (entitlement.py:58 has_active_subscription + backend.py:2065 /auth/me subscription_active), so premium was revoked the instant Cancel was tapped - contradicting the 'keep access until <date>' promise. Fix: both reads now accept status in ('active','canceled'); get_active_subscription already excludes expired rows, so access ends exactly at current_period_end (cancel stops auto-renew, not access). Backend commit 02c7027, deployed + health-checked. Proof: prod E2E (rolled back) - canceled-in-period => access TRUE, canceled-expired => access FALSE.",
+        "imagePath": "images/i-20260708-9c2e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-9c2e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f80bbc617eaf0d75bacac6aba8a71edf5b45273e",
+        "imageCommits": [
+          "f80bbc617eaf0d75bacac6aba8a71edf5b45273e"
+        ],
+        "fixedAt": "2026-07-08T05:40:02.973Z",
+        "by": "shakeebshaan",
+        "appCommit": "9685a71f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Owner-prescribed fix applied verbatim to both files; deployed to prod + health-green; verified end-to-end against the deployed code and real DB in a rolled-back transaction (in-period keeps access, expired loses it)."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,8 @@
       "imagePrivate": false,
       "id": "i-20260708-9c2e",
       "route": null,
-      "description": "[bug-hunt] Canceling a paid subscription revokes premium access IMMEDIATELY instead of at the end of the prepaid period - contradicting the cancel endpoint's own contract and the on-screen promise. ROOT CAUSE (backend): POST /api/v1/subscription/cancel (CancelSubscriptionResource, BACKEND backend.py:2861) soft-cancels by setting status='canceled' but INTENTIONALLY leaves current_period_end in the future so the user 'keeps access until the prepaid window ends' (its own docstring, backend.py:2812-2815). BUT both entitlement reads require status=='active': (1) entitlement.py:58 has_active_subscription() returns bool(sub and sub.status=='active') - this gates subscription_required, which 402s premium endpoints when FEATURE_SUBSCRIPTION_GATE is ON; (2) backend.py:2065 /auth/me sets subscription_active = bool(active_sub and active_sub.status=='active'). The comment two lines above (backend.py:2054-2055) literally says 'We include soft-canceled subs whose period hasn't elapsed because the FE treats period_end (not status) as the access boundary' - but the boolean then discards them via the status check, contradicting its own comment and get_active_subscription()'s documented 'may be soft-canceled but still within its period'. EXPECTED: after cancel, subscription_active stays true and premium stays unlocked until current_period_end; only auto-renew stops. ACTUAL: subscription_active flips false the instant Cancel is tapped. The FE cancel toast promises 'Your plan will remain active until the end of the current billing period' and SubscriptionSettings shows a 'You will keep access until <date>' banner, yet /auth/me already reports the user as unsubscribed; when the gate flips ON (documented rollout) the user is 402'd out of coach chat / AI builders immediately despite having paid through period_end. REPRO: paid/active user -> /choose-plan?manage=1 or /settings/subscription -> Cancel subscription -> confirm; the 'Current subscription' billing block + cancel affordance vanish instantly (both gate on user.subscription_active), and with the gate on premium endpoints return 402 on the next call. FIX: grant access to soft-canceled rows still within their period, e.g. status in ('active','canceled') with current_period_end>now, in BOTH BACKEND nyu_backend/app/services/entitlement.py:58 and nyu_backend/backend.py:2065."
+      "description": "[bug-hunt] Canceling a paid subscription revokes premium access IMMEDIATELY instead of at the end of the prepaid period - contradicting the cancel endpoint's own contract and the on-screen promise. ROOT CAUSE (backend): POST /api/v1/subscription/cancel (CancelSubscriptionResource, BACKEND backend.py:2861) soft-cancels by setting status='canceled' but INTENTIONALLY leaves current_period_end in the future so the user 'keeps access until the prepaid window ends' (its own docstring, backend.py:2812-2815). BUT both entitlement reads require status=='active': (1) entitlement.py:58 has_active_subscription() returns bool(sub and sub.status=='active') - this gates subscription_required, which 402s premium endpoints when FEATURE_SUBSCRIPTION_GATE is ON; (2) backend.py:2065 /auth/me sets subscription_active = bool(active_sub and active_sub.status=='active'). The comment two lines above (backend.py:2054-2055) literally says 'We include soft-canceled subs whose period hasn't elapsed because the FE treats period_end (not status) as the access boundary' - but the boolean then discards them via the status check, contradicting its own comment and get_active_subscription()'s documented 'may be soft-canceled but still within its period'. EXPECTED: after cancel, subscription_active stays true and premium stays unlocked until current_period_end; only auto-renew stops. ACTUAL: subscription_active flips false the instant Cancel is tapped. The FE cancel toast promises 'Your plan will remain active until the end of the current billing period' and SubscriptionSettings shows a 'You will keep access until <date>' banner, yet /auth/me already reports the user as unsubscribed; when the gate flips ON (documented rollout) the user is 402'd out of coach chat / AI builders immediately despite having paid through period_end. REPRO: paid/active user -> /choose-plan?manage=1 or /settings/subscription -> Cancel subscription -> confirm; the 'Current subscription' billing block + cancel affordance vanish instantly (both gate on user.subscription_active), and with the gate on premium endpoints return 402 on the next call. FIX: grant access to soft-canceled rows still within their period, e.g. status in ('active','canceled') with current_period_end>now, in BOTH BACKEND nyu_backend/app/services/entitlement.py:58 and nyu_backend/backend.py:2065.",
+      "needsReview": false
     },
     {
       "createdAt": "2026-07-08T05:24:55.012Z",
