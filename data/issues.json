@@ -717,48 +717,6 @@
       "needsReview": false
     },
     {
-      "createdAt": "2026-07-08T04:30:10.490Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Deferred deploy step completed. The ghee post (commit ec790bbf) was pushed to main but 404 on live (main->live sync is not automatic; DEPLOY_SSH_KEY still pending). Fix: pscp'd the 6 changed blog files (ghee post + calories-macros & index & sitemap backlinks + curd/roti interlinks) to the apex VM /home/ubuntu/nyus-landing/blog/. Verified live: https://nyus.in/blog/is-ghee-good-for-weight-loss-india.html now returns HTTP 200 with the correct title. Submitted the URL to IndexNow (Bing/Yandex, HTTP 200; key file live).",
-        "imagePath": "images/i-20260708-gh08-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-gh08-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "bb014e549fd8c71255807a44491e05f1d52e686f",
-        "imageCommits": [
-          "bb014e549fd8c71255807a44491e05f1d52e686f"
-        ],
-        "fixedAt": "2026-07-08T05:45:05.368Z",
-        "by": "shakeebshaan",
-        "appCommit": "ec790bbf",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Deferred action from the note (verify live + submit IndexNow) fully completed: URL 200 live with correct title, IndexNow accepted."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-gh08",
-      "route": null,
-      "description": "[content] Published: Is Ghee Good for Weight Loss? Calories, How Much per Day, and the Myths - https://nyus.in/blog/is-ghee-good-for-weight-loss-india.html. Ideas added: 3. Escalated: 0. NOTE: commit ec790bbf pushed to main; live URL 404 at post time (known main->live sync ~1h lag; DEPLOY_SSH_KEY escalation still pending), so IndexNow deferred for this URL - next tick/owner pscp should verify live + submit (same path as is-curd cd4h). npm run deploy is inert (ENAMETOOLONG on gh-pages, gh-pages branch not served). Post backlinked from calories-macros-common-indian-foods.html (ghee-roti line), blog index.html, and sitemap-blog.xml. Content: honest evidence-based myth-check - ghee doesn't burn fat, ~45 kcal/tsp, debunks CLA/MCT/A2-bilona claims, ghee-vs-oils table, 60% sat-fat + heart disclaimer. New [todo] ideas: dal chawal fat-loss guide, best cooking oil + how much per day, are bananas good for weight loss.",
-      "needsReview": false
-    },
-    {
       "createdAt": "2026-07-08T00:30:58.000Z",
       "status": "fixed",
       "fix": {
