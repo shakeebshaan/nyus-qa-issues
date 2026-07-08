@@ -2,6 +2,46 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T09:12:52.824Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false,
+      "id": "i-20260708-c1b7",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Calorie-balance ring on the Weekly Progress hero colors a deficit as \"good\" (teal) and a surplus as \"warning\" (orange) for EVERY user, ignoring their goal direction. src/components/CalorieBalanceRing.tsx:42-45 hardcodes accent = surplus ? orange : teal and label = surplus ? \"surplus\" : \"deficit\" with a comment that admits the encoding is goal-specific (\"teal/success when deficit (good for fat loss), orange when surplus (good for muscle gain)\") but applies it unconditionally. The component takes no goal_direction prop, and WeeklyProgress.tsx (line ~630) renders it as <CalorieBalanceRing intake target /> with no goal.\n\nExpected vs actual: for a muscle_gain / weight_gain athlete a calorie SURPLUS is the desired state and a deficit is under-eating (bad). Expected: surplus shown in the positive/teal accent, deficit in the warning accent. Actual (inverted for the gain cohort): their needed surplus is painted orange as if it is a warning, and an unwanted deficit is painted teal/success as if it is on-track. Note the sibling weight surfaces on the very same pages are already goal-aware (WeeklyProgress weightTrendStats.isOnTrack and MonthlyProgress isWeightOnTrack both branch on goal_direction), so the ring is the lone outlier and the intended pattern is goal-aware coloring.\n\nRepro: as a muscle_gain user with a calorie target, open /weekly-progress; on any week where avg daily calories land below target the hero ring renders teal with \"kcal deficit\" as though under-eating is on-track. Same class as the fixed dashboard weight-chip inversion (i-20260703-b52e) but on a distinct, un-fixed component.\n\nFix: thread the user goal_direction into CalorieBalanceRing and invert the accent + good/bad semantics for gain goals (surplus = positive accent, deficit = warning) while keeping loss/maintain as-is."
+    },
+    {
+      "createdAt": "2026-07-08T09:12:52.824Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false,
+      "id": "i-20260708-e4a2",
+      "route": "/plan-timeline",
+      "description": "[bug-hunt] Projected-trajectory curve pins projected weight ABOVE the current weight on a fat-loss plan when the user is already at/below their goal weight. src/lib/weekly-projection.ts:63 clampTowardGoal for direction \"lose\" does return Math.max(next, goal) — intended to \"never undershoot below goal\", but it also clamps UPWARD when the starting weight is below the goal, so the whole projected curve jumps to the goal weight (above current) on week 1 and stays flat there while the calorie targets are a deficit.\n\nRepro (node-verified against the real math): startWeightKg 73, goalWeightKg 75, direction lose (fat_loss/weight_loss), any pace -> every week returns projectedWeightKg 75 at ~1690 kcal (a deficit below TDEE). In the app this reaches the user via PlanTimeline.tsx dietTraj (which derives direction purely from goal_type and gates only on positive start/goal/height/age — no start-vs-goal sanity check), so a fat_loss plan whose current logged weight has already dropped to/below the goal weight renders WeeklyTrajectory as a flat line sitting 2 kg ABOVE the current weight, with the trend badge/goal line showing the goal, on a deficit plan.\n\nExpected vs actual: expected — when the current weight is already past the goal for the plan direction, show a flat/at-goal curve at the CURRENT weight (or omit the projection), never a curve above current on a deficit. Actual — the curve is clamped up to the goal, implying the user will gain to 75 kg and hold, which contradicts the deficit calorie targets shown alongside. Edge trigger (overshot-goal-but-plan-still-active) but a concrete logic defect in the pure projection lib.\n\nFix: in clampTowardGoal, when the direction move would cross the goal from the wrong side (start already past goal), return current (flat) instead of Math.max/Math.min-ing up to the goal; or have dietTrajectory early-return [] when start is already at/beyond goal for the given direction."
+    },
+    {
       "createdAt": "2026-07-08T07:09:21.592Z",
       "status": "open",
       "fix": null,
