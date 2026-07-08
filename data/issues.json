@@ -191,8 +191,30 @@
     },
     {
       "createdAt": "2026-07-08T04:30:10.490Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Deferred deploy step completed. The ghee post (commit ec790bbf) was pushed to main but 404 on live (main->live sync is not automatic; DEPLOY_SSH_KEY still pending). Fix: pscp'd the 6 changed blog files (ghee post + calories-macros & index & sitemap backlinks + curd/roti interlinks) to the apex VM /home/ubuntu/nyus-landing/blog/. Verified live: https://nyus.in/blog/is-ghee-good-for-weight-loss-india.html now returns HTTP 200 with the correct title. Submitted the URL to IndexNow (Bing/Yandex, HTTP 200; key file live).",
+        "imagePath": "images/i-20260708-gh08-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-gh08-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bb014e549fd8c71255807a44491e05f1d52e686f",
+        "imageCommits": [
+          "bb014e549fd8c71255807a44491e05f1d52e686f"
+        ],
+        "fixedAt": "2026-07-08T05:45:05.368Z",
+        "by": "shakeebshaan",
+        "appCommit": "ec790bbf",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Deferred action from the note (verify live + submit IndexNow) fully completed: URL 200 live with correct title, IndexNow accepted."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
