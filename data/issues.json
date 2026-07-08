@@ -1759,7 +1759,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED, DEPLOYED & VERIFIED LIVE — flagging only because the board's resolve test-gate can't apply here. Root cause: archive-2026.json crossed GitHub's 1MB Contents-API limit, so the board's loadJson() falls back to raw.githubusercontent.com; that fallback sent an Authorization header, making it a non-simple request -> CORS preflight that raw rejects (net::ERR_FAILED) -> EVERY Resolve failed with 'failed to fetch' (this issue + i-20260708-28ac). Fix (index.html, committed e9b766b, pushed, GitHub Pages rebuilt): raw fallback is now a plain GET with NO Authorization header (repo is public, raw returns Access-Control-Allow-Origin:*). Verified from the live shakeebshaan.github.io origin: with-auth fetch = 'Failed to fetch', no-auth fetch = HTTP 200 + 335 archived issues. Once the CDN edge fully purges (build already 'built'), Resolve will work again. NOTE: this is a fix in the nyus-qa-issues BOARD repo, not the frontend app, so loop.json testGate (frontend 'npm test') is not applicable AND is infra-blocked headless (~39min, Playwright/PACT/canvas). Owner: safe to click Resolve — the fix is verified.",
+      "reviewedAt": "2026-07-08T16:05:09.640Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
