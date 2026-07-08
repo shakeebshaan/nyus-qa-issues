@@ -633,48 +633,6 @@
       "needsReview": false
     },
     {
-      "createdAt": "2026-07-08T04:10:00.000Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: isConfirmationPrompt used includes('ready') — which matches the substring inside 'already' — plus broad phrases ('here's your'/'personalized'/'set up') gated only by ANY of plan|program|daily|repeat, so normal mid-flow questions ('plan isn''t ready yet…daily', 'already on a plan…daily?') were misclassified as confirmations and rendered premature Confirm/Make-Changes buttons. Fix (AIWizardShell.tsx): guard negated readiness ('isn''t/not…ready'), match whole-word \\bready\\b, and require an explicit confirm/finished-plan cue (confirm / look good / all set / 'plan is ready') before the confirm buttons render. Genuine 'plan is ready! Confirm' still triggers them. Proof: 6 new regression tests, 43/43 green (logic-only, LLM-output-dependent state not deterministically browser-reproducible).",
-        "imagePath": "images/i-20260708-3f1c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-3f1c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "bf00a804cbc5358657f5245caaf3b7426862793c",
-        "imageCommits": [
-          "bf00a804cbc5358657f5245caaf3b7426862793c"
-        ],
-        "fixedAt": "2026-07-08T05:06:04.742Z",
-        "by": "shakeebshaan",
-        "appCommit": "4fb83bb9",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Both reported false-positive strings now return false; genuine confirmation + button payloads still work; locked by regression tests."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-3f1c",
-      "route": "/ai/create-activity-plan",
-      "description": "[bug-hunt] isConfirmationPrompt over-matches, showing a premature 'Confirm Plan / Make Changes' pair mid-flow. In src/components/ai/AIWizardShell.tsx:315-321 the check uses lower.includes('ready') — which also matches the substring inside 'already' — plus other broad phrases ('here's your', 'personalized', 'set up'), gated only by ANY of 'plan'|'program'|'daily'|'repeat'. Expected: the Confirm/Make-Changes buttons appear only when the coach is actually presenting a finished plan for confirmation. Actual (unit-tested): isConfirmationPrompt(\"Your plan isn't ready yet — I'm still calculating your daily targets.\") => true; isConfirmationPrompt(\"You're already on a plan — want to rebuild it daily?\") => true. When the backend omits a ui_element (common — the entire extractInlineOptions/generateFallbackOptions/isConfirmationPrompt fallback layer exists because the LLM frequently forgets the ui block), a normal mid-flow QUESTION containing 'already'/'here's your' + 'daily'/'plan' is misclassified as a confirmation, so the wizard renders 'Confirm Plan' and 'Make Changes' buttons in the middle of the intake. Tapping them sends the canned strings 'Yes, confirm' / 'I want to make changes' instead of an answer to the real question, derailing the session. LIVE on /ai/create-activity-plan (uses AIWizardShell). Repro: in the Activity wizard, when the coach asks a clarifying question phrased with 'here's your daily …' or containing 'already' + a plan word and sends no ui_element, the confirm buttons appear prematurely. Fix: match whole word 'ready' with a boundary (\bready\b) and tighten the phrase set / require a stronger confirmation signal (e.g. combine with a plan-preview or an explicit 'confirm'/'look good' cue) before rendering the confirm buttons.",
-      "needsReview": false
-    },
-    {
       "createdAt": "2026-07-08T00:30:58.000Z",
       "status": "fixed",
       "fix": {
