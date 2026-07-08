@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "press",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-07-08T12:11:33Z",
+      "id": "i-20260708-p3k9",
+      "route": null,
+      "description": "[press] Press kit: created marketing/PRESS_KIT.md (all 6 sections at a sourced baseline; Fact Sheet + Key Facts built out this tick from live-site + repo sourcing). Flagged live-site-vs-collateral discrepancies and treated the live site as canonical: food count 1,000+ Indian & global (site) vs 800+ Indian (LAUNCH_KIT); HQ Bengaluru (site) vs Mumbai (LAUNCH_KIT/press-release); blog corpus 1,782 in-repo pages (counted static/blog: 874 exercise, 796 meal, 65 guides, 22 goal, 18 muscle, 7 cuisine) vs 1,669 (LAUNCH_KIT). Barred the unsourced '~38% protein under-logging' stat. Article drafted: \"The Macro Black Box: Why Your Dal-and-Roti Plate Hides Its Protein - and How to Actually Count It\" (target: Man's World India; secondary Health & Nutrition/Magna; ~835 words; non-medical + disclaimered; NYUS disclosed; zero fabricated stats) at marketing/press-articles/the-macro-black-box-indian-protein.md. Escalated: 1 pitch (+5 press-kit fact requests). NOTE: ESCALATIONS.md write BLOCKED this tick (sensitive-file permission denied) - full escalation carried here as fallback. [ESCALATION] SAFE TO SEND - Man's World India route VERIFIED on own site (https://www.mansworldindia.com/contact/ -> editor@mansworldindia.com). Owner-only action = email the drafted-article pitch; subject 'Pitch: The macro black box - why Indian home food hides its protein (fitness feature)'. DO NOT send to Health & Nutrition/Magna (route UNVERIFIED - own domain magnamags.com redirects to an unrelated site). FACT REQUESTS for founder (for PRESS_KIT.md): (1) approved founder name/title/bio/byline (site shows only 'NYUS Inc., Bengaluru'; owner signs 'Shaan', git author shakeebshaan - neither a published bio); (2) Play Store metrics for com.nyus.nyusand (listing returned HTTP 404 via fetch this tick - likely bot/geo block; rating/downloads left [TBD]); (3) precise food-DB size (1,000+ vs 800+); (4) dedicated press contact + press-room URL (only on-site contact is support@nyus.in); (5) source-or-drop the '~38% protein under-logging' stat in LAUNCH_KIT's press-release draft.",
+      "needsReview": false
+    },
+    {
       "status": "fixed",
       "fix": {
         "description": "Root cause: Dashboard.tsx passed useDashboardData's computed progress (0 when target===0) to useDashboardMoment, so non-training weekdays and plan-less users read as progress 0 and satisfied the *_BEHIND branches, firing the 'your plan is waiting' nag that contradicts the same-screen 'no workout today'/'Generate plan' card. Fix: pass the -1 'no plan/nothing scheduled today' sentinel (gated on dietHasPlan/activityHasPlan target>0) instead of 0, so the sentinel distinguishes 'behind' from 'nothing scheduled'. Proof: regression test test/hooks-useDashboardMoment.test.ts locks the contract both ways (0->BEHIND, -1->generic). The exact rest-day state is not stageable on a single headless capture; the shot shows the healthy dashboard where 'No diet plan yet' now keeps the diet half silent.",
