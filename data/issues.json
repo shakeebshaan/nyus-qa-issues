@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T09:55:13.656Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "page-nutrition-guardian",
+      "tags": [
+        "bug-hunt",
+        "nutrition",
+        "accuracy"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-kc49",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Nutrition: headline 'consumed kcal' can disagree with the sum of the meal cards. The top calorie number (and 'remaining') is re-derived client-side as 4*protein + 4*carbs + 9*fats from macros_consumed (src/pages/_components/nutrition/useNutritionData.tsx ~L349), but each meal card shows the backend's own total_calories (backend.py /diet/plan L6722: sum of ing.calories from the food DB per serving). Food-DB calories are label/Atwater-with-fiber values that are NOT exactly 4/4/9, so for many meals the two differ. Net effect: a precision-focused user adding up the per-meal kcal on the cards won't get the number shown at the top of the page (typically a few % off, data-dependent). Proper fix is cross-repo: backend should return a calories_consumed field (sum of eaten AssignedMeal.total_calories + ad-hoc MealLog.total_calories, mirroring the macros_consumed fold at L6823), and the frontend should DISPLAY that instead of re-deriving 4/4/9 — then headline == sum of cards. Filed by the daily nutrition page-guardian loop; could not reproduce on-screen because the QA account has a macro target (2794 kcal) but zero assigned meals on all recent dates, so the plan renders the empty state. Not frontend-fixable alone."
+    },
+    {
       "createdAt": "2026-07-08T09:42:08.800Z",
       "status": "open",
       "fix": null,
