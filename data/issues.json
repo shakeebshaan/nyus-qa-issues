@@ -571,9 +571,32 @@
         "6e2c858cfd5d3816d26d770fbb3ac4ee931de95f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed: archive-2026.json is 1027KB which exceeds GitHub Contents API 1MB limit causing empty j.content and JSON.parse('') crash. Added raw.githubusercontent.com fallback in loadJson() when j.content is empty. The rawUrl() helper already existed in the board source. Board now loads all 14 issues including archived ones without error.",
+        "imagePath": "images/i-20260708-53f2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-53f2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f6228b0d18e46e067c7b7bcf2cb467bc09170ade",
+        "imageCommits": [
+          "f6228b0d18e46e067c7b7bcf2cb467bc09170ade"
+        ],
+        "fixedAt": "2026-07-08T01:07:53.274Z",
+        "by": "shakeebshaan",
+        "appCommit": "8cd0e38b1f91d7bc67259d60097b057864b9cca7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root cause precisely identified (1027KB > 1MB limit). Fix uses existing rawUrl helper. Board screenshot confirms 14 issues load cleanly."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260708-4509",
