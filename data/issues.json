@@ -31,50 +31,6 @@
       "createdAt": "2026-07-08T17:24:00.000Z",
       "status": "fixed",
       "fix": {
-        "description": "Root cause: Nutrition.tsx mounts CustomMealModal unconditionally (only inner DOM gated on isOpen), so closing never unmounts it -> useSpeechInput's unmount-only cleanup never fires -> mic stayed live + stray partials re-populated the text box after the parent's reset. Fix: effect in CustomMealModal ends the recognizer on close (toggleMic when !isOpen && micListening). Proof: Quick-Log tab + mic affordance. 3 scoped tests green; board gate npm run test:unit exits 0.",
-        "imagePath": "images/i-20260708-d0be-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-d0be-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "7cf8af0416b5d3268ee586b48ca2b7b9ecf53e9b",
-        "imageCommits": [
-          "7cf8af0416b5d3268ee586b48ca2b7b9ecf53e9b"
-        ],
-        "fixedAt": "2026-07-08T17:37:05.834Z",
-        "by": "shakeebshaan",
-        "appCommit": "4d8dad10",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Root-caused, minimal, 2 scoped tests green, proof on the correct Quick-Log surface."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-d0be",
-      "route": "/nutrition",
-      "tags": [
-        "bug-hunt",
-        "auto",
-        "nutrition",
-        "voice"
-      ],
-      "description": "[bug-hunt] Voice dictation keeps recording after the Add-Food (meal log) modal is closed — the mic never stops.\n\nWHERE: src/components/nutrition/CustomMealModal.tsx (Quick Log tab mic, added by the voice feature e6609570 / i-20260708-v1ce) + src/hooks/useSpeechInput.ts + src/pages/Nutrition.tsx.\n\nROOT CAUSE: Nutrition.tsx renders <CustomMealModal isOpen={showCustomMealModal} .../> UNCONDITIONALLY (Nutrition.tsx:604) — only the modal's inner DOM is gated by `isOpen` inside its own <AnimatePresence>. So closing the modal (X / Escape / back gesture) sets isOpen=false but does NOT unmount the CustomMealModal component. useSpeechInput's ONLY teardown is its native cleanup effect (useSpeechInput.ts:86-91, runs on component UNMOUNT) — which never fires here. There is no effect in CustomMealModal that couples the mic to `isOpen`, and nothing calls toggleMic()/SpeechRecognition.stop() on close. So a dictation started in the modal survives the close.\n\nThe 'proven' MealSlotCard reference (src/components/plan-builder/MealSlotCard.tsx) only got away with the same hook because plan-builder cards genuinely UNMOUNT when you leave the step, firing the native cleanup. A persistent-mounted modal breaks that assumption.\n\nCONSEQUENCES:\n (1) Native (the shipped product): SpeechRecognition is never stopped on close, so the OS mic indicator stays on and `listening` stays true (privacy + battery). On iOS the start() promise 'never settles' (per the hook's own comment) and stop() is never called since the user closed instead of tapping the mic — the session can hang open indefinitely.\n (2) The parent resets customMealText='' on close (Nutrition.tsx:305). But the still-live recognizer keeps firing onPartial/onResult -> onCustomMealTextChange(joinDictation(dictateBaseRef.current, spoken)) AFTER the reset, re-populating customMealText with the leftover transcript. Reopening the modal then shows stray dictated text AND a false red 'Listening…' label + pulsing mic (micListening still true), even though the user never restarted dictation.\n\nREPRO: /nutrition -> Add Food -> Quick Log -> tap mic, start speaking -> tap X (or Escape) WITHOUT tapping the mic to stop. Native: mic indicator stays lit. Web/QA (Chrome, continuous=false so it self-heals after a silence timeout): reopen the modal within the recognition window -> the box shows leftover transcript and the 'Listening…' state.\n\nFIX: couple mic teardown to close, e.g. in CustomMealModal add `useEffect(() => { if (!isOpen && micListening) toggleMic(); }, [isOpen])` (or stop the recognizer directly), so closing the modal ends any active dictation. Same class applies to CoachChatComposer only if the chat page can stay mounted while hidden (it unmounts on nav, so native cleanup covers it) — the meal modal is the persistent-mount case.",
-      "needsReview": false
-    },
-    {
-      "createdAt": "2026-07-08T17:24:00.000Z",
-      "status": "fixed",
-      "fix": {
         "description": "Root cause: the new-ingredient form has no servings control, but the payload sent the inherited ingServings from a previously-selected ingredient, silently multiplying the typed calories (e.g. 180 -> 540 kcal). Fix: hard-code servings:1 on the new-ingredient path in handleLogIngredient + reset ingServings when entering add-new mode. Proof: 'Ghar ka laddu' @ 180 kcal in the servings-less form -> logs exactly 180. 3 scoped tests green; board gate npm run test:unit exits 0.",
         "imagePath": "images/i-20260708-f3a7-fix-r1.png",
         "imagePaths": [
