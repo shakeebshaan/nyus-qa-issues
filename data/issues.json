@@ -2,6 +2,28 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T16:58:14.751Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "page-coach-chat-guardian",
+      "tags": [
+        "bug-hunt",
+        "coach-chat",
+        "accuracy"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-wlc1",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] CoachChat: the AI welcome greeting is persisted MULTIPLE times per user because backend POST /ai/welcome is not idempotent. Evidence (QA acct 170e4f9e): /coach/history returns 4 byte-identical \"Welcome, Das - I am really glad you are here...\" AI rows (ids 1518 @2026-04-17, then 1535/1536/1537 all @2026-04-25 within ~3.5h). The frontend only ever calls sendWelcome() when chat history is empty AND guards with a per-DEVICE localStorage flag (nyus_coach_welcome_fired_<uid>), so the 3 extra Apr-25 rows were minted when history was already NON-empty -> they came from a path that hit /ai/welcome without the empty-history + device-flag guard (2nd device open, storage-clear/reinstall before history replicated, or a direct endpoint hit). Net user-visible effect: the greeting rendered TWICE in the thread (once at top, once mid-thread) because the client consecutive-dedup only collapses a back-to-back run, not the non-consecutive top-vs-mid copies. ROOT-CAUSE FIX is backend: /ai/welcome must be idempotent (only ever persist ONE welcome per user, e.g. skip if the user already has a welcome/any coach message row) - cannot be fixed frontend-only across devices, and this loop is barred from touching backend prod. FRONTEND MITIGATION SHIPPED this tick (commit 3c50a171, useVisibleMessages): later block-free AI copies byte-identical to the first message (the welcome) are now collapsed, so the display symptom is gone (rendered rows 16->15, welcome shown once). Filing the backend idempotency gap so the source is fixed + junk rows stop accumulating in the messages table.",
+      "needsReview": false,
+      "reviewReason": null
+    },
+    {
       "id": "i-20260708-fst1",
       "createdAt": "2026-07-08T16:39:56.595Z",
       "status": "open",
