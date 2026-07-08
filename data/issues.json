@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T05:41:22.728Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-v1ce",
+      "route": "/nutrition",
+      "description": "[suggestion] Add voice input (mic) to the daily meal logger and the coach-chat composer, reusing the voice infra the app already ships. PROBLEM: logging home-cooked Indian meals by typing (\"2 roti, 1 katori dal, thoda chawal\") is high-friction on mobile, and the app is mid-rollout of Hinglish/Hindi UI (see i-20260707-b1a9/514b/dcd5) where typing Devanagari is even harder — voice is the natural companion. EVIDENCE: voice ALREADY works in-app — src/hooks/useSpeechInput.ts (+ @capacitor-community/speech-recognition in package.json) is wired ONLY into the one-time plan BUILDER (src/components/plan-builder/MealSlotCard.tsx:184 and src/pages/onboarding/custom/CustomWorkoutBuilder.tsx:327). The two HIGHEST-frequency text surfaces have NO mic (confirmed: neither imports the hook) — the daily meal quick-log (src/components/nutrition/CustomMealModal.tsx, quick tab) and the coach chat composer (src/components/coach/CoachChatComposer.tsx). Daily meal logging is the retention core loop; the dominant India competitor (HealthifyMe Ria) leans on conversational/voice logging. V1 SCOPE: drop the same mic button + useSpeechInput call into those 2 components; the transcript appends into the existing textarea and flows through the existing free-text /logs/meal LLM-parse path (no backend change) and the existing coach send path. Pass the app language as the speech locale (en-IN / hi-IN). Hide the button when useSpeechInput.supported is false (web preview / unsupported device). EFFORT: small — copy the proven MealSlotCard pattern into 2 components; no new deps, no new backend, no new permissions.",
+      "needsReview": false
+    },
+    {
       "createdAt": "2026-07-08T05:24:55.012Z",
       "status": "fixed",
       "fix": {
