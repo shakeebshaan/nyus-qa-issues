@@ -18875,50 +18875,49 @@
       "archivedAt": "2026-07-08T20:40:21.435Z"
     },
     {
-      "createdAt": "2026-07-08T15:10:02.753Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: navyMethodMale/navyMethodFemale (BodyFatEstimator.tsx) converted the cm inputs to inches (÷2.54) and then applied the METRIC Navy constants (495/1.0324…), under-reporting body fat by ~6.4pts — and handleSave persisted that low body_fat_pct, corrupting downstream Katch-McArdle BMR/TDEE. Fix: dropped the ÷2.54 conversions and feed cm straight into the metric form (matches the fixed Measurements + BodyComposition screens). Verified on /body-fat-estimator: neck 38 / waist 85 (cm) / height 170cm male -> 17.8% (was ~11%). Regression test added (test/BodyFatNavy.formula.test.ts, 6/6 green).",
-        "imagePath": "images/i-20260708-bd8e-fix-r1.png",
+        "description": "Root cause: StackedMomentCards.tsx reset expansion via useLayoutEffect keyed on [moments], but Dashboard rebuilds the moments array (new identity) every commit, so the effect re-ran after EVERY parent render (CSAT timer, useCoachMoment async setState, react-query refetch, pull-to-refresh) and snapped any expanded coach tip back to line-clamp-2. Fix: key the reset effect on the content (joined sectionIds) instead of array identity, so expansion resets only when the actual moment set changes. Proof: regression test test/StackedMomentCards.expand.test.tsx proves expansion survives an identical-content array rebuild and still resets when the set changes. This is a pure render-timing bug with no static visual signature; the shot confirms the dashboard/coach deck renders cleanly.",
+        "imagePath": "images/i-20260708-e7c9-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-bd8e-fix-r1.png"
+          "images/i-20260708-e7c9-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "98f6dc7c8d90c8d22fedce0eb5ee4e38b3c556d7",
+        "imageCommit": "942580cfc2819222f3b0e5e1d47befa50bcef978",
         "imageCommits": [
-          "98f6dc7c8d90c8d22fedce0eb5ee4e38b3c556d7"
+          "942580cfc2819222f3b0e5e1d47befa50bcef978"
         ],
-        "fixedAt": "2026-07-08T15:43:36.494Z",
+        "fixedAt": "2026-07-08T11:34:43.975Z",
         "by": "shakeebshaan",
-        "appCommit": "a25f4987",
+        "appCommit": "a360a050",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Root-caused to cm→inch conversion before metric constants; removed it; verified 17.8% on the actual estimator screen (full-screen proof, cm inputs + metric formula shown); scoped regression test green; sibling /measurements bug fixed in tandem so both screens agree."
+          "note": "Precise root cause, minimal one-line dependency-key fix, regression test covers persist + reset, tsc clean."
         }
       },
       "history": [],
       "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto",
-        "accuracy"
-      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-bd8e",
-      "route": "/body-fat-estimator",
-      "description": "[bug-hunt] Body Fat Estimator: the Navy-method calculator converts the user cm inputs to INCHES and then applies the METRIC (cm) Navy coefficients, so it UNDER-estimates body fat by ~6.4 points - and this wrong value is SAVED to the profile.\n\nnavyMethodMale (src/pages/BodyFatEstimator.tsx:100-105) does waistIn=waistCm/2.54 (neck/height too), then returns 495/(1.0324 - 0.19077*log10(waistIn-neckIn) + 0.15456*log10(heightIn)) - 450. The 495/(1.0324...) form is the METRIC Navy formula - its constants are calibrated for CENTIMETRES. Feeding it inches shifts the result down by a fixed offset.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5% - confirmed because metric-form-fed-cm 16.44% and imperial-form-fed-inches 16.49% agree): this function returns 10.08%, ~6.4 points too LOW. navyMethodFemale (:107-113) has the identical cm->inches conversion before the metric female constants (1.29579/0.35004/0.22100) - same error.\n\nWorse than a display glitch: handleSave (:289-302) calls healthService.saveBodyFatEstimate(displayedBf) with this under-reported %, persisting body_fat_pct to the profile - which Katch-McArdle BMR keys off (LBM = weight*(1-BF/100)), inflating lean mass and BMR/TDEE downstream.\n\nThis is the OPPOSITE-direction sibling of the /measurements Navy bug (that one feeds cm to the imperial form -> +6.5 too high; see companion issue).\n\nRepro: /body-fat-estimator -> Calculator -> Navy tab -> neck 38, waist 85 (cm) -> Calculate -> shows ~10% for a man whose real Navy BF is ~16.5%; Save persists the low value.\n\nFix: drop the /2.54 conversions and feed cm straight into the 495/(...) metric form (or keep inches but switch to the imperial 86.010/163.205 constants).\n\nFiles: src/pages/BodyFatEstimator.tsx:100-113 (navyMethodMale/navyMethodFemale); saved via :293 handleSave.",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "createdAt": "2026-07-08T11:26:20Z",
+      "id": "i-20260708-e7c9",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard coach-tip “Tap to read more” expansion collapses itself on any dashboard re-render, so long coach tips cannot be read expanded. ROOT CAUSE: StackedMomentCards.tsx:43-45 runs `useLayoutEffect(() => setExpanded(false), [moments])` to reset expansion when the moment set changes. But the `moments` prop is a BRAND-NEW array on every Dashboard render — Dashboard.tsx:397-435 rebuilds `const items: MomentItem[] = []` inside an inline IIFE each render and passes it straight to <StackedMomentCards moments={items}>. So the `[moments]` dependency changes every commit, the effect runs after EVERY parent render (not only when content changes), and `setExpanded(false)` fires each time. Any Dashboard re-render — the CSAT 4s timer (Dashboard.tsx:162-169), useCoachMoment’s async liveData setState (useMoments.ts:184-195), a react-query background refetch, or pull-to-refresh (handleRefresh) — snaps an expanded tip back to collapsed (line-clamp-2). EXPECTED: once the user taps “Tap to read more,” the tip stays expanded until they collapse it. ACTUAL: it re-collapses on the next parent re-render. REPRO: (1) open /dashboard where the top coach tip is long enough to clamp (shows “Tap to read more” at StackedMomentCards.tsx:144-148). (2) tap the tip to expand. (3) pull-to-refresh (or just wait for a background query refetch / the CSAT timer). → the tip collapses back on its own. FIX: reset expansion only when the moment set actually changes (e.g. key the effect on the joined sectionIds string, not the array identity), or useMemo the `items` array in Dashboard so `moments` is referentially stable across renders.",
       "needsReview": false,
-      "resolvedAt": "2026-07-08T20:42:59.862Z",
+      "resolvedAt": "2026-07-08T20:43:11.228Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:42:59.862Z"
+      "archivedAt": "2026-07-08T20:43:11.228Z"
     }
   ]
 }
