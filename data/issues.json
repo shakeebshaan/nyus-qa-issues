@@ -106,8 +106,30 @@
     },
     {
       "createdAt": "2026-07-08T00:16:15.232Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed: added page param to ChatHistoryRequest + total field to ChatHistory; getHistory() forwards page to /coach/history and returns total from response; CoachChat.tsx adds loadOlderMessages() with olderPage/hasMoreMessages/isLoadingOlder state; 'Load earlier messages' pill renders above the message list when server total > 30. Button uses page-based pagination against /coach/history (not before_id which that endpoint ignores). TS clean, tests pass.",
+        "imagePath": "images/i-20260708-1898-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-1898-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "40f82ab8954b8d0c2926c0f6d954d64fd4142af5",
+        "imageCommits": [
+          "40f82ab8954b8d0c2926c0f6d954d64fd4142af5"
+        ],
+        "fixedAt": "2026-07-08T01:07:30.961Z",
+        "by": "shakeebshaan",
+        "appCommit": "59de797e1734d853a605423448e9a5493284ea87",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Full pagination flow implemented: page state tracks loaded pages, hasMore derived from total vs loaded count, pill renders conditionally. TS noEmit clean."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -121,7 +143,8 @@
       "imagePrivate": false,
       "id": "i-20260708-1898",
       "route": "/coach-chat",
-      "description": "[bug-hunt] Coach chat history is hard-capped at the newest 30 messages - older conversation is permanently unreachable in the UI. CoachChat.tsx:91 fetches chatService.getHistory({ limit: 30 }) once; nothing in the app ever passes before_id (ChatHistoryRequest.before_id has zero UI callers) and the message list has no top-reached loader (no loadMore/fetchNext/hasMore anywhere under coach-chat components or CoachChatMessageList). Scrolling to the top just dead-ends at the 30th-newest message. Since the AI answers every user message and also sends proactive messages, an active user exceeds 30 rows within a day or two - yesterday's plan discussion and coach advice silently vanish. Expected: reaching the top loads older messages (standard chat pattern) - the backend already supports it twice over: /coach/history has page+limit pagination and returns total (app/routes/coach.py:481-490), and legacy /chat/history supports before_id (backend.py:3882-3883). Gotcha for the fix: the FE service plumbs before_id (chat.service.ts:50-52) but the PRIMARY /coach/history endpoint ignores that param entirely (it is page-based) - wiring before_id through without touching the backend would silently re-fetch page 1; use page= against /coach/history or add before_id support server-side. Files: src/pages/CoachChat.tsx:89-97, src/services/chat.service.ts:47-58, src/components/coach/CoachChatMessageList.tsx."
+      "description": "[bug-hunt] Coach chat history is hard-capped at the newest 30 messages - older conversation is permanently unreachable in the UI. CoachChat.tsx:91 fetches chatService.getHistory({ limit: 30 }) once; nothing in the app ever passes before_id (ChatHistoryRequest.before_id has zero UI callers) and the message list has no top-reached loader (no loadMore/fetchNext/hasMore anywhere under coach-chat components or CoachChatMessageList). Scrolling to the top just dead-ends at the 30th-newest message. Since the AI answers every user message and also sends proactive messages, an active user exceeds 30 rows within a day or two - yesterday's plan discussion and coach advice silently vanish. Expected: reaching the top loads older messages (standard chat pattern) - the backend already supports it twice over: /coach/history has page+limit pagination and returns total (app/routes/coach.py:481-490), and legacy /chat/history supports before_id (backend.py:3882-3883). Gotcha for the fix: the FE service plumbs before_id (chat.service.ts:50-52) but the PRIMARY /coach/history endpoint ignores that param entirely (it is page-based) - wiring before_id through without touching the backend would silently re-fetch page 1; use page= against /coach/history or add before_id support server-side. Files: src/pages/CoachChat.tsx:89-97, src/services/chat.service.ts:47-58, src/components/coach/CoachChatMessageList.tsx.",
+      "needsReview": false
     },
     {
       "id": "i-20260707-b1a9",
@@ -548,32 +571,9 @@
         "6e2c858cfd5d3816d26d770fbb3ac4ee931de95f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: initI18n() defaulted lng:'en', bypassing LanguageDetector and rewriting nyus_locale->'en' on every boot, erasing the user's Hindi/Hinglish choice. Fix: made the lng param optional and only pass it when explicitly provided (src/i18n/config.ts) so the detector reads localStorage; main.tsx calls initI18n() with no arg. Same root cause as already-fixed i-20260707-b1a9 (commit 8e2e5a0a, predates this report). Verified: set nyus_locale='hi', reload -> stays 'hi' and the whole app (Profile shown) renders in Hindi.",
-        "imagePath": "images/i-20260708-53f2-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-53f2-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "96b098577307f3906c90357555615c3659f7d34b",
-        "imageCommits": [
-          "96b098577307f3906c90357555615c3659f7d34b"
-        ],
-        "fixedAt": "2026-07-08T01:07:29.287Z",
-        "by": "shakeebshaan",
-        "appCommit": "59de797e",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "empirically re-verified persistence + Hindi render after reload"
-        }
-      },
-      "history": [],
-      "needsReview": false
+      "status": "open",
+      "fix": null,
+      "history": []
     },
     {
       "id": "i-20260708-4509",
