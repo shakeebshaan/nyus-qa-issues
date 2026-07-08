@@ -46,8 +46,30 @@
     },
     {
       "createdAt": "2026-07-08T15:10:02.753Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: navyMethodMale/navyMethodFemale (BodyFatEstimator.tsx) converted the cm inputs to inches (÷2.54) and then applied the METRIC Navy constants (495/1.0324…), under-reporting body fat by ~6.4pts — and handleSave persisted that low body_fat_pct, corrupting downstream Katch-McArdle BMR/TDEE. Fix: dropped the ÷2.54 conversions and feed cm straight into the metric form (matches the fixed Measurements + BodyComposition screens). Verified on /body-fat-estimator: neck 38 / waist 85 (cm) / height 170cm male -> 17.8% (was ~11%). Regression test added (test/BodyFatNavy.formula.test.ts, 6/6 green).",
+        "imagePath": "images/i-20260708-bd8e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-bd8e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "98f6dc7c8d90c8d22fedce0eb5ee4e38b3c556d7",
+        "imageCommits": [
+          "98f6dc7c8d90c8d22fedce0eb5ee4e38b3c556d7"
+        ],
+        "fixedAt": "2026-07-08T15:43:36.494Z",
+        "by": "shakeebshaan",
+        "appCommit": "a25f4987",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root-caused to cm→inch conversion before metric constants; removed it; verified 17.8% on the actual estimator screen (full-screen proof, cm inputs + metric formula shown); scoped regression test green; sibling /measurements bug fixed in tandem so both screens agree."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -62,7 +84,8 @@
       "imagePrivate": false,
       "id": "i-20260708-bd8e",
       "route": "/body-fat-estimator",
-      "description": "[bug-hunt] Body Fat Estimator: the Navy-method calculator converts the user cm inputs to INCHES and then applies the METRIC (cm) Navy coefficients, so it UNDER-estimates body fat by ~6.4 points - and this wrong value is SAVED to the profile.\n\nnavyMethodMale (src/pages/BodyFatEstimator.tsx:100-105) does waistIn=waistCm/2.54 (neck/height too), then returns 495/(1.0324 - 0.19077*log10(waistIn-neckIn) + 0.15456*log10(heightIn)) - 450. The 495/(1.0324...) form is the METRIC Navy formula - its constants are calibrated for CENTIMETRES. Feeding it inches shifts the result down by a fixed offset.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5% - confirmed because metric-form-fed-cm 16.44% and imperial-form-fed-inches 16.49% agree): this function returns 10.08%, ~6.4 points too LOW. navyMethodFemale (:107-113) has the identical cm->inches conversion before the metric female constants (1.29579/0.35004/0.22100) - same error.\n\nWorse than a display glitch: handleSave (:289-302) calls healthService.saveBodyFatEstimate(displayedBf) with this under-reported %, persisting body_fat_pct to the profile - which Katch-McArdle BMR keys off (LBM = weight*(1-BF/100)), inflating lean mass and BMR/TDEE downstream.\n\nThis is the OPPOSITE-direction sibling of the /measurements Navy bug (that one feeds cm to the imperial form -> +6.5 too high; see companion issue).\n\nRepro: /body-fat-estimator -> Calculator -> Navy tab -> neck 38, waist 85 (cm) -> Calculate -> shows ~10% for a man whose real Navy BF is ~16.5%; Save persists the low value.\n\nFix: drop the /2.54 conversions and feed cm straight into the 495/(...) metric form (or keep inches but switch to the imperial 86.010/163.205 constants).\n\nFiles: src/pages/BodyFatEstimator.tsx:100-113 (navyMethodMale/navyMethodFemale); saved via :293 handleSave."
+      "description": "[bug-hunt] Body Fat Estimator: the Navy-method calculator converts the user cm inputs to INCHES and then applies the METRIC (cm) Navy coefficients, so it UNDER-estimates body fat by ~6.4 points - and this wrong value is SAVED to the profile.\n\nnavyMethodMale (src/pages/BodyFatEstimator.tsx:100-105) does waistIn=waistCm/2.54 (neck/height too), then returns 495/(1.0324 - 0.19077*log10(waistIn-neckIn) + 0.15456*log10(heightIn)) - 450. The 495/(1.0324...) form is the METRIC Navy formula - its constants are calibrated for CENTIMETRES. Feeding it inches shifts the result down by a fixed offset.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5% - confirmed because metric-form-fed-cm 16.44% and imperial-form-fed-inches 16.49% agree): this function returns 10.08%, ~6.4 points too LOW. navyMethodFemale (:107-113) has the identical cm->inches conversion before the metric female constants (1.29579/0.35004/0.22100) - same error.\n\nWorse than a display glitch: handleSave (:289-302) calls healthService.saveBodyFatEstimate(displayedBf) with this under-reported %, persisting body_fat_pct to the profile - which Katch-McArdle BMR keys off (LBM = weight*(1-BF/100)), inflating lean mass and BMR/TDEE downstream.\n\nThis is the OPPOSITE-direction sibling of the /measurements Navy bug (that one feeds cm to the imperial form -> +6.5 too high; see companion issue).\n\nRepro: /body-fat-estimator -> Calculator -> Navy tab -> neck 38, waist 85 (cm) -> Calculate -> shows ~10% for a man whose real Navy BF is ~16.5%; Save persists the low value.\n\nFix: drop the /2.54 conversions and feed cm straight into the 495/(...) metric form (or keep inches but switch to the imperial 86.010/163.205 constants).\n\nFiles: src/pages/BodyFatEstimator.tsx:100-113 (navyMethodMale/navyMethodFemale); saved via :293 handleSave.",
+      "needsReview": false
     },
     {
       "id": "i-20260708-vitl",
