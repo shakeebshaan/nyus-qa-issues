@@ -64,8 +64,30 @@
     },
     {
       "createdAt": "2026-07-08T00:16:15.232Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed two bugs: (1) disconnect() now fires disconnectCallbacks BEFORE removing the 'disconnect' handler so useChatSocket.isSocketConnected flips false and polling fallback engages; (2) handleSocketError auth-recovery path snapshots newMessageCallback/errorCallback/aiTypingCallback before disconnect() and restores them after connect() so the open chat screen keeps receiving messages without a page remount. TS clean, tests pass.",
+        "imagePath": "images/i-20260708-aa69-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-aa69-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bb374d8e7f8b78094dea3bdad3ec89e761cd76e2",
+        "imageCommits": [
+          "bb374d8e7f8b78094dea3bdad3ec89e761cd76e2"
+        ],
+        "fixedAt": "2026-07-08T01:07:12.361Z",
+        "by": "shakeebshaan",
+        "appCommit": "59de797e1734d853a605423448e9a5493284ea87",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Both bugs fixed at described code lines. Callbacks snapshot+restore is the correct pattern; polling fallback now engages on teardown. TS noEmit clean."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -79,7 +101,8 @@
       "imagePrivate": false,
       "id": "i-20260708-aa69",
       "route": "/coach-chat",
-      "description": "[bug-hunt] After the socket's 'Authentication failed.' recovery reconnect, an OPEN coach-chat screen goes permanently deaf: incoming AI replies never render (while the unread badge lights up), the typing indicator freezes, and the polling fallback never engages. Chain: handleSocketError (chat.service.ts:361) on 'Authentication failed.' refreshes the token, then calls this.disconnect() + this.connect(userId). disconnect() (1) nulls the single-slot callbacks newMessageCallback / aiTypingCallback / errorCallback (chat.service.ts:256-258), which are only registered by useChatSocket's mount effect - a service-internal reconnect re-runs no React effect, so they stay null; and (2) detaches the socket 'disconnect' handler BEFORE calling socket.disconnect() (line 242 vs 254), so disconnectCallbacks never fire, useChatSocket's isSocketConnected stays true, and CoachChat's 60s polling fallback (CoachChat.tsx:104-108) never turns on. Net effect: new_message events still reach handleNewMessage, which sets nyus_has_unread_coach - the user sits INSIDE the chat watching an unread badge appear while no bubble renders, until they leave and re-enter the page. Ironically the comment at chat.service.ts:259-265 preserves the connect/disconnect REGISTRIES for exactly this code path but misses the single-slot callbacks two lines above it. Trigger is real: access-token rotation/expiry mid-session or a token_version bump (owner login) makes the backend reject the socket handshake with 'Authentication failed.'; the refresh then succeeds and the recovery path runs. Expected: after the internal recovery reconnect, the open chat keeps receiving messages (or at minimum the polling fallback engages). Fix: snapshot + restore the callback slots across the auth-recovery reconnect (or convert them to multi-subscriber registries like connectCallbacks), and invoke disconnectCallbacks on teardown. Files: src/services/chat.service.ts:235-270 + 361-382, src/pages/_components/coach-chat/hooks/useChatSocket.ts:57-141."
+      "description": "[bug-hunt] After the socket's 'Authentication failed.' recovery reconnect, an OPEN coach-chat screen goes permanently deaf: incoming AI replies never render (while the unread badge lights up), the typing indicator freezes, and the polling fallback never engages. Chain: handleSocketError (chat.service.ts:361) on 'Authentication failed.' refreshes the token, then calls this.disconnect() + this.connect(userId). disconnect() (1) nulls the single-slot callbacks newMessageCallback / aiTypingCallback / errorCallback (chat.service.ts:256-258), which are only registered by useChatSocket's mount effect - a service-internal reconnect re-runs no React effect, so they stay null; and (2) detaches the socket 'disconnect' handler BEFORE calling socket.disconnect() (line 242 vs 254), so disconnectCallbacks never fire, useChatSocket's isSocketConnected stays true, and CoachChat's 60s polling fallback (CoachChat.tsx:104-108) never turns on. Net effect: new_message events still reach handleNewMessage, which sets nyus_has_unread_coach - the user sits INSIDE the chat watching an unread badge appear while no bubble renders, until they leave and re-enter the page. Ironically the comment at chat.service.ts:259-265 preserves the connect/disconnect REGISTRIES for exactly this code path but misses the single-slot callbacks two lines above it. Trigger is real: access-token rotation/expiry mid-session or a token_version bump (owner login) makes the backend reject the socket handshake with 'Authentication failed.'; the refresh then succeeds and the recovery path runs. Expected: after the internal recovery reconnect, the open chat keeps receiving messages (or at minimum the polling fallback engages). Fix: snapshot + restore the callback slots across the auth-recovery reconnect (or convert them to multi-subscriber registries like connectCallbacks), and invoke disconnectCallbacks on teardown. Files: src/services/chat.service.ts:235-270 + 361-382, src/pages/_components/coach-chat/hooks/useChatSocket.ts:57-141.",
+      "needsReview": false
     },
     {
       "createdAt": "2026-07-08T00:16:15.232Z",
