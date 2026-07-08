@@ -615,30 +615,8 @@
     },
     {
       "createdAt": "2026-07-08T06:55:23.362Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Re-fix confirm (reopen 'B'). Symptom A (out-of-order log -> premature completion): ExerciseWheelPicker.handleLogSet now fires onSetComplete only when ALL target sets 1..targetSets are logged (distinct coverage), not on set_number equality (ExerciseWheelPicker.tsx:350-353). Symptom B (edit-after-complete replays celebration): Activity.handleSetComplete returns early when showWorkoutCompleteRef.current is already true, so editing the final set does NOT replay confetti/sound (Activity.tsx:703, ref synced :402). NOTE: reproducing needs a live workout with target sets + a mounted picker; not drivable in a static capture — screenshot shows /activity rendering correctly.",
-        "imagePath": "images/i-20260708-2ea5-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260708-2ea5-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "af9d4a3fe75a4a8e71aeb344ce1e964e3716861b",
-        "imageCommits": [
-          "af9d4a3fe75a4a8e71aeb344ce1e964e3716861b"
-        ],
-        "fixedAt": "2026-07-08T09:37:46.878Z",
-        "by": "shakeebshaan",
-        "appCommit": "901ace7f",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Both A and B verified present in HEAD (ExerciseWheelPicker.tsx:350-353 coverage gate; Activity.tsx:703 celebration-replay guard) — reopen 'B' predates the build reaching device."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-08T09:08:51.381Z",
@@ -666,6 +644,35 @@
               "score": 100,
               "bar": 100,
               "note": "Exact root-cause match on both symptoms; distinct-coverage gate + replay guard confirmed in code; dedicated unit spec 48/48 green; tsc clean."
+            }
+          }
+        },
+        {
+          "at": "2026-07-08T20:39:04.403Z",
+          "event": "reopened",
+          "note": "B",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Re-fix confirm (reopen 'B'). Symptom A (out-of-order log -> premature completion): ExerciseWheelPicker.handleLogSet now fires onSetComplete only when ALL target sets 1..targetSets are logged (distinct coverage), not on set_number equality (ExerciseWheelPicker.tsx:350-353). Symptom B (edit-after-complete replays celebration): Activity.handleSetComplete returns early when showWorkoutCompleteRef.current is already true, so editing the final set does NOT replay confetti/sound (Activity.tsx:703, ref synced :402). NOTE: reproducing needs a live workout with target sets + a mounted picker; not drivable in a static capture — screenshot shows /activity rendering correctly.",
+            "imagePath": "images/i-20260708-2ea5-fix-r2.png",
+            "imagePaths": [
+              "images/i-20260708-2ea5-fix-r2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "af9d4a3fe75a4a8e71aeb344ce1e964e3716861b",
+            "imageCommits": [
+              "af9d4a3fe75a4a8e71aeb344ce1e964e3716861b"
+            ],
+            "fixedAt": "2026-07-08T09:37:46.878Z",
+            "by": "shakeebshaan",
+            "appCommit": "901ace7f",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Both A and B verified present in HEAD (ExerciseWheelPicker.tsx:350-353 coverage gate; Activity.tsx:703 celebration-replay guard) — reopen 'B' predates the build reaching device."
             }
           }
         }
