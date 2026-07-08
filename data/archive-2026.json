@@ -18849,49 +18849,30 @@
       "archivedAt": "2026-07-08T20:24:25.893Z"
     },
     {
-      "createdAt": "2026-07-08T09:12:52.824Z",
+      "createdAt": "2026-07-08T16:58:14.751Z",
       "status": "resolved",
-      "fix": {
-        "description": "Root cause: weekly-projection.ts clampTowardGoal used Math.max(next,goal)/Math.min(next,goal), so on an already-past-goal plan (fat-loss whose current weight is already at/below goal) the projected curve jumped UP to the goal, above current, on a deficit. Fix: bound the clamp by min/max(goal,current) so an overshot-goal cut/bulk stays FLAT at current weight; normal case unchanged. Added regression tests (test/weekly-projection.test.ts). NOTE: this QA account is 71.9->65kg (not overshot), so the defect state isn't reproducible in a screenshot on it; proof is the passing unit test of the exact repro. Screenshot shows /plan-timeline rendering correctly.",
-        "imagePath": "images/i-20260708-e4a2-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-e4a2-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0f0e64feb6fb2ee5502975025104d7eef196f133",
-        "imageCommits": [
-          "0f0e64feb6fb2ee5502975025104d7eef196f133"
-        ],
-        "fixedAt": "2026-07-08T09:36:54.788Z",
-        "by": "shakeebshaan",
-        "appCommit": "901ace7f",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Pure-math fix, unit-proven against the exact issue repro (start 73, goal 75, lose -> flat at 73); 23/23 tests green, tsc clean, normal-case curve unchanged."
-        }
-      },
+      "fix": null,
       "history": [],
-      "author": "shakeebshaan",
+      "author": "page-coach-chat-guardian",
       "tags": [
-        "bug-hunt",
-        "auto"
+        "backend",
+        "coach-chat"
       ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "needsReview": false,
-      "id": "i-20260708-e4a2",
-      "route": "/plan-timeline",
-      "description": "[bug-hunt] Projected-trajectory curve pins projected weight ABOVE the current weight on a fat-loss plan when the user is already at/below their goal weight. src/lib/weekly-projection.ts:63 clampTowardGoal for direction \"lose\" does return Math.max(next, goal) — intended to \"never undershoot below goal\", but it also clamps UPWARD when the starting weight is below the goal, so the whole projected curve jumps to the goal weight (above current) on week 1 and stays flat there while the calorie targets are a deficit.\n\nRepro (node-verified against the real math): startWeightKg 73, goalWeightKg 75, direction lose (fat_loss/weight_loss), any pace -> every week returns projectedWeightKg 75 at ~1690 kcal (a deficit below TDEE). In the app this reaches the user via PlanTimeline.tsx dietTraj (which derives direction purely from goal_type and gates only on positive start/goal/height/age — no start-vs-goal sanity check), so a fat_loss plan whose current logged weight has already dropped to/below the goal weight renders WeeklyTrajectory as a flat line sitting 2 kg ABOVE the current weight, with the trend badge/goal line showing the goal, on a deficit plan.\n\nExpected vs actual: expected — when the current weight is already past the goal for the plan direction, show a flat/at-goal curve at the CURRENT weight (or omit the projection), never a curve above current on a deficit. Actual — the curve is clamped up to the goal, implying the user will gain to 75 kg and hold, which contradicts the deficit calorie targets shown alongside. Edge trigger (overshot-goal-but-plan-still-active) but a concrete logic defect in the pure projection lib.\n\nFix: in clampTowardGoal, when the direction move would cross the goal from the wrong side (start already past goal), return current (flat) instead of Math.max/Math.min-ing up to the goal; or have dietTrajectory early-return [] when start is already at/beyond goal for the given direction.",
-      "resolvedAt": "2026-07-08T20:39:11.000Z",
+      "id": "i-20260708-wlc1",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] CoachChat: the AI welcome greeting is persisted MULTIPLE times per user because backend POST /ai/welcome is not idempotent. Evidence (QA acct 170e4f9e): /coach/history returns 4 byte-identical \"Welcome, Das - I am really glad you are here...\" AI rows (ids 1518 @2026-04-17, then 1535/1536/1537 all @2026-04-25 within ~3.5h). The frontend only ever calls sendWelcome() when chat history is empty AND guards with a per-DEVICE localStorage flag (nyus_coach_welcome_fired_<uid>), so the 3 extra Apr-25 rows were minted when history was already NON-empty -> they came from a path that hit /ai/welcome without the empty-history + device-flag guard (2nd device open, storage-clear/reinstall before history replicated, or a direct endpoint hit). Net user-visible effect: the greeting rendered TWICE in the thread (once at top, once mid-thread) because the client consecutive-dedup only collapses a back-to-back run, not the non-consecutive top-vs-mid copies. ROOT-CAUSE FIX is backend: /ai/welcome must be idempotent (only ever persist ONE welcome per user, e.g. skip if the user already has a welcome/any coach message row) - cannot be fixed frontend-only across devices, and this loop is barred from touching backend prod. FRONTEND MITIGATION SHIPPED this tick (commit 3c50a171, useVisibleMessages): later block-free AI copies byte-identical to the first message (the welcome) are now collapsed, so the display symptom is gone (rendered rows 16->15, welcome shown once). Filing the backend idempotency gap so the source is fixed + junk rows stop accumulating in the messages table.",
+      "needsReview": true,
+      "reviewReason": "FIXED & DEPLOYED to prod (backend 8c53ad3, systemd active, /api/v1/health OK). Root cause confirmed: POST /ai/welcome deduped only within a 10-minute window (backend.py AIWelcomeResource), so repeat welcome calls minutes/hours/days apart still minted duplicate greeting rows -> QA acct 170e4f9e had 4 byte-identical welcome rows (one Apr-17, three Apr-25). Fix: the welcome is now treated as the user's FIRST AI message -> if ANY prior AI message exists for the user, return the original greeting and never persist a second; only a truly first-time (zero AI messages) call generates+persists. Stops junk rows accumulating in the messages table at the source; complements the FE display-dedup already shipped (3c50a171). Flagging (not auto-resolving) because the board resolve gate is frontend 'npm run test:unit' (N/A to a backend-only fix + known-broken headless) plus the satisfaction bar is 100; verification = prod deploy + health.",
+      "reviewedAt": "2026-07-08T17:15:40.855Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-08T20:39:33.204Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:39:11.000Z"
+      "archivedAt": "2026-07-08T20:39:33.204Z"
     }
   ]
 }
