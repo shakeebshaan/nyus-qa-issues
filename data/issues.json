@@ -2,6 +2,46 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T15:10:02.753Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "accuracy"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-bd41",
+      "route": "/measurements",
+      "description": "[bug-hunt] Measurements: the \"Estimated Body Fat (Navy Method)\" card uses the IMPERIAL (inches) Navy coefficients but is fed CENTIMETRE values, so every estimate is materially wrong.\n\ncalculateBodyFat (src/pages/Measurements.tsx:26-50) uses the inches-form constants - male: 86.010*log10(waist-neck) - 70.041*log10(height) + 36.76; female: 163.205*log10(waist+hip-neck) - 97.684*log10(height) - 78.387 - which are only valid when circumferences AND height are in INCHES. But it passes waist/neck/hip = value_cm (measurement logs are canonical cm) and heightCm straight in. Feeding cm into a log10-of-inches formula adds a fixed offset of (86.010-70.041)*log10(2.54)=+6.47 for men and (163.205-97.684)*log10(2.54)=+26.5 for women.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5%): metric form 495/(1.0324-0.19077*log10(w-n)+0.15456*log10(h))-450 fed cm = 16.44%, imperial form fed inches = 16.49% (they AGREE = correct). This code returns 22.96% - +6.5 too high. Woman waist75/neck32/hip100/height165 cm (correct ~30%) returns 56.8% -> clamps to the 50% ceiling, so essentially EVERY female account shows 50.0% regardless of measurements.\n\nThe same defective formula is duplicated in onboarding src/components/onboarding/BodyDiagram.tsx:164-186 (its comment claims \"Navy formula requires all inputs in one unit\" - true, but the constants demand inches, not cm).\n\nExpected: estimate within Navy method +/-3-4%. Actual: men ~+6.5pts high, women pinned at 50%; it also disagrees with the /body-fat-estimator and /body-composition screens for the same person.\n\nRepro: log waist+neck (+hip if female) on /measurements -> the body-fat card shows an inflated %; female accounts show 50.0%.\n\nFix: either convert cm->inches before the 86.010/163.205 formula, OR switch to the metric 495/(...) form fed cm. Secondary: key the male/female branch off biological_sex ?? gender (physiology) to match BodyComposition.tsx:145 / BodyFatEstimator.tsx:156 / onboarding-calc.ts:67 - Measurements.tsx:194 currently uses identity gender only.\n\nFiles: src/pages/Measurements.tsx:26-50 (calculateBodyFat) + :189-201 (bodyFatEstimate memo; gender source :194); src/components/onboarding/BodyDiagram.tsx:164-186."
+    },
+    {
+      "createdAt": "2026-07-08T15:10:02.753Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "accuracy"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-bd8e",
+      "route": "/body-fat-estimator",
+      "description": "[bug-hunt] Body Fat Estimator: the Navy-method calculator converts the user cm inputs to INCHES and then applies the METRIC (cm) Navy coefficients, so it UNDER-estimates body fat by ~6.4 points - and this wrong value is SAVED to the profile.\n\nnavyMethodMale (src/pages/BodyFatEstimator.tsx:100-105) does waistIn=waistCm/2.54 (neck/height too), then returns 495/(1.0324 - 0.19077*log10(waistIn-neckIn) + 0.15456*log10(heightIn)) - 450. The 495/(1.0324...) form is the METRIC Navy formula - its constants are calibrated for CENTIMETRES. Feeding it inches shifts the result down by a fixed offset.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5% - confirmed because metric-form-fed-cm 16.44% and imperial-form-fed-inches 16.49% agree): this function returns 10.08%, ~6.4 points too LOW. navyMethodFemale (:107-113) has the identical cm->inches conversion before the metric female constants (1.29579/0.35004/0.22100) - same error.\n\nWorse than a display glitch: handleSave (:289-302) calls healthService.saveBodyFatEstimate(displayedBf) with this under-reported %, persisting body_fat_pct to the profile - which Katch-McArdle BMR keys off (LBM = weight*(1-BF/100)), inflating lean mass and BMR/TDEE downstream.\n\nThis is the OPPOSITE-direction sibling of the /measurements Navy bug (that one feeds cm to the imperial form -> +6.5 too high; see companion issue).\n\nRepro: /body-fat-estimator -> Calculator -> Navy tab -> neck 38, waist 85 (cm) -> Calculate -> shows ~10% for a man whose real Navy BF is ~16.5%; Save persists the low value.\n\nFix: drop the /2.54 conversions and feed cm straight into the 495/(...) metric form (or keep inches but switch to the imperial 86.010/163.205 constants).\n\nFiles: src/pages/BodyFatEstimator.tsx:100-113 (navyMethodMale/navyMethodFemale); saved via :293 handleSave."
+    },
+    {
       "id": "i-20260708-vitl",
       "createdAt": "2026-07-08T14:42:38.248Z",
       "status": "open",
