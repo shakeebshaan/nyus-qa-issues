@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T05:24:55.012Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-9c2e",
+      "route": null,
+      "description": "[bug-hunt] Canceling a paid subscription revokes premium access IMMEDIATELY instead of at the end of the prepaid period - contradicting the cancel endpoint's own contract and the on-screen promise. ROOT CAUSE (backend): POST /api/v1/subscription/cancel (CancelSubscriptionResource, BACKEND backend.py:2861) soft-cancels by setting status='canceled' but INTENTIONALLY leaves current_period_end in the future so the user 'keeps access until the prepaid window ends' (its own docstring, backend.py:2812-2815). BUT both entitlement reads require status=='active': (1) entitlement.py:58 has_active_subscription() returns bool(sub and sub.status=='active') - this gates subscription_required, which 402s premium endpoints when FEATURE_SUBSCRIPTION_GATE is ON; (2) backend.py:2065 /auth/me sets subscription_active = bool(active_sub and active_sub.status=='active'). The comment two lines above (backend.py:2054-2055) literally says 'We include soft-canceled subs whose period hasn't elapsed because the FE treats period_end (not status) as the access boundary' - but the boolean then discards them via the status check, contradicting its own comment and get_active_subscription()'s documented 'may be soft-canceled but still within its period'. EXPECTED: after cancel, subscription_active stays true and premium stays unlocked until current_period_end; only auto-renew stops. ACTUAL: subscription_active flips false the instant Cancel is tapped. The FE cancel toast promises 'Your plan will remain active until the end of the current billing period' and SubscriptionSettings shows a 'You will keep access until <date>' banner, yet /auth/me already reports the user as unsubscribed; when the gate flips ON (documented rollout) the user is 402'd out of coach chat / AI builders immediately despite having paid through period_end. REPRO: paid/active user -> /choose-plan?manage=1 or /settings/subscription -> Cancel subscription -> confirm; the 'Current subscription' billing block + cancel affordance vanish instantly (both gate on user.subscription_active), and with the gate on premium endpoints return 402 on the next call. FIX: grant access to soft-canceled rows still within their period, e.g. status in ('active','canceled') with current_period_end>now, in BOTH BACKEND nyu_backend/app/services/entitlement.py:58 and nyu_backend/backend.py:2065."
+    },
+    {
+      "createdAt": "2026-07-08T05:24:55.012Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-b7a4",
+      "route": "/settings/subscription",
+      "description": "[bug-hunt] Subscription screen shows a FALSE 'Purchases restored' success even when there is nothing to restore. FILE: src/pages/SubscriptionSettings.tsx handleRestore (~lines 177-197). The 'Restore previous purchase' button POSTs /payments/restore-purchases and UNCONDITIONALLY shows the success toast 'Purchases restored / Your subscription has been refreshed' in the try block - it never inspects the response. But the backend (RestoreSubscriptionResource, BACKEND backend.py:2955-2959) returns HTTP 200 with {restored:false, reason:'no active subscription found'} when there is no valid subscription. Because it is a 200 (not 4xx), axios does NOT throw, so the code never reaches the 'Nothing to restore' catch branch - that branch only fires on real network/5xx errors. EXPECTED: a user with no prior purchase taps Restore -> 'Nothing to restore / We couldn't find a previous purchase on this account'. ACTUAL: they get 'Purchases restored / Your subscription has been refreshed' (false success), then load() re-fetches and the card still shows status 'none' - the toast contradicts the screen. REPRO: log in as a free/never-paid account -> /settings/subscription -> tap 'Restore previous purchase' -> false success toast. FIX: read response.data.restored from the POST and branch on it (success toast only when restored===true; otherwise the no-purchases message), mirroring ChoosePlan.handleRestorePurchases which already gates its success toast on the response payload. Keep the catch branch for genuine network/5xx errors."
+    },
+    {
       "createdAt": "2026-07-08T04:10:00.000Z",
       "status": "fixed",
       "fix": {
