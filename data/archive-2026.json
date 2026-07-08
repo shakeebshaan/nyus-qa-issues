@@ -18875,35 +18875,35 @@
       "archivedAt": "2026-07-08T20:40:21.435Z"
     },
     {
-      "createdAt": "2026-07-08T09:12:52.824Z",
+      "createdAt": "2026-07-08T04:30:10.490Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: weekly-projection.ts clampTowardGoal used Math.max(next,goal)/Math.min(next,goal), so on an already-past-goal plan (fat-loss whose current weight is already at/below goal) the projected curve jumped UP to the goal, above current, on a deficit. Fix: bound the clamp by min/max(goal,current) so an overshot-goal cut/bulk stays FLAT at current weight; normal case unchanged. Added regression tests (test/weekly-projection.test.ts). NOTE: this QA account is 71.9->65kg (not overshot), so the defect state isn't reproducible in a screenshot on it; proof is the passing unit test of the exact repro. Screenshot shows /plan-timeline rendering correctly.",
-        "imagePath": "images/i-20260708-e4a2-fix-r1.png",
+        "description": "Deferred deploy step completed. The ghee post (commit ec790bbf) was pushed to main but 404 on live (main->live sync is not automatic; DEPLOY_SSH_KEY still pending). Fix: pscp'd the 6 changed blog files (ghee post + calories-macros & index & sitemap backlinks + curd/roti interlinks) to the apex VM /home/ubuntu/nyus-landing/blog/. Verified live: https://nyus.in/blog/is-ghee-good-for-weight-loss-india.html now returns HTTP 200 with the correct title. Submitted the URL to IndexNow (Bing/Yandex, HTTP 200; key file live).",
+        "imagePath": "images/i-20260708-gh08-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-e4a2-fix-r1.png"
+          "images/i-20260708-gh08-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "0f0e64feb6fb2ee5502975025104d7eef196f133",
+        "imageCommit": "bb014e549fd8c71255807a44491e05f1d52e686f",
         "imageCommits": [
-          "0f0e64feb6fb2ee5502975025104d7eef196f133"
+          "bb014e549fd8c71255807a44491e05f1d52e686f"
         ],
-        "fixedAt": "2026-07-08T09:36:54.788Z",
+        "fixedAt": "2026-07-08T05:45:05.368Z",
         "by": "shakeebshaan",
-        "appCommit": "901ace7f",
+        "appCommit": "ec790bbf",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Pure-math fix, unit-proven against the exact issue repro (start 73, goal 75, lose -> flat at 73); 23/23 tests green, tsc clean, normal-case curve unchanged."
+          "note": "Deferred action from the note (verify live + submit IndexNow) fully completed: URL 200 live with correct title, IndexNow accepted."
         }
       },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
+        "content",
         "auto"
       ],
       "imagePath": null,
@@ -18911,13 +18911,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
+      "id": "i-20260708-gh08",
+      "route": null,
+      "description": "[content] Published: Is Ghee Good for Weight Loss? Calories, How Much per Day, and the Myths - https://nyus.in/blog/is-ghee-good-for-weight-loss-india.html. Ideas added: 3. Escalated: 0. NOTE: commit ec790bbf pushed to main; live URL 404 at post time (known main->live sync ~1h lag; DEPLOY_SSH_KEY escalation still pending), so IndexNow deferred for this URL - next tick/owner pscp should verify live + submit (same path as is-curd cd4h). npm run deploy is inert (ENAMETOOLONG on gh-pages, gh-pages branch not served). Post backlinked from calories-macros-common-indian-foods.html (ghee-roti line), blog index.html, and sitemap-blog.xml. Content: honest evidence-based myth-check - ghee doesn't burn fat, ~45 kcal/tsp, debunks CLA/MCT/A2-bilona claims, ghee-vs-oils table, 60% sat-fat + heart disclaimer. New [todo] ideas: dal chawal fat-loss guide, best cooking oil + how much per day, are bananas good for weight loss.",
       "needsReview": false,
-      "id": "i-20260708-e4a2",
-      "route": "/plan-timeline",
-      "description": "[bug-hunt] Projected-trajectory curve pins projected weight ABOVE the current weight on a fat-loss plan when the user is already at/below their goal weight. src/lib/weekly-projection.ts:63 clampTowardGoal for direction \"lose\" does return Math.max(next, goal) — intended to \"never undershoot below goal\", but it also clamps UPWARD when the starting weight is below the goal, so the whole projected curve jumps to the goal weight (above current) on week 1 and stays flat there while the calorie targets are a deficit.\n\nRepro (node-verified against the real math): startWeightKg 73, goalWeightKg 75, direction lose (fat_loss/weight_loss), any pace -> every week returns projectedWeightKg 75 at ~1690 kcal (a deficit below TDEE). In the app this reaches the user via PlanTimeline.tsx dietTraj (which derives direction purely from goal_type and gates only on positive start/goal/height/age — no start-vs-goal sanity check), so a fat_loss plan whose current logged weight has already dropped to/below the goal weight renders WeeklyTrajectory as a flat line sitting 2 kg ABOVE the current weight, with the trend badge/goal line showing the goal, on a deficit plan.\n\nExpected vs actual: expected — when the current weight is already past the goal for the plan direction, show a flat/at-goal curve at the CURRENT weight (or omit the projection), never a curve above current on a deficit. Actual — the curve is clamped up to the goal, implying the user will gain to 75 kg and hold, which contradicts the deficit calorie targets shown alongside. Edge trigger (overshot-goal-but-plan-still-active) but a concrete logic defect in the pure projection lib.\n\nFix: in clampTowardGoal, when the direction move would cross the goal from the wrong side (start already past goal), return current (flat) instead of Math.max/Math.min-ing up to the goal; or have dietTrajectory early-return [] when start is already at/beyond goal for the given direction.",
-      "resolvedAt": "2026-07-08T20:43:20.172Z",
+      "resolvedAt": "2026-07-08T20:43:40.427Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:43:20.172Z"
+      "archivedAt": "2026-07-08T20:43:40.427Z"
     }
   ]
 }
