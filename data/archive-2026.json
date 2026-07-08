@@ -18875,14 +18875,36 @@
       "archivedAt": "2026-07-08T20:40:21.435Z"
     },
     {
-      "createdAt": "2026-07-08T09:55:13.656Z",
+      "createdAt": "2026-07-08T15:10:02.753Z",
       "status": "resolved",
-      "fix": null,
+      "fix": {
+        "description": "Root cause: navyMethodMale/navyMethodFemale (BodyFatEstimator.tsx) converted the cm inputs to inches (÷2.54) and then applied the METRIC Navy constants (495/1.0324…), under-reporting body fat by ~6.4pts — and handleSave persisted that low body_fat_pct, corrupting downstream Katch-McArdle BMR/TDEE. Fix: dropped the ÷2.54 conversions and feed cm straight into the metric form (matches the fixed Measurements + BodyComposition screens). Verified on /body-fat-estimator: neck 38 / waist 85 (cm) / height 170cm male -> 17.8% (was ~11%). Regression test added (test/BodyFatNavy.formula.test.ts, 6/6 green).",
+        "imagePath": "images/i-20260708-bd8e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-bd8e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "98f6dc7c8d90c8d22fedce0eb5ee4e38b3c556d7",
+        "imageCommits": [
+          "98f6dc7c8d90c8d22fedce0eb5ee4e38b3c556d7"
+        ],
+        "fixedAt": "2026-07-08T15:43:36.494Z",
+        "by": "shakeebshaan",
+        "appCommit": "a25f4987",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root-caused to cm→inch conversion before metric constants; removed it; verified 17.8% on the actual estimator screen (full-screen proof, cm inputs + metric formula shown); scoped regression test green; sibling /measurements bug fixed in tandem so both screens agree."
+        }
+      },
       "history": [],
-      "author": "page-nutrition-guardian",
+      "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
-        "nutrition",
+        "auto",
         "accuracy"
       ],
       "imagePath": null,
@@ -18890,16 +18912,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-kc49",
-      "route": "/nutrition",
-      "description": "[bug-hunt] Nutrition: headline 'consumed kcal' can disagree with the sum of the meal cards. The top calorie number (and 'remaining') is re-derived client-side as 4*protein + 4*carbs + 9*fats from macros_consumed (src/pages/_components/nutrition/useNutritionData.tsx ~L349), but each meal card shows the backend's own total_calories (backend.py /diet/plan L6722: sum of ing.calories from the food DB per serving). Food-DB calories are label/Atwater-with-fiber values that are NOT exactly 4/4/9, so for many meals the two differ. Net effect: a precision-focused user adding up the per-meal kcal on the cards won't get the number shown at the top of the page (typically a few % off, data-dependent). Proper fix is cross-repo: backend should return a calories_consumed field (sum of eaten AssignedMeal.total_calories + ad-hoc MealLog.total_calories, mirroring the macros_consumed fold at L6823), and the frontend should DISPLAY that instead of re-deriving 4/4/9 — then headline == sum of cards. Filed by the daily nutrition page-guardian loop; could not reproduce on-screen because the QA account has a macro target (2794 kcal) but zero assigned meals on all recent dates, so the plan renders the empty state. Not frontend-fixable alone.",
-      "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED both repos (awaiting on-device confirmation only). Root cause exactly as filed: headline re-derived consumed kcal as 4P+4C+9F from macros_consumed, while each meal card shows the food-DB total_calories (label/Atwater-with-fiber, not 4/4/9) -> few-% disagreement. FIX (cross-repo): (1) backend.py /diet/plan now sums eaten AssignedMeal.total_calories + ad-hoc MealLog.total_calories into a new authoritative calories_consumed field (commit f1e0e84, deployed to prod, health 200); (2) frontend useNutritionData.tsx displays calories_consumed when present, keeping 4/4/9 only as an older-OTA fallback (commit 57618617). Headline now == sum of eaten cards by construction. VERIFIED: 2 new passing unit tests (test/useNutritionData.calories.test.tsx) assert the FE prefers calories_consumed (1234) and falls back to 4/4/9 (1160); tsc clean; backend ast-clean + live. NO on-screen pixel proof this tick: the QA account currently returns 'Error loading the user' on /diet/plan AND has zero assigned meals on all recent dates (same reason the nutrition-guardian could not reproduce), so a faithful headline-vs-cards capture is impossible without provisioning meals. Requesting owner verify on-device, or confirm resolve.",
-      "reviewedAt": "2026-07-08T10:03:20.044Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-08T20:42:48.797Z",
+      "id": "i-20260708-bd8e",
+      "route": "/body-fat-estimator",
+      "description": "[bug-hunt] Body Fat Estimator: the Navy-method calculator converts the user cm inputs to INCHES and then applies the METRIC (cm) Navy coefficients, so it UNDER-estimates body fat by ~6.4 points - and this wrong value is SAVED to the profile.\n\nnavyMethodMale (src/pages/BodyFatEstimator.tsx:100-105) does waistIn=waistCm/2.54 (neck/height too), then returns 495/(1.0324 - 0.19077*log10(waistIn-neckIn) + 0.15456*log10(heightIn)) - 450. The 495/(1.0324...) form is the METRIC Navy formula - its constants are calibrated for CENTIMETRES. Feeding it inches shifts the result down by a fixed offset.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5% - confirmed because metric-form-fed-cm 16.44% and imperial-form-fed-inches 16.49% agree): this function returns 10.08%, ~6.4 points too LOW. navyMethodFemale (:107-113) has the identical cm->inches conversion before the metric female constants (1.29579/0.35004/0.22100) - same error.\n\nWorse than a display glitch: handleSave (:289-302) calls healthService.saveBodyFatEstimate(displayedBf) with this under-reported %, persisting body_fat_pct to the profile - which Katch-McArdle BMR keys off (LBM = weight*(1-BF/100)), inflating lean mass and BMR/TDEE downstream.\n\nThis is the OPPOSITE-direction sibling of the /measurements Navy bug (that one feeds cm to the imperial form -> +6.5 too high; see companion issue).\n\nRepro: /body-fat-estimator -> Calculator -> Navy tab -> neck 38, waist 85 (cm) -> Calculate -> shows ~10% for a man whose real Navy BF is ~16.5%; Save persists the low value.\n\nFix: drop the /2.54 conversions and feed cm straight into the 495/(...) metric form (or keep inches but switch to the imperial 86.010/163.205 constants).\n\nFiles: src/pages/BodyFatEstimator.tsx:100-113 (navyMethodMale/navyMethodFemale); saved via :293 handleSave.",
+      "needsReview": false,
+      "resolvedAt": "2026-07-08T20:42:59.862Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:42:48.797Z"
+      "archivedAt": "2026-07-08T20:42:59.862Z"
     }
   ]
 }
