@@ -346,6 +346,30 @@ function pullCompetitors() {
   try { return JSON.parse(readFileSync(p, "utf8")); } catch { return null; }
 }
 
+// Cold-outreach / email metrics from the email-waterfall skill's local logs
+// (sent-log.json + leads-queue.csv live in the FRONTEND repo, gitignored — real
+// send data written by daily-loop.mjs). Returns null if the skill isn't present.
+function pullOutreach() {
+  const base = join(HOME, "Desktop", "nyus-well-tracker-00146a-75469", ".agents", "skills", "email-waterfall");
+  const sentP = join(base, "sent-log.json");
+  const queueP = join(base, "leads-queue.csv");
+  if (!existsSync(sentP) && !existsSync(queueP)) return null;
+  let sent = [];
+  try { sent = JSON.parse(readFileSync(sentP, "utf8")); } catch {}
+  if (!Array.isArray(sent)) sent = [];
+  const ok = sent.filter(s => s.status === "sent");
+  const failed = sent.filter(s => s.status && s.status !== "sent");
+  const today = new Date().toISOString().slice(0, 10);
+  const sentToday = ok.filter(s => (s.sentAt || "").slice(0, 10) === today).length;
+  const lastSend = ok.length ? ok.map(s => s.sentAt).sort().pop() : null;
+  let queueRows = 0;
+  try {
+    const csv = readFileSync(queueP, "utf8").trim().split(/\r?\n/);
+    queueRows = Math.max(0, csv.length - 1); // minus header
+  } catch {}
+  return { total: ok.length, failed: failed.length, sentToday, lastSend, queueRows };
+}
+
 // ── assemble ───────────────────────────────────────────────
 const A = (need) => ({ status: "awaiting", need });
 function num(v) { return (v === null || v === undefined) ? null : v; }
@@ -378,6 +402,7 @@ const health = pullHealth();
 const vuln = pullVuln();
 const vulnBackend = pullVulnBackend();
 const comp = pullCompetitors();
+const outr = pullOutreach();
 let aiEval = null;
 {
   const prev = (ghGetJson("data/metrics.json") || {}).aiEval;
@@ -573,6 +598,15 @@ const categories = [
     m("nyus_play_rating", "NYUS Play Store rating", play && !play.permissionPending && play.avgRating != null ? play.avgRating : (comp && comp.nyus_benchmarks && comp.nyus_benchmarks.play_rating != null ? comp.nyus_benchmarks.play_rating : A("Play API live — see play_rating metric in App Store section; or set play_rating in data/competitor_estimates.json manually")), { unit: play && play.avgRating != null ? `★/5 (Play API live, ${play.ratingCount} reviews)` : "★/5", source: "Play Publisher API (live) or data/competitor_estimates.json nyus_benchmarks", owner: "Strategy", priority: "M" }),
     m("gdpr_requests", "GDPR/DPDP requests (30d)", num(gd.requests_30d), { source: "DB admin_gdpr_requests", owner: "Legal", priority: "M" }),
     m("privacy_incidents", "Privacy incidents (tracked)", 0, { unit: "incidents", formula: "0 = no incidents on record; wire admin_privacy_incidents table when process exists", source: "manual", owner: "Legal", priority: "H" }),
+  ]},
+  { key: "outreach", title: "Outreach & Email", metrics: [
+    m("outreach_emails_total", "Cold emails sent (all-time)", outr ? outr.total : null, { unit: "emails", formula: "count of status=sent in email-waterfall sent-log.json", source: "email-waterfall daily-loop (Resend, from support@nyus.in)", owner: "Growth", priority: "H" }),
+    m("outreach_emails_today", "Cold emails sent today", outr ? outr.sentToday : null, { unit: "emails", formula: "sent-log rows with sentAt = today (UTC); daily cap 10", source: "email-waterfall daily-loop", owner: "Growth", priority: "H" }),
+    m("outreach_daily_cap", "Daily send cap", outr ? 10 : null, { unit: "emails/day", formula: "DAILY_SEND_LIMIT (daily-loop.mjs)", source: "email-waterfall config", owner: "Growth", priority: "M" }),
+    m("outreach_leads_queue", "Leads in queue", outr ? outr.queueRows : null, { unit: "leads", formula: "rows in leads-queue.csv (minus header)", source: "email-waterfall find-leads", owner: "Growth", priority: "M" }),
+    m("outreach_send_failures", "Send failures (all-time)", outr ? outr.failed : null, { unit: "emails", formula: "sent-log rows with status != sent", source: "email-waterfall sent-log.json", owner: "Growth", priority: "M" }),
+    m("outreach_last_send", "Last send at", outr && outr.lastSend ? outr.lastSend : (outr ? A("no sends logged yet — run daily-loop.mjs") : null), { formula: "max sentAt in sent-log.json", source: "email-waterfall sent-log.json", owner: "Growth", priority: "L" }),
+    m("outreach_reply_rate", "Reply rate (30d)", A("wire Resend inbound/webhook or IMAP reply tracking on support@nyus.in to compute replies/sent"), { unit: "%", source: "Resend webhooks (not yet wired)", owner: "Growth", priority: "M" }),
   ]},
 ];
 
