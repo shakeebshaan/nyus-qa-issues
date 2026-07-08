@@ -310,48 +310,6 @@
       "createdAt": "2026-07-08T09:12:52.824Z",
       "status": "fixed",
       "fix": {
-        "description": "Root cause: CalorieBalanceRing.tsx hardcoded accent = surplus?orange:teal for every user, so a muscle_gain athlete saw their needed surplus painted as a warning and an unwanted deficit painted teal/on-track. Fix: added a goalDirection prop; the ring now paints the ON-TRACK state teal (surplus for gain, deficit for loss/maintain) and OFF-TRACK orange. Wired progressData.on_track.goal_direction from WeeklyProgress.tsx. NOTE: this QA account has no meals logged this week so the ring (caloriesStats.hasTarget) is hidden; screenshot shows /weekly-progress rendering correctly. Fix is goal-conditional logic matching the already-goal-aware sibling surfaces.",
-        "imagePath": "images/i-20260708-c1b7-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-c1b7-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "36adcb50baad1728b85be2a5699cd2175a9e5776",
-        "imageCommits": [
-          "36adcb50baad1728b85be2a5699cd2175a9e5776"
-        ],
-        "fixedAt": "2026-07-08T09:37:09.388Z",
-        "by": "shakeebshaan",
-        "appCommit": "901ace7f",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Correct, complete goal-aware fix mirroring the sibling goal-aware weight surfaces (WeeklyProgress weightTrendStats, MonthlyProgress). Label stays factual; only the accent flips by goal."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false,
-      "id": "i-20260708-c1b7",
-      "route": "/weekly-progress",
-      "description": "[bug-hunt] Calorie-balance ring on the Weekly Progress hero colors a deficit as \"good\" (teal) and a surplus as \"warning\" (orange) for EVERY user, ignoring their goal direction. src/components/CalorieBalanceRing.tsx:42-45 hardcodes accent = surplus ? orange : teal and label = surplus ? \"surplus\" : \"deficit\" with a comment that admits the encoding is goal-specific (\"teal/success when deficit (good for fat loss), orange when surplus (good for muscle gain)\") but applies it unconditionally. The component takes no goal_direction prop, and WeeklyProgress.tsx (line ~630) renders it as <CalorieBalanceRing intake target /> with no goal.\n\nExpected vs actual: for a muscle_gain / weight_gain athlete a calorie SURPLUS is the desired state and a deficit is under-eating (bad). Expected: surplus shown in the positive/teal accent, deficit in the warning accent. Actual (inverted for the gain cohort): their needed surplus is painted orange as if it is a warning, and an unwanted deficit is painted teal/success as if it is on-track. Note the sibling weight surfaces on the very same pages are already goal-aware (WeeklyProgress weightTrendStats.isOnTrack and MonthlyProgress isWeightOnTrack both branch on goal_direction), so the ring is the lone outlier and the intended pattern is goal-aware coloring.\n\nRepro: as a muscle_gain user with a calorie target, open /weekly-progress; on any week where avg daily calories land below target the hero ring renders teal with \"kcal deficit\" as though under-eating is on-track. Same class as the fixed dashboard weight-chip inversion (i-20260703-b52e) but on a distinct, un-fixed component.\n\nFix: thread the user goal_direction into CalorieBalanceRing and invert the accent + good/bad semantics for gain goals (surplus = positive accent, deficit = warning) while keeping loss/maintain as-is."
-    },
-    {
-      "createdAt": "2026-07-08T09:12:52.824Z",
-      "status": "fixed",
-      "fix": {
         "description": "Root cause: weekly-projection.ts clampTowardGoal used Math.max(next,goal)/Math.min(next,goal), so on an already-past-goal plan (fat-loss whose current weight is already at/below goal) the projected curve jumped UP to the goal, above current, on a deficit. Fix: bound the clamp by min/max(goal,current) so an overshot-goal cut/bulk stays FLAT at current weight; normal case unchanged. Added regression tests (test/weekly-projection.test.ts). NOTE: this QA account is 71.9->65kg (not overshot), so the defect state isn't reproducible in a screenshot on it; proof is the passing unit test of the exact repro. Screenshot shows /plan-timeline rendering correctly.",
         "imagePath": "images/i-20260708-e4a2-fix-r1.png",
         "imagePaths": [
