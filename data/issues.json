@@ -74,31 +74,39 @@
     },
     {
       "createdAt": "2026-07-08T06:55:23.362Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: logSetMutation.onSuccess toasted 'Set logged' for EVERY set, so the quick-complete checkbox auto-log path (handleCheckboxToggle logs every prior-session set with the picker closed) stacked 4-5 toasts from a single tap, breaking the calm-design no-popups-on-routine-taps rule. Fix: the per-set onSuccess toast now fires only when the picker is actually open (isModalOpen.current, Activity.tsx:472) i.e. manual logging; the auto-log path keeps just its single '{exercise} auto-logged' summary toast. Verified: tsc clean, ExerciseWheelPicker.test.tsx 48/48 green. Capture = authenticated /activity screen (toast-stacking is behavioral, not a static frame).",
-        "imagePath": "images/i-20260708-2da8-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-2da8-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0a2adee11eb851bfe4be35e673f0cb38f602d503",
-        "imageCommits": [
-          "0a2adee11eb851bfe4be35e673f0cb38f602d503"
-        ],
-        "fixedAt": "2026-07-08T07:32:49.506Z",
-        "by": "shakeebshaan",
-        "appCommit": "d792e4cc",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Per-set toast now gated on isModalOpen.current so auto-log emits one summary toast only; matches the described fix exactly; tsc clean."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-08T09:09:15.004Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: logSetMutation.onSuccess toasted 'Set logged' for EVERY set, so the quick-complete checkbox auto-log path (handleCheckboxToggle logs every prior-session set with the picker closed) stacked 4-5 toasts from a single tap, breaking the calm-design no-popups-on-routine-taps rule. Fix: the per-set onSuccess toast now fires only when the picker is actually open (isModalOpen.current, Activity.tsx:472) i.e. manual logging; the auto-log path keeps just its single '{exercise} auto-logged' summary toast. Verified: tsc clean, ExerciseWheelPicker.test.tsx 48/48 green. Capture = authenticated /activity screen (toast-stacking is behavioral, not a static frame).",
+            "imagePath": "images/i-20260708-2da8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260708-2da8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0a2adee11eb851bfe4be35e673f0cb38f602d503",
+            "imageCommits": [
+              "0a2adee11eb851bfe4be35e673f0cb38f602d503"
+            ],
+            "fixedAt": "2026-07-08T07:32:49.506Z",
+            "by": "shakeebshaan",
+            "appCommit": "d792e4cc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Per-set toast now gated on isModalOpen.current so auto-log emits one summary toast only; matches the described fix exactly; tsc clean."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
