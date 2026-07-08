@@ -999,10 +999,11 @@ async function loadJson(path) {
   // j.content is empty when the file exceeds GitHub's 1MB Contents API limit.
   // Fall back to raw.githubusercontent.com so large archive files load correctly.
   if (!j.content) {
-    const rawR = await fetch(rawUrl(path), {
-      headers: token ? { Authorization: "Bearer " + token } : {},
-      cache: "no-store",
-    });
+    // NO Authorization header here: the board repo is public, so raw.githubusercontent
+    // serves it unauthenticated. Sending Authorization makes the request non-simple, which
+    // triggers a CORS preflight that raw.githubusercontent rejects ("no HTTP ok status") →
+    // net::ERR_FAILED. Once archive-2026.json crossed 1MB this broke every resolve (a9d6/28ac).
+    const rawR = await fetch(rawUrl(path), { cache: "no-store" });
     if (!rawR.ok) throw new Error("Raw fallback failed " + rawR.status);
     return { data: await rawR.json(), sha: j.sha, missing: false };
   }
