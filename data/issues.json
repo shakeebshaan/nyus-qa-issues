@@ -248,31 +248,39 @@
     },
     {
       "createdAt": "2026-07-08T05:24:55.012Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: SubscriptionSettings.handleRestore showed the 'Purchases restored' toast unconditionally in the try block; the backend returns HTTP 200 {restored:false} for a no-purchase account so axios never threw and the 'Nothing to restore' catch branch never ran. Fix: branch on res.data.restored (success toast only when restored===true, else the no-purchase message; catch still handles network/5xx), mirroring ChoosePlan. Proof: with the endpoint returning {restored:false} the screen now shows 'Nothing to restore / We couldn't find a previous purchase on this account.'",
-        "imagePath": "images/i-20260708-b7a4-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-b7a4-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "95a6beb663e3ca1a538c7ee90a9b823dc56ff3e9",
-        "imageCommits": [
-          "95a6beb663e3ca1a538c7ee90a9b823dc56ff3e9"
-        ],
-        "fixedAt": "2026-07-08T05:39:46.606Z",
-        "by": "shakeebshaan",
-        "appCommit": "9685a71f",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Owner-prescribed fix applied verbatim; tsc clean; proven end-to-end in-browser with a {restored:false} response showing the correct 'Nothing to restore' toast."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-08T09:10:06.557Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: SubscriptionSettings.handleRestore showed the 'Purchases restored' toast unconditionally in the try block; the backend returns HTTP 200 {restored:false} for a no-purchase account so axios never threw and the 'Nothing to restore' catch branch never ran. Fix: branch on res.data.restored (success toast only when restored===true, else the no-purchase message; catch still handles network/5xx), mirroring ChoosePlan. Proof: with the endpoint returning {restored:false} the screen now shows 'Nothing to restore / We couldn't find a previous purchase on this account.'",
+            "imagePath": "images/i-20260708-b7a4-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260708-b7a4-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "95a6beb663e3ca1a538c7ee90a9b823dc56ff3e9",
+            "imageCommits": [
+              "95a6beb663e3ca1a538c7ee90a9b823dc56ff3e9"
+            ],
+            "fixedAt": "2026-07-08T05:39:46.606Z",
+            "by": "shakeebshaan",
+            "appCommit": "9685a71f",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Owner-prescribed fix applied verbatim; tsc clean; proven end-to-end in-browser with a {restored:false} response showing the correct 'Nothing to restore' toast."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
