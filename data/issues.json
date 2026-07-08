@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-07-08T10:37:18Z",
+      "id": "i-20260708-5a3d",
+      "route": "/social",
+      "description": "[bug-hunt] Leaderboard 'My Group' scope gets STUCK with no way back to Global after you leave your last partner group. LeaderboardView.tsx renders the Global/'My Group' scope toggle ONLY when hasAnyGroup (line 273: `{hasAnyGroup && (...)}`), but the selected `scope` state ('group') is never reset when the partnerGroups list becomes empty. Expected: with no groups, scope should fall back to 'global'. Actual: the toggle unmounts while scope stays 'group', freezing the board. Repro: (1) be in >=1 partner group; open Social -> Leaderboard -> the Global/'My Group' toggle appears; tap 'My Group'. (2) Leave/delete your last partner group from the Partners hub (or pull-to-refresh after leaving -> handleRefresh invalidates ['partner-groups'], staleTime 60s, refetches empty). (3) hasAnyGroup flips false so the scope toggle UNMOUNTS while scope is still 'group'; displayedResults = groupResults filters visibleResults to groupMemberIds which is now just {yourself}, so the board freezes showing only you (or the 'No group members on this board yet' empty state) with NO toggle to return to Global. Fix: derive effectiveScope = hasAnyGroup ? scope : 'global' (or a useEffect that resets scope to 'global' when !hasAnyGroup)."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-07-08T10:37:18Z",
+      "id": "i-20260708-7c1e",
+      "route": "/social",
+      "description": "[bug-hunt] Challenges: accepting/declining ONE challenge invite spins & disables the Join/Decline buttons on ALL other invited challenge cards. ChallengesView.tsx uses a single shared mutation per action (joinMutation / declineMutation); each card's button keys its spinner + disabled state purely off `joinMutation.isPending` / `declineMutation.isPending` (lines ~448-469), which is one global boolean, not per-challenge. Repro: have >=2 pending challenge invites (my_status === 'invited') visible in the Active tab; tap Join on card #1 -> every invited card's Join button simultaneously shows the Loader2 spinner and becomes disabled until that one request settles (same for Decline). Expected: only the tapped card shows a pending state; the others stay actionable. Fix: track the in-flight challengeId (e.g. gate on `joinMutation.isPending && joinMutation.variables === challenge.id`) so only the acted-on card shows the spinner/disabled."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-07-08T10:37:18Z",
+      "id": "i-20260708-b2f9",
+      "route": "/social",
+      "description": "[bug-hunt] Direct-message send fails SILENTLY - no error feedback, no retry. MessagesView.tsx sendMessageMutation (lines ~70-83) has an onSuccess (clears the input + invalidates the thread) but NO onError. If POST /messages fails (offline, 5xx, timeout) nothing happens: no toast, no error state, the message never appears in the thread, and unlike coach chat there is no optimistic echo or outbox. The composer re-enables (isPending=false) with the typed text still present, so the user cannot tell the send failed vs is still pending. Repro: open a friend DM thread, go offline (or force a 500 on /messages), type a message, tap Send -> the button briefly disables then re-enables, the message silently drops with zero feedback. Expected: a failure toast (ideally retain text for retry). Fix: add an onError to the mutation that fires toast.error (and keeps the text), matching the error-toast pattern used elsewhere in the app."
+    },
+    {
       "createdAt": "2026-07-08T09:55:13.656Z",
       "status": "open",
       "fix": null,
