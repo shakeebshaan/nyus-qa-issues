@@ -154,7 +154,11 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": true,
+      "reviewReason": "Feasibility confirmed + V1 plan ready — one owner go/no-go needed before building (medical-data feature). WHAT I VERIFIED IN CODE: (1) medical_flags ['diabetes','bp'] is already exposed client-side on the profile (coach-intake-questions.ts reads it), so condition-gating the Vitals section is pure-FE, no new backend needed for the gate. (2) /measurements already runs on generic 'available_types' measurement types with per-type history + MeasurementChangeChart, so a single-value vital slots straight in. PROPOSED V1: fasting blood glucose (mg/dL) = a normal single-value measurement type — zero schema change, reuses the existing POST/GET + chart. Blood pressure (the one wrinkle you flagged) = model as TWO single-value types (bp_systolic / bp_diastolic) rendered as one paired card + dual-line chart — this ALSO avoids any prod DB migration (no new two-value column), which is the sensible default vs a bespoke paired schema. Gate the whole Vitals section on profile.medical_flags including 'diabetes'/'bp' so it stays invisible to everyone else (calm design). Framing: tracking-only, explicit 'not medical advice / not diagnosis' disclaimer. OWNER DECISION (why I'm flagging not auto-building): shipping user-entered glucose/BP is health-data with liability framing + it's a multi-file FE+BE feature I can't prove headless (needs a diabetes/BP-flagged QA account = the throwaway-provisioning you rejected on 9375). Give me a yes + a nod on the two-single-types BP shape and I'll build + deploy V1 next tick. If you'd rather a real two-value BP schema, say so and I'll write the migration instead.",
+      "reviewedAt": "2026-07-08T16:29:57.579Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260708-3ea8",
