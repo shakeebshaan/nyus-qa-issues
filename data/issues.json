@@ -548,9 +548,32 @@
         "6e2c858cfd5d3816d26d770fbb3ac4ee931de95f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: initI18n() defaulted lng:'en', bypassing LanguageDetector and rewriting nyus_locale->'en' on every boot, erasing the user's Hindi/Hinglish choice. Fix: made the lng param optional and only pass it when explicitly provided (src/i18n/config.ts) so the detector reads localStorage; main.tsx calls initI18n() with no arg. Same root cause as already-fixed i-20260707-b1a9 (commit 8e2e5a0a, predates this report). Verified: set nyus_locale='hi', reload -> stays 'hi' and the whole app (Profile shown) renders in Hindi.",
+        "imagePath": "images/i-20260708-53f2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-53f2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "96b098577307f3906c90357555615c3659f7d34b",
+        "imageCommits": [
+          "96b098577307f3906c90357555615c3659f7d34b"
+        ],
+        "fixedAt": "2026-07-08T01:07:29.287Z",
+        "by": "shakeebshaan",
+        "appCommit": "59de797e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "empirically re-verified persistence + Hindi render after reload"
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260708-4509",
