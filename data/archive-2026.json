@@ -18875,49 +18875,81 @@
       "archivedAt": "2026-07-08T20:40:21.435Z"
     },
     {
-      "createdAt": "2026-07-08T00:30:58.000Z",
+      "id": "i-20260707-da4e",
+      "createdAt": "2026-07-07T13:33:09.815Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "status": "resolved",
       "fix": {
-        "description": "Follow-up on the content report: the blog post was 404 at post time (main->live sync lag). This tick deployed it: pscp'd is-curd-dahi-good-for-weight-loss-india.html + updated blog/index.html + high-protein backlink guide to the nyus.in VM (/home/ubuntu/nyus-landing/blog/). Now HTTP 200 and linked from the blog index. Submitted the URL to IndexNow (HTTP 200, Bing/Yandex/AEO). Screenshot = live rendered article.",
-        "imagePath": "images/i-20260708-cd4h-fix-r1.png",
+        "description": "Root cause: loops panel fetched data/loops.json from private repo (missing), falling back to 2 hardcoded loops. Fix: uploaded data/loops.json to nyus-qa-private with all 21 registered loops including name, purpose, schedule, last-fired times, and status. Panel now shows the full fleet when owner views the Metrics tab. NOTE: screenshot shows board UI (panel loads from private JSON requiring owner token at runtime - cannot capture private data headlessly).",
+        "imagePath": "images/i-20260707-da4e-fix-r2.png",
         "imagePaths": [
-          "images/i-20260708-cd4h-fix-r1.png"
+          "images/i-20260707-da4e-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "7c71235c26a72098b52a17427aba742ccb00da61",
+        "imageCommit": "d2381d47b79fc7667e2a5074481aab71543ebb6a",
         "imageCommits": [
-          "7c71235c26a72098b52a17427aba742ccb00da61"
+          "d2381d47b79fc7667e2a5074481aab71543ebb6a"
         ],
-        "fixedAt": "2026-07-08T01:26:52.034Z",
+        "fixedAt": "2026-07-07T23:16:07.913Z",
         "by": "shakeebshaan",
-        "appCommit": "e73be547",
+        "appCommit": "06dbee1",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "live 200 + indexed + backlinked, verified"
+          "note": "data/loops.json uploaded with all 21 loops to correct private repo path. Board code verified to fetch from that path. Fix is complete - screenshot limitation is a headless capture constraint, not a fix gap."
         }
       },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
+      "history": [
+        {
+          "at": "2026-07-07T21:02:28.243Z",
+          "event": "reopened",
+          "note": "there are more than 10",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Running Loops panel added to Metrics tab showing QA Fix Loop (active, */30 schedule) and Analytics Insights Loop (pending setup, daily at 9am). Reads from private data/loops.json with fallback to hardcoded config.",
+            "imagePath": "images/i-20260707-da4e-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-da4e-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "97912ef18f6dd34a421d5674facc8fcd81b8e0b7",
+            "imageCommits": [
+              "97912ef18f6dd34a421d5674facc8fcd81b8e0b7"
+            ],
+            "fixedAt": "2026-07-07T19:00:27.611Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Screenshot shows RUNNING LOOPS section with both loops and their status labels."
+            }
+          },
+          "images": [
+            "images/i-20260707-da4e-notfixed.jpg"
+          ],
+          "imageCommits": [
+            "1c025fc54f59b53d44ad86bb161d4b0f6915c82b"
+          ]
+        }
       ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-cd4h",
-      "route": null,
-      "description": "[content] Published: Is Curd (Dahi) Good for Weight Loss? Calories, How Much per Day, and What to Avoid - https://nyus.in/blog/is-curd-dahi-good-for-weight-loss-india.html. Ideas added: 3. Escalated: 0. NOTE: commit e73be547 pushed to main; live URL still 404 at post time (known main->live sync ~1h lag; DEPLOY_SSH_KEY escalation pending), so IndexNow deferred for this URL - next tick should verify live + submit. Post backlinked from high-protein-indian-foods-guide.html and blog index. New [todo] ideas: green tea evidence check, workout timing morning-vs-evening, monsoon weight-gain survival guide.",
       "needsReview": false,
-      "resolvedAt": "2026-07-08T20:44:10.055Z",
+      "resolvedAt": "2026-07-08T20:44:49.325Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:44:10.055Z"
+      "archivedAt": "2026-07-08T20:44:49.325Z"
     }
   ]
 }
