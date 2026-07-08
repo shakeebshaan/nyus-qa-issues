@@ -18875,35 +18875,35 @@
       "archivedAt": "2026-07-08T20:40:21.435Z"
     },
     {
-      "createdAt": "2026-07-08T05:41:22.728Z",
+      "createdAt": "2026-07-08T09:12:52.824Z",
       "status": "resolved",
       "fix": {
-        "description": "Added voice dictation to the two highest-frequency text surfaces, reusing the existing useSpeechInput hook (no new deps/backend). Meal quick-log (CustomMealModal Quick Log tab) now has a mic in the 'describe what you ate' box; the CoachChatComposer has a mic beside Send. Same live-transcript pattern as the plan builder (partials stream, final commits on stop). New appSpeechLocale() sets the recognition locale from the app language (en->en-IN, hi/hinglish->hi-IN) so home-cooked Indian meals ('2 roti, 1 katori dal') transcribe well. Mic hidden when speech isn't supported. Proof shows both mics on their live screens.",
-        "imagePath": "images/i-20260708-v1ce-fix-r1.png",
+        "description": "Root cause: weekly-projection.ts clampTowardGoal used Math.max(next,goal)/Math.min(next,goal), so on an already-past-goal plan (fat-loss whose current weight is already at/below goal) the projected curve jumped UP to the goal, above current, on a deficit. Fix: bound the clamp by min/max(goal,current) so an overshot-goal cut/bulk stays FLAT at current weight; normal case unchanged. Added regression tests (test/weekly-projection.test.ts). NOTE: this QA account is 71.9->65kg (not overshot), so the defect state isn't reproducible in a screenshot on it; proof is the passing unit test of the exact repro. Screenshot shows /plan-timeline rendering correctly.",
+        "imagePath": "images/i-20260708-e4a2-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-v1ce-fix-r1.png"
+          "images/i-20260708-e4a2-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "5c481da0e98d023036974bcdbf064df443f46e96",
+        "imageCommit": "0f0e64feb6fb2ee5502975025104d7eef196f133",
         "imageCommits": [
-          "5c481da0e98d023036974bcdbf064df443f46e96"
+          "0f0e64feb6fb2ee5502975025104d7eef196f133"
         ],
-        "fixedAt": "2026-07-08T06:13:58.102Z",
+        "fixedAt": "2026-07-08T09:36:54.788Z",
         "by": "shakeebshaan",
-        "appCommit": "e6609570",
+        "appCommit": "901ace7f",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Every item in the issue's V1 SCOPE is met: mic + useSpeechInput dropped into both target components; transcript flows through the existing free-text /logs/meal + coach send paths (no backend change); app language passed as speech locale via new appSpeechLocale() (en-IN/hi-IN); button hidden when supported=false; no new deps/permissions. tsc clean; CustomMealModal 20/20 + CoachChat 25/25 green; loop.mjs verify green. Both mics visually verified on their live authenticated screens (combined proof). Live audio-to-text itself relies on the already production-proven hook (same one shipped in the plan builder) and can't be exercised in a headless browser."
+          "note": "Pure-math fix, unit-proven against the exact issue repro (start 73, goal 75, lose -> flat at 73); 23/23 tests green, tsc clean, normal-case curve unchanged."
         }
       },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
-        "suggestion",
+        "bug-hunt",
         "auto"
       ],
       "imagePath": null,
@@ -18911,13 +18911,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-v1ce",
-      "route": "/nutrition",
-      "description": "[suggestion] Add voice input (mic) to the daily meal logger and the coach-chat composer, reusing the voice infra the app already ships. PROBLEM: logging home-cooked Indian meals by typing (\"2 roti, 1 katori dal, thoda chawal\") is high-friction on mobile, and the app is mid-rollout of Hinglish/Hindi UI (see i-20260707-b1a9/514b/dcd5) where typing Devanagari is even harder — voice is the natural companion. EVIDENCE: voice ALREADY works in-app — src/hooks/useSpeechInput.ts (+ @capacitor-community/speech-recognition in package.json) is wired ONLY into the one-time plan BUILDER (src/components/plan-builder/MealSlotCard.tsx:184 and src/pages/onboarding/custom/CustomWorkoutBuilder.tsx:327). The two HIGHEST-frequency text surfaces have NO mic (confirmed: neither imports the hook) — the daily meal quick-log (src/components/nutrition/CustomMealModal.tsx, quick tab) and the coach chat composer (src/components/coach/CoachChatComposer.tsx). Daily meal logging is the retention core loop; the dominant India competitor (HealthifyMe Ria) leans on conversational/voice logging. V1 SCOPE: drop the same mic button + useSpeechInput call into those 2 components; the transcript appends into the existing textarea and flows through the existing free-text /logs/meal LLM-parse path (no backend change) and the existing coach send path. Pass the app language as the speech locale (en-IN / hi-IN). Hide the button when useSpeechInput.supported is false (web preview / unsupported device). EFFORT: small — copy the proven MealSlotCard pattern into 2 components; no new deps, no new backend, no new permissions.",
       "needsReview": false,
-      "resolvedAt": "2026-07-08T20:43:25.357Z",
+      "id": "i-20260708-e4a2",
+      "route": "/plan-timeline",
+      "description": "[bug-hunt] Projected-trajectory curve pins projected weight ABOVE the current weight on a fat-loss plan when the user is already at/below their goal weight. src/lib/weekly-projection.ts:63 clampTowardGoal for direction \"lose\" does return Math.max(next, goal) — intended to \"never undershoot below goal\", but it also clamps UPWARD when the starting weight is below the goal, so the whole projected curve jumps to the goal weight (above current) on week 1 and stays flat there while the calorie targets are a deficit.\n\nRepro (node-verified against the real math): startWeightKg 73, goalWeightKg 75, direction lose (fat_loss/weight_loss), any pace -> every week returns projectedWeightKg 75 at ~1690 kcal (a deficit below TDEE). In the app this reaches the user via PlanTimeline.tsx dietTraj (which derives direction purely from goal_type and gates only on positive start/goal/height/age — no start-vs-goal sanity check), so a fat_loss plan whose current logged weight has already dropped to/below the goal weight renders WeeklyTrajectory as a flat line sitting 2 kg ABOVE the current weight, with the trend badge/goal line showing the goal, on a deficit plan.\n\nExpected vs actual: expected — when the current weight is already past the goal for the plan direction, show a flat/at-goal curve at the CURRENT weight (or omit the projection), never a curve above current on a deficit. Actual — the curve is clamped up to the goal, implying the user will gain to 75 kg and hold, which contradicts the deficit calorie targets shown alongside. Edge trigger (overshot-goal-but-plan-still-active) but a concrete logic defect in the pure projection lib.\n\nFix: in clampTowardGoal, when the direction move would cross the goal from the wrong side (start already past goal), return current (flat) instead of Math.max/Math.min-ing up to the goal; or have dietTrajectory early-return [] when start is already at/beyond goal for the given direction.",
+      "resolvedAt": "2026-07-08T20:43:20.172Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:43:25.357Z"
+      "archivedAt": "2026-07-08T20:43:20.172Z"
     }
   ]
 }
