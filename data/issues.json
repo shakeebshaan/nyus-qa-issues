@@ -183,31 +183,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "createdAt": "2026-07-08T15:54:54.226Z",
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto",
-        "notifications",
-        "backend"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-d1f7",
-      "route": null,
-      "description": "[bug-hunt] Notifications: breakfast, hydration & weekly weigh-in push reminders are SILENTLY suppressed for (almost) every user by send-time optimization.\n\nROOT CAUSE (backend). app/services/notification_jobs.py sends these reminders with notification_type 'breakfast_reminder' (8:00 AM IST), 'water_reminder' (3:00 PM IST), 'weight_reminder' (Mon 8:00 AM IST), 'dinner_reminder' (7:30 PM IST) — all trigger_source='scheduled'. In notification_service.py send_notification() Check 7 calls should_defer_scheduled_notification() -> get_optimal_send_time(type). But SEND_TIME_DEFAULTS (notification_service.py:139) has NO entry for breakfast_reminder / dinner_reminder / water_reminder / weight_reminder — only 'meal_reminder' (12), 'diet_reminder' (12), 'workout_reminder' (7), 'streak_*' (20), 'general' (18). So for any user with <7 notification-open events in the last 30 days (_MIN_DATA_POINTS=7 -> the majority of users, and EVERY new user) the \"optimal hour\" falls back to SEND_TIME_DEFAULTS['general'] = 18:00 for all four types.\n\nshould_defer then defers whenever |current_hour - 18| > 1 (and not the 0/23 wrap). Python-verified against the actual constants:\n  breakfast_reminder runs@ 8 IST  default_optimal=18  DEFERRED(suppressed)=True\n  water_reminder     runs@15 IST  default_optimal=18  DEFERRED(suppressed)=True\n  weight_reminder    runs@ 8 IST  default_optimal=18  DEFERRED(suppressed)=True\n  dinner_reminder    runs@19 IST  default_optimal=18  DEFERRED(suppressed)=False   (survives by luck, 19~=18)\n\nWORSE: \"deferral\" has NO reschedule. should_defer_scheduled_notification's docstring says \"the caller should skip sending now and reschedule\", but the ONLY consumer (send_notification.py:326-331) just sets suppressed=True + suppression_reason='send_time_deferred_to_18h'. grep confirms no reschedule/re-enqueue anywhere. The jobs run ONCE per day at a fixed cron (backend.py:16098-16121) and never re-fire. So the deferred reminder is dropped for the day: create_notification still runs with send_push=False (an in-app inbox row appears) but NO push is ever delivered.\n\nEXPECTED: the daily 8:00 AM breakfast push fires at 8:00 AM. ACTUAL: suppressed, \"deferred to 18h\" — 18:00 never comes back around for that job.\n\nREPRO: user with fcm_token, active plan, last_active within 14d, hasn't logged breakfast, sparse/zero notification opens -> breakfast_reminder job (2:30 UTC) -> send_notification returns {sent:false, reason:'send_time_deferred_to_18h'}. Identical for hydration (9:30 UTC) and Monday weigh-in.\n\nCOMPOUNDING (note, not the core bug): weekly_scheduled_cap defaults to 3 (db_models.py:322) and the max the FE offers is 5/week — less than the 7+/week daily cadence — so even the reminders that clear send-time defer get throttled to 'frequency_cap' after 3 sends in a rolling 7-day window.\n\nFIX (pick one): (1) add breakfast_reminder/dinner_reminder/water_reminder/weight_reminder to SEND_TIME_DEFAULTS at their true fixed hours (8/19/15/8) so should_defer never fires against a reminder's own scheduled time; (2) skip send-time optimization entirely for fixed-time reminder types (apply it only to genuinely time-flexible types); or (3) actually implement the reschedule the docstring promises. Files: app/services/notification_service.py:139-243, app/services/notification_jobs.py:90-221, backend.py:16098-16121.",
-      "needsReview": true,
-      "reviewReason": "FIXED & DEPLOYED to prod (backend b915553, systemd active, /health OK). Root cause confirmed: breakfast/dinner/water/weight reminders fire on fixed daily/weekly crons but ran through send-time optimization; for users with <7 notification opens in 30d, get_optimal_send_time fell back to SEND_TIME_DEFAULTS['general']=18h, so should_defer_scheduled_notification deferred (=silent drop, no reschedule) every breakfast(8h)/water(15h)/weight(8h) push. Fix (notification_service.py): new _FIXED_TIME_REMINDER_TYPES set short-circuits deferral for these anchored reminders so they always fire at their scheduled hour (also fixes the >=7-data-point case where the reminder would've been wrongly shifted to the user's evening engagement peak). Flagging (not auto-resolving) because the board resolve test-gate is frontend 'npm test', which is (a) not applicable to a backend-only fix and (b) infra-blocked headless (~39min Playwright/PACT/canvas). Verification = prod deploy + health. Compounding note from the report (weekly_scheduled_cap default 3 < 7/wk cadence) is a separate owner tuning decision, left untouched.",
-      "reviewedAt": "2026-07-08T16:10:06.969Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "createdAt": "2026-07-08T15:10:02.753Z",
       "status": "fixed",
       "fix": {
