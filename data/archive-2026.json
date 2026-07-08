@@ -18875,35 +18875,35 @@
       "archivedAt": "2026-07-08T20:40:21.435Z"
     },
     {
-      "createdAt": "2026-07-08T09:12:52.824Z",
+      "createdAt": "2026-07-08T05:41:22.728Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: CalorieBalanceRing.tsx hardcoded accent = surplus?orange:teal for every user, so a muscle_gain athlete saw their needed surplus painted as a warning and an unwanted deficit painted teal/on-track. Fix: added a goalDirection prop; the ring now paints the ON-TRACK state teal (surplus for gain, deficit for loss/maintain) and OFF-TRACK orange. Wired progressData.on_track.goal_direction from WeeklyProgress.tsx. NOTE: this QA account has no meals logged this week so the ring (caloriesStats.hasTarget) is hidden; screenshot shows /weekly-progress rendering correctly. Fix is goal-conditional logic matching the already-goal-aware sibling surfaces.",
-        "imagePath": "images/i-20260708-c1b7-fix-r1.png",
+        "description": "Added voice dictation to the two highest-frequency text surfaces, reusing the existing useSpeechInput hook (no new deps/backend). Meal quick-log (CustomMealModal Quick Log tab) now has a mic in the 'describe what you ate' box; the CoachChatComposer has a mic beside Send. Same live-transcript pattern as the plan builder (partials stream, final commits on stop). New appSpeechLocale() sets the recognition locale from the app language (en->en-IN, hi/hinglish->hi-IN) so home-cooked Indian meals ('2 roti, 1 katori dal') transcribe well. Mic hidden when speech isn't supported. Proof shows both mics on their live screens.",
+        "imagePath": "images/i-20260708-v1ce-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-c1b7-fix-r1.png"
+          "images/i-20260708-v1ce-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "36adcb50baad1728b85be2a5699cd2175a9e5776",
+        "imageCommit": "5c481da0e98d023036974bcdbf064df443f46e96",
         "imageCommits": [
-          "36adcb50baad1728b85be2a5699cd2175a9e5776"
+          "5c481da0e98d023036974bcdbf064df443f46e96"
         ],
-        "fixedAt": "2026-07-08T09:37:09.388Z",
+        "fixedAt": "2026-07-08T06:13:58.102Z",
         "by": "shakeebshaan",
-        "appCommit": "901ace7f",
+        "appCommit": "e6609570",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Correct, complete goal-aware fix mirroring the sibling goal-aware weight surfaces (WeeklyProgress weightTrendStats, MonthlyProgress). Label stays factual; only the accent flips by goal."
+          "note": "Every item in the issue's V1 SCOPE is met: mic + useSpeechInput dropped into both target components; transcript flows through the existing free-text /logs/meal + coach send paths (no backend change); app language passed as speech locale via new appSpeechLocale() (en-IN/hi-IN); button hidden when supported=false; no new deps/permissions. tsc clean; CustomMealModal 20/20 + CoachChat 25/25 green; loop.mjs verify green. Both mics visually verified on their live authenticated screens (combined proof). Live audio-to-text itself relies on the already production-proven hook (same one shipped in the plan builder) and can't be exercised in a headless browser."
         }
       },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
+        "suggestion",
         "auto"
       ],
       "imagePath": null,
@@ -18911,13 +18911,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
+      "id": "i-20260708-v1ce",
+      "route": "/nutrition",
+      "description": "[suggestion] Add voice input (mic) to the daily meal logger and the coach-chat composer, reusing the voice infra the app already ships. PROBLEM: logging home-cooked Indian meals by typing (\"2 roti, 1 katori dal, thoda chawal\") is high-friction on mobile, and the app is mid-rollout of Hinglish/Hindi UI (see i-20260707-b1a9/514b/dcd5) where typing Devanagari is even harder — voice is the natural companion. EVIDENCE: voice ALREADY works in-app — src/hooks/useSpeechInput.ts (+ @capacitor-community/speech-recognition in package.json) is wired ONLY into the one-time plan BUILDER (src/components/plan-builder/MealSlotCard.tsx:184 and src/pages/onboarding/custom/CustomWorkoutBuilder.tsx:327). The two HIGHEST-frequency text surfaces have NO mic (confirmed: neither imports the hook) — the daily meal quick-log (src/components/nutrition/CustomMealModal.tsx, quick tab) and the coach chat composer (src/components/coach/CoachChatComposer.tsx). Daily meal logging is the retention core loop; the dominant India competitor (HealthifyMe Ria) leans on conversational/voice logging. V1 SCOPE: drop the same mic button + useSpeechInput call into those 2 components; the transcript appends into the existing textarea and flows through the existing free-text /logs/meal LLM-parse path (no backend change) and the existing coach send path. Pass the app language as the speech locale (en-IN / hi-IN). Hide the button when useSpeechInput.supported is false (web preview / unsupported device). EFFORT: small — copy the proven MealSlotCard pattern into 2 components; no new deps, no new backend, no new permissions.",
       "needsReview": false,
-      "id": "i-20260708-c1b7",
-      "route": "/weekly-progress",
-      "description": "[bug-hunt] Calorie-balance ring on the Weekly Progress hero colors a deficit as \"good\" (teal) and a surplus as \"warning\" (orange) for EVERY user, ignoring their goal direction. src/components/CalorieBalanceRing.tsx:42-45 hardcodes accent = surplus ? orange : teal and label = surplus ? \"surplus\" : \"deficit\" with a comment that admits the encoding is goal-specific (\"teal/success when deficit (good for fat loss), orange when surplus (good for muscle gain)\") but applies it unconditionally. The component takes no goal_direction prop, and WeeklyProgress.tsx (line ~630) renders it as <CalorieBalanceRing intake target /> with no goal.\n\nExpected vs actual: for a muscle_gain / weight_gain athlete a calorie SURPLUS is the desired state and a deficit is under-eating (bad). Expected: surplus shown in the positive/teal accent, deficit in the warning accent. Actual (inverted for the gain cohort): their needed surplus is painted orange as if it is a warning, and an unwanted deficit is painted teal/success as if it is on-track. Note the sibling weight surfaces on the very same pages are already goal-aware (WeeklyProgress weightTrendStats.isOnTrack and MonthlyProgress isWeightOnTrack both branch on goal_direction), so the ring is the lone outlier and the intended pattern is goal-aware coloring.\n\nRepro: as a muscle_gain user with a calorie target, open /weekly-progress; on any week where avg daily calories land below target the hero ring renders teal with \"kcal deficit\" as though under-eating is on-track. Same class as the fixed dashboard weight-chip inversion (i-20260703-b52e) but on a distinct, un-fixed component.\n\nFix: thread the user goal_direction into CalorieBalanceRing and invert the accent + good/bad semantics for gain goals (surplus = positive accent, deficit = warning) while keeping loss/maintain as-is.",
-      "resolvedAt": "2026-07-08T20:43:17.743Z",
+      "resolvedAt": "2026-07-08T20:43:25.357Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:43:17.743Z"
+      "archivedAt": "2026-07-08T20:43:25.357Z"
     }
   ]
 }
