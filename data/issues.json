@@ -24,31 +24,39 @@
     },
     {
       "createdAt": "2026-07-08T06:55:23.362Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: ExerciseWheelPicker.handleLogSet declared the final set on set_number===targetSets, firing onSetComplete(true) even when earlier sets were unlogged (premature completion on top-set-first); and Activity.handleSetComplete re-fired the celebration when editing an already-logged final set. Fix: completion now gates on distinct coverage of ALL target sets 1..targetSets (ExerciseWheelPicker.tsx:350-353) and activeSet advances to the first still-pending set; handleSetComplete returns early when showWorkoutCompleteRef is already true (Activity.tsx:703) so editing the final set no longer replays confetti/sound. Verified: ExerciseWheelPicker.test.tsx 48/48 green, tsc clean. Capture = authenticated /activity screen (defect is behavioral, not a static frame).",
-        "imagePath": "images/i-20260708-2ea5-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-2ea5-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "867e5d13d798b34d0209c3ad68a362148f6eb23f",
-        "imageCommits": [
-          "867e5d13d798b34d0209c3ad68a362148f6eb23f"
-        ],
-        "fixedAt": "2026-07-08T07:32:36.994Z",
-        "by": "shakeebshaan",
-        "appCommit": "d792e4cc",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Exact root-cause match on both symptoms; distinct-coverage gate + replay guard confirmed in code; dedicated unit spec 48/48 green; tsc clean."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-08T09:08:51.381Z",
+          "event": "reopened",
+          "note": "B",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: ExerciseWheelPicker.handleLogSet declared the final set on set_number===targetSets, firing onSetComplete(true) even when earlier sets were unlogged (premature completion on top-set-first); and Activity.handleSetComplete re-fired the celebration when editing an already-logged final set. Fix: completion now gates on distinct coverage of ALL target sets 1..targetSets (ExerciseWheelPicker.tsx:350-353) and activeSet advances to the first still-pending set; handleSetComplete returns early when showWorkoutCompleteRef is already true (Activity.tsx:703) so editing the final set no longer replays confetti/sound. Verified: ExerciseWheelPicker.test.tsx 48/48 green, tsc clean. Capture = authenticated /activity screen (defect is behavioral, not a static frame).",
+            "imagePath": "images/i-20260708-2ea5-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260708-2ea5-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "867e5d13d798b34d0209c3ad68a362148f6eb23f",
+            "imageCommits": [
+              "867e5d13d798b34d0209c3ad68a362148f6eb23f"
+            ],
+            "fixedAt": "2026-07-08T07:32:36.994Z",
+            "by": "shakeebshaan",
+            "appCommit": "d792e4cc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Exact root-cause match on both symptoms; distinct-coverage gate + replay guard confirmed in code; dedicated unit spec 48/48 green; tsc clean."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
