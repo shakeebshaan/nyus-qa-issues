@@ -202,31 +202,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "createdAt": "2026-07-08T15:54:54.226Z",
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto",
-        "notifications",
-        "backend"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-e93c",
-      "route": null,
-      "description": "[bug-hunt] Notifications: \"Plan ending soon\" reminders never fire again for a returning user on a 2nd/3rd plan — the dedup is all-time + per-user, not per-plan.\n\nBACKEND. app/services/notification_jobs.py plan_ending_soon() (~L228). For each threshold (7d / 3d / 1d) it builds already_alerted_subq = Notification.user_id WHERE type='plan_ending_soon' AND trigger_type=alert_type (e.g. 'plan_ending_7d'), then filters ~FitnessPlan.user_id.in_(...that...). That subquery has NO created_at filter and NO plan_id scope — it matches EVERY such notification the user has EVER received. create_notification (backend.py:1417-1425) persists trigger_type on the Notification row (verified), so once a user got a 'plan_ending_7d' alert for ANY past plan they are permanently excluded from the 7-day alert forever (and likewise 3d/1d).\n\nIMPACT: exactly the cohort the alert exists for — anyone who finished a plan and started another (renewals, plan changes, goal switches) — silently stops getting \"ends in a week / 3 days / tomorrow\". The nudge-to-queue-the-next-block loop breaks permanently after the first plan.\n\nREPRO: user completes plan A -> receives 7d/3d/1d alerts (3 Notification rows persist with trigger_type plan_ending_7d/3d/1d). User starts plan B with end_date exactly 7 days out. Next day plan_ending_soon runs -> plans query excludes user (in already_alerted for plan_ending_7d) -> NO alert for plan B. Same at the 3d and 1d marks. Note the alert cannot rely on end_date uniqueness to save it: plan B has a different end_date but the SAME user_id + alert_type, which is all the dedup keys on.\n\nFIX: scope the dedup to the CURRENT plan — either store/compare plan_id (meta_data already carries plan_id) so a per-plan alert fires once per plan, or add a recency window (only dedup within the plan's active window / last N days). Files: app/services/notification_jobs.py:228-266.",
-      "needsReview": true,
-      "reviewReason": "FIXED & DEPLOYED to prod (backend b915553, systemd active, /health OK). Root cause confirmed: plan_ending_soon() deduped on (user_id, trigger_type='plan_ending_7d/3d/1d') with NO plan_id and NO recency scope, so once a user received an alert for ANY past plan they were permanently excluded — renewal/2nd/3rd-plan users never got 'ends in a week / 3 days / tomorrow' again. Fix (notification_jobs.py): dedup now scopes per-plan via meta_data.plan_id (json_extract), so each new plan alerts exactly once per threshold; the broken user-level all-time subquery is removed. Flagging (not auto-resolving) for the same reason as d1f7: the board resolve gate runs frontend 'npm test', which is N/A to a backend fix and infra-blocked headless. Verification = prod deploy + health.",
-      "reviewedAt": "2026-07-08T16:10:10.646Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "createdAt": "2026-07-08T15:10:02.753Z",
       "status": "fixed",
       "fix": {
