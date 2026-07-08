@@ -2,6 +2,47 @@
   "version": 1,
   "issues": [
     {
+      "createdAt": "2026-07-08T17:24:00.000Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-d0be",
+      "route": "/nutrition",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "nutrition",
+        "voice"
+      ],
+      "description": "[bug-hunt] Voice dictation keeps recording after the Add-Food (meal log) modal is closed — the mic never stops.\n\nWHERE: src/components/nutrition/CustomMealModal.tsx (Quick Log tab mic, added by the voice feature e6609570 / i-20260708-v1ce) + src/hooks/useSpeechInput.ts + src/pages/Nutrition.tsx.\n\nROOT CAUSE: Nutrition.tsx renders <CustomMealModal isOpen={showCustomMealModal} .../> UNCONDITIONALLY (Nutrition.tsx:604) — only the modal's inner DOM is gated by `isOpen` inside its own <AnimatePresence>. So closing the modal (X / Escape / back gesture) sets isOpen=false but does NOT unmount the CustomMealModal component. useSpeechInput's ONLY teardown is its native cleanup effect (useSpeechInput.ts:86-91, runs on component UNMOUNT) — which never fires here. There is no effect in CustomMealModal that couples the mic to `isOpen`, and nothing calls toggleMic()/SpeechRecognition.stop() on close. So a dictation started in the modal survives the close.\n\nThe 'proven' MealSlotCard reference (src/components/plan-builder/MealSlotCard.tsx) only got away with the same hook because plan-builder cards genuinely UNMOUNT when you leave the step, firing the native cleanup. A persistent-mounted modal breaks that assumption.\n\nCONSEQUENCES:\n (1) Native (the shipped product): SpeechRecognition is never stopped on close, so the OS mic indicator stays on and `listening` stays true (privacy + battery). On iOS the start() promise 'never settles' (per the hook's own comment) and stop() is never called since the user closed instead of tapping the mic — the session can hang open indefinitely.\n (2) The parent resets customMealText='' on close (Nutrition.tsx:305). But the still-live recognizer keeps firing onPartial/onResult -> onCustomMealTextChange(joinDictation(dictateBaseRef.current, spoken)) AFTER the reset, re-populating customMealText with the leftover transcript. Reopening the modal then shows stray dictated text AND a false red 'Listening…' label + pulsing mic (micListening still true), even though the user never restarted dictation.\n\nREPRO: /nutrition -> Add Food -> Quick Log -> tap mic, start speaking -> tap X (or Escape) WITHOUT tapping the mic to stop. Native: mic indicator stays lit. Web/QA (Chrome, continuous=false so it self-heals after a silence timeout): reopen the modal within the recognition window -> the box shows leftover transcript and the 'Listening…' state.\n\nFIX: couple mic teardown to close, e.g. in CustomMealModal add `useEffect(() => { if (!isOpen && micListening) toggleMic(); }, [isOpen])` (or stop the recognizer directly), so closing the modal ends any active dictation. Same class applies to CoachChatComposer only if the chat page can stay mounted while hidden (it unmounts on nav, so native cleanup covers it) — the meal modal is the persistent-mount case."
+    },
+    {
+      "createdAt": "2026-07-08T17:24:00.000Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-f3a7",
+      "route": "/nutrition",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "nutrition"
+      ],
+      "description": "[bug-hunt] Add-Food > Ingredients > 'Add new ingredient' logs the WRONG calories — a stale servings multiplier from a previously-selected ingredient is applied silently, and the new-ingredient form has no servings control to reveal or fix it.\n\nWHERE: src/components/nutrition/CustomMealModal.tsx (Ingredients tab). Backend confirms the multiply: app/routes/logging.py:708 -> total_calories = round(cals * servings) (also protein/carbs/fat * servings, 709-711); servings comes straight from the FE payload (logging.py:653).\n\nROOT CAUSE: `ingServings` state is NOT reset when the user enters 'Add new' mode. Reset happens only when a search result is SELECTED (CustomMealModal.tsx:570 sets ingServings=1) and after a successful log (line 167). The 'Add new ingredient with custom macros' button (line 546) does `setIsAddingNew(true); setSelectedIngredient(null);` but leaves ingServings untouched. The search-box onChange (line 538) also resets selectedIngredient/isAddingNew but NOT ingServings. Meanwhile the new-ingredient form (lines 592-608) renders only Name + Calories/Protein/Carbs/Fat — it has NO servings stepper (the stepper at 630-637 and the macro-total preview at 621-628 only render for a selectedIngredient), so the inherited servings value is invisible to the user.\n\nREPRO: /nutrition -> Add Food -> Ingredients tab -> search + select any ingredient (ingServings=1) -> tap the servings '+' to raise it to e.g. 3 -> now tap 'Add new ingredient with custom macros' -> enter 'Ghar ka laddu', calories 180 -> 'Add to Today'. Payload sends {calories_per_serving:180, servings:3}. Backend logs total_calories = round(180*3) = 540 kcal (and 3x the macros). EXPECTED: 180 kcal (the number the user typed, with no visible servings field implying 1x). ACTUAL: 540 kcal logged silently — day totals corrupted with no way to see why in the add-new form.\n\nFIX: reset ingServings to 1 when entering add-new mode (in the 'Add new' onClick and/or on ingredientQuery change), or add a servings control + macro-total preview to the new-ingredient form so the multiplier is visible and editable."
+    },
+    {
       "createdAt": "2026-07-08T16:58:14.751Z",
       "status": "open",
       "fix": null,
