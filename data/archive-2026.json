@@ -18875,49 +18875,49 @@
       "archivedAt": "2026-07-08T20:40:21.435Z"
     },
     {
+      "createdAt": "2026-07-08T09:12:52.824Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: StackedMomentCards.tsx reset expansion via useLayoutEffect keyed on [moments], but Dashboard rebuilds the moments array (new identity) every commit, so the effect re-ran after EVERY parent render (CSAT timer, useCoachMoment async setState, react-query refetch, pull-to-refresh) and snapped any expanded coach tip back to line-clamp-2. Fix: key the reset effect on the content (joined sectionIds) instead of array identity, so expansion resets only when the actual moment set changes. Proof: regression test test/StackedMomentCards.expand.test.tsx proves expansion survives an identical-content array rebuild and still resets when the set changes. This is a pure render-timing bug with no static visual signature; the shot confirms the dashboard/coach deck renders cleanly.",
-        "imagePath": "images/i-20260708-e7c9-fix-r1.png",
+        "description": "Root cause: CalorieBalanceRing.tsx hardcoded accent = surplus?orange:teal for every user, so a muscle_gain athlete saw their needed surplus painted as a warning and an unwanted deficit painted teal/on-track. Fix: added a goalDirection prop; the ring now paints the ON-TRACK state teal (surplus for gain, deficit for loss/maintain) and OFF-TRACK orange. Wired progressData.on_track.goal_direction from WeeklyProgress.tsx. NOTE: this QA account has no meals logged this week so the ring (caloriesStats.hasTarget) is hidden; screenshot shows /weekly-progress rendering correctly. Fix is goal-conditional logic matching the already-goal-aware sibling surfaces.",
+        "imagePath": "images/i-20260708-c1b7-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-e7c9-fix-r1.png"
+          "images/i-20260708-c1b7-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "942580cfc2819222f3b0e5e1d47befa50bcef978",
+        "imageCommit": "36adcb50baad1728b85be2a5699cd2175a9e5776",
         "imageCommits": [
-          "942580cfc2819222f3b0e5e1d47befa50bcef978"
+          "36adcb50baad1728b85be2a5699cd2175a9e5776"
         ],
-        "fixedAt": "2026-07-08T11:34:43.975Z",
+        "fixedAt": "2026-07-08T09:37:09.388Z",
         "by": "shakeebshaan",
-        "appCommit": "a360a050",
+        "appCommit": "901ace7f",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Precise root cause, minimal one-line dependency-key fix, regression test covers persist + reset, tsc clean."
+          "note": "Correct, complete goal-aware fix mirroring the sibling goal-aware weight surfaces (WeeklyProgress weightTrendStats, MonthlyProgress). Label stays factual; only the accent flips by goal."
         }
       },
       "history": [],
       "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "createdAt": "2026-07-08T11:26:20Z",
-      "id": "i-20260708-e7c9",
-      "route": "/dashboard",
-      "description": "[bug-hunt] Dashboard coach-tip “Tap to read more” expansion collapses itself on any dashboard re-render, so long coach tips cannot be read expanded. ROOT CAUSE: StackedMomentCards.tsx:43-45 runs `useLayoutEffect(() => setExpanded(false), [moments])` to reset expansion when the moment set changes. But the `moments` prop is a BRAND-NEW array on every Dashboard render — Dashboard.tsx:397-435 rebuilds `const items: MomentItem[] = []` inside an inline IIFE each render and passes it straight to <StackedMomentCards moments={items}>. So the `[moments]` dependency changes every commit, the effect runs after EVERY parent render (not only when content changes), and `setExpanded(false)` fires each time. Any Dashboard re-render — the CSAT 4s timer (Dashboard.tsx:162-169), useCoachMoment’s async liveData setState (useMoments.ts:184-195), a react-query background refetch, or pull-to-refresh (handleRefresh) — snaps an expanded tip back to collapsed (line-clamp-2). EXPECTED: once the user taps “Tap to read more,” the tip stays expanded until they collapse it. ACTUAL: it re-collapses on the next parent re-render. REPRO: (1) open /dashboard where the top coach tip is long enough to clamp (shows “Tap to read more” at StackedMomentCards.tsx:144-148). (2) tap the tip to expand. (3) pull-to-refresh (or just wait for a background query refetch / the CSAT timer). → the tip collapses back on its own. FIX: reset expansion only when the moment set actually changes (e.g. key the effect on the joined sectionIds string, not the array identity), or useMemo the `items` array in Dashboard so `moments` is referentially stable across renders.",
       "needsReview": false,
-      "resolvedAt": "2026-07-08T20:43:11.228Z",
+      "id": "i-20260708-c1b7",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Calorie-balance ring on the Weekly Progress hero colors a deficit as \"good\" (teal) and a surplus as \"warning\" (orange) for EVERY user, ignoring their goal direction. src/components/CalorieBalanceRing.tsx:42-45 hardcodes accent = surplus ? orange : teal and label = surplus ? \"surplus\" : \"deficit\" with a comment that admits the encoding is goal-specific (\"teal/success when deficit (good for fat loss), orange when surplus (good for muscle gain)\") but applies it unconditionally. The component takes no goal_direction prop, and WeeklyProgress.tsx (line ~630) renders it as <CalorieBalanceRing intake target /> with no goal.\n\nExpected vs actual: for a muscle_gain / weight_gain athlete a calorie SURPLUS is the desired state and a deficit is under-eating (bad). Expected: surplus shown in the positive/teal accent, deficit in the warning accent. Actual (inverted for the gain cohort): their needed surplus is painted orange as if it is a warning, and an unwanted deficit is painted teal/success as if it is on-track. Note the sibling weight surfaces on the very same pages are already goal-aware (WeeklyProgress weightTrendStats.isOnTrack and MonthlyProgress isWeightOnTrack both branch on goal_direction), so the ring is the lone outlier and the intended pattern is goal-aware coloring.\n\nRepro: as a muscle_gain user with a calorie target, open /weekly-progress; on any week where avg daily calories land below target the hero ring renders teal with \"kcal deficit\" as though under-eating is on-track. Same class as the fixed dashboard weight-chip inversion (i-20260703-b52e) but on a distinct, un-fixed component.\n\nFix: thread the user goal_direction into CalorieBalanceRing and invert the accent + good/bad semantics for gain goals (surplus = positive accent, deficit = warning) while keeping loss/maintain as-is.",
+      "resolvedAt": "2026-07-08T20:43:17.743Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-08T20:43:11.228Z"
+      "archivedAt": "2026-07-08T20:43:17.743Z"
     }
   ]
 }
