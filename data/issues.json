@@ -22,8 +22,30 @@
     },
     {
       "createdAt": "2026-07-08T00:16:15.232Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed: move reconnect_attempt from socket to socket.io (Manager). socket.io-client v4 emits Manager lifecycle events only on Manager, not Socket. Old handler was dead code; now socket.io.on fires on each retry. Token refresh runs before reconnect attempts. TS clean, tests pass.",
+        "imagePath": "images/i-20260708-7ff8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-7ff8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b4085467aa0b5f6c63a8f7047e29b95a275caaad",
+        "imageCommits": [
+          "b4085467aa0b5f6c63a8f7047e29b95a275caaad"
+        ],
+        "fixedAt": "2026-07-08T01:06:53.950Z",
+        "by": "shakeebshaan",
+        "appCommit": "59de797e1734d853a605423448e9a5493284ea87",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "One-line fix in correct location; root cause (Manager vs Socket emitter) verified against socket.io-client source. TS noEmit clean, unit tests pass."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -37,7 +59,8 @@
       "imagePrivate": false,
       "id": "i-20260708-7ff8",
       "route": "/coach-chat",
-      "description": "[bug-hunt] Socket auto-reconnect always retries with the STALE token captured at connect time - the pre-reconnect token-refresh hook is dead code listening on the wrong emitter. chat.service.ts:168 registers `this.socket.on('reconnect_attempt', ...)` (refreshes the access token and swaps socket.auth + query.token before each retry), but in socket.io-client v4 (repo ships 4.8.3) reconnect lifecycle events are emitted ONLY on the Manager - `socket.io.on('reconnect_attempt')`; the Socket instance never receives them (verified: node_modules/socket.io-client/build/cjs/manager.js:379 is the sole emitter, socket.js re-emits nothing). Expected: each reconnect attempt carries a freshly-rotated token, as the code comment states. Actual: after any network blip the manager retries with the ORIGINAL token from the connect() closure; if the token was refreshed/expired/revoked meanwhile, the backend connect handler rejects every attempt ('Authentication failed.' + disconnect, backend.py:14382), all 10 reconnectionAttempts burn, and the app-wide singleton socket stays dead for the session (chat deltas, image_ready, streak_update, partner events) until an app-foreground or chat-page mount calls connect() again. Repro (static + empirical): attach both listeners and drop the network - the Manager listener fires per attempt, the Socket listener never does. Fix: one line - register the handler on this.socket.io instead of this.socket. File: src/services/chat.service.ts:165-180."
+      "description": "[bug-hunt] Socket auto-reconnect always retries with the STALE token captured at connect time - the pre-reconnect token-refresh hook is dead code listening on the wrong emitter. chat.service.ts:168 registers `this.socket.on('reconnect_attempt', ...)` (refreshes the access token and swaps socket.auth + query.token before each retry), but in socket.io-client v4 (repo ships 4.8.3) reconnect lifecycle events are emitted ONLY on the Manager - `socket.io.on('reconnect_attempt')`; the Socket instance never receives them (verified: node_modules/socket.io-client/build/cjs/manager.js:379 is the sole emitter, socket.js re-emits nothing). Expected: each reconnect attempt carries a freshly-rotated token, as the code comment states. Actual: after any network blip the manager retries with the ORIGINAL token from the connect() closure; if the token was refreshed/expired/revoked meanwhile, the backend connect handler rejects every attempt ('Authentication failed.' + disconnect, backend.py:14382), all 10 reconnectionAttempts burn, and the app-wide singleton socket stays dead for the session (chat deltas, image_ready, streak_update, partner events) until an app-foreground or chat-page mount calls connect() again. Repro (static + empirical): attach both listeners and drop the network - the Manager listener fires per attempt, the Socket listener never does. Fix: one line - register the handler on this.socket.io instead of this.socket. File: src/services/chat.service.ts:165-180.",
+      "needsReview": false
     },
     {
       "createdAt": "2026-07-08T00:16:15.232Z",
