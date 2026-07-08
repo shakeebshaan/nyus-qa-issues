@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260708-vitl",
+      "createdAt": "2026-07-08T14:42:38.248Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/measurements",
+      "description": "[suggestion] Vitals logging (fasting blood glucose + blood pressure) on the Measurements screen, condition-gated to users who flagged Diabetes/BP at onboarding.\n\nPROBLEM: Onboarding already asks whether the user has Diabetes or Blood Pressure (Screen5_Health MEDICAL_CONDITIONS), but the app then gives those users nowhere to track those numbers. A diabetic/hypertensive user can log weight and waist, not the two readings their doctor actually cares about, and there is zero feedback loop between their NYUS diet plan and their glucose/BP.\n\nEVIDENCE: India is the diabetes/hypertension capital (~100M+ diabetics, very high BP prevalence) and NYUS is India-focused. Every major India/global tracker (HealthifyMe, MyFitnessPal, Fitbit) logs vitals. We already capture the condition flags at onboarding and do nothing with them beyond content gating. The /measurements page already has the measurement-type + trend-chart infra (waist/neck/hip charts render there via MeasurementChangeChart), so the surface exists.\n\nV1 SCOPE: On /measurements, show a Vitals section ONLY for users who flagged Diabetes and/or BP at onboarding (keeps it out of everyone else's way - calm design). Two manual inputs: fasting blood glucose (mg/dL) and blood pressure (systolic/diastolic), each with a simple trend line reusing MeasurementChangeChart. Manual entry only, no device sync. Tracking-only framing (not diagnosis). Backend: add the vitals measurement types (BP is a two-value pair - the one small schema wrinkle) and reuse the existing measurement POST/GET.\n\nEFFORT: ~1-2 days. FE reuses the Measurements page + chart infra; BE adds measurement types (BP two-value shape is the only wrinkle).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260708-3ea8",
       "createdAt": "2026-07-08T12:54:39.147Z",
       "status": "open",
