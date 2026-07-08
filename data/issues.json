@@ -6,6 +6,44 @@
       "fix": null,
       "history": [],
       "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "createdAt": "2026-07-08T11:26:20Z",
+      "id": "i-20260708-a1f3",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard coach-moment deck nags “Your workout is still doable today — your plan is waiting, tap Activity to begin” on rest / non-training days AND for users with no workout plan, directly contradicting the same-screen activity card that says “no workout today” (or shows the “Generate workout plan” CTA). EXPECTED: on a day with no scheduled workout (or no plan), the coach tip is neutral/rest-oriented, never “you are behind, your plan is waiting.” ACTUAL: the ACTIVITY_BEHIND pool fires. ROOT CAUSE: useDashboardMoment (src/hooks/useMoments.ts:137-143) branches on `activityProgress >= 0 && activityProgress < 20` (ACTIVITY_BEHIND) and `dietProgress >= 0 && dietProgress < 40` (DIET_BEHIND). The `-1` sentinel defaults (lines 119-120) are meant to signal “no plan / unknown → skip these branches,” but Dashboard.tsx (line 196-208) passes the COMPUTED progress from useDashboardData.progressData, which returns a real `0` whenever target is 0 (useDashboardData.ts:151-153: `activityTarget <= 0 ? 0`). target is 0 on any non-training weekday (has_active_plan=true, no session today, is_break_today=false — the exact state DashboardActivityCard.tsx:96 renders “no workout today” for) and for users with no workout plan. So activityProgress===0 satisfies `>=0 && <20` and ACTIVITY_BEHIND is chosen. Verified with a node repro of the branch: passing 0 → ACTIVITY_BEHIND; passing the intended -1 → COACH_GENERIC (correct). REPRO: (1) log in as a user with an active workout plan; open /dashboard on a non-training weekday — activity card shows “no workout today”. (2) scroll to the coach-moment deck (Section 3). (3) tip reads “Your workout is still doable today. … Your plan is waiting — tap Activity to begin.” Same class hits diet (DIET_BEHIND “Protein is still catchable…”) for a user with no diet plan (dietTarget 0 → dietProgress 0). FIX: in Dashboard.tsx pass -1 (or a hasPlan flag) instead of the computed 0 when target===0, or gate the *_BEHIND branches on target>0 (plan exists + session scheduled today) so the sentinel actually distinguishes “behind” from “nothing scheduled.”"
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "createdAt": "2026-07-08T11:26:20Z",
+      "id": "i-20260708-e7c9",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard coach-tip “Tap to read more” expansion collapses itself on any dashboard re-render, so long coach tips cannot be read expanded. ROOT CAUSE: StackedMomentCards.tsx:43-45 runs `useLayoutEffect(() => setExpanded(false), [moments])` to reset expansion when the moment set changes. But the `moments` prop is a BRAND-NEW array on every Dashboard render — Dashboard.tsx:397-435 rebuilds `const items: MomentItem[] = []` inside an inline IIFE each render and passes it straight to <StackedMomentCards moments={items}>. So the `[moments]` dependency changes every commit, the effect runs after EVERY parent render (not only when content changes), and `setExpanded(false)` fires each time. Any Dashboard re-render — the CSAT 4s timer (Dashboard.tsx:162-169), useCoachMoment’s async liveData setState (useMoments.ts:184-195), a react-query background refetch, or pull-to-refresh (handleRefresh) — snaps an expanded tip back to collapsed (line-clamp-2). EXPECTED: once the user taps “Tap to read more,” the tip stays expanded until they collapse it. ACTUAL: it re-collapses on the next parent re-render. REPRO: (1) open /dashboard where the top coach tip is long enough to clamp (shows “Tap to read more” at StackedMomentCards.tsx:144-148). (2) tap the tip to expand. (3) pull-to-refresh (or just wait for a background query refetch / the CSAT timer). → the tip collapses back on its own. FIX: reset expansion only when the moment set actually changes (e.g. key the effect on the joined sectionIds string, not the array identity), or useMemo the `items` array in Dashboard so `moments` is referentially stable across renders."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
       "tags": [
         "social",
         "fixed-awaiting-verify"
