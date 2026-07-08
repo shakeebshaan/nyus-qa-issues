@@ -1786,26 +1786,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260708-28ac",
-      "createdAt": "2026-07-08T12:59:09.389Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Root-caused + FIXED (deployed to the board). Cause: data/archive-2026.json hit 1,051,157 bytes, just over GitHub's 1MB Contents-API write ceiling. The board could still READ it (loadJson raw-falls-back >1MB) but Resolve WRITES the archive back via the Contents API PUT, which fails once the file exceeds 1MB — that's the 'failed to fetch'/upload error, and it froze every resolve. Fix (index.html, commit e87be29): payloads >1MB now write via the Git Data API (blob -> tree -> commit -> ref; blobs allow up to 100MB), same 401/conflict semantics so the retry loop still works; transparent to readers. Verified the page parses clean (0 console errors) + smoke-tested the blobs endpoint. Can't finish verification headless because only your authenticated board click exercises the real resolve write — please hard-refresh the board (Pages just redeployed) and click Resolve on any in-review issue; it should now succeed. If it still errors, capture the browser console and reopen.",
-      "reviewedAt": "2026-07-08T14:11:36.711Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "createdAt": "2026-07-08T19:28:41.679Z",
       "status": "open",
       "fix": null,
