@@ -332,8 +332,30 @@
     },
     {
       "createdAt": "2026-07-08T05:24:55.012Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Re-fix confirm (reopen 'Fix it'). Root cause: handleRestore unconditionally showed 'Purchases restored' because the backend returns HTTP 200 {restored:false} (no throw). Fix ALREADY in HEAD: handleRestore reads res.data.restored and branches — success toast only when restored===true, else 'Nothing to restore / We couldn't find a previous purchase', keeping the catch for genuine network/5xx errors (SubscriptionSettings.tsx:180-201). NOTE: this QA account has an ACTIVE Pro subscription, so tapping Restore genuinely returns restored:true (correct success) — the false-success state needs a free/never-paid account and a one-shot toast, not capturable here; screenshot shows /settings/subscription with the Restore control present.",
+        "imagePath": "images/i-20260708-b7a4-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260708-b7a4-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "83c23ebb8a8ccee804fe863cdd9c668c7957b861",
+        "imageCommits": [
+          "83c23ebb8a8ccee804fe863cdd9c668c7957b861"
+        ],
+        "fixedAt": "2026-07-08T09:37:26.994Z",
+        "by": "shakeebshaan",
+        "appCommit": "901ace7f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Fix verified present in HEAD (SubscriptionSettings.tsx:180-201) — reopen 'Fix it' predates the build reaching device."
+        }
+      },
       "history": [
         {
           "at": "2026-07-08T09:10:06.557Z",
