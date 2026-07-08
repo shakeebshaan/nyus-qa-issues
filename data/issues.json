@@ -11,16 +11,19 @@
       "description": "[bug-hunt] Onboarding Body-Fat % estimator keys off IDENTITY gender, not PHYSIOLOGICAL biological_sex — wrong body-fat reference ladder + wrong metabolic default (a v5 sex/identity-split regression, same class as QA i-20260627-gsex which fixed BMR).\n\nWHERE: Body sub-step of the condensed \"You & Goal\" step (Screen3_BodyStats). This screen collects biological_sex (Male/Female, REQUIRED — Continue is gated on it) precisely BECAUSE gender is an identity field that can be \"Other\" and must never drive physiology. But the Body Fat % card on the SAME screen still reads data.gender in 4 spots:\n  - reference-guide set:  BODY_FAT_REFERENCES[data.gender === \"female\" ? \"female\" : \"male\"]  (Screen3_BodyStats.tsx:394)\n  - un-skip default:      body_fat_pct: data.gender === \"female\" ? 28 : 20                    (line 333)\n  - slider default:       data.body_fat_pct ?? (data.gender === \"female\" ? 28 : 20)           (line 371)\n  - slider clamp default: clampNum(v, 5, 50, data.gender === \"female\" ? 28 : 20)              (line 373)\n\nREPRO:\n  1. Basics tab → Gender = \"Other\" (a valid identity option, Screen2_BasicInfo.tsx:123).\n  2. Body tab → Sex = \"Female\".\n  3. Body Fat % guide shows the MALE ladder (~10/15/20/25/30%) and the default estimate is 20% — directly contradicting the Female sex picked one card above. (Also triggers for Gender=\"Male\" + Sex=\"Female\".)\n\nEXPECTED vs ACTUAL: any user whose biological_sex=\"female\" but gender!=\"female\" (i.e. \"male\" or \"other\") should see the FEMALE ladder (~18/22/28/33/38%) and a 28% default; instead they get the MALE ladder + 20% default.\n\nIMPACT: body_fat_pct feeds the metabolism-formula selection (card copy: \"helps us choose the most accurate formula for your metabolism\") and is persisted + shipped to the backend (sanitizeOnboarding keeps it — OnboardingFlow.tsx:625). So the ~28-vs-20 skew rides through into the plan calc — exactly the BMR-class error the v5 split was built to eliminate.\n\nFIX: swap the 4 `data.gender === \"female\"` checks to `data.biological_sex === \"female\"`. biological_sex is guaranteed set on this screen (Continue is gated on it), and the convention already exists in calcOnboardingStats (onboarding-calc.ts uses `data.biological_sex ?? data.gender`). Found by the onboarding-intake bug-hunt (static read; verified against sibling calc convention).",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto",
         "onboarding",
-        "accuracy"
+        "accuracy",
+        "fixed-awaiting-verify"
       ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": true,
+      "reviewReason": "FIXED in src (commit 8b9c7a28, pushed to main) + 3 passing regression tests (test/Screen3_BodyStats.test.tsx, 28/28 green). Root cause exactly as filed: Screen3_BodyStats read data.gender in 4 body-fat spots (reference ladder L394, un-skip default L333, slider default+clamp L371/L373), so a user with gender='male'/'other' but biological_sex='female' saw the MALE ladder + 20% default, contradicting the Female sex picked one card above and skewing the metabolism-formula selection. Fix swaps all 4 to data.biological_sex==='female' (guaranteed set — Continue is gated on it), matching the calcOnboardingStats convention. Regression tests assert: gender='other'+sex='female' -> female ladder (~22% Athletic); gender='other'+sex='male' -> male ladder; gender='male'+sex='female' -> 28% un-skip default. Not auto-resolving with a screenshot: live satisfaction bar is 100 (resolve freeze) and no on-device verification is available headlessly. Please verify on-device or confirm resolve.",
+      "reviewedAt": "2026-07-08T14:15:11.609Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "status": "open",
