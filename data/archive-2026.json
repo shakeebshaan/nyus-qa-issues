@@ -18952,85 +18952,50 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "id": "i-20260707-4b08",
-      "createdAt": "2026-07-07T18:41:36.652Z",
+      "id": "i-20260707-f54a",
+      "createdAt": "2026-07-07T20:58:46.154Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260707-4b08.jpg",
-      "imageCommit": "00ab4e292a356ee8e159ee0966d8d9a45b734ecc",
+      "imagePath": "images/i-20260707-f54a.jpg",
+      "imageCommit": "6740d52a9ed0f0fedb119224de5ec8e0915fe285",
       "imagePaths": [
-        "images/i-20260707-4b08.jpg"
+        "images/i-20260707-f54a.jpg"
       ],
       "imageCommits": [
-        "00ab4e292a356ee8e159ee0966d8d9a45b734ecc"
+        "6740d52a9ed0f0fedb119224de5ec8e0915fe285"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Reopen asked for a report + email metrics. Done: (1) Report — attached 'Outreach report' (inline on board): the lead-finding + daily send loop, 10 emails already sent via Resend from support@nyus.in (Planet Fitness/Equinox/Crunch/Orangetheory/F45/Barry's/solidcore/Blink/Anytime/Strava), 68 leads queued, 10/day cap, 0 failures. (2) Metrics — new 'Outreach & Email' category in metrics-collect.mjs (emails sent all-time/today, daily cap, leads queue, failures, last send, reply-rate=awaiting Resend webhook); collector re-run, live on the board Metrics tab. Loop enforces 10/day cap + suppression + STOP opt-out in code (daily-loop.mjs). Sender = support@nyus.in via Resend as requested.",
-        "imagePath": "images/i-20260707-4b08-fix-r2.png",
+        "description": "Removed 7 design/UI exploration report CTAs from the Intelligence & Reports panel: Design Report Jul 3, Design Shotgun (10 variants), 7 Design Variants, Meal-Card Designs, Contrast Fix Proof, Design Shotgun (3 variants), 3 Designs A/B/C. Screenshot shows cleaned-up panel with only operational reports (Platform Intelligence, Market Research, Onboarding Run, QA Loop Specs, Press Pitches, Plan Sim, Onboarding Walk, Coaching Audit, Coach Portraits, Metrics Setup Guide, Board Report). Deployed to shakeebshaan.github.io/nyus-qa-issues.",
+        "imagePath": "images/i-20260707-f54a-fix-r1.png",
         "imagePaths": [
-          "images/i-20260707-4b08-fix-r2.png"
+          "images/i-20260707-f54a-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "1e46c8dc574d7f8f1ff3feedff2ae893fe9d12a2",
+        "imageCommit": "11a4bc72b5295ff5e8a57a60bbf1a5ca11f7bad4",
         "imageCommits": [
-          "1e46c8dc574d7f8f1ff3feedff2ae893fe9d12a2"
+          "11a4bc72b5295ff5e8a57a60bbf1a5ca11f7bad4"
         ],
-        "fixedAt": "2026-07-08T01:24:08.822Z",
+        "fixedAt": "2026-07-07T23:15:32.917Z",
         "by": "shakeebshaan",
-        "appCommit": "df75e514",
+        "appCommit": "25c7bd9",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "metrics live (10 sent/68 queued real data); report renders inline"
+          "note": "Screenshot confirms all 7 design cards gone from live board. Only operational/product reports remain."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-07T23:58:11.150Z",
-          "event": "reopened",
-          "note": "create a report for this and add to the matrics about emails for this",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Lead-outreach loop is LIVE: scheduled 3x daily (09:20/14:20/19:20, first tick tomorrow 09:20). Each tick discovers leads from PUBLIC data per your direction (funding news for India fitness/health startups, gym-chain + corporate-wellness partnership pages, D2C nutrition brands, fitness creators, accelerators), verifies addresses with the email-waterfall free checks, writes a short personalized pitch, and sends from support@nyus.in via Resend - sending verified with a real test email to your inbox (id b759b1e1, check support@chartraiders.com). Every send is logged: outreach/SENT-LOG.md + ledger.json + ONE daily summary card to this board. Guardrails are enforced in code by send-pitch.mjs (the only send path): hard 10/day cap, never the same address twice, suppression list (any 'stop' reply gets suppressed), mandatory opt-out line + NYUS identity in every body, published-emails-only. Note: the waterfall's paid API keys (MillionVerifier/Prospeo/Blitz) are not on this machine - the loop therefore only emails addresses actually published by the recipient (no guessed permutations, no bounce risk); drop the 3 keys into .agents/skills/email-waterfall/.env to enable permutation-guessing later.",
-            "imagePath": "images/i-20260707-4b08-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260707-4b08-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "3ee8f401beb56ffc9d0551429e141b57ae080d73",
-            "imageCommits": [
-              "3ee8f401beb56ffc9d0551429e141b57ae080d73"
-            ],
-            "fixedAt": "2026-07-07T23:33:53.012Z",
-            "by": "shakeebshaan",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 100,
-              "bar": 100,
-              "note": "Loop created+scheduled (3 tasks Ready), Resend sending proven with a real delivered email from support@nyus.in, 10/day target = enforced cap, complete send logging in place, all owner-reply requirements (public-data discovery, support@nyus.in, Resend, logging) covered. Screenshot shows schedule + real send id + code-enforced refusals."
-            }
-          }
-        }
-      ],
+      "history": [],
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Find the public data linked search etc where ever there are go to websites possible search for names etc new old what gave funding in news etc and continuously pitch to everyone aim for 10 per day and log all the emails every sent from support@nyus.in etc \n\nsend email from the resend etc",
-      "reviewRepliedAt": "2026-07-07T20:53:14.126Z",
-      "reviewReplyBy": "shakeebshaan",
-      "reportPath": "reports/outreach-report.html",
-      "reportLabel": "Outreach report",
-      "resolvedAt": "2026-07-09T06:59:07.072Z",
+      "resolvedAt": "2026-07-09T06:59:30.203Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:59:07.072Z"
+      "archivedAt": "2026-07-09T06:59:30.203Z"
     }
   ]
 }
