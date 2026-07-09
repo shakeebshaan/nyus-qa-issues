@@ -18952,50 +18952,50 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "createdAt": "2026-07-08T17:24:00.000Z",
+      "createdAt": "2026-07-08T15:10:02.753Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: the new-ingredient form has no servings control, but the payload sent the inherited ingServings from a previously-selected ingredient, silently multiplying the typed calories (e.g. 180 -> 540 kcal). Fix: hard-code servings:1 on the new-ingredient path in handleLogIngredient + reset ingServings when entering add-new mode. Proof: 'Ghar ka laddu' @ 180 kcal in the servings-less form -> logs exactly 180. 3 scoped tests green; board gate npm run test:unit exits 0.",
-        "imagePath": "images/i-20260708-f3a7-fix-r1.png",
+        "description": "Root cause: calculateBodyFat (Measurements.tsx) used the IMPERIAL Navy constants (86.010/163.205) but was fed cm, inflating men ~+6.5pts and pinning women at the 50% ceiling. Fix: switched both branches to the METRIC Navy form 495/(1.0324-0.19077*log10(waist-neck)+0.15456*log10(height))-450 fed cm directly (identical duplicate in onboarding BodyDiagram.tsx also fixed), and keyed the male/female branch off biological_sex ?? gender. All 3 body-fat screens now agree. Verified on /measurements: waist 85 / neck 38 / height 170cm male -> 17.8% (was 22.96%). Regression test added (test/BodyFatNavy.formula.test.ts, 6/6 green).",
+        "imagePath": "images/i-20260708-bd41-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-f3a7-fix-r1.png"
+          "images/i-20260708-bd41-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "87b552620d92f78c1a8e03349def3871c9743f2f",
+        "imageCommit": "3b730070dc7ee37ee2b1b5f7000495fa314729d4",
         "imageCommits": [
-          "87b552620d92f78c1a8e03349def3871c9743f2f"
+          "3b730070dc7ee37ee2b1b5f7000495fa314729d4"
         ],
-        "fixedAt": "2026-07-08T17:37:21.405Z",
+        "fixedAt": "2026-07-08T15:43:22.370Z",
         "by": "shakeebshaan",
-        "appCommit": "4d8dad10",
+        "appCommit": "a25f4987",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Deterministic invariant fix (new-ingredient form has no servings control -> log 1x); 1 scoped test asserts servings:1 with typed calories; proof shows the exact scenario."
+          "note": "Root-caused to imperial-constants-fed-cm; switched all 3 screens to metric form; verified 17.8% on the actual /measurements card (full-screen proof) matching the estimator; scoped regression test green."
         }
       },
       "history": [],
       "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "accuracy"
+      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-f3a7",
-      "route": "/nutrition",
-      "tags": [
-        "bug-hunt",
-        "auto",
-        "nutrition"
-      ],
-      "description": "[bug-hunt] Add-Food > Ingredients > 'Add new ingredient' logs the WRONG calories — a stale servings multiplier from a previously-selected ingredient is applied silently, and the new-ingredient form has no servings control to reveal or fix it.\n\nWHERE: src/components/nutrition/CustomMealModal.tsx (Ingredients tab). Backend confirms the multiply: app/routes/logging.py:708 -> total_calories = round(cals * servings) (also protein/carbs/fat * servings, 709-711); servings comes straight from the FE payload (logging.py:653).\n\nROOT CAUSE: `ingServings` state is NOT reset when the user enters 'Add new' mode. Reset happens only when a search result is SELECTED (CustomMealModal.tsx:570 sets ingServings=1) and after a successful log (line 167). The 'Add new ingredient with custom macros' button (line 546) does `setIsAddingNew(true); setSelectedIngredient(null);` but leaves ingServings untouched. The search-box onChange (line 538) also resets selectedIngredient/isAddingNew but NOT ingServings. Meanwhile the new-ingredient form (lines 592-608) renders only Name + Calories/Protein/Carbs/Fat — it has NO servings stepper (the stepper at 630-637 and the macro-total preview at 621-628 only render for a selectedIngredient), so the inherited servings value is invisible to the user.\n\nREPRO: /nutrition -> Add Food -> Ingredients tab -> search + select any ingredient (ingServings=1) -> tap the servings '+' to raise it to e.g. 3 -> now tap 'Add new ingredient with custom macros' -> enter 'Ghar ka laddu', calories 180 -> 'Add to Today'. Payload sends {calories_per_serving:180, servings:3}. Backend logs total_calories = round(180*3) = 540 kcal (and 3x the macros). EXPECTED: 180 kcal (the number the user typed, with no visible servings field implying 1x). ACTUAL: 540 kcal logged silently — day totals corrupted with no way to see why in the add-new form.\n\nFIX: reset ingServings to 1 when entering add-new mode (in the 'Add new' onClick and/or on ingredientQuery change), or add a servings control + macro-total preview to the new-ingredient form so the multiplier is visible and editable.",
+      "id": "i-20260708-bd41",
+      "route": "/measurements",
+      "description": "[bug-hunt] Measurements: the \"Estimated Body Fat (Navy Method)\" card uses the IMPERIAL (inches) Navy coefficients but is fed CENTIMETRE values, so every estimate is materially wrong.\n\ncalculateBodyFat (src/pages/Measurements.tsx:26-50) uses the inches-form constants - male: 86.010*log10(waist-neck) - 70.041*log10(height) + 36.76; female: 163.205*log10(waist+hip-neck) - 97.684*log10(height) - 78.387 - which are only valid when circumferences AND height are in INCHES. But it passes waist/neck/hip = value_cm (measurement logs are canonical cm) and heightCm straight in. Feeding cm into a log10-of-inches formula adds a fixed offset of (86.010-70.041)*log10(2.54)=+6.47 for men and (163.205-97.684)*log10(2.54)=+26.5 for women.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5%): metric form 495/(1.0324-0.19077*log10(w-n)+0.15456*log10(h))-450 fed cm = 16.44%, imperial form fed inches = 16.49% (they AGREE = correct). This code returns 22.96% - +6.5 too high. Woman waist75/neck32/hip100/height165 cm (correct ~30%) returns 56.8% -> clamps to the 50% ceiling, so essentially EVERY female account shows 50.0% regardless of measurements.\n\nThe same defective formula is duplicated in onboarding src/components/onboarding/BodyDiagram.tsx:164-186 (its comment claims \"Navy formula requires all inputs in one unit\" - true, but the constants demand inches, not cm).\n\nExpected: estimate within Navy method +/-3-4%. Actual: men ~+6.5pts high, women pinned at 50%; it also disagrees with the /body-fat-estimator and /body-composition screens for the same person.\n\nRepro: log waist+neck (+hip if female) on /measurements -> the body-fat card shows an inflated %; female accounts show 50.0%.\n\nFix: either convert cm->inches before the 86.010/163.205 formula, OR switch to the metric 495/(...) form fed cm. Secondary: key the male/female branch off biological_sex ?? gender (physiology) to match BodyComposition.tsx:145 / BodyFatEstimator.tsx:156 / onboarding-calc.ts:67 - Measurements.tsx:194 currently uses identity gender only.\n\nFiles: src/pages/Measurements.tsx:26-50 (calculateBodyFat) + :189-201 (bodyFatEstimate memo; gender source :194); src/components/onboarding/BodyDiagram.tsx:164-186.",
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:56:14.463Z",
+      "resolvedAt": "2026-07-09T06:56:41.873Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:56:14.463Z"
+      "archivedAt": "2026-07-09T06:56:41.873Z"
     }
   ]
 }
