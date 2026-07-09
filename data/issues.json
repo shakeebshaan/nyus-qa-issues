@@ -113,48 +113,6 @@
       "needsReview": false
     },
     {
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: Dashboard.tsx passed useDashboardData's computed progress (0 when target===0) to useDashboardMoment, so non-training weekdays and plan-less users read as progress 0 and satisfied the *_BEHIND branches, firing the 'your plan is waiting' nag that contradicts the same-screen 'no workout today'/'Generate plan' card. Fix: pass the -1 'no plan/nothing scheduled today' sentinel (gated on dietHasPlan/activityHasPlan target>0) instead of 0, so the sentinel distinguishes 'behind' from 'nothing scheduled'. Proof: regression test test/hooks-useDashboardMoment.test.ts locks the contract both ways (0->BEHIND, -1->generic). The exact rest-day state is not stageable on a single headless capture; the shot shows the healthy dashboard where 'No diet plan yet' now keeps the diet half silent.",
-        "imagePath": "images/i-20260708-a1f3-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-a1f3-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0d8bf8a663708db571ca88d25842968ea2e903ea",
-        "imageCommits": [
-          "0d8bf8a663708db571ca88d25842968ea2e903ea"
-        ],
-        "fixedAt": "2026-07-08T11:34:30.178Z",
-        "by": "shakeebshaan",
-        "appCommit": "a360a050",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Precise root cause, minimal surgical diff, bidirectional regression test, tsc clean, no regressions."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "createdAt": "2026-07-08T11:26:20Z",
-      "id": "i-20260708-a1f3",
-      "route": "/dashboard",
-      "description": "[bug-hunt] Dashboard coach-moment deck nags “Your workout is still doable today — your plan is waiting, tap Activity to begin” on rest / non-training days AND for users with no workout plan, directly contradicting the same-screen activity card that says “no workout today” (or shows the “Generate workout plan” CTA). EXPECTED: on a day with no scheduled workout (or no plan), the coach tip is neutral/rest-oriented, never “you are behind, your plan is waiting.” ACTUAL: the ACTIVITY_BEHIND pool fires. ROOT CAUSE: useDashboardMoment (src/hooks/useMoments.ts:137-143) branches on `activityProgress >= 0 && activityProgress < 20` (ACTIVITY_BEHIND) and `dietProgress >= 0 && dietProgress < 40` (DIET_BEHIND). The `-1` sentinel defaults (lines 119-120) are meant to signal “no plan / unknown → skip these branches,” but Dashboard.tsx (line 196-208) passes the COMPUTED progress from useDashboardData.progressData, which returns a real `0` whenever target is 0 (useDashboardData.ts:151-153: `activityTarget <= 0 ? 0`). target is 0 on any non-training weekday (has_active_plan=true, no session today, is_break_today=false — the exact state DashboardActivityCard.tsx:96 renders “no workout today” for) and for users with no workout plan. So activityProgress===0 satisfies `>=0 && <20` and ACTIVITY_BEHIND is chosen. Verified with a node repro of the branch: passing 0 → ACTIVITY_BEHIND; passing the intended -1 → COACH_GENERIC (correct). REPRO: (1) log in as a user with an active workout plan; open /dashboard on a non-training weekday — activity card shows “no workout today”. (2) scroll to the coach-moment deck (Section 3). (3) tip reads “Your workout is still doable today. … Your plan is waiting — tap Activity to begin.” Same class hits diet (DIET_BEHIND “Protein is still catchable…”) for a user with no diet plan (dietTarget 0 → dietProgress 0). FIX: in Dashboard.tsx pass -1 (or a hasPlan flag) instead of the computed 0 when target===0, or gate the *_BEHIND branches on target>0 (plan exists + session scheduled today) so the sentinel actually distinguishes “behind” from “nothing scheduled.”",
-      "needsReview": false
-    },
-    {
       "createdAt": "2026-07-08T09:42:08.800Z",
       "status": "open",
       "fix": null,
