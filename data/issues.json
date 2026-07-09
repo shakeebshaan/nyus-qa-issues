@@ -241,29 +241,6 @@
       "needsReview": false
     },
     {
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "social",
-        "fixed-awaiting-verify"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "createdAt": "2026-07-08T10:37:18Z",
-      "id": "i-20260708-7c1e",
-      "route": "/social",
-      "description": "[bug-hunt] Challenges: accepting/declining ONE challenge invite spins & disables the Join/Decline buttons on ALL other invited challenge cards. ChallengesView.tsx uses a single shared mutation per action (joinMutation / declineMutation); each card's button keys its spinner + disabled state purely off `joinMutation.isPending` / `declineMutation.isPending` (lines ~448-469), which is one global boolean, not per-challenge. Repro: have >=2 pending challenge invites (my_status === 'invited') visible in the Active tab; tap Join on card #1 -> every invited card's Join button simultaneously shows the Loader2 spinner and becomes disabled until that one request settles (same for Decline). Expected: only the tapped card shows a pending state; the others stay actionable. Fix: track the in-flight challengeId (e.g. gate on `joinMutation.isPending && joinMutation.variables === challenge.id`) so only the acted-on card shows the spinner/disabled.",
-      "needsReview": true,
-      "reviewReason": "FIXED in src (commit 8def0326, pushed to main) + passing regression test in test/ChallengesView.test.tsx ('acting on one invited card leaves the OTHER invited cards actionable'). Root cause as filed: Join/Decline gated on the shared global joinMutation/declineMutation.isPending. Fix gates each invited card on mutation.variables === challenge.id (isJoining/isDeclining/isActing) so only the tapped card shows the spinner/disabled; other invited cards stay actionable. Not auto-resolving with a screenshot: bar=100 and this needs >=2 pending challenge invites plus an in-flight request to demonstrate, which a single headless /social capture can't stage. Please verify on-device or confirm resolve.",
-      "reviewedAt": "2026-07-08T10:49:44.646Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "createdAt": "2026-07-08T09:42:08.800Z",
       "status": "open",
       "fix": null,
