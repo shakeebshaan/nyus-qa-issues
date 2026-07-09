@@ -1215,30 +1215,6 @@
       "description": "[discovery] Outreach OP-NOTE (tick 2, 2026-07-08): leads-backlog.md write BLOCKED.\n\nAgent Write/Edit tools are permission-gated on C:/Users/Administrator/.claude/nyus-loops/ (\"sensitive file\"). send-pitch.mjs still writes ledger.json + SENT-LOG.md itself, so ALL sends stay logged and send-dedup is intact. Only the manual leads-backlog.md scratchpad can no longer be updated -> cross-tick candidate/dead-route notes do not persist. Not bypassing the guardrail via node; recording carry-over here instead. Likely same family as the ESCALATIONS.md write-block already tracked.\n\nSends this tick (both PUBLIC emails on own contact page, FREE prevalidate PASS):\n- The Func. Lab (just-raised $1.5M seed, D2C functional nutrition) -> hello@thefunclab.com | resendId e66d59c2-2b26-4ff1-873a-35d7e1115359\n- The Good Bug (gut/metabolic-health D2C) -> tgb@seventurns.in | resendId 1a8a073f-b7a4-4a6e-96c7-6d883eb61b91\nDay total after tick 2: 6/10 sent, ~4 remaining for tick 3. 0 suppressed, 0 replies.\n\nTICK-3 CARRY-OVER (since backlog cannot be written):\n- DEAD/skip routes (no published email / support-only / scraper): OZiva (JS page, no email), Onsurity (403, care@ only), Truworth Wellness (phone only), Bose Fitness (form only), Wellbeing Nutrition (support only), Anytime Fitness IN (scraper-sourced - hard-rule).\n- Re-try URLs: Cosmix /pages/contact 404 (find real URL); indianfitnesscoach.com /contact HTTP 500.\n- Marginal last-resort (paid coaches, competitor risk): parambodyfitmind@gmail.com, enquiry@myfitnessgoal.in - pitch only as client-logging tool.\n- Elevate Now = direct competitor (weight-mgmt), do NOT product-pitch.\n- Next angles: corp-wellness with REAL partnerships routes, gym co-marketing (member perk), health-tech accelerators.\n\nOwner action: none required unless you want the .claude write-gate relaxed so the backlog file can persist across ticks."
     },
     {
-      "createdAt": "2026-07-08T10:26:34.253Z",
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "activity",
-        "accuracy"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-bw0v",
-      "route": "/activity",
-      "description": "[bug-hunt] Activity: completed BODYWEIGHT-only workouts are invisible to the weekly consistency + volume surfaces.\n\nThe \"Workout sessions this week\" weekday dots (TodaysActivityCard) and the Exercise Volume chart both mark a day active only when daily_volume_history[].volume > 0. A bodyweight exercise logs weight_kg=0, so its volume = reps*0 = 0. A calisthenics athlete who finishes push-up/pull-up/dip sessions daily still sees 0/7 sessions all week, and the whole Exercise Volume card is hidden (Activity.tsx gate ~L932: only renders when some day volume>0).\n\nSession-completion data exists independently of volume: GET /activity/history returns summary.total_sessions + per-session records regardless of load. The dots/chart just use the wrong signal.\n\nFix: mark a weekday dot \"done\" when a session was COMPLETED that day (not merely volume>0). Cleanest = backend adds a per-day session_completed / session_count field to daily_volume_history; FE-only fix is limited because the activity/overview payload carries no per-day completion flag today.\n\nFiles: src/components/activity/TodaysActivityCard.tsx (weekDots hasSession = point.volume>0, ~L87), src/pages/Activity.tsx (volume-chart render gate ~L932-934). Found by the /activity page-guardian loop; cross-checked vs prod /activity/overview + /activity/history for QA acct.\n\nUPDATE 2026-07-08 (page-guardian): FRONTEND half SHIPPED (commit 39734010) - TodaysActivityCard weekDots now reads daily_volume_history[].session_count when present (falls back to volume>0, zero regression). REMAINING = BACKEND: emit session_count (completed WorkoutSessionLog count per day) on activity/overview daily_volume_history. Card stays OPEN for that backend field.",
-      "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED both repos (awaiting on-device confirm / owner resolve). Root cause exactly as filed: the Workout",
-      "reviewedAt": "2026-07-08T10:33:41.667Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "createdAt": "2026-07-08T19:28:41.679Z",
       "status": "open",
       "fix": null,
