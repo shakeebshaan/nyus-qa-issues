@@ -264,29 +264,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "social",
-        "fixed-awaiting-verify"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "createdAt": "2026-07-08T10:37:18Z",
-      "id": "i-20260708-b2f9",
-      "route": "/social",
-      "description": "[bug-hunt] Direct-message send fails SILENTLY - no error feedback, no retry. MessagesView.tsx sendMessageMutation (lines ~70-83) has an onSuccess (clears the input + invalidates the thread) but NO onError. If POST /messages fails (offline, 5xx, timeout) nothing happens: no toast, no error state, the message never appears in the thread, and unlike coach chat there is no optimistic echo or outbox. The composer re-enables (isPending=false) with the typed text still present, so the user cannot tell the send failed vs is still pending. Repro: open a friend DM thread, go offline (or force a 500 on /messages), type a message, tap Send -> the button briefly disables then re-enables, the message silently drops with zero feedback. Expected: a failure toast (ideally retain text for retry). Fix: add an onError to the mutation that fires toast.error (and keeps the text), matching the error-toast pattern used elsewhere in the app.",
-      "needsReview": true,
-      "reviewReason": "FIXED in src (commit 14ed381a, pushed to main) + passing regression test (test/MessagesView.send.test.tsx). Root cause exactly as filed: sendMessageMutation had onSuccess but no onError, so a failed POST /messages dropped silently (no toast, text lingered looking half-sent). Fix adds onError -> destructive toast ('Message not sent. Check your connection and try again.') and deliberately keeps the typed text in the composer for retry. Not auto-resolving with a screenshot: bar=100 and proving it needs a forced offline/5xx failure inside an authenticated DM thread, which a single headless /social capture can't stage. Please verify on-device or confirm resolve.",
-      "reviewedAt": "2026-07-08T10:49:54.856Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "createdAt": "2026-07-08T09:42:08.800Z",
       "status": "open",
       "fix": null,
