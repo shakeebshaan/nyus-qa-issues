@@ -3,6 +3,17 @@
   "satisfaction": 100,
   "testGate": true,
   "testCommand": "npm run test:unit",
-  "updatedAt": "2026-07-07T13:51:05.035Z",
-  "updatedBy": "shakeebshaan"
+  "modelPolicy": {
+    "directive": "i-20260709",
+    "updatedAt": "2026-07-09",
+    "rules": {
+      "fable": "banned",
+      "small": "claude-sonnet-5 @ effort medium (monitors, content, page guardians, ideation, outreach)",
+      "heavy": "claude-opus-4-8 @ effort xhigh (bug-hunt, coverage-push, test-stabilizer, quality-streak, security-review, data-review)",
+      "workflow": "claude-opus-4-8 @ effort xhigh + ultracode multi-agent (fix-issues, health-check-fix)",
+      "escalation": "any loop unsolved in >1 try auto-escalates to workflow mode on next tick"
+    }
+  },
+  "updatedAt": "2026-07-09T00:00:00.000Z",
+  "updatedBy": "claude-code (i-20260709 model policy)"
 }
