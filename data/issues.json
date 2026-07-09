@@ -387,48 +387,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260707-514b",
-      "createdAt": "2026-07-07T19:39:06.185Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: setAppLocale() in LanguagePicker only wrote nyus_locale; nothing bridged it to backend coach_language. Fix (9c12cca1): useCoachLanguageSync hook reads nyus_locale on first auth, maps hi->hindi/hinglish->hinglish, calls PUT /profile once (flag persisted). Wired in App.tsx:297. Screenshot shows Coach language = Hindi (selected) after startup picker chose Hindi - no manual Profile toggle needed.",
-        "imagePath": "images/i-20260707-514b-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260707-514b-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "9c87c106ddc82ea7b424772e4dc62f42f5966eb3",
-        "imageCommits": [
-          "9c87c106ddc82ea7b424772e4dc62f42f5966eb3"
-        ],
-        "fixedAt": "2026-07-07T23:14:58.137Z",
-        "by": "shakeebshaan",
-        "appCommit": "9c12cca1",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Hook is implemented and wired. Screenshot proves coach_language matches startup picker choice. One-shot with retry on failure."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "route": "/coach-chat",
-      "description": "[bug-hunt] Startup language picker promises the coach speaks your language but never sets coach_language - Hindi/Hinglish pickers still get an ENGLISH AI coach. The picker subtitle literally says 'apni bhasha mein baat karein' (talk in your language), yet setAppLocale() (src/pages/LanguagePicker.tsx:11) only calls i18n.changeLanguage + writes nyus_locale. The backend coach_language pref (drives AI reply language, shipped for i-20260707-lng1) is only settable from Profile > Preferences (ProfilePreferencesCard.tsx handleLangChange -> PUT /profile). Nothing bridges the two: grep shows nyus_locale is read nowhere except the i18n detector, and coach_language is written nowhere except the profile card. Expected: pick Hindi at startup -> UI AND coach replies in Hindi. Actual: coach replies in English until the user separately discovers the buried Profile toggle. Repro: fresh install -> pick Hindi -> onboard -> open coach chat -> replies are English; GET /profile shows coach_language english. Fix: picker is pre-auth, so stash the choice (e.g. from nyus_locale) and apply it to coach_language at login/onboarding finalize (map hi->hindi, hinglish->hinglish, en->english).",
-      "needsReview": false
-    },
-    {
       "createdAt": "2026-07-08T06:06:35.622Z",
       "status": "open",
       "fix": null,
