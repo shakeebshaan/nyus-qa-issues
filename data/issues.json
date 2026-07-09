@@ -28,49 +28,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "createdAt": "2026-07-08T17:24:00.000Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the new-ingredient form has no servings control, but the payload sent the inherited ingServings from a previously-selected ingredient, silently multiplying the typed calories (e.g. 180 -> 540 kcal). Fix: hard-code servings:1 on the new-ingredient path in handleLogIngredient + reset ingServings when entering add-new mode. Proof: 'Ghar ka laddu' @ 180 kcal in the servings-less form -> logs exactly 180. 3 scoped tests green; board gate npm run test:unit exits 0.",
-        "imagePath": "images/i-20260708-f3a7-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-f3a7-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "87b552620d92f78c1a8e03349def3871c9743f2f",
-        "imageCommits": [
-          "87b552620d92f78c1a8e03349def3871c9743f2f"
-        ],
-        "fixedAt": "2026-07-08T17:37:21.405Z",
-        "by": "shakeebshaan",
-        "appCommit": "4d8dad10",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Deterministic invariant fix (new-ingredient form has no servings control -> log 1x); 1 scoped test asserts servings:1 with typed calories; proof shows the exact scenario."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-f3a7",
-      "route": "/nutrition",
-      "tags": [
-        "bug-hunt",
-        "auto",
-        "nutrition"
-      ],
-      "description": "[bug-hunt] Add-Food > Ingredients > 'Add new ingredient' logs the WRONG calories — a stale servings multiplier from a previously-selected ingredient is applied silently, and the new-ingredient form has no servings control to reveal or fix it.\n\nWHERE: src/components/nutrition/CustomMealModal.tsx (Ingredients tab). Backend confirms the multiply: app/routes/logging.py:708 -> total_calories = round(cals * servings) (also protein/carbs/fat * servings, 709-711); servings comes straight from the FE payload (logging.py:653).\n\nROOT CAUSE: `ingServings` state is NOT reset when the user enters 'Add new' mode. Reset happens only when a search result is SELECTED (CustomMealModal.tsx:570 sets ingServings=1) and after a successful log (line 167). The 'Add new ingredient with custom macros' button (line 546) does `setIsAddingNew(true); setSelectedIngredient(null);` but leaves ingServings untouched. The search-box onChange (line 538) also resets selectedIngredient/isAddingNew but NOT ingServings. Meanwhile the new-ingredient form (lines 592-608) renders only Name + Calories/Protein/Carbs/Fat — it has NO servings stepper (the stepper at 630-637 and the macro-total preview at 621-628 only render for a selectedIngredient), so the inherited servings value is invisible to the user.\n\nREPRO: /nutrition -> Add Food -> Ingredients tab -> search + select any ingredient (ingServings=1) -> tap the servings '+' to raise it to e.g. 3 -> now tap 'Add new ingredient with custom macros' -> enter 'Ghar ka laddu', calories 180 -> 'Add to Today'. Payload sends {calories_per_serving:180, servings:3}. Backend logs total_calories = round(180*3) = 540 kcal (and 3x the macros). EXPECTED: 180 kcal (the number the user typed, with no visible servings field implying 1x). ACTUAL: 540 kcal logged silently — day totals corrupted with no way to see why in the add-new form.\n\nFIX: reset ingServings to 1 when entering add-new mode (in the 'Add new' onClick and/or on ingredientQuery change), or add a servings control + macro-total preview to the new-ingredient form so the multiplier is visible and editable.",
-      "needsReview": false
-    },
-    {
       "id": "i-20260708-fst1",
       "createdAt": "2026-07-08T16:39:56.595Z",
       "status": "open",
