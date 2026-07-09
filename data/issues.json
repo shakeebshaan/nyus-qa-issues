@@ -60,7 +60,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "BUILT + verified + pushed (frontend commit 553bd47d) — not auto-resolving because the board's LLM-judge bar is pinned at 100 (resolve-freeze), and I won't game that gate.\n\nWhat shipped: a calm, self-gating Dashboard \"sleep log\" card (src/pages/_components/dashboard/SleepLogPrompt.tsx, mounted in Dashboard.tsx). Hours slider 4–10 + Poor/OK/Great quality → writes sleep_hours + sleep_rating to daily_logs via the EXISTING POST /api/v1/logs/daily. No backend or schema change was needed — the daily_logs.sleep_hours/sleep_rating columns and the write path already existed; they just had no direct Dashboard entry point, which is exactly why wearable-less users left Weekly Review's avg_sleep_hours as dead data.\n\nGating (matches your V1 ask): shows only when today's daily_log has no sleep_hours yet — so a Health-Connect-supplied value hides it automatically — and once/day after \"Not now\". Strings added across en / hi / hinglish / xx-AE (honors the full-app-translation directive).\n\nVerified end-to-end on the QA account at 390×844: logging 7h + Great persisted sleep_hours=7, sleep_rating=9, and the card auto-hid on refetch. Screenshot (EN) attached shows the card; Hindi render also confirmed live.\n\nDEFERRED (transparent): the OPTIONAL morning \"log your sleep\" reminder from your V1 note is NOT built — reminderSync.ts's existing sleep slot (22:00) is a BEDTIME nudge, not a morning log reminder, so a proper one needs a new reminder id + a NotificationPreferences toggle + a pref field. Held it back rather than half-wire it. Say the word and I'll add it next tick.\n\nResolve when you're ready (or drop the satisfaction bar off 100 and I'll move it to In-review with the attached proof).",
+      "reviewedAt": "2026-07-09T18:41:56.737Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260708-pc1a",
