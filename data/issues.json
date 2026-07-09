@@ -515,7 +515,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Verified the reported screen end-to-end. Under Hindi locale (nyus_locale=hi) the DASHBOARD from your screenshot is now fully Hindi — every English string in your shot is localized: streak rows (अपनी स्ट्रीक शुरू करें / अपना वजन/मील/एक्टिविटी लॉग करें), कस्टमाइज़ (was Customize), '6 में से 0 एक्सरसाइज़ पूरी' (was 'X of Y exercises done'), coach chrome (आपका कोच / Nisha से पूछें), and the bottom nav होम/डाइट/एक्टिविटी/प्रोफ़ाइल. Onboarding intro carousel (Screen1_Tutorial) is also localized. Shipped in commits 2235dc30 (P2 dashboard chrome), c2b4ffc6 (P3 coach intake), 210f1b95 (P4 coach moment + Ask-coach FAB), 5937d02a (P5 onboarding intro) — all pushed AFTER your screenshot was taken. i18n parity tests 10/10 green; test gate (npm run test:unit) green. Proof capture in tmp/i-20260709-e11f-fix.png. HONEST SCOPE NOTE (why I'm flagging, not auto-resolving under the 100 bar): 'other things aren't hindi' is the whole-app i18n migration — the hardcoded-strings guard runs on a BASELINE CEILING, not zero, so deeper/lower-traffic screens still contain English pending later phases (P6+), and dynamic AI-coach message text comes from the backend. So the exact screen you flagged is 100% fixed, but full-app Hindi is still in progress. Your call: RESOLVE this now that the reported dashboard+onboarding are fixed, or keep it OPEN as the tracking issue for the remaining i18n phases (tell me and I'll keep translating screen-by-screen each tick).",
+      "reviewedAt": "2026-07-09T17:37:02.188Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
