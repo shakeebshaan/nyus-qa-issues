@@ -1906,6 +1906,14 @@ async function resolveIssue(id, btn) {
   if (!token) { openSettings("A token is needed to resolve."); return; }
   if (!confirm("Mark this resolved? It moves off the board into Resolved.")) return;
   btn.disabled = true;
+  // Optimistic: drop the card and re-render NOW so the click feels instant. The two
+  // GitHub writes below are slow (archive-2026.json is >1MB → raw-fallback GET + ~1.4MB
+  // PUT every resolve), and rendering only after they finish made the board look stuck
+  // after clicking ✓ (i-20260708-acce). Writes run in the background; roll back on failure.
+  const prevIssues = db.issues;
+  db.issues = db.issues.filter((x) => x.id !== id);
+  render();
+  toast("Resolving…");
   try {
     const snap = JSON.parse(JSON.stringify(it));
     snap.status = "resolved";
@@ -1913,6 +1921,8 @@ async function resolveIssue(id, btn) {
     snap.resolvedBy = myLogin || undefined;  // multi-user: who accepted the fix
     snap.archivedAt = snap.resolvedAt; // back-compat with the archive store/sort
     const path = `data/archive-${new Date().getFullYear()}.json`;
+    // Order matters: archive first, then remove from active. If the second write fails
+    // the issue is duped (recoverable), never lost. Do NOT parallelize these.
     await mutateJson(path, `issue ${id}: resolved`, (a) => {
       a.issues = a.issues || [];
       if (!a.issues.some((x) => x.id === id)) a.issues.push(snap);
@@ -1925,7 +1935,9 @@ async function resolveIssue(id, btn) {
     if (!$("arch").hidden) { $("arch").hidden = true; $("arch-toggle").textContent = "View resolved"; }
     toast("Resolved ✓");
   } catch (e) {
+    db.issues = prevIssues;  // restore the card so it can be retried
     btn.disabled = false;
+    render();
     toast(e.message || "Resolve failed.", 4200);
   }
 }
