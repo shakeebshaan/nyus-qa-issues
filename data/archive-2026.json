@@ -18997,33 +18997,62 @@
       "archivedAt": "2026-07-09T07:00:16.021Z"
     },
     {
-      "id": "i-20260707-514b",
-      "createdAt": "2026-07-07T19:39:06.185Z",
+      "createdAt": "2026-07-08T05:24:55.012Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: setAppLocale() in LanguagePicker only wrote nyus_locale; nothing bridged it to backend coach_language. Fix (9c12cca1): useCoachLanguageSync hook reads nyus_locale on first auth, maps hi->hindi/hinglish->hinglish, calls PUT /profile once (flag persisted). Wired in App.tsx:297. Screenshot shows Coach language = Hindi (selected) after startup picker chose Hindi - no manual Profile toggle needed.",
-        "imagePath": "images/i-20260707-514b-fix-r1.png",
+        "description": "Re-fix confirm (reopen 'Fix it'). Root cause: handleRestore unconditionally showed 'Purchases restored' because the backend returns HTTP 200 {restored:false} (no throw). Fix ALREADY in HEAD: handleRestore reads res.data.restored and branches — success toast only when restored===true, else 'Nothing to restore / We couldn't find a previous purchase', keeping the catch for genuine network/5xx errors (SubscriptionSettings.tsx:180-201). NOTE: this QA account has an ACTIVE Pro subscription, so tapping Restore genuinely returns restored:true (correct success) — the false-success state needs a free/never-paid account and a one-shot toast, not capturable here; screenshot shows /settings/subscription with the Restore control present.",
+        "imagePath": "images/i-20260708-b7a4-fix-r2.png",
         "imagePaths": [
-          "images/i-20260707-514b-fix-r1.png"
+          "images/i-20260708-b7a4-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "9c87c106ddc82ea7b424772e4dc62f42f5966eb3",
+        "imageCommit": "83c23ebb8a8ccee804fe863cdd9c668c7957b861",
         "imageCommits": [
-          "9c87c106ddc82ea7b424772e4dc62f42f5966eb3"
+          "83c23ebb8a8ccee804fe863cdd9c668c7957b861"
         ],
-        "fixedAt": "2026-07-07T23:14:58.137Z",
+        "fixedAt": "2026-07-08T09:37:26.994Z",
         "by": "shakeebshaan",
-        "appCommit": "9c12cca1",
+        "appCommit": "901ace7f",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Hook is implemented and wired. Screenshot proves coach_language matches startup picker choice. One-shot with retry on failure."
+          "note": "Fix verified present in HEAD (SubscriptionSettings.tsx:180-201) — reopen 'Fix it' predates the build reaching device."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-07-08T09:10:06.557Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: SubscriptionSettings.handleRestore showed the 'Purchases restored' toast unconditionally in the try block; the backend returns HTTP 200 {restored:false} for a no-purchase account so axios never threw and the 'Nothing to restore' catch branch never ran. Fix: branch on res.data.restored (success toast only when restored===true, else the no-purchase message; catch still handles network/5xx), mirroring ChoosePlan. Proof: with the endpoint returning {restored:false} the screen now shows 'Nothing to restore / We couldn't find a previous purchase on this account.'",
+            "imagePath": "images/i-20260708-b7a4-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260708-b7a4-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "95a6beb663e3ca1a538c7ee90a9b823dc56ff3e9",
+            "imageCommits": [
+              "95a6beb663e3ca1a538c7ee90a9b823dc56ff3e9"
+            ],
+            "fixedAt": "2026-07-08T05:39:46.606Z",
+            "by": "shakeebshaan",
+            "appCommit": "9685a71f",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Owner-prescribed fix applied verbatim; tsc clean; proven end-to-end in-browser with a {restored:false} response showing the correct 'Nothing to restore' toast."
+            }
+          }
+        }
+      ],
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -19034,12 +19063,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "route": "/coach-chat",
-      "description": "[bug-hunt] Startup language picker promises the coach speaks your language but never sets coach_language - Hindi/Hinglish pickers still get an ENGLISH AI coach. The picker subtitle literally says 'apni bhasha mein baat karein' (talk in your language), yet setAppLocale() (src/pages/LanguagePicker.tsx:11) only calls i18n.changeLanguage + writes nyus_locale. The backend coach_language pref (drives AI reply language, shipped for i-20260707-lng1) is only settable from Profile > Preferences (ProfilePreferencesCard.tsx handleLangChange -> PUT /profile). Nothing bridges the two: grep shows nyus_locale is read nowhere except the i18n detector, and coach_language is written nowhere except the profile card. Expected: pick Hindi at startup -> UI AND coach replies in Hindi. Actual: coach replies in English until the user separately discovers the buried Profile toggle. Repro: fresh install -> pick Hindi -> onboard -> open coach chat -> replies are English; GET /profile shows coach_language english. Fix: picker is pre-auth, so stash the choice (e.g. from nyus_locale) and apply it to coach_language at login/onboarding finalize (map hi->hindi, hinglish->hinglish, en->english).",
+      "id": "i-20260708-b7a4",
+      "route": "/settings/subscription",
+      "description": "[bug-hunt] Subscription screen shows a FALSE 'Purchases restored' success even when there is nothing to restore. FILE: src/pages/SubscriptionSettings.tsx handleRestore (~lines 177-197). The 'Restore previous purchase' button POSTs /payments/restore-purchases and UNCONDITIONALLY shows the success toast 'Purchases restored / Your subscription has been refreshed' in the try block - it never inspects the response. But the backend (RestoreSubscriptionResource, BACKEND backend.py:2955-2959) returns HTTP 200 with {restored:false, reason:'no active subscription found'} when there is no valid subscription. Because it is a 200 (not 4xx), axios does NOT throw, so the code never reaches the 'Nothing to restore' catch branch - that branch only fires on real network/5xx errors. EXPECTED: a user with no prior purchase taps Restore -> 'Nothing to restore / We couldn't find a previous purchase on this account'. ACTUAL: they get 'Purchases restored / Your subscription has been refreshed' (false success), then load() re-fetches and the card still shows status 'none' - the toast contradicts the screen. REPRO: log in as a free/never-paid account -> /settings/subscription -> tap 'Restore previous purchase' -> false success toast. FIX: read response.data.restored from the POST and branch on it (success toast only when restored===true; otherwise the no-purchases message), mirroring ChoosePlan.handleRestorePurchases which already gates its success toast on the response payload. Keep the catch branch for genuine network/5xx errors.",
       "needsReview": false,
-      "resolvedAt": "2026-07-09T07:00:29.947Z",
+      "resolvedAt": "2026-07-09T07:00:51.984Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T07:00:29.947Z"
+      "archivedAt": "2026-07-09T07:00:51.984Z"
     }
   ]
 }
