@@ -18952,45 +18952,79 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "id": "i-20260707-c3b9",
-      "createdAt": "2026-07-07T20:40:09.297Z",
+      "id": "i-20260707-a671",
+      "createdAt": "2026-07-07T14:25:56.614Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "imagePath": "images/i-20260707-a671.jpg",
+      "imageCommit": "96373816cd6d0d52a4c88d9d84c4fcfd5161ae9a",
+      "imagePaths": [
+        "images/i-20260707-a671.jpg"
+      ],
+      "imageCommits": [
+        "96373816cd6d0d52a4c88d9d84c4fcfd5161ae9a"
+      ],
+      "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Model usage: (1) Headless tick.ps1 (this fix loop) = claude-sonnet-4-6 — Fable cannot run headless (exits 1). (2) Interactive Claude Code session = Fable 5 (settings.json). (3) All other loops via runner.ps1 = Fable as primary, Opus as fallback on rate-limit. Recent commits show Co-Authored-By: Claude Fable 5 from interactive sessions. This tick uses sonnet-4-6.",
-        "imagePath": "images/i-20260707-c3b9-fix-r1.png",
+        "description": "Reopen fix: expanded the metrics summary block to cover every tracked metric with day-over-day deltas. Now shows: Total users, New today/7d/30d, DAU/WAU/MAU, Activation rate, Stickiness (DAU/MAU %), Retention D1/D7/D30, Active plans, Paid subscribers, Paid revenue, Workouts completed 7d, Meals logged 7d, Meal logging adoption %, AI cost 30d. Each metric shows a colored delta arrow vs previous snapshot. Grid layout (auto-fill 200px cols) fits all metrics without overflow.",
+        "imagePath": "images/i-20260707-a671-fix-r2.png",
         "imagePaths": [
-          "images/i-20260707-c3b9-fix-r1.png"
+          "images/i-20260707-a671-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "2eb66cab03224563c45a9179a921b3801cafad6f",
+        "imageCommit": "9d60a8f4c5a311a41fcc519a9b3e275d5e66ed28",
         "imageCommits": [
-          "2eb66cab03224563c45a9179a921b3801cafad6f"
+          "9d60a8f4c5a311a41fcc519a9b3e275d5e66ed28"
         ],
-        "fixedAt": "2026-07-07T23:16:44.710Z",
+        "fixedAt": "2026-07-07T23:17:04.594Z",
         "by": "shakeebshaan",
+        "appCommit": "7de8171",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Informational question answered completely. Model policy documented in tick.ps1 and runner.ps1 comments."
+          "note": "Every metric from the board screenshot is now in the summary block with delta indicators. Grid layout handles all metrics cleanly."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-07-07T21:00:05.921Z",
+          "event": "reopened",
+          "note": "no summary of everysingle data and how its improved",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Data summary line added to Metrics section: reads total_users, MAU, DAU, revenue, retention, active_plans from the private metrics JSON and renders a one-line summary paragraph (e.g. '22 users · 8 MAU · 3 DAU · 15 active plans') before the metric grid.",
+            "imagePath": "images/i-20260707-a671-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260707-a671-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "87d3a972a735a718fb43274ac1434cf21811b907",
+            "imageCommits": [
+              "87d3a972a735a718fb43274ac1434cf21811b907"
+            ],
+            "fixedAt": "2026-07-07T19:01:02.422Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Board metrics tab code confirmed; summary renders from live private metrics data."
+            }
+          }
+        }
+      ],
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:58:30.103Z",
+      "resolvedAt": "2026-07-09T06:58:47.203Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:58:30.103Z"
+      "archivedAt": "2026-07-09T06:58:47.203Z"
     }
   ]
 }
