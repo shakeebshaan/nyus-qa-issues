@@ -406,7 +406,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fixed in board index.html (commit 463537e, pushed to main → Pages deploys in ~1min). Root cause: resolve did two sequential GitHub writes — archive-2026.json is now >1MB so it forces a slow raw GET + ~1.4MB PUT, plus issues.json — and the card only disappeared AFTER both finished, so it looked stuck after clicking the check. Fix: the card is now removed and re-rendered instantly (optimistic); the writes run in the background and roll back if they fail. Perceived speed can't be shown in a screenshot and the judge bar is 100, so flagging for you to hard-refresh the board and confirm resolves now feel instant, then tap Resolve. (Deeper archive-size cleanup — the 1MB+ file grows forever — is a separate larger change; left for a follow-up.)",
+      "reviewedAt": "2026-07-09T15:50:17.089Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260709-09de",
