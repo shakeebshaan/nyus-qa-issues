@@ -18952,31 +18952,30 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "createdAt": "2026-07-08T10:26:34.253Z",
       "status": "resolved",
       "fix": null,
       "history": [],
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "activity",
-        "accuracy"
+        "social",
+        "fixed-awaiting-verify"
       ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-bw0v",
-      "route": "/activity",
-      "description": "[bug-hunt] Activity: completed BODYWEIGHT-only workouts are invisible to the weekly consistency + volume surfaces.\n\nThe \"Workout sessions this week\" weekday dots (TodaysActivityCard) and the Exercise Volume chart both mark a day active only when daily_volume_history[].volume > 0. A bodyweight exercise logs weight_kg=0, so its volume = reps*0 = 0. A calisthenics athlete who finishes push-up/pull-up/dip sessions daily still sees 0/7 sessions all week, and the whole Exercise Volume card is hidden (Activity.tsx gate ~L932: only renders when some day volume>0).\n\nSession-completion data exists independently of volume: GET /activity/history returns summary.total_sessions + per-session records regardless of load. The dots/chart just use the wrong signal.\n\nFix: mark a weekday dot \"done\" when a session was COMPLETED that day (not merely volume>0). Cleanest = backend adds a per-day session_completed / session_count field to daily_volume_history; FE-only fix is limited because the activity/overview payload carries no per-day completion flag today.\n\nFiles: src/components/activity/TodaysActivityCard.tsx (weekDots hasSession = point.volume>0, ~L87), src/pages/Activity.tsx (volume-chart render gate ~L932-934). Found by the /activity page-guardian loop; cross-checked vs prod /activity/overview + /activity/history for QA acct.\n\nUPDATE 2026-07-08 (page-guardian): FRONTEND half SHIPPED (commit 39734010) - TodaysActivityCard weekDots now reads daily_volume_history[].session_count when present (falls back to volume>0, zero regression). REMAINING = BACKEND: emit session_count (completed WorkoutSessionLog count per day) on activity/overview daily_volume_history. Card stays OPEN for that backend field.",
+      "createdAt": "2026-07-08T10:37:18Z",
+      "id": "i-20260708-7c1e",
+      "route": "/social",
+      "description": "[bug-hunt] Challenges: accepting/declining ONE challenge invite spins & disables the Join/Decline buttons on ALL other invited challenge cards. ChallengesView.tsx uses a single shared mutation per action (joinMutation / declineMutation); each card's button keys its spinner + disabled state purely off `joinMutation.isPending` / `declineMutation.isPending` (lines ~448-469), which is one global boolean, not per-challenge. Repro: have >=2 pending challenge invites (my_status === 'invited') visible in the Active tab; tap Join on card #1 -> every invited card's Join button simultaneously shows the Loader2 spinner and becomes disabled until that one request settles (same for Decline). Expected: only the tapped card shows a pending state; the others stay actionable. Fix: track the in-flight challengeId (e.g. gate on `joinMutation.isPending && joinMutation.variables === challenge.id`) so only the acted-on card shows the spinner/disabled.",
       "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED both repos (awaiting on-device confirm / owner resolve). Root cause exactly as filed: the Workout",
-      "reviewedAt": "2026-07-08T10:33:41.667Z",
+      "reviewReason": "FIXED in src (commit 8def0326, pushed to main) + passing regression test in test/ChallengesView.test.tsx ('acting on one invited card leaves the OTHER invited cards actionable'). Root cause as filed: Join/Decline gated on the shared global joinMutation/declineMutation.isPending. Fix gates each invited card on mutation.variables === challenge.id (isJoining/isDeclining/isActing) so only the tapped card shows the spinner/disabled; other invited cards stay actionable. Not auto-resolving with a screenshot: bar=100 and this needs >=2 pending challenge invites plus an in-flight request to demonstrate, which a single headless /social capture can't stage. Please verify on-device or confirm resolve.",
+      "reviewedAt": "2026-07-08T10:49:44.646Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-09T06:55:40.652Z",
+      "resolvedAt": "2026-07-09T06:55:57.920Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:55:40.652Z"
+      "archivedAt": "2026-07-09T06:55:57.920Z"
     }
   ]
 }
