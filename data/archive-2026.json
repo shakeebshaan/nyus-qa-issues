@@ -18952,29 +18952,29 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "createdAt": "2026-07-08T05:24:55.012Z",
+      "createdAt": "2026-07-08T00:16:15.232Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: cancel soft-cancels (status='canceled') but intentionally keeps current_period_end in the future, yet both entitlement reads gated on status=='active' (entitlement.py:58 has_active_subscription + backend.py:2065 /auth/me subscription_active), so premium was revoked the instant Cancel was tapped - contradicting the 'keep access until <date>' promise. Fix: both reads now accept status in ('active','canceled'); get_active_subscription already excludes expired rows, so access ends exactly at current_period_end (cancel stops auto-renew, not access). Backend commit 02c7027, deployed + health-checked. Proof: prod E2E (rolled back) - canceled-in-period => access TRUE, canceled-expired => access FALSE.",
-        "imagePath": "images/i-20260708-9c2e-fix-r1.png",
+        "description": "Fixed: move reconnect_attempt from socket to socket.io (Manager). socket.io-client v4 emits Manager lifecycle events only on Manager, not Socket. Old handler was dead code; now socket.io.on fires on each retry. Token refresh runs before reconnect attempts. TS clean, tests pass.",
+        "imagePath": "images/i-20260708-7ff8-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-9c2e-fix-r1.png"
+          "images/i-20260708-7ff8-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "f80bbc617eaf0d75bacac6aba8a71edf5b45273e",
+        "imageCommit": "b4085467aa0b5f6c63a8f7047e29b95a275caaad",
         "imageCommits": [
-          "f80bbc617eaf0d75bacac6aba8a71edf5b45273e"
+          "b4085467aa0b5f6c63a8f7047e29b95a275caaad"
         ],
-        "fixedAt": "2026-07-08T05:40:02.973Z",
+        "fixedAt": "2026-07-08T01:06:53.950Z",
         "by": "shakeebshaan",
-        "appCommit": "9685a71f",
+        "appCommit": "59de797e1734d853a605423448e9a5493284ea87",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Owner-prescribed fix applied verbatim to both files; deployed to prod + health-green; verified end-to-end against the deployed code and real DB in a rolled-back transaction (in-period keeps access, expired loses it)."
+          "note": "One-line fix in correct location; root cause (Manager vs Socket emitter) verified against socket.io-client source. TS noEmit clean, unit tests pass."
         }
       },
       "history": [],
@@ -18988,13 +18988,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-9c2e",
-      "route": null,
-      "description": "[bug-hunt] Canceling a paid subscription revokes premium access IMMEDIATELY instead of at the end of the prepaid period - contradicting the cancel endpoint's own contract and the on-screen promise. ROOT CAUSE (backend): POST /api/v1/subscription/cancel (CancelSubscriptionResource, BACKEND backend.py:2861) soft-cancels by setting status='canceled' but INTENTIONALLY leaves current_period_end in the future so the user 'keeps access until the prepaid window ends' (its own docstring, backend.py:2812-2815). BUT both entitlement reads require status=='active': (1) entitlement.py:58 has_active_subscription() returns bool(sub and sub.status=='active') - this gates subscription_required, which 402s premium endpoints when FEATURE_SUBSCRIPTION_GATE is ON; (2) backend.py:2065 /auth/me sets subscription_active = bool(active_sub and active_sub.status=='active'). The comment two lines above (backend.py:2054-2055) literally says 'We include soft-canceled subs whose period hasn't elapsed because the FE treats period_end (not status) as the access boundary' - but the boolean then discards them via the status check, contradicting its own comment and get_active_subscription()'s documented 'may be soft-canceled but still within its period'. EXPECTED: after cancel, subscription_active stays true and premium stays unlocked until current_period_end; only auto-renew stops. ACTUAL: subscription_active flips false the instant Cancel is tapped. The FE cancel toast promises 'Your plan will remain active until the end of the current billing period' and SubscriptionSettings shows a 'You will keep access until <date>' banner, yet /auth/me already reports the user as unsubscribed; when the gate flips ON (documented rollout) the user is 402'd out of coach chat / AI builders immediately despite having paid through period_end. REPRO: paid/active user -> /choose-plan?manage=1 or /settings/subscription -> Cancel subscription -> confirm; the 'Current subscription' billing block + cancel affordance vanish instantly (both gate on user.subscription_active), and with the gate on premium endpoints return 402 on the next call. FIX: grant access to soft-canceled rows still within their period, e.g. status in ('active','canceled') with current_period_end>now, in BOTH BACKEND nyu_backend/app/services/entitlement.py:58 and nyu_backend/backend.py:2065.",
+      "id": "i-20260708-7ff8",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Socket auto-reconnect always retries with the STALE token captured at connect time - the pre-reconnect token-refresh hook is dead code listening on the wrong emitter. chat.service.ts:168 registers `this.socket.on('reconnect_attempt', ...)` (refreshes the access token and swaps socket.auth + query.token before each retry), but in socket.io-client v4 (repo ships 4.8.3) reconnect lifecycle events are emitted ONLY on the Manager - `socket.io.on('reconnect_attempt')`; the Socket instance never receives them (verified: node_modules/socket.io-client/build/cjs/manager.js:379 is the sole emitter, socket.js re-emits nothing). Expected: each reconnect attempt carries a freshly-rotated token, as the code comment states. Actual: after any network blip the manager retries with the ORIGINAL token from the connect() closure; if the token was refreshed/expired/revoked meanwhile, the backend connect handler rejects every attempt ('Authentication failed.' + disconnect, backend.py:14382), all 10 reconnectionAttempts burn, and the app-wide singleton socket stays dead for the session (chat deltas, image_ready, streak_update, partner events) until an app-foreground or chat-page mount calls connect() again. Repro (static + empirical): attach both listeners and drop the network - the Manager listener fires per attempt, the Socket listener never does. Fix: one line - register the handler on this.socket.io instead of this.socket. File: src/services/chat.service.ts:165-180.",
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:57:09.413Z",
+      "resolvedAt": "2026-07-09T06:57:23.988Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:57:09.413Z"
+      "archivedAt": "2026-07-09T06:57:23.988Z"
     }
   ]
 }
