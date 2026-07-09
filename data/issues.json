@@ -35,12 +35,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Owner ruling applied (reviewReply 'achievable calorie-derived rate'). calcOnboardingStats now returns achievableWeeklyChange = the calorie-derived pace (daily energy delta) captured BEFORE the date-driven override; PostPlanTour's Weekly-pace label reads it (src/pages/onboarding/PostPlanTour.tsx:261), matching PlanReadyOverview which already derives pace the same way. The date-driven rate is preserved only for trajectory projection + other consumers. So the tour no longer over-promises vs what the built plan delivers. tsc clean; PostPlanTour + onboarding-calc(-extra) = 58 tests green. NOTE: the Weekly-pace hero renders only after completing the full onboarding finalize (always-custom builders -> PostPlanTour), so it is not reachable via a direct headless route — attached capture is the onboarding flow entry (closest faithful frame); the number change is logic, verified by the tests above.",
+        "imagePath": "images/i-20260708-pc1a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-pc1a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1a8073fda710939e79b16d72d23ff7b252ed9259",
+        "imageCommits": [
+          "1a8073fda710939e79b16d72d23ff7b252ed9259"
+        ],
+        "fixedAt": "2026-07-09T14:46:33.242Z",
+        "by": "shakeebshaan",
+        "appCommit": "c31f23cd",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Implements the owner ruling exactly (show achievable calorie-derived rate; both surfaces match); verified by 58 green tests incl. PostPlanTour + onboarding-calc. Capture shows the onboarding flow entry — the pace label itself lives on the post-finalize tour hero, not reachable via a direct headless route."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Product call needed (not auto-fixing per issue author). Two DIFFERENT formulas feed the same 'Weekly pace kg/week' label: PostPlanTour (happy-path, every user) shows the DATE-DRIVEN rate from calcOnboardingStats (goal_delta / weeks_to_target, src/lib/onboarding-calc.ts:104-118); PlanReadyOverview (retry-only surface, src/pages/onboarding/custom/PlanReadyOverview.tsx:110-124) shows the CALORIE-DERIVED rate the built plan actually delivers ((serverTarget - tdee)*7/7700). When an aggressive-but-acknowledgeable timeline needs a faster loss than the safe deficit cap allows, the tour OVER-PROMISES (worked example: 0.88 vs 0.45 kg/wk). Owner decision: (1) which is the honest number to display - achievable calorie-derived rate, or required-to-hit-date rate? (2) once chosen, make BOTH screens show the same one. Can't pick without a product ruling; flagging rather than guessing.",
-      "reviewedAt": "2026-07-08T19:49:17.116Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "chievable calorie-derived rate",
       "reviewRepliedAt": "2026-07-08T20:36:50.532Z",
