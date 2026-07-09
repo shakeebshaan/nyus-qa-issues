@@ -18952,30 +18952,31 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
+      "createdAt": "2026-07-08T10:26:34.253Z",
       "status": "resolved",
       "fix": null,
       "history": [],
       "author": "shakeebshaan",
       "tags": [
-        "social",
-        "fixed-awaiting-verify"
+        "bug-hunt",
+        "activity",
+        "accuracy"
       ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "createdAt": "2026-07-08T10:37:18Z",
-      "id": "i-20260708-b2f9",
-      "route": "/social",
-      "description": "[bug-hunt] Direct-message send fails SILENTLY - no error feedback, no retry. MessagesView.tsx sendMessageMutation (lines ~70-83) has an onSuccess (clears the input + invalidates the thread) but NO onError. If POST /messages fails (offline, 5xx, timeout) nothing happens: no toast, no error state, the message never appears in the thread, and unlike coach chat there is no optimistic echo or outbox. The composer re-enables (isPending=false) with the typed text still present, so the user cannot tell the send failed vs is still pending. Repro: open a friend DM thread, go offline (or force a 500 on /messages), type a message, tap Send -> the button briefly disables then re-enables, the message silently drops with zero feedback. Expected: a failure toast (ideally retain text for retry). Fix: add an onError to the mutation that fires toast.error (and keeps the text), matching the error-toast pattern used elsewhere in the app.",
+      "id": "i-20260708-bw0v",
+      "route": "/activity",
+      "description": "[bug-hunt] Activity: completed BODYWEIGHT-only workouts are invisible to the weekly consistency + volume surfaces.\n\nThe \"Workout sessions this week\" weekday dots (TodaysActivityCard) and the Exercise Volume chart both mark a day active only when daily_volume_history[].volume > 0. A bodyweight exercise logs weight_kg=0, so its volume = reps*0 = 0. A calisthenics athlete who finishes push-up/pull-up/dip sessions daily still sees 0/7 sessions all week, and the whole Exercise Volume card is hidden (Activity.tsx gate ~L932: only renders when some day volume>0).\n\nSession-completion data exists independently of volume: GET /activity/history returns summary.total_sessions + per-session records regardless of load. The dots/chart just use the wrong signal.\n\nFix: mark a weekday dot \"done\" when a session was COMPLETED that day (not merely volume>0). Cleanest = backend adds a per-day session_completed / session_count field to daily_volume_history; FE-only fix is limited because the activity/overview payload carries no per-day completion flag today.\n\nFiles: src/components/activity/TodaysActivityCard.tsx (weekDots hasSession = point.volume>0, ~L87), src/pages/Activity.tsx (volume-chart render gate ~L932-934). Found by the /activity page-guardian loop; cross-checked vs prod /activity/overview + /activity/history for QA acct.\n\nUPDATE 2026-07-08 (page-guardian): FRONTEND half SHIPPED (commit 39734010) - TodaysActivityCard weekDots now reads daily_volume_history[].session_count when present (falls back to volume>0, zero regression). REMAINING = BACKEND: emit session_count (completed WorkoutSessionLog count per day) on activity/overview daily_volume_history. Card stays OPEN for that backend field.",
       "needsReview": true,
-      "reviewReason": "FIXED in src (commit 14ed381a, pushed to main) + passing regression test (test/MessagesView.send.test.tsx). Root cause exactly as filed: sendMessageMutation had onSuccess but no onError, so a failed POST /messages dropped silently (no toast, text lingered looking half-sent). Fix adds onError -> destructive toast ('Message not sent. Check your connection and try again.') and deliberately keeps the typed text in the composer for retry. Not auto-resolving with a screenshot: bar=100 and proving it needs a forced offline/5xx failure inside an authenticated DM thread, which a single headless /social capture can't stage. Please verify on-device or confirm resolve.",
-      "reviewedAt": "2026-07-08T10:49:54.856Z",
+      "reviewReason": "FIXED + DEPLOYED both repos (awaiting on-device confirm / owner resolve). Root cause exactly as filed: the Workout",
+      "reviewedAt": "2026-07-08T10:33:41.667Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-09T06:55:16.563Z",
+      "resolvedAt": "2026-07-09T06:55:40.652Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:55:16.563Z"
+      "archivedAt": "2026-07-09T06:55:40.652Z"
     }
   ]
 }
