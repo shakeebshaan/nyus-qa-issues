@@ -18952,62 +18952,32 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "createdAt": "2026-07-08T06:55:23.362Z",
+      "createdAt": "2026-07-08T05:24:55.012Z",
       "status": "resolved",
       "fix": {
-        "description": "Re-fix confirm (reopen 'Fix it'). Root cause: logSetMutation.onSuccess toasted every logged set, so the checkbox auto-log path (loops one mutate per prior set) stacked 4-5 toasts per tap. Fix ALREADY in HEAD: the per-set toast is gated on isModalOpen.current (Activity.tsx:472) — only manual picker logging toasts per set; the checkbox auto-log runs with the picker CLOSED and shows just its single '{exercise} auto-logged' summary. NOTE: needs an exercise with prior-session data (checkbox shown) in a live session; not drivable in a static capture — screenshot shows /activity rendering correctly.",
-        "imagePath": "images/i-20260708-2da8-fix-r2.png",
+        "description": "Root cause: cancel soft-cancels (status='canceled') but intentionally keeps current_period_end in the future, yet both entitlement reads gated on status=='active' (entitlement.py:58 has_active_subscription + backend.py:2065 /auth/me subscription_active), so premium was revoked the instant Cancel was tapped - contradicting the 'keep access until <date>' promise. Fix: both reads now accept status in ('active','canceled'); get_active_subscription already excludes expired rows, so access ends exactly at current_period_end (cancel stops auto-renew, not access). Backend commit 02c7027, deployed + health-checked. Proof: prod E2E (rolled back) - canceled-in-period => access TRUE, canceled-expired => access FALSE.",
+        "imagePath": "images/i-20260708-9c2e-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-2da8-fix-r2.png"
+          "images/i-20260708-9c2e-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "fa7af226c6aedcc0a43e39335ed035800a6796da",
+        "imageCommit": "f80bbc617eaf0d75bacac6aba8a71edf5b45273e",
         "imageCommits": [
-          "fa7af226c6aedcc0a43e39335ed035800a6796da"
+          "f80bbc617eaf0d75bacac6aba8a71edf5b45273e"
         ],
-        "fixedAt": "2026-07-08T09:37:51.690Z",
+        "fixedAt": "2026-07-08T05:40:02.973Z",
         "by": "shakeebshaan",
-        "appCommit": "901ace7f",
+        "appCommit": "9685a71f",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Fix verified present in HEAD (Activity.tsx:472 gates per-set toast on isModalOpen; auto-log path keeps single summary toast) — reopen 'Fix it' predates the build reaching device."
+          "note": "Owner-prescribed fix applied verbatim to both files; deployed to prod + health-green; verified end-to-end against the deployed code and real DB in a rolled-back transaction (in-period keeps access, expired loses it)."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-08T09:09:15.004Z",
-          "event": "reopened",
-          "note": "Fix it",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: logSetMutation.onSuccess toasted 'Set logged' for EVERY set, so the quick-complete checkbox auto-log path (handleCheckboxToggle logs every prior-session set with the picker closed) stacked 4-5 toasts from a single tap, breaking the calm-design no-popups-on-routine-taps rule. Fix: the per-set onSuccess toast now fires only when the picker is actually open (isModalOpen.current, Activity.tsx:472) i.e. manual logging; the auto-log path keeps just its single '{exercise} auto-logged' summary toast. Verified: tsc clean, ExerciseWheelPicker.test.tsx 48/48 green. Capture = authenticated /activity screen (toast-stacking is behavioral, not a static frame).",
-            "imagePath": "images/i-20260708-2da8-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260708-2da8-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "0a2adee11eb851bfe4be35e673f0cb38f602d503",
-            "imageCommits": [
-              "0a2adee11eb851bfe4be35e673f0cb38f602d503"
-            ],
-            "fixedAt": "2026-07-08T07:32:49.506Z",
-            "by": "shakeebshaan",
-            "appCommit": "d792e4cc",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 100,
-              "bar": 100,
-              "note": "Per-set toast now gated on isModalOpen.current so auto-log emits one summary toast only; matches the described fix exactly; tsc clean."
-            }
-          }
-        }
-      ],
+      "history": [],
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -19018,13 +18988,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-2da8",
-      "route": "/activity",
-      "description": "[bug-hunt] Quick-complete checkbox auto-log spams one toast per set (4-5 stacked toasts from a single tap), breaking the calm-design \"no popups on routine taps\" rule. logSetMutation.onSuccess (src/pages/Activity.tsx:464-469) unconditionally shows a \"Set logged. Set N: X reps x Ykg\" toast for EVERY logged set. Activity.handleCheckboxToggle (src/pages/Activity.tsx:759-766) loops over the previous session's sets and calls logSetMutation.mutateAsync once per set, then fires an extra \"{exercise} auto-logged\" toast.\n\nRepro: on /activity, find an exercise that has prior-session data (so the quick-complete checkbox is shown, not the manual \"+\" button), tap the checkbox once. Expected: a single confirmation toast. Actual: for a 4-set exercise the user gets 4x \"Set logged...\" toasts PLUS the \"{exercise} auto-logged\" toast = 5 stacked toasts from one tap.\n\nFix: suppress the per-set onSuccess toast on the auto-log path (e.g. thread a silent flag through the mutation variables, or only toast when the picker is actually open), keeping just the single \"auto-logged\" summary toast.",
+      "id": "i-20260708-9c2e",
+      "route": null,
+      "description": "[bug-hunt] Canceling a paid subscription revokes premium access IMMEDIATELY instead of at the end of the prepaid period - contradicting the cancel endpoint's own contract and the on-screen promise. ROOT CAUSE (backend): POST /api/v1/subscription/cancel (CancelSubscriptionResource, BACKEND backend.py:2861) soft-cancels by setting status='canceled' but INTENTIONALLY leaves current_period_end in the future so the user 'keeps access until the prepaid window ends' (its own docstring, backend.py:2812-2815). BUT both entitlement reads require status=='active': (1) entitlement.py:58 has_active_subscription() returns bool(sub and sub.status=='active') - this gates subscription_required, which 402s premium endpoints when FEATURE_SUBSCRIPTION_GATE is ON; (2) backend.py:2065 /auth/me sets subscription_active = bool(active_sub and active_sub.status=='active'). The comment two lines above (backend.py:2054-2055) literally says 'We include soft-canceled subs whose period hasn't elapsed because the FE treats period_end (not status) as the access boundary' - but the boolean then discards them via the status check, contradicting its own comment and get_active_subscription()'s documented 'may be soft-canceled but still within its period'. EXPECTED: after cancel, subscription_active stays true and premium stays unlocked until current_period_end; only auto-renew stops. ACTUAL: subscription_active flips false the instant Cancel is tapped. The FE cancel toast promises 'Your plan will remain active until the end of the current billing period' and SubscriptionSettings shows a 'You will keep access until <date>' banner, yet /auth/me already reports the user as unsubscribed; when the gate flips ON (documented rollout) the user is 402'd out of coach chat / AI builders immediately despite having paid through period_end. REPRO: paid/active user -> /choose-plan?manage=1 or /settings/subscription -> Cancel subscription -> confirm; the 'Current subscription' billing block + cancel affordance vanish instantly (both gate on user.subscription_active), and with the gate on premium endpoints return 402 on the next call. FIX: grant access to soft-canceled rows still within their period, e.g. status in ('active','canceled') with current_period_end>now, in BOTH BACKEND nyu_backend/app/services/entitlement.py:58 and nyu_backend/backend.py:2065.",
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:56:55.477Z",
+      "resolvedAt": "2026-07-09T06:57:09.413Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:56:55.477Z"
+      "archivedAt": "2026-07-09T06:57:09.413Z"
     }
   ]
 }
