@@ -18952,52 +18952,45 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "id": "i-20260708-53f2",
-      "createdAt": "2026-07-08T00:00:20.847Z",
+      "id": "i-20260707-c3b9",
+      "createdAt": "2026-07-07T20:40:09.297Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260708-53f2-0.jpg",
-      "imageCommit": "668a1fcbd85dced45d3fd97fb9df84227b59e7a6",
-      "imagePaths": [
-        "images/i-20260708-53f2-0.jpg",
-        "images/i-20260708-53f2-1.jpg"
-      ],
-      "imageCommits": [
-        "668a1fcbd85dced45d3fd97fb9df84227b59e7a6",
-        "6e2c858cfd5d3816d26d770fbb3ac4ee931de95f"
-      ],
-      "imagePrivate": true,
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "status": "resolved",
       "fix": {
-        "description": "Fixed: archive-2026.json is 1027KB which exceeds GitHub Contents API 1MB limit causing empty j.content and JSON.parse('') crash. Added raw.githubusercontent.com fallback in loadJson() when j.content is empty. The rawUrl() helper already existed in the board source. Board now loads all 14 issues including archived ones without error.",
-        "imagePath": "images/i-20260708-53f2-fix-r1.png",
+        "description": "Model usage: (1) Headless tick.ps1 (this fix loop) = claude-sonnet-4-6 — Fable cannot run headless (exits 1). (2) Interactive Claude Code session = Fable 5 (settings.json). (3) All other loops via runner.ps1 = Fable as primary, Opus as fallback on rate-limit. Recent commits show Co-Authored-By: Claude Fable 5 from interactive sessions. This tick uses sonnet-4-6.",
+        "imagePath": "images/i-20260707-c3b9-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-53f2-fix-r1.png"
+          "images/i-20260707-c3b9-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "f6228b0d18e46e067c7b7bcf2cb467bc09170ade",
+        "imageCommit": "2eb66cab03224563c45a9179a921b3801cafad6f",
         "imageCommits": [
-          "f6228b0d18e46e067c7b7bcf2cb467bc09170ade"
+          "2eb66cab03224563c45a9179a921b3801cafad6f"
         ],
-        "fixedAt": "2026-07-08T01:07:53.274Z",
+        "fixedAt": "2026-07-07T23:16:44.710Z",
         "by": "shakeebshaan",
-        "appCommit": "8cd0e38b1f91d7bc67259d60097b057864b9cca7",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Root cause precisely identified (1027KB > 1MB limit). Fix uses existing rawUrl helper. Board screenshot confirms 14 issues load cleanly."
+          "note": "Informational question answered completely. Model policy documented in tick.ps1 and runner.ps1 comments."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:58:17.544Z",
+      "resolvedAt": "2026-07-09T06:58:30.103Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:58:17.544Z"
+      "archivedAt": "2026-07-09T06:58:30.103Z"
     }
   ]
 }
