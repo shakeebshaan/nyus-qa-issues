@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260709-slp1",
+      "createdAt": "2026-07-09T14:39:59.983Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "route": null,
+      "description": "[suggestion] Add a manual daily sleep log (hours + quality) so Weekly Review sleep data isn't wearable-only.\n\nProblem: sleep is asked ONCE at onboarding (baseline_sleep_hours in src/lib/healthScoreQuestions.ts) and otherwise only updates via Health Connect sync (src/services/health-connect.service.ts sleep_minutes) for users with a paired wearable. Weekly Review already has an avg_sleep_hours field (src/services/review.service.ts:31,67) and the FAQ (src/lib/faq-fallback.ts) explicitly promises the coach factors sleep into training-load adjustments 'via check-ins' — but for the majority of Indian users without Health Connect/wearables paired, that number is a single stale onboarding answer forever, so the promised adaptive coaching input is effectively dead data for them.\n\nEvidence: grep for sleep across src/ shows onboarding intake (coach-intake-questions.ts, healthScoreQuestions.ts) + passive wearable sync (health-connect.service.ts) + a review consumer field (review.service.ts) but NO manual daily log endpoint/UI anywhere — no sleep entry screen or dashboard card exists (Dashboard.tsx only has Weight/Diet/Activity gradient cards).\n\nV1 scope: one-tap morning entry (hours slider 4-10 + quality: poor/ok/great) surfaced as a small prompt on Dashboard for users without Health Connect sleep data today, written to the existing daily-log table backing avg_sleep_hours; no new card/chart needed for v1, just feeding the number the review already reads. Reuse existing notification-preference categories for an optional morning reminder (reminderSync.ts already has a sleep slot wired for something else at 22:00 — confirm no collision).\n\nEffort: small-medium — 1 backend endpoint/field (or reuse if daily_log already has a sleep_hours column), 1 lightweight modal component, 1 conditional Dashboard prompt (skip if Health Connect already supplying today’s value).",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260708-pc1a",
       "createdAt": "2026-07-08T19:37:34.425Z",
       "author": "shakeebshaan",
