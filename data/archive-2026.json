@@ -18952,46 +18952,49 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "id": "i-20260708-4509",
-      "createdAt": "2026-07-08T00:01:24.673Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "createdAt": "2026-07-08T00:16:15.232Z",
       "status": "resolved",
       "fix": {
-        "description": "Fixed: tick.ps1 updated to --model claude-opus-4-8 (was claude-sonnet-4-6). All 30-min headless ticks now use opus-4-8 workflow mode per owner directive. File: C:\\Users\\Administrator\\nyus-qa-loop\\tick.ps1 line 46.",
-        "imagePath": "images/i-20260708-4509-fix-r1.png",
+        "description": "Fixed: added page param to ChatHistoryRequest + total field to ChatHistory; getHistory() forwards page to /coach/history and returns total from response; CoachChat.tsx adds loadOlderMessages() with olderPage/hasMoreMessages/isLoadingOlder state; 'Load earlier messages' pill renders above the message list when server total > 30. Button uses page-based pagination against /coach/history (not before_id which that endpoint ignores). TS clean, tests pass.",
+        "imagePath": "images/i-20260708-1898-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-4509-fix-r1.png"
+          "images/i-20260708-1898-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "0a87721846a2ec652223a013f6247d780d2bad37",
+        "imageCommit": "40f82ab8954b8d0c2926c0f6d954d64fd4142af5",
         "imageCommits": [
-          "0a87721846a2ec652223a013f6247d780d2bad37"
+          "40f82ab8954b8d0c2926c0f6d954d64fd4142af5"
         ],
-        "fixedAt": "2026-07-08T01:08:30.618Z",
+        "fixedAt": "2026-07-08T01:07:30.961Z",
         "by": "shakeebshaan",
-        "appCommit": "8cd0e38b1f91d7bc67259d60097b057864b9cca7",
+        "appCommit": "59de797e1734d853a605423448e9a5493284ea87",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Single-line model flag change; correct ID claude-opus-4-8."
+          "note": "Full pagination flow implemented: page state tracks loaded pages, hasMore derived from total vs loaded count, pill renders conditionally. TS noEmit clean."
         }
       },
       "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "id": "i-20260708-1898",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach chat history is hard-capped at the newest 30 messages - older conversation is permanently unreachable in the UI. CoachChat.tsx:91 fetches chatService.getHistory({ limit: 30 }) once; nothing in the app ever passes before_id (ChatHistoryRequest.before_id has zero UI callers) and the message list has no top-reached loader (no loadMore/fetchNext/hasMore anywhere under coach-chat components or CoachChatMessageList). Scrolling to the top just dead-ends at the 30th-newest message. Since the AI answers every user message and also sends proactive messages, an active user exceeds 30 rows within a day or two - yesterday's plan discussion and coach advice silently vanish. Expected: reaching the top loads older messages (standard chat pattern) - the backend already supports it twice over: /coach/history has page+limit pagination and returns total (app/routes/coach.py:481-490), and legacy /chat/history supports before_id (backend.py:3882-3883). Gotcha for the fix: the FE service plumbs before_id (chat.service.ts:50-52) but the PRIMARY /coach/history endpoint ignores that param entirely (it is page-based) - wiring before_id through without touching the backend would silently re-fetch page 1; use page= against /coach/history or add before_id support server-side. Files: src/pages/CoachChat.tsx:89-97, src/services/chat.service.ts:47-58, src/components/coach/CoachChatMessageList.tsx.",
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:57:50.499Z",
+      "resolvedAt": "2026-07-09T06:58:04.048Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:57:50.499Z"
+      "archivedAt": "2026-07-09T06:58:04.048Z"
     }
   ]
 }
