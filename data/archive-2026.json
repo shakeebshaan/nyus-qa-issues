@@ -18952,30 +18952,50 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
+      "createdAt": "2026-07-08T17:24:00.000Z",
       "status": "resolved",
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the new-ingredient form has no servings control, but the payload sent the inherited ingServings from a previously-selected ingredient, silently multiplying the typed calories (e.g. 180 -> 540 kcal). Fix: hard-code servings:1 on the new-ingredient path in handleLogIngredient + reset ingServings when entering add-new mode. Proof: 'Ghar ka laddu' @ 180 kcal in the servings-less form -> logs exactly 180. 3 scoped tests green; board gate npm run test:unit exits 0.",
+        "imagePath": "images/i-20260708-f3a7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260708-f3a7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "87b552620d92f78c1a8e03349def3871c9743f2f",
+        "imageCommits": [
+          "87b552620d92f78c1a8e03349def3871c9743f2f"
+        ],
+        "fixedAt": "2026-07-08T17:37:21.405Z",
+        "by": "shakeebshaan",
+        "appCommit": "4d8dad10",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Deterministic invariant fix (new-ingredient form has no servings control -> log 1x); 1 scoped test asserts servings:1 with typed calories; proof shows the exact scenario."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
-      "tags": [
-        "social",
-        "fixed-awaiting-verify"
-      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "createdAt": "2026-07-08T10:37:18Z",
-      "id": "i-20260708-7c1e",
-      "route": "/social",
-      "description": "[bug-hunt] Challenges: accepting/declining ONE challenge invite spins & disables the Join/Decline buttons on ALL other invited challenge cards. ChallengesView.tsx uses a single shared mutation per action (joinMutation / declineMutation); each card's button keys its spinner + disabled state purely off `joinMutation.isPending` / `declineMutation.isPending` (lines ~448-469), which is one global boolean, not per-challenge. Repro: have >=2 pending challenge invites (my_status === 'invited') visible in the Active tab; tap Join on card #1 -> every invited card's Join button simultaneously shows the Loader2 spinner and becomes disabled until that one request settles (same for Decline). Expected: only the tapped card shows a pending state; the others stay actionable. Fix: track the in-flight challengeId (e.g. gate on `joinMutation.isPending && joinMutation.variables === challenge.id`) so only the acted-on card shows the spinner/disabled.",
-      "needsReview": true,
-      "reviewReason": "FIXED in src (commit 8def0326, pushed to main) + passing regression test in test/ChallengesView.test.tsx ('acting on one invited card leaves the OTHER invited cards actionable'). Root cause as filed: Join/Decline gated on the shared global joinMutation/declineMutation.isPending. Fix gates each invited card on mutation.variables === challenge.id (isJoining/isDeclining/isActing) so only the tapped card shows the spinner/disabled; other invited cards stay actionable. Not auto-resolving with a screenshot: bar=100 and this needs >=2 pending challenge invites plus an in-flight request to demonstrate, which a single headless /social capture can't stage. Please verify on-device or confirm resolve.",
-      "reviewedAt": "2026-07-08T10:49:44.646Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-09T06:55:57.920Z",
+      "id": "i-20260708-f3a7",
+      "route": "/nutrition",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "nutrition"
+      ],
+      "description": "[bug-hunt] Add-Food > Ingredients > 'Add new ingredient' logs the WRONG calories — a stale servings multiplier from a previously-selected ingredient is applied silently, and the new-ingredient form has no servings control to reveal or fix it.\n\nWHERE: src/components/nutrition/CustomMealModal.tsx (Ingredients tab). Backend confirms the multiply: app/routes/logging.py:708 -> total_calories = round(cals * servings) (also protein/carbs/fat * servings, 709-711); servings comes straight from the FE payload (logging.py:653).\n\nROOT CAUSE: `ingServings` state is NOT reset when the user enters 'Add new' mode. Reset happens only when a search result is SELECTED (CustomMealModal.tsx:570 sets ingServings=1) and after a successful log (line 167). The 'Add new ingredient with custom macros' button (line 546) does `setIsAddingNew(true); setSelectedIngredient(null);` but leaves ingServings untouched. The search-box onChange (line 538) also resets selectedIngredient/isAddingNew but NOT ingServings. Meanwhile the new-ingredient form (lines 592-608) renders only Name + Calories/Protein/Carbs/Fat — it has NO servings stepper (the stepper at 630-637 and the macro-total preview at 621-628 only render for a selectedIngredient), so the inherited servings value is invisible to the user.\n\nREPRO: /nutrition -> Add Food -> Ingredients tab -> search + select any ingredient (ingServings=1) -> tap the servings '+' to raise it to e.g. 3 -> now tap 'Add new ingredient with custom macros' -> enter 'Ghar ka laddu', calories 180 -> 'Add to Today'. Payload sends {calories_per_serving:180, servings:3}. Backend logs total_calories = round(180*3) = 540 kcal (and 3x the macros). EXPECTED: 180 kcal (the number the user typed, with no visible servings field implying 1x). ACTUAL: 540 kcal logged silently — day totals corrupted with no way to see why in the add-new form.\n\nFIX: reset ingServings to 1 when entering add-new mode (in the 'Add new' onClick and/or on ingredientQuery change), or add a servings control + macro-total preview to the new-ingredient form so the multiplier is visible and editable.",
+      "needsReview": false,
+      "resolvedAt": "2026-07-09T06:56:14.463Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:55:57.920Z"
+      "archivedAt": "2026-07-09T06:56:14.463Z"
     }
   ]
 }
