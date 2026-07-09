@@ -18952,50 +18952,79 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "createdAt": "2026-07-08T15:10:02.753Z",
+      "createdAt": "2026-07-08T06:55:23.362Z",
       "status": "resolved",
       "fix": {
-        "description": "Root cause: calculateBodyFat (Measurements.tsx) used the IMPERIAL Navy constants (86.010/163.205) but was fed cm, inflating men ~+6.5pts and pinning women at the 50% ceiling. Fix: switched both branches to the METRIC Navy form 495/(1.0324-0.19077*log10(waist-neck)+0.15456*log10(height))-450 fed cm directly (identical duplicate in onboarding BodyDiagram.tsx also fixed), and keyed the male/female branch off biological_sex ?? gender. All 3 body-fat screens now agree. Verified on /measurements: waist 85 / neck 38 / height 170cm male -> 17.8% (was 22.96%). Regression test added (test/BodyFatNavy.formula.test.ts, 6/6 green).",
-        "imagePath": "images/i-20260708-bd41-fix-r1.png",
+        "description": "Re-fix confirm (reopen 'Fix it'). Root cause: logSetMutation.onSuccess toasted every logged set, so the checkbox auto-log path (loops one mutate per prior set) stacked 4-5 toasts per tap. Fix ALREADY in HEAD: the per-set toast is gated on isModalOpen.current (Activity.tsx:472) — only manual picker logging toasts per set; the checkbox auto-log runs with the picker CLOSED and shows just its single '{exercise} auto-logged' summary. NOTE: needs an exercise with prior-session data (checkbox shown) in a live session; not drivable in a static capture — screenshot shows /activity rendering correctly.",
+        "imagePath": "images/i-20260708-2da8-fix-r2.png",
         "imagePaths": [
-          "images/i-20260708-bd41-fix-r1.png"
+          "images/i-20260708-2da8-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "3b730070dc7ee37ee2b1b5f7000495fa314729d4",
+        "imageCommit": "fa7af226c6aedcc0a43e39335ed035800a6796da",
         "imageCommits": [
-          "3b730070dc7ee37ee2b1b5f7000495fa314729d4"
+          "fa7af226c6aedcc0a43e39335ed035800a6796da"
         ],
-        "fixedAt": "2026-07-08T15:43:22.370Z",
+        "fixedAt": "2026-07-08T09:37:51.690Z",
         "by": "shakeebshaan",
-        "appCommit": "a25f4987",
+        "appCommit": "901ace7f",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Root-caused to imperial-constants-fed-cm; switched all 3 screens to metric form; verified 17.8% on the actual /measurements card (full-screen proof) matching the estimator; scoped regression test green."
+          "note": "Fix verified present in HEAD (Activity.tsx:472 gates per-set toast on isModalOpen; auto-log path keeps single summary toast) — reopen 'Fix it' predates the build reaching device."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-07-08T09:09:15.004Z",
+          "event": "reopened",
+          "note": "Fix it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: logSetMutation.onSuccess toasted 'Set logged' for EVERY set, so the quick-complete checkbox auto-log path (handleCheckboxToggle logs every prior-session set with the picker closed) stacked 4-5 toasts from a single tap, breaking the calm-design no-popups-on-routine-taps rule. Fix: the per-set onSuccess toast now fires only when the picker is actually open (isModalOpen.current, Activity.tsx:472) i.e. manual logging; the auto-log path keeps just its single '{exercise} auto-logged' summary toast. Verified: tsc clean, ExerciseWheelPicker.test.tsx 48/48 green. Capture = authenticated /activity screen (toast-stacking is behavioral, not a static frame).",
+            "imagePath": "images/i-20260708-2da8-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260708-2da8-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0a2adee11eb851bfe4be35e673f0cb38f602d503",
+            "imageCommits": [
+              "0a2adee11eb851bfe4be35e673f0cb38f602d503"
+            ],
+            "fixedAt": "2026-07-08T07:32:49.506Z",
+            "by": "shakeebshaan",
+            "appCommit": "d792e4cc",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Per-set toast now gated on isModalOpen.current so auto-log emits one summary toast only; matches the described fix exactly; tsc clean."
+            }
+          }
+        }
+      ],
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
-        "auto",
-        "accuracy"
+        "auto"
       ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "id": "i-20260708-bd41",
-      "route": "/measurements",
-      "description": "[bug-hunt] Measurements: the \"Estimated Body Fat (Navy Method)\" card uses the IMPERIAL (inches) Navy coefficients but is fed CENTIMETRE values, so every estimate is materially wrong.\n\ncalculateBodyFat (src/pages/Measurements.tsx:26-50) uses the inches-form constants - male: 86.010*log10(waist-neck) - 70.041*log10(height) + 36.76; female: 163.205*log10(waist+hip-neck) - 97.684*log10(height) - 78.387 - which are only valid when circumferences AND height are in INCHES. But it passes waist/neck/hip = value_cm (measurement logs are canonical cm) and heightCm straight in. Feeding cm into a log10-of-inches formula adds a fixed offset of (86.010-70.041)*log10(2.54)=+6.47 for men and (163.205-97.684)*log10(2.54)=+26.5 for women.\n\nNode-verified (man waist85/neck38/height178 cm; correct Navy ~16.5%): metric form 495/(1.0324-0.19077*log10(w-n)+0.15456*log10(h))-450 fed cm = 16.44%, imperial form fed inches = 16.49% (they AGREE = correct). This code returns 22.96% - +6.5 too high. Woman waist75/neck32/hip100/height165 cm (correct ~30%) returns 56.8% -> clamps to the 50% ceiling, so essentially EVERY female account shows 50.0% regardless of measurements.\n\nThe same defective formula is duplicated in onboarding src/components/onboarding/BodyDiagram.tsx:164-186 (its comment claims \"Navy formula requires all inputs in one unit\" - true, but the constants demand inches, not cm).\n\nExpected: estimate within Navy method +/-3-4%. Actual: men ~+6.5pts high, women pinned at 50%; it also disagrees with the /body-fat-estimator and /body-composition screens for the same person.\n\nRepro: log waist+neck (+hip if female) on /measurements -> the body-fat card shows an inflated %; female accounts show 50.0%.\n\nFix: either convert cm->inches before the 86.010/163.205 formula, OR switch to the metric 495/(...) form fed cm. Secondary: key the male/female branch off biological_sex ?? gender (physiology) to match BodyComposition.tsx:145 / BodyFatEstimator.tsx:156 / onboarding-calc.ts:67 - Measurements.tsx:194 currently uses identity gender only.\n\nFiles: src/pages/Measurements.tsx:26-50 (calculateBodyFat) + :189-201 (bodyFatEstimate memo; gender source :194); src/components/onboarding/BodyDiagram.tsx:164-186.",
+      "id": "i-20260708-2da8",
+      "route": "/activity",
+      "description": "[bug-hunt] Quick-complete checkbox auto-log spams one toast per set (4-5 stacked toasts from a single tap), breaking the calm-design \"no popups on routine taps\" rule. logSetMutation.onSuccess (src/pages/Activity.tsx:464-469) unconditionally shows a \"Set logged. Set N: X reps x Ykg\" toast for EVERY logged set. Activity.handleCheckboxToggle (src/pages/Activity.tsx:759-766) loops over the previous session's sets and calls logSetMutation.mutateAsync once per set, then fires an extra \"{exercise} auto-logged\" toast.\n\nRepro: on /activity, find an exercise that has prior-session data (so the quick-complete checkbox is shown, not the manual \"+\" button), tap the checkbox once. Expected: a single confirmation toast. Actual: for a 4-set exercise the user gets 4x \"Set logged...\" toasts PLUS the \"{exercise} auto-logged\" toast = 5 stacked toasts from one tap.\n\nFix: suppress the per-set onSuccess toast on the auto-log path (e.g. thread a silent flag through the mutation variables, or only toast when the picker is actually open), keeping just the single \"auto-logged\" summary toast.",
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:56:41.873Z",
+      "resolvedAt": "2026-07-09T06:56:55.477Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:56:41.873Z"
+      "archivedAt": "2026-07-09T06:56:55.477Z"
     }
   ]
 }
