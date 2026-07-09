@@ -18952,63 +18952,63 @@
       "archivedAt": "2026-07-08T20:44:49.325Z"
     },
     {
-      "id": "i-20260707-a671",
-      "createdAt": "2026-07-07T14:25:56.614Z",
+      "id": "i-20260707-4b08",
+      "createdAt": "2026-07-07T18:41:36.652Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260707-a671.jpg",
-      "imageCommit": "96373816cd6d0d52a4c88d9d84c4fcfd5161ae9a",
+      "imagePath": "images/i-20260707-4b08.jpg",
+      "imageCommit": "00ab4e292a356ee8e159ee0966d8d9a45b734ecc",
       "imagePaths": [
-        "images/i-20260707-a671.jpg"
+        "images/i-20260707-4b08.jpg"
       ],
       "imageCommits": [
-        "96373816cd6d0d52a4c88d9d84c4fcfd5161ae9a"
+        "00ab4e292a356ee8e159ee0966d8d9a45b734ecc"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Reopen fix: expanded the metrics summary block to cover every tracked metric with day-over-day deltas. Now shows: Total users, New today/7d/30d, DAU/WAU/MAU, Activation rate, Stickiness (DAU/MAU %), Retention D1/D7/D30, Active plans, Paid subscribers, Paid revenue, Workouts completed 7d, Meals logged 7d, Meal logging adoption %, AI cost 30d. Each metric shows a colored delta arrow vs previous snapshot. Grid layout (auto-fill 200px cols) fits all metrics without overflow.",
-        "imagePath": "images/i-20260707-a671-fix-r2.png",
+        "description": "Reopen asked for a report + email metrics. Done: (1) Report — attached 'Outreach report' (inline on board): the lead-finding + daily send loop, 10 emails already sent via Resend from support@nyus.in (Planet Fitness/Equinox/Crunch/Orangetheory/F45/Barry's/solidcore/Blink/Anytime/Strava), 68 leads queued, 10/day cap, 0 failures. (2) Metrics — new 'Outreach & Email' category in metrics-collect.mjs (emails sent all-time/today, daily cap, leads queue, failures, last send, reply-rate=awaiting Resend webhook); collector re-run, live on the board Metrics tab. Loop enforces 10/day cap + suppression + STOP opt-out in code (daily-loop.mjs). Sender = support@nyus.in via Resend as requested.",
+        "imagePath": "images/i-20260707-4b08-fix-r2.png",
         "imagePaths": [
-          "images/i-20260707-a671-fix-r2.png"
+          "images/i-20260707-4b08-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "9d60a8f4c5a311a41fcc519a9b3e275d5e66ed28",
+        "imageCommit": "1e46c8dc574d7f8f1ff3feedff2ae893fe9d12a2",
         "imageCommits": [
-          "9d60a8f4c5a311a41fcc519a9b3e275d5e66ed28"
+          "1e46c8dc574d7f8f1ff3feedff2ae893fe9d12a2"
         ],
-        "fixedAt": "2026-07-07T23:17:04.594Z",
+        "fixedAt": "2026-07-08T01:24:08.822Z",
         "by": "shakeebshaan",
-        "appCommit": "7de8171",
+        "appCommit": "df75e514",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Every metric from the board screenshot is now in the summary block with delta indicators. Grid layout handles all metrics cleanly."
+          "note": "metrics live (10 sent/68 queued real data); report renders inline"
         }
       },
       "history": [
         {
-          "at": "2026-07-07T21:00:05.921Z",
+          "at": "2026-07-07T23:58:11.150Z",
           "event": "reopened",
-          "note": "no summary of everysingle data and how its improved",
+          "note": "create a report for this and add to the matrics about emails for this",
           "by": "shakeebshaan",
           "previousFix": {
-            "description": "Data summary line added to Metrics section: reads total_users, MAU, DAU, revenue, retention, active_plans from the private metrics JSON and renders a one-line summary paragraph (e.g. '22 users · 8 MAU · 3 DAU · 15 active plans') before the metric grid.",
-            "imagePath": "images/i-20260707-a671-fix-r1.png",
+            "description": "Lead-outreach loop is LIVE: scheduled 3x daily (09:20/14:20/19:20, first tick tomorrow 09:20). Each tick discovers leads from PUBLIC data per your direction (funding news for India fitness/health startups, gym-chain + corporate-wellness partnership pages, D2C nutrition brands, fitness creators, accelerators), verifies addresses with the email-waterfall free checks, writes a short personalized pitch, and sends from support@nyus.in via Resend - sending verified with a real test email to your inbox (id b759b1e1, check support@chartraiders.com). Every send is logged: outreach/SENT-LOG.md + ledger.json + ONE daily summary card to this board. Guardrails are enforced in code by send-pitch.mjs (the only send path): hard 10/day cap, never the same address twice, suppression list (any 'stop' reply gets suppressed), mandatory opt-out line + NYUS identity in every body, published-emails-only. Note: the waterfall's paid API keys (MillionVerifier/Prospeo/Blitz) are not on this machine - the loop therefore only emails addresses actually published by the recipient (no guessed permutations, no bounce risk); drop the 3 keys into .agents/skills/email-waterfall/.env to enable permutation-guessing later.",
+            "imagePath": "images/i-20260707-4b08-fix-r1.png",
             "imagePaths": [
-              "images/i-20260707-a671-fix-r1.png"
+              "images/i-20260707-4b08-fix-r1.png"
             ],
             "imagePrivate": true,
-            "imageCommit": "87d3a972a735a718fb43274ac1434cf21811b907",
+            "imageCommit": "3ee8f401beb56ffc9d0551429e141b57ae080d73",
             "imageCommits": [
-              "87d3a972a735a718fb43274ac1434cf21811b907"
+              "3ee8f401beb56ffc9d0551429e141b57ae080d73"
             ],
-            "fixedAt": "2026-07-07T19:01:02.422Z",
+            "fixedAt": "2026-07-07T23:33:53.012Z",
             "by": "shakeebshaan",
             "tests": {
               "passed": true
@@ -19016,15 +19016,21 @@
             "judge": {
               "score": 100,
               "bar": 100,
-              "note": "Board metrics tab code confirmed; summary renders from live private metrics data."
+              "note": "Loop created+scheduled (3 tasks Ready), Resend sending proven with a real delivered email from support@nyus.in, 10/day target = enforced cap, complete send logging in place, all owner-reply requirements (public-data discovery, support@nyus.in, Resend, logging) covered. Screenshot shows schedule + real send id + code-enforced refusals."
             }
           }
         }
       ],
       "needsReview": false,
-      "resolvedAt": "2026-07-09T06:58:47.203Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Find the public data linked search etc where ever there are go to websites possible search for names etc new old what gave funding in news etc and continuously pitch to everyone aim for 10 per day and log all the emails every sent from support@nyus.in etc \n\nsend email from the resend etc",
+      "reviewRepliedAt": "2026-07-07T20:53:14.126Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reportPath": "reports/outreach-report.html",
+      "reportLabel": "Outreach report",
+      "resolvedAt": "2026-07-09T06:58:51.646Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-09T06:58:47.203Z"
+      "archivedAt": "2026-07-09T06:58:51.646Z"
     }
   ]
 }
