@@ -18,7 +18,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + DEPLOYED to prod (140.245.238.38, backend healthy) — commit 547f631. Root cause exactly as you diagnosed: _evaluate_streak (Step 2) already increments plan.current_streak for the day, then _evaluate_daily_rewards (Step 3) did `streak = current_streak + (1 if rewards else 0)` and re-added the day. Fix: thread the streak_maintained verdict from Step 2 into Step 3, read plan.current_streak as-is (no +1), and only mint on a maintained day. Now the reward row's day == milestone day == streak_milestone_N XPLedger day, so _reconcile_reward_xp credits it (display==credit) and a non-maintained day never mints. Verified standalone (module loaded with stubbed deps): day7-maintained mints streak_bonus, day6-maintained does NOT (off-by-one gone), day7-not-maintained does NOT, day14-maintained mints. Added 3 regression tests to tests/test_daily_report_service.py.\n\nNOT auto-resolved on the board because: (1) this is a nightly-scheduler backend change with no directly-capturable UI state (RewardRevealSheet only appears on a real user's real milestone day) — no faithful fix screenshot is possible; (2) the board testGate requires `--tests pass` but testCommand is `npm run test:unit` (FRONTEND) which cannot validate a Python backend fix, and backend pytest is infra-blocked in this headless env (no flask/sqlalchemy installed). I will not fake --tests pass or flip your gate. Please Resolve manually — fix is live.",
+      "reviewedAt": "2026-07-09T17:03:05.929Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260709-bn4t",
