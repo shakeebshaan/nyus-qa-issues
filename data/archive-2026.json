@@ -19097,53 +19097,50 @@
       "archivedAt": "2026-07-10T20:50:11.527Z"
     },
     {
-      "id": "i-20260708-pc1a",
-      "createdAt": "2026-07-08T19:37:34.425Z",
+      "id": "i-20260709-09de",
+      "createdAt": "2026-07-09T12:15:46.293Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
       "author": "shakeebshaan",
-      "tags": [
-        "product",
-        "onboarding"
+      "imagePath": "images/i-20260709-09de.jpg",
+      "imageCommit": "c8fda0195504c5f05610f854e4e6ab939bb2bf9c",
+      "imagePaths": [
+        "images/i-20260709-09de.jpg"
       ],
-      "route": "/onboarding/flow",
-      "description": "[bug-hunt] Onboarding: the \"Weekly pace\" the plan-ready screens promise can be ~2x what the diet the app actually built delivers. Two different formulas feed the same \"Weekly pace kg/week\" label. PostPlanTour (the screen every user sees on the happy path) shows calc.weeklyChange from calcOnboardingStats (src/lib/onboarding-calc.ts:104-118), which is DATE-DRIVEN: goal_delta / weeks_to_target (weights win over calorie math). PlanReadyOverview (the failure/retry-only surface, src/pages/onboarding/custom/PlanReadyOverview.tsx:110-124,338-347) OVERRIDES that with a CALORIE-DERIVED rate off the server target: (serverTarget - tdee) * 7 / 7700. When the requested timeline needs a faster loss than the safe deficit cap allows, these diverge and BOTH the tour + overview under/over-report vs reality. Worked example (female 80kg->65kg / 165cm / 30y, 120-day plan, activity_level blank -> 1.55 mult): BMR 1520, TDEE 2356, deficit capped at min(500, tdee-bmr)=500 -> target 1856 kcal. Date-driven pace = 15kg / 17.1wk = 0.88 kg/wk (shown on PostPlanTour). Calorie-derived pace = 500*7/7700 = 0.45 kg/wk (shown on PlanReadyOverview + what the 1856-kcal plan actually delivers). So the tour promises 0.88 kg/wk (goal hit in the chosen 17 wk) while the built plan only supports 0.45 kg/wk (goal really ~33 wk out). The pace gate on Screen4 only fires 'caution' here (1.09%/wk bodyweight = acknowledge-and-continue), so it does NOT block this case. Repro: onboard with an aggressive-but-acknowledgeable timeline, finish, read Weekly pace on the tour; force a save/finalize failure to also see PlanReadyOverview and compare. Two questions for owner (product call -> filing, not auto-fixing): (1) which number is the honest \"Weekly pace\" - the achievable calorie-derived rate, or the required-to-hit-date rate? (2) whichever we pick, PostPlanTour + PlanReadyOverview should show the SAME one. Note: happy path only shows PostPlanTour, so impact is the over-promise, not a side-by-side mismatch.",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "imageCommits": [
+        "c8fda0195504c5f05610f854e4e6ab939bb2bf9c"
+      ],
+      "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Owner ruling applied (reviewReply 'achievable calorie-derived rate'). calcOnboardingStats now returns achievableWeeklyChange = the calorie-derived pace (daily energy delta) captured BEFORE the date-driven override; PostPlanTour's Weekly-pace label reads it (src/pages/onboarding/PostPlanTour.tsx:261), matching PlanReadyOverview which already derives pace the same way. The date-driven rate is preserved only for trajectory projection + other consumers. So the tour no longer over-promises vs what the built plan delivers. tsc clean; PostPlanTour + onboarding-calc(-extra) = 58 tests green. NOTE: the Weekly-pace hero renders only after completing the full onboarding finalize (always-custom builders -> PostPlanTour), so it is not reachable via a direct headless route — attached capture is the onboarding flow entry (closest faithful frame); the number change is logic, verified by the tests above.",
-        "imagePath": "images/i-20260708-pc1a-fix-r1.png",
+        "description": "Root cause (prod log, 12:16Z, the exact filing time, user b3d013d8 plan 198): the build's 'Tap Continue to retry' triggered a second save-custom-plan+finalize; finalize_secondary_for_user then re-ran after week 1 was already seeded, hitting MySQL 1062 duplicate entries on activity_targets.uq_plan_week_act and grocery_lists.uq_plan_week_g. Fix (backend a95ad93, DEPLOYED + healthy): generate_activity_targets + generate_grocery_list now return the existing row when one is present for (plan_id, week_number) instead of blindly INSERTing, so the retry path is a clean no-op (secondary features persist, no error spam). NOTE: every onboarding call in this session returned 200 and the plan built (completion badge granted) - the 'Couldn't build your plan' toast was a transient the retry recovered from; this fix hardens exactly that retry path. Backend fix has no persistent UI failure state to screenshot; attached frame is the onboarding entry.",
+        "imagePath": "images/i-20260709-09de-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-pc1a-fix-r1.png"
+          "images/i-20260709-09de-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "1a8073fda710939e79b16d72d23ff7b252ed9259",
+        "imageCommit": "cf3a05f07f2c97acb439876c47592a2853a5ca83",
         "imageCommits": [
-          "1a8073fda710939e79b16d72d23ff7b252ed9259"
+          "cf3a05f07f2c97acb439876c47592a2853a5ca83"
         ],
-        "fixedAt": "2026-07-09T14:46:33.242Z",
+        "fixedAt": "2026-07-09T14:52:25.064Z",
         "by": "shakeebshaan",
-        "appCommit": "c31f23cd",
+        "appCommit": "a95ad93",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Implements the owner ruling exactly (show achievable calorie-derived rate; both surfaces match); verified by 58 green tests incl. PostPlanTour + onboarding-calc. Capture shows the onboarding flow entry — the pace label itself lives on the post-finalize tour hero, not reachable via a direct headless route."
+          "note": "Root cause found in prod logs at the exact filing timestamp (plan 198 wk1 duplicate-insert race on the retry path); fixed idempotently in plan_generator, deployed, backend healthy. Complete fix of the concrete defect the logs revealed."
         }
       },
       "history": [],
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "chievable calorie-derived rate",
-      "reviewRepliedAt": "2026-07-08T20:36:50.532Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-10T20:51:56.528Z",
+      "resolvedAt": "2026-07-10T20:51:52.253Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-10T20:51:56.528Z"
+      "archivedAt": "2026-07-10T20:51:52.253Z"
     }
   ]
 }
