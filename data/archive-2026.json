@@ -19092,9 +19092,9 @@
       "reviewReason": "FIXED (2-layer), frozen at bar=100 pending your on-device verify. Layer 1 (commit c0463e0f): handleContinue/handleBgContinue re-index day_index to contiguous 1..N on emit, killing the remove-then-add gap. Layer 2 (commit 0bb48735, this tick): the builder still allowed up to 10 days while the backend maps each day to a distinct weekday in ONE week (clamps day_index>7 to Sunday), so building 8-10 filled days re-indexed to 8/9/10 still collapsed onto Sunday. Capped BUILDER_MAX_DAYS 10->7 (single cap source for seed/add/coach-reshape), mirroring CustomDietBuilder MAX_DAYS=7; default seed unchanged (full week). Locked by test/onboarding-derive.test.ts cap invariant.",
       "reviewedAt": "2026-07-10T15:01:48.409Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-10T20:49:20.676Z",
+      "resolvedAt": "2026-07-10T20:49:31.003Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-10T20:49:20.676Z"
+      "archivedAt": "2026-07-10T20:49:31.003Z"
     }
   ]
 }
