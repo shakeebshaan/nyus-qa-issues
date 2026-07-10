@@ -108,29 +108,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260710-1b7e",
-      "createdAt": "2026-07-10T09:15:18.055Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "route": "/nutrition (intermittent-fasting 16:8 day)",
-      "description": "[bug-hunt] On an intermittent-fasting (16:8) day the Nutrition meal list stays blur-covered and CLICK-BLOCKED for the entire day — even after the fast completes and the banner says \"Eating window open\" — so the user cannot log / skip / swap / adjust any meal without turning fasting off.\n\nComponent: src/pages/Nutrition.tsx.\n\nWhat's wrong:\n- The blur+dark overlay over the meal list renders whenever fastingDay && fastingType === 'intermittent' (Nutrition.tsx:471) — there is NO fast-complete / eating-window term in that condition.\n- The overlay is a later-sibling absolute inset-0 ... bg-black/50 backdrop-blur-sm div (Nutrition.tsx:472) with NO pointer-events-none, so it sits on top of NutritionMealList and swallows every tap (eaten checkbox, Skip, Swap, Adjust).\n- The completion signal fastDone = elapsed >= FAST_MIN is computed LOCALLY inside FastingBanner (Nutrition.tsx:116) and is never lifted to the page; and backend getFastingStatus returns only {fasting_day, fasting_type} (nutrition.service.ts:107) — no window state — so the overlay condition can never learn the window is open.\n- The overlay copy itself promises the opposite: \"Your meals unlock when the eating window opens.\" (en.json nutrition.fasting.window_active_body).\n\nExpected: once the 16h fast completes (banner flips to \"Eating window open\" / \"Your 16-hour fast is complete\"), the overlay lifts and meals become tappable so the user can log during their eating window.\n\nActual: the overlay + blur persist all day; the only way to reveal/log meals is \"End fast\", which disables fasting tracking for the day entirely.\n\nRepro:\n1. /nutrition with a diet plan → tap the \"Intermittent\" fasting chip → meals blur (expected during the fast).\n2. Reach completion — the fast start is back-dated to the last eaten meal (Nutrition.tsx:82-92), so a user whose last meal was >16h ago is already complete; force it with localStorage['nyus_fast_start_<today>'] = String(Date.now() - 17*3600*1000) then reload.\n3. Banner ring shows \"complete\" and text switches to \"Eating window open.\"\n4. Tap any meal card → nothing responds; blur/overlay still there. Only \"End fast\" reveals meals.\n\nFix: add a fast-complete term to the overlay condition (lift fastDone to the page, or derive it from the fast-start localStorage key) so the overlay only shows while the fast is actually in progress; also add pointer-events-none to the decorative overlay so it never blocks the list when not intended.",
-      "needsReview": true,
-      "reviewReason": "STILL FIXED + hardened this tick (app commit e0d44416, pushed to main). Original fix (6275a222) already lifts the 16:8 blur/overlay once the fast completes: FastingBanner publishes fast-complete up via onFastCompleteChange and the meal list overlay only renders while (intermittent && !fastComplete). This tick I closed a 1-frame cosmetic edge — the banner's elapsed started at 0, so on mount it briefly published fastComplete=false before its timer caught up, flashing the overlay for an already-complete fast. Now elapsed is seeded synchronously from the nyus_fast_start_<today> key (mirroring the page seed), so fastDone is correct on first render and no transient false is published. tsc clean; fasting.test.ts + Nutrition.page tests 40/40 green. No faithful full-screen proof possible in the QA env (meal list is hasMeals-gated and this account has no active date-covering diet plan; provisioning prohibited per owner directive). Please verify on-device (start a 16:8 fast, reach completion — overlay lifts, meals tappable, no flash) and Resolve, or lower the bar.",
-      "reviewedAt": "2026-07-10T10:21:37.394Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260710-c4d9",
       "createdAt": "2026-07-10T09:15:18.055Z",
       "author": "shakeebshaan",
