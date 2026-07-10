@@ -127,52 +127,6 @@
       "history": []
     },
     {
-      "id": "i-20260708-pc1a",
-      "createdAt": "2026-07-08T19:37:34.425Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "product",
-        "onboarding"
-      ],
-      "route": "/onboarding/flow",
-      "description": "[bug-hunt] Onboarding: the \"Weekly pace\" the plan-ready screens promise can be ~2x what the diet the app actually built delivers. Two different formulas feed the same \"Weekly pace kg/week\" label. PostPlanTour (the screen every user sees on the happy path) shows calc.weeklyChange from calcOnboardingStats (src/lib/onboarding-calc.ts:104-118), which is DATE-DRIVEN: goal_delta / weeks_to_target (weights win over calorie math). PlanReadyOverview (the failure/retry-only surface, src/pages/onboarding/custom/PlanReadyOverview.tsx:110-124,338-347) OVERRIDES that with a CALORIE-DERIVED rate off the server target: (serverTarget - tdee) * 7 / 7700. When the requested timeline needs a faster loss than the safe deficit cap allows, these diverge and BOTH the tour + overview under/over-report vs reality. Worked example (female 80kg->65kg / 165cm / 30y, 120-day plan, activity_level blank -> 1.55 mult): BMR 1520, TDEE 2356, deficit capped at min(500, tdee-bmr)=500 -> target 1856 kcal. Date-driven pace = 15kg / 17.1wk = 0.88 kg/wk (shown on PostPlanTour). Calorie-derived pace = 500*7/7700 = 0.45 kg/wk (shown on PlanReadyOverview + what the 1856-kcal plan actually delivers). So the tour promises 0.88 kg/wk (goal hit in the chosen 17 wk) while the built plan only supports 0.45 kg/wk (goal really ~33 wk out). The pace gate on Screen4 only fires 'caution' here (1.09%/wk bodyweight = acknowledge-and-continue), so it does NOT block this case. Repro: onboard with an aggressive-but-acknowledgeable timeline, finish, read Weekly pace on the tour; force a save/finalize failure to also see PlanReadyOverview and compare. Two questions for owner (product call -> filing, not auto-fixing): (1) which number is the honest \"Weekly pace\" - the achievable calorie-derived rate, or the required-to-hit-date rate? (2) whichever we pick, PostPlanTour + PlanReadyOverview should show the SAME one. Note: happy path only shows PostPlanTour, so impact is the over-promise, not a side-by-side mismatch.",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Owner ruling applied (reviewReply 'achievable calorie-derived rate'). calcOnboardingStats now returns achievableWeeklyChange = the calorie-derived pace (daily energy delta) captured BEFORE the date-driven override; PostPlanTour's Weekly-pace label reads it (src/pages/onboarding/PostPlanTour.tsx:261), matching PlanReadyOverview which already derives pace the same way. The date-driven rate is preserved only for trajectory projection + other consumers. So the tour no longer over-promises vs what the built plan delivers. tsc clean; PostPlanTour + onboarding-calc(-extra) = 58 tests green. NOTE: the Weekly-pace hero renders only after completing the full onboarding finalize (always-custom builders -> PostPlanTour), so it is not reachable via a direct headless route — attached capture is the onboarding flow entry (closest faithful frame); the number change is logic, verified by the tests above.",
-        "imagePath": "images/i-20260708-pc1a-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260708-pc1a-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "1a8073fda710939e79b16d72d23ff7b252ed9259",
-        "imageCommits": [
-          "1a8073fda710939e79b16d72d23ff7b252ed9259"
-        ],
-        "fixedAt": "2026-07-09T14:46:33.242Z",
-        "by": "shakeebshaan",
-        "appCommit": "c31f23cd",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Implements the owner ruling exactly (show achievable calorie-derived rate; both surfaces match); verified by 58 green tests incl. PostPlanTour + onboarding-calc. Capture shows the onboarding flow entry — the pace label itself lives on the post-finalize tour hero, not reachable via a direct headless route."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "chievable calorie-derived rate",
-      "reviewRepliedAt": "2026-07-08T20:36:50.532Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260708-fst1",
       "createdAt": "2026-07-08T16:39:56.595Z",
       "status": "open",
