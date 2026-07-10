@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260710-4c1a",
+      "createdAt": "2026-07-10T05:40:31.068Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/coach-chat (in-chat 'Today's Meals' meal_plan_card block)",
+      "description": "[bug-hunt] In coach chat, marking a planned meal \"Eaten\" from a meal_plan_card block is silently UN-logged if the block scrolls out of view and back. The card's eaten-state lives only in local component state that resets on virtualized remount, and re-tapping \"Mark Eaten\" hits a server TOGGLE endpoint that flips the meal back to un-eaten.\n\nRoot cause (frontend), src/components/blocks/MealPlanCard.tsx:\n- Eaten/skip state is held in local useState(data.meals || []) (line 35), seeded ONCE from the immutable chat-message payload. The component does NOT accept or use cacheKey (unlike the 6 logging blocks, which persist their draft in a module-level Map keyed by cacheKey specifically to survive virtualized remount).\n- meal_plan_card is NOT a logging block (src/lib/block-transformers.ts isLoggingBlock set = meal_logger / workout_tracker / daily_checkin / measurement_input / activity_logger / water_logger only). So useBlockSubmit.submitBlock takes the !isLoggingBlock branch (useBlockSubmit.ts:103-107): it calls onChatResponse() and returns WITHOUT ever calling setBlockStatus('completed'). CoachChatMessageList.handleBlockResponse (line 506-517) confirms non-nav non-logging responses never advance blockStatuses.\n- So blockStatuses[blockKey] stays unset and status = (blockStatuses[blockKey] ?? block.status ?? 'active') (CoachChatMessageList.tsx:528) stays 'active' forever.\n\nProd virtualization is ON: FEATURE_COACH_CHAT_VIRTUALIZE = import.meta.env.VITE_COACH_CHAT_VIRTUALIZE === \"true\" (feature-flags.ts:71) and .env.production line 24 sets VITE_COACH_CHAT_VIRTUALIZE=true. @tanstack/react-virtual windows the message list, so off-screen block rows UNMOUNT and remount on scroll-back. On remount MealPlanCard re-runs useState(data.meals || []) so logged resets to the payload value (false): the \"Eaten\" badge disappears and the Mark Eaten / Swap / Skip buttons reappear (they only render when !meal.logged && !meal.skipped, line 160).\n\nBackend toggle: handleMarkEaten (line 68-89) guards \"if (disabled || meal.logged) return\", but after remount meal.logged is false so the guard passes. It calls nutritionService.logMeal({assigned_meal_id}) which POSTs /diet/log-meal, documented \"Toggle meal eaten status\" (nutrition.service.ts:72), sending NO was_eaten flag, so the server toggles. The meal was already eaten server-side, so this second call flips it to UN-eaten.\n\nRepro (prod build / VITE_COACH_CHAT_VIRTUALIZE=true):\n1. Coach sends a \"Today's Meals\" meal_plan_card. Tap \"Mark Eaten\" on a meal: optimistic \"Eaten\" badge, POST /diet/log-meal logs it, buttons vanish.\n2. Keep chatting so the block scrolls out of the virtual window, then scroll back.\n3. The card re-seeds from the original payload: the \"Eaten\" badge is gone and Mark Eaten is back.\n4. Tap \"Mark Eaten\" again (natural, it looks un-logged): POST /diet/log-meal toggles the meal back to UN-eaten. The meal is silently dropped from the day's logged totals; no error, no 500.\n\nExpected: a meal logged from the chat card stays logged across scroll; the card reflects server truth on remount.\nActual: the eaten state is discarded on scroll-back and re-tapping un-logs the meal server-side (silent corruption of the nutrition log).\n\nSame root cause (non-logging stateful blocks that ignore cacheKey and are never marked 'completed', so prod virtualization discards local state on remount) also affects grocery_list (checked items visually reset on scroll: GroceryListBlock.tsx:67, block never calls onResponse) and plan_update_proposal (Approve/Modify/Reject re-enable on remount: PlanUpdateBlock local \"responded\" resets), but MealPlanCard is the data-integrity case.\n\nFix: persist MealPlanCard's meals (or at least the logged/skipped ids) via cacheKey using a module-level Map + useEffect, exactly like ActivityLoggerBlock / DailyCheckinBlock; OR seed the eaten guard from server truth on mount; OR have the parent mark meal_plan_card 'completed' in blockStatuses once a meal is logged. Also send an explicit was_eaten:true (idempotent) rather than relying on the toggle."
+    },
+    {
+      "id": "i-20260710-9d3b",
+      "createdAt": "2026-07-10T05:40:31.068Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/coach-chat (in-chat daily_checkin block)",
+      "description": "[bug-hunt] The in-chat Daily Check-in block DISPLAYS mood (and, when the coach pre-fills defaults, water + sleep) as already set/selected, but submitting without physically re-tapping those controls silently omits them from the log. The mood control also reports aria-checked=true for a value that will not be submitted.\n\nRoot cause, src/components/blocks/DailyCheckinBlock.tsx:\n- handleSubmit (line 50-60) includes water_ml / sleep_hours / mood ONLY when touched.has(...) is true (weight is gated on weight > 0). The touched set only gains a field when the user physically taps a water preset (line 131), moves the sleep slider (line 158) or taps a mood emoji (line 185).\n- But the UI always renders these fields as populated/selected:\n  - Mood: const [mood, setMood] = useState(cached?.mood ?? defaults.mood ?? 3) (line 35). With no defaults mood = 3, and the \"Okay\" emoji renders with the selected ring-2 highlight and aria-checked={mood === m.value} = true (lines 189, 196-197). There is no \"nothing selected\" state; a chip is ALWAYS shown selected.\n  - Sleep: the slider sits at defaults.sleep_hours ?? 7 and the label shows \"{sleep}h\" (line 152) as if staged.\n  - Water: shows \"{water} ml\" from defaults.water_ml ?? 0 (line 121).\n\nSo a user who agrees with the shown mood (\"Okay\") / water / sleep and taps \"Submit Check-in\" without re-tapping gets a payload of just {date, weight_kg?}: mood, sleep and water are dropped. It is worst with backend-supplied defaults: the coach's show_daily_checkin can send defaults {water_ml, sleep_hours, mood} (the dev fixture chatBlockFixtures.ts sends water_ml:1800, sleep_hours:7.5, mood:4). The card then displays \"1800 ml\", a 7.5h slider and a highlighted \"Good\" mood, but confirming via Submit logs none of them.\n\nThe touched gate is deliberate (comment lines 36-37: omit untouched fields, prevents fabricating sleep/mood), but the display contradicts it: the card visually stages values it will not submit, and screen readers announce aria-checked=true on a mood the user never chose and that will not be logged.\n\nRepro:\n1. Coach opens a Daily Check-in (no defaults). \"Okay\" mood shows highlighted/selected (aria-checked true), sleep shows 7h.\n2. A user who genuinely feels Okay and slept 7h taps \"Submit Check-in\" without tapping anything.\n3. Payload = {date} only (mood/sleep/water omitted). Mood and sleep are never logged, though the card showed them staged. (With backend defaults populated, the pre-filled water/sleep/mood are likewise dropped on a confirm-only submit.)\n\nExpected: what the card displays as selected/filled is what gets submitted (displayed == submitted).\nActual: mood is always shown selected but omitted unless re-tapped; pre-filled sleep/water defaults are shown but omitted unless re-touched. Silent data loss plus a misleading aria-checked state.\n\nFix: make displayed state match submitted state. Either (a) include mood/sleep/water when a meaningful value is shown (e.g. include mood/sleep when defaults exist, mirroring weight's value-gate), or (b) render mood with NO chip selected and the sleep slider in an explicit untouched state until the user interacts, so an untouched Submit honestly submits nothing for those fields. Keep aria-checked false until a real selection."
+    },
+    {
+      "id": "i-20260710-7e2f",
+      "createdAt": "2026-07-10T05:40:31.068Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/coach-chat (in-chat rating_scale block with max > 10)",
+      "description": "[bug-hunt] A rating_scale block whose scale exceeds 10 (max > 10) renders as a Slider, but choosing a value never sends the rating to the coach: the slider freezes after the first movement and onResponse is never called. The dots variant (max <= 10) is fine; only the slider path is broken.\n\nRoot cause, src/components/blocks/RatingScaleBlock.tsx:\n- disabled = status === \"completed\" || status === \"expired\" || value !== null (line 13). It flips to true as soon as local value is non-null.\n- Slider (line 81-96): onValueChange={([v]) => { if (!disabled) setValue(v); }} sets value during drag/track-click; onValueCommit={([v]) => { if (disabled) return; ... onResponse({value:v}); }} is the ONLY place the slider calls onResponse.\n- onValueChange (pointer move) and onValueCommit (pointer up) are separate pointer events, so React re-renders between them. The first onValueChange sets value, the next render makes disabled === true, the Radix Slider then receives disabled (thumb gets disabled:pointer-events-none per src/components/ui/slider.tsx) and stops tracking the drag, AND onValueCommit's \"if (disabled) return\" guard now short-circuits. Net: onResponse is effectively UNREACHABLE for the slider. The value shows on screen (line 101-103) but is never sent to the coach, and the thumb sticks at the first position.\n- The dots path works because handleSelect (line 17-22) sets value AND calls onResponse atomically in one handler before the disabling re-render.\n\nRepro:\n1. Coach sends a rating_scale with max > 10 (e.g. {question, min:0, max:100} or min:1, max:20) so it renders the Slider variant (useDots = max <= 10 is false, line 14).\n2. Drag the slider thumb (or tap the track). The thumb freezes at/near the first position and the coach never receives a rating; the interaction is dead after one move.\n\nExpected: dragging/committing the slider sends onResponse({value}) with the chosen number, like the dots variant.\nActual: onResponse never fires for the slider; the rating is silently lost and the control freezes.\n\nFix: do not derive disabled from value for the slider. Track commit separately, e.g. const [committed, setCommitted] = useState(false); const disabled = status === \"completed\" || status === \"expired\" || committed; set committed inside onValueCommit and keep onValueChange only updating value. (The dots path can keep its single-handler behavior.)"
+    },
+    {
       "id": "i-20260710-7a3f",
       "createdAt": "2026-07-10T01:10:32.632Z",
       "author": "shakeebshaan",
