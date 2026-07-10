@@ -2,6 +2,66 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260710-fa1c",
+      "createdAt": "2026-07-10T09:15:18.055Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/nutrition (Fine-tune your plan → Food preferences sheet)",
+      "description": "[bug-hunt] Nutrition \"Food preferences\" sheet never loads the user's saved preferences, so its \"tap to edit\" is impossible and tapping Save silently OVERWRITES (wipes) the saved food intolerances + cuisines — including allergy intolerances that drive meal generation.\n\nComponent: src/pages/_components/nutrition/NutritionPlanActions.tsx (rendered on /nutrition under \"Fine-tune your plan\", Nutrition.tsx:501).\n\nWhat's wrong:\n- The sheet's selection state is initialised EMPTY and is NEVER hydrated from the profile: intolerances=useState<string[]>([]) and cuisines=useState<string[]>([]) (NutritionPlanActions.tsx:53-54). No effect syncs profile.food_intolerances / profile.cuisine_preferences into that state — even though the component already reads those arrays for the row's count (prefsCount, :62).\n- The row subtitle reads \"{{count}} set — tap to edit\" (en.json nutrition.plan_actions.food_prefs_set) with a green check when prefs exist (:121,:124-125), promising an editable view.\n- handleSave ALWAYS sends both keys built from the (empty-started) state: food_intolerances: intolerances.map(i=>i.toLowerCase()), cuisine_preferences: cuisines.map(c=>c.toLowerCase()) (:77-80), then POSTs /profile/food-prefs.\n- The backend endpoint DOES exist (the \"backend endpoint pending\" comment at :91 is STALE) and REPLACES each column it receives: for field,value in updates.items(): setattr(hp,field,value) (backend app/routes/profile.py:671-672); an explicit [] clears the column (documented at profile.py:611-614).\n- Worse, the \"Saved!\" success toast fires UNCONDITIONALLY even if the POST throws — the catch only logs (:90-92) then always toasts (:93-94).\n\nExpected: opening the sheet pre-selects the chips matching the saved intolerances/cuisines so they can be seen and edited; Save preserves anything not changed; a failed save shows an error, not \"Saved!\".\n\nActual: the sheet opens with ALL chips DESELECTED regardless of saved prefs; there is no way to view/edit the real values; tapping Save (default empty selection, or a partial one) posts arrays that overwrite/clear the saved dietary prefs server-side — and the app claims \"Saved!\" even when the request fails.\n\nRepro:\n1. Have saved food prefs (e.g. onboarding set intolerances Nuts+Gluten, cuisine Indian) — the /nutrition \"Food preferences\" row shows \"3 set — tap to edit\" + a check.\n2. Tap the row → sheet opens with EVERY chip unselected.\n3. Tap Save without re-picking → payload sends empty arrays → backend clears food_intolerances + cuisine_preferences (allergies gone) → UI shows \"Saved!\".\n\nFix: on open, seed intolerances/cuisines from profile (map stored lowercase values back to the option casing); and/or only include a key in the payload when the user actually changed it; gate the success toast on POST success.",
+      "needsReview": false
+    },
+    {
+      "id": "i-20260710-1b7e",
+      "createdAt": "2026-07-10T09:15:18.055Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/nutrition (intermittent-fasting 16:8 day)",
+      "description": "[bug-hunt] On an intermittent-fasting (16:8) day the Nutrition meal list stays blur-covered and CLICK-BLOCKED for the entire day — even after the fast completes and the banner says \"Eating window open\" — so the user cannot log / skip / swap / adjust any meal without turning fasting off.\n\nComponent: src/pages/Nutrition.tsx.\n\nWhat's wrong:\n- The blur+dark overlay over the meal list renders whenever fastingDay && fastingType === 'intermittent' (Nutrition.tsx:471) — there is NO fast-complete / eating-window term in that condition.\n- The overlay is a later-sibling absolute inset-0 ... bg-black/50 backdrop-blur-sm div (Nutrition.tsx:472) with NO pointer-events-none, so it sits on top of NutritionMealList and swallows every tap (eaten checkbox, Skip, Swap, Adjust).\n- The completion signal fastDone = elapsed >= FAST_MIN is computed LOCALLY inside FastingBanner (Nutrition.tsx:116) and is never lifted to the page; and backend getFastingStatus returns only {fasting_day, fasting_type} (nutrition.service.ts:107) — no window state — so the overlay condition can never learn the window is open.\n- The overlay copy itself promises the opposite: \"Your meals unlock when the eating window opens.\" (en.json nutrition.fasting.window_active_body).\n\nExpected: once the 16h fast completes (banner flips to \"Eating window open\" / \"Your 16-hour fast is complete\"), the overlay lifts and meals become tappable so the user can log during their eating window.\n\nActual: the overlay + blur persist all day; the only way to reveal/log meals is \"End fast\", which disables fasting tracking for the day entirely.\n\nRepro:\n1. /nutrition with a diet plan → tap the \"Intermittent\" fasting chip → meals blur (expected during the fast).\n2. Reach completion — the fast start is back-dated to the last eaten meal (Nutrition.tsx:82-92), so a user whose last meal was >16h ago is already complete; force it with localStorage['nyus_fast_start_<today>'] = String(Date.now() - 17*3600*1000) then reload.\n3. Banner ring shows \"complete\" and text switches to \"Eating window open.\"\n4. Tap any meal card → nothing responds; blur/overlay still there. Only \"End fast\" reveals meals.\n\nFix: add a fast-complete term to the overlay condition (lift fastDone to the page, or derive it from the fast-start localStorage key) so the overlay only shows while the fast is actually in progress; also add pointer-events-none to the decorative overlay so it never blocks the list when not intended.",
+      "needsReview": false
+    },
+    {
+      "id": "i-20260710-c4d9",
+      "createdAt": "2026-07-10T09:15:18.055Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/nutrition (water tracker)",
+      "description": "[bug-hunt] Water intake added on the Nutrition page is silently LOST if the user leaves the page within the 600ms sync-debounce window — the unmount handler cancels the pending write without flushing it.\n\nComponent: src/pages/_components/nutrition/useNutritionData.tsx.\n\nWhat's wrong:\n- Adding water updates local state and schedules a debounced backend sync 600ms later: waterSyncTimeout.current = setTimeout(() => { ...upsertDailyLog... }, 600) (:81); rapid taps keep RESETTING that timer (:80).\n- The unmount cleanup CANCELS the pending timer without ever flushing the write: clearTimeout(waterSyncTimeout.current); waterSyncTimeout.current = null; (:72-74). No pagehide/visibilitychange/flush path exists.\n- The POST is ABSOLUTE, not incremental (water_intake_liters: liters computed from the current ml, :82-85), so the unsynced delta is dropped entirely, not merely delayed.\n\nExpected: water added just before navigating away persists (flush the pending sync on unmount / navigation).\n\nActual: the pending upsertDailyLog never fires; on return, the water tracker reseeds from the backend's stale value (effect at :57-62) and the added glasses are gone. A burst of taps followed by an immediate tab switch loses the whole unsynced amount.\n\nRepro:\n1. /nutrition → tap the add-water control one or more times (watch the count rise).\n2. Within ~600ms of the last tap, navigate away (e.g. tap the Dashboard bottom-nav tab — the Nutrition page unmounts).\n3. Return to /nutrition → water reads the pre-tap value; the added water was never saved.\n\nFix: flush the pending sync in the unmount cleanup (fire the upsert immediately, with keepalive, if a timer is pending) instead of just clearing the timeout; or write the final value synchronously before unmount.",
+      "needsReview": false
+    },
+    {
       "id": "i-20260710-4c1a",
       "createdAt": "2026-07-10T05:40:31.068Z",
       "author": "shakeebshaan",
