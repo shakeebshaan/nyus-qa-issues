@@ -108,29 +108,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260710-c4d9",
-      "createdAt": "2026-07-10T09:15:18.055Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "route": "/nutrition (water tracker)",
-      "description": "[bug-hunt] Water intake added on the Nutrition page is silently LOST if the user leaves the page within the 600ms sync-debounce window — the unmount handler cancels the pending write without flushing it.\n\nComponent: src/pages/_components/nutrition/useNutritionData.tsx.\n\nWhat's wrong:\n- Adding water updates local state and schedules a debounced backend sync 600ms later: waterSyncTimeout.current = setTimeout(() => { ...upsertDailyLog... }, 600) (:81); rapid taps keep RESETTING that timer (:80).\n- The unmount cleanup CANCELS the pending timer without ever flushing the write: clearTimeout(waterSyncTimeout.current); waterSyncTimeout.current = null; (:72-74). No pagehide/visibilitychange/flush path exists.\n- The POST is ABSOLUTE, not incremental (water_intake_liters: liters computed from the current ml, :82-85), so the unsynced delta is dropped entirely, not merely delayed.\n\nExpected: water added just before navigating away persists (flush the pending sync on unmount / navigation).\n\nActual: the pending upsertDailyLog never fires; on return, the water tracker reseeds from the backend's stale value (effect at :57-62) and the added glasses are gone. A burst of taps followed by an immediate tab switch loses the whole unsynced amount.\n\nRepro:\n1. /nutrition → tap the add-water control one or more times (watch the count rise).\n2. Within ~600ms of the last tap, navigate away (e.g. tap the Dashboard bottom-nav tab — the Nutrition page unmounts).\n3. Return to /nutrition → water reads the pre-tap value; the added water was never saved.\n\nFix: flush the pending sync in the unmount cleanup (fire the upsert immediately, with keepalive, if a timer is pending) instead of just clearing the timeout; or write the final value synchronously before unmount.",
-      "needsReview": true,
-      "reviewReason": "FIXED — shipped, awaiting on-device verify. Root cause: adding water schedules a 600ms debounced absolute upsert, but the unmount cleanup CLEARED the pending timer without flushing it, so water added just before navigating away was dropped entirely (the POST is absolute, not incremental). Fix (useNutritionData.tsx, commit 6275a222): a pendingWaterMlRef tracks the latest unsynced value; the unmount cleanup now FLUSHES it (fires the upsert fire-and-forget) instead of discarding, and the debounce clears the ref once it fires. tsc clean. This is a persistence-timing bug with no on-screen state to screenshot, and the water tracker is additionally gated behind hasMeals which this QA account cannot render (no active date-covering diet plan; provisioning prohibited per owner directive). Please verify on-device (tap water, immediately switch tabs, return — count persists) and Resolve.",
-      "reviewedAt": "2026-07-10T09:46:59.084Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260710-4c1a",
       "createdAt": "2026-07-10T05:40:31.068Z",
       "author": "shakeebshaan",
