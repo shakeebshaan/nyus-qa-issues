@@ -62,29 +62,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260710-9d3b",
-      "createdAt": "2026-07-10T05:40:31.068Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "route": "/coach-chat (in-chat daily_checkin block)",
-      "description": "[bug-hunt] The in-chat Daily Check-in block DISPLAYS mood (and, when the coach pre-fills defaults, water + sleep) as already set/selected, but submitting without physically re-tapping those controls silently omits them from the log. The mood control also reports aria-checked=true for a value that will not be submitted.\n\nRoot cause, src/components/blocks/DailyCheckinBlock.tsx:\n- handleSubmit (line 50-60) includes water_ml / sleep_hours / mood ONLY when touched.has(...) is true (weight is gated on weight > 0). The touched set only gains a field when the user physically taps a water preset (line 131), moves the sleep slider (line 158) or taps a mood emoji (line 185).\n- But the UI always renders these fields as populated/selected:\n  - Mood: const [mood, setMood] = useState(cached?.mood ?? defaults.mood ?? 3) (line 35). With no defaults mood = 3, and the \"Okay\" emoji renders with the selected ring-2 highlight and aria-checked={mood === m.value} = true (lines 189, 196-197). There is no \"nothing selected\" state; a chip is ALWAYS shown selected.\n  - Sleep: the slider sits at defaults.sleep_hours ?? 7 and the label shows \"{sleep}h\" (line 152) as if staged.\n  - Water: shows \"{water} ml\" from defaults.water_ml ?? 0 (line 121).\n\nSo a user who agrees with the shown mood (\"Okay\") / water / sleep and taps \"Submit Check-in\" without re-tapping gets a payload of just {date, weight_kg?}: mood, sleep and water are dropped. It is worst with backend-supplied defaults: the coach's show_daily_checkin can send defaults {water_ml, sleep_hours, mood} (the dev fixture chatBlockFixtures.ts sends water_ml:1800, sleep_hours:7.5, mood:4). The card then displays \"1800 ml\", a 7.5h slider and a highlighted \"Good\" mood, but confirming via Submit logs none of them.\n\nThe touched gate is deliberate (comment lines 36-37: omit untouched fields, prevents fabricating sleep/mood), but the display contradicts it: the card visually stages values it will not submit, and screen readers announce aria-checked=true on a mood the user never chose and that will not be logged.\n\nRepro:\n1. Coach opens a Daily Check-in (no defaults). \"Okay\" mood shows highlighted/selected (aria-checked true), sleep shows 7h.\n2. A user who genuinely feels Okay and slept 7h taps \"Submit Check-in\" without tapping anything.\n3. Payload = {date} only (mood/sleep/water omitted). Mood and sleep are never logged, though the card showed them staged. (With backend defaults populated, the pre-filled water/sleep/mood are likewise dropped on a confirm-only submit.)\n\nExpected: what the card displays as selected/filled is what gets submitted (displayed == submitted).\nActual: mood is always shown selected but omitted unless re-tapped; pre-filled sleep/water defaults are shown but omitted unless re-touched. Silent data loss plus a misleading aria-checked state.\n\nFix: make displayed state match submitted state. Either (a) include mood/sleep/water when a meaningful value is shown (e.g. include mood/sleep when defaults exist, mirroring weight's value-gate), or (b) render mood with NO chip selected and the sleep slider in an explicit untouched state until the user interacts, so an untouched Submit honestly submits nothing for those fields. Keep aria-checked false until a real selection.",
-      "needsReview": true,
-      "reviewReason": "FIXED + pushed to main (commit 0d17e9c2). DailyCheckinBlock displayed==submitted mismatch: the card staged mood/sleep/water (worst with coach-supplied defaults like water 1800/sleep 7.5/mood 'Good') but a confirm-only Submit omitted them because they were gated on a hidden `touched` set; it also rendered aria-checked=true on an unselected mood. Fix: value-gate every field exactly like weight (submit what the card shows) and start mood UNSELECTED (null) so aria-checked is honest and nothing is fabricated; removed the touched machinery. Regression tests test/DailyCheckinBlock.test.tsx: 'does not pre-select or submit a mood when no defaults' + 'submits coach-supplied defaults on confirm-only'. 31/31 green; tsc clean. Not self-resolving under the pinned-100 bar — please confirm on device (open a check-in with backend defaults, tap Submit without re-tapping, verify mood/sleep/water are logged) and Resolve, or lower the bar.",
-      "reviewedAt": "2026-07-10T06:10:30.187Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260710-7e2f",
       "createdAt": "2026-07-10T05:40:31.068Z",
       "author": "shakeebshaan",
