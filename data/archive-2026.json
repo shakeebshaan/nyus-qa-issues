@@ -19092,9 +19092,9 @@
       "reviewReason": "FIX SHIPPED (commit 0b8ccc78, pushed to main) — flagging instead of resolving because the board satisfaction bar is pinned at 100/100 (judge gate), which freezes auto-resolves. Root cause: a request timeout (axios ECONNABORTED, no server response) leaves navigator.onLine=true, so useBlockSubmit isOffline check (:165) was false and the timed-out log fell through to the hard 'Failed to save' rollback instead of the offline queue. Fix: new isNoResponseError() in api-client.ts treats any axios error with no response (timeout/ETIMEDOUT/ERR_NETWORK) as offline-queueable; 4xx/5xx (with response) still roll back. Regression tests added (timeout queues offline; 4xx does NOT). Full offline-queue + useBlockSubmit suite 61/61 green; loop.mjs verify (npm run test:unit) exits 0. Non-visual behavioral fix. Please Resolve, or move the satisfaction slider below 100 to let the loop resolve.",
       "reviewedAt": "2026-07-10T15:37:54.956Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-10T20:49:59.601Z",
+      "resolvedAt": "2026-07-10T20:50:02.425Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-10T20:49:59.601Z"
+      "archivedAt": "2026-07-10T20:50:02.425Z"
     }
   ]
 }
