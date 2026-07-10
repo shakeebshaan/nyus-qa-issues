@@ -131,29 +131,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260710-b9c2",
-      "createdAt": "2026-07-10T01:10:32.632Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "route": "/onboarding (custom diet builder — meal-idea suggestion swiper)",
-      "description": "[bug-hunt] The \"infinite\" meal-idea swiper permanently stops topping up its deck after the first background fetch that is interrupted by a swipe — the deck is silently capped at the initial ~20 cards for the rest of the session (and across every re-open).\n\nRoot cause (src/components/plan-builder/MealSuggestionSwiper.tsx). The background top-up uses a single-flight mutex ref, but releases it conditionally:\n- fetchingMoreRef = useRef(false) (line ~78) — persists across renders. Only reset in ONE place.\n- Top-up effect: guard \"if (fetchingMoreRef.current) return;\" (line ~129), then fetchingMoreRef.current = true (line ~133), starts a force:true (cache-bypassing, live-LLM, ~14s) suggestMealCached fetch (line ~136).\n- The reset is gated on !cancelled: .finally(() => { if (!cancelled) fetchingMoreRef.current = false; }) (line ~147).\n- The effect cleanup sets cancelled = true (line ~149-151). Effect deps include index (line ~153), so the very next swipe (skip() -> setIndex(i+1), line ~189) re-runs the effect and fires the previous closure's cleanup -> cancelled = true.\n- When the in-flight fetch then settles, .then early-returns on cancelled (line ~138) AND .finally skips the reset because !cancelled is false -> fetchingMoreRef.current is now stuck true FOREVER. Every subsequent top-up early-returns at line 129.\n\nNothing else clears the ref: the open/re-open effect (line ~88-117) resets loading/error/cards/index but NOT fetchingMoreRef; and the component only \"return null\"s when closed (line ~220) — it never unmounts, because the caller renders it as {suggestMeal && <MealSuggestionSwiper open=... />} and suggestMeal stays defined once set (setSuggestTarget is only ever called with a non-null value, never reset). So the stuck ref survives close/reopen for the whole builder session; even \"More ideas\" (reloadKey) fetches a fresh 20 but that deck is capped at 20 too.\n\nBecause force:true hits the live LLM (~14s) and the user reached index 10 by actively swiping (seconds per card), the interrupting swipe is the DEFAULT, not the exception — the fetch is almost always orphaned.\n\nRepro:\n1. Onboarding -> custom diet builder -> tap \"Suggest\" on a meal. Swiper loads 20 cards, index 0.\n2. Swipe/x down to index 10 -> top-up condition (cards.length - index = 10) fires -> fetchingMoreRef=true, ~14s fetch starts.\n3. Swipe once more before it resolves -> setIndex(11) -> cleanup sets cancelled=true; effect re-runs and early-returns at the guard (no new fetch registered).\n4. Fetch resolves: results discarded (cancelled), and the .finally skips the reset -> fetchingMoreRef stuck true.\n5. From now on no top-up ever runs. At index 20 the UI degrades to the manual \"That's all the ideas / More ideas\" gate — the exact fallback the infinite-deck feature (QA i-20260623-ab17) was built to eliminate. Reopening the swiper for the same or a different meal also never tops up.\n\nExpected: as the user nears the end of the queue a fresh batch is always fetched and appended, keeping the deck endless across the session and across re-opens.\nActual: the deck freezes at ~20 cards after the first interrupted top-up and never grows again.\n\nFix: release the mutex unconditionally — drop the !cancelled guard on line ~147 so .finally always does fetchingMoreRef.current = false (safe, because the guard at line 129 already prevents a second concurrent fetch, so only one .finally is ever pending). For defense in depth also clear fetchingMoreRef.current = false in the open effect (line ~88-117).\n\nDistinct from i-20260706-4ea7 (which is about the per-meal Suggest context omitting saved mealPrefs / cold vs warmed deck) — this is a separate ref-release deadlock in the top-up path.",
-      "reviewReason": "FIXED + pushed to main (commit c0463e0f). MealSuggestionSwiper top-up mutex now releases unconditionally in .finally (was gated on !cancelled, so a swipe mid-fetch left fetchingMoreRef stuck true forever and froze the infinite deck at ~20 cards) + it resets on every open/reload. Regression lock: test/qa-i20260710-fixes.test.ts (mutex-release invariant incl. old-behavior-fails assertion) — 7/7 green; tsc clean. Not auto-resolving: satisfaction bar is pinned 100 (freezes resolves for your on-device verdict) and I won't self-score 100 because the fix screenshot (the /customize/diet builder surface) can't visually show a time/interaction deadlock — the proof is the unit test. Please verify on device (swipe ~10 meals fast, confirm the deck keeps topping up) and Resolve, or lower the bar.",
-      "reviewedAt": "2026-07-10T01:41:12.719Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260709-sb61",
       "createdAt": "2026-07-09T16:40:18.319Z",
       "author": "shakeebshaan",
