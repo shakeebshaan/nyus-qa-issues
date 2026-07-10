@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260710-sup1",
+      "createdAt": "2026-07-10T19:42:35.993Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/dashboard",
+      "description": "[suggestion] Supplement & medication tracker with reminders + adherence — let users track the supplements/meds they already tell us about at onboarding, so the coach's existing supplement science finally runs on real adherence data.\n\nFeature (one sentence): An opt-in \"Supplements\" checklist — add each item (name + optional dose + schedule of times/days) → a small calm daily check-off card + one reminder per item via the EXISTING notification scheduler → adherence % surfaced in Weekly Review and fed to the coach context.\n\nProblem: NYUS already ASKS \"Are you on any medications or supplements?\" at intake (src/lib/coach-intake-questions.ts:349, topic option :118), ships coach supplement science (nyu_backend/prompts/science/supplements.txt) and educates users about supplements on the Science page (src/pages/Science.tsx) — but there is NO way to track them or be reminded. db_models.py has no supplement-log table (\"supplement\" at :386 is only a food-database category string); no /supplements route, page, service, card or reminder job exists (grep-verified both repos). So a serious athlete \"optimizing their health stack\" (our stated user persona) reports whey/creatine/vitamin-D/thyroid/PCOS meds ONCE and the app forgets — the coach can discuss supplements in the abstract but never knows whether the user actually takes them. Dead-data, same shape as the cycle-tracking gap (i-20260710-cyc1).\n\nEvidence: coach science + intake question + Science-page education all ship; the adherence data path + reminders do NOT (grep-verified across frontend and backend). India relevance: widespread vitamin-D/B12 deficiency, thyroid + PCOS medication, and whey/creatine among gym-goers — adherence directly drives results and retention (a daily check-off is a reason-to-open-the-app).\n\nWhy now: thin wiring unlocks a real daily-engagement loop AND a genuinely-differentiated coaching input for the athlete segment, reusing infra we already pay for (notification scheduler + 5 channels + frequency caps). No new science needed — supplements.txt already exists.\n\nV1 scope (opt-in): (1) BE: 1-2 tables (supplement item + schedule / daily check log) + CRUD + a today-adherence serializer; (2) FE: a \"Supplements\" add-item screen (name + optional dose + times/days) + a calm tier-free daily check-off card on Dashboard/Profile — no arcade, no streak confetti; (3) one reminder per scheduled time reusing the existing scheduler + frequency caps (toggle in /notification-preferences); (4) expose today adherence to the coach context string + one line in Weekly Review. OUT of v1: no dosing advice, no drug-interaction checks, no medical claims (short \"not medical advice\" note), no product database/barcode — free-text name only.\n\nEffort: small-medium. BE: 1-2 tables + CRUD + one scheduler reminder job + adherence into review/coach context. FE: 1 add-item screen + 1 check-off card + a reminder toggle. No new nutrition/coach science."
+    },
+    {
       "id": "i-20260710-0dbd",
       "createdAt": "2026-07-10T15:16:00.000Z",
       "author": "shakeebshaan",
