@@ -19092,9 +19092,9 @@
       "reviewReason": "FIXED + pushed to main (commit 0d17e9c2). DailyCheckinBlock displayed==submitted mismatch: the card staged mood/sleep/water (worst with coach-supplied defaults like water 1800/sleep 7.5/mood 'Good') but a confirm-only Submit omitted them because they were gated on a hidden `touched` set; it also rendered aria-checked=true on an unselected mood. Fix: value-gate every field exactly like weight (submit what the card shows) and start mood UNSELECTED (null) so aria-checked is honest and nothing is fabricated; removed the touched machinery. Regression tests test/DailyCheckinBlock.test.tsx: 'does not pre-select or submit a mood when no defaults' + 'submits coach-supplied defaults on confirm-only'. 31/31 green; tsc clean. Not self-resolving under the pinned-100 bar — please confirm on device (open a check-in with backend defaults, tap Submit without re-tapping, verify mood/sleep/water are logged) and Resolve, or lower the bar.",
       "reviewedAt": "2026-07-10T06:10:30.187Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-10T20:50:06.733Z",
+      "resolvedAt": "2026-07-10T20:50:14.371Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-10T20:50:06.733Z"
+      "archivedAt": "2026-07-10T20:50:14.371Z"
     }
   ]
 }
