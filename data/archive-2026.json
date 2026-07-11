@@ -19192,9 +19192,9 @@
       "reviewReason": "FIXED + pushed to main (app commit 245a7786), adversarially re-verified this tick. Root cause exactly as filed: values were seeded from each question defaultValue and the Save-enable gate ran seeded numeric values through toPayload (identity for emoji/clock/slider) so != null was always true -> purple Save armed from mount, submitting fabricated baselines. Fix: values now seed to {} (empty); touched = key-present-in-values, written only by a control onChange; hasAnswer + useCoachIntake.submit both treat an absent key as blank (undefined-skip is defense-in-depth, also kills the old fabricated switch=false). Verified: fresh mount Save disabled; a real drag arms + submits the touched value; reset effect cannot wipe touched input mid-session; text/choice/multi unchanged. 22/22 CoachIntake+cycle unit tests + tsc green. Not auto-resolved: board satisfaction bar is pinned 100 (an honest self-score can't be a perfect 100, and this is a from-mount interaction bug a static screenshot can't prove) and the testGate command npm run test:unit is a known no-op. Please verify on device and Resolve, or lower the bar.",
       "reviewedAt": "2026-07-11T01:25:42.558Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-11T06:28:43.533Z",
+      "resolvedAt": "2026-07-11T06:29:00.729Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-11T06:28:43.533Z"
+      "archivedAt": "2026-07-11T06:29:00.729Z"
     }
   ]
 }
