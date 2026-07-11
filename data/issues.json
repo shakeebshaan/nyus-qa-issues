@@ -4,6 +4,44 @@
     {
       "author": "shakeebshaan",
       "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/dashboard",
+      "createdAt": "2026-07-11T01:43:12.505Z",
+      "id": "i-20260711-fb7e",
+      "description": "[bug-hunt] Fasting is tracked in TWO independent, unsynchronized systems, so the app shows contradictory \"am I fasting?\" state and a fast started in one surface is invisible in the other.\n\nSystem A (older, nutrition-embedded): src/pages/Nutrition.tsx FastingBanner + a per-day 16:8 elapsed timer keyed on localStorage `nyus_fast_start_${todayLocal()}` (Nutrition.tsx:66, 306-311) PLUS the backend fasting-DAY flag from getFastingStatus GET /daily-logs/fasting (nutrition.service.ts:107, useNutritionData.tsx:328). This drives the FastingBanner + the meal-list overlay.\n\nSystem B (new V1, closes i-20260708-fst1, commit 70a395c8): src/hooks/useFasting.ts + src/lib/fasting.ts, keyed on a completely different localStorage store `nyus_fasting_active` / `nyus_fasting_history`, with NO backend call at all. This drives the Dashboard Fasting card (DashboardFastingCard.tsx) and the /fasting detail page.\n\nThe two share NOTHING -- different localStorage keys, and B never touches the backend fasting-day. So:\n- Start a 16:8 fast on the Dashboard card or /fasting -> nyus_fasting_active is set, a live timer runs. Open Nutrition -> FastingBanner shows nothing (it reads nyus_fast_start_* + the backend day-flag), and the meal-list behaves as a normal (non-fasting) day. The fast the user just started has zero effect on their meal plan / calorie framing / streak / coach.\n- Conversely, mark today a fasting day in Nutrition (backend flag) or run the nutrition 16:8 timer -> the Dashboard Fasting card still reads 'Track your eating window / Start a fast' (idle), because it only knows about nyus_fasting_active.\n\nRepro:\n1. Dashboard -> Fasting card -> 'Start 16:8'. Card shows a live count-up.\n2. Navigate to /nutrition. No fasting banner; meals fully interactive as a normal day.\n3. (reverse) In /nutrition mark today a fasting day -> back to /dashboard -> Fasting card still shows idle 'Start a fast'.\n\nExpected: one source of truth for the user's fasting state; starting/ending a fast in any surface is reflected everywhere (and ideally informs the meal overlay / streak).\nActual: two disjoint 16:8 timers + a backend day-flag that don't know about each other -> contradictory state, and a Dashboard/​/fasting timer that is purely cosmetic (no impact on nutrition, streak, or coach).\n\nFix (owner decision on scope): unify on a single fasting source of truth -- either back the V1 timer with the same backend fasting-day + nyus_fast_start_* the nutrition banner uses, or have both surfaces read/write one shared module. At minimum the Dashboard/​/fasting timer should reflect (and set) the same 'fasting today' state the Nutrition page uses so the app never shows two contradictory fasting states at once."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/fasting",
+      "createdAt": "2026-07-11T01:43:12.505Z",
+      "id": "i-20260711-fa19",
+      "description": "[bug-hunt] The fasting 'window reached' reminder (REMINDER_IDS.FAST_TARGET) is only ever scheduled inside startFast and is never reconciled with the actual active fast, so it (a) can fire for a fast that was already ended, and (b) silently never fires for an active fast when permission wasn't granted at start or after an app relaunch/reboot. That reminder is the whole point of a device-local V1 timer.\n\nRoot cause: src/hooks/useFasting.ts. startFast (lines 43-61) schedules the one-shot ASYNC: `void requestPermission().then(granted => { if(!granted) return; scheduleOneShot(FAST_TARGET, at, ...) })`. endFast (63-72) calls cancelReminder(FAST_TARGET). There is NO reschedule/reconcile on mount when an active fast is loaded from storage (loadActive, line 32), and no re-request if permission was denied at start.\n\nTwo concrete defects:\n\n(1) Orphan reminder (schedule-after-cancel race). On the first-ever fast, requestPermission() shows the OS prompt (async). `active` is set synchronously (setActive), so the button immediately flips to 'End fast'. If the user taps End before the prompt resolves, endFast runs cancelReminder (nothing scheduled yet -> no-op) and clears the fast; THEN the prompt resolves granted and the queued .then() calls scheduleOneShot for the ORIGINAL target time. Result: a 'Fasting window complete' notification fires later with no active fast.\n\n(2) Reminder never (re)scheduled. If the user denies the prompt at first start (granted=false -> early return, no reminder), the fast still runs but the target reminder is gone for that fast even if they enable notifications afterward. Likewise on app relaunch/reboot, loadActive() restores the active fast but nothing re-checks getPending()/reschedules, so a dropped OS notification is never restored. Compare NotificationPreferences/reminderSync which DO have recovery-on-mount logic; the fasting reminder has none.\n\nRepro (2): native build, notifications not yet granted -> /fasting -> Start 16:8 -> deny the OS prompt -> no target reminder is scheduled; enabling notifications later does not schedule one for the in-progress fast, so 'window reached' never fires.\n\nFix: reconcile the FAST_TARGET reminder against the active fast on hook mount (reschedule for loadActive() when pending is missing and permission is granted; cancel when there is no active fast), and guard the startFast .then() so it does not schedule if the fast that owned it has already ended (capture startedAt and skip when the current active fast != that start)."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
         "discovery",
         "auto"
       ],
