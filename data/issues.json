@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T21:16:39.865Z",
+      "id": "i-20260711-a3d1",
+      "description": "[bug-hunt] Ad-hoc \"Log activity\": removing ONE logged activity silently deletes EVERY same-named activity that day (data loss). The new sheet's Remove (X) and the plan tick-off both delete by name+date, but log always inserts a new row.\n\nRoot cause (frontend + backend):\n- Remove passes the NAME, not the row id: src/components/activity/LogActivitySheet.tsx:327 -> removeMut.mutate(entry.activity_name) -> loggingService.unlogActivity({activity_name, log_date}) (logging.service.ts:104).\n- Backend DELETE /api/logs/activity deletes ALL rows matching user+date+lower(name): app/routes/logging.py:1228-1230 (.delete(synchronize_session=False), no id, no LIMIT 1). Returns {deleted: N}.\n- POST always INSERTs a fresh row (logging.py:1191-1202, no upsert/dedup). No unique constraint on (name,date) — db_models.py ActivityLog has only a NON-unique idx_activity_log_user_date. So two same-name rows/day are allowed and each renders as its own <li key={entry.id}> (LogActivitySheet.tsx:303).\n- Same by-name delete is used by the plan tick-off: src/components/activity/ActivityMarkSection.tsx:101 unlogActivityMut.mutate({activity_name: activity.name, log_date}).\n\nRepro (single feature):\n1. /activity -> Log activity -> type Cardio, Name \"Run\", Duration 30 -> Save.\n2. Log activity again -> Name \"Run\", Duration 20 -> Save.\n3. Reopen the sheet: both \"Run\" entries show under \"Also logged today\".\n4. Tap X on the 20-min Run. Toast: \"removed\".\nExpected: only that one entry is removed.\nActual: BOTH Run rows are deleted (DELETE returns {deleted:2}); the 30-min run and its data are destroyed silently.\n\nRepro (cross-feature, worse — the ad-hoc row is invisible):\n1. Plan has activity target \"Morning Walk\"; user also logs an ad-hoc \"Morning Walk\" via the sheet (hidden from the sheet list because it matches a plan name).\n2. Plan \"Morning Walk\" now shows completed (backend marks a plan activity done when ANY same-name ActivityLog exists). User un-ticks it in ActivityMarkSection.\nActual: the ad-hoc Morning Walk is deleted too, with no indication.\n\nFix: delete by ActivityLog.id scoped to the user (add id to unlogActivity + the row), not by name. Plan tick-off (which legitimately keys on name) should delete only the most-recent matching row or tag plan-generated logs so it never touches ad-hoc rows. Verified: tsc clean; both repos traced; adversarial verify CONFIRMED all 6 links, no unique constraint."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T21:16:39.865Z",
+      "id": "i-20260711-b7e2",
+      "description": "[bug-hunt] Voice rest-timer cue announces a phantom \"set N+1 of N\" after the FINAL set, contradicting the on-screen \"Workout complete\"/\"Next up\", and mislabels the just-completed set's reps/weight as the next set's \"Target\". New voice-cues feature (commit b7df14c5), opt-in (Profile > Voice cues) + Sounds on.\n\nRoot cause (src/pages/Activity.tsx):\n- The rest timer arms after EVERY logged set while the picker is open, with NO final-set guard: logSetMutation.onSuccess sets lastLoggedSetRef then, if isModalOpen.current, restarts the timer (Activity.tsx:515-533).\n- buildRestCue always computes nextSet = (lastSet.set_number ?? 0)+1 and appends \" of {target_sets}\" (Activity.tsx:57-59). After logging the last set of a 3-set exercise: lastLoggedSet=3 -> nextSet=4, total=3 -> \"set 4 of 3\".\n- The cue is spoken by RestTimer's completion effect (RestTimer.tsx:51 speakRestCue(announceOnComplete)) after the rest duration elapses.\n- Secondary (same root): the \"Target {reps} reps at {kg} kilos\" line (Activity.tsx:60-61) uses lastLoggedSetRef — the set JUST COMPLETED — but frames it as the upcoming set's TARGET, ignoring the plan's prescribed target (currentExercise.current_target). On a failed/under-target set (did 5 of a 10 target) it announces \"Target 5 reps\" — mis-coaching.\n\nRepro:\n1. Profile > Preferences: Sounds ON, Voice cues ON.\n2. /activity -> start a live workout -> open a 3-set exercise -> log set 3/3. Do NOT tap Continue/Finish; pocket the phone.\n3. After the 90s rest, the phone says: \"Rest over. Next: <exercise>, set 4 of 3. Target <last reps> at <last kg> kilos.\"\nExpected: no cue after the last set (or announce the real next exercise / prescribed target).\nActual: phantom set \"4 of 3\"; if a next exercise exists the screen says \"Next up: Squats\" while the voice says the finished exercise \"set 4 of 3\" (double-wrong). Distinct from fixed 2ea5 (that was workout-completion detection, not the spoken cue).\n\nFix: suppress the cue when nextSet > target_sets (final set), and base the \"Target\" line on the plan's prescribed next-set target rather than lastLoggedSetRef."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T21:16:39.865Z",
+      "id": "i-20260711-c4f9",
+      "description": "[bug-hunt] Ad-hoc \"Log activity\" sheet's \"Also logged today\" list is sourced from ALL of today's activity_logs (not just entries the sheet created), so it surfaces rows it cannot manage: (a) nameless AI-coach-logged rows show with a permanently-disabled Remove X, and (b) a legit ad-hoc entry whose name collides with a plan activity is filtered out entirely — logged and counted toward streak/calories, but invisible and un-removable.\n\nRoot cause (src/components/activity/LogActivitySheet.tsx):\n- adHocEntries = daily.activity_logs filtered ONLY by \"name not in planActivityNames\" (LogActivitySheet.tsx:78-90); it is NOT scoped to sheet-created rows.\n- (a) AI coach activity_logger blocks store rows with activity_name = NULL when the canonical type equals the activity type: src/lib/block-transformers.ts:186 (activity_name: activity?.type !== activityType ? activity?.type : undefined) -> useBlockSubmit.ts logActivity -> NULL name. In the sheet that row renders (name falls back to the type label, :310) but Remove is disabled={... || !entry.activity_name} (:329) and the handler is guarded if(entry.activity_name) (:327), and backend requires a name (logging.py:1226). => visible entry with a dead X, un-removable through any UI.\n- (b) The plan-name exclusion (:78-90; plan names from Activity.tsx:971 overview.activity_targets.activities) hides any ad-hoc log whose name matches a plan activity name. Repro: plan target \"Walk\"; user logs ad-hoc \"Walk\" -> row saved, counts toward calories/streak, but never appears in the sheet -> looks un-logged and cannot be removed there.\n\nExpected: the list shows and lets the user manage exactly the entries relevant to ad-hoc logging (and every shown entry is removable).\nActual: rows appear that can never be removed, and legit ad-hoc rows silently vanish from the list.\n\nFix: scope the list to sheet-created ad-hoc rows (e.g. delete-by-id so nameless rows are removable; stop hiding name-collision ad-hoc entries), or clearly separate \"your ad-hoc entries\" from synced/plan rows. (Lower-sev siblings noted, not filed: removal-failure toast reuses \"Couldn't log activity\" copy; metric-less submit creates an all-null row with a blank subtitle; daily-logs query has no enabled:open gate.)"
+    },
+    {
       "author": "claude-page-guardian",
       "tags": [
         "bug-hunt",
