@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260711-e23a",
+      "createdAt": "2026-07-11T11:39:59.248Z",
+      "route": "/profile",
+      "description": "[bug-hunt] Profile > Hydration: the daily water-goal stepper steps by 250 ml, but the goal persists to a Numeric(3,1) column (0.1 L / 100 ml granularity), so odd-250 goals are silently rounded and the stepper drifts off its own grid. Expected: the value you tap is saved and shown. Actual: from 2.5 L, tapping + shows 2.75 L then snaps to 2.8 L after the save round-trips (2750 ml -> PUT target_water_liters=2.75 -> DB rounds to 2.8 -> refetch re-seeds 2800 ml); every later tap then drifts by +300 ml (2.8->3.1->3.4...), never landing back on the 250 grid, so 2750/3250/3750 ml can never be saved. The Nutrition water tracker reads the same hydration-prefs query key, so it inherits the wrong rounded goal too. Repro: Profile -> HYDRATION -> Daily goal + once -> watch the value snap 2.5 -> 2.75 -> 2.8 L. Files: src/pages/_components/profile/ProfileHydrationSection.tsx:19 (GOAL_STEP=250) + src/services/other.service.ts:106 (Math.round(goalMl)/1000) + backend db_models.py:1315 (target_water_liters Numeric(3,1)). Fix: set GOAL_STEP=500 (frontend-only; 0.5-L steps are representable) OR widen the column to Numeric(4,2) via migration.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
+      "id": "i-20260711-5b36",
+      "createdAt": "2026-07-11T11:39:59.248Z",
+      "route": "/profile",
+      "description": "[bug-hunt] Profile > Show me around again (Replay Tutorials) is a dead feature that reports success. Tapping it -> picker -> select tutorials -> Reset (N) shows a toast N tutorials will replay on next visit, but NO tutorial ever replays. Root cause: the tutorial overlay is globally disabled -- const TUTORIAL_ENABLED = false in src/components/tutorial/TutorialOverlay.tsx:13 (comment: disabled pending native viewport handling for tooltip positioning), so TutorialOverlay returns null on every screen; and the reset POSTs to /users/tutorial/reset, a deliberate no-op stub (backend app/routes/users.py:245 returns {reset:true} and deletes nothing). Nothing gates the Profile entry point (src/pages/_components/profile/ProfileSupportSection.tsx:65 renders the Show me around again row unconditionally) or the success toast (src/pages/_components/profile/ProfileTutorialPicker.tsx:76-79) on the disabled flag. Expected: while tutorials are disabled, hide the Show me around again row or stop promising a replay. Actual: the user is told N tutorials will replay and none ever do. Repro: Profile -> Show me around again -> Select all -> Reset (8) -> toast promises replay -> open Dashboard / Coach Chat -> nothing replays, ever. Fix: gate the ProfileSupportSection row + toast copy on TUTORIAL_ENABLED (export it), or re-enable the overlay.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260711-9c7a",
       "createdAt": "2026-07-11T07:19:31.192Z",
       "route": "/",
