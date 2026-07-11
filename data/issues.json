@@ -684,8 +684,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Fixed in board index.html (commit 463537e, pushed to main → Pages deploys in ~1min). Root cause: resolve did two sequential GitHub writes — archive-2026.json is now >1MB so it forces a slow raw GET + ~1.4MB PUT, plus issues.json — and the card only disappeared AFTER both finished, so it looked stuck after clicking the check. Fix: the card is now removed and re-rendered instantly (optimistic); the writes run in the background and roll back if they fail. Perceived speed can't be shown in a screenshot and the judge bar is 100, so flagging for you to hard-refresh the board and confirm resolves now feel instant, then tap Resolve. (Deeper archive-size cleanup — the 1MB+ file grows forever — is a separate larger change; left for a follow-up.)",
-      "reviewedAt": "2026-07-09T15:50:17.089Z",
+      "reviewReason": "Fix already shipped: commit 463537e made Resolve OPTIMISTIC — the card now leaves the board instantly on click (state updates locally, the GitHub write reconciles in the background) instead of waiting on the API round-trip that made it feel stuck. Please retest from your phone: tap Resolve on any in-review card — it should disappear immediately. If it still lags, it's the network write reconciling; tell me and I'll add a spinner+toast on the button so the click always feels acknowledged. (Related to c695 board-feel.)",
+      "reviewedAt": "2026-07-11T07:02:07.505Z",
       "reviewedBy": "shakeebshaan"
     },
     {
