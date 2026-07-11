@@ -53,14 +53,37 @@
         "bug-hunt",
         "auto"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Profile > 'Show me around again' promised N tutorials would replay, but the tutorial overlay is globally disabled (TUTORIAL_ENABLED=false) and the reset endpoint is a no-op, so nothing ever replayed. Fix: exported TUTORIAL_ENABLED from TutorialOverlay.tsx and gated the ProfileSupportSection row on it, hiding the dead entry point while tutorials are off. Verified live: the row is gone from Profile > SUPPORT.",
+        "imagePath": "images/i-20260711-5b36-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260711-5b36-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bc1c278bfec67b1311459e69bb3cc8dacfaef7ef",
+        "imageCommits": [
+          "bc1c278bfec67b1311459e69bb3cc8dacfaef7ef"
+        ],
+        "fixedAt": "2026-07-11T12:03:41.927Z",
+        "by": "shakeebshaan",
+        "appCommit": "2b4be366",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Removes the false promise at the source by gating on the real disabled flag; when the overlay is re-enabled the row returns automatically. Verified in browser (row absent), tsc clean."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260711-9c7a",
