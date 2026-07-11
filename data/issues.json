@@ -342,8 +342,30 @@
     },
     {
       "createdAt": "2026-07-08T06:55:23.362Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Re-fix reopen 'B'. Root cause of symptom B (edit-after-complete replays celebration): ExerciseWheelPicker.handleLogSet fired onSetComplete(true) on EVERY edit while full coverage held, so re-editing the last exercise's final set re-triggered Activity's workout-complete confetti/sound. Fix: fire completion only on the incomplete->complete EDGE -- onSetComplete(allTargetLogged && !wasAllLogged) (ExerciseWheelPicker.tsx:350-360); editing an already-complete set now passes false. Belt-and-suspenders with the existing Activity.handleSetComplete showWorkoutCompleteRef guard. Added a symptom-B regression test; ExerciseWheelPicker 49/49 + Activity 34/34 green, tsc clean. Capture = authenticated /activity (today is a rest day so the live edit-state isn't drivable in a static frame; the regression test is the behavioral proof).",
+        "imagePath": "images/i-20260708-2ea5-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260708-2ea5-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "922326fc09bfbad305d03a87b5e54c4cdfc37f42",
+        "imageCommits": [
+          "922326fc09bfbad305d03a87b5e54c4cdfc37f42"
+        ],
+        "fixedAt": "2026-07-11T06:33:45.908Z",
+        "by": "shakeebshaan",
+        "appCommit": "c29d4d3e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Prior reopens guarded the replay only in Activity (showWorkoutCompleteRef); owner still hit B. Now killed at source in the picker: completion is edge-triggered, so a no-op edit of an already-complete exercise can never signal completion again. Dedicated symptom-B regression test asserts onSetComplete never re-fires true on Update. Both symptoms A+B covered by tests; tsc clean. Behavioral defect -> the regression test is the definitive proof (live edit-state not drivable in a static capture on a rest day, per verify-discipline)."
+        }
+      },
       "history": [
         {
           "at": "2026-07-08T09:08:51.381Z",
