@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260711-d0ca",
+      "createdAt": "2026-07-11T07:01:14.484Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Plan-independent food diary shows \"0 kcal logged\" for the DEFAULT free-text log — the new feature's headline running-totals card is dead on its own primary path.\n\nThe no-plan food diary (commit e6f84228, closes i-20260711-fdry) renders a \"Today's food diary\" card with a big kcal headline + P/C/F macro tiles + per-item list, for users with NO AI diet plan who track home-cooked food. Its primary CTA \"Log what you ate\" (NutritionDiaryCard.tsx:102 / NutritionEmptyState.tsx:44 / Nutrition.tsx:481) opens CustomMealModal, which DEFAULTS to the 'quick' free-text tab (CustomMealModal.tsx:60 useState('quick')).\n\nA plain typed log attaches macros ONLY when a prior photo-analysis description still matches the text (CustomMealModal.tsx:351-358); text typed from scratch => macros=null => POST /logs/meal with no total_calories/protein/carbs/fat (CustomMealModal.tsx:360-366). Backend log_meal stores total_calories=body.get('total_calories') = NULL with ZERO server-side estimation (nyu_backend app/routes/logging.py:803-806). getDailyLogs serializes those nulls; the diary sums m.total_calories ?? 0 (Nutrition.tsx:320-325) => 0.\n\nResult: the exact target user (home-cooked tracker, no plan) who taps the primary CTA and types their meal gets a diary whose flagship metric is uniformly ZERO — headline \"0 kcal logged\" (NutritionDiaryCard.tsx:54-57) and every item \"0 kcal · P0g C0g F0g\" (:88, :93). Only the item name + count are correct. The macro-bearing paths are all non-default/gated: photo analysis is Pro-only (403/429 for free users), the Ingredients tab needs a tab-switch + search, and re-logging a recent free-text meal carries null again.\n\nRepro:\n1. Account with NO AI diet plan -> /nutrition.\n2. Tap \"Log what you ate\" -> stays on Quick Log tab -> type \"2 roti, 1 katori dal\" -> Log Meal.\n3. Reopen /nutrition.\nExpected: diary reflects the meal with an estimated/entered kcal + macros (or prompts to add them).\nActual: \"Today's food diary · 1 item · 0 kcal logged\"; item shows \"0 kcal · P0g C0g F0g\" — the running-totals card looks broken on its own primary flow.\n\nFix options: (a) let the free-text quick log capture optional kcal/macros inline (like the Ingredients \"Add new\" form) so a text meal can carry numbers; (b) route free text through the AI macro estimator for ALL users (or a cheap heuristic) before logging; (c) when a meal truly has no macros, show a per-item \"No calories entered — add them\" and SUPPRESS the 0-kcal headline instead of asserting a false \"0 kcal logged\" total.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260711-d5b1",
+      "createdAt": "2026-07-11T07:01:14.484Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Food logged via the new no-plan food diary is invisible on the DASHBOARD diet card — it still says \"no diet plan\", contradicting the diary the user just filled.\n\nThe plan-independent food diary (commit e6f84228) makes no-plan meal logging first-class: /nutrition AND GET /diet/plan both fold ad-hoc MealLog rows into the day's consumed totals (nyu_backend backend.py:6851-6893, comment \"Fold ad-hoc custom meal logs (MealLog) for the day into consumed totals\" -> calories_consumed). But the DASHBOARD diet card is computed from a DIFFERENT source: diet_summary.progress = {current: diet_completed_today, target: diet_target_today}, both func.count(AssignedMeal.id).join(UserDietPlan) (backend.py:3481-3494, 3684-3689). A no-plan user has no UserDietPlan/AssignedMeal -> target=0, current=0, and the card NEVER reads MealLog. The frontend derives dietHasPlan = diet_summary.progress.target > 0, so it renders the \"No diet plan yet / Generate diet plan\" empty state.\n\nCustomMealModal invalidates ['dashboard-overview'] after logging (CustomMealModal.tsx:371), but because the dashboard's data source ignores MealLog, that refetch changes nothing.\n\nRepro:\n1. No-plan user -> /nutrition -> log 2-3 meals via the diary (use the photo or Ingredients path so they carry kcal).\n2. /nutrition diary shows \"Today's food diary · N items · NNNN kcal logged\".\n3. Go to Dashboard.\nExpected: the dashboard diet card acknowledges the logged food (a \"logged N meals / NNNN kcal today\" state), not a dead \"no plan\" prompt.\nActual: Dashboard diet card shows \"No diet plan yet / Generate diet plan\" — zero acknowledgment; the diary and the home surface disagree.\n\nFix: make the dashboard diet_summary fold MealLog for no-plan users the same way /diet/plan already does, so the food-diary feature isn't undone on the home screen. (Distinct from dashboard tick issues a1f3/e7c9, which were about moments/stacked cards.)",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260711-da17",
+      "createdAt": "2026-07-11T07:01:14.484Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] \"Add daily from now on — Auto-log this every day\" toggle is a phantom: the use_daily flag is stored but NEVER consumed, so nothing is ever auto-logged.\n\nIn CustomMealModal's Ingredients tab, the \"Add daily from now on / Auto-log this every day\" toggle (CustomMealModal.tsx:675-685) sets use_daily, sent to POST /logs/meal/custom-ingredient. The backend stores it on CustomIngredient (nyu_backend app/routes/logging.py:660, 678, 691) and exposes it via GET/PUT, but NO code path EVER reads use_daily to auto-create a daily MealLog.\n\nFull backend grep for use_daily returns ONLY: create/serialize/PUT in app/routes/logging.py, the db_models column (db_models.py:1620), and the create-table migration — no scheduler, daily_report, or cron job consumes it. CustomIngredient itself is referenced ONLY in logging.py + db_models.py. No client-side auto-log exists either.\n\nResult: the toggle makes a concrete promise (\"Auto-log this every day\") that is silently inert.\n\nRepro:\n1. /nutrition -> Add Food -> Ingredients tab -> select or add an ingredient -> enable \"Add daily from now on\" -> Add to Today.\n2. The next day, open /nutrition.\nExpected: that ingredient auto-appears in today's log/diary.\nActual: it never auto-logs on any subsequent day; the flag persists but does nothing.\n\nFix: either implement an idempotent daily job that logs each user's use_daily=true CustomIngredients as a MealLog for the new local day, or remove the toggle until it's wired so it stops misleading. (Pre-existing Ingredients-tab feature, surfaced while hunting the food-diary area; distinct from the diary-macro [d0ca] and dashboard [d5b1] findings.)",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "author": "shakeebshaan",
       "tags": [
         "content",
