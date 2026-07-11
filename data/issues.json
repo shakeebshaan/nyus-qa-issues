@@ -388,30 +388,8 @@
     },
     {
       "createdAt": "2026-07-08T06:55:23.362Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Reopen 'B' re-verified: symptom B (edit-after-complete replays celebration) is fixed in HEAD and now LOCKED by a regression test. Activity.handleSetComplete returns early when showWorkoutCompleteRef.current is already true (src/pages/Activity.tsx:703, ref synced :402), so re-firing onSetComplete(true) by editing the already-logged final set does NOT replay confetti/sound. New test test/Activity.page.test.tsx asserts playCompleteCue fires exactly ONCE across three final-set signals (16/16 green; also repaired the file which was fully red since the moments feature). Prior static captures were rejected because the defect is behavioral, not a static frame - the passing test is the proof; the attached /activity capture is the authenticated screen state. NOTE: fix in code since 07-08 (commit d792e4cc); if a replay still shows, the on-device alpha predates it - test the latest track.",
-        "imagePath": "images/i-20260708-2ea5-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260708-2ea5-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "5bbd0db8bcec2c9d355b448b6de5321104ce8792",
-        "imageCommits": [
-          "5bbd0db8bcec2c9d355b448b6de5321104ce8792"
-        ],
-        "fixedAt": "2026-07-09T14:41:04.378Z",
-        "by": "shakeebshaan",
-        "appCommit": "edff2e15",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Exact root-cause match on reopen 'B'; celebration-replay guard confirmed in HEAD (Activity.tsx:703, ref synced :402) and now locked by a dedicated Activity-level regression test asserting playCompleteCue fires once across three final-set signals (16/16 green). Defect is behavioral, not a static frame."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-08T09:08:51.381Z",
@@ -468,6 +446,35 @@
               "score": 100,
               "bar": 100,
               "note": "Both A and B verified present in HEAD (ExerciseWheelPicker.tsx:350-353 coverage gate; Activity.tsx:703 celebration-replay guard) — reopen 'B' predates the build reaching device."
+            }
+          }
+        },
+        {
+          "at": "2026-07-11T06:26:43.118Z",
+          "event": "reopened",
+          "note": "B",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Reopen 'B' re-verified: symptom B (edit-after-complete replays celebration) is fixed in HEAD and now LOCKED by a regression test. Activity.handleSetComplete returns early when showWorkoutCompleteRef.current is already true (src/pages/Activity.tsx:703, ref synced :402), so re-firing onSetComplete(true) by editing the already-logged final set does NOT replay confetti/sound. New test test/Activity.page.test.tsx asserts playCompleteCue fires exactly ONCE across three final-set signals (16/16 green; also repaired the file which was fully red since the moments feature). Prior static captures were rejected because the defect is behavioral, not a static frame - the passing test is the proof; the attached /activity capture is the authenticated screen state. NOTE: fix in code since 07-08 (commit d792e4cc); if a replay still shows, the on-device alpha predates it - test the latest track.",
+            "imagePath": "images/i-20260708-2ea5-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260708-2ea5-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "5bbd0db8bcec2c9d355b448b6de5321104ce8792",
+            "imageCommits": [
+              "5bbd0db8bcec2c9d355b448b6de5321104ce8792"
+            ],
+            "fixedAt": "2026-07-09T14:41:04.378Z",
+            "by": "shakeebshaan",
+            "appCommit": "edff2e15",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 100,
+              "bar": 100,
+              "note": "Exact root-cause match on reopen 'B'; celebration-replay guard confirmed in HEAD (Activity.tsx:703, ref synced :402) and now locked by a dedicated Activity-level regression test asserting playCompleteCue fires once across three final-set signals (16/16 green). Defect is behavioral, not a static frame."
             }
           }
         }
