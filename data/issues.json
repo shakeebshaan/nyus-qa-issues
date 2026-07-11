@@ -492,7 +492,10 @@
       "id": "i-20260708-2ea5",
       "route": "/activity",
       "description": "[bug-hunt] Live workout player declares a set the \"final set\" based purely on set NUMBER, not on whether all target sets were actually logged. In ExerciseWheelPicker.handleLogSet (src/components/ExerciseWheelPicker.tsx:341) it fires onSetComplete(true) whenever setData.set_number === targetSets, with no check that sets 1..targetSets-1 were logged. Activity.handleSetComplete (src/pages/Activity.tsx:672) then advances to the next exercise or declares the whole workout done. Two demonstrable symptoms from the same root cause:\n\n(A) OUT-OF-ORDER LOG -> premature completion. Repro: open an exercise whose target is 3 sets (e.g. 3x8-10), tap the Set 3 row to activate it, and log it FIRST (reverse-pyramid / top-set-first is common for the strength persona this app targets). Expected: nothing special; sets 1-2 still pending. Actual: onSetComplete(true) fires -> if more exercises remain, the \"Set complete - Next up\" banner pops prompting the user to move on; if this is the last exercise, \"Workout complete\" + confetti + completion sound fire with only 1 of 3 sets logged.\n\n(B) EDIT-AFTER-COMPLETE -> celebration replays. Repro: log all 3 sets of the LAST exercise normally (workout-complete banner shows, confetti + sound fire once - correct). The picker stays mounted/open above the banner. Tap the already-logged Set 3 row -> the editor expands -> tap \"Update\". Expected: a silent value update. Actual: handleLogSet runs again with set_number === targetSets -> onSetComplete(true) -> Activity.handleSetComplete else-branch unconditionally re-runs setShowWorkoutCelebration(true) + playCompleteCue(), so the confetti overlay and completion sound REPLAY on every edit of the final set.\n\nFix: gate completion on distinct logged target sets covering 1..target_sets (count reached), not on set_number equality; and skip re-firing the celebration when showWorkoutComplete is already true.",
-      "needsReview": false
+      "needsReview": false,
+      "reviewReply": "B",
+      "reviewRepliedAt": "2026-07-11T06:27:02.659Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "createdAt": "2026-07-08T06:39:38.000Z",
