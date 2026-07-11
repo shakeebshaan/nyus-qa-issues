@@ -142,6 +142,17 @@
   .tagchip.active { background: var(--accent-soft); color: var(--accent-ink); border-color: transparent; }
   .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
   .card-tag { font-size: 11px; font-weight: 600; color: var(--muted); background: hsl(40 15% 94%); border-radius: 999px; padding: 2px 8px; }
+  /* Loop-activity fold: auto content/discovery/press status posts collapse into
+     one section so real bugs aren't buried (i-20260711-c695). */
+  .loop-activity { margin-top: 18px; border: 1px dashed var(--line); border-radius: 12px; background: var(--bg); }
+  .loop-activity > summary {
+    cursor: pointer; list-style: none; padding: 12px 14px; font-size: 13px; font-weight: 600;
+    color: var(--muted); user-select: none; display: flex; align-items: center; gap: 7px;
+  }
+  .loop-activity > summary::-webkit-details-marker { display: none; }
+  .loop-activity > summary::before { content: "▸"; font-size: 11px; transition: transform .15s; }
+  .loop-activity[open] > summary::before { transform: rotate(90deg); }
+  .loop-activity-body { padding: 0 10px 10px; display: flex; flex-direction: column; gap: 12px; }
   /* Multi-user attribution: who filed / fixed / answered (login + avatar). */
   .actor { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--muted); font-weight: 500; }
   .actor img { width: 16px; height: 16px; border-radius: 50%; display: block; background: var(--line); }
@@ -1240,8 +1251,21 @@ function render() {
       (it.route || "").toLowerCase().includes(q)
     );
   }
+  // Fold the standing-loops' automated status posts (auto-tagged content/discovery/press)
+  // into one collapsible "Loop activity" section so real bugs stay in the main list.
+  // Only fold in the default view — an explicit tag filter or search shows everything flat.
+  const isLoopLog = (it) => {
+    const t = tagsFor(it);
+    return t.includes("auto") && (t.includes("content") || t.includes("discovery") || t.includes("press"));
+  };
+  const fold = !activeTag && !searchQuery;
+  const mainCards = fold ? visible.filter((it) => !isLoopLog(it)) : visible;
+  const logCards = fold ? visible.filter(isLoopLog) : [];
+  const logHtml = logCards.length
+    ? `<details class="loop-activity"><summary>Loop activity — ${logCards.length} automated log ${logCards.length === 1 ? "post" : "posts"} (content · discovery · press)</summary><div class="loop-activity-body">${logCards.map((it) => cardHtml(it)).join("")}</div></details>`
+    : "";
   $("list").innerHTML = visible.length
-    ? visible.map((it) => cardHtml(it)).join("")
+    ? mainCards.map((it) => cardHtml(it)).join("") + logHtml
     : all.length
       ? searchQuery
         ? `<div class="search-empty">No issues match "<b>${esc(searchQuery)}</b>"</div>`
