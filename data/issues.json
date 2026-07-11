@@ -7,6 +7,46 @@
         "bug-hunt",
         "auto"
       ],
+      "route": "/nutrition",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T01:59:11.237Z",
+      "id": "i-20260711-dp0f",
+      "description": "[bug-hunt] Nutrition: the meal-plan query ['diet-plan'] has NO date in its react-query key, so a session left open across local midnight keeps serving YESTERDAY's plan -- wrong eaten checkmarks and wrong consumed calorie/macro totals for the new day.\n\nRoot cause: src/pages/_components/nutrition/useNutritionData.tsx:123 useQuery({queryKey:['diet-plan']}), getDietPlan() called with no date (nutrition.service.ts:41-42 -> params={}, backend resolves today from request time). Siblings ['daily-logs', today] (L50) and ['fasting-status', today] (L327) DO embed a fresh todayLocal() each render, so at rollover their keys change and they refetch the new day -- but ['diet-plan'] keeps the same key and serves the cached prior-day payload (is_eaten flags + macros_consumed + calories_consumed). Global refetchOnWindowFocus:false (App.tsx:166) means Capacitor app-resume does NOT heal it; it heals only on Nutrition remount (>30s stale), a diet-write invalidation, or pull-to-refresh. This key is the odd one out -- the widget uses ['diet-plan-widget', today] (useWidgetSync.ts:16) and the weekly view ['diet-plan', d.iso] (DietPlanWeek.tsx:76), both date-keyed.\n\nRepro: leave Nutrition foregrounded from 11:55pm into the next morning. Water tank + fasting banner show the NEW day (keys embed today); meal cards still show yesterday's eaten checks and the header shows yesterday's consumed kcal/macros.\n\nFix: key it ['diet-plan', today] + getDietPlan(today). IMPORTANT -- also update the EXACT-MATCH optimistic cache ops in the same file so the meal-toggle still works: cancelQueries/getQueryData/setQueryData(['diet-plan']) at L139,140,143,190 must include today; prefix-match invalidateQueries(['diet-plan']) elsewhere keep matching. Filed (not auto-fixed) because the optimistic-toggle blast radius needs a runtime verify this headless tick could not perform.\n\nSame session-across-midnight family (both LOW, bundled here): (a) WaterTrackerCard.tsx:92 todayKey=useMemo(...,[]) is frozen at mount date, so the water-goal celebration is SUPPRESSED on day N+1 (the L131 localStorage guard reads the stale day-N key); fix: dep on todayStr not []. (b) useNutritionData.tsx:57-62 water seed effect has no day-rollover reset, so if the backend returns null (not 0) for a fresh day the tank keeps yesterday's fill until interaction (backend-dependent, unconfirmed).",
+      "needsReview": false
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "route": "/nutrition",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T01:59:11.237Z",
+      "id": "i-20260711-ar1a",
+      "description": "[bug-hunt] Nutrition: the protein/carbs/fats macro progress bars expose aria-valuenow ABOVE aria-valuemax when a macro exceeds its target -- an invalid ARIA value pair a screen reader announces as e.g. \"protein 150 of 126\" (WCAG AA gap).\n\nsrc/pages/_components/nutrition/NutritionMacrosSection.tsx:49 (protein), :59 (carbs), :69 (fats): aria-valuenow={Math.round(macros_consumed.X)} with aria-valuemax={Math.round(effectiveTarget.X)}; when consumed>target, valuenow>valuemax. The visible bar already clamps (useNutritionData bar styles Math.min(...,1)) and the SIBLING calorie summary clamps this exact case (NutritionCalorieSummary.tsx:28 aria-valuenow={Math.min(consumedCalories, Math.max(targetCalories,1))}) -- the macro bars just were not given the same clamp.\n\nRepro: eat 150g protein vs a 126g target -> bar caps visually at 100% but the progressbar announces \"150 of 126\".\n\nFix: clamp each macro aria-valuenow to its target, e.g. Math.min(Math.round(macros_consumed.protein), Math.round(effectiveTarget?.protein ?? 0)), mirroring the calorie-summary clamp. Low severity (a11y only; no visual or data error).",
+      "needsReview": false
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
