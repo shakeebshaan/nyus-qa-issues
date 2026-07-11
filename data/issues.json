@@ -50,9 +50,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: dashboard diet card computed progress only from AssignedMeal counts joined to UserDietPlan, so a no-plan user who logged food via the plan-independent diary got target=0 and saw the dead 'No diet plan yet / Generate diet plan' prompt. Fix: backend.py folds today's ad-hoc MealLog rows into two new diet_summary fields (logged_meal_count/logged_calories) using the same filter GET /diet/plan uses; DashboardDietCard renders 'N meals logged today / NNNN kcal so far' + a Log Meal CTA. Verified on prod: card shows '1 meal logged today'.",
+        "imagePath": "images/i-20260711-d5b1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260711-d5b1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f58d2e0270a29dfed777a8e67f51abfeb7e02575",
+        "imageCommits": [
+          "f58d2e0270a29dfed777a8e67f51abfeb7e02575"
+        ],
+        "fixedAt": "2026-07-11T10:37:56.183Z",
+        "by": "shakeebshaan",
+        "appCommit": "e68bf21b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Verified end-to-end: prod /dashboard/overview now returns logged_meal_count=1,target=0; authenticated dashboard screenshot shows the card rendering '1 meal logged today / 0 kcal so far' with Log Meal CTA (was the dead no-plan prompt). Backend deployed+healthy, FE tsc clean, i18n parity across 4 bundles."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260711-da17",
