@@ -11,14 +11,37 @@
         "bug-hunt",
         "auto"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: hydration goal stepped by 250 ml but persists to a Numeric(3,1) column (0.1 L granularity), so 2.75 L rounded to 2.8 L and every later tap drifted off the 250 grid. Fix: GOAL_STEP=500 in ProfileHydrationSection.tsx (frontend-only) so every value is representable in 0.1 L and round-trips exactly. Verified live: 3.0 -> 3.5 L held after save+refetch, no snap.",
+        "imagePath": "images/i-20260711-e23a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260711-e23a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0edaaf3226e254bd80f535cec8bcbcfabb4c3178",
+        "imageCommits": [
+          "0edaaf3226e254bd80f535cec8bcbcfabb4c3178"
+        ],
+        "fixedAt": "2026-07-11T12:03:28.244Z",
+        "by": "shakeebshaan",
+        "appCommit": "2b4be366",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root-caused to the DB column granularity; 500 ml step is exactly representable so drift is impossible. Verified end-to-end in browser: value held through the save round-trip. tsc clean."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260711-5b36",
