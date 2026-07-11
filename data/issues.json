@@ -31,9 +31,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the plan-independent food-diary headline summed null macros as 0, so a free-text meal (the default Quick-Log path, macros only attach via Pro photo analysis) showed a false '0 kcal / P0 C0 F0'. Fix (commit dd0ce308): CustomMealModal adds an optional inline 'Calories & macros' panel on the Quick-Log tab so a typed meal can carry real user-entered numbers; NutritionDiaryCard stops asserting a false 0 — untracked totals show '— Calories not tracked' and macro-less items read 'No calories entered'. Never fabricates numbers.",
+        "imagePath": "images/i-20260711-d0ca-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260711-d0ca-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fa172667c02c4320a948227392ad79e00fd98a0c",
+        "imageCommits": [
+          "fa172667c02c4320a948227392ad79e00fd98a0c"
+        ],
+        "fixedAt": "2026-07-11T10:38:13.524Z",
+        "by": "shakeebshaan",
+        "appCommit": "e68bf21b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Verified on authenticated /nutrition: diary now reads 'Calories not tracked' with '—' macros and item 'No calories entered' (not '0 kcal'); Quick-Log modal shows the 'Calories & macros (optional)' input panel. Frontend-only, tsc clean."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260711-d5b1",
