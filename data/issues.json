@@ -7,6 +7,26 @@
         "suggestion",
         "auto"
       ],
+      "route": "/log-weight",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T20:46:06.502Z",
+      "id": "i-20260711-eta7",
+      "description": "[suggestion] Goal ETA — a calm \"On track for <date>\" line on the Log Weight screen that projects when you will actually reach your goal weight at your CURRENT logged pace.\n\nUser problem: the single most-asked question of anyone cutting or bulking — \"given how I am actually trending, when do I hit my goal?\" — is the one thing the app never answers. Log Weight already shows the past trend + observed rate (e.g. -0.4 kg/wk) and, separately, the kg remaining, but never combines them. The only forward projection in the app (WeeklyTrajectory on Plan Timeline/onboarding) uses the PLAN prescribed pace in \"weeks\", not the user real measured rate — so an off-plan lifter gets a fantasy timeline, not reality.\n\nEvidence: observed EWMA weekly rate (ratePerWeek, LogWeight.tsx:391-406) and remaining kg (goalProgress.remaining, LogWeight.tsx:336) are BOTH already computed on this exact screen and rendered as separate stats — nothing divides one into the other to yield a date (grepped: no ETA/projected-date logic in LogWeight.tsx). The plan-pace projection (src/lib/weekly-projection.ts / WeeklyTrajectory) is a different, plan-based, week-indexed forecast on a different screen. Competitors (HealthifyMe et al.) surface goal-date estimates; NYUS has the data but does not show it.\n\nProposed v1: one card/line on /log-weight — \"At your current pace (-0.4 kg/wk) you will reach your 75 kg goal around 14 Sep · ~11 weeks.\" Frontend-only, reuses the existing rate + remaining. Guard rails (fits the precision-over-encouragement brand): require >=3 logged points, and if the user is stalled or trending AWAY from goal, show \"Not trending toward your goal yet — keep logging\" instead of a fake date. Label it an estimate, like weekly-projection.ts already does. No backend.\n\nRough effort: S (~1-2 frontend files: a small pure helper + a card in LogWeight.tsx; data already present).",
+      "needsReview": false
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
       "route": "/activity",
       "imagePath": null,
       "imageCommit": null,
