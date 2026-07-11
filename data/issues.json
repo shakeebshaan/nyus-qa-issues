@@ -614,49 +614,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260709-09de",
-      "createdAt": "2026-07-09T12:15:46.293Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260709-09de.jpg",
-      "imageCommit": "c8fda0195504c5f05610f854e4e6ab939bb2bf9c",
-      "imagePaths": [
-        "images/i-20260709-09de.jpg"
-      ],
-      "imageCommits": [
-        "c8fda0195504c5f05610f854e4e6ab939bb2bf9c"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause (prod log, 12:16Z, the exact filing time, user b3d013d8 plan 198): the build's 'Tap Continue to retry' triggered a second save-custom-plan+finalize; finalize_secondary_for_user then re-ran after week 1 was already seeded, hitting MySQL 1062 duplicate entries on activity_targets.uq_plan_week_act and grocery_lists.uq_plan_week_g. Fix (backend a95ad93, DEPLOYED + healthy): generate_activity_targets + generate_grocery_list now return the existing row when one is present for (plan_id, week_number) instead of blindly INSERTing, so the retry path is a clean no-op (secondary features persist, no error spam). NOTE: every onboarding call in this session returned 200 and the plan built (completion badge granted) - the 'Couldn't build your plan' toast was a transient the retry recovered from; this fix hardens exactly that retry path. Backend fix has no persistent UI failure state to screenshot; attached frame is the onboarding entry.",
-        "imagePath": "images/i-20260709-09de-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260709-09de-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "cf3a05f07f2c97acb439876c47592a2853a5ca83",
-        "imageCommits": [
-          "cf3a05f07f2c97acb439876c47592a2853a5ca83"
-        ],
-        "fixedAt": "2026-07-09T14:52:25.064Z",
-        "by": "shakeebshaan",
-        "appCommit": "a95ad93",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Root cause found in prod logs at the exact filing timestamp (plan 198 wk1 duplicate-insert race on the retry path); fixed idempotently in plan_generator, deployed, backend healthy. Complete fix of the concrete defect the logs revealed."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260709-e11f",
       "createdAt": "2026-07-09T12:17:31.165Z",
       "route": null,
