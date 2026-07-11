@@ -30,29 +30,6 @@
         "bug-hunt",
         "auto"
       ],
-      "route": "/nutrition",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "createdAt": "2026-07-11T01:59:11.237Z",
-      "id": "i-20260711-ar1a",
-      "description": "[bug-hunt] Nutrition: the protein/carbs/fats macro progress bars expose aria-valuenow ABOVE aria-valuemax when a macro exceeds its target -- an invalid ARIA value pair a screen reader announces as e.g. \"protein 150 of 126\" (WCAG AA gap).\n\nsrc/pages/_components/nutrition/NutritionMacrosSection.tsx:49 (protein), :59 (carbs), :69 (fats): aria-valuenow={Math.round(macros_consumed.X)} with aria-valuemax={Math.round(effectiveTarget.X)}; when consumed>target, valuenow>valuemax. The visible bar already clamps (useNutritionData bar styles Math.min(...,1)) and the SIBLING calorie summary clamps this exact case (NutritionCalorieSummary.tsx:28 aria-valuenow={Math.min(consumedCalories, Math.max(targetCalories,1))}) -- the macro bars just were not given the same clamp.\n\nRepro: eat 150g protein vs a 126g target -> bar caps visually at 100% but the progressbar announces \"150 of 126\".\n\nFix: clamp each macro aria-valuenow to its target, e.g. Math.min(Math.round(macros_consumed.protein), Math.round(effectiveTarget?.protein ?? 0)), mirroring the calorie-summary clamp. Low severity (a11y only; no visual or data error).",
-      "needsReview": true,
-      "reviewReason": "FIXED + pushed to main (app commit 1eb3414e). Root cause: the protein/carbs/fats macro progressbars set aria-valuenow to the raw consumed grams while aria-valuemax was the target, so when a macro exceeded target a screen reader announced an invalid pair like 'protein 150 of 126'. Fix: clamp aria-valuenow to the target with Math.min, mirroring the existing NutritionCalorieSummary clamp; a11y-only, visible bar and the '150 / 126g' text label unchanged. Verified: tsc 0 errors, nutrition test suite green, adversarial review confirmed no valuenow>valuemax path remains for realistic data. Flagging for review (not faking a self-score) because the satisfaction bar is pinned at 100 which freezes --judge resolves, and I could not capture a live macro-bar screenshot: the QA account has no diet plan so /nutrition renders the empty state. Please verify and Resolve, or lower the bar to accept --judge resolves.",
-      "reviewedAt": "2026-07-11T05:33:15.326Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
