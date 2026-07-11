@@ -2,6 +2,27 @@
   "version": 1,
   "issues": [
     {
+      "author": "claude-page-guardian",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "data-accuracy"
+      ],
+      "route": "/achievements",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T21:01:43.310Z",
+      "id": "i-20260711-pwk9",
+      "description": "[bug-hunt] Achievements: the \"Milestones\" card surfaces two backend counters that are dead or drift, so its data is unreliable.\n\n(1) PERFECT WEEKS is a dead metric. overview.stats.perfect_weeks has NO production writer in the backend - confirmed by the backend's own comments (app/routes/gamification.py:484 and :631: \"The perfect_weeks GamificationProfile counter has no production writer\"). Badge checks derive it from DailyReport via _week_compliance(), but get_gamification_overview (app/services/gamification_service.py:603) serializes the RAW profile.perfect_weeks, which is always 0. Result: the \"Perfect weeks\" tile in src/pages/Achievements.tsx (~lines 259-274) can NEVER render for any user - structurally dead.\n\n(2) TOTAL PRS drifts from actual PR rows. The pr_5 \"Record Setter\" badge is awarded from PersonalRecord.count() (gamification.py:626), but the Milestones \"Personal records\" tile reads profile.total_prs. On the QA account these disagree: the user has >=5 PersonalRecord rows (pr_5 badge earned, StrengthStrip shows 5-6 PRs + \"2 this month\") yet overview.stats.total_prs == 0, so the tile under-reports and the card hides.\n\nVERIFIED this tick against live API (GET /gamification/overview): perfect_weeks=0, total_prs=0 while the same user has the pr_5 badge and 5+ PR rows. All OTHER achievements numbers are accurate (level 9, 1435 XP, 185 to next, 11/43 badges, lifetime 0/5/0/3).\n\nFIX (backend, needs deploy): in get_gamification_overview serialize DERIVED values - perfect_weeks from _week_compliance(), and total_prs reconciled against PersonalRecord.count() - instead of the raw profile counters. Optional FE cleanup: drop the \"Perfect weeks\" tile until it has a real source.\n\nSeverity: low user-visible (both tiles self-hide at 0) but a genuine data-accuracy gap - a milestone the app can never show. Found by the page-achievements guardian loop.",
+      "needsReview": false
+    },
+    {
       "author": "shakeebshaan",
       "tags": [
         "suggestion",
