@@ -18,7 +18,7 @@
       "history": [],
       "createdAt": "2026-07-11T06:18:37.387Z",
       "id": "i-20260711-pk5a",
-      "description": "[press] Press kit: section 5 Brand-asset manifest improved (added machine-measured pixel dimensions + file sizes for every logo/product PNG/social graphic; made the press-usability gap precise -- only 1.png at 2602x5367 is print-res, logo1.png is 180x180 icon-class, webp shots left as unverified-resolution). Accuracy maintenance: refreshed section 4 blog count 1,782-\u003e1,786 (+4 guides). Article drafted: \"For India, AI Localisation Is a Data Problem -- Not a Translation Problem\" (target: Analytics India Magazine; secondary Analytics Vidhya Blogathon; ~880 words). Escalated: 1 (AIM article submission -- full draft + verified route info@analyticsindiamag.com ready; HOLDS on founder byline [TBD-founder-to-confirm], escalate-never-execute). The article was adversarially fact-checked this tick by 3 independent reviewers (fabrication / AIM-compliance / distinctness): no fabricated facts, distinct beat from the existing macro-black-box consumer piece. No invented stats, users, ratings, funding, or coverage anywhere. Text-only tick; landing marketing commit kept local (deploy pipeline inert per prior pattern)."
+      "description": "[press] Press kit: section 5 Brand-asset manifest improved (added machine-measured pixel dimensions + file sizes for every logo/product PNG/social graphic; made the press-usability gap precise -- only 1.png at 2602x5367 is print-res, logo1.png is 180x180 icon-class, webp shots left as unverified-resolution). Accuracy maintenance: refreshed section 4 blog count 1,782->1,786 (+4 guides). Article drafted: \"For India, AI Localisation Is a Data Problem -- Not a Translation Problem\" (target: Analytics India Magazine; secondary Analytics Vidhya Blogathon; ~880 words). Escalated: 1 (AIM article submission -- full draft + verified route info@analyticsindiamag.com ready; HOLDS on founder byline [TBD-founder-to-confirm], escalate-never-execute). The article was adversarially fact-checked this tick by 3 independent reviewers (fabrication / AIM-compliance / distinctness): no fabricated facts, distinct beat from the existing macro-black-box consumer piece. No invented stats, users, ratings, funding, or coverage anywhere. Text-only tick; landing marketing commit kept local (deploy pipeline inert per prior pattern)."
     },
     {
       "author": "shakeebshaan",
@@ -304,31 +304,6 @@
       "status": "open",
       "fix": null,
       "history": []
-    },
-    {
-      "id": "i-20260708-fst1",
-      "createdAt": "2026-07-08T16:39:56.595Z",
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "route": "/dashboard",
-      "description": "[suggestion] A fasting / eating-window timer — a live start/stop fast timer with preset windows (16:8, 18:6, 20:4, OMAD) surfaced as a Dashboard card, reusing the app notification scheduler for window reminders.\n\nPROBLEM: NYUS is an India-focused weight-loss app but has NO way to track intermittent fasting or an eating window — arguably the most-adopted self-directed weight-loss protocol in the market. Users who fast (16:8, or traditional/religious fasts) leave NYUS for a separate timer app, so the behavior driving their result lives outside the app and produces zero coaching signal.\n\nEVIDENCE: Grepped src — no fasting/eating-window/IF surface exists anywhere (only 'fasting blood glucose' as a lab value in the separate vitals idea i-20260708-vitl, unrelated). Intermittent fasting is culturally huge in India (religious fasting traditions + mainstream 16:8/OMAD) and a top weight-loss search intent; dedicated apps (Zero) and every major tracker (HealthifyMe, MyFitnessPal Premium) ship a fasting timer. NYUS already has the pieces to reuse: the notification scheduler + 5 channels + frequency caps (for 'fast complete' / 'eating window open' reminders), the Dashboard gradient-card rhythm (a drop-in card slot), and a daily-log data model. A live countdown ring is also a strong reason-to-open-the-app retention hook that fits the calm-design bar (one ring, no arcade).\n\nV1 SCOPE: One Fasting card on /dashboard plus a lightweight detail view. Preset windows 16:8 / 18:6 / 20:4 / OMAD + custom hours. Start Fast / End Fast drives a live elapsed-time ring vs the target, persisted so it survives app restarts. A simple 7-day history (bars of completed fast hours). ONE notification when the target is reached (reuse the existing scheduler, respect frequency caps). Manual start/stop only — no auto-detection, no meal-timing inference. Framing: neutral tracking with a short safety note (not for anyone with an eating-disorder history; consult a doctor).\n\nEFFORT: ~2-3 days. FE: new dashboard card + detail view + a reused ring + persisted timer state. BE wrinkle: a small fasting_sessions table (start_ts / end_ts / target_hours) + POST/GET + one scheduler reminder job — the only real backend addition.",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "reportPath": "reports/fst1-report.html",
-      "reportLabel": "Fasting timer V1 — fix proof",
-      "needsReview": true,
-      "reviewReason": "SHIPPED + pushed to main (commit 70a395c8); test gate green (test:unit + loop verify pass), fasting logic locked by test/fasting.test.ts (8/8). Built the fasting / eating-window timer V1: a Dashboard Fasting card (indigo domain gradient, one-tap Start 16:8 / live End fast + progress bar) and a /fasting detail screen with a live count-up ring, presets 16:8/18:6/20:4/OMAD + custom 12-36h, a 7-day history bar chart, and a neutral safety note. State is device-local (localStorage) so a fast survives app restarts; a one-shot device-local notification fires when the target window is reached (works offline). Verified in-browser at 390x844 (0 console errors): idle detail, active detail, and the dashboard card live-ticking (0h 01m of 16h). See the attached '📄 Fasting timer V1 — fix proof' report for the 3 screenshots. NOT auto-resolved because the board satisfaction bar is pinned at 100 (freezes resolves for your on-device verdict) — please verify on your device and Resolve. Honest scope note: this is a device-local V1; DEFERRED as a fast-follow are the cross-device backend fasting_sessions table + GET/POST + a server-side scheduler reminder job (the device-local notification covers the V1 reminder), plus i18n keying of the new strings under the i18n directive. Want backend cross-device sync in this pass, or is device-local V1 good to ship to alpha?",
-      "reviewedAt": "2026-07-09T19:48:03.799Z",
-      "reviewedBy": "shakeebshaan"
     },
     {
       "status": "open",
