@@ -878,7 +878,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Checked the live board headless (390x844): it DOES scroll — scrollHeight ~63k across 33 cards, no open dialog/overlay, no scroll-lock or touch-action trap on any card, resolve is already optimistic (acce fix 463537e). So I can't repro a pure scroll bug and need to pin down 'not moving below'. Most likely root cause of the clutter: ~18 of the open items are auto content/discovery/press LOG posts from the standing loops (tags content/discovery/press) that never get archived, plus the 7 'pending direction' (needsReview) bug-hunt items sorted to the top — so real bugs get buried and the board feels stuck. Which is it: (a) can't finger-scroll down on your phone, (b) resolved items don't clear, or (c) the loop log-posts are clogging it? For (c) I can add a board-side collapse so auto-tagged loop logs fold into one 'Loop activity' section and only real bugs stay in the main list — say the word and I'll ship it next tick.",
+      "reviewedAt": "2026-07-11T07:01:47.636Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
