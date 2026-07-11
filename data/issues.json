@@ -983,8 +983,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "P8 this tick (app commit e1e5cced, pushed to main): localized four more core pages under nyus_locale — Activity (workout header/empty/error/build CTAs), ChoosePlan (plan tiers), LogWeight, and the onboarding PostPlanTour. Added 36 keys per locale (en/hi/hinglish) at exact parity; hi in Devanagari, hinglish romanized. locale-parity guard extended and green (26/26). tsc clean, no new errors on the touched files. Whole-app i18n epic continues to progress toward full onboarding+app coverage.",
-      "reviewedAt": "2026-07-09T23:32:06.391Z",
+      "reviewReason": "i18n epic progress (this tick, app commit 77cfa883, pushed to main): localized the shipped condensed-flow \"Goal\" tab (Screen4_Goal, ScreenA You & Goal) from hardcoded English to t(). Covers the hero title/subtitle, Today / Next Monday / Custom date pickers, the 90/120/200-day plan buttons + aria labels, the disabled-Continue hints, and the pace-warning card (block/caution titles + \"I understand\" acknowledge). Added 23 new onboarding.goal.* keys across all 4 bundles at exact parity (Devanagari for hi, romanized for hinglish, bracket+accent+pad pseudo for xx-AE with {{placeholders}} preserved); pinned 7 goal keys to Devanagari in locale-parity.test so a regression to English fails red. tsc clean; Screen4_Goal + i18n parity/pseudo + onboarding flow/a11y/integration suites all green; repo-wide scan shows 0 unresolved i18n keys. Also RE-VERIFIED this tick that all 8 open bug-hunt fixes still hold in current source: 7e2f rating-slider, a4e1/c7d2/f3b9 supplements, ci01 coach-intake, 5a0d weekly-review, 7436 monthly-progress, 190c plan-timeline - each traced end-to-end, all HOLDS. Board note: the satisfaction bar is pinned at 100 and testGate is ON with the known-no-op test:unit command, so no honest resolve can post - please lower the bar (or point testGate at a real command) to drain the verified queue. Next i18n unit: Health & Food (Food tab).",
+      "reviewedAt": "2026-07-11T17:31:39.330Z",
       "reviewedBy": "shakeebshaan"
     },
     {
