@@ -1051,6 +1051,25 @@
       "reviewReason": "Checked the live board headless (390x844): it DOES scroll — scrollHeight ~63k across 33 cards, no open dialog/overlay, no scroll-lock or touch-action trap on any card, resolve is already optimistic (acce fix 463537e). So I can't repro a pure scroll bug and need to pin down 'not moving below'. Most likely root cause of the clutter: ~18 of the open items are auto content/discovery/press LOG posts from the standing loops (tags content/discovery/press) that never get archived, plus the 7 'pending direction' (needsReview) bug-hunt items sorted to the top — so real bugs get buried and the board feels stuck. Which is it: (a) can't finger-scroll down on your phone, (b) resolved items don't clear, or (c) the loop log-posts are clogging it? For (c) I can add a board-side collapse so auto-tagged loop logs fold into one 'Loop activity' section and only real bugs stay in the main list — say the word and I'll ship it next tick.",
       "reviewedAt": "2026-07-11T07:01:47.636Z",
       "reviewedBy": "shakeebshaan"
+    },
+    {
+      "id": "i-20260711-out2",
+      "createdAt": "2026-07-11T12:10:11.850Z",
+      "route": null,
+      "title": "Outreach day-summary + tick 2026-07-11 t2",
+      "description": "[discovery] Outreach 2026-07-11 tick-2 (@12:07 UTC, opus/workflow-tier resume).\n\nPRIOR-TICK NOTE: the 09:20 tick fired at 20260711-092002 and died immediately on session limit (log line 1) - zero sends, no partial work to clean or revert. This is the clean resume.\n\nTHIS TICK: 4 sent (day total 8/10, remaining 2). Rotated to D2C organic/healthy food + health-tech accelerator + sports nutrition. Every email re-verified on the recipient OWN domain THIS tick (Agent fan-out; Workflow tool gated headless) AND passed FREE waterfall prevalidate (syntax/MX/disposable/free-provider):\n1. Two Brothers Organic Farms (D2C organic food) -> marketing@twobrothersindia.com | twobrothersindiashop.com/pages/contact-us | resendId 09a9ea41-e9da-49fb-881a-96c999335e4b\n2. Nourish You (D2C millets/quinoa/plant-based) -> care@nourishyou.in | nourishyou.in/pages/contact-us | resendId 7920fdd8-19af-4624-a239-80affb416d97\n3. HealthStart (health-tech accelerator/incubator) -> contact@healthstart.co.in | healthstart.co.in footer (NOT the /contact/ wrappixel placeholders) | resendId d6c04567-deaa-43ac-96b7-a95fe588ff98\n4. Steadfast Nutrition (D2C sports nutrition) -> info@steadfastnutrition.in | steadfastnutrition.in/pages/contact-us | resendId df4a0f07-81c8-4bd0-89f9-409962fc3d1d\n\nDedupe checked vs ledger.json (29 prior) + suppression.json (empty, still 0). leads-backlog.md written OK this tick (PowerShell WriteAllText).\n\nSEND-READY bench for tick-3 (re-confirm own-domain BEFORE send): Villgro info@villgro.org (marginal, big org); Zyla Health care@zyla.in (companion framing); IIHMR Startups startups@iihmrfoundation.org; Elevate Now info@joinelevatenow.com (MODERATE, companion only); coaches Nmami Life / Indian Nutritionist / My Fitness Goal / Indian Fitness Coach (companion framing only); Avni Wellness care@myavni.com; SuperLiving connect@superlivingapp.com (companion). RE-VERIFY: Farmley social@farmley.com (verify agent hit rate-limit cooldown this tick, NOT confirmed - do not send until re-fetched); Phab getphab.com (429-blocked, best product fit).\n\nREPLIES/complaints for owner: NONE found on board this tick; suppression list still empty. Earlier today tick-1 @06:03 sent 4 (Golds Gym, Earthful, Physique Expert, Nutrova). NEXT TICK (t3): only 2 sends left today.",
+      "author": "shakeebshaan",
+      "tags": [
+        "discovery",
+        "auto"
+      ],
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": []
     }
   ]
 }
