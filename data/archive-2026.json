@@ -19141,6 +19141,32 @@
       "resolvedAt": "2026-07-10T20:51:52.253Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-10T20:51:52.253Z"
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "route": "/nutrition",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T05:44:35.261Z",
+      "id": "i-20260711-fdry",
+      "description": "[suggestion] Plan-independent Food Diary on /nutrition -- let users log AND see what they actually ate without first generating an AI diet plan.\n\nFeature: on /nutrition a no-plan user gets a working food diary -- the existing \"Log what you ate\" modal (food search / custom-macro food / AI photo estimate / recents) PLUS a Today consumed list with running calorie + macro totals -- instead of the current dead-end empty state.\n\nUser problem: /nutrition is entirely gated on hasMeals (a generated AI diet plan). Users who don’t want an AI plan -- the majority who just eat home-cooked Indian food and want to track it -- hit an empty state whose ONLY CTA is \"Create AI plan\". They can never log a meal, so the whole nutrition surface is dead weight for them.\n\nEvidence: the manual logger is ALREADY fully built and plan-independent in code -- src/components/nutrition/CustomMealModal.tsx (quick-log, custom-macro food, AI photo estimate, recents) -> backend POST /logs/meal + /logs/meal/custom-ingredient (MealLog has NO diet-plan FK; logging.py). BUT its only entry point (Nutrition.tsx ~L530 \"Log Custom Meal\") and the kcal/macro summary render only when hasMeals is true, and the page lists dietPlan.meals not MealLog rows -- so a meal logged with no plan is persisted yet INVISIBLE. NutritionEmptyState offers only \"Create AI plan\". Corroborated by QA note reference_qa_no_today_meals (QA acct renders empty /nutrition). Comparable trackers (MyFitnessPal, HealthifyMe) are diary-FIRST: logging what you ate never requires a diet plan -- NYUS inverts this.\n\nProposed v1: (1) un-gate the \"Log what you ate\" action in the no-plan branch; (2) render a Today list + kcal/macro totals sourced from MealLog for no-plan users; (3) empty state offers BOTH \"Log what you ate\" and \"Create AI plan\". Defer: a target-calorie ring for diary mode, editing logged rows, whole-meal favorites.\n\nRough effort: S-M. Backend already exists (no new endpoints/models) -- mostly frontend: un-gate + a MealLog-driven Today summary + empty-state CTA. High value / low cost.",
+      "needsReview": true,
+      "reviewReason": "BUILT + pushed to main (app commit 5fc0f2b2). Flagging (not resolving) because the satisfaction bar is pinned at 100, which freezes --judge resolves; not faking a 100 self-score. tsc 0 errors + the board gate 'npm run test:unit' exits 0 (green).\n\nShipped the plan-independent food diary you asked for. /nutrition was a dead-end gated on hasMeals (a generated AI diet plan): the manual logger (CustomMealModal) + kcal/macro summary rendered only with a plan, and the page listed dietPlan.meals not MealLog rows, so a meal logged with no plan was persisted yet INVISIBLE and the empty state's only CTA was 'Create AI plan'. Frontend-only fix (MealLog has no diet-plan FK; POST /logs/meal unchanged):\n\n1. NutritionDiaryCard.tsx (new): for no-plan users who logged food today, renders the Today diary from ['daily-logs', today] -- running kcal + P/C/F totals + a per-item list.\n2. NutritionEmptyState.tsx: new onLogFood branch offers BOTH 'Log what you ate' (opens the existing CustomMealModal) AND 'Create AI plan'.\n3. Nutrition.tsx: consumes dailyLogs (now exposed by useNutritionData), derives loggedMeals + diaryTotals, branches the no-plan surface to diary (has logs) vs dual-CTA empty state.\n4. CustomMealModal.tsx: invalidates ['daily-logs'] on log so the diary refreshes immediately.\n\nVerified live at 390x844 on the QA account (no plan): empty state shows both CTAs; after logging '2 roti with dal and sabzi' the diary card renders the item + running totals, no console errors. Two proof screenshots attached (populated diary is the fix image). Note: a free-text quick-log carries no macros (backend stores null), so that row reads 0 kcal -- photo/ingredient logs populate macros. Deferred per your v1 scope: target-calorie ring for diary mode, editing logged rows, whole-meal favorites.\n\nPlease verify on device and Resolve, or lower the bar to accept --judge resolves.",
+      "reviewedAt": "2026-07-11T06:06:11.996Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-11T06:16:41.358Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-11T06:16:41.358Z"
     }
   ]
 }
