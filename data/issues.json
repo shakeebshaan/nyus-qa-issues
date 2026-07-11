@@ -16,6 +16,26 @@
       "status": "open",
       "fix": null,
       "history": [],
+      "createdAt": "2026-07-11T00:00:00.000Z",
+      "id": "i-20260711-vgcu",
+      "description": "[suggestion] Voice-guided rest timer — announce the next exercise + target reps/weight aloud (TTS) when the live-workout rest timer ends.\n\nUser problem: mid-set the phone is usually racked, in a pocket, or across the gym floor. Right now the ONLY rest-timer feedback is a single completion chime (`playCompleteCue`, src/lib/workoutAudio.ts) — the lifter still has to walk over and look at the screen to see what's next, breaking flow and rest-interval discipline. This is the classic gap that pushes serious lifters to a separate app (Strong, Fitbod both ship voice cues) even though NYUS already tracks the full set/rest state needed to speak it.\n\nEvidence: src/pages/Activity.tsx live workout player only imports `playCompleteCue` for audio (no `speechSynthesis` usage anywhere in Activity.tsx/CustomizeWorkout.tsx/workoutAudio.ts — grepped); the rest-timer countdown already knows the next exercise name + target reps/weight (it renders that data on-screen), so the payload for a spoken cue is already computed, just never spoken. Web Speech API (`window.speechSynthesis`) needs zero new deps and works offline in the WebView.\n\nProposed v1: a toggle in the live-workout session (or Notification Preferences) — \"Voice cues\" — that, on rest-timer completion, speaks \"Rest over — next: 3 sets of Bench Press, 60 kg\" via `speechSynthesis.speak()` alongside (not replacing) the existing chime. Off by default first run, remembered per-device (localStorage). No backend work.\n\nRough effort: S (~1-2 files: workoutAudio.ts + Activity.tsx wiring + a settings toggle).",
+      "needsReview": false
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
       "createdAt": "2026-07-11T16:49:08.451Z",
       "id": "i-20260711-actl",
       "description": "[suggestion] Ad-hoc activity logging — a \"Log activity\" sheet so a user can record a run, walk, cricket/badminton game, swim, or yoga session that is NOT part of their AI workout plan.\n\nUser problem: the Activity screen only lets you tick off pre-generated plan exercises; on a rest day, or for anyone without a plan, it is a dead end whose only button is \"Create workout plan.\" Real training done off-script (cardio, sport, walking — the mass-market India activities) can never be recorded, so it never counts toward streaks, calories burned, or progress.\n\nEvidence: the client + backend ALREADY fully support this — LogActivityRequest accepts activity_type 'steps'|'cardio'|'sport'|'swimming'|'other' with name/duration/distance/calories/steps (src/types/api.ts:931) and loggingService.logActivity POSTs /logs/activity (src/services/logging.service.ts:96) — but the ONLY caller is the plan-bound tick-off in src/components/activity/ActivityMarkSection.tsx:106; no free-form user affordance exists (empty state routes to /ai/create-workout-plan only, Activity.tsx:1050). The schema was built for ad-hoc logging; the UI for it never shipped.\n\nProposed v1: a bottom-sheet (activity-type chips + name + duration + optional distance/calories/steps + notes) opened from a \"Log activity\" button on /activity (and a Dashboard quick-action), POSTing to the existing endpoint; render today's ad-hoc entries in a small list under the plan. No backend work.\n\nRough effort: S–M (~2 files; endpoint, types, and gamification hook already live).",
