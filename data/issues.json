@@ -4,6 +4,25 @@
     {
       "author": "shakeebshaan",
       "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T16:49:08.451Z",
+      "id": "i-20260711-actl",
+      "description": "[suggestion] Ad-hoc activity logging — a \"Log activity\" sheet so a user can record a run, walk, cricket/badminton game, swim, or yoga session that is NOT part of their AI workout plan.\n\nUser problem: the Activity screen only lets you tick off pre-generated plan exercises; on a rest day, or for anyone without a plan, it is a dead end whose only button is \"Create workout plan.\" Real training done off-script (cardio, sport, walking — the mass-market India activities) can never be recorded, so it never counts toward streaks, calories burned, or progress.\n\nEvidence: the client + backend ALREADY fully support this — LogActivityRequest accepts activity_type 'steps'|'cardio'|'sport'|'swimming'|'other' with name/duration/distance/calories/steps (src/types/api.ts:931) and loggingService.logActivity POSTs /logs/activity (src/services/logging.service.ts:96) — but the ONLY caller is the plan-bound tick-off in src/components/activity/ActivityMarkSection.tsx:106; no free-form user affordance exists (empty state routes to /ai/create-workout-plan only, Activity.tsx:1050). The schema was built for ad-hoc logging; the UI for it never shipped.\n\nProposed v1: a bottom-sheet (activity-type chips + name + duration + optional distance/calories/steps + notes) opened from a \"Log activity\" button on /activity (and a Dashboard quick-action), POSTing to the existing endpoint; render today's ad-hoc entries in a small list under the plan. No backend work.\n\nRough effort: S–M (~2 files; endpoint, types, and gamification hook already live)."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
         "bug-hunt",
         "auto"
       ],
