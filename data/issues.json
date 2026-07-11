@@ -49,29 +49,6 @@
     {
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "route": "/fasting",
-      "createdAt": "2026-07-11T01:43:12.505Z",
-      "id": "i-20260711-fa19",
-      "description": "[bug-hunt] The fasting 'window reached' reminder (REMINDER_IDS.FAST_TARGET) is only ever scheduled inside startFast and is never reconciled with the actual active fast, so it (a) can fire for a fast that was already ended, and (b) silently never fires for an active fast when permission wasn't granted at start or after an app relaunch/reboot. That reminder is the whole point of a device-local V1 timer.\n\nRoot cause: src/hooks/useFasting.ts. startFast (lines 43-61) schedules the one-shot ASYNC: `void requestPermission().then(granted => { if(!granted) return; scheduleOneShot(FAST_TARGET, at, ...) })`. endFast (63-72) calls cancelReminder(FAST_TARGET). There is NO reschedule/reconcile on mount when an active fast is loaded from storage (loadActive, line 32), and no re-request if permission was denied at start.\n\nTwo concrete defects:\n\n(1) Orphan reminder (schedule-after-cancel race). On the first-ever fast, requestPermission() shows the OS prompt (async). `active` is set synchronously (setActive), so the button immediately flips to 'End fast'. If the user taps End before the prompt resolves, endFast runs cancelReminder (nothing scheduled yet -> no-op) and clears the fast; THEN the prompt resolves granted and the queued .then() calls scheduleOneShot for the ORIGINAL target time. Result: a 'Fasting window complete' notification fires later with no active fast.\n\n(2) Reminder never (re)scheduled. If the user denies the prompt at first start (granted=false -> early return, no reminder), the fast still runs but the target reminder is gone for that fast even if they enable notifications afterward. Likewise on app relaunch/reboot, loadActive() restores the active fast but nothing re-checks getPending()/reschedules, so a dropped OS notification is never restored. Compare NotificationPreferences/reminderSync which DO have recovery-on-mount logic; the fasting reminder has none.\n\nRepro (2): native build, notifications not yet granted -> /fasting -> Start 16:8 -> deny the OS prompt -> no target reminder is scheduled; enabling notifications later does not schedule one for the in-progress fast, so 'window reached' never fires.\n\nFix: reconcile the FAST_TARGET reminder against the active fast on hook mount (reschedule for loadActive() when pending is missing and permission is granted; cancel when there is no active fast), and guard the startFast .then() so it does not schedule if the fast that owned it has already ended (capture startedAt and skip when the current active fast != that start).",
-      "needsReview": true,
-      "reviewReason": "FIXED + pushed to main (app commit 2f5041b5) — flagging because the satisfaction bar is pinned at 100, which freezes --judge resolves; not faking a 100 self-score or flipping your bar. Root cause: the fasting 'window reached' reminder (REMINDER_IDS.FAST_TARGET) was only scheduled inside startFast and never reconciled with the real active fast. Both reported defects addressed in src/hooks/useFasting.ts + src/lib/localNotifications.ts: (1) schedule-after-cancel race — the async permission .then() now only schedules if loadActive() still matches this fast's startedAt, so ending a fast before the prompt resolves no longer leaves an orphan 'window complete' notification; (2) no reschedule on relaunch/late-grant — a new mount-reconcile effect reschedules FAST_TARGET for a fast restored from storage via a NON-prompting checkPermission() + listScheduled() dedupe, and cancels a stale reminder when none is active. Verified: 5 new hook tests covering the race + all 4 reconcile branches, 14/14 fasting suite green, tsc 0 errors, /fasting renders clean (the OS notification itself is native-only, not observable headless). Please verify on device and Resolve, or lower the bar to accept --judge resolves.",
-      "reviewedAt": "2026-07-11T02:04:26.709Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
-      "author": "shakeebshaan",
-      "tags": [
         "discovery",
         "auto"
       ],
