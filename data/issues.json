@@ -371,8 +371,30 @@
     },
     {
       "createdAt": "2026-07-08T06:55:23.362Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen note 'B': editing an already-complete final set replayed the workout-complete confetti + sound. Root cause: onSetComplete fired on set_number equality every time. Fix (c29d4d3e): (1) ExerciseWheelPicker.handleLogSet fires completion ONLY on the incomplete->complete edge (allTargetLogged && !wasAllLogged) so editing a set whose coverage is already full fires onSetComplete(false); (2) Activity.handleSetComplete early-returns on !isFinal and again when showWorkoutCompleteRef is already true, so the celebration never replays. Verified: test/ExerciseWheelPicker.test.tsx:443 'does NOT re-fire complete=true when editing an already-complete final set (symptom B)' passes, 49/49 green. The confetti/sound replay is a one-shot animated interaction with no active workout on the QA account, so the proof image is the passing regression test + both code guards (per one-shot capture rule).",
+        "imagePath": "images/i-20260708-2ea5-fix-r6.png",
+        "imagePaths": [
+          "images/i-20260708-2ea5-fix-r6.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "dc777dce35991e78459bfb59de6e854467ec856f",
+        "imageCommits": [
+          "dc777dce35991e78459bfb59de6e854467ec856f"
+        ],
+        "fixedAt": "2026-07-12T06:41:14.498Z",
+        "by": "shakeebshaan",
+        "appCommit": "cdac1f2d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Symptom B fixed by two independent guards + a green regression test (ExerciseWheelPicker.test.tsx:443)."
+        }
+      },
       "history": [
         {
           "at": "2026-07-08T09:08:51.381Z",
