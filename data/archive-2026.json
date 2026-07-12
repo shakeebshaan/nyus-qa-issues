@@ -19197,13 +19197,12 @@
       "archivedAt": "2026-07-11T06:29:00.729Z"
     },
     {
-      "id": "i-20260710-7e2f",
-      "createdAt": "2026-07-10T05:40:31.068Z",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
         "auto"
       ],
+      "route": "/dashboard",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19212,15 +19211,16 @@
       "status": "resolved",
       "fix": null,
       "history": [],
-      "route": "/coach-chat (in-chat rating_scale block with max > 10)",
-      "description": "[bug-hunt] A rating_scale block whose scale exceeds 10 (max > 10) renders as a Slider, but choosing a value never sends the rating to the coach: the slider freezes after the first movement and onResponse is never called. The dots variant (max <= 10) is fine; only the slider path is broken.\n\nRoot cause, src/components/blocks/RatingScaleBlock.tsx:\n- disabled = status === \"completed\" || status === \"expired\" || value !== null (line 13). It flips to true as soon as local value is non-null.\n- Slider (line 81-96): onValueChange={([v]) => { if (!disabled) setValue(v); }} sets value during drag/track-click; onValueCommit={([v]) => { if (disabled) return; ... onResponse({value:v}); }} is the ONLY place the slider calls onResponse.\n- onValueChange (pointer move) and onValueCommit (pointer up) are separate pointer events, so React re-renders between them. The first onValueChange sets value, the next render makes disabled === true, the Radix Slider then receives disabled (thumb gets disabled:pointer-events-none per src/components/ui/slider.tsx) and stops tracking the drag, AND onValueCommit's \"if (disabled) return\" guard now short-circuits. Net: onResponse is effectively UNREACHABLE for the slider. The value shows on screen (line 101-103) but is never sent to the coach, and the thumb sticks at the first position.\n- The dots path works because handleSelect (line 17-22) sets value AND calls onResponse atomically in one handler before the disabling re-render.\n\nRepro:\n1. Coach sends a rating_scale with max > 10 (e.g. {question, min:0, max:100} or min:1, max:20) so it renders the Slider variant (useDots = max <= 10 is false, line 14).\n2. Drag the slider thumb (or tap the track). The thumb freezes at/near the first position and the coach never receives a rating; the interaction is dead after one move.\n\nExpected: dragging/committing the slider sends onResponse({value}) with the chosen number, like the dots variant.\nActual: onResponse never fires for the slider; the rating is silently lost and the control freezes.\n\nFix: do not derive disabled from value for the slider. Track commit separately, e.g. const [committed, setCommitted] = useState(false); const disabled = status === \"completed\" || status === \"expired\" || committed; set committed inside onValueCommit and keep onValueChange only updating value. (The dots path can keep its single-handler behavior.)",
+      "createdAt": "2026-07-11T00:12:23.992Z",
+      "id": "i-20260711-a4e1",
+      "description": "[bug-hunt] Supplement & medication tracker: the \"% this week\" adherence pill counts days BEFORE an item was added as missed doses, so a brand-new item shows a wrongly-low weekly % that directly contradicts the \"100% taken today\" line beside it.\n\nRoot cause (src/lib/supplements.ts + src/pages/_components/dashboard/SupplementsCard.tsx). The weekly figure is adherenceOverWindow(store, lastNDates(today, 7)) (SupplementsCard.tsx:68-71). lastNDates always returns a fixed 7 calendar dates ending today (supplements.ts:89-100). adherenceOverWindow sums adherenceForDate for each date, whose denominator is scheduledFor(store.items, date) using the CURRENT items list (supplements.ts:75-85, 103-112). The Supplement interface has NO createdAt / start date (supplements.ts:25-37), so a daily item (days:[] = every day) is treated as \"scheduled\" on all 7 window days -- including the up-to-6 days before the user ever added it -- with no checks on those days, i.e. permanent misses that inflate the denominator.\n\nRepro (fresh user, no prior supplement data):\n1. Dashboard -> \"Track your supplements\" -> add \"Vitamin D\", Every day, Save.\n2. Tap the item to mark it taken today.\nHeader daily subline shows \"100% taken today\" (todayAdh 1/1). Top-right pill shows \"14% this week\" = round(1/7*100), because the 6 pre-existence days count as missed. Logging days 1-3 perfectly shows 43% (3/7); the pill only converges to the truth after the item has existed 7 days.\n\nExpected: weekly adherence reflects only the days the item has actually existed (100% here) and never contradicts the adjacent daily figure.\nActual: \"100% taken today\" sits next to \"14% this week\"; the weekly number understates real adherence for up to a week after every add. Demoralizing + factually wrong, against the calm \"quiet confidence\" bar.\n\nFix: stamp a createdAt (local date) on each Supplement at add time and clamp the window per item to dates >= its createdAt (skip an item on dates before it existed), or start the window at max(today-6, earliest item createdAt). Add a new-item case to test/supplements.test.ts.",
       "needsReview": true,
-      "reviewReason": "ALREADY FIXED + shipped — verified against source this tick. RatingScaleBlock.tsx now locks on COMMIT via a separate 'committed' state (lines 19-20), not derived from value, so the slider (max>10) no longer disables its own thumb mid-drag; onValueCommit reaches onResponse. Fixed in commit 0d17e9c2 (2026-07-10). Safe to Resolve.",
-      "reviewedAt": "2026-07-11T12:30:58.105Z",
+      "reviewReason": "ALREADY FIXED + shipped — verified. Supplement now stamps createdAt at add (SupplementsCard.tsx:89) and isScheduledOn clamps dates < createdAt (supplements.ts:79), so pre-add days no longer count as missed doses; weekly % reflects only days the item existed. Fixed in commit 77d050d6 (2026-07-11). Safe to Resolve.",
+      "reviewedAt": "2026-07-11T12:31:02.786Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T00:14:27.670Z",
+      "resolvedAt": "2026-07-12T00:14:19.553Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T00:14:27.670Z"
+      "archivedAt": "2026-07-12T00:14:19.553Z"
     }
   ]
 }
