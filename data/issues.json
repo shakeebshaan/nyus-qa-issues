@@ -793,33 +793,6 @@
       ]
     },
     {
-      "id": "i-20260712-6e8b",
-      "createdAt": "2026-07-12T04:58:48.694Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-6e8b.jpg",
-      "imageCommit": "0053179aadf4fe7453dba9d2aabab05d0976aa58",
-      "imagePaths": [
-        "images/i-20260712-6e8b.jpg"
-      ],
-      "imageCommits": [
-        "0053179aadf4fe7453dba9d2aabab05d0976aa58"
-      ],
-      "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED (commit eb3c0d10, pushed). 'Choose a plan now' on the plan-ready screen silently landed on the dashboard. Root cause: the /choose-plan anti-repurchase guard used not-is_trial, which treats an undefined is_trial (common right after onboarding finalize for a reverse-trial user) as PAID and redirects to /dashboard. Changed both guards (App.tsx ProtectedRoute + ChoosePlan effect) to bounce only definitively-paid users (is_trial === false); trial/undefined users now reach the plan screen. Reopen of the i-20260624-8276 class. Live proof not capturable on the QA account (needs the subscription-gate flag + a just-finalized trial state) - logic-verified. Not auto-resolved: bar pinned at 100.",
-      "reviewedAt": "2026-07-12T07:40:18.285Z",
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "On it",
-      "reviewRepliedAt": "2026-07-12T06:45:23.203Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260712-36dd",
       "createdAt": "2026-07-12T05:01:52.490Z",
       "route": null,
