@@ -600,6 +600,13 @@
               "note": "Prior reopens guarded the replay only in Activity (showWorkoutCompleteRef); owner still hit B. Now killed at source in the picker: completion is edge-triggered, so a no-op edit of an already-complete exercise can never signal completion again. Dedicated symptom-B regression test asserts onSetComplete never re-fires true on Update. Both symptoms A+B covered by tests; tsc clean. Behavioral defect -> the regression test is the definitive proof (live edit-state not drivable in a static capture on a rest day, per verify-discipline)."
             }
           }
+        },
+        {
+          "at": "2026-07-12T04:50:27.093Z",
+          "event": "reopened",
+          "note": "B",
+          "by": "shakeebshaan",
+          "previousFix": null
         }
       ],
       "author": "shakeebshaan",
