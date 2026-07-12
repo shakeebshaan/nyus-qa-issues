@@ -19421,37 +19421,34 @@
       "archivedAt": "2026-07-12T09:14:14.615Z"
     },
     {
-      "id": "i-20260712-50c0",
-      "createdAt": "2026-07-12T05:02:57.212Z",
+      "id": "i-20260712-6e8b",
+      "createdAt": "2026-07-12T04:58:48.694Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-50c0.jpg",
-      "imageCommit": "e2cb7f0d04d5c3bda6c63340dd82751632da3dff",
+      "imagePath": "images/i-20260712-6e8b.jpg",
+      "imageCommit": "0053179aadf4fe7453dba9d2aabab05d0976aa58",
       "imagePaths": [
-        "images/i-20260712-50c0.jpg"
+        "images/i-20260712-6e8b.jpg"
       ],
       "imageCommits": [
-        "e2cb7f0d04d5c3bda6c63340dd82751632da3dff"
+        "0053179aadf4fe7453dba9d2aabab05d0976aa58"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Could not reproduce - flagging rather than guessing a risky backend change. Dashboard 'current weight' reads the latest WeightLog; onboarding finalize seeds that log from initial_weight_kg. Your shot showed 112.7 current vs a correct 116.0 start with no manual log - i.e. the seeded log value (112.7) diverged from the onboarding weight (116). The account has since logged 116, so the 112.7 seed is no longer reproducible. To fix the root cause safely I need the exact weight entered on the onboarding wheel on a fresh run, so I can trace whether the FE sent a wrong/stale initial_weight_kg. Can you re-run onboarding on a test account and note entered vs shown weight?",
-      "reviewedAt": "2026-07-12T07:41:12.193Z",
+      "reviewReason": "FIXED (commit eb3c0d10, pushed). 'Choose a plan now' on the plan-ready screen silently landed on the dashboard. Root cause: the /choose-plan anti-repurchase guard used not-is_trial, which treats an undefined is_trial (common right after onboarding finalize for a reverse-trial user) as PAID and redirects to /dashboard. Changed both guards (App.tsx ProtectedRoute + ChoosePlan effect) to bounce only definitively-paid users (is_trial === false); trial/undefined users now reach the plan screen. Reopen of the i-20260624-8276 class. Live proof not capturable on the QA account (needs the subscription-gate flag + a just-finalized trial state) - logic-verified. Not auto-resolved: bar pinned at 100.",
+      "reviewedAt": "2026-07-12T07:40:18.285Z",
       "reviewedBy": "shakeebshaan",
-      "reviewReply": "Make sure we take from the onboarding weight",
-      "reviewRepliedAt": "2026-07-12T06:45:59.531Z",
+      "reviewReply": "On it",
+      "reviewRepliedAt": "2026-07-12T06:45:23.203Z",
       "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "cannot-reproduce"
-      ],
-      "resolvedAt": "2026-07-12T09:14:49.670Z",
+      "resolvedAt": "2026-07-12T09:14:55.446Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T09:14:49.670Z"
+      "archivedAt": "2026-07-12T09:14:55.446Z"
     }
   ]
 }
