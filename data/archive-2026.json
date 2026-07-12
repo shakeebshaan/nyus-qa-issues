@@ -19197,12 +19197,13 @@
       "archivedAt": "2026-07-11T06:29:00.729Z"
     },
     {
+      "id": "i-20260710-7e2f",
+      "createdAt": "2026-07-10T05:40:31.068Z",
       "author": "shakeebshaan",
       "tags": [
-        "suggestion",
+        "bug-hunt",
         "auto"
       ],
-      "route": "/activity",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19211,16 +19212,15 @@
       "status": "resolved",
       "fix": null,
       "history": [],
-      "createdAt": "2026-07-11T00:00:00.000Z",
-      "id": "i-20260711-vgcu",
-      "description": "[suggestion] Voice-guided rest timer — announce the next exercise + target reps/weight aloud (TTS) when the live-workout rest timer ends.\n\nUser problem: mid-set the phone is usually racked, in a pocket, or across the gym floor. Right now the ONLY rest-timer feedback is a single completion chime (`playCompleteCue`, src/lib/workoutAudio.ts) — the lifter still has to walk over and look at the screen to see what's next, breaking flow and rest-interval discipline. This is the classic gap that pushes serious lifters to a separate app (Strong, Fitbod both ship voice cues) even though NYUS already tracks the full set/rest state needed to speak it.\n\nEvidence: src/pages/Activity.tsx live workout player only imports `playCompleteCue` for audio (no `speechSynthesis` usage anywhere in Activity.tsx/CustomizeWorkout.tsx/workoutAudio.ts — grepped); the rest-timer countdown already knows the next exercise name + target reps/weight (it renders that data on-screen), so the payload for a spoken cue is already computed, just never spoken. Web Speech API (`window.speechSynthesis`) needs zero new deps and works offline in the WebView.\n\nProposed v1: a toggle in the live-workout session (or Notification Preferences) — \"Voice cues\" — that, on rest-timer completion, speaks \"Rest over — next: 3 sets of Bench Press, 60 kg\" via `speechSynthesis.speak()` alongside (not replacing) the existing chime. Off by default first run, remembered per-device (localStorage). No backend work.\n\nRough effort: S (~1-2 files: workoutAudio.ts + Activity.tsx wiring + a settings toggle).",
+      "route": "/coach-chat (in-chat rating_scale block with max > 10)",
+      "description": "[bug-hunt] A rating_scale block whose scale exceeds 10 (max > 10) renders as a Slider, but choosing a value never sends the rating to the coach: the slider freezes after the first movement and onResponse is never called. The dots variant (max <= 10) is fine; only the slider path is broken.\n\nRoot cause, src/components/blocks/RatingScaleBlock.tsx:\n- disabled = status === \"completed\" || status === \"expired\" || value !== null (line 13). It flips to true as soon as local value is non-null.\n- Slider (line 81-96): onValueChange={([v]) => { if (!disabled) setValue(v); }} sets value during drag/track-click; onValueCommit={([v]) => { if (disabled) return; ... onResponse({value:v}); }} is the ONLY place the slider calls onResponse.\n- onValueChange (pointer move) and onValueCommit (pointer up) are separate pointer events, so React re-renders between them. The first onValueChange sets value, the next render makes disabled === true, the Radix Slider then receives disabled (thumb gets disabled:pointer-events-none per src/components/ui/slider.tsx) and stops tracking the drag, AND onValueCommit's \"if (disabled) return\" guard now short-circuits. Net: onResponse is effectively UNREACHABLE for the slider. The value shows on screen (line 101-103) but is never sent to the coach, and the thumb sticks at the first position.\n- The dots path works because handleSelect (line 17-22) sets value AND calls onResponse atomically in one handler before the disabling re-render.\n\nRepro:\n1. Coach sends a rating_scale with max > 10 (e.g. {question, min:0, max:100} or min:1, max:20) so it renders the Slider variant (useDots = max <= 10 is false, line 14).\n2. Drag the slider thumb (or tap the track). The thumb freezes at/near the first position and the coach never receives a rating; the interaction is dead after one move.\n\nExpected: dragging/committing the slider sends onResponse({value}) with the chosen number, like the dots variant.\nActual: onResponse never fires for the slider; the rating is silently lost and the control freezes.\n\nFix: do not derive disabled from value for the slider. Track commit separately, e.g. const [committed, setCommitted] = useState(false); const disabled = status === \"completed\" || status === \"expired\" || committed; set committed inside onValueCommit and keep onValueChange only updating value. (The dots path can keep its single-handler behavior.)",
       "needsReview": true,
-      "reviewReason": "SHIPPED + pushed (frontend b7df14c5, docs c76e75a0). Cannot move to In-review: the board's LLM-as-judge satisfaction bar is pinned 100/100, which freezes all resolves (self-score for this fix is an honest 92 — see below). Flagging so you can verify + Resolve, or drop the bar. WHAT SHIPPED: the voice-cue engineering was mostly present but UNREACHABLE — speakRestCue/isVoiceCuesEnabled/setVoiceCuesEnabled + RestTimer.announceOnComplete + Activity.buildRestCue existed, but NOTHING ever called setVoiceCuesEnabled, so the OFF-by-default pref could never be turned on and the feature was dead code. Added a 'Voice cues' toggle to the Profile Preferences card (ProfilePreferencesCard.tsx) beside the Sounds switch. When ON, rest-timer completion speaks the next set aloud via Web Speech API ('Rest over. Next: Bench Press, set 3 of 4. Target 8 reps at 60 kilos.') ALONGSIDE the existing chime; per-device localStorage (nyus_voice_cues), OFF by default, also gated on the app Sounds switch so a muted user stays silent. Verified live at 390x844 on /profile: toggle renders, flips ON (orange), persists nyus_voice_cues=on; 0 console errors; tsc clean; gate npm run test:unit green. Proof PNG: tmp/i-20260711-vgcu-fix.png. Self-score 92 not 100 only because the spoken TTS cue fires on a live-workout rest-timer completion (not capturable in a headless still) — on-device audio confirmation is the one thing left. Please confirm on a workout + Resolve.",
-      "reviewedAt": "2026-07-11T21:03:15.107Z",
+      "reviewReason": "ALREADY FIXED + shipped — verified against source this tick. RatingScaleBlock.tsx now locks on COMMIT via a separate 'committed' state (lines 19-20), not derived from value, so the slider (max>10) no longer disables its own thumb mid-drag; onValueCommit reaches onResponse. Fixed in commit 0d17e9c2 (2026-07-10). Safe to Resolve.",
+      "reviewedAt": "2026-07-11T12:30:58.105Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T00:14:12.086Z",
+      "resolvedAt": "2026-07-12T00:14:27.670Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T00:14:12.086Z"
+      "archivedAt": "2026-07-12T00:14:27.670Z"
     }
   ]
 }
