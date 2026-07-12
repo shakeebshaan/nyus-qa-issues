@@ -19218,9 +19218,9 @@
       "reviewReason": "Fixed + pushed + DEPLOYED (frontend commit 820566e9, backend commit f052a5d, prod restarted + healthy). Root cause: backend _serialize_review returned proposed_changes raw, but it is stored as a json.dumps string of engine items {category,current_value,proposed_value}; the FE collapsed the string to [] so the approve/modify flow was dead. It also omitted a top-level insights field and target_daily_protein/steps, so Insights always read No notable patterns and protein showed slash 0g. Fix: backend now json.loads + reshapes proposed_changes to the FE contract, emits insights (with id + pattern_tag) and target_daily_protein/steps; FE normalizeReview also parses a string + maps engine keys idempotently as a safety net. Verified: 22 FE unit tests pass (new regression tests included), tsc clean, and I ran the deployed normalizers on prod - they emit the exact FE shape (protein maps to macros, calories to calories, numerics kept, None and bad-string to []). Full on-screen render still needs a user with a real generated weekly review (QA account has none; not provisioning per your directive). Safe to Resolve after you open a real weekly review on-device.",
       "reviewedAt": "2026-07-11T16:32:58.100Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T00:15:56.888Z",
+      "resolvedAt": "2026-07-12T00:16:05.479Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T00:15:56.888Z"
+      "archivedAt": "2026-07-12T00:16:05.479Z"
     }
   ]
 }
