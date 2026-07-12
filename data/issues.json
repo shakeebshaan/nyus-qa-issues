@@ -618,15 +618,15 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Ready to build. Plan: a Profile > \"Adjust macro targets\" editor (set calories or protein/carbs/fat directly, with a live P*4 + C*4 + F*9 vs kcal reconciliation) backed by a new PUT /profile/macro-targets endpoint that persists your manual targets (target_kcal + protein/carbs/fat grams — columns already exist, no migration) and mirrors the plan's current-week macro row. Because the nutrition ring, per-meal targets, and coach context all read those same fields, the daily TARGETS rescale everywhere instantly. Re-cooking your already-assigned MEAL PORTIONS to the new macros (the full \"scale everything accordingly\") is a larger follow-up slice (LLM re-portioning of each meal). One blocker to shipping this to your 90 bar right now: all QA test accounts were deleted in the prelaunch cleanup and admin@nyus.app cannot load the nutrition/dashboard screens, so I cannot verify the rescale end-to-end headless. Restore or allow ONE onboarded test account (or lower the bar for this feature) and I will build, verify, and ship it.",
-      "reviewedAt": "2026-07-12T11:56:59.063Z",
+      "reviewReason": "SHIPPED slice 1 (targets editor) + deployed to prod. Profile > 'Adjust macro targets' (pink card between Body & Hydration) opens a bottom sheet to set daily calories + protein/carbs/fat with a LIVE Atwater reconciliation banner (captured working: 150P/250C/70F -> 'Macros add up to 2,230 kcal'). Backend GET|PUT /api/v1/profile/macro-targets (commit 1ff045e) persists target_kcal (UserHealthProfile) + target_{protein,carbs,fats}_grams (UserProfile) -- the SAME columns the nutrition ring, per-meal splits, and coach read, so the daily TARGETS rescale everywhere on save. No migration; live on prod (401 unauth / graceful 404). FE commit 92b83cd7, tsc clean, unit test 7/7 green, saves invalidate nutrition/dashboard caches. TWO honest gaps before I mark it fixed: (1) could NOT observe the cross-surface rescale live -- every onboarded/QA account was deleted in the prelaunch cleanup, so GET macro-targets returns 404 for the only account I can mint; verified-by-construction (identical columns) but not watched end-to-end. (2) Re-cooking already-assigned MEAL PORTIONS to the new macros (fuller reading of 'scaled accordingly') is a separate LLM re-portioning slice NOT built yet. ASK: restore/allow ONE onboarded test account so I can verify the ring/meal rescale, and confirm you want meal-portion re-cooking as the next slice (or if target-only rescale satisfies 'do all').",
+      "reviewedAt": "2026-07-12T12:11:40.068Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "do all",
       "reviewRepliedAt": "2026-07-12T11:02:01.429Z",
       "reviewReplyBy": "shakeebshaan",
       "tags": [
         "feature",
-        "blocked"
+        "shipped"
       ]
     },
     {
