@@ -956,13 +956,16 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "Two things here. (1) 'One click doesn't generate' is the same custom-diet-build-then-no-meals bug as f717, which I FIXED + deployed this tick (catalog-miss ingredients now persist via client per-100g fallback instead of the meal being silently dropped) - please re-test on the next alpha build. (2) 'make sure we have custom build / add custom ingredients / build our own meals' - a manual builder already exists (CustomWorkoutBuilder / CustomDietBuilder + 'I'll build it myself' in the build overlay + CustomMealModal ingredient entry); the ask is really to surface it more prominently vs the coach 'build it all' default, which is a product/discoverability decision. A fresh screenshot of the exact screen you mean would help pin it down.",
-      "reviewedAt": "2026-07-12T05:51:46.495Z",
+      "needsReview": true,
+      "reviewReason": "FEATURE (paired with i-20260712-90e8). Today the diet 'No diet plan yet' state only offers 'Create Diet Plan with AI' (coach build). You want a custom/manual build path - add your own ingredients / build your own meals, not just coach-build. The building blocks exist (CustomMealModal with text + image on Nutrition), but wiring a full custom diet-plan builder into the diet page is a dedicated build, not a one-tick fix. Flagging to track alongside 90e8 - confirm scope and I'll build both together.",
+      "reviewedAt": "2026-07-12T07:42:15.988Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do all",
       "reviewRepliedAt": "2026-07-12T06:43:32.140Z",
-      "reviewReplyBy": "shakeebshaan"
+      "reviewReplyBy": "shakeebshaan",
+      "tags": [
+        "feature"
+      ]
     },
     {
       "id": "i-20260712-f717",
