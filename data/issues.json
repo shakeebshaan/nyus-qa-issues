@@ -743,49 +743,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260712-f118",
-      "createdAt": "2026-07-12T04:58:18.136Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-f118.jpg",
-      "imageCommit": "30d8cec82acb927cbf9e741395df84ac9819fa56",
-      "imagePaths": [
-        "images/i-20260712-f118.jpg"
-      ],
-      "imageCommits": [
-        "30d8cec82acb927cbf9e741395df84ac9819fa56"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: a QA/seed 'TestCoach' placeholder row (no minted portrait) could be assigned as a user's coach, so onboarding + build screens rendered 'Coach TestCoach' with a generic bust. Fix: backend coach_roster.py excludes placeholder-named coaches from assignment AND self-heals stale links (deactivate row + reassign real coach) - deployed to prod (cb95667); prod DB TestCoach row now is_active=false. Frontend coach-config.ts mirrors the guard: getCoachName()/isPlaceholderCoachName() purge any cached 'TestCoach' and fall back to a real coach. Proof: injected 'TestCoach' into localStorage, loaded a coach surface - it renders real coach 'Nisha' with a real portrait, never TestCoach.",
-        "imagePath": "images/i-20260712-f118-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260712-f118-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "786bc0f785f8ab644f59d4727c40729ef5d481d5",
-        "imageCommits": [
-          "786bc0f785f8ab644f59d4727c40729ef5d481d5"
-        ],
-        "fixedAt": "2026-07-12T06:36:39.818Z",
-        "by": "shakeebshaan",
-        "appCommit": "cdac1f2d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Root cause eliminated at source (backend never assigns placeholder coaches, prod TestCoach row deactivated) + FE cache-purge guard; verified live end-to-end."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260712-6e8b",
       "createdAt": "2026-07-12T04:58:48.694Z",
       "route": null,
