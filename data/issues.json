@@ -939,7 +939,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Could not reproduce the 116 to 112.7 change deterministically. The onboarding kg weight picker steps by 0.5 and cannot itself emit 112.7; a lbs-mode pick CAN round-trip to a non-round kg (lbs/2.2046 without re-snap). But your screenshot's dashboard reads current 112.7 vs start 116 - for a freshly-onboarded user those should match, so 112.7 is likely a residual weight_log row on this heavily-provisioned QA account rather than the picker. Need a repro on a CLEAN account (or confirm you used lbs) to tell whether to fix the picker's lbs snap or seed current_kg = start_weight_kg when no post-onboarding weigh-in exists.",
+      "reviewedAt": "2026-07-12T05:51:50.095Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-47d9",
