@@ -19478,50 +19478,50 @@
       "archivedAt": "2026-07-12T10:20:45.647Z"
     },
     {
-      "id": "i-20260712-616f",
-      "createdAt": "2026-07-12T05:05:04.899Z",
+      "id": "i-20260712-53e3",
+      "createdAt": "2026-07-12T09:38:33.365Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-616f.jpg",
-      "imageCommit": "16c6052ef44520d3938258c935561a3f4cb6457c",
+      "imagePath": "images/i-20260712-53e3.jpg",
+      "imageCommit": "b97c5ae5d5bc8f142e6c224d59c13bdac6d856ea",
       "imagePaths": [
-        "images/i-20260712-616f.jpg"
+        "images/i-20260712-53e3.jpg"
       ],
       "imageCommits": [
-        "16c6052ef44520d3938258c935561a3f4cb6457c"
+        "b97c5ae5d5bc8f142e6c224d59c13bdac6d856ea"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: the weekly-challenge/coach-moment banner sat only 20px below the domain-card grid, but the grid's card rhythm is 40px (.card-stack margin-top + .responsive-grid gap both apply), so with Weekly Insights empty it read as cramped. Fix: bumped the deck's top margin mt-5 -> mt-10 in Dashboard.tsx so the gap matches the 40px card rhythm.",
-        "imagePath": "images/i-20260712-616f-fix-r1.png",
+        "description": "Root cause: a workout day with exercises but under its set target showed the 'Looks light - add N more sets' nudge, but the only coach action ('More ideas') re-plans the whole day and replaces every exercise - so there was no one-tap way to just top up a light day. Fix: added a 'Coach <name> adds the missing N sets' button under the volume meter that appends fresh coach-picked exercises (skipping duplicates) until the day reaches its target, keeping everything you already programmed.",
+        "imagePath": "images/i-20260712-53e3-fix-r1.png",
         "imagePaths": [
-          "images/i-20260712-616f-fix-r1.png"
+          "images/i-20260712-53e3-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "21c5e4ff44bee80b185b4882e42508213dae0e49",
+        "imageCommit": "808133e0f2d6b465fa7591eae684290ad001f743",
         "imageCommits": [
-          "21c5e4ff44bee80b185b4882e42508213dae0e49"
+          "808133e0f2d6b465fa7591eae684290ad001f743"
         ],
-        "fixedAt": "2026-07-12T10:36:31.091Z",
+        "fixedAt": "2026-07-12T10:38:00.907Z",
         "by": "shakeebshaan",
-        "appCommit": "ec07850f",
+        "appCommit": "7cfdda13",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 93,
+          "score": 92,
           "bar": 90,
-          "note": "Verified end-to-end on authenticated dashboard: DOM-measured the gap going from 20px to 40px (matching the exact inter-card rhythm above it) and confirmed visually in a 390-wide capture. Surgical one-line className change, no regression risk."
+          "note": "Verified live at 390x844: a 1/12-set day shows the button; appends without replacing; matches coach-button design tokens; tsc clean; flow doc updated."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-12T11:02:21.860Z",
+      "resolvedAt": "2026-07-12T11:02:37.927Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T11:02:21.860Z"
+      "archivedAt": "2026-07-12T11:02:37.927Z"
     }
   ]
 }
