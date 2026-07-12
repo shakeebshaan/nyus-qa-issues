@@ -222,48 +222,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260711-d5b1",
-      "createdAt": "2026-07-11T07:01:14.484Z",
-      "route": "/dashboard",
-      "description": "[bug-hunt] Food logged via the new no-plan food diary is invisible on the DASHBOARD diet card — it still says \"no diet plan\", contradicting the diary the user just filled.\n\nThe plan-independent food diary (commit e6f84228) makes no-plan meal logging first-class: /nutrition AND GET /diet/plan both fold ad-hoc MealLog rows into the day's consumed totals (nyu_backend backend.py:6851-6893, comment \"Fold ad-hoc custom meal logs (MealLog) for the day into consumed totals\" -> calories_consumed). But the DASHBOARD diet card is computed from a DIFFERENT source: diet_summary.progress = {current: diet_completed_today, target: diet_target_today}, both func.count(AssignedMeal.id).join(UserDietPlan) (backend.py:3481-3494, 3684-3689). A no-plan user has no UserDietPlan/AssignedMeal -> target=0, current=0, and the card NEVER reads MealLog. The frontend derives dietHasPlan = diet_summary.progress.target > 0, so it renders the \"No diet plan yet / Generate diet plan\" empty state.\n\nCustomMealModal invalidates ['dashboard-overview'] after logging (CustomMealModal.tsx:371), but because the dashboard's data source ignores MealLog, that refetch changes nothing.\n\nRepro:\n1. No-plan user -> /nutrition -> log 2-3 meals via the diary (use the photo or Ingredients path so they carry kcal).\n2. /nutrition diary shows \"Today's food diary · N items · NNNN kcal logged\".\n3. Go to Dashboard.\nExpected: the dashboard diet card acknowledges the logged food (a \"logged N meals / NNNN kcal today\" state), not a dead \"no plan\" prompt.\nActual: Dashboard diet card shows \"No diet plan yet / Generate diet plan\" — zero acknowledgment; the diary and the home surface disagree.\n\nFix: make the dashboard diet_summary fold MealLog for no-plan users the same way /diet/plan already does, so the food-diary feature isn't undone on the home screen. (Distinct from dashboard tick issues a1f3/e7c9, which were about moments/stacked cards.)",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: dashboard diet card computed progress only from AssignedMeal counts joined to UserDietPlan, so a no-plan user who logged food via the plan-independent diary got target=0 and saw the dead 'No diet plan yet / Generate diet plan' prompt. Fix: backend.py folds today's ad-hoc MealLog rows into two new diet_summary fields (logged_meal_count/logged_calories) using the same filter GET /diet/plan uses; DashboardDietCard renders 'N meals logged today / NNNN kcal so far' + a Log Meal CTA. Verified on prod: card shows '1 meal logged today'.",
-        "imagePath": "images/i-20260711-d5b1-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260711-d5b1-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f58d2e0270a29dfed777a8e67f51abfeb7e02575",
-        "imageCommits": [
-          "f58d2e0270a29dfed777a8e67f51abfeb7e02575"
-        ],
-        "fixedAt": "2026-07-11T10:37:56.183Z",
-        "by": "shakeebshaan",
-        "appCommit": "e68bf21b",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Verified end-to-end: prod /dashboard/overview now returns logged_meal_count=1,target=0; authenticated dashboard screenshot shows the card rendering '1 meal logged today / 0 kcal so far' with Log Meal CTA (was the dead no-plan prompt). Backend deployed+healthy, FE tsc clean, i18n parity across 4 bundles."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260711-da17",
       "createdAt": "2026-07-11T07:01:14.484Z",
       "route": "/nutrition",
