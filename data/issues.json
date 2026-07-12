@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260712-e7a2",
+      "createdAt": "2026-07-12T12:09:26.093Z",
+      "route": "/log-weight",
+      "description": "[bug-hunt] Goal ETA on the Log-Weight \"Goal Progress\" card projects the goal date from an EWMA-SMOOTHED weekly rate but divides it into an UNSMOOTHED remaining distance, and reads trend direction from a single raw weigh-in — so the projected date is wrong by the daily water-weight swing on ~every view, and can invert outright.\n\nROOT CAUSE (src/pages/LogWeight.tsx:394-404 + src/lib/goal-eta.ts): computeGoalEta gets ratePerWeekKg = weightTrend.ratePerWeek (EWMA alpha=0.25, whose entire purpose is to cancel the 0.5-1.5 kg daily water/sodium noise), but remainingKg = goalProgress.remaining and direction = goalProgress.direction — both derived from goalProgress.currentKg = last_log.weight_kg, the RAW latest reading (seeded into the input at line 94, used at rest at lines 318/337/340-341). Smoothed rate + unsmoothed distance = apples-to-oranges.\n\nMANIFESTATION 1 (distance error, ~every view): goal 75 kg, EWMA trend 76.2 kg descending -0.35 kg/wk -> true remaining 1.2 kg -> ~3 wk. If today's raw last_log came in at 77.5 kg (normal high-water morning) -> remaining = |77.5-75| = 2.5 -> weeks = round(2.5/0.35) = 7 -> \"On track for <date> - ~7 wk\". Projected date off by ~4 weeks from one noisy reading, and it jerks daily with water weight — defeating the EWMA the rate half already applies.\n\nMANIFESTATION 2 (direction inversion): goal 75, EWMA trend 76.2 still descending -0.35 kg/wk, but the latest saved reading dipped to 74.0 kg (dehydrated morning; below goal though the trend is clearly above). goalProgress.direction = currentKg(74.0) < goalKg(75) -> \"gain\"; computeGoalEta towardGoal for \"gain\" needs rate>0 but rate is -0.35 -> off_track -> card shows \"Not trending toward your goal yet - Keep logging to project your goal date.\" while the Goal Progress bar directly above reads ~99% and the trend caption shows the user steadily losing toward goal. Opposite of reality.\n\nEXPECTED: the ETA remaining distance AND direction should be measured from the SAME EWMA-smoothed weight the rate comes from (weightTrend.kg) — remaining = |weightTrend.kg - goalKg|, direction from weightTrend.kg vs goalKg — so a single noisy weigh-in cannot swing or invert the projection.\n\nREPRO: /log-weight with >=3 logged points and a live goal; have the most recent saved weigh-in deviate from the smoothed trend by ~1-2.5 kg (routine daily fluctuation). The \"~N wk / On track for <date>\" shifts by weeks vs the trend-implied ETA; when the raw reading crosses the goal line the card flips to \"keep logging\". tsc + the pure goal-eta.ts unit tests pass — the defect is the input wiring in LogWeight.tsx, not the helper.\n\nFIX: pass remainingKg = |weightTrend.kg - goalKg| and derive direction from weightTrend.kg vs goalKg (the EWMA trend), instead of goalProgress (raw last_log / live input).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260712-a91c",
       "createdAt": "2026-07-12T07:07:29.370Z",
       "route": "/",
