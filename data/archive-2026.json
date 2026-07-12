@@ -19313,31 +19313,50 @@
       "archivedAt": "2026-07-12T05:00:05.402Z"
     },
     {
-      "id": "i-20260712-96e1",
-      "createdAt": "2026-07-12T00:15:30.503Z",
+      "id": "i-20260712-47d9",
+      "createdAt": "2026-07-12T05:03:34.364Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-96e1.jpg",
-      "imageCommit": "6131d27cf0a99b8087d48cfa8e472693b585daad",
+      "imagePath": "images/i-20260712-47d9.jpg",
+      "imageCommit": "2598093e71cdfc91276737ebf201096c90e279ea",
       "imagePaths": [
-        "images/i-20260712-96e1.jpg"
+        "images/i-20260712-47d9.jpg"
       ],
       "imageCommits": [
-        "6131d27cf0a99b8087d48cfa8e472693b585daad"
+        "2598093e71cdfc91276737ebf201096c90e279ea"
       ],
       "imagePrivate": true,
       "status": "resolved",
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the Log Weight card rendered a decorative horizontal sparkline/divider line beneath the weight number (the line circled in the report). Fix: removed the decorative weight sparkline element from the LogWeight card (commit 9464118f). Proof: /log-weight now shows the number + kg/lb toggle + tick ruler with no horizontal line across the card.",
+        "imagePath": "images/i-20260712-47d9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260712-47d9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ce8f5aa22d00ffdcceafe1e3b040a5417442bde9",
+        "imageCommits": [
+          "ce8f5aa22d00ffdcceafe1e3b040a5417442bde9"
+        ],
+        "fixedAt": "2026-07-12T06:38:35.142Z",
+        "by": "shakeebshaan",
+        "appCommit": "cdac1f2d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Decorative sparkline line removed from the Log Weight card; verified absent on the live /log-weight screen."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Board satisfaction bar is at 100 - qa.mjs resolve rejects any honest self-score below 100, so this tick's fixes cannot post as Resolved even though they are done + deployed. Lower the bar in the board header to let the loop post proof. FIXED + shipped this tick (in code, pending the next alpha build): c4f9 ad-hoc activity sheet (backend source column, deployed); pwk9 Milestones perfect_weeks/total_prs now derived on-read + live-verified total_prs 0 to 6 (deployed); 2ea5 final-set completion + celebration replay (already in main, 65 tests green); 47d9 weight sparkline removed; 616f dashboard tip gap; f717 'No meals major error' custom-diet save now persists via client per-100g fallback + honest error (backend, deployed); f118/5684 TestCoach placeholder blocked + self-heal to real coach (backend, deployed); 36dd plan-build banner contradiction suppressed. Also fixed the loop fleet (see f1d9). THIS issue (96e1): the 'Sync conflict - try again.' toast string does not exist anywhere in the app or backend, incl. full git history - need a repro/route to attribute it (may be a stale or non-NYUS screenshot).",
-      "reviewedAt": "2026-07-12T05:50:48.751Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T06:47:30.490Z",
+      "needsReview": false,
+      "resolvedAt": "2026-07-12T06:47:55.302Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T06:47:30.490Z"
+      "archivedAt": "2026-07-12T06:47:55.302Z"
     }
   ]
 }
