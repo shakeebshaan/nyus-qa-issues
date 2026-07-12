@@ -602,49 +602,6 @@
       "history": []
     },
     {
-      "id": "i-20260712-616f",
-      "createdAt": "2026-07-12T05:05:04.899Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-616f.jpg",
-      "imageCommit": "16c6052ef44520d3938258c935561a3f4cb6457c",
-      "imagePaths": [
-        "images/i-20260712-616f.jpg"
-      ],
-      "imageCommits": [
-        "16c6052ef44520d3938258c935561a3f4cb6457c"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the weekly-challenge/coach-moment banner sat only 20px below the domain-card grid, but the grid's card rhythm is 40px (.card-stack margin-top + .responsive-grid gap both apply), so with Weekly Insights empty it read as cramped. Fix: bumped the deck's top margin mt-5 -> mt-10 in Dashboard.tsx so the gap matches the 40px card rhythm.",
-        "imagePath": "images/i-20260712-616f-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260712-616f-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "21c5e4ff44bee80b185b4882e42508213dae0e49",
-        "imageCommits": [
-          "21c5e4ff44bee80b185b4882e42508213dae0e49"
-        ],
-        "fixedAt": "2026-07-12T10:36:31.091Z",
-        "by": "shakeebshaan",
-        "appCommit": "ec07850f",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Verified end-to-end on authenticated dashboard: DOM-measured the gap going from 20px to 40px (matching the exact inter-card rhythm above it) and confirmed visually in a 390-wide capture. Surgical one-line className change, no regression risk."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260712-bd63",
       "createdAt": "2026-07-12T09:09:10.469Z",
       "route": null,
