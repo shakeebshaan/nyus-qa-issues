@@ -19588,6 +19588,40 @@
       "resolvedAt": "2026-07-12T13:22:41.116Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-12T13:22:41.116Z"
+    },
+    {
+      "id": "i-20260712-fa39",
+      "createdAt": "2026-07-12T09:43:14.090Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260712-fa39.jpg",
+      "imageCommit": "c30736c0d940f803ab52b85a4b9a7cea8a0d6538",
+      "imagePaths": [
+        "images/i-20260712-fa39.jpg"
+      ],
+      "imageCommits": [
+        "c30736c0d940f803ab52b85a4b9a7cea8a0d6538"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Understood -- you want MORE than 10 distinct training days, not a cap bump. I'm proceeding with Option A (rotating microcycle) since you didn't need me to choose: plan days become Day 1..N (any N), and 'today's workout' = days_since_plan_start % N instead of the weekday mapping that silently merged days 8/9/10 onto Sunday (the data-loss reason the cap was 7). This removes the weekday coupling entirely so N can be 12, 14, whatever. It's a multi-file structural change (plan schema day-of-cycle, WorkoutSession creation, every 'today's workout' lookup, and the weekly-review 'next week' logic) delivered as a tracked slice in a dedicated build tick, not a one-tick fix. ONE real blocker remains for verifying it to your 90 bar: all onboarded/QA accounts were deleted in the prelaunch cleanup, so I can't drive a live plan headless to confirm Day 11/12 resolve correctly. Restore/allow ONE onboarded test account and I'll build + verify Option A end-to-end. Shout if you'd rather Option B (days 8+ overflow into week 2).",
+      "reviewedAt": "2026-07-12T12:12:13.335Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "I want it to be more than 10 currently its only 10",
+      "reviewRepliedAt": "2026-07-12T11:01:40.118Z",
+      "reviewReplyBy": "shakeebshaan",
+      "tags": [
+        "architecture",
+        "building"
+      ],
+      "resolvedAt": "2026-07-12T13:52:25.644Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-12T13:52:25.644Z"
     }
   ]
 }
