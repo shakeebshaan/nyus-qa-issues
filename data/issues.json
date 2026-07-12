@@ -13,48 +13,6 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: DELETE /logs/activity keyed on name+date with .delete() and no id/LIMIT (app/routes/logging.py), so removing one ad-hoc activity destroyed EVERY same-named ActivityLog that day. The sheet's Remove passed the name, not the row id. Fix (full-stack): backend now deletes exactly one row by id (user-scoped) when id is given, and for the name-based plan tick-off deletes only the MOST-RECENT match (order by id desc, first) — never all of them; frontend LogActivitySheet Remove passes entry.id, so nameless AI-logged rows are also removable (dead X gone, i-20260711-c4f9 part a). Verified end-to-end on prod: logged two same-named 'Run' rows (id 9/30min, id 10/20min), DELETE {id:10} returned deleted:1 and id 9 survived (old bug returned deleted:2 and destroyed both); name-based DELETE also returned deleted:1, leaving one row. Screenshot shows the correct /activity route with the Log activity entry point. tsc clean; 66 logging/activity service tests green. Deployed: backend commit 8ced0c6, frontend 955b7326.",
-        "imagePath": "images/i-20260711-a3d1-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260711-a3d1-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f7287f483daafcd42dc6b51b9d36eab3a4b67d30",
-        "imageCommits": [
-          "f7287f483daafcd42dc6b51b9d36eab3a4b67d30"
-        ],
-        "fixedAt": "2026-07-11T21:46:10.300Z",
-        "by": "shakeebshaan",
-        "appCommit": "955b7326",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Root-caused across FE+BE; data-loss path fixed both ways (sheet=delete-by-id, plan un-tick=most-recent-only); verified end-to-end on PROD API (deleted:1 not 2, sibling row survived); tsc clean; 66 service tests green."
-        }
-      },
-      "history": [],
-      "createdAt": "2026-07-11T21:16:39.865Z",
-      "id": "i-20260711-a3d1",
-      "description": "[bug-hunt] Ad-hoc \"Log activity\": removing ONE logged activity silently deletes EVERY same-named activity that day (data loss). The new sheet's Remove (X) and the plan tick-off both delete by name+date, but log always inserts a new row.\n\nRoot cause (frontend + backend):\n- Remove passes the NAME, not the row id: src/components/activity/LogActivitySheet.tsx:327 -> removeMut.mutate(entry.activity_name) -> loggingService.unlogActivity({activity_name, log_date}) (logging.service.ts:104).\n- Backend DELETE /api/logs/activity deletes ALL rows matching user+date+lower(name): app/routes/logging.py:1228-1230 (.delete(synchronize_session=False), no id, no LIMIT 1). Returns {deleted: N}.\n- POST always INSERTs a fresh row (logging.py:1191-1202, no upsert/dedup). No unique constraint on (name,date) — db_models.py ActivityLog has only a NON-unique idx_activity_log_user_date. So two same-name rows/day are allowed and each renders as its own <li key={entry.id}> (LogActivitySheet.tsx:303).\n- Same by-name delete is used by the plan tick-off: src/components/activity/ActivityMarkSection.tsx:101 unlogActivityMut.mutate({activity_name: activity.name, log_date}).\n\nRepro (single feature):\n1. /activity -> Log activity -> type Cardio, Name \"Run\", Duration 30 -> Save.\n2. Log activity again -> Name \"Run\", Duration 20 -> Save.\n3. Reopen the sheet: both \"Run\" entries show under \"Also logged today\".\n4. Tap X on the 20-min Run. Toast: \"removed\".\nExpected: only that one entry is removed.\nActual: BOTH Run rows are deleted (DELETE returns {deleted:2}); the 30-min run and its data are destroyed silently.\n\nRepro (cross-feature, worse — the ad-hoc row is invisible):\n1. Plan has activity target \"Morning Walk\"; user also logs an ad-hoc \"Morning Walk\" via the sheet (hidden from the sheet list because it matches a plan name).\n2. Plan \"Morning Walk\" now shows completed (backend marks a plan activity done when ANY same-name ActivityLog exists). User un-ticks it in ActivityMarkSection.\nActual: the ad-hoc Morning Walk is deleted too, with no indication.\n\nFix: delete by ActivityLog.id scoped to the user (add id to unlogActivity + the row), not by name. Plan tick-off (which legitimately keys on name) should delete only the most-recent matching row or tag plan-generated logs so it never touches ad-hoc rows. Verified: tsc clean; both repos traced; adversarial verify CONFIRMED all 6 links, no unique constraint.",
-      "needsReview": false
-    },
-    {
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "route": "/activity",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
       "status": "open",
       "fix": null,
       "history": [],
