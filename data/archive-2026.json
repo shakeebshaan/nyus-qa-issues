@@ -19197,12 +19197,12 @@
       "archivedAt": "2026-07-11T06:29:00.729Z"
     },
     {
-      "id": "i-20260711-c695",
-      "createdAt": "2026-07-11T06:29:37.853Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
       "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "route": "/dashboard",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19211,13 +19211,16 @@
       "status": "resolved",
       "fix": null,
       "history": [],
+      "createdAt": "2026-07-11T00:12:23.992Z",
+      "id": "i-20260711-c7d2",
+      "description": "[bug-hunt] Supplement & medication tracker: on a day when nothing is scheduled the header shows \"0% taken today\" while the body simultaneously says \"Nothing scheduled today.\" -- a self-contradicting card that reads as a missed dose when nothing was actually due.\n\nRoot cause. adherenceForDate returns { taken:0, total:0, pct:0 } when nothing is scheduled (src/lib/supplements.ts:80-85, \"pct: total === 0 ? 0\"). The card renders the daily subline t(\"supplements.adherence\", { pct: todayAdh.pct }) = \"{{pct}}% taken today\" UNCONDITIONALLY whenever hasItems (SupplementsCard.tsx:144-148), with no guard on todayAdh.total. Meanwhile the check-off body branches on dueToday.length === 0 and shows t(\"supplements.none_today\") = \"Nothing scheduled today.\" (SupplementsCard.tsx:161-165). Both render at once.\n\nRepro:\n1. Add one supplement scheduled on Monday only (Days -> tap \"Mon\", so days:[1]).\n2. Open the dashboard on any non-Monday.\nBody: \"Nothing scheduled today.\" Header subline: \"0% taken today\". (On the same rest day the weekly pill also shows a % that includes non-existent misses -- see i-20260711-a4e1.)\n\nExpected: when nothing is due today, show a neutral nothing-due / rest-day label, not a \"0% taken today\" that reads as total non-adherence.\nActual: \"0% taken today\" directly contradicts \"Nothing scheduled today.\"\n\nFix: in SupplementsCard, when todayAdh.total === 0 render a nothing-due subline (reuse none_today or a rest-day string) instead of the adherence percentage; likewise suppress/relabel the weekly pill when the week has no scheduled doses.",
       "needsReview": true,
-      "reviewReason": "SHIPPED option (c) this tick (board commit 332511f). Diagnosis held: the board wasn't broken — it was buried. ~25 of the open cards are automated status posts from the standing loops (content/discovery/press, all auto-tagged) that never get archived, so the 7 real 'pending direction' bug-hunt items sank below them. Fix: the board now folds those auto loop-logs into ONE collapsible 'Loop activity — N automated log posts' section at the bottom; real bugs stay in the main list. Verified headless against live data: main list drops from ~41 cards to 16, with 25 folded, 0 console errors. An explicit tag filter or search still shows everything flat. Reload the board — the 8 real items (5 fixed bug-hunt findings marked 'Safe to Resolve' + acce + e11f + this) are now all above the fold and one tap from Resolve. If you'd rather auto-archive loop logs entirely (vs fold), say so and I'll add a retention sweep.",
-      "reviewedAt": "2026-07-11T15:35:12.086Z",
+      "reviewReason": "ALREADY FIXED + shipped — verified. When nothing is due today the card shows a rest-day subline (SupplementsCard.tsx:156 todayAdh.total===0 -> supplements.rest_today) instead of '0% taken today', and the weekly pill is gated on weekAdh.total>0 (line 162). No more self-contradiction. Fixed in commit 77d050d6 (2026-07-11). Safe to Resolve.",
+      "reviewedAt": "2026-07-11T12:31:07.456Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T00:14:04.337Z",
+      "resolvedAt": "2026-07-12T00:14:08.911Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T00:14:04.337Z"
+      "archivedAt": "2026-07-12T00:14:08.911Z"
     }
   ]
 }
