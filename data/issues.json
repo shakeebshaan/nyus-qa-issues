@@ -1262,10 +1262,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Destructive PROD data wipe - owner must confirm before I run it (irreversible). Investigated: ~90 user-FK tables + logging tables in db_models; no existing hard-delete cascade to reuse (account_deletion only logs; admin soft_delete only sets deleted_at). Safe plan: full mysqldump first, then delete per-user + logging rows for every account EXCEPT yours (support@chartraiders.com / support@nyus.in), preserving all content/catalog seed tables (ingredients/recipes/exercises/plans/badges/etc). Confirm: (1) exact owner account email to keep, (2) whether to also clear the owner's own logs, and I will run it as a one-off backed-up script (loops cannot - no ssh in their allowlist).",
       "reviewedAt": "2026-07-12T05:50:52.477Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Delete all",
+      "reviewRepliedAt": "2026-07-12T06:43:11.184Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-9913",
