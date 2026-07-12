@@ -35,9 +35,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: LogWeight.tsx fed computeGoalEta a smoothed EWMA rate but an UNSMOOTHED remaining distance + direction (goalProgress.remaining/direction, both from the raw last_log weight) - so one noisy weigh-in swung the projected date by weeks and could invert direction to a false 'keep logging'. Fix: remaining = |weightTrend.kg - goalKg| and direction from weightTrend.kg vs goalKg (same EWMA weight the rate uses). Proof: raw last_log dipped to 74.0 kg below the 75 kg goal while EWMA trend ~76 kg descending - pre-fix inverted to 'keep logging'; post-fix reads 'On track for Jul 19, 2026'. tsc clean, goal-eta unit 8/8.",
+        "imagePath": "images/i-20260712-e7a2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260712-e7a2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9c82a9ef603d3f73372da18a0cc08592cfe931bd",
+        "imageCommits": [
+          "9c82a9ef603d3f73372da18a0cc08592cfe931bd"
+        ],
+        "fixedAt": "2026-07-12T12:35:48.653Z",
+        "by": "shakeebshaan",
+        "appCommit": "54f0c23e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Exact root-cause fix (matches the bug report's prescribed wiring change); surgical 12-line edit in LogWeight.tsx; full-screen 390x844 proof on the correct /log-weight screen shows the manifestation-2 inversion gone (raw 74.0 dip below goal now correctly reads 'On track for Jul 19, 2026' from the EWMA trend instead of 'keep logging'); tsc clean, goal-eta unit 8/8 green. Only caveat: proof uses a route.fulfill scenario mock since all onboarded accounts were deleted in the prelaunch cleanup - the mock faithfully drives the exact code path."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260712-a91c",
