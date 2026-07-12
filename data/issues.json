@@ -691,29 +691,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260710-7e2f",
-      "createdAt": "2026-07-10T05:40:31.068Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "route": "/coach-chat (in-chat rating_scale block with max > 10)",
-      "description": "[bug-hunt] A rating_scale block whose scale exceeds 10 (max > 10) renders as a Slider, but choosing a value never sends the rating to the coach: the slider freezes after the first movement and onResponse is never called. The dots variant (max <= 10) is fine; only the slider path is broken.\n\nRoot cause, src/components/blocks/RatingScaleBlock.tsx:\n- disabled = status === \"completed\" || status === \"expired\" || value !== null (line 13). It flips to true as soon as local value is non-null.\n- Slider (line 81-96): onValueChange={([v]) => { if (!disabled) setValue(v); }} sets value during drag/track-click; onValueCommit={([v]) => { if (disabled) return; ... onResponse({value:v}); }} is the ONLY place the slider calls onResponse.\n- onValueChange (pointer move) and onValueCommit (pointer up) are separate pointer events, so React re-renders between them. The first onValueChange sets value, the next render makes disabled === true, the Radix Slider then receives disabled (thumb gets disabled:pointer-events-none per src/components/ui/slider.tsx) and stops tracking the drag, AND onValueCommit's \"if (disabled) return\" guard now short-circuits. Net: onResponse is effectively UNREACHABLE for the slider. The value shows on screen (line 101-103) but is never sent to the coach, and the thumb sticks at the first position.\n- The dots path works because handleSelect (line 17-22) sets value AND calls onResponse atomically in one handler before the disabling re-render.\n\nRepro:\n1. Coach sends a rating_scale with max > 10 (e.g. {question, min:0, max:100} or min:1, max:20) so it renders the Slider variant (useDots = max <= 10 is false, line 14).\n2. Drag the slider thumb (or tap the track). The thumb freezes at/near the first position and the coach never receives a rating; the interaction is dead after one move.\n\nExpected: dragging/committing the slider sends onResponse({value}) with the chosen number, like the dots variant.\nActual: onResponse never fires for the slider; the rating is silently lost and the control freezes.\n\nFix: do not derive disabled from value for the slider. Track commit separately, e.g. const [committed, setCommitted] = useState(false); const disabled = status === \"completed\" || status === \"expired\" || committed; set committed inside onValueCommit and keep onValueChange only updating value. (The dots path can keep its single-handler behavior.)",
-      "needsReview": true,
-      "reviewReason": "ALREADY FIXED + shipped — verified against source this tick. RatingScaleBlock.tsx now locks on COMMIT via a separate 'committed' state (lines 19-20), not derived from value, so the slider (max>10) no longer disables its own thumb mid-drag; onValueCommit reaches onResponse. Fixed in commit 0d17e9c2 (2026-07-10). Safe to Resolve.",
-      "reviewedAt": "2026-07-11T12:30:58.105Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260709-bn4t",
       "createdAt": "2026-07-09T13:00:00.000Z",
       "author": "shakeebshaan",
