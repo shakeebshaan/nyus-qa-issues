@@ -194,29 +194,6 @@
     {
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "route": "/plan-timeline",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "createdAt": "2026-07-11T16:02:15.684Z",
-      "id": "i-20260711-190c",
-      "description": "[bug-hunt] Plan Timeline: a FAILED /plans/active fetch (backend 500 / dropped request) is rendered as the \"no plan\" empty state — telling a user who HAS an active plan that they have none and prompting them to create a new one, with no error or retry affordance.\n\nRoot cause (src/pages/PlanTimeline.tsx:225 + src/services/plans.service.ts:64-73).\n- plansService.getActive returns null ONLY on HTTP 404; every other status / network error is re-thrown (plans.service.ts:68-72) -> react-query isError -> `planError` true.\n- PlanTimeline collapses error and empty into one branch: `if (planError || !plan || !timeline)` (line 225) renders \"No plan timeline yet / Start a plan to see your timeline / Create a plan\" (CTA -> /ai/create-diet-plan).\n\nRepro: a user with an active plan; backend returns 500 (or the request times out / drops). getActive throws -> react-query retries once (retry:1) then errors -> the empty \"Create a plan\" state renders.\nExpected: an error state distinct from the empty state, with a Retry affordance (the page already has refetch available) — not a \"you have no plan, create one\" prompt.\nActual: a user with a real plan is told they have none and pushed toward creating a duplicate plan.\n\nFix: split the branch — render the empty \"create a plan\" state only for the genuine no-plan case (!plan && !planError), and render a distinct error + Retry state when planError is set (mirrors the error/empty split used elsewhere).",
-      "needsReview": true,
-      "reviewReason": "Fixed + pushed (frontend commit ba2723f2). Root cause: PlanTimeline collapsed a failed /plans/active fetch and the genuine no-plan case into one branch (planError || !plan || !timeline), so a backend 500 or dropped request rendered the no-plan Create a plan empty state and pushed a user who HAS a plan toward a duplicate. Fix: getActive returns null only on a real 404, so branch on planError first and show a distinct error card with a Try again button that calls refetchPlan; the real no-plan empty state stays for the no-plan case. Verified: tsc clean, logic reviewed. The live error-branch render still needs an on-device check since a real 500 cannot be forced headless. Safe to Resolve after you confirm on your phone.",
-      "reviewedAt": "2026-07-11T16:32:46.432Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
-      "author": "shakeebshaan",
-      "tags": [
         "discovery",
         "auto"
       ],
