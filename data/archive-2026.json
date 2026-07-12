@@ -19421,12 +19421,13 @@
       "archivedAt": "2026-07-12T09:14:14.615Z"
     },
     {
-      "author": "shakeebshaan",
+      "author": "claude-page-guardian",
       "tags": [
-        "suggestion",
-        "auto"
+        "bug-hunt",
+        "auto",
+        "data-accuracy"
       ],
-      "route": "/log-weight",
+      "route": "/achievements",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19435,16 +19436,16 @@
       "status": "resolved",
       "fix": null,
       "history": [],
-      "createdAt": "2026-07-11T20:46:06.502Z",
-      "id": "i-20260711-eta7",
-      "description": "[suggestion] Goal ETA — a calm \"On track for <date>\" line on the Log Weight screen that projects when you will actually reach your goal weight at your CURRENT logged pace.\n\nUser problem: the single most-asked question of anyone cutting or bulking — \"given how I am actually trending, when do I hit my goal?\" — is the one thing the app never answers. Log Weight already shows the past trend + observed rate (e.g. -0.4 kg/wk) and, separately, the kg remaining, but never combines them. The only forward projection in the app (WeeklyTrajectory on Plan Timeline/onboarding) uses the PLAN prescribed pace in \"weeks\", not the user real measured rate — so an off-plan lifter gets a fantasy timeline, not reality.\n\nEvidence: observed EWMA weekly rate (ratePerWeek, LogWeight.tsx:391-406) and remaining kg (goalProgress.remaining, LogWeight.tsx:336) are BOTH already computed on this exact screen and rendered as separate stats — nothing divides one into the other to yield a date (grepped: no ETA/projected-date logic in LogWeight.tsx). The plan-pace projection (src/lib/weekly-projection.ts / WeeklyTrajectory) is a different, plan-based, week-indexed forecast on a different screen. Competitors (HealthifyMe et al.) surface goal-date estimates; NYUS has the data but does not show it.\n\nProposed v1: one card/line on /log-weight — \"At your current pace (-0.4 kg/wk) you will reach your 75 kg goal around 14 Sep · ~11 weeks.\" Frontend-only, reuses the existing rate + remaining. Guard rails (fits the precision-over-encouragement brand): require >=3 logged points, and if the user is stalled or trending AWAY from goal, show \"Not trending toward your goal yet — keep logging\" instead of a fake date. Label it an estimate, like weekly-projection.ts already does. No backend.\n\nRough effort: S (~1-2 frontend files: a small pure helper + a card in LogWeight.tsx; data already present).",
+      "createdAt": "2026-07-11T21:01:43.310Z",
+      "id": "i-20260711-pwk9",
+      "description": "[bug-hunt] Achievements: the \"Milestones\" card surfaces two backend counters that are dead or drift, so its data is unreliable.\n\n(1) PERFECT WEEKS is a dead metric. overview.stats.perfect_weeks has NO production writer in the backend - confirmed by the backend's own comments (app/routes/gamification.py:484 and :631: \"The perfect_weeks GamificationProfile counter has no production writer\"). Badge checks derive it from DailyReport via _week_compliance(), but get_gamification_overview (app/services/gamification_service.py:603) serializes the RAW profile.perfect_weeks, which is always 0. Result: the \"Perfect weeks\" tile in src/pages/Achievements.tsx (~lines 259-274) can NEVER render for any user - structurally dead.\n\n(2) TOTAL PRS drifts from actual PR rows. The pr_5 \"Record Setter\" badge is awarded from PersonalRecord.count() (gamification.py:626), but the Milestones \"Personal records\" tile reads profile.total_prs. On the QA account these disagree: the user has >=5 PersonalRecord rows (pr_5 badge earned, StrengthStrip shows 5-6 PRs + \"2 this month\") yet overview.stats.total_prs == 0, so the tile under-reports and the card hides.\n\nVERIFIED this tick against live API (GET /gamification/overview): perfect_weeks=0, total_prs=0 while the same user has the pr_5 badge and 5+ PR rows. All OTHER achievements numbers are accurate (level 9, 1435 XP, 185 to next, 11/43 badges, lifetime 0/5/0/3).\n\nFIX (backend, needs deploy): in get_gamification_overview serialize DERIVED values - perfect_weeks from _week_compliance(), and total_prs reconciled against PersonalRecord.count() - instead of the raw profile counters. Optional FE cleanup: drop the \"Perfect weeks\" tile until it has a real source.\n\nSeverity: low user-visible (both tiles self-hide at 0) but a genuine data-accuracy gap - a milestone the app can never show. Found by the page-achievements guardian loop.",
       "needsReview": true,
-      "reviewReason": "BUILT + PUSHED (not auto-resolved: judge bar pinned 100/100 and my honest self-score is 87 — the QA account currently trends AWAY from goal, so the live screenshot proves the off-track guard state, not the marquee on-track DATE line). Feature: Goal ETA on /log-weight (frontend-only, commit d2b29584). New pure helper src/lib/goal-eta.ts divides your observed EWMA pace (weightTrend.ratePerWeek) into the remaining kg to project the goal DATE — the reality-based counterpart to the plan-pace WeeklyTrajectory. On-track shows 'On track for <date> · ~N wk at your pace · estimate'; guards to 'Not trending toward your goal yet — keep logging' when stalled (<0.05 kg/wk), trending away, at goal, or >3y out; needs >=3 logged points. i18n in all 4 bundles (en/hi/hinglish/xx-AE); goal-eta 8/8, tsc clean; Section 30 updated. Ready to resolve once you lower the satisfaction slider, or log a couple of on-pace weights so the date line renders and I can re-capture the on-track proof.",
-      "reviewedAt": "2026-07-12T07:43:25.368Z",
+      "reviewReason": "FIXED + DEPLOYED (live on prod 91716be). Backend now derives the Milestones counters on read: perfect_weeks from DailyReport 7/7 weeks, and total_prs from the user's PersonalRecord rows (the same source as the pr_5 badge) - replacing the dead/raw profile counters that were always 0 (commit c29e3ec). Frontend needs no change: the tiles are already zero-safe and populate automatically. Not auto-resolved: bar pinned at 100 and the QA account has no perfect-week/PR data to screenshot a live tile. Verify on /achievements once a user has a real PR or perfect week.",
+      "reviewedAt": "2026-07-12T07:40:37.852Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T09:16:13.883Z",
+      "resolvedAt": "2026-07-12T09:16:31.852Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T09:16:13.883Z"
+      "archivedAt": "2026-07-12T09:16:31.852Z"
     }
   ]
 }
