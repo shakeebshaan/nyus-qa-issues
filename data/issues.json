@@ -1218,7 +1218,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root-caused (needs a focused full-stack fix + a reproducing account, not a blind patch): the builder's 'Save plan' fires the 'Diet plan saved - your meals are ready' toast, but the Nutrition page reads via nutritionService.getDietPlan(today) keyed on todayLocal() (useNutritionData.tsx:128-130). It returns a dietPlan whose meals[] is empty for TODAY, so Nutrition.tsx:475 (dietPlan && !hasMeals, hasMeals=!!dietPlan.meals.length) renders NutritionEmptyState ('No diet plan yet'). So the plan persists but today's meals are not materialized for the local date getDietPlan queries. Likely backend: the saved plan's start/effective date != today, OR a UTC-vs-local date mismatch between save and the /diet today endpoint, OR the built deck is stored as a template that isn't expanded into per-day meal rows. Fix plan: (1) confirm on prod what save-plan persists (UserDietPlan row + its date) vs what getDietPlan(today) returns for the same user; (2) ensure the builder save materializes meals for todayLocal (align timezone); (3) verify end-to-end on a real onboarded account (the QA account hits the same empty-nutrition gap, so it can't confirm the fix). Not shipping a speculative backend change this tick to avoid breaking the diet flow unverified.",
+      "reviewedAt": "2026-07-12T06:43:20.102Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-5418",
