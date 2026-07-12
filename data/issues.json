@@ -96,48 +96,6 @@
       "reportLabel": "Growth insights 2026-07-11"
     },
     {
-      "id": "i-20260711-da17",
-      "createdAt": "2026-07-11T07:01:14.484Z",
-      "route": "/nutrition",
-      "description": "[bug-hunt] \"Add daily from now on — Auto-log this every day\" toggle is a phantom: the use_daily flag is stored but NEVER consumed, so nothing is ever auto-logged.\n\nIn CustomMealModal's Ingredients tab, the \"Add daily from now on / Auto-log this every day\" toggle (CustomMealModal.tsx:675-685) sets use_daily, sent to POST /logs/meal/custom-ingredient. The backend stores it on CustomIngredient (nyu_backend app/routes/logging.py:660, 678, 691) and exposes it via GET/PUT, but NO code path EVER reads use_daily to auto-create a daily MealLog.\n\nFull backend grep for use_daily returns ONLY: create/serialize/PUT in app/routes/logging.py, the db_models column (db_models.py:1620), and the create-table migration — no scheduler, daily_report, or cron job consumes it. CustomIngredient itself is referenced ONLY in logging.py + db_models.py. No client-side auto-log exists either.\n\nResult: the toggle makes a concrete promise (\"Auto-log this every day\") that is silently inert.\n\nRepro:\n1. /nutrition -> Add Food -> Ingredients tab -> select or add an ingredient -> enable \"Add daily from now on\" -> Add to Today.\n2. The next day, open /nutrition.\nExpected: that ingredient auto-appears in today's log/diary.\nActual: it never auto-logs on any subsequent day; the flag persists but does nothing.\n\nFix: either implement an idempotent daily job that logs each user's use_daily=true CustomIngredients as a MealLog for the new local day, or remove the toggle until it's wired so it stops misleading. (Pre-existing Ingredients-tab feature, surfaced while hunting the food-diary area; distinct from the diary-macro [d0ca] and dashboard [d5b1] findings.)",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Ingredients-tab 'Add daily from now on / Auto-log this every day' toggle set use_daily and POSTed it, but NO backend consumer ever read the flag to auto-create a daily MealLog — the promise was silently inert. Fix (commit fdeb8e00): removed the misleading toggle + ingUseDaily state and dropped use_daily from both POST payloads. Chose removal over wiring a per-user-timezone daily APScheduler job (idempotency + NOT-NULL risk not worth a headless tick). The legit 'Save ingredient' (is_saved) toggle is untouched.",
-        "imagePath": "images/i-20260711-da17-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260711-da17-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c45bf80052cc69f10b5607790147e4b2090d5840",
-        "imageCommits": [
-          "c45bf80052cc69f10b5607790147e4b2090d5840"
-        ],
-        "fixedAt": "2026-07-11T10:38:27.968Z",
-        "by": "shakeebshaan",
-        "appCommit": "e68bf21b",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Verified on authenticated /nutrition Ingredients > New ingredient: panel now shows only Name/macros + the legit 'Save ingredient / Keep for future quick-adds' toggle + Add to Today. The phantom 'Auto-log every day' toggle is gone. tsc clean."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "author": "shakeebshaan",
       "tags": [
         "content",
