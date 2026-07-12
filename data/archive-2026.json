@@ -19228,6 +19228,7 @@
         "bug-hunt",
         "auto"
       ],
+      "route": "/activity",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19235,41 +19236,36 @@
       "imagePrivate": false,
       "status": "resolved",
       "fix": {
-        "description": "Implemented owner scope decision B. Root cause: the 16:8 eating-window stopwatch existed TWICE with disjoint localStorage stores -- Nutrition FastingBanner (nyus_fast_start_*) vs useFasting (nyus_fasting_active, driving Dashboard card + /fasting) -- so a fast started on one surface was invisible on the other. Fix: the intermittent IF stopwatch now has ONE source of truth (useFasting). Nutrition's FastingBanner + meal-list overlay read the SAME shared instance (lifted to the page), and selecting the intermittent chip starts that shared timer, so start/end on any surface reflects everywhere. Back-dating (count from last meal) preserved via a new optional startFast(startedAt). Backend vrat/full whole-day flag kept as a distinct concept (no stopwatch). PROOF (attached): a 16:8 fast started on the Dashboard card now renders live on Nutrition -- 'Fasting day - 16:8 window' with the running ring + End fast (was blank before). useFasting 8/8 + fasting/nutrition suites 19/19 green, tsc clean.",
-        "imagePath": "images/i-20260711-fb7e-fix-r1.png",
+        "description": "Root cause: buildRestCue (src/pages/Activity.tsx) had no final-set guard and framed the just-logged reps as the next set's Target. After the last set of a 3-set exercise it spoke a phantom 'set 4 of 3', and on an under-target set it mis-coached the low reps as the target. Fix: extracted to src/lib/restCue.ts (pure) - returns undefined when nextSet > target_sets (RestTimer then skips speech), and the Target line now reads the plan's prescribed reps from current_target (e.g. '3x8-10' -> '8 to 10'), not the reps just logged. Proof: voice/audio-only behavior with no visual surface (cue fires only after logging the final set of a LIVE workout; screenshot shows the correct /activity route on a rest day). Verified by new unit test test/restCue.test.ts (6/6 green) covering final-set suppression + prescribed-vs-logged reps.",
+        "imagePath": "images/i-20260711-b7e2-fix-r1.png",
         "imagePaths": [
-          "images/i-20260711-fb7e-fix-r1.png"
+          "images/i-20260711-b7e2-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "ce854213a46330c6fd4936c21ca0990861c518f9",
+        "imageCommit": "2871904f05270397550984ef6538bc9ad1d651ae",
         "imageCommits": [
-          "ce854213a46330c6fd4936c21ca0990861c518f9"
+          "2871904f05270397550984ef6538bc9ad1d651ae"
         ],
-        "fixedAt": "2026-07-11T06:45:30.247Z",
+        "fixedAt": "2026-07-11T21:41:12.580Z",
         "by": "shakeebshaan",
-        "appCommit": "80475dd6",
+        "appCommit": "66462344",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Directly implements the owner-confirmed option B from the review thread. Single-store unification eliminates the contradictory dual-timer state; cross-screen sync proven live (Dashboard start -> Nutrition reflects); reverse symmetric via shared store. Back-dating preserved, vrat/full kept separate exactly as the scope note specified. New unit tests cover the back-dated start + no-reminder-on-past-target; tsc clean."
+          "note": "Root-caused to buildRestCue; both reported defects fixed (final-set suppression + prescribed-reps target); unit-tested 6/6; tsc clean; minimal surgical scope. Non-visual voice bug so proof is the test + affected-route screenshot."
         }
       },
       "history": [],
-      "route": "/dashboard",
-      "createdAt": "2026-07-11T01:43:12.505Z",
-      "id": "i-20260711-fb7e",
-      "description": "[bug-hunt] Fasting is tracked in TWO independent, unsynchronized systems, so the app shows contradictory \"am I fasting?\" state and a fast started in one surface is invisible in the other.\n\nSystem A (older, nutrition-embedded): src/pages/Nutrition.tsx FastingBanner + a per-day 16:8 elapsed timer keyed on localStorage `nyus_fast_start_${todayLocal()}` (Nutrition.tsx:66, 306-311) PLUS the backend fasting-DAY flag from getFastingStatus GET /daily-logs/fasting (nutrition.service.ts:107, useNutritionData.tsx:328). This drives the FastingBanner + the meal-list overlay.\n\nSystem B (new V1, closes i-20260708-fst1, commit 70a395c8): src/hooks/useFasting.ts + src/lib/fasting.ts, keyed on a completely different localStorage store `nyus_fasting_active` / `nyus_fasting_history`, with NO backend call at all. This drives the Dashboard Fasting card (DashboardFastingCard.tsx) and the /fasting detail page.\n\nThe two share NOTHING -- different localStorage keys, and B never touches the backend fasting-day. So:\n- Start a 16:8 fast on the Dashboard card or /fasting -> nyus_fasting_active is set, a live timer runs. Open Nutrition -> FastingBanner shows nothing (it reads nyus_fast_start_* + the backend day-flag), and the meal-list behaves as a normal (non-fasting) day. The fast the user just started has zero effect on their meal plan / calorie framing / streak / coach.\n- Conversely, mark today a fasting day in Nutrition (backend flag) or run the nutrition 16:8 timer -> the Dashboard Fasting card still reads 'Track your eating window / Start a fast' (idle), because it only knows about nyus_fasting_active.\n\nRepro:\n1. Dashboard -> Fasting card -> 'Start 16:8'. Card shows a live count-up.\n2. Navigate to /nutrition. No fasting banner; meals fully interactive as a normal day.\n3. (reverse) In /nutrition mark today a fasting day -> back to /dashboard -> Fasting card still shows idle 'Start a fast'.\n\nExpected: one source of truth for the user's fasting state; starting/ending a fast in any surface is reflected everywhere (and ideally informs the meal overlay / streak).\nActual: two disjoint 16:8 timers + a backend day-flag that don't know about each other -> contradictory state, and a Dashboard/​/fasting timer that is purely cosmetic (no impact on nutrition, streak, or coach).\n\nFix (owner decision on scope): unify on a single fasting source of truth -- either back the V1 timer with the same backend fasting-day + nyus_fast_start_* the nutrition banner uses, or have both surfaces read/write one shared module. At minimum the Dashboard/​/fasting timer should reflect (and set) the same 'fasting today' state the Nutrition page uses so the app never shows two contradictory fasting states at once.",
+      "createdAt": "2026-07-11T21:16:39.865Z",
+      "id": "i-20260711-b7e2",
+      "description": "[bug-hunt] Voice rest-timer cue announces a phantom \"set N+1 of N\" after the FINAL set, contradicting the on-screen \"Workout complete\"/\"Next up\", and mislabels the just-completed set's reps/weight as the next set's \"Target\". New voice-cues feature (commit b7df14c5), opt-in (Profile > Voice cues) + Sounds on.\n\nRoot cause (src/pages/Activity.tsx):\n- The rest timer arms after EVERY logged set while the picker is open, with NO final-set guard: logSetMutation.onSuccess sets lastLoggedSetRef then, if isModalOpen.current, restarts the timer (Activity.tsx:515-533).\n- buildRestCue always computes nextSet = (lastSet.set_number ?? 0)+1 and appends \" of {target_sets}\" (Activity.tsx:57-59). After logging the last set of a 3-set exercise: lastLoggedSet=3 -> nextSet=4, total=3 -> \"set 4 of 3\".\n- The cue is spoken by RestTimer's completion effect (RestTimer.tsx:51 speakRestCue(announceOnComplete)) after the rest duration elapses.\n- Secondary (same root): the \"Target {reps} reps at {kg} kilos\" line (Activity.tsx:60-61) uses lastLoggedSetRef — the set JUST COMPLETED — but frames it as the upcoming set's TARGET, ignoring the plan's prescribed target (currentExercise.current_target). On a failed/under-target set (did 5 of a 10 target) it announces \"Target 5 reps\" — mis-coaching.\n\nRepro:\n1. Profile > Preferences: Sounds ON, Voice cues ON.\n2. /activity -> start a live workout -> open a 3-set exercise -> log set 3/3. Do NOT tap Continue/Finish; pocket the phone.\n3. After the 90s rest, the phone says: \"Rest over. Next: <exercise>, set 4 of 3. Target <last reps> at <last kg> kilos.\"\nExpected: no cue after the last set (or announce the real next exercise / prescribed target).\nActual: phantom set \"4 of 3\"; if a next exercise exists the screen says \"Next up: Squats\" while the voice says the finished exercise \"set 4 of 3\" (double-wrong). Distinct from fixed 2ea5 (that was workout-completion detection, not the spoken cue).\n\nFix: suppress the cue when nextSet > target_sets (final set), and base the \"Target\" line on the plan's prescribed next-set target rather than lastLoggedSetRef.",
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "B",
-      "reviewRepliedAt": "2026-07-11T06:18:35.232Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T04:49:56.705Z",
+      "resolvedAt": "2026-07-12T04:50:25.055Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T04:49:56.705Z"
+      "archivedAt": "2026-07-12T04:50:25.055Z"
     }
   ]
 }
