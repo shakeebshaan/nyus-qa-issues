@@ -598,13 +598,17 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "Two readings, and one is already shipped. Profile > Plan Management ALREADY has 'Change Goal' -> /goal-change, which recomputes your full macro set (calories + protein/carbs/fat, shown current-vs-projected) and re-scales the diet plan. If you want DIRECT macro editing (type your own protein/carbs/fat or calories on the profile and have the plan scale to them), that's a new full-stack feature + a design call I shouldn't guess: (1) do manual macros OVERRIDE the goal-derived targets or just seed them; (2) does 'scaled accordingly' mean regenerate the meal plan or scale existing meal portions; (3) guardrails (protein floor, calorie sanity, macros summing to calories). Needs a backend contract to persist a manual override + re-scale, plus a macro editor UI, and can't be verified end-to-end at the 90 bar in one tick. Tell me: is the existing goal-change path enough, or do you want a direct macro editor? If the latter, confirm (1)-(3) and I build it as a tracked slice.",
-      "reviewedAt": "2026-07-12T10:25:33.312Z",
+      "needsReview": true,
+      "reviewReason": "Ready to build. Plan: a Profile > \"Adjust macro targets\" editor (set calories or protein/carbs/fat directly, with a live P*4 + C*4 + F*9 vs kcal reconciliation) backed by a new PUT /profile/macro-targets endpoint that persists your manual targets (target_kcal + protein/carbs/fat grams — columns already exist, no migration) and mirrors the plan's current-week macro row. Because the nutrition ring, per-meal targets, and coach context all read those same fields, the daily TARGETS rescale everywhere instantly. Re-cooking your already-assigned MEAL PORTIONS to the new macros (the full \"scale everything accordingly\") is a larger follow-up slice (LLM re-portioning of each meal). One blocker to shipping this to your 90 bar right now: all QA test accounts were deleted in the prelaunch cleanup and admin@nyus.app cannot load the nutrition/dashboard screens, so I cannot verify the rescale end-to-end headless. Restore or allow ONE onboarded test account (or lower the bar for this feature) and I will build, verify, and ship it.",
+      "reviewedAt": "2026-07-12T11:56:59.063Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "do all",
       "reviewRepliedAt": "2026-07-12T11:02:01.429Z",
-      "reviewReplyBy": "shakeebshaan"
+      "reviewReplyBy": "shakeebshaan",
+      "tags": [
+        "feature",
+        "blocked"
+      ]
     },
     {
       "id": "i-20260712-fa39",
