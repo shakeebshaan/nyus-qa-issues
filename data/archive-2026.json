@@ -19223,8 +19223,10 @@
       "archivedAt": "2026-07-12T00:16:24.438Z"
     },
     {
-      "id": "i-20260710-pfav",
-      "createdAt": "2026-07-10T05:59:10.160Z",
+      "id": "i-20260711-d0ca",
+      "createdAt": "2026-07-11T07:01:14.484Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Plan-independent food diary shows \"0 kcal logged\" for the DEFAULT free-text log — the new feature's headline running-totals card is dead on its own primary path.\n\nThe no-plan food diary (commit e6f84228, closes i-20260711-fdry) renders a \"Today's food diary\" card with a big kcal headline + P/C/F macro tiles + per-item list, for users with NO AI diet plan who track home-cooked food. Its primary CTA \"Log what you ate\" (NutritionDiaryCard.tsx:102 / NutritionEmptyState.tsx:44 / Nutrition.tsx:481) opens CustomMealModal, which DEFAULTS to the 'quick' free-text tab (CustomMealModal.tsx:60 useState('quick')).\n\nA plain typed log attaches macros ONLY when a prior photo-analysis description still matches the text (CustomMealModal.tsx:351-358); text typed from scratch => macros=null => POST /logs/meal with no total_calories/protein/carbs/fat (CustomMealModal.tsx:360-366). Backend log_meal stores total_calories=body.get('total_calories') = NULL with ZERO server-side estimation (nyu_backend app/routes/logging.py:803-806). getDailyLogs serializes those nulls; the diary sums m.total_calories ?? 0 (Nutrition.tsx:320-325) => 0.\n\nResult: the exact target user (home-cooked tracker, no plan) who taps the primary CTA and types their meal gets a diary whose flagship metric is uniformly ZERO — headline \"0 kcal logged\" (NutritionDiaryCard.tsx:54-57) and every item \"0 kcal · P0g C0g F0g\" (:88, :93). Only the item name + count are correct. The macro-bearing paths are all non-default/gated: photo analysis is Pro-only (403/429 for free users), the Ingredients tab needs a tab-switch + search, and re-logging a recent free-text meal carries null again.\n\nRepro:\n1. Account with NO AI diet plan -> /nutrition.\n2. Tap \"Log what you ate\" -> stays on Quick Log tab -> type \"2 roti, 1 katori dal\" -> Log Meal.\n3. Reopen /nutrition.\nExpected: diary reflects the meal with an estimated/entered kcal + macros (or prompts to add them).\nActual: \"Today's food diary · 1 item · 0 kcal logged\"; item shows \"0 kcal · P0g C0g F0g\" — the running-totals card looks broken on its own primary flow.\n\nFix options: (a) let the free-text quick log capture optional kcal/macros inline (like the Ingredients \"Add new\" form) so a text meal can carry numbers; (b) route free text through the AI macro estimator for ALL users (or a cheap heuristic) before logging; (c) when a meal truly has no macros, show a per-item \"No calories entered — add them\" and SUPPRESS the 0-kcal headline instead of asserting a false \"0 kcal logged\" total.",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -19237,35 +19239,33 @@
       "imagePrivate": false,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: apiClient's instance-level Content-Type: application/json default made axios 1.x serialize the FormData avatar upload to {file:{}} (binary dropped). Fix: set per-request Content-Type to undefined so the browser emits multipart/form-data with a boundary — applied to ProfileIdentityCard avatar upload + progressPhotos.service + other.service uploadAttachment + BodyFatCameraCapture. Verified at 390x844: real POST /users/me/avatar sent 'content-type: multipart/form-data; boundary=...' and the backend returned 201 CREATED; the uploaded image now renders in the avatar.",
-        "imagePath": "images/i-20260710-pfav-fix-r1.png",
+        "description": "Root cause: the plan-independent food-diary headline summed null macros as 0, so a free-text meal (the default Quick-Log path, macros only attach via Pro photo analysis) showed a false '0 kcal / P0 C0 F0'. Fix (commit dd0ce308): CustomMealModal adds an optional inline 'Calories & macros' panel on the Quick-Log tab so a typed meal can carry real user-entered numbers; NutritionDiaryCard stops asserting a false 0 — untracked totals show '— Calories not tracked' and macro-less items read 'No calories entered'. Never fabricates numbers.",
+        "imagePath": "images/i-20260711-d0ca-fix-r1.png",
         "imagePaths": [
-          "images/i-20260710-pfav-fix-r1.png"
+          "images/i-20260711-d0ca-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "5736f943d27bfb403a07e38f5b0726b30edf98c9",
+        "imageCommit": "fa172667c02c4320a948227392ad79e00fd98a0c",
         "imageCommits": [
-          "5736f943d27bfb403a07e38f5b0726b30edf98c9"
+          "fa172667c02c4320a948227392ad79e00fd98a0c"
         ],
-        "fixedAt": "2026-07-10T09:10:53.007Z",
+        "fixedAt": "2026-07-11T10:38:13.524Z",
         "by": "shakeebshaan",
-        "appCommit": "55860659",
+        "appCommit": "e68bf21b",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Fixed at the exact root cause the issue named (axios formDataToJSON under the JSON default) across all 4 FormData sites; proven end-to-end — real upload sent multipart/form-data;boundary and backend returned 201, avatar rendered."
+          "note": "Verified on authenticated /nutrition: diary now reads 'Calories not tracked' with '—' macros and item 'No calories entered' (not '0 kcal'); Quick-Log modal shows the 'Calories & macros (optional)' input panel. Frontend-only, tsc clean."
         }
       },
       "history": [],
-      "route": "/profile (avatar upload)",
-      "description": "[bug-hunt] Profile: avatar upload will silently drop the image file (sends empty JSON {\"file\":{}} instead of multipart form-data). This is a REGRESSION of the fix for i-20260704-a0ec, which over-corrected.\n\nRoot cause (frontend):\n- The shared axios instance is created with an instance-level default header Content-Type: application/json (src/lib/api-client.ts:12-13).\n- The avatar upload (src/pages/_components/profile/ProfileIdentityCard.tsx:130-132) builds a FormData, appends \"file\", and does apiClient.post(\"/users/me/avatar\", formData) with NO per-request Content-Type override.\n- Commit 98386822 (i-20260704-a0ec) REMOVED the previous \"Content-Type: multipart/form-data\" override, reasoning \"let axios set it automatically.\" But that only works when there is no instance default forcing JSON. Because the instance default is application/json, axios 1.x transformRequest (node_modules/axios/lib/defaults/index.js) sees a JSON content-type on a FormData body and runs formDataToJSON -> serializes it to the string {\"file\":{}} and sends Content-Type: application/json. Verified by running the repo axios with the identical instance config: body = {\"file\":{}}, no multipart, no boundary, binary gone.\n\nWhy latent today: the backend /users/me/avatar endpoint does not exist yet (404s) and the catch masks it as a \"Photo saved locally\" toast. So no current user impact -- but the moment the backend avatar endpoint ships, uploads will fail server-side (empty JSON, no file) with no error surfaced to the user.\n\nCorrect fix: neither the removed \"multipart/form-data\" (breaks because axios/XHR will not append the boundary when you set the header manually -- the original i-20260704-a0ec concern) NOR the current bare post (JSON default). Set the per-request header to undefined so axios deletes the JSON default and the browser generates \"multipart/form-data; boundary=...\":\n  apiClient.post(\"/users/me/avatar\", formData, { headers: { \"Content-Type\": undefined } })\nShip this together with the backend endpoint so it can be verified end-to-end. Same pattern would bite any future FormData upload on this instance (e.g. ProgressPhotos, support attachments) -- audit those when fixing.",
       "needsReview": false,
-      "resolvedAt": "2026-07-12T04:50:45.452Z",
+      "resolvedAt": "2026-07-12T04:51:00.002Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T04:50:45.452Z"
+      "archivedAt": "2026-07-12T04:51:00.002Z"
     }
   ]
 }
