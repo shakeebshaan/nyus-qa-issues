@@ -19313,34 +19313,34 @@
       "archivedAt": "2026-07-12T05:00:05.402Z"
     },
     {
-      "id": "i-20260712-47d9",
-      "createdAt": "2026-07-12T05:03:34.364Z",
+      "id": "i-20260712-5684",
+      "createdAt": "2026-07-12T04:54:19.542Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-47d9.jpg",
-      "imageCommit": "2598093e71cdfc91276737ebf201096c90e279ea",
+      "imagePath": "images/i-20260712-5684.jpg",
+      "imageCommit": "ee433cbd51923c6d455ef55de62891963e081ea4",
       "imagePaths": [
-        "images/i-20260712-47d9.jpg"
+        "images/i-20260712-5684.jpg"
       ],
       "imageCommits": [
-        "2598093e71cdfc91276737ebf201096c90e279ea"
+        "ee433cbd51923c6d455ef55de62891963e081ea4"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: the Log Weight card rendered a decorative horizontal sparkline/divider line beneath the weight number (the line circled in the report). Fix: removed the decorative weight sparkline element from the LogWeight card (commit 9464118f). Proof: /log-weight now shows the number + kg/lb toggle + tick ruler with no horizontal line across the card.",
-        "imagePath": "images/i-20260712-47d9-fix-r1.png",
+        "description": "Root cause: same as i-20260712-f118 - a 'TestCoach' placeholder coach (no minted portrait) was being assigned, so the coach avatar fell back to a generic themed bust ('coach image missing'). Fix: backend excludes/deactivates placeholder coaches and reassigns a real roster coach (all 39 active coaches have minted portraits); FE purges any cached placeholder name. Proof: coach surface now renders real coach 'Nisha' WITH her portrait photo, not a blank/generic avatar.",
+        "imagePath": "images/i-20260712-5684-fix-r1.png",
         "imagePaths": [
-          "images/i-20260712-47d9-fix-r1.png"
+          "images/i-20260712-5684-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "ce8f5aa22d00ffdcceafe1e3b040a5417442bde9",
+        "imageCommit": "a1249fd6ae06ac1c5b1755df55ada5226ea4870d",
         "imageCommits": [
-          "ce8f5aa22d00ffdcceafe1e3b040a5417442bde9"
+          "a1249fd6ae06ac1c5b1755df55ada5226ea4870d"
         ],
-        "fixedAt": "2026-07-12T06:38:35.142Z",
+        "fixedAt": "2026-07-12T06:36:55.761Z",
         "by": "shakeebshaan",
         "appCommit": "cdac1f2d",
         "tests": {
@@ -19349,14 +19349,14 @@
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Decorative sparkline line removed from the Log Weight card; verified absent on the live /log-weight screen."
+          "note": "Missing coach image was a symptom of the TestCoach placeholder (no portrait); real coaches carry minted portraits. Fixed at source + verified live."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-12T06:47:55.302Z",
+      "resolvedAt": "2026-07-12T06:48:31.823Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T06:47:55.302Z"
+      "archivedAt": "2026-07-12T06:48:31.823Z"
     }
   ]
 }
