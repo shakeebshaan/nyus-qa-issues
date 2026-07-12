@@ -649,16 +649,15 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Verified against the live code this tick: raising the workout-day cap re-introduces a DATA-LOSS bug. The backend keys each plan day to a weekday (day_index->weekday) and CLAMPS day 8/9/10 all onto Sunday (plan_builder_routes.py _day_index_to_dow, max_v=7), with no unique constraint and weekday-based reads (.first()) — so an 8th-10th training day silently merges onto one weekday and becomes unreachable. That is exactly why the cap was lowered 10->7 (fix i-20260710-7a3f); the \"Day 10 of 10\" you saw is a stale build. To truly support 10+ distinct days I must move the plan off the weekly/day-of-week model to a rotating day-of-cycle model (Day 1..N; today = days_since_start % N), touching the plan schema, WorkoutSession creation, every \"today's workout\" lookup, and the weekly-review \"next week\" logic. Two safe designs: (A) rotating microcycle [recommended — clean, no weekday coupling] or (B) days 8+ overflow into week 2 [reuses weekday columns, changes weekly progression]. This is a multi-file structural build I cannot verify to your 90 bar headless because all QA test accounts were deleted in the prelaunch cleanup (admin@nyus.app can't load the dashboard). Confirm A or B and restore/allow one onboarded test account, and I will build + verify it as a tracked slice.",
-      "reviewedAt": "2026-07-12T11:56:14.283Z",
+      "reviewReason": "Understood -- you want MORE than 10 distinct training days, not a cap bump. I'm proceeding with Option A (rotating microcycle) since you didn't need me to choose: plan days become Day 1..N (any N), and 'today's workout' = days_since_plan_start % N instead of the weekday mapping that silently merged days 8/9/10 onto Sunday (the data-loss reason the cap was 7). This removes the weekday coupling entirely so N can be 12, 14, whatever. It's a multi-file structural change (plan schema day-of-cycle, WorkoutSession creation, every 'today's workout' lookup, and the weekly-review 'next week' logic) delivered as a tracked slice in a dedicated build tick, not a one-tick fix. ONE real blocker remains for verifying it to your 90 bar: all onboarded/QA accounts were deleted in the prelaunch cleanup, so I can't drive a live plan headless to confirm Day 11/12 resolve correctly. Restore/allow ONE onboarded test account and I'll build + verify Option A end-to-end. Shout if you'd rather Option B (days 8+ overflow into week 2).",
+      "reviewedAt": "2026-07-12T12:12:13.335Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "I want it to be more than 10 currently its only 10",
       "reviewRepliedAt": "2026-07-12T11:01:40.118Z",
       "reviewReplyBy": "shakeebshaan",
       "tags": [
         "architecture",
-        "data-loss",
-        "blocked"
+        "building"
       ]
     },
     {
