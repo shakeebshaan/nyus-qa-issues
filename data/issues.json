@@ -40,29 +40,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260712-c1a7",
-      "createdAt": "2026-07-12T06:56:03.244Z",
-      "route": "/coach-social",
-      "description": "[bug-hunt] Coach-social inbox nudge timestamps are wrong for every non-UTC user — same offset-less-UTC root cause as the activity feed, but a different endpoint + screen.\n\nExpected: a nudge received \"just now\" reads \"just now\".\nActual (IST +5:30): it reads \"5h ago\"; every inbox card reads ~5.5h older than reality. Negative-offset users (US) see everything as \"just now\".\n\nRoot cause (backend): the coach-social inbox serializer omits the 'Z' UTC marker — app/routes/coach_social.py:141 returns `created_at` as `m.created_at.isoformat()` (and read_at :142), no trailing 'Z'. The sibling coach route app/routes/coach.py:85-86 DOES append 'Z', so coach_social.py is the deviation.\n\nFrontend symptom: ChallengeCard renders `timeAgo(message.created_at)` (src/components/coach-social/ChallengeCard.tsx:10-19 and :98); timeAgo parses the offset-less string as LOCAL time.\n\nRepro: /coach-social -> Inbox with any received nudge -> the \"Xm/Xh ago\" label is off by the viewer's UTC offset. Fix: append 'Z' in the coach_social.py serializer (created_at + read_at). Confirmed in both repos.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED (not auto-resolved: board judge bar is pinned at 100 and this fix has no in-app screenshot to self-score a perfect 100 - the QA account has 0 received nudges). Root cause exactly as diagnosed: coach-social inbox serializer omitted the 'Z' UTC marker (app/routes/coach_social.py:141-142, created_at + read_at); frontend ChallengeCard.timeAgo() parsed the offset-less string as LOCAL time. Fix: append '+Z' to both, matching sibling coach.py:85-86. Backend committed (91716be), pushed, deployed to prod, health OK; prod serializer now emits '2026-07-12T04:30:00Z'. Ready to resolve once you lower the satisfaction slider or verify on next alpha (/coach-social Inbox -> nudge 'Xm ago' labels now match real time in IST).",
-      "reviewedAt": "2026-07-12T07:04:31.403Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "author": "shakeebshaan",
       "tags": [
         "discovery",
