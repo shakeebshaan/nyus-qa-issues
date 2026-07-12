@@ -93,30 +93,6 @@
       "description": "[bug-hunt] Ad-hoc \"Log activity\" sheet's \"Also logged today\" list is sourced from ALL of today's activity_logs (not just entries the sheet created), so it surfaces rows it cannot manage: (a) nameless AI-coach-logged rows show with a permanently-disabled Remove X, and (b) a legit ad-hoc entry whose name collides with a plan activity is filtered out entirely — logged and counted toward streak/calories, but invisible and un-removable.\n\nRoot cause (src/components/activity/LogActivitySheet.tsx):\n- adHocEntries = daily.activity_logs filtered ONLY by \"name not in planActivityNames\" (LogActivitySheet.tsx:78-90); it is NOT scoped to sheet-created rows.\n- (a) AI coach activity_logger blocks store rows with activity_name = NULL when the canonical type equals the activity type: src/lib/block-transformers.ts:186 (activity_name: activity?.type !== activityType ? activity?.type : undefined) -> useBlockSubmit.ts logActivity -> NULL name. In the sheet that row renders (name falls back to the type label, :310) but Remove is disabled={... || !entry.activity_name} (:329) and the handler is guarded if(entry.activity_name) (:327), and backend requires a name (logging.py:1226). => visible entry with a dead X, un-removable through any UI.\n- (b) The plan-name exclusion (:78-90; plan names from Activity.tsx:971 overview.activity_targets.activities) hides any ad-hoc log whose name matches a plan activity name. Repro: plan target \"Walk\"; user logs ad-hoc \"Walk\" -> row saved, counts toward calories/streak, but never appears in the sheet -> looks un-logged and cannot be removed there.\n\nExpected: the list shows and lets the user manage exactly the entries relevant to ad-hoc logging (and every shown entry is removable).\nActual: rows appear that can never be removed, and legit ad-hoc rows silently vanish from the list.\n\nFix: scope the list to sheet-created ad-hoc rows (e.g. delete-by-id so nameless rows are removable; stop hiding name-collision ad-hoc entries), or clearly separate \"your ad-hoc entries\" from synced/plan rows. (Lower-sev siblings noted, not filed: removal-failure toast reuses \"Couldn't log activity\" copy; metric-less submit creates an all-null row with a blank subtitle; daily-logs query has no enabled:open gate.)"
     },
     {
-      "author": "claude-page-guardian",
-      "tags": [
-        "bug-hunt",
-        "auto",
-        "data-accuracy"
-      ],
-      "route": "/achievements",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "createdAt": "2026-07-11T21:01:43.310Z",
-      "id": "i-20260711-pwk9",
-      "description": "[bug-hunt] Achievements: the \"Milestones\" card surfaces two backend counters that are dead or drift, so its data is unreliable.\n\n(1) PERFECT WEEKS is a dead metric. overview.stats.perfect_weeks has NO production writer in the backend - confirmed by the backend's own comments (app/routes/gamification.py:484 and :631: \"The perfect_weeks GamificationProfile counter has no production writer\"). Badge checks derive it from DailyReport via _week_compliance(), but get_gamification_overview (app/services/gamification_service.py:603) serializes the RAW profile.perfect_weeks, which is always 0. Result: the \"Perfect weeks\" tile in src/pages/Achievements.tsx (~lines 259-274) can NEVER render for any user - structurally dead.\n\n(2) TOTAL PRS drifts from actual PR rows. The pr_5 \"Record Setter\" badge is awarded from PersonalRecord.count() (gamification.py:626), but the Milestones \"Personal records\" tile reads profile.total_prs. On the QA account these disagree: the user has >=5 PersonalRecord rows (pr_5 badge earned, StrengthStrip shows 5-6 PRs + \"2 this month\") yet overview.stats.total_prs == 0, so the tile under-reports and the card hides.\n\nVERIFIED this tick against live API (GET /gamification/overview): perfect_weeks=0, total_prs=0 while the same user has the pr_5 badge and 5+ PR rows. All OTHER achievements numbers are accurate (level 9, 1435 XP, 185 to next, 11/43 badges, lifetime 0/5/0/3).\n\nFIX (backend, needs deploy): in get_gamification_overview serialize DERIVED values - perfect_weeks from _week_compliance(), and total_prs reconciled against PersonalRecord.count() - instead of the raw profile counters. Optional FE cleanup: drop the \"Perfect weeks\" tile until it has a real source.\n\nSeverity: low user-visible (both tiles self-hide at 0) but a genuine data-accuracy gap - a milestone the app can never show. Found by the page-achievements guardian loop.",
-      "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED (live on prod 91716be). Backend now derives the Milestones counters on read: perfect_weeks from DailyReport 7/7 weeks, and total_prs from the user's PersonalRecord rows (the same source as the pr_5 badge) - replacing the dead/raw profile counters that were always 0 (commit c29e3ec). Frontend needs no change: the tiles are already zero-safe and populate automatically. Not auto-resolved: bar pinned at 100 and the QA account has no perfect-week/PR data to screenshot a live tile. Verify on /achievements once a user has a real PR or perfect week.",
-      "reviewedAt": "2026-07-12T07:40:37.852Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "author": "shakeebshaan",
       "tags": [
         "discovery",
