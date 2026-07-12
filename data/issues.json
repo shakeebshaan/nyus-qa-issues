@@ -304,52 +304,6 @@
     {
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Implemented owner scope decision B. Root cause: the 16:8 eating-window stopwatch existed TWICE with disjoint localStorage stores -- Nutrition FastingBanner (nyus_fast_start_*) vs useFasting (nyus_fasting_active, driving Dashboard card + /fasting) -- so a fast started on one surface was invisible on the other. Fix: the intermittent IF stopwatch now has ONE source of truth (useFasting). Nutrition's FastingBanner + meal-list overlay read the SAME shared instance (lifted to the page), and selecting the intermittent chip starts that shared timer, so start/end on any surface reflects everywhere. Back-dating (count from last meal) preserved via a new optional startFast(startedAt). Backend vrat/full whole-day flag kept as a distinct concept (no stopwatch). PROOF (attached): a 16:8 fast started on the Dashboard card now renders live on Nutrition -- 'Fasting day - 16:8 window' with the running ring + End fast (was blank before). useFasting 8/8 + fasting/nutrition suites 19/19 green, tsc clean.",
-        "imagePath": "images/i-20260711-fb7e-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260711-fb7e-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ce854213a46330c6fd4936c21ca0990861c518f9",
-        "imageCommits": [
-          "ce854213a46330c6fd4936c21ca0990861c518f9"
-        ],
-        "fixedAt": "2026-07-11T06:45:30.247Z",
-        "by": "shakeebshaan",
-        "appCommit": "80475dd6",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Directly implements the owner-confirmed option B from the review thread. Single-store unification eliminates the contradictory dual-timer state; cross-screen sync proven live (Dashboard start -> Nutrition reflects); reverse symmetric via shared store. Back-dating preserved, vrat/full kept separate exactly as the scope note specified. New unit tests cover the back-dated start + no-reminder-on-past-target; tsc clean."
-        }
-      },
-      "history": [],
-      "route": "/dashboard",
-      "createdAt": "2026-07-11T01:43:12.505Z",
-      "id": "i-20260711-fb7e",
-      "description": "[bug-hunt] Fasting is tracked in TWO independent, unsynchronized systems, so the app shows contradictory \"am I fasting?\" state and a fast started in one surface is invisible in the other.\n\nSystem A (older, nutrition-embedded): src/pages/Nutrition.tsx FastingBanner + a per-day 16:8 elapsed timer keyed on localStorage `nyus_fast_start_${todayLocal()}` (Nutrition.tsx:66, 306-311) PLUS the backend fasting-DAY flag from getFastingStatus GET /daily-logs/fasting (nutrition.service.ts:107, useNutritionData.tsx:328). This drives the FastingBanner + the meal-list overlay.\n\nSystem B (new V1, closes i-20260708-fst1, commit 70a395c8): src/hooks/useFasting.ts + src/lib/fasting.ts, keyed on a completely different localStorage store `nyus_fasting_active` / `nyus_fasting_history`, with NO backend call at all. This drives the Dashboard Fasting card (DashboardFastingCard.tsx) and the /fasting detail page.\n\nThe two share NOTHING -- different localStorage keys, and B never touches the backend fasting-day. So:\n- Start a 16:8 fast on the Dashboard card or /fasting -> nyus_fasting_active is set, a live timer runs. Open Nutrition -> FastingBanner shows nothing (it reads nyus_fast_start_* + the backend day-flag), and the meal-list behaves as a normal (non-fasting) day. The fast the user just started has zero effect on their meal plan / calorie framing / streak / coach.\n- Conversely, mark today a fasting day in Nutrition (backend flag) or run the nutrition 16:8 timer -> the Dashboard Fasting card still reads 'Track your eating window / Start a fast' (idle), because it only knows about nyus_fasting_active.\n\nRepro:\n1. Dashboard -> Fasting card -> 'Start 16:8'. Card shows a live count-up.\n2. Navigate to /nutrition. No fasting banner; meals fully interactive as a normal day.\n3. (reverse) In /nutrition mark today a fasting day -> back to /dashboard -> Fasting card still shows idle 'Start a fast'.\n\nExpected: one source of truth for the user's fasting state; starting/ending a fast in any surface is reflected everywhere (and ideally informs the meal overlay / streak).\nActual: two disjoint 16:8 timers + a backend day-flag that don't know about each other -> contradictory state, and a Dashboard/​/fasting timer that is purely cosmetic (no impact on nutrition, streak, or coach).\n\nFix (owner decision on scope): unify on a single fasting source of truth -- either back the V1 timer with the same backend fasting-day + nyus_fast_start_* the nutrition banner uses, or have both surfaces read/write one shared module. At minimum the Dashboard/​/fasting timer should reflect (and set) the same 'fasting today' state the Nutrition page uses so the app never shows two contradictory fasting states at once.",
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "B",
-      "reviewRepliedAt": "2026-07-11T06:18:35.232Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
-      "author": "shakeebshaan",
-      "tags": [
         "discovery",
         "auto"
       ],
