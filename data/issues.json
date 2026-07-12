@@ -654,7 +654,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Two readings, and one is already shipped. Profile > Plan Management ALREADY has 'Change Goal' -> /goal-change, which recomputes your full macro set (calories + protein/carbs/fat, shown current-vs-projected) and re-scales the diet plan. If you want DIRECT macro editing (type your own protein/carbs/fat or calories on the profile and have the plan scale to them), that's a new full-stack feature + a design call I shouldn't guess: (1) do manual macros OVERRIDE the goal-derived targets or just seed them; (2) does 'scaled accordingly' mean regenerate the meal plan or scale existing meal portions; (3) guardrails (protein floor, calorie sanity, macros summing to calories). Needs a backend contract to persist a manual override + re-scale, plus a macro editor UI, and can't be verified end-to-end at the 90 bar in one tick. Tell me: is the existing goal-change path enough, or do you want a direct macro editor? If the latter, confirm (1)-(3) and I build it as a tracked slice.",
+      "reviewedAt": "2026-07-12T10:25:33.312Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-53e3",
