@@ -1288,26 +1288,6 @@
       "description": "[discovery] Outreach day-summary: 2026-07-10 total 10 pitches sent (day cap hit), all to PUBLIC emails on recipient own contact/partnerships pages, 0 replies, 0 suppressed.\n\n1. Trijog (corp wellness/EAP) -> info@trijog.com | published trijog.com/corporate-wellness | resendId 642c3af1\n2. Ferra (funded fitness/wellness studio) -> hello@ferra.club | published ferra.club footer | resendId f558b516\n3. Beastlife (Gaurav Taneja supplement brand) -> care@beastlife.in | published beastlife.in/pages/contact | resendId a05e13f3\n4. Supply6 (nutrition sachets) -> care@supplysix.com | published supplysix.com/pages/contact-us | resendId 2cb05ad0\n5. Truworth Wellness (corp wellness/EAP) -> partners@truworthwellness.com | published truworthwellness.com/contact | resendId 935d04e5\n6. ekincare (enterprise workforce health) -> corporatecare@ekincare.com | published ekincare.com/contact | resendId aef67fe9\n7. GOQii (corporate wellness challenges) -> gcc@goqii.com | published goqii.com/gcc | resendId 4999b31d\n8. D2C Insider (founder community) -> connect@d2cinsider.com | published d2cinsider.com/contact-us | resendId 20544d74\n9. ZeroHarm Sciences (plant-based nutraceuticals, Rs 65cr Series A) -> care@zeroharm.in | published zeroharm.in/pages/contact | resendId 1fb9b63a\n10. Crunches and Curves (online coach, companion framing) -> pravin@crunchesandcurves.com | published site header/footer | resendId 5acffb6d\n\nRunning totals through 2026-07-10: 25 all-time sends (incl. 1 provisioning test), 0 suppressed, 0 replies to review.\n\n--- Today (2026-07-11) tick 1 @06:00 ---\nStatus at start: remaining=10 (fresh day). leads-backlog.md write succeeded this tick (PowerShell WriteAllText, no gate issue) - backlog file brought current, folded in all carry-over benches from 07-10 cards (o3v3/o6z9) that were never written there. Sent 4 this tick (day total 4/10), rotated to gym-chain corporate wellness + D2C women's-health nutrition + corporate-professional coach angles, none overlapping the SEND-READY bench from yesterday's cards:\n1. Gold's Gym India (corporate wellness program) -> customer.care@goldsgym.in | published goldsgym.in/corporate-wellness-program | resendId 9481911d\n2. Earthful (plant-based women's health, raised Rs 26cr) -> care@earthful.me | published earthful.me/pages/contact | resendId 19d61054\n3. Physique Expert (Mahesh Kathare, corporate-professional coach) -> mahesh@physiqueexpert.in | published site footer | resendId bc890f22\n4. Nutrova (women's health/hair-skin nutrition D2C) -> support@nutrova.com | published nutrova.com/pages/contact-us | resendId 688e0449\n\nAll 4 passed FREE waterfall prevalidate (syntax+MX ok, none disposable/free-provider). Dedupe checked vs ledger.json (25 prior) + suppression.json (empty, still 0) + backlog file.\n\nREPLIES for owner to review: NONE.\nNext tick: continue from the 07-10 SEND-READY benches (Zyla Health, IIHMR Startups, Elevate Now [companion-framing only], Nmami Life, Indian Nutritionist, Two Brothers Organic Farms, Farmley, Nourish You, Steadfast Nutrition, My Fitness Goal, Indian Fitness Coach, HealthStart, Villgro, YKBI Pilates, Avni Wellness, SuperLiving) before researching fresh candidates; verify Phab (getphab.com, 429-blocked) when the fetcher isn't rate-limited."
     },
     {
-      "id": "i-20260711-c695",
-      "createdAt": "2026-07-11T06:29:37.853Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "SHIPPED option (c) this tick (board commit 332511f). Diagnosis held: the board wasn't broken — it was buried. ~25 of the open cards are automated status posts from the standing loops (content/discovery/press, all auto-tagged) that never get archived, so the 7 real 'pending direction' bug-hunt items sank below them. Fix: the board now folds those auto loop-logs into ONE collapsible 'Loop activity — N automated log posts' section at the bottom; real bugs stay in the main list. Verified headless against live data: main list drops from ~41 cards to 16, with 25 folded, 0 console errors. An explicit tag filter or search still shows everything flat. Reload the board — the 8 real items (5 fixed bug-hunt findings marked 'Safe to Resolve' + acce + e11f + this) are now all above the fold and one tap from Resolve. If you'd rather auto-archive loop logs entirely (vs fold), say so and I'll add a retention sweep.",
-      "reviewedAt": "2026-07-11T15:35:12.086Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260711-out2",
       "createdAt": "2026-07-11T12:10:11.850Z",
       "route": null,
