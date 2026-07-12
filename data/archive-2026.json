@@ -19522,6 +19522,38 @@
       "resolvedAt": "2026-07-12T11:02:37.927Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-12T11:02:37.927Z"
+    },
+    {
+      "id": "i-20260712-36dd",
+      "createdAt": "2026-07-12T05:01:52.490Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260712-36dd-0.jpg",
+      "imageCommit": "82c5053304b16c880b6e6ddc4dc89cef089a7aa8",
+      "imagePaths": [
+        "images/i-20260712-36dd-0.jpg",
+        "images/i-20260712-36dd-1.jpg"
+      ],
+      "imageCommits": [
+        "82c5053304b16c880b6e6ddc4dc89cef089a7aa8",
+        "d6f5a9eac0c8d56ec20c393f39f1525ea3848b0a"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Option A shipped + deployed to prod (backend commit 062dda4, healthy). Root cause: the dashboard's 'Building your plan' card (LockedPlanCard) + /onboarding/plan-gen-status poller were already shipped and wired, but NOTHING ever wrote a plan_gen_lock row — so the background-build state never triggered and a dashboard opened mid-finalize showed the contradictory 'No diet plan yet' CTA. Fix: finalize_onboarding now writes the lock around its self-heal generation — 'running' before a slow diet/workout build (no-op when both plans already exist), cleared on success (so a stale row never ages into the endpoint's 5-min 'failed' ceiling), 'failed' on the 409/exception paths. Fully guarded (import+writes in try/except) so a lock failure can never block onboarding — worst case the card just doesn't show (today's behavior). Verified: 9/9 finalize route tests green (3 new: running->complete on heal, complete-only when no heal, running->failed when unhealable); live GET /plan-gen-status returns the correct shape, backend healthy. NOT auto-resolved: a faithful full-screen capture of the transient 'Building your plan' dashboard needs a LIVE onboarding — the QA test account is already onboarded + data-less, so it can't reach the mid-finalize state to screenshot. Please confirm on-device at your next onboarding / goal-change (it fires whenever finalize runs a self-heal). If you'd rather I capture it, I can inject a temp lock row for a test user — flag and I'll do that in a dedicated tick.",
+      "reviewedAt": "2026-07-12T11:42:55.199Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "A",
+      "reviewRepliedAt": "2026-07-12T11:16:06.769Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-12T11:49:26.752Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-12T11:49:26.752Z"
     }
   ]
 }
