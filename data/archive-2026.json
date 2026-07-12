@@ -19223,10 +19223,6 @@
       "archivedAt": "2026-07-12T00:16:24.438Z"
     },
     {
-      "id": "i-20260711-d5b1",
-      "createdAt": "2026-07-11T07:01:14.484Z",
-      "route": "/dashboard",
-      "description": "[bug-hunt] Food logged via the new no-plan food diary is invisible on the DASHBOARD diet card — it still says \"no diet plan\", contradicting the diary the user just filled.\n\nThe plan-independent food diary (commit e6f84228) makes no-plan meal logging first-class: /nutrition AND GET /diet/plan both fold ad-hoc MealLog rows into the day's consumed totals (nyu_backend backend.py:6851-6893, comment \"Fold ad-hoc custom meal logs (MealLog) for the day into consumed totals\" -> calories_consumed). But the DASHBOARD diet card is computed from a DIFFERENT source: diet_summary.progress = {current: diet_completed_today, target: diet_target_today}, both func.count(AssignedMeal.id).join(UserDietPlan) (backend.py:3481-3494, 3684-3689). A no-plan user has no UserDietPlan/AssignedMeal -> target=0, current=0, and the card NEVER reads MealLog. The frontend derives dietHasPlan = diet_summary.progress.target > 0, so it renders the \"No diet plan yet / Generate diet plan\" empty state.\n\nCustomMealModal invalidates ['dashboard-overview'] after logging (CustomMealModal.tsx:371), but because the dashboard's data source ignores MealLog, that refetch changes nothing.\n\nRepro:\n1. No-plan user -> /nutrition -> log 2-3 meals via the diary (use the photo or Ingredients path so they carry kcal).\n2. /nutrition diary shows \"Today's food diary · N items · NNNN kcal logged\".\n3. Go to Dashboard.\nExpected: the dashboard diet card acknowledges the logged food (a \"logged N meals / NNNN kcal today\" state), not a dead \"no plan\" prompt.\nActual: Dashboard diet card shows \"No diet plan yet / Generate diet plan\" — zero acknowledgment; the diary and the home surface disagree.\n\nFix: make the dashboard diet_summary fold MealLog for no-plan users the same way /diet/plan already does, so the food-diary feature isn't undone on the home screen. (Distinct from dashboard tick issues a1f3/e7c9, which were about moments/stacked cards.)",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -19239,33 +19235,41 @@
       "imagePrivate": false,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: dashboard diet card computed progress only from AssignedMeal counts joined to UserDietPlan, so a no-plan user who logged food via the plan-independent diary got target=0 and saw the dead 'No diet plan yet / Generate diet plan' prompt. Fix: backend.py folds today's ad-hoc MealLog rows into two new diet_summary fields (logged_meal_count/logged_calories) using the same filter GET /diet/plan uses; DashboardDietCard renders 'N meals logged today / NNNN kcal so far' + a Log Meal CTA. Verified on prod: card shows '1 meal logged today'.",
-        "imagePath": "images/i-20260711-d5b1-fix-r1.png",
+        "description": "Implemented owner scope decision B. Root cause: the 16:8 eating-window stopwatch existed TWICE with disjoint localStorage stores -- Nutrition FastingBanner (nyus_fast_start_*) vs useFasting (nyus_fasting_active, driving Dashboard card + /fasting) -- so a fast started on one surface was invisible on the other. Fix: the intermittent IF stopwatch now has ONE source of truth (useFasting). Nutrition's FastingBanner + meal-list overlay read the SAME shared instance (lifted to the page), and selecting the intermittent chip starts that shared timer, so start/end on any surface reflects everywhere. Back-dating (count from last meal) preserved via a new optional startFast(startedAt). Backend vrat/full whole-day flag kept as a distinct concept (no stopwatch). PROOF (attached): a 16:8 fast started on the Dashboard card now renders live on Nutrition -- 'Fasting day - 16:8 window' with the running ring + End fast (was blank before). useFasting 8/8 + fasting/nutrition suites 19/19 green, tsc clean.",
+        "imagePath": "images/i-20260711-fb7e-fix-r1.png",
         "imagePaths": [
-          "images/i-20260711-d5b1-fix-r1.png"
+          "images/i-20260711-fb7e-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "f58d2e0270a29dfed777a8e67f51abfeb7e02575",
+        "imageCommit": "ce854213a46330c6fd4936c21ca0990861c518f9",
         "imageCommits": [
-          "f58d2e0270a29dfed777a8e67f51abfeb7e02575"
+          "ce854213a46330c6fd4936c21ca0990861c518f9"
         ],
-        "fixedAt": "2026-07-11T10:37:56.183Z",
+        "fixedAt": "2026-07-11T06:45:30.247Z",
         "by": "shakeebshaan",
-        "appCommit": "e68bf21b",
+        "appCommit": "80475dd6",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Verified end-to-end: prod /dashboard/overview now returns logged_meal_count=1,target=0; authenticated dashboard screenshot shows the card rendering '1 meal logged today / 0 kcal so far' with Log Meal CTA (was the dead no-plan prompt). Backend deployed+healthy, FE tsc clean, i18n parity across 4 bundles."
+          "note": "Directly implements the owner-confirmed option B from the review thread. Single-store unification eliminates the contradictory dual-timer state; cross-screen sync proven live (Dashboard start -> Nutrition reflects); reverse symmetric via shared store. Back-dating preserved, vrat/full kept separate exactly as the scope note specified. New unit tests cover the back-dated start + no-reminder-on-past-target; tsc clean."
         }
       },
       "history": [],
+      "route": "/dashboard",
+      "createdAt": "2026-07-11T01:43:12.505Z",
+      "id": "i-20260711-fb7e",
+      "description": "[bug-hunt] Fasting is tracked in TWO independent, unsynchronized systems, so the app shows contradictory \"am I fasting?\" state and a fast started in one surface is invisible in the other.\n\nSystem A (older, nutrition-embedded): src/pages/Nutrition.tsx FastingBanner + a per-day 16:8 elapsed timer keyed on localStorage `nyus_fast_start_${todayLocal()}` (Nutrition.tsx:66, 306-311) PLUS the backend fasting-DAY flag from getFastingStatus GET /daily-logs/fasting (nutrition.service.ts:107, useNutritionData.tsx:328). This drives the FastingBanner + the meal-list overlay.\n\nSystem B (new V1, closes i-20260708-fst1, commit 70a395c8): src/hooks/useFasting.ts + src/lib/fasting.ts, keyed on a completely different localStorage store `nyus_fasting_active` / `nyus_fasting_history`, with NO backend call at all. This drives the Dashboard Fasting card (DashboardFastingCard.tsx) and the /fasting detail page.\n\nThe two share NOTHING -- different localStorage keys, and B never touches the backend fasting-day. So:\n- Start a 16:8 fast on the Dashboard card or /fasting -> nyus_fasting_active is set, a live timer runs. Open Nutrition -> FastingBanner shows nothing (it reads nyus_fast_start_* + the backend day-flag), and the meal-list behaves as a normal (non-fasting) day. The fast the user just started has zero effect on their meal plan / calorie framing / streak / coach.\n- Conversely, mark today a fasting day in Nutrition (backend flag) or run the nutrition 16:8 timer -> the Dashboard Fasting card still reads 'Track your eating window / Start a fast' (idle), because it only knows about nyus_fasting_active.\n\nRepro:\n1. Dashboard -> Fasting card -> 'Start 16:8'. Card shows a live count-up.\n2. Navigate to /nutrition. No fasting banner; meals fully interactive as a normal day.\n3. (reverse) In /nutrition mark today a fasting day -> back to /dashboard -> Fasting card still shows idle 'Start a fast'.\n\nExpected: one source of truth for the user's fasting state; starting/ending a fast in any surface is reflected everywhere (and ideally informs the meal overlay / streak).\nActual: two disjoint 16:8 timers + a backend day-flag that don't know about each other -> contradictory state, and a Dashboard/​/fasting timer that is purely cosmetic (no impact on nutrition, streak, or coach).\n\nFix (owner decision on scope): unify on a single fasting source of truth -- either back the V1 timer with the same backend fasting-day + nyus_fast_start_* the nutrition banner uses, or have both surfaces read/write one shared module. At minimum the Dashboard/​/fasting timer should reflect (and set) the same 'fasting today' state the Nutrition page uses so the app never shows two contradictory fasting states at once.",
       "needsReview": false,
-      "resolvedAt": "2026-07-12T04:49:50.747Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "B",
+      "reviewRepliedAt": "2026-07-11T06:18:35.232Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-12T04:49:56.705Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T04:49:50.747Z"
+      "archivedAt": "2026-07-12T04:49:56.705Z"
     }
   ]
 }
