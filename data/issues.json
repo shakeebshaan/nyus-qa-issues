@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260712-b3f0",
+      "createdAt": "2026-07-12T06:56:03.244Z",
+      "route": "/social",
+      "description": "[bug-hunt] Activity feed relative timestamps are wrong for every non-UTC user (offset-less UTC serialization).\n\nExpected: an event logged \"just now\" reads \"just now\"; a 3h-old event reads \"3h ago\".\nActual (IST +5:30, the primary market): a just-now event reads \"5h ago\"; a 3h-old event reads \"8h ago\" — every feed row reads ~5.5h older than reality. For negative-offset users (US) the parse lands in the future, so everything reads \"just now\".\n\nRoot cause (backend): ActivityFeedResource serializes the event time WITHOUT a UTC marker — backend.py:11038 does `e.created_at.isoformat()` producing a naive string like \"2026-07-12T04:30:00\" (no trailing 'Z'/offset). Every OTHER timestamp endpoint appends 'Z' (messages backend.py:3933/3991, notifications 4017/4095, group chat 5603/5665, friend-requests 10298 — ~15 sites); the feed is the lone exception.\n\nFrontend symptom: ActivityFeedView.timeAgo() (src/components/ActivityFeedView.tsx:46-54) computes `Date.now() - new Date(dateStr).getTime()`. Per ECMAScript, an offset-less date-TIME string is parsed as LOCAL time, so the instant is shifted by the viewer's UTC offset.\n\nRepro: log in as a user with >=1 friend who has recent activity -> Social -> Activity feed -> compare each \"Xh ago\" label to the true event time. Fix: append 'Z' in ActivityFeedResource to match the rest of the backend (or normalize the string in timeAgo). Confirmed in both repos.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260712-c1a7",
+      "createdAt": "2026-07-12T06:56:03.244Z",
+      "route": "/coach-social",
+      "description": "[bug-hunt] Coach-social inbox nudge timestamps are wrong for every non-UTC user — same offset-less-UTC root cause as the activity feed, but a different endpoint + screen.\n\nExpected: a nudge received \"just now\" reads \"just now\".\nActual (IST +5:30): it reads \"5h ago\"; every inbox card reads ~5.5h older than reality. Negative-offset users (US) see everything as \"just now\".\n\nRoot cause (backend): the coach-social inbox serializer omits the 'Z' UTC marker — app/routes/coach_social.py:141 returns `created_at` as `m.created_at.isoformat()` (and read_at :142), no trailing 'Z'. The sibling coach route app/routes/coach.py:85-86 DOES append 'Z', so coach_social.py is the deviation.\n\nFrontend symptom: ChallengeCard renders `timeAgo(message.created_at)` (src/components/coach-social/ChallengeCard.tsx:10-19 and :98); timeAgo parses the offset-less string as LOCAL time.\n\nRepro: /coach-social -> Inbox with any received nudge -> the \"Xm/Xh ago\" label is off by the viewer's UTC offset. Fix: append 'Z' in the coach_social.py serializer (created_at + read_at). Confirmed in both repos.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "author": "shakeebshaan",
       "tags": [
         "discovery",
