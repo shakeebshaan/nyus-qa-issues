@@ -19202,7 +19202,7 @@
         "bug-hunt",
         "auto"
       ],
-      "route": "/dashboard",
+      "route": "/plan-timeline",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19211,16 +19211,16 @@
       "status": "resolved",
       "fix": null,
       "history": [],
-      "createdAt": "2026-07-11T00:12:23.992Z",
-      "id": "i-20260711-f3b9",
-      "description": "[bug-hunt] Supplement & medication tracker: adding an item that is NOT scheduled for today makes it vanish immediately with no confirmation and no way to see or remove it until its next scheduled weekday -- so the user re-adds it and creates silent duplicates.\n\nRoot cause (src/pages/_components/dashboard/SupplementsCard.tsx). The card only ever renders today's due items: the check-off list maps dueToday = scheduledFor(store.items, today) (line 66, rendered 161-215), and the remove \"X\" button exists ONLY inside that dueToday.map (lines 204-211). The add form shows only when (adding || !hasItems) (line 231). After handleAdd (lines 78-89) it sets adding=false and clears the draft; the only feedback is triggerHaptic(\"success\") + logEvent -- no toast, no visible row. There is no all-items / manage view.\n\nRepro:\n1. First run (no items) on a Sunday. Tap \"Track your supplements\".\n2. Name \"Creatine\", Days -> select Mon + Wed + Fri (Sunday NOT selected), Save.\nResult: the form closes (hasItems true, adding false); the list renders but dueToday is empty -> body shows \"Nothing scheduled today.\" The just-added Creatine is nowhere on screen and there is no confirmation it saved. A user reasonably concludes it failed and re-adds it -> a duplicate is silently created (addSupplement always appends; ids differ so no dedup). The hidden item also cannot be removed (no X outside dueToday.map) until one of Mon/Wed/Fri arrives.\n\nExpected: confirmation the item saved (toast or a visible entry) and a way to see + remove EVERY item regardless of whether it is due today.\nActual: not-due items are invisible AND unmanageable, inviting duplicate entries.\n\nFix: after save show a brief confirmation, or render a compact \"all items\" section (each with a remove control) below today's due list; at minimum keep a remove affordance for items not due today.",
+      "createdAt": "2026-07-11T16:02:15.684Z",
+      "id": "i-20260711-190c",
+      "description": "[bug-hunt] Plan Timeline: a FAILED /plans/active fetch (backend 500 / dropped request) is rendered as the \"no plan\" empty state — telling a user who HAS an active plan that they have none and prompting them to create a new one, with no error or retry affordance.\n\nRoot cause (src/pages/PlanTimeline.tsx:225 + src/services/plans.service.ts:64-73).\n- plansService.getActive returns null ONLY on HTTP 404; every other status / network error is re-thrown (plans.service.ts:68-72) -> react-query isError -> `planError` true.\n- PlanTimeline collapses error and empty into one branch: `if (planError || !plan || !timeline)` (line 225) renders \"No plan timeline yet / Start a plan to see your timeline / Create a plan\" (CTA -> /ai/create-diet-plan).\n\nRepro: a user with an active plan; backend returns 500 (or the request times out / drops). getActive throws -> react-query retries once (retry:1) then errors -> the empty \"Create a plan\" state renders.\nExpected: an error state distinct from the empty state, with a Retry affordance (the page already has refetch available) — not a \"you have no plan, create one\" prompt.\nActual: a user with a real plan is told they have none and pushed toward creating a duplicate plan.\n\nFix: split the branch — render the empty \"create a plan\" state only for the genuine no-plan case (!plan && !planError), and render a distinct error + Retry state when planError is set (mirrors the error/empty split used elsewhere).",
       "needsReview": true,
-      "reviewReason": "ALREADY FIXED + shipped — verified. Not-due items now render in an 'also tracked' section with a remove control (SupplementsCard.tsx:228-262 otherItems), so a just-added item can't silently vanish or invite duplicates. Fixed in commit 77d050d6 (2026-07-11). Safe to Resolve.",
-      "reviewedAt": "2026-07-11T12:31:11.816Z",
+      "reviewReason": "Fixed + pushed (frontend commit ba2723f2). Root cause: PlanTimeline collapsed a failed /plans/active fetch and the genuine no-plan case into one branch (planError || !plan || !timeline), so a backend 500 or dropped request rendered the no-plan Create a plan empty state and pushed a user who HAS a plan toward a duplicate. Fix: getActive returns null only on a real 404, so branch on planError first and show a distinct error card with a Try again button that calls refetchPlan; the real no-plan empty state stays for the no-plan case. Verified: tsc clean, logic reviewed. The live error-branch render still needs an on-device check since a real 500 cannot be forced headless. Safe to Resolve after you confirm on your phone.",
+      "reviewedAt": "2026-07-11T16:32:46.432Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T00:15:45.665Z",
+      "resolvedAt": "2026-07-12T00:15:48.397Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T00:15:45.665Z"
+      "archivedAt": "2026-07-12T00:15:48.397Z"
     }
   ]
 }
