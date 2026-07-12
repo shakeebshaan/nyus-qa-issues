@@ -2,47 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260712-9b2c",
-      "createdAt": "2026-07-12T15:52:26.768Z",
-      "status": "fixed",
-      "route": "/profile",
-      "description": "[bug-hunt] Profile > \"Adjust macro targets\" is a silent no-op for users who HAVE a plan (the default onboarding outcome), yet shows a success toast (\"Your daily calorie and macro goals now apply across the app\").\n\nROOT CAUSE (traced both repos): the editor (ProfileMacroTargetsCard -> PUT /profile/macro-targets) writes ONLY UserProfile.target_{protein,carbs,fats}_grams + UserHealthProfile.target_kcal (backend app/routes/profile.py:546-553). But the /nutrition ring reads dietPlan.macros_target (src/pages/_components/nutrition/useNutritionData.tsx:363), and GET /diet/plan PREFERS the active plan WeeklyMacroTarget rows and only falls back to the UserProfile columns when there is NO active plan (backend.py:6686-6712, \"prefer WeeklyMacroTarget (calculated), fallback to profile\"). Onboarding always builds a plan and seeds WeeklyMacroTarget (plan_generator.py:3237/3379, plans.py:808), so real users hit the WeeklyMacroTarget branch and the edited columns are never read -> editing macro targets changes nothing on the ring / per-meal splits.\n\nSECONDARY (same feature): even for no-plan users the /nutrition CALORIE target is Atwater-derived from the macro grams (useNutritionData.tsx:387-393: protein*4+carbs*4+fats*9), so the \"Daily calories\" field (target_kcal) is never consumed by the ring -- the reconciliation banner presents calories & macros as two independent knobs but the ring only ever uses macros. Coach-wizard context recomputes target_kcal from scratch (backend.py:11287 _calc[calorie_target]) rather than reading the saved column, so it does not rescale either.\n\nEXPECTED: after Save the nutrition ring + per-meal splits reflect the new targets for ALL users (the toast promise). ACTUAL: no change for plan users (the majority); the calorie field never affects the ring even for no-plan users.\n\nREPRO: onboard so an active plan exists -> Profile -> Adjust macro targets -> change Protein/Carbs/Fat + Daily calories -> Save (success toast) -> open /nutrition -> macro/calorie target rings unchanged.\n\nFIX options: (a) editor also writes the active plan current-week WeeklyMacroTarget row (protein_g/carbs_g/fat_g + calories) so plan-derived targets change; (b) GET /diet/plan prefer a user manual override when present; (c) at minimum stop claiming \"applies across the app\" for plan users.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Root cause: PUT /profile/macro-targets wrote only UserProfile.target_{protein,carbs,fats}_grams + UserHealthProfile.target_kcal, but the /nutrition ring + per-meal splits read GET /diet/plan, which PREFERS the active plan's WeeklyMacroTarget rows over those columns whenever an active plan exists (onboarding always seeds one) - so editing macro targets was a silent no-op for the majority. Fix (app/routes/profile.py, backend 47cb15f, deployed): the editor now also updates the active plan's current-week + future-week WeeklyMacroTarget rows (protein_g/carbs_g/fat_g/calories_kcal); past weeks left intact. Proven by tests/integration/test_macro_targets_propagation.py (2/2, exercises the real route + DB). NOTE: live in-app ring capture is impossible headless - all onboarded/QA accounts were deleted in prelaunch cleanup so GET /profile/macro-targets 404s; the integration test is the faithful end-to-end proof (attached).",
-        "imagePath": "images/i-20260712-9b2c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260712-9b2c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "25fa6f8224077978406eb21ac0f455a71fc1f64c",
-        "imageCommits": [
-          "25fa6f8224077978406eb21ac0f455a71fc1f64c"
-        ],
-        "fixedAt": "2026-07-12T16:07:22.902Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Correct root cause traced across both repos; minimal surgical backend fix; deployed + healthy; 2/2 integration tests exercise the real route+DB. Only gap is a live ring screenshot, environmentally impossible headless (no onboarded account), not a fix weakness."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260712-569f",
       "createdAt": "2026-07-12T12:57:39.546Z",
       "route": "/partners/:groupId",
