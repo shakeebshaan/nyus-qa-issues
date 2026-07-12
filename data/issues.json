@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260712-b4e1",
+      "createdAt": "2026-07-12T23:41:55.249Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[suggestion] Quick-add \"Recent meals\" row for one-tap re-logging of frequently eaten foods. Problem: meal logging (FoodSearchSheet) requires a full search+select+qty flow every time, even for the same dal/roti/protein-shake a user eats daily — the highest-frequency action in the app has the highest friction, which is a known churn driver in nutrition trackers (MyFitnessPal/Cronometer both ship \"recent\" and \"favorites\" as their #1 speed feature). Evidence: grepped src/pages/_components/nutrition + components/plan-builder — no favorites/recent/quick-add/log-again surface exists anywhere in the logging flow today. Proposed v1: backend endpoint returning the user’s last 8 distinct logged foods (query existing meal-log table, group by food_id, order by last-logged desc) + a \"Recent\" chip row atop FoodSearchSheet; tapping re-logs the same food/qty at current time via the existing log-meal endpoint (no new write path). Effort: ~1 backend endpoint (S) + ~1 FE component insert (S), no schema change — half-day.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260712-9f7c",
       "createdAt": "2026-07-12T14:10:00.000Z",
       "status": "open",
