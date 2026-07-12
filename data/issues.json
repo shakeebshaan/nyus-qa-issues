@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260712-9f7c",
+      "createdAt": "2026-07-12T14:10:00.000Z",
+      "status": "open",
+      "route": "/plan-pause",
+      "description": "[suggestion] Injury-aware exercise substitution when a plan is paused for injury. Problem: PlanPauseScreen (src/pages/PlanPauseScreen.tsx) already has an \"Injury\" pause reason but only stores it as a label — no body-part capture and no downstream effect, so on resume the workout plan generator/coach can re-serve the exact movement that caused the injury (e.g. shoulder press after a shoulder injury). Evidence: REASONS array has injury as a flat enum value with no follow-up field; workout-plan generation and AI coach have no injury-exclusion input anywhere in the codebase. Comparable apps (Fitbod, Future) ask which body part and auto-avoid loading it. V1 scope: when reason=injury, show one extra step \"Which area?\" (shoulder/knee/back/wrist/ankle/other) + optional note; store on the pause record; on resume, pass the flagged body part(s) to the workout-plan builder/coach system prompt to exclude/soften exercises targeting that area for the first 1-2 weeks back, with a banner reminding the user to clear it manually if resolved sooner. Effort: ~1-2 days (1 new field + storage, 1 builder-prompt condition, 1 UI step).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260712-569f",
       "createdAt": "2026-07-12T12:57:39.546Z",
       "route": "/partners/:groupId",
