@@ -600,10 +600,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Investigated end-to-end. Today the diet plan is generated SYNCHRONOUSLY during the onboarding customize-diet step (/onboarding/generate-diet); Finalize only verifies it exists and self-heals if missing - there is NO background job after finalize, and the dashboard has no generating state (Diet card shows a plan only when diet target > 0, else the Generate-diet-plan CTA). So 'show background progress' currently has no signal to read. Dormant infra for exactly this exists but was never wired: plan_gen_lock table + /onboarding/plan-gen-status endpoint + a LockedPlanCard poller. Two readings, both a product/design call I should not guess: (A) you want a real 'Preparing your plan...' state -> make generation async and wire that dormant lock/status end-to-end + add a dashboard generating-card (full-stack slice, verifiable once built); (B) the real problem is 'plan-ready screen showed macros, then dashboard says No diet plan yet' -> a persistence/sync bug, but I cannot reproduce it on the test account (it has no persisted diet plan). Tell me A or B; for B, the account/email that hit it lets me reproduce and fix.",
       "reviewedAt": "2026-07-12T11:02:46.637Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "A",
+      "reviewRepliedAt": "2026-07-12T11:16:06.769Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-bd63",
