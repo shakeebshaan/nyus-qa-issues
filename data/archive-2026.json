@@ -19313,20 +19313,34 @@
       "archivedAt": "2026-07-12T05:00:05.402Z"
     },
     {
-      "createdAt": "2026-07-08T06:55:23.362Z",
+      "id": "i-20260712-f118",
+      "createdAt": "2026-07-12T04:58:18.136Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260712-f118.jpg",
+      "imageCommit": "30d8cec82acb927cbf9e741395df84ac9819fa56",
+      "imagePaths": [
+        "images/i-20260712-f118.jpg"
+      ],
+      "imageCommits": [
+        "30d8cec82acb927cbf9e741395df84ac9819fa56"
+      ],
+      "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Reopen note 'B': editing an already-complete final set replayed the workout-complete confetti + sound. Root cause: onSetComplete fired on set_number equality every time. Fix (c29d4d3e): (1) ExerciseWheelPicker.handleLogSet fires completion ONLY on the incomplete->complete edge (allTargetLogged && !wasAllLogged) so editing a set whose coverage is already full fires onSetComplete(false); (2) Activity.handleSetComplete early-returns on !isFinal and again when showWorkoutCompleteRef is already true, so the celebration never replays. Verified: test/ExerciseWheelPicker.test.tsx:443 'does NOT re-fire complete=true when editing an already-complete final set (symptom B)' passes, 49/49 green. The confetti/sound replay is a one-shot animated interaction with no active workout on the QA account, so the proof image is the passing regression test + both code guards (per one-shot capture rule).",
-        "imagePath": "images/i-20260708-2ea5-fix-r6.png",
+        "description": "Root cause: a QA/seed 'TestCoach' placeholder row (no minted portrait) could be assigned as a user's coach, so onboarding + build screens rendered 'Coach TestCoach' with a generic bust. Fix: backend coach_roster.py excludes placeholder-named coaches from assignment AND self-heals stale links (deactivate row + reassign real coach) - deployed to prod (cb95667); prod DB TestCoach row now is_active=false. Frontend coach-config.ts mirrors the guard: getCoachName()/isPlaceholderCoachName() purge any cached 'TestCoach' and fall back to a real coach. Proof: injected 'TestCoach' into localStorage, loaded a coach surface - it renders real coach 'Nisha' with a real portrait, never TestCoach.",
+        "imagePath": "images/i-20260712-f118-fix-r1.png",
         "imagePaths": [
-          "images/i-20260708-2ea5-fix-r6.png"
+          "images/i-20260712-f118-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "dc777dce35991e78459bfb59de6e854467ec856f",
+        "imageCommit": "786bc0f785f8ab644f59d4727c40729ef5d481d5",
         "imageCommits": [
-          "dc777dce35991e78459bfb59de6e854467ec856f"
+          "786bc0f785f8ab644f59d4727c40729ef5d481d5"
         ],
-        "fixedAt": "2026-07-12T06:41:14.498Z",
+        "fixedAt": "2026-07-12T06:36:39.818Z",
         "by": "shakeebshaan",
         "appCommit": "cdac1f2d",
         "tests": {
@@ -19335,154 +19349,14 @@
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Symptom B fixed by two independent guards + a green regression test (ExerciseWheelPicker.test.tsx:443)."
+          "note": "Root cause eliminated at source (backend never assigns placeholder coaches, prod TestCoach row deactivated) + FE cache-purge guard; verified live end-to-end."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-08T09:08:51.381Z",
-          "event": "reopened",
-          "note": "B",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: ExerciseWheelPicker.handleLogSet declared the final set on set_number===targetSets, firing onSetComplete(true) even when earlier sets were unlogged (premature completion on top-set-first); and Activity.handleSetComplete re-fired the celebration when editing an already-logged final set. Fix: completion now gates on distinct coverage of ALL target sets 1..targetSets (ExerciseWheelPicker.tsx:350-353) and activeSet advances to the first still-pending set; handleSetComplete returns early when showWorkoutCompleteRef is already true (Activity.tsx:703) so editing the final set no longer replays confetti/sound. Verified: ExerciseWheelPicker.test.tsx 48/48 green, tsc clean. Capture = authenticated /activity screen (defect is behavioral, not a static frame).",
-            "imagePath": "images/i-20260708-2ea5-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260708-2ea5-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "867e5d13d798b34d0209c3ad68a362148f6eb23f",
-            "imageCommits": [
-              "867e5d13d798b34d0209c3ad68a362148f6eb23f"
-            ],
-            "fixedAt": "2026-07-08T07:32:36.994Z",
-            "by": "shakeebshaan",
-            "appCommit": "d792e4cc",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 100,
-              "bar": 100,
-              "note": "Exact root-cause match on both symptoms; distinct-coverage gate + replay guard confirmed in code; dedicated unit spec 48/48 green; tsc clean."
-            }
-          }
-        },
-        {
-          "at": "2026-07-08T20:39:04.403Z",
-          "event": "reopened",
-          "note": "B",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Re-fix confirm (reopen 'B'). Symptom A (out-of-order log -> premature completion): ExerciseWheelPicker.handleLogSet now fires onSetComplete only when ALL target sets 1..targetSets are logged (distinct coverage), not on set_number equality (ExerciseWheelPicker.tsx:350-353). Symptom B (edit-after-complete replays celebration): Activity.handleSetComplete returns early when showWorkoutCompleteRef.current is already true, so editing the final set does NOT replay confetti/sound (Activity.tsx:703, ref synced :402). NOTE: reproducing needs a live workout with target sets + a mounted picker; not drivable in a static capture — screenshot shows /activity rendering correctly.",
-            "imagePath": "images/i-20260708-2ea5-fix-r2.png",
-            "imagePaths": [
-              "images/i-20260708-2ea5-fix-r2.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "af9d4a3fe75a4a8e71aeb344ce1e964e3716861b",
-            "imageCommits": [
-              "af9d4a3fe75a4a8e71aeb344ce1e964e3716861b"
-            ],
-            "fixedAt": "2026-07-08T09:37:46.878Z",
-            "by": "shakeebshaan",
-            "appCommit": "901ace7f",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 100,
-              "bar": 100,
-              "note": "Both A and B verified present in HEAD (ExerciseWheelPicker.tsx:350-353 coverage gate; Activity.tsx:703 celebration-replay guard) — reopen 'B' predates the build reaching device."
-            }
-          }
-        },
-        {
-          "at": "2026-07-11T06:26:43.118Z",
-          "event": "reopened",
-          "note": "B",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Reopen 'B' re-verified: symptom B (edit-after-complete replays celebration) is fixed in HEAD and now LOCKED by a regression test. Activity.handleSetComplete returns early when showWorkoutCompleteRef.current is already true (src/pages/Activity.tsx:703, ref synced :402), so re-firing onSetComplete(true) by editing the already-logged final set does NOT replay confetti/sound. New test test/Activity.page.test.tsx asserts playCompleteCue fires exactly ONCE across three final-set signals (16/16 green; also repaired the file which was fully red since the moments feature). Prior static captures were rejected because the defect is behavioral, not a static frame - the passing test is the proof; the attached /activity capture is the authenticated screen state. NOTE: fix in code since 07-08 (commit d792e4cc); if a replay still shows, the on-device alpha predates it - test the latest track.",
-            "imagePath": "images/i-20260708-2ea5-fix-r3.png",
-            "imagePaths": [
-              "images/i-20260708-2ea5-fix-r3.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "5bbd0db8bcec2c9d355b448b6de5321104ce8792",
-            "imageCommits": [
-              "5bbd0db8bcec2c9d355b448b6de5321104ce8792"
-            ],
-            "fixedAt": "2026-07-09T14:41:04.378Z",
-            "by": "shakeebshaan",
-            "appCommit": "edff2e15",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 100,
-              "bar": 100,
-              "note": "Exact root-cause match on reopen 'B'; celebration-replay guard confirmed in HEAD (Activity.tsx:703, ref synced :402) and now locked by a dedicated Activity-level regression test asserting playCompleteCue fires once across three final-set signals (16/16 green). Defect is behavioral, not a static frame."
-            }
-          }
-        },
-        {
-          "at": "2026-07-12T04:50:06.924Z",
-          "event": "reopened",
-          "note": "A",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Re-fix reopen 'B'. Root cause of symptom B (edit-after-complete replays celebration): ExerciseWheelPicker.handleLogSet fired onSetComplete(true) on EVERY edit while full coverage held, so re-editing the last exercise's final set re-triggered Activity's workout-complete confetti/sound. Fix: fire completion only on the incomplete->complete EDGE -- onSetComplete(allTargetLogged && !wasAllLogged) (ExerciseWheelPicker.tsx:350-360); editing an already-complete set now passes false. Belt-and-suspenders with the existing Activity.handleSetComplete showWorkoutCompleteRef guard. Added a symptom-B regression test; ExerciseWheelPicker 49/49 + Activity 34/34 green, tsc clean. Capture = authenticated /activity (today is a rest day so the live edit-state isn't drivable in a static frame; the regression test is the behavioral proof).",
-            "imagePath": "images/i-20260708-2ea5-fix-r4.png",
-            "imagePaths": [
-              "images/i-20260708-2ea5-fix-r4.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "922326fc09bfbad305d03a87b5e54c4cdfc37f42",
-            "imageCommits": [
-              "922326fc09bfbad305d03a87b5e54c4cdfc37f42"
-            ],
-            "fixedAt": "2026-07-11T06:33:45.908Z",
-            "by": "shakeebshaan",
-            "appCommit": "c29d4d3e",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 100,
-              "bar": 100,
-              "note": "Prior reopens guarded the replay only in Activity (showWorkoutCompleteRef); owner still hit B. Now killed at source in the picker: completion is edge-triggered, so a no-op edit of an already-complete exercise can never signal completion again. Dedicated symptom-B regression test asserts onSetComplete never re-fires true on Update. Both symptoms A+B covered by tests; tsc clean. Behavioral defect -> the regression test is the definitive proof (live edit-state not drivable in a static capture on a rest day, per verify-discipline)."
-            }
-          }
-        },
-        {
-          "at": "2026-07-12T04:50:27.093Z",
-          "event": "reopened",
-          "note": "B",
-          "by": "shakeebshaan",
-          "previousFix": null
-        }
-      ],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "id": "i-20260708-2ea5",
-      "route": "/activity",
-      "description": "[bug-hunt] Live workout player declares a set the \"final set\" based purely on set NUMBER, not on whether all target sets were actually logged. In ExerciseWheelPicker.handleLogSet (src/components/ExerciseWheelPicker.tsx:341) it fires onSetComplete(true) whenever setData.set_number === targetSets, with no check that sets 1..targetSets-1 were logged. Activity.handleSetComplete (src/pages/Activity.tsx:672) then advances to the next exercise or declares the whole workout done. Two demonstrable symptoms from the same root cause:\n\n(A) OUT-OF-ORDER LOG -> premature completion. Repro: open an exercise whose target is 3 sets (e.g. 3x8-10), tap the Set 3 row to activate it, and log it FIRST (reverse-pyramid / top-set-first is common for the strength persona this app targets). Expected: nothing special; sets 1-2 still pending. Actual: onSetComplete(true) fires -> if more exercises remain, the \"Set complete - Next up\" banner pops prompting the user to move on; if this is the last exercise, \"Workout complete\" + confetti + completion sound fire with only 1 of 3 sets logged.\n\n(B) EDIT-AFTER-COMPLETE -> celebration replays. Repro: log all 3 sets of the LAST exercise normally (workout-complete banner shows, confetti + sound fire once - correct). The picker stays mounted/open above the banner. Tap the already-logged Set 3 row -> the editor expands -> tap \"Update\". Expected: a silent value update. Actual: handleLogSet runs again with set_number === targetSets -> onSetComplete(true) -> Activity.handleSetComplete else-branch unconditionally re-runs setShowWorkoutCelebration(true) + playCompleteCue(), so the confetti overlay and completion sound REPLAY on every edit of the final set.\n\nFix: gate completion on distinct logged target sets covering 1..target_sets (count reached), not on set_number equality; and skip re-firing the celebration when showWorkoutComplete is already true.",
+      "history": [],
       "needsReview": false,
-      "reviewReply": "B",
-      "reviewRepliedAt": "2026-07-11T06:27:02.659Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T06:48:37.936Z",
+      "resolvedAt": "2026-07-12T06:48:49.535Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T06:48:37.936Z"
+      "archivedAt": "2026-07-12T06:48:49.535Z"
     }
   ]
 }
