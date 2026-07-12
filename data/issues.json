@@ -1031,10 +1031,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "The 'Choose a plan now' handler chain is correct in current code (PostPlanTour -> OnboardingFlow.handleFinish -> navigate('/choose-plan')). Two signals suggest an older build + a redirect, not a dead button: (a) this CTA is gated behind FEATURE_SUBSCRIPTION_GATE which is OFF by default, yet you see it, and (b) ChoosePlan's mount redirect bounces a user to /dashboard when subscription_active is true and is_trial is not true - a freshly-onboarded trial user hits this if the backend /me isn't reliably reporting is_trial=true. Need: your alpha build version + whether tapping it flashes /choose-plan then bounces to /dashboard (redirect) or does nothing (dead). Then I fix the is_trial gate or the backend flag.",
       "reviewedAt": "2026-07-12T05:51:53.602Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "On it",
+      "reviewRepliedAt": "2026-07-12T06:45:23.203Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-36dd",
