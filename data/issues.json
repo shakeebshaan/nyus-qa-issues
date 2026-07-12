@@ -725,48 +725,6 @@
       "descPrivate": false
     },
     {
-      "id": "i-20260710-pfav",
-      "createdAt": "2026-07-10T05:59:10.160Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: apiClient's instance-level Content-Type: application/json default made axios 1.x serialize the FormData avatar upload to {file:{}} (binary dropped). Fix: set per-request Content-Type to undefined so the browser emits multipart/form-data with a boundary — applied to ProfileIdentityCard avatar upload + progressPhotos.service + other.service uploadAttachment + BodyFatCameraCapture. Verified at 390x844: real POST /users/me/avatar sent 'content-type: multipart/form-data; boundary=...' and the backend returned 201 CREATED; the uploaded image now renders in the avatar.",
-        "imagePath": "images/i-20260710-pfav-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260710-pfav-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "5736f943d27bfb403a07e38f5b0726b30edf98c9",
-        "imageCommits": [
-          "5736f943d27bfb403a07e38f5b0726b30edf98c9"
-        ],
-        "fixedAt": "2026-07-10T09:10:53.007Z",
-        "by": "shakeebshaan",
-        "appCommit": "55860659",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Fixed at the exact root cause the issue named (axios formDataToJSON under the JSON default) across all 4 FormData sites; proven end-to-end — real upload sent multipart/form-data;boundary and backend returned 201, avatar rendered."
-        }
-      },
-      "history": [],
-      "route": "/profile (avatar upload)",
-      "description": "[bug-hunt] Profile: avatar upload will silently drop the image file (sends empty JSON {\"file\":{}} instead of multipart form-data). This is a REGRESSION of the fix for i-20260704-a0ec, which over-corrected.\n\nRoot cause (frontend):\n- The shared axios instance is created with an instance-level default header Content-Type: application/json (src/lib/api-client.ts:12-13).\n- The avatar upload (src/pages/_components/profile/ProfileIdentityCard.tsx:130-132) builds a FormData, appends \"file\", and does apiClient.post(\"/users/me/avatar\", formData) with NO per-request Content-Type override.\n- Commit 98386822 (i-20260704-a0ec) REMOVED the previous \"Content-Type: multipart/form-data\" override, reasoning \"let axios set it automatically.\" But that only works when there is no instance default forcing JSON. Because the instance default is application/json, axios 1.x transformRequest (node_modules/axios/lib/defaults/index.js) sees a JSON content-type on a FormData body and runs formDataToJSON -> serializes it to the string {\"file\":{}} and sends Content-Type: application/json. Verified by running the repo axios with the identical instance config: body = {\"file\":{}}, no multipart, no boundary, binary gone.\n\nWhy latent today: the backend /users/me/avatar endpoint does not exist yet (404s) and the catch masks it as a \"Photo saved locally\" toast. So no current user impact -- but the moment the backend avatar endpoint ships, uploads will fail server-side (empty JSON, no file) with no error surfaced to the user.\n\nCorrect fix: neither the removed \"multipart/form-data\" (breaks because axios/XHR will not append the boundary when you set the header manually -- the original i-20260704-a0ec concern) NOR the current bare post (JSON default). Set the per-request header to undefined so axios deletes the JSON default and the browser generates \"multipart/form-data; boundary=...\":\n  apiClient.post(\"/users/me/avatar\", formData, { headers: { \"Content-Type\": undefined } })\nShip this together with the backend endpoint so it can be verified end-to-end. Same pattern would bite any future FormData upload on this instance (e.g. ProgressPhotos, support attachments) -- audit those when fixing.",
-      "needsReview": false
-    },
-    {
       "id": "i-20260710-out1",
       "title": "[discovery] Outreach day-summary + tick carry-over 2026-07-10",
       "description": "[discovery] Outreach day-summary: 2026-07-09 total 4 pitches sent, all to PUBLIC emails on recipient own contact/partnerships pages, 0 replies, 0 suppressed.\n\n1. BeerBiceps (Ranveer Allahbadia, fitness/lifestyle creator) -> business@beerbiceps.com | A Hindi/Hinglish AI nutrition coach for your audience\n2. Cult.fit (Curefit gym chain) -> cultpasspartnerships@cult.fit | A nutrition-coach partnership idea for Cult Pass members\n3. TruNativ (just-raised $30M Series B, OrbiMed) -> hello@trunativ.co | Congrats on the Series B - a NYUS collab idea for TruNativ\n4. Parambodyfitmind (online transformation coach, LOW/marginal, pitched only as client-log tool) -> parambodyfitmind@gmail.com | A between-session client logging tool - NYUS\n\nRunning totals: 4 sent 2026-07-09, 15 all-time (incl. provisioning test), 0 suppressed, 0 replies to review.\n\n--- Today (2026-07-10) tick in progress ---\nleads-backlog.md write-gate CLOSED again this tick (intermittent, per known issue) - persisting state here.\nStatus at start: remaining=10 (fresh day). Sent 4 this tick (fleet cap now 6 remaining today):\n1. Trijog (corp wellness/EAP, 550+ orgs) -> info@trijog.com | published trijog.com/corporate-wellness/ | resendId 642c3af1-6861-42a4-ad98-38587cc4eedb\n2. Ferra (recently funded fitness/wellness studio, Bengaluru) -> hello@ferra.club | published ferra.club footer | resendId f558b516-cb6c-4021-8bf5-0c3defe5cbde\n3. Beastlife (Gaurav Taneja supplement brand) -> care@beastlife.in | published beastlife.in/pages/contact | resendId a05e13f3-6a2f-4afb-9082-89b9bf0bb67d\n4. Supply6 (nutrition sachets, Bengaluru, celeb-backed) -> care@supplysix.com | published supplysix.com/pages/contact-us | resendId 2cb05ad0-efca-40aa-a70d-feab710ee8ff\n\nAll 4 passed FREE waterfall prevalidate (syntax+MX ok, none disposable, MX resolves). Dedupe checked vs ledger.json (15 prior) + suppression.json (empty) + backlog file.\n\nResearched, no email route found (forms/phone only, skip): Truworth Wellness, Kris Gethin Gyms, Crunch Fitness India, Machaxi, UP&RUN (403/blocked).\nResearched, low priority carry-over: ThrivePass (US-based, Sales@ThrivePass.com, low personalization); OZiva community@oziva.in still unconfirmed live (carried since 07-08); Onsurity 403; Salveo Lifecare marginal.\nDead (carry): Anytime Fitness India (scraper-sourced), Wellbeing Nutrition (support-only).\n\nREPLIES for owner to review: NONE.\nNext tick: fold this into leads-backlog.md if write-gate open; rotate to accelerator/community + more corp-wellness angles; avoid all orgs listed as SENT across 07-08/07-09/07-10.",
