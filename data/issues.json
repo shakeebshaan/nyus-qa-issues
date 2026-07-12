@@ -768,10 +768,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Blocked on an architecture decision, not a cap tweak. The workout-day cap was deliberately lowered 10->7 by fix i-20260710-7a3f because the backend workout plan is DAY-OF-WEEK indexed: it maps day_index->weekday (0-6) and clamps any day_index>7 to Sunday, so an 8th-10th day silently collapses two training days onto one weekday (real data-loss bug). Raising BUILDER_MAX_DAYS back to 10+ reintroduces that bug. Truly supporting 10+ days needs the backend moved from a weekly (day-of-week) model to a rotating microcycle (day-of-cycle) model - touching plan schema, WorkoutSession creation, scheduler, and weekly-review 'next week' logic that all assume 7 weekdays. Full-stack multi-file build, not verifiable at the 90 bar in one tick. Confirm you want a rotating multi-day cycle and I'll build it as a tracked slice.",
       "reviewedAt": "2026-07-12T10:21:22.745Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "I want it to be more than 10 currently its only 10",
+      "reviewRepliedAt": "2026-07-12T11:01:40.118Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-3d81",
