@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the GET /partner-groups/<id>/events endpoint serialized each event's UTC created_at with .isoformat() but WITHOUT a 'Z' suffix, while every sibling timestamp in the thread (chat messages) does append Z. The app parsed the offset-less string as LOCAL time, so for IST users a just-created event card showed '5h' ago instead of 'just now' and sorted ~5.5h out of order against messages. Fix: append '+Z' to the events serializer (and the DM-reaction serializer) so both are true UTC, matching the message serializers. Capture shows the thread now rendering a just-logged meal as 'just now' and a 6-min-old session as '6m', in correct order.",
+        "imagePath": "images/i-20260712-569f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260712-569f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "94e62b0ba0bc86d5bb9c48fec4baf71bbd0c4173",
+        "imageCommits": [
+          "94e62b0ba0bc86d5bb9c48fec4baf71bbd0c4173"
+        ],
+        "fixedAt": "2026-07-12T15:23:50.905Z",
+        "by": "shakeebshaan",
+        "appCommit": "9d00a8f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused + one-line fix mirroring the two prior offset-less-UTC fixes; backend regression test asserts Z-suffix (32/32 green); scenario capture confirms FE renders correct relative time + order; deployed live to prod."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260712-w7lk",
