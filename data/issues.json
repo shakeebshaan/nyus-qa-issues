@@ -809,7 +809,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "The custom-meal affordance already exists: CustomMealModal (opened from /nutrition) has a Quick Log tab (free-text meal + optional calories/macros + voice + 'Snap meal' AI photo-identify) and an Ingredients tab (add a single custom ingredient with macros = your 'small meal / single ingredient'). Two gaps vs your ask, both product calls: (1) discoverability - it lives in the empty state + footer, not a prominent always-visible 'Add meal' button on the diet page; want me to promote it? (2) ATTACHING/storing a photo with the logged meal is not supported (POST /logs/meal + MealLog have no photo field; only AI-identify-from-photo exists) - that needs a backend column + upload path. Confirm scope (promote button only, or also add stored meal photos) and I will build it.",
+      "reviewedAt": "2026-07-12T05:51:16.873Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-f1d9",
