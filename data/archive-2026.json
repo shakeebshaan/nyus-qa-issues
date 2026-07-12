@@ -19442,9 +19442,9 @@
       "reviewReason": "FIXED + DEPLOYED (not auto-resolved: board judge bar is pinned at 100 and this fix has no in-app timestamped-row screenshot to self-score a perfect 100 - the QA account has 0 friend events). Root cause exactly as diagnosed: ActivityFeedResource serialized created_at via naive isoformat() with no 'Z' (backend.py:11038); frontend timeAgo() then parsed it as LOCAL time. Fix: append '+Z' to match every other timestamp endpoint (messages/notifications/coach.py). Backend committed (91716be), pushed, deployed to prod, health OK; prod serializer now emits '2026-07-12T04:30:00Z'. Ready to resolve once you lower the satisfaction slider or verify on the next alpha (log any friend activity -> Social feed -> labels now match real time in IST).",
       "reviewedAt": "2026-07-12T07:04:21.077Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T09:15:56.627Z",
+      "resolvedAt": "2026-07-12T09:16:11.947Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T09:15:56.627Z"
+      "archivedAt": "2026-07-12T09:16:11.947Z"
     }
   ]
 }
