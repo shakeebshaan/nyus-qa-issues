@@ -41,7 +41,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + DEPLOYED (not auto-resolved: board judge bar is pinned at 100 and this fix has no in-app screenshot to self-score a perfect 100 - the QA account has 0 received nudges). Root cause exactly as diagnosed: coach-social inbox serializer omitted the 'Z' UTC marker (app/routes/coach_social.py:141-142, created_at + read_at); frontend ChallengeCard.timeAgo() parsed the offset-less string as LOCAL time. Fix: append '+Z' to both, matching sibling coach.py:85-86. Backend committed (91716be), pushed, deployed to prod, health OK; prod serializer now emits '2026-07-12T04:30:00Z'. Ready to resolve once you lower the satisfaction slider or verify on next alpha (/coach-social Inbox -> nudge 'Xm ago' labels now match real time in IST).",
+      "reviewedAt": "2026-07-12T07:04:31.403Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "author": "shakeebshaan",
