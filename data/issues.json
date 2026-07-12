@@ -17,29 +17,6 @@
       "reportLabel": "Growth insights 2026-07-12"
     },
     {
-      "id": "i-20260712-b3f0",
-      "createdAt": "2026-07-12T06:56:03.244Z",
-      "route": "/social",
-      "description": "[bug-hunt] Activity feed relative timestamps are wrong for every non-UTC user (offset-less UTC serialization).\n\nExpected: an event logged \"just now\" reads \"just now\"; a 3h-old event reads \"3h ago\".\nActual (IST +5:30, the primary market): a just-now event reads \"5h ago\"; a 3h-old event reads \"8h ago\" — every feed row reads ~5.5h older than reality. For negative-offset users (US) the parse lands in the future, so everything reads \"just now\".\n\nRoot cause (backend): ActivityFeedResource serializes the event time WITHOUT a UTC marker — backend.py:11038 does `e.created_at.isoformat()` producing a naive string like \"2026-07-12T04:30:00\" (no trailing 'Z'/offset). Every OTHER timestamp endpoint appends 'Z' (messages backend.py:3933/3991, notifications 4017/4095, group chat 5603/5665, friend-requests 10298 — ~15 sites); the feed is the lone exception.\n\nFrontend symptom: ActivityFeedView.timeAgo() (src/components/ActivityFeedView.tsx:46-54) computes `Date.now() - new Date(dateStr).getTime()`. Per ECMAScript, an offset-less date-TIME string is parsed as LOCAL time, so the instant is shifted by the viewer's UTC offset.\n\nRepro: log in as a user with >=1 friend who has recent activity -> Social -> Activity feed -> compare each \"Xh ago\" label to the true event time. Fix: append 'Z' in ActivityFeedResource to match the rest of the backend (or normalize the string in timeAgo). Confirmed in both repos.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED (not auto-resolved: board judge bar is pinned at 100 and this fix has no in-app timestamped-row screenshot to self-score a perfect 100 - the QA account has 0 friend events). Root cause exactly as diagnosed: ActivityFeedResource serialized created_at via naive isoformat() with no 'Z' (backend.py:11038); frontend timeAgo() then parsed it as LOCAL time. Fix: append '+Z' to match every other timestamp endpoint (messages/notifications/coach.py). Backend committed (91716be), pushed, deployed to prod, health OK; prod serializer now emits '2026-07-12T04:30:00Z'. Ready to resolve once you lower the satisfaction slider or verify on the next alpha (log any friend activity -> Social feed -> labels now match real time in IST).",
-      "reviewedAt": "2026-07-12T07:04:21.077Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "author": "shakeebshaan",
       "tags": [
         "discovery",
