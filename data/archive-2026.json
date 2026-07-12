@@ -19478,49 +19478,50 @@
       "archivedAt": "2026-07-12T10:20:45.647Z"
     },
     {
+      "id": "i-20260712-616f",
+      "createdAt": "2026-07-12T05:05:04.899Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
       "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
+      "imagePath": "images/i-20260712-616f.jpg",
+      "imageCommit": "16c6052ef44520d3938258c935561a3f4cb6457c",
+      "imagePaths": [
+        "images/i-20260712-616f.jpg"
       ],
-      "route": "/activity",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "imageCommits": [
+        "16c6052ef44520d3938258c935561a3f4cb6457c"
+      ],
+      "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: the ad-hoc 'Log activity' sheet listed today's activity by matching names against your plan, so AI-coach rows showed a dead Remove button and any ad-hoc entry whose name matched a plan activity disappeared. Fix: entries are now tagged with an origin ('adhoc') end to end (app + backend), so the list shows exactly your own ad-hoc logs and each has a working Remove that deletes just that row. Verified live on /activity.",
-        "imagePath": "images/i-20260711-c4f9-fix-r1.png",
+        "description": "Root cause: the weekly-challenge/coach-moment banner sat only 20px below the domain-card grid, but the grid's card rhythm is 40px (.card-stack margin-top + .responsive-grid gap both apply), so with Weekly Insights empty it read as cramped. Fix: bumped the deck's top margin mt-5 -> mt-10 in Dashboard.tsx so the gap matches the 40px card rhythm.",
+        "imagePath": "images/i-20260712-616f-fix-r1.png",
         "imagePaths": [
-          "images/i-20260711-c4f9-fix-r1.png"
+          "images/i-20260712-616f-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "ef5e291b63d3302e5621ad0836d0b9a2ab79d2d1",
+        "imageCommit": "21c5e4ff44bee80b185b4882e42508213dae0e49",
         "imageCommits": [
-          "ef5e291b63d3302e5621ad0836d0b9a2ab79d2d1"
+          "21c5e4ff44bee80b185b4882e42508213dae0e49"
         ],
-        "fixedAt": "2026-07-12T10:57:24.458Z",
+        "fixedAt": "2026-07-12T10:36:31.091Z",
         "by": "shakeebshaan",
-        "appCommit": "5c8bf841",
+        "appCommit": "ec07850f",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 93,
           "bar": 90,
-          "note": "Verified against prod: POST logs/activity persists source=adhoc and daily-logs returns it; live sheet shows the ad-hoc row with an enabled Remove X. Backend c043cf2 + app 5c8bf841."
+          "note": "Verified end-to-end on authenticated dashboard: DOM-measured the gap going from 20px to 40px (matching the exact inter-card rhythm above it) and confirmed visually in a 390-wide capture. Surgical one-line className change, no regression risk."
         }
       },
       "history": [],
-      "createdAt": "2026-07-11T21:16:39.865Z",
-      "id": "i-20260711-c4f9",
-      "description": "[bug-hunt] Ad-hoc \"Log activity\" sheet's \"Also logged today\" list is sourced from ALL of today's activity_logs (not just entries the sheet created), so it surfaces rows it cannot manage: (a) nameless AI-coach-logged rows show with a permanently-disabled Remove X, and (b) a legit ad-hoc entry whose name collides with a plan activity is filtered out entirely — logged and counted toward streak/calories, but invisible and un-removable.\n\nRoot cause (src/components/activity/LogActivitySheet.tsx):\n- adHocEntries = daily.activity_logs filtered ONLY by \"name not in planActivityNames\" (LogActivitySheet.tsx:78-90); it is NOT scoped to sheet-created rows.\n- (a) AI coach activity_logger blocks store rows with activity_name = NULL when the canonical type equals the activity type: src/lib/block-transformers.ts:186 (activity_name: activity?.type !== activityType ? activity?.type : undefined) -> useBlockSubmit.ts logActivity -> NULL name. In the sheet that row renders (name falls back to the type label, :310) but Remove is disabled={... || !entry.activity_name} (:329) and the handler is guarded if(entry.activity_name) (:327), and backend requires a name (logging.py:1226). => visible entry with a dead X, un-removable through any UI.\n- (b) The plan-name exclusion (:78-90; plan names from Activity.tsx:971 overview.activity_targets.activities) hides any ad-hoc log whose name matches a plan activity name. Repro: plan target \"Walk\"; user logs ad-hoc \"Walk\" -> row saved, counts toward calories/streak, but never appears in the sheet -> looks un-logged and cannot be removed there.\n\nExpected: the list shows and lets the user manage exactly the entries relevant to ad-hoc logging (and every shown entry is removable).\nActual: rows appear that can never be removed, and legit ad-hoc rows silently vanish from the list.\n\nFix: scope the list to sheet-created ad-hoc rows (e.g. delete-by-id so nameless rows are removable; stop hiding name-collision ad-hoc entries), or clearly separate \"your ad-hoc entries\" from synced/plan rows. (Lower-sev siblings noted, not filed: removal-failure toast reuses \"Couldn't log activity\" copy; metric-less submit creates an all-null row with a blank subtitle; daily-logs query has no enabled:open gate.)",
       "needsReview": false,
-      "resolvedAt": "2026-07-12T11:02:13.738Z",
+      "resolvedAt": "2026-07-12T11:02:21.860Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T11:02:13.738Z"
+      "archivedAt": "2026-07-12T11:02:21.860Z"
     }
   ]
 }
