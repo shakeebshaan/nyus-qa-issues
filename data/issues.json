@@ -699,9 +699,32 @@
         "b97c5ae5d5bc8f142e6c224d59c13bdac6d856ea"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: a workout day with exercises but under its set target showed the 'Looks light - add N more sets' nudge, but the only coach action ('More ideas') re-plans the whole day and replaces every exercise - so there was no one-tap way to just top up a light day. Fix: added a 'Coach <name> adds the missing N sets' button under the volume meter that appends fresh coach-picked exercises (skipping duplicates) until the day reaches its target, keeping everything you already programmed.",
+        "imagePath": "images/i-20260712-53e3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260712-53e3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "808133e0f2d6b465fa7591eae684290ad001f743",
+        "imageCommits": [
+          "808133e0f2d6b465fa7591eae684290ad001f743"
+        ],
+        "fixedAt": "2026-07-12T10:38:00.907Z",
+        "by": "shakeebshaan",
+        "appCommit": "7cfdda13",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Verified live at 390x844: a 1/12-set day shows the button; appends without replacing; matches coach-button design tokens; tsc clean; flow doc updated."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260712-fa39",
