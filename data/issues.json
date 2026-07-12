@@ -704,12 +704,34 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Profile 'Adjust macro targets' editor moved your nutrition ring goal, but the day's meal cards stayed portioned to the OLD calories — and editing only protein/carbs/fat did not rescale the meals at all — so the ring and the meal cards disagreed. Fix: the backend now re-portions your upcoming un-eaten meals to the exact number the ring shows (protein x4 + carbs x4 + fat x9) on ANY macro or calorie edit, so the meal cards always add up to the ring goal. Proof: the editor sets 1940 kcal / 150-200-60 and the nutrition ring goal (1940) equals the sum of the meal cards (500+540+500+400 = 1940). Backend commit dcbdfe7 (deployed).",
+        "imagePath": "images/i-20260712-bd63-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260712-bd63-fix-r1.png",
+          "images/i-20260712-bd63-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9945f2ef783ffb8da9794e3f625e03f1d9b25d59",
+        "imageCommits": [
+          "9945f2ef783ffb8da9794e3f625e03f1d9b25d59",
+          "93925cfd558096482853325ff910af778e3e6356"
+        ],
+        "fixedAt": "2026-07-12T17:20:22.247Z",
+        "by": "shakeebshaan",
+        "appCommit": "57da7915",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 90,
+          "note": "Backend rescale now targets macro_kcal (the ring value) on any edit; pytest 3/3 + 2/2 propagation; scenario-capture proves ring goal == summed meal cards on the real screens."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Slice 2 (\"do all\") is BUILT + DEPLOYED, not fake-resolved. PUT /profile/macro-targets now re-portions the active plan's today+future UN-EATEN meals to the new calorie target (deterministic linear scale, no LLM, no migration), so the /nutrition meal cards sum to the ring goal after an edit — that was the remaining gap. Backend commit b3b4c14 (deployed to prod, /health OK), flow-doc frontend 5fae0086. Integration test test_macro_targets_meal_rescale.py 2/2 green: proves a fresh day rescales exactly to the new target, and an already-eaten meal is never rewritten. Guardrails: never touches eaten meals (logged intake preserved), per-day remaining budget, preserves prior user portion tweaks, factor clamped [0.1,5.0], skips recipe-less meals, best-effort so a rescale failure can never lose the target edit.\n\nThe one thing I cannot do headless is the authenticated on-device screenshot proving the ring + cards now agree: every QA/onboarded account was deleted 2026-07-12 and a health-profile-less admin account 404s /profile & /nutrition, so there is no data account to capture. Per your mandatory-screenshot directive I am not resolving without bar-clearing proof. Please verify on your device, OR restore one onboarded test account and I will capture the before/after and resolve immediately.",
-      "reviewedAt": "2026-07-12T16:35:00.130Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "do all",
       "reviewRepliedAt": "2026-07-12T11:02:01.429Z",
