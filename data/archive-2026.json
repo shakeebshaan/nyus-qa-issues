@@ -19421,36 +19421,37 @@
       "archivedAt": "2026-07-12T09:14:14.615Z"
     },
     {
-      "id": "i-20260712-500a",
-      "createdAt": "2026-07-12T05:06:34.469Z",
+      "id": "i-20260712-50c0",
+      "createdAt": "2026-07-12T05:02:57.212Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-500a-0.jpg",
-      "imageCommit": "a8c73c0af6b9f2ad3b52629cd7fdc3c45ac0c868",
+      "imagePath": "images/i-20260712-50c0.jpg",
+      "imageCommit": "e2cb7f0d04d5c3bda6c63340dd82751632da3dff",
       "imagePaths": [
-        "images/i-20260712-500a-0.jpg",
-        "images/i-20260712-500a-1.jpg"
+        "images/i-20260712-50c0.jpg"
       ],
       "imageCommits": [
-        "a8c73c0af6b9f2ad3b52629cd7fdc3c45ac0c868",
-        "f865b04be1137830640408970d82c7c9943292e0"
+        "e2cb7f0d04d5c3bda6c63340dd82751632da3dff"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "FIXED (commit 402d34f3, pushed). Per your 'Do blurred backdrop': tapping the weekly-challenge tip did a hard page-jump to /achievements; it now opens a calm peek - the level card (teal ring + recent badges) over a backdrop-blur-md scrim with a 'View all achievements' CTA - reusing the shadcn Dialog blur convention (same precedent as BuildFocusOverlay), scoped so other modals are unaffected. Couldn't capture the peek on the QA account (the tip is suppressed in the fresh-start state where nothing is logged today); typecheck-clean. Not auto-resolved: bar pinned at 100. Verify on next alpha.",
-      "reviewedAt": "2026-07-12T07:40:22.340Z",
+      "reviewReason": "Could not reproduce - flagging rather than guessing a risky backend change. Dashboard 'current weight' reads the latest WeightLog; onboarding finalize seeds that log from initial_weight_kg. Your shot showed 112.7 current vs a correct 116.0 start with no manual log - i.e. the seeded log value (112.7) diverged from the onboarding weight (116). The account has since logged 116, so the 112.7 seed is no longer reproducible. To fix the root cause safely I need the exact weight entered on the onboarding wheel on a fresh run, so I can trace whether the FE sent a wrong/stale initial_weight_kg. Can you re-run onboarding on a test account and note entered vs shown weight?",
+      "reviewedAt": "2026-07-12T07:41:12.193Z",
       "reviewedBy": "shakeebshaan",
-      "reviewReply": "Do blurred backdrop",
-      "reviewRepliedAt": "2026-07-12T06:42:43.055Z",
+      "reviewReply": "Make sure we take from the onboarding weight",
+      "reviewRepliedAt": "2026-07-12T06:45:59.531Z",
       "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T09:14:42.101Z",
+      "tags": [
+        "cannot-reproduce"
+      ],
+      "resolvedAt": "2026-07-12T09:14:49.670Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T09:14:42.101Z"
+      "archivedAt": "2026-07-12T09:14:49.670Z"
     }
   ]
 }
