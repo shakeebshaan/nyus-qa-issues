@@ -234,48 +234,6 @@
       "description": "[discovery] Outlets added: 4. Pitch-ready: ThePrint. Escalated: 1.\n\nNew (total 32, all with OWN-SITE-VERIFIED routes): (29) ThePrint — national Opinion desk; route VERIFIED own-site ideas@theprint.in (theprint.in/about-us: freelancers email story ideas, clear pitch first; commissioned contributions PAID = not pay-to-play). Made [pitch-ready] -> escalated with a data/tech-culture op-ed angle (macro black box + 'localization is data work, not translation'). (30) The Quint / FIT — national; first dedicated consumer HEALTH & WELLNESS vertical; route VERIFIED own-site editor@thequint.com (/contact-us); fit@thequint.com refuted as search-summary-only -> barred. Source/tip. (31) Outlook Business / Outlook Start-Up — national business+startup mag; route VERIFIED own-site letters@outlookindia.com (outlookbusiness.com/contact-us, confirmed x2) but it's a general letters inbox + PAY-TO-PLAY caution (branded content). Source/tip. (32) Silicon India — national/niche startup mag (StartupCity); route VERIFIED own-site free 'My Startup Journey' form + editorial@siliconindia.com, but flagged STRONG PAY-TO-PLAY risk (News Laundry documented ~Rs.30,000 paid features + rankings/awards) -> free form is the clean editorial route; any paid upsell = owner-decision-only.\n\nNoted but NOT added (route-research notes, both [route unverified]): Scroll.in (excellent Pulse health-beat fit but scroll.in 403-blocks fetch; only own-domain letters@/readerseditor@ surfaced, neither a pitch route, and /contribute is a donation page -> source-only) and The Hindu BusinessLine (strong op-ed fit but own domain hard-blocked; contact only from aggregators/PR-blog -> barred).\n\nMethod: Workflow tool gated in headless, so fanned out 6 candidate outlets to parallel research subagents (WebSearch/WebFetch, own-site-only verification, aggregator emails barred), each doing a skeptical own-site route re-check. ThePrint = the only verified contributed-column route this tick -> pitch-ready.\n\nEscalation: ThePrint outlet + full pitch + route appended to ESCALATIONS.md 2026-07-11T12:44Z (route own-site verified; safe for owner to send as-is). Kit: marketing/DISCOVERY_KIT.md."
     },
     {
-      "id": "i-20260711-e23a",
-      "createdAt": "2026-07-11T11:39:59.248Z",
-      "route": "/profile",
-      "description": "[bug-hunt] Profile > Hydration: the daily water-goal stepper steps by 250 ml, but the goal persists to a Numeric(3,1) column (0.1 L / 100 ml granularity), so odd-250 goals are silently rounded and the stepper drifts off its own grid. Expected: the value you tap is saved and shown. Actual: from 2.5 L, tapping + shows 2.75 L then snaps to 2.8 L after the save round-trips (2750 ml -> PUT target_water_liters=2.75 -> DB rounds to 2.8 -> refetch re-seeds 2800 ml); every later tap then drifts by +300 ml (2.8->3.1->3.4...), never landing back on the 250 grid, so 2750/3250/3750 ml can never be saved. The Nutrition water tracker reads the same hydration-prefs query key, so it inherits the wrong rounded goal too. Repro: Profile -> HYDRATION -> Daily goal + once -> watch the value snap 2.5 -> 2.75 -> 2.8 L. Files: src/pages/_components/profile/ProfileHydrationSection.tsx:19 (GOAL_STEP=250) + src/services/other.service.ts:106 (Math.round(goalMl)/1000) + backend db_models.py:1315 (target_water_liters Numeric(3,1)). Fix: set GOAL_STEP=500 (frontend-only; 0.5-L steps are representable) OR widen the column to Numeric(4,2) via migration.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: hydration goal stepped by 250 ml but persists to a Numeric(3,1) column (0.1 L granularity), so 2.75 L rounded to 2.8 L and every later tap drifted off the 250 grid. Fix: GOAL_STEP=500 in ProfileHydrationSection.tsx (frontend-only) so every value is representable in 0.1 L and round-trips exactly. Verified live: 3.0 -> 3.5 L held after save+refetch, no snap.",
-        "imagePath": "images/i-20260711-e23a-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260711-e23a-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0edaaf3226e254bd80f535cec8bcbcfabb4c3178",
-        "imageCommits": [
-          "0edaaf3226e254bd80f535cec8bcbcfabb4c3178"
-        ],
-        "fixedAt": "2026-07-11T12:03:28.244Z",
-        "by": "shakeebshaan",
-        "appCommit": "2b4be366",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Root-caused to the DB column granularity; 500 ml step is exactly representable so drift is impossible. Verified end-to-end in browser: value held through the save round-trip. tsc clean."
-        }
-      },
-      "history": [],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
       "id": "i-20260711-5b36",
       "createdAt": "2026-07-11T11:39:59.248Z",
       "route": "/profile",
