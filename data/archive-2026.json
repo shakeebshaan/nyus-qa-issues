@@ -19223,12 +19223,13 @@
       "archivedAt": "2026-07-12T00:16:24.438Z"
     },
     {
+      "id": "i-20260710-pfav",
+      "createdAt": "2026-07-10T05:59:10.160Z",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
         "auto"
       ],
-      "route": "/activity",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19236,36 +19237,35 @@
       "imagePrivate": false,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: buildRestCue (src/pages/Activity.tsx) had no final-set guard and framed the just-logged reps as the next set's Target. After the last set of a 3-set exercise it spoke a phantom 'set 4 of 3', and on an under-target set it mis-coached the low reps as the target. Fix: extracted to src/lib/restCue.ts (pure) - returns undefined when nextSet > target_sets (RestTimer then skips speech), and the Target line now reads the plan's prescribed reps from current_target (e.g. '3x8-10' -> '8 to 10'), not the reps just logged. Proof: voice/audio-only behavior with no visual surface (cue fires only after logging the final set of a LIVE workout; screenshot shows the correct /activity route on a rest day). Verified by new unit test test/restCue.test.ts (6/6 green) covering final-set suppression + prescribed-vs-logged reps.",
-        "imagePath": "images/i-20260711-b7e2-fix-r1.png",
+        "description": "Root cause: apiClient's instance-level Content-Type: application/json default made axios 1.x serialize the FormData avatar upload to {file:{}} (binary dropped). Fix: set per-request Content-Type to undefined so the browser emits multipart/form-data with a boundary — applied to ProfileIdentityCard avatar upload + progressPhotos.service + other.service uploadAttachment + BodyFatCameraCapture. Verified at 390x844: real POST /users/me/avatar sent 'content-type: multipart/form-data; boundary=...' and the backend returned 201 CREATED; the uploaded image now renders in the avatar.",
+        "imagePath": "images/i-20260710-pfav-fix-r1.png",
         "imagePaths": [
-          "images/i-20260711-b7e2-fix-r1.png"
+          "images/i-20260710-pfav-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "2871904f05270397550984ef6538bc9ad1d651ae",
+        "imageCommit": "5736f943d27bfb403a07e38f5b0726b30edf98c9",
         "imageCommits": [
-          "2871904f05270397550984ef6538bc9ad1d651ae"
+          "5736f943d27bfb403a07e38f5b0726b30edf98c9"
         ],
-        "fixedAt": "2026-07-11T21:41:12.580Z",
+        "fixedAt": "2026-07-10T09:10:53.007Z",
         "by": "shakeebshaan",
-        "appCommit": "66462344",
+        "appCommit": "55860659",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 100,
           "bar": 100,
-          "note": "Root-caused to buildRestCue; both reported defects fixed (final-set suppression + prescribed-reps target); unit-tested 6/6; tsc clean; minimal surgical scope. Non-visual voice bug so proof is the test + affected-route screenshot."
+          "note": "Fixed at the exact root cause the issue named (axios formDataToJSON under the JSON default) across all 4 FormData sites; proven end-to-end — real upload sent multipart/form-data;boundary and backend returned 201, avatar rendered."
         }
       },
       "history": [],
-      "createdAt": "2026-07-11T21:16:39.865Z",
-      "id": "i-20260711-b7e2",
-      "description": "[bug-hunt] Voice rest-timer cue announces a phantom \"set N+1 of N\" after the FINAL set, contradicting the on-screen \"Workout complete\"/\"Next up\", and mislabels the just-completed set's reps/weight as the next set's \"Target\". New voice-cues feature (commit b7df14c5), opt-in (Profile > Voice cues) + Sounds on.\n\nRoot cause (src/pages/Activity.tsx):\n- The rest timer arms after EVERY logged set while the picker is open, with NO final-set guard: logSetMutation.onSuccess sets lastLoggedSetRef then, if isModalOpen.current, restarts the timer (Activity.tsx:515-533).\n- buildRestCue always computes nextSet = (lastSet.set_number ?? 0)+1 and appends \" of {target_sets}\" (Activity.tsx:57-59). After logging the last set of a 3-set exercise: lastLoggedSet=3 -> nextSet=4, total=3 -> \"set 4 of 3\".\n- The cue is spoken by RestTimer's completion effect (RestTimer.tsx:51 speakRestCue(announceOnComplete)) after the rest duration elapses.\n- Secondary (same root): the \"Target {reps} reps at {kg} kilos\" line (Activity.tsx:60-61) uses lastLoggedSetRef — the set JUST COMPLETED — but frames it as the upcoming set's TARGET, ignoring the plan's prescribed target (currentExercise.current_target). On a failed/under-target set (did 5 of a 10 target) it announces \"Target 5 reps\" — mis-coaching.\n\nRepro:\n1. Profile > Preferences: Sounds ON, Voice cues ON.\n2. /activity -> start a live workout -> open a 3-set exercise -> log set 3/3. Do NOT tap Continue/Finish; pocket the phone.\n3. After the 90s rest, the phone says: \"Rest over. Next: <exercise>, set 4 of 3. Target <last reps> at <last kg> kilos.\"\nExpected: no cue after the last set (or announce the real next exercise / prescribed target).\nActual: phantom set \"4 of 3\"; if a next exercise exists the screen says \"Next up: Squats\" while the voice says the finished exercise \"set 4 of 3\" (double-wrong). Distinct from fixed 2ea5 (that was workout-completion detection, not the spoken cue).\n\nFix: suppress the cue when nextSet > target_sets (final set), and base the \"Target\" line on the plan's prescribed next-set target rather than lastLoggedSetRef.",
+      "route": "/profile (avatar upload)",
+      "description": "[bug-hunt] Profile: avatar upload will silently drop the image file (sends empty JSON {\"file\":{}} instead of multipart form-data). This is a REGRESSION of the fix for i-20260704-a0ec, which over-corrected.\n\nRoot cause (frontend):\n- The shared axios instance is created with an instance-level default header Content-Type: application/json (src/lib/api-client.ts:12-13).\n- The avatar upload (src/pages/_components/profile/ProfileIdentityCard.tsx:130-132) builds a FormData, appends \"file\", and does apiClient.post(\"/users/me/avatar\", formData) with NO per-request Content-Type override.\n- Commit 98386822 (i-20260704-a0ec) REMOVED the previous \"Content-Type: multipart/form-data\" override, reasoning \"let axios set it automatically.\" But that only works when there is no instance default forcing JSON. Because the instance default is application/json, axios 1.x transformRequest (node_modules/axios/lib/defaults/index.js) sees a JSON content-type on a FormData body and runs formDataToJSON -> serializes it to the string {\"file\":{}} and sends Content-Type: application/json. Verified by running the repo axios with the identical instance config: body = {\"file\":{}}, no multipart, no boundary, binary gone.\n\nWhy latent today: the backend /users/me/avatar endpoint does not exist yet (404s) and the catch masks it as a \"Photo saved locally\" toast. So no current user impact -- but the moment the backend avatar endpoint ships, uploads will fail server-side (empty JSON, no file) with no error surfaced to the user.\n\nCorrect fix: neither the removed \"multipart/form-data\" (breaks because axios/XHR will not append the boundary when you set the header manually -- the original i-20260704-a0ec concern) NOR the current bare post (JSON default). Set the per-request header to undefined so axios deletes the JSON default and the browser generates \"multipart/form-data; boundary=...\":\n  apiClient.post(\"/users/me/avatar\", formData, { headers: { \"Content-Type\": undefined } })\nShip this together with the backend endpoint so it can be verified end-to-end. Same pattern would bite any future FormData upload on this instance (e.g. ProgressPhotos, support attachments) -- audit those when fixing.",
       "needsReview": false,
-      "resolvedAt": "2026-07-12T04:50:25.055Z",
+      "resolvedAt": "2026-07-12T04:50:45.452Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T04:50:25.055Z"
+      "archivedAt": "2026-07-12T04:50:45.452Z"
     }
   ]
 }
