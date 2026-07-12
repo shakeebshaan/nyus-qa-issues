@@ -455,29 +455,6 @@
       "description": "[discovery] Outlets added: 3. Pitch-ready: The Hindu (Open Page). Escalated: 1.\n\nNew (total 28, all national mainstream — kit was startup-heavy): (26) The Hindu / \"Open Page\" reader-essay column — a genuinely-open contributed-essay track, made [pitch-ready] and escalated with the macro-black-box angle (the 835-word draft trims to Open Page's ~800-word cap); column ACTIVE per Wayback 2026-06-23, but route [unverified] — the submission email (obfuscated on purpose: openpage[at]thehindu[dot]co[dot]in) is aggregator-only and NOT own-site confirmed (thehindu.com blocks the crawler; .co.in-vs-.com quirk), so a human must retrieve and confirm the real address before sending; do NOT auto-send. (27) Moneycontrol — India-first consumer-AI health-tech story, source/tip; route [unverified] (own site 403). (28) India Today (Health/Lifestyle) — source/tip stretch; route [unverified] (own site blocked; only a catch-all group inbox editor@intoday.com exists).\n\nMethod: fanned out 6 candidate outlets to parallel research subagents (WebSearch/WebFetch, own-site-only verification) plus an adversarial re-verify of the pitch-ready route (confirmed Open Page live, refuted the email as own-site-verified -> kept unverified). Notes updated for 3 non-adds: Deccan Herald (two named Bengaluru reporters surfaced — Udbhavi Balakrishna/health, Suraksha P/business — with own-domain author pages, but own site 403 so still unverified/not promoted), The Ranveer Show/BeerBiceps (own-site contact verified but guest-bar >> early-stage founder + paid-only -> not added), GQ India (PR-only/closed, own site crawler-blocked -> not added).\n\nEscalation: The Hindu Open Page pitch logged to ESCALATIONS.md 2026-07-11T00:49Z (do-not-send; human email-confirm required). Kit: marketing/DISCOVERY_KIT.md."
     },
     {
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "route": "/dashboard",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "createdAt": "2026-07-11T00:30:48.067Z",
-      "id": "i-20260711-ci01",
-      "description": "[bug-hunt] Dashboard: CoachIntakeCard submits untouched slider/emoji DEFAULT values as if they were real answers -> feeds the coach fabricated baselines and never re-asks.\n\nRoot cause (src/pages/_components/dashboard/CoachIntakeCard.tsx + src/lib/coach-intake-questions.ts + src/hooks/useCoachIntake.ts). `values` is seeded from each question's defaultValue (CoachIntakeCard.tsx:164-179). The Save-enable gate hasAnswer = questions.some(q => q.toPayload(values[q.key]) != null) (lines 183-186) runs values through toPayload, but for numeric kinds (emoji/clock/slider) toPayload is the identity (v)=>v (coach-intake-questions.ts ~131/143) and the seeded value is a number, so != null is ALWAYS true. The purple Save button is therefore enabled from mount with zero interaction, and handleSave -> submit(values) writes every default to /profile/extended-intake, then marks the pair answered so the drip never re-asks.\n\nThe first deferred pair for a fresh user is stress_level (emoji, default 5) + baseline_sleep_hours (clock, default 7) -- both numeric -- so it triggers on the very first showing.\n\nRepro:\n1. Fresh user, 2nd dashboard visit of the day -> Coach intake card appears ('<coach> wants to get to know you').\n2. Do NOT move any slider. Tap the prominent purple 'Save' button (natural way users dismiss the card).\nResult: stress_level=5 and baseline_sleep_hours=7 persist as the user's REAL baseline; coach is fed fabricated data and never re-asks. A user whose real stress is 9 / sleep is 5h ends up with silently-wrong health data.\n\nExpected: only deliberately-set values persist; untouched numeric questions count as blank (Save disabled until a real interaction, OR untouched values omitted from the payload).\n\nFix: track a 'touched' set (or seed numeric values as undefined and let QuestionControl render defaultValue for display only via its existing typeof-value-is-number ? value : defaultValue fallbacks), then have hasAnswer + submit treat untouched numeric questions as blank. Watch the values-reset effect (line 180) and the hook submit payload mapping -- real regression surface, so QA the whole intake drip after the change.",
-      "needsReview": true,
-      "reviewReason": "ALREADY FIXED + shipped — verified. CoachIntakeCard seeds values EMPTY not from defaultValue (line 177), so untouched numeric questions leave their key absent -> toPayload(undefined) blank -> Save stays disabled until real interaction; no fabricated baselines persist. Fixed in commit 245a7786 (2026-07-11). Safe to Resolve.",
-      "reviewedAt": "2026-07-11T12:31:16.442Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260710-brk8",
       "createdAt": "2026-07-10T20:37:47.664Z",
       "author": "shakeebshaan",
