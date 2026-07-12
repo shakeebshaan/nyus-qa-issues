@@ -19421,15 +19421,12 @@
       "archivedAt": "2026-07-12T09:14:14.615Z"
     },
     {
-      "id": "i-20260712-b3f0",
-      "createdAt": "2026-07-12T06:56:03.244Z",
-      "route": "/social",
-      "description": "[bug-hunt] Activity feed relative timestamps are wrong for every non-UTC user (offset-less UTC serialization).\n\nExpected: an event logged \"just now\" reads \"just now\"; a 3h-old event reads \"3h ago\".\nActual (IST +5:30, the primary market): a just-now event reads \"5h ago\"; a 3h-old event reads \"8h ago\" — every feed row reads ~5.5h older than reality. For negative-offset users (US) the parse lands in the future, so everything reads \"just now\".\n\nRoot cause (backend): ActivityFeedResource serializes the event time WITHOUT a UTC marker — backend.py:11038 does `e.created_at.isoformat()` producing a naive string like \"2026-07-12T04:30:00\" (no trailing 'Z'/offset). Every OTHER timestamp endpoint appends 'Z' (messages backend.py:3933/3991, notifications 4017/4095, group chat 5603/5665, friend-requests 10298 — ~15 sites); the feed is the lone exception.\n\nFrontend symptom: ActivityFeedView.timeAgo() (src/components/ActivityFeedView.tsx:46-54) computes `Date.now() - new Date(dateStr).getTime()`. Per ECMAScript, an offset-less date-TIME string is parsed as LOCAL time, so the instant is shifted by the viewer's UTC offset.\n\nRepro: log in as a user with >=1 friend who has recent activity -> Social -> Activity feed -> compare each \"Xh ago\" label to the true event time. Fix: append 'Z' in ActivityFeedResource to match the rest of the backend (or normalize the string in timeAgo). Confirmed in both repos.",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
+        "suggestion",
         "auto"
       ],
+      "route": "/log-weight",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19438,13 +19435,16 @@
       "status": "resolved",
       "fix": null,
       "history": [],
+      "createdAt": "2026-07-11T20:46:06.502Z",
+      "id": "i-20260711-eta7",
+      "description": "[suggestion] Goal ETA — a calm \"On track for <date>\" line on the Log Weight screen that projects when you will actually reach your goal weight at your CURRENT logged pace.\n\nUser problem: the single most-asked question of anyone cutting or bulking — \"given how I am actually trending, when do I hit my goal?\" — is the one thing the app never answers. Log Weight already shows the past trend + observed rate (e.g. -0.4 kg/wk) and, separately, the kg remaining, but never combines them. The only forward projection in the app (WeeklyTrajectory on Plan Timeline/onboarding) uses the PLAN prescribed pace in \"weeks\", not the user real measured rate — so an off-plan lifter gets a fantasy timeline, not reality.\n\nEvidence: observed EWMA weekly rate (ratePerWeek, LogWeight.tsx:391-406) and remaining kg (goalProgress.remaining, LogWeight.tsx:336) are BOTH already computed on this exact screen and rendered as separate stats — nothing divides one into the other to yield a date (grepped: no ETA/projected-date logic in LogWeight.tsx). The plan-pace projection (src/lib/weekly-projection.ts / WeeklyTrajectory) is a different, plan-based, week-indexed forecast on a different screen. Competitors (HealthifyMe et al.) surface goal-date estimates; NYUS has the data but does not show it.\n\nProposed v1: one card/line on /log-weight — \"At your current pace (-0.4 kg/wk) you will reach your 75 kg goal around 14 Sep · ~11 weeks.\" Frontend-only, reuses the existing rate + remaining. Guard rails (fits the precision-over-encouragement brand): require >=3 logged points, and if the user is stalled or trending AWAY from goal, show \"Not trending toward your goal yet — keep logging\" instead of a fake date. Label it an estimate, like weekly-projection.ts already does. No backend.\n\nRough effort: S (~1-2 frontend files: a small pure helper + a card in LogWeight.tsx; data already present).",
       "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED (not auto-resolved: board judge bar is pinned at 100 and this fix has no in-app timestamped-row screenshot to self-score a perfect 100 - the QA account has 0 friend events). Root cause exactly as diagnosed: ActivityFeedResource serialized created_at via naive isoformat() with no 'Z' (backend.py:11038); frontend timeAgo() then parsed it as LOCAL time. Fix: append '+Z' to match every other timestamp endpoint (messages/notifications/coach.py). Backend committed (91716be), pushed, deployed to prod, health OK; prod serializer now emits '2026-07-12T04:30:00Z'. Ready to resolve once you lower the satisfaction slider or verify on the next alpha (log any friend activity -> Social feed -> labels now match real time in IST).",
-      "reviewedAt": "2026-07-12T07:04:21.077Z",
+      "reviewReason": "BUILT + PUSHED (not auto-resolved: judge bar pinned 100/100 and my honest self-score is 87 — the QA account currently trends AWAY from goal, so the live screenshot proves the off-track guard state, not the marquee on-track DATE line). Feature: Goal ETA on /log-weight (frontend-only, commit d2b29584). New pure helper src/lib/goal-eta.ts divides your observed EWMA pace (weightTrend.ratePerWeek) into the remaining kg to project the goal DATE — the reality-based counterpart to the plan-pace WeeklyTrajectory. On-track shows 'On track for <date> · ~N wk at your pace · estimate'; guards to 'Not trending toward your goal yet — keep logging' when stalled (<0.05 kg/wk), trending away, at goal, or >3y out; needs >=3 logged points. i18n in all 4 bundles (en/hi/hinglish/xx-AE); goal-eta 8/8, tsc clean; Section 30 updated. Ready to resolve once you lower the satisfaction slider, or log a couple of on-pace weights so the date line renders and I can re-capture the on-track proof.",
+      "reviewedAt": "2026-07-12T07:43:25.368Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T09:16:11.947Z",
+      "resolvedAt": "2026-07-12T09:16:13.883Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T09:16:11.947Z"
+      "archivedAt": "2026-07-12T09:16:13.883Z"
     }
   ]
 }
