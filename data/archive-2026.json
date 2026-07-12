@@ -19195,6 +19195,32 @@
       "resolvedAt": "2026-07-11T06:29:00.729Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-11T06:29:00.729Z"
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "createdAt": "2026-07-11T16:49:08.451Z",
+      "id": "i-20260711-actl",
+      "description": "[suggestion] Ad-hoc activity logging — a \"Log activity\" sheet so a user can record a run, walk, cricket/badminton game, swim, or yoga session that is NOT part of their AI workout plan.\n\nUser problem: the Activity screen only lets you tick off pre-generated plan exercises; on a rest day, or for anyone without a plan, it is a dead end whose only button is \"Create workout plan.\" Real training done off-script (cardio, sport, walking — the mass-market India activities) can never be recorded, so it never counts toward streaks, calories burned, or progress.\n\nEvidence: the client + backend ALREADY fully support this — LogActivityRequest accepts activity_type 'steps'|'cardio'|'sport'|'swimming'|'other' with name/duration/distance/calories/steps (src/types/api.ts:931) and loggingService.logActivity POSTs /logs/activity (src/services/logging.service.ts:96) — but the ONLY caller is the plan-bound tick-off in src/components/activity/ActivityMarkSection.tsx:106; no free-form user affordance exists (empty state routes to /ai/create-workout-plan only, Activity.tsx:1050). The schema was built for ad-hoc logging; the UI for it never shipped.\n\nProposed v1: a bottom-sheet (activity-type chips + name + duration + optional distance/calories/steps + notes) opened from a \"Log activity\" button on /activity (and a Dashboard quick-action), POSTing to the existing endpoint; render today's ad-hoc entries in a small list under the plan. No backend work.\n\nRough effort: S–M (~2 files; endpoint, types, and gamification hook already live).",
+      "needsReview": true,
+      "reviewReason": "SHIPPED (frontend commit 030c9d39, docs 896ad905, pushed to main). Built the ad-hoc 'Log activity' bottom sheet exactly as scoped: a full-width 'Log activity' button on /activity opens a sheet with activity-type chips (Run/Cardio, Walk/Steps, Sport, Swim, Other) + name + duration + optional distance/calories/steps + notes, POSTing to the existing /logs/activity endpoint (loggingService.logActivity — no backend work, endpoint+type+gamification hook were already live). Today's off-plan entries render under the form (plan-activity names excluded so plan tick-offs aren't duplicated) with a remove control (unlogActivity). Fully localized en/hi/hinglish/xx-AE at 4-bundle parity. Verified live at 390x844: logged 'QA Evening Run 35min/5km' -> it POSTed, persisted, appeared in 'Also logged today', and removed cleanly; 0 console errors; tsc clean. Fix proof PNG: tmp/i-20260711-actl-fix.png. WHY REVIEW not RESOLVE: the board test gate requires --tests pass (full 'npm test' = vitest + Playwright e2e + PACT + a11y-canvas, ~39min and RED on headless infra, not on this fix), which is unsatisfiable in the headless tick — I will not fake --tests pass. Please verify on your device and Resolve, or scope loop.json testCommand to a unit subset so the gate can pass. Deferred (fast-follow): Dashboard quick-action entry point (v1 is /activity only).",
+      "reviewedAt": "2026-07-11T17:36:36.085Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-12T00:13:59.355Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-12T00:13:59.355Z"
     }
   ]
 }
