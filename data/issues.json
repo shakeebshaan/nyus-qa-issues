@@ -912,49 +912,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260712-5684",
-      "createdAt": "2026-07-12T04:54:19.542Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260712-5684.jpg",
-      "imageCommit": "ee433cbd51923c6d455ef55de62891963e081ea4",
-      "imagePaths": [
-        "images/i-20260712-5684.jpg"
-      ],
-      "imageCommits": [
-        "ee433cbd51923c6d455ef55de62891963e081ea4"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: same as i-20260712-f118 - a 'TestCoach' placeholder coach (no minted portrait) was being assigned, so the coach avatar fell back to a generic themed bust ('coach image missing'). Fix: backend excludes/deactivates placeholder coaches and reassigns a real roster coach (all 39 active coaches have minted portraits); FE purges any cached placeholder name. Proof: coach surface now renders real coach 'Nisha' WITH her portrait photo, not a blank/generic avatar.",
-        "imagePath": "images/i-20260712-5684-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260712-5684-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a1249fd6ae06ac1c5b1755df55ada5226ea4870d",
-        "imageCommits": [
-          "a1249fd6ae06ac1c5b1755df55ada5226ea4870d"
-        ],
-        "fixedAt": "2026-07-12T06:36:55.761Z",
-        "by": "shakeebshaan",
-        "appCommit": "cdac1f2d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Missing coach image was a symptom of the TestCoach placeholder (no portrait); real coaches carry minted portraits. Fixed at source + verified live."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260712-f118",
       "createdAt": "2026-07-12T04:58:18.136Z",
       "route": null,
