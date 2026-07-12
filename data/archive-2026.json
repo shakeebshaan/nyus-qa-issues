@@ -19197,27 +19197,49 @@
       "archivedAt": "2026-07-11T06:29:00.729Z"
     },
     {
-      "id": "i-20260708-acce",
-      "createdAt": "2026-07-08T20:40:46.805Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
+      "id": "i-20260711-e23a",
+      "createdAt": "2026-07-11T11:39:59.248Z",
+      "route": "/profile",
+      "description": "[bug-hunt] Profile > Hydration: the daily water-goal stepper steps by 250 ml, but the goal persists to a Numeric(3,1) column (0.1 L / 100 ml granularity), so odd-250 goals are silently rounded and the stepper drifts off its own grid. Expected: the value you tap is saved and shown. Actual: from 2.5 L, tapping + shows 2.75 L then snaps to 2.8 L after the save round-trips (2750 ml -> PUT target_water_liters=2.75 -> DB rounds to 2.8 -> refetch re-seeds 2800 ml); every later tap then drifts by +300 ml (2.8->3.1->3.4...), never landing back on the 250 grid, so 2750/3250/3750 ml can never be saved. The Nutrition water tracker reads the same hydration-prefs query key, so it inherits the wrong rounded goal too. Repro: Profile -> HYDRATION -> Daily goal + once -> watch the value snap 2.5 -> 2.75 -> 2.8 L. Files: src/pages/_components/profile/ProfileHydrationSection.tsx:19 (GOAL_STEP=250) + src/services/other.service.ts:106 (Math.round(goalMl)/1000) + backend db_models.py:1315 (target_water_liters Numeric(3,1)). Fix: set GOAL_STEP=500 (frontend-only; 0.5-L steps are representable) OR widen the column to Numeric(4,2) via migration.",
       "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: hydration goal stepped by 250 ml but persists to a Numeric(3,1) column (0.1 L granularity), so 2.75 L rounded to 2.8 L and every later tap drifted off the 250 grid. Fix: GOAL_STEP=500 in ProfileHydrationSection.tsx (frontend-only) so every value is representable in 0.1 L and round-trips exactly. Verified live: 3.0 -> 3.5 L held after save+refetch, no snap.",
+        "imagePath": "images/i-20260711-e23a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260711-e23a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0edaaf3226e254bd80f535cec8bcbcfabb4c3178",
+        "imageCommits": [
+          "0edaaf3226e254bd80f535cec8bcbcfabb4c3178"
+        ],
+        "fixedAt": "2026-07-11T12:03:28.244Z",
+        "by": "shakeebshaan",
+        "appCommit": "2b4be366",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 100,
+          "bar": 100,
+          "note": "Root-caused to the DB column granularity; 500 ml step is exactly representable so drift is impossible. Verified end-to-end in browser: value held through the save round-trip. tsc clean."
+        }
+      },
+      "history": [],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "resolved",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Fix already shipped: commit 463537e made Resolve OPTIMISTIC — the card now leaves the board instantly on click (state updates locally, the GitHub write reconciles in the background) instead of waiting on the API round-trip that made it feel stuck. Please retest from your phone: tap Resolve on any in-review card — it should disappear immediately. If it still lags, it's the network write reconciling; tell me and I'll add a spinner+toast on the button so the click always feels acknowledged. (Related to c695 board-feel.)",
-      "reviewedAt": "2026-07-11T07:02:07.505Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-12T00:14:41.868Z",
+      "needsReview": false,
+      "resolvedAt": "2026-07-12T00:14:51.736Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-12T00:14:41.868Z"
+      "archivedAt": "2026-07-12T00:14:51.736Z"
     }
   ]
 }
