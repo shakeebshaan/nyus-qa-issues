@@ -690,15 +690,16 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Update on 'do all': found + fixed the core reason the edit felt like nothing changed. The earlier 'targets rescale by construction' note was WRONG for real users - traced it this tick (QA i-20260712-9b2c): the /nutrition ring + per-meal splits read GET /diet/plan, which PREFERS the active plan's WeeklyMacroTarget rows over the UserProfile columns the editor was writing. Onboarding always seeds a plan, so the edit was a silent no-op for the majority. Fixed (backend 47cb15f, DEPLOYED): PUT /profile/macro-targets now also updates the active plan's current-week + future-week WeeklyMacroTarget rows, so the daily calorie/macro TARGETS truly rescale on the ring + per-meal target splits. 2/2 integration tests green (test_macro_targets_propagation.py). ONE slice remains for full 'scaled accordingly': re-cooking the already-assigned MEAL PORTIONS to hit the new grams (an LLM re-portioning pass) - separate build tick. Flagging so you can verify on-device (headless has no onboarded account to screenshot the live ring).",
-      "reviewedAt": "2026-07-12T16:07:39.213Z",
+      "reviewReason": "Slice 2 (\"do all\") is BUILT + DEPLOYED, not fake-resolved. PUT /profile/macro-targets now re-portions the active plan's today+future UN-EATEN meals to the new calorie target (deterministic linear scale, no LLM, no migration), so the /nutrition meal cards sum to the ring goal after an edit — that was the remaining gap. Backend commit b3b4c14 (deployed to prod, /health OK), flow-doc frontend 5fae0086. Integration test test_macro_targets_meal_rescale.py 2/2 green: proves a fresh day rescales exactly to the new target, and an already-eaten meal is never rewritten. Guardrails: never touches eaten meals (logged intake preserved), per-day remaining budget, preserves prior user portion tweaks, factor clamped [0.1,5.0], skips recipe-less meals, best-effort so a rescale failure can never lose the target edit.\n\nThe one thing I cannot do headless is the authenticated on-device screenshot proving the ring + cards now agree: every QA/onboarded account was deleted 2026-07-12 and a health-profile-less admin account 404s /profile & /nutrition, so there is no data account to capture. Per your mandatory-screenshot directive I am not resolving without bar-clearing proof. Please verify on your device, OR restore one onboarded test account and I will capture the before/after and resolve immediately.",
+      "reviewedAt": "2026-07-12T16:35:00.130Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "do all",
       "reviewRepliedAt": "2026-07-12T11:02:01.429Z",
       "reviewReplyBy": "shakeebshaan",
       "tags": [
         "feature",
-        "shipped"
+        "shipped",
+        "needs-account"
       ]
     },
     {
