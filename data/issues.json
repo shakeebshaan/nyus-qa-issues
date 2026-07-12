@@ -55,48 +55,6 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: buildRestCue (src/pages/Activity.tsx) had no final-set guard and framed the just-logged reps as the next set's Target. After the last set of a 3-set exercise it spoke a phantom 'set 4 of 3', and on an under-target set it mis-coached the low reps as the target. Fix: extracted to src/lib/restCue.ts (pure) - returns undefined when nextSet > target_sets (RestTimer then skips speech), and the Target line now reads the plan's prescribed reps from current_target (e.g. '3x8-10' -> '8 to 10'), not the reps just logged. Proof: voice/audio-only behavior with no visual surface (cue fires only after logging the final set of a LIVE workout; screenshot shows the correct /activity route on a rest day). Verified by new unit test test/restCue.test.ts (6/6 green) covering final-set suppression + prescribed-vs-logged reps.",
-        "imagePath": "images/i-20260711-b7e2-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260711-b7e2-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "2871904f05270397550984ef6538bc9ad1d651ae",
-        "imageCommits": [
-          "2871904f05270397550984ef6538bc9ad1d651ae"
-        ],
-        "fixedAt": "2026-07-11T21:41:12.580Z",
-        "by": "shakeebshaan",
-        "appCommit": "66462344",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 100,
-          "bar": 100,
-          "note": "Root-caused to buildRestCue; both reported defects fixed (final-set suppression + prescribed-reps target); unit-tested 6/6; tsc clean; minimal surgical scope. Non-visual voice bug so proof is the test + affected-route screenshot."
-        }
-      },
-      "history": [],
-      "createdAt": "2026-07-11T21:16:39.865Z",
-      "id": "i-20260711-b7e2",
-      "description": "[bug-hunt] Voice rest-timer cue announces a phantom \"set N+1 of N\" after the FINAL set, contradicting the on-screen \"Workout complete\"/\"Next up\", and mislabels the just-completed set's reps/weight as the next set's \"Target\". New voice-cues feature (commit b7df14c5), opt-in (Profile > Voice cues) + Sounds on.\n\nRoot cause (src/pages/Activity.tsx):\n- The rest timer arms after EVERY logged set while the picker is open, with NO final-set guard: logSetMutation.onSuccess sets lastLoggedSetRef then, if isModalOpen.current, restarts the timer (Activity.tsx:515-533).\n- buildRestCue always computes nextSet = (lastSet.set_number ?? 0)+1 and appends \" of {target_sets}\" (Activity.tsx:57-59). After logging the last set of a 3-set exercise: lastLoggedSet=3 -> nextSet=4, total=3 -> \"set 4 of 3\".\n- The cue is spoken by RestTimer's completion effect (RestTimer.tsx:51 speakRestCue(announceOnComplete)) after the rest duration elapses.\n- Secondary (same root): the \"Target {reps} reps at {kg} kilos\" line (Activity.tsx:60-61) uses lastLoggedSetRef — the set JUST COMPLETED — but frames it as the upcoming set's TARGET, ignoring the plan's prescribed target (currentExercise.current_target). On a failed/under-target set (did 5 of a 10 target) it announces \"Target 5 reps\" — mis-coaching.\n\nRepro:\n1. Profile > Preferences: Sounds ON, Voice cues ON.\n2. /activity -> start a live workout -> open a 3-set exercise -> log set 3/3. Do NOT tap Continue/Finish; pocket the phone.\n3. After the 90s rest, the phone says: \"Rest over. Next: <exercise>, set 4 of 3. Target <last reps> at <last kg> kilos.\"\nExpected: no cue after the last set (or announce the real next exercise / prescribed target).\nActual: phantom set \"4 of 3\"; if a next exercise exists the screen says \"Next up: Squats\" while the voice says the finished exercise \"set 4 of 3\" (double-wrong). Distinct from fixed 2ea5 (that was workout-completion detection, not the spoken cue).\n\nFix: suppress the cue when nextSet > target_sets (final set), and base the \"Target\" line on the plan's prescribed next-set target rather than lastLoggedSetRef.",
-      "needsReview": false
-    },
-    {
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "route": "/activity",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
       "status": "open",
       "fix": null,
       "history": [],
