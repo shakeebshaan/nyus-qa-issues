@@ -19841,12 +19841,14 @@
       "archivedAt": "2026-07-13T02:19:49.302Z"
     },
     {
-      "id": "i-20260712-bd63",
-      "createdAt": "2026-07-12T09:09:10.469Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
+      "id": "i-20260713-c3f1",
+      "createdAt": "2026-07-13T01:39:23.388Z",
+      "route": "/recipe-detail",
       "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19854,54 +19856,15 @@
       "imagePrivate": false,
       "status": "resolved",
       "fix": null,
-      "history": [
-        {
-          "at": "2026-07-13T01:31:52.564Z",
-          "event": "reopened",
-          "note": "Send the app to playstore",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: the Profile 'Adjust macro targets' editor moved your nutrition ring goal, but the day's meal cards stayed portioned to the OLD calories — and editing only protein/carbs/fat did not rescale the meals at all — so the ring and the meal cards disagreed. Fix: the backend now re-portions your upcoming un-eaten meals to the exact number the ring shows (protein x4 + carbs x4 + fat x9) on ANY macro or calorie edit, so the meal cards always add up to the ring goal. Proof: the editor sets 1940 kcal / 150-200-60 and the nutrition ring goal (1940) equals the sum of the meal cards (500+540+500+400 = 1940). Backend commit dcbdfe7 (deployed).",
-            "imagePath": "images/i-20260712-bd63-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260712-bd63-fix-r1.png",
-              "images/i-20260712-bd63-fix-r1-2.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "9945f2ef783ffb8da9794e3f625e03f1d9b25d59",
-            "imageCommits": [
-              "9945f2ef783ffb8da9794e3f625e03f1d9b25d59",
-              "93925cfd558096482853325ff910af778e3e6356"
-            ],
-            "fixedAt": "2026-07-12T17:20:22.247Z",
-            "by": "shakeebshaan",
-            "appCommit": "57da7915",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 96,
-              "bar": 90,
-              "note": "Backend rescale now targets macro_kcal (the ring value) on any edit; pytest 3/3 + 2/2 propagation; scenario-capture proves ring goal == summed meal cards on the real screens."
-            }
-          }
-        }
-      ],
+      "history": [],
+      "description": "[bug-hunt] In the Recipe Detail meal editor (/recipe-detail, reached by tapping a meal in Nutrition or MealDetail), editing or removing an individual part of a COMBINED ingredient row (an ingredient whose NAME joins foods, e.g. \"Dal with Rice\" / \"Chicken and Vegetables\" / \"Rice + Beans\") does not persist. Save shows a \"Recipe updated for today\" success toast, but on reload the removed part reappears and any uneven per-part quantities are silently redistributed EVENLY.\n\nROOT CAUSE (frontend expand/collapse vs backend re-split mismatch):\n- GET /diet/recipes/<id> expands a combined-name ingredient into per-part rows with STRING ids like \"42-0\",\"42-1\" via _expand_combined (backend.py:6971-7090); per_part_qty = round(parent_qty / part_count). So one DB Ingredient (id 42 \"Dal with Rice\", 200g) is served to the FE as two editable rows: \"Dal\" (\"42-0\", 100g) + \"Rice\" (\"42-1\", 100g).\n- RecipeDetail renders each split row as a normal editable/removable row with no split awareness (RecipeDetail.tsx:420-524) — the user naturally edits/removes them individually.\n- handleSaveChanges (RecipeDetail.tsx:146-177) COLLAPSES every split row back to its parent INTEGER id and SUMS the quantities: rawId.includes('-') ? parseInt(rawId.split('-')[0]) — so both \"42-0\" and \"42-1\" fold into ingredient_id 42 with quantity = sum. The per-part distribution is discarded; a removed part just lowers the parent sum.\n- POST /diet/log-modification is a full-replace UserMealModification keyed by integer ingredient_id (backend.py:7418-7420).\n- The next GET reads the modification back and re-expands it by NAME through the SAME _expand_combined (backend.py:7110-7126) — the parent name still contains both foods, so it re-splits EVENLY again.\n\nMANIFESTATION A (remove doesn't stick): remove \"Rice\" from \"Dal with Rice\", Save. currentIngredients now has only \"Dal\" (100g) -> payload {ingredient_id:42, quantity:100}. Reload -> _expand_combined(\"Dal with Rice\", 100) -> \"Dal\" 50g + \"Rice\" 50g. Rice is BACK (at half) and Dal was halved. The removal is silently undone.\n\nMANIFESTATION B (uneven edit redistributed): set \"Dal\" 150g, leave \"Rice\" 100g, Save. Payload {42, 250}. Reload -> 250/2 -> \"Dal\" 125g + \"Rice\" 125g. The \"more dal, less rice\" intent is erased.\n\nOnly affects ingredients whose NAME combines foods (split on \" with \"/\" and \"/&/+), which is common in this India-focused app's AI meal plans (dal-and-rice, paneer-with-roti, chana-and-rice). Single-name ingredients round-trip fine (len(parts)<2 -> same integer id in and out).\n\nEXPECTED: removing a part removes it; an uneven per-part edit persists as edited.\nACTUAL: success toast, then reload reverts the removal and evens out the quantities (silent data loss).\n\nREPRO: Nutrition -> tap a meal whose recipe has a combined-name ingredient -> in the ingredient list remove one half of that row (or bump only one half) -> Save -> reopen the recipe: the removed half is back and both halves are equal.\n\nFIX: preserve the expanded view across the round-trip — e.g. have the backend NOT re-split when an active modification exists (persist + read the expanded rows keyed by the string part id), or have the FE send per-part quantities the backend can honor, so a removed/resized part is not reconstituted from the parent name.",
       "needsReview": true,
+      "reviewReason": "FIXED + shipped (FE fc5eedf2, backend 2efde98 deployed to prod, health OK). Root cause: GET /diet/recipes/<id> re-expanded stored modifications by the parent combined NAME, so removing/uneven-editing one part of a 'Dal with Rice' row was reverted to an even 50/50 split on reload. Fix: save now persists the exact edited display rows (schema rows_v2) and the backend returns them verbatim (no re-split); legacy portion-scaler payloads unchanged. Verified by 2 new RecipeDetail page tests (per-part removal + uneven qty persist without collapsing to the parent) — full suite 29/29 green. Flagging for review because the live /recipe-detail round-trip can't be screenshotted headlessly: the QA test account is data-less (empty /nutrition, no meal recipe to open). Please verify on-device, or it rides the next alpha build.",
+      "reviewedAt": "2026-07-13T03:13:54.282Z",
       "reviewedBy": "shakeebshaan",
-      "reviewReply": "do all",
-      "reviewRepliedAt": "2026-07-12T11:02:01.429Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "feature",
-        "shipped",
-        "needs-account"
-      ],
-      "reviewReason": "Macro editor is DONE and already shipping in the current alpha build (v203): ProfileMacroTargetsCard on the Profile page opens a full editor sheet (daily kcal + protein/carbs/fat) with live Atwater reconciliation, and on save it invalidates every target-dependent query (nutrition ring, per-meal splits, dashboard cards, AI overview, server calorie target) so everything rescales at once — the 'scaled accordingly' ask. Code committed 92b83cd7 / present in v203 (tag 9b35e579). The only open item in your reopen is 'send the app to playstore': v203 with this feature is already on the closed/alpha testing track. Promoting alpha -> PRODUCTION is the owner-gated 'release the app' step (per project policy I auto-ship backend + alpha but never auto-promote to production). Want me to promote v203 to production now? Reply 'release' and I'll run fastlane release.",
-      "reviewedAt": "2026-07-13T02:55:39.066Z",
-      "resolvedAt": "2026-07-13T03:17:25.733Z",
+      "resolvedAt": "2026-07-13T03:18:42.454Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T03:17:25.733Z"
+      "archivedAt": "2026-07-13T03:18:42.454Z"
     }
   ]
 }
