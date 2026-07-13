@@ -20111,53 +20111,63 @@
       "archivedAt": "2026-07-13T08:35:48.427Z"
     },
     {
-      "id": "i-20260713-ab7b",
-      "createdAt": "2026-07-13T03:14:23.281Z",
+      "id": "i-20260713-518b",
+      "createdAt": "2026-07-13T03:17:57.354Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "imagePath": "images/i-20260713-518b-0.jpg",
+      "imageCommit": "5e2dd33a1c024d25879a6ee68ba808791809076c",
+      "imagePaths": [
+        "images/i-20260713-518b-0.jpg",
+        "images/i-20260713-518b-1.jpg"
+      ],
+      "imageCommits": [
+        "5e2dd33a1c024d25879a6ee68ba808791809076c",
+        "ab01b59a79fa2c40b547eaa63fc87e763caa2791"
+      ],
+      "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Built the wake-on-new-issue watcher you asked for. New scheduled task \\NYUS-Loops\\issue-watch (runs every 5 min) reads the board and, when a NEW actionable issue lands, fires an EARLY fix-issues tick instead of waiting for the fixed 30-min slot — so Claude no longer 'sits there'. Because it retries every 5 min, it also auto-resumes the instant a usage-limit window opens (the '...if Claude has a limit it works on the issues' part). Fully guarded so it can't spiral/double-run: 8-min min-kick-gap, runner.lock + running-task check, and an opus limit-gate that defers (and retries) when both model windows are blocked. It excludes auto-log [content]/[discovery]/[press] cards and owner-blocked review items. Verified live: detected 3 actionable open issues and correctly deferred while another tick was running (see proof). This is infra (the desktop loop runner), not app code.",
-        "imagePath": "images/i-20260713-ab7b-fix-r1.png",
+        "description": "Added a Share button on the Fasting screen that generates a branded shareable card - NYUS mark, the fasting ring (e.g. 10h 44m of 16h), your current streak + N/7-this-week, nyus.in tag - via the app's existing capture-to-native-share pipeline. Appears whenever there's an active fast or fasting history.",
+        "imagePath": "images/i-20260713-518b-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-ab7b-fix-r1.png"
+          "images/i-20260713-518b-fix-r1.png",
+          "images/i-20260713-518b-fix-r1-2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "c8df545d950ebab3e99e15e03e583335e8733cdf",
+        "imageCommit": "eb977fba8df16094bc22ea9fff62b3369ff9b640",
         "imageCommits": [
-          "c8df545d950ebab3e99e15e03e583335e8733cdf"
+          "eb977fba8df16094bc22ea9fff62b3369ff9b640",
+          "2d469222d6c1a7da30a7bd3403206228262f19e0"
         ],
-        "fixedAt": "2026-07-13T08:10:16.370Z",
+        "fixedAt": "2026-07-13T06:49:57.894Z",
         "by": "shakeebshaan",
+        "appCommit": "5d474b08",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 92,
           "bar": 90,
-          "note": "Delivers the ask end-to-end (wake-on-new-issue + limit-aware auto-resume) as a guarded, additive watcher that cannot break the existing fleet; detection+defer verified live. A 5-min poll is the right tool here (the board exposes no push webhook) and gives near-instant pickup."
+          "note": "Verified live: branded share card renders + Share button on /fasting; calm design, matches the scroll-stopper ask."
         }
       },
       "history": [],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "infra",
-        "runner"
+        "feature",
+        "design",
+        "blocked"
       ],
-      "reviewReply": "search desktop",
-      "reviewRepliedAt": "2026-07-13T04:29:55.047Z",
+      "reviewReply": "do it",
+      "reviewRepliedAt": "2026-07-13T04:29:11.117Z",
       "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-13T08:36:38.831Z",
+      "resolvedAt": "2026-07-13T08:36:52.132Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T08:36:38.831Z"
+      "archivedAt": "2026-07-13T08:36:52.132Z"
     }
   ]
 }
