@@ -19839,6 +19839,69 @@
       "resolvedAt": "2026-07-13T02:19:49.302Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-13T02:19:49.302Z"
+    },
+    {
+      "id": "i-20260712-bd63",
+      "createdAt": "2026-07-12T09:09:10.469Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-13T01:31:52.564Z",
+          "event": "reopened",
+          "note": "Send the app to playstore",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the Profile 'Adjust macro targets' editor moved your nutrition ring goal, but the day's meal cards stayed portioned to the OLD calories — and editing only protein/carbs/fat did not rescale the meals at all — so the ring and the meal cards disagreed. Fix: the backend now re-portions your upcoming un-eaten meals to the exact number the ring shows (protein x4 + carbs x4 + fat x9) on ANY macro or calorie edit, so the meal cards always add up to the ring goal. Proof: the editor sets 1940 kcal / 150-200-60 and the nutrition ring goal (1940) equals the sum of the meal cards (500+540+500+400 = 1940). Backend commit dcbdfe7 (deployed).",
+            "imagePath": "images/i-20260712-bd63-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260712-bd63-fix-r1.png",
+              "images/i-20260712-bd63-fix-r1-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "9945f2ef783ffb8da9794e3f625e03f1d9b25d59",
+            "imageCommits": [
+              "9945f2ef783ffb8da9794e3f625e03f1d9b25d59",
+              "93925cfd558096482853325ff910af778e3e6356"
+            ],
+            "fixedAt": "2026-07-12T17:20:22.247Z",
+            "by": "shakeebshaan",
+            "appCommit": "57da7915",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 96,
+              "bar": 90,
+              "note": "Backend rescale now targets macro_kcal (the ring value) on any edit; pytest 3/3 + 2/2 propagation; scenario-capture proves ring goal == summed meal cards on the real screens."
+            }
+          }
+        }
+      ],
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "do all",
+      "reviewRepliedAt": "2026-07-12T11:02:01.429Z",
+      "reviewReplyBy": "shakeebshaan",
+      "tags": [
+        "feature",
+        "shipped",
+        "needs-account"
+      ],
+      "reviewReason": "Macro editor is DONE and already shipping in the current alpha build (v203): ProfileMacroTargetsCard on the Profile page opens a full editor sheet (daily kcal + protein/carbs/fat) with live Atwater reconciliation, and on save it invalidates every target-dependent query (nutrition ring, per-meal splits, dashboard cards, AI overview, server calorie target) so everything rescales at once — the 'scaled accordingly' ask. Code committed 92b83cd7 / present in v203 (tag 9b35e579). The only open item in your reopen is 'send the app to playstore': v203 with this feature is already on the closed/alpha testing track. Promoting alpha -> PRODUCTION is the owner-gated 'release the app' step (per project policy I auto-ship backend + alpha but never auto-promote to production). Want me to promote v203 to production now? Reply 'release' and I'll run fastlane release.",
+      "reviewedAt": "2026-07-13T02:55:39.066Z",
+      "resolvedAt": "2026-07-13T03:17:25.733Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-13T03:17:25.733Z"
     }
   ]
 }
