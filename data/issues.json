@@ -62,48 +62,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260713-a7e9",
-      "createdAt": "2026-07-13T02:23:27.495Z",
-      "route": "/health-score",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: HealthScore.tsx onRefresh only called refetch() (re-GET of the last persisted snapshot); the /recompute endpoint + recompute() client method had zero callers, so Refresh never recomputed. Fix: new handleRefresh awaits healthScoreService.recompute() then refetch(), with the backend 1/5min rate-limit (429) surfaced as a calm toast. Verified: network log shows POST /recompute 200 then GET, and 'Last updated' reset to 0 min ago.",
-        "imagePath": "images/i-20260713-a7e9-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-a7e9-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c1a1fc1c55291433930dd39651b88c693ad936d6",
-        "imageCommits": [
-          "c1a1fc1c55291433930dd39651b88c693ad936d6"
-        ],
-        "fixedAt": "2026-07-13T02:51:02.374Z",
-        "by": "shakeebshaan",
-        "appCommit": "462c98b7",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 91,
-          "bar": 90,
-          "note": "Verified in-browser: tapping Refresh now fires POST /health-score/recompute (200) then GET /health-score (network log req 333-334); 'Last updated' reset from 7 min to 0 min ago, proving a real recompute vs the old stale re-GET. 429 rate-limit handled with a calm toast."
-        }
-      },
-      "history": [],
-      "description": "[bug-hunt] Health Score page (/health-score): the header \"Refresh\" button (RefreshCcw icon, aria-label \"Refresh\") does NOT recompute the score — it only re-reads the last saved snapshot. The fully-implemented, rate-limited backend endpoint POST /api/v1/health-score/recompute and the matching client method healthScoreService.recompute() are wired to NOTHING (0 callers anywhere in src/).\n\nROOT CAUSE:\n- HealthScore.tsx onRefresh handlers (lines 266, 297) call refetch() from the useQuery([health-score,current]) query, i.e. they re-GET /health-score/ which returns get_latest() (the most recent PERSISTED snapshot).\n- New snapshots are only created by: quiz submit, the nightly job (nightly_health_score_recompute, active-plan users only), or the manual /recompute endpoint. Nothing in the app ever hits /recompute — grep for \"recompute(\" across src/ finds only the service definition (healthScore.service.ts:100-107), no call site.\n- So tapping Refresh after logging meals/workouts/weight re-fetches the identical stale snapshot and just spins the icon; the score does not change until the nightly job runs (and never, for a user with no active fitness plan, since the nightly job filters to status=active plans).\n\nMANIFESTATION: user opens /health-score, logs a workout + meals, taps the Refresh button expecting an updated score. The RefreshCcw spins and the same number comes back. The affordance strongly implies \"recompute my score now\" but is only a cache refetch.\n\nEXPECTED: Refresh recomputes from current data (call recompute() then refetch), respecting the 429 rate-limit the backend already enforces (1/5min).\nACTUAL: Refresh only re-reads the last snapshot; /recompute + recompute() are dead/unwired, so the button rarely changes anything.\n\nREPRO: /health-score -> note score -> log a workout and several meals from the app -> return to /health-score -> tap the Refresh (circular-arrows) icon -> score is unchanged (no recompute occurred).\n\nFIX: wire the Refresh button to await healthScoreService.recompute() (handle the 429 rate-limit -> toast \"Try again in a few minutes\") and then refetch(), so Refresh actually recomputes; alternatively relabel it if a read-only refresh is intended.",
-      "needsReview": false
-    },
-    {
       "id": "i-20260713-8f2c",
       "createdAt": "2026-07-13T00:00:00.000Z",
       "status": "open",
