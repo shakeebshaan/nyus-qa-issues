@@ -20510,29 +20510,50 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260712-b4e1",
-      "createdAt": "2026-07-12T23:41:55.249Z",
+      "id": "i-20260713-9d98",
+      "createdAt": "2026-07-13T22:38:21Z",
       "status": "resolved",
-      "route": "/nutrition",
-      "description": "[suggestion] Quick-add \"Recent meals\" row for one-tap re-logging of frequently eaten foods. Problem: meal logging (FoodSearchSheet) requires a full search+select+qty flow every time, even for the same dal/roti/protein-shake a user eats daily — the highest-frequency action in the app has the highest friction, which is a known churn driver in nutrition trackers (MyFitnessPal/Cronometer both ship \"recent\" and \"favorites\" as their #1 speed feature). Evidence: grepped src/pages/_components/nutrition + components/plan-builder — no favorites/recent/quick-add/log-again surface exists anywhere in the logging flow today. Proposed v1: backend endpoint returning the user’s last 8 distinct logged foods (query existing meal-log table, group by food_id, order by last-logged desc) + a \"Recent\" chip row atop FoodSearchSheet; tapping re-logs the same food/qty at current time via the existing log-meal endpoint (no new write path). Effort: ~1 backend endpoint (S) + ~1 FE component insert (S), no schema change — half-day.",
+      "route": "/activity",
+      "title": "Recurring Daily-activity done-state matched by name, not id — dup-name under-count + rename orphans calorie log",
+      "description": "[bug-hunt] Recurring \"Daily activity\" done-state is matched by name string, not by id (no FK link) — duplicate-name completions under-count, and renaming a done activity orphans its calorie log.\n\nArea: recurring off-plan \"Daily activity\" (NEW feature, commit 2f33). Route: /activity.\n\nROOT CAUSE: a recurring completion is tracked two disjoint ways — the scalar RecurringActivity.last_done_date (drives done_today in recurring_activities.py:_serialize line 112) AND an ActivityLog(source=recurring) that mark_done/undo_done match purely by activity_name string (recurring_activities.py:234 and :273). db_models RecurringActivity/ActivityLog have NO id link (no recurring_activity_id column/FK), so the name is the only join key. Any two recurring rows that share a name — or a rename after being marked done — desyncs the scalar from the log.\n\nREPRO 1 (duplicate name -> silent under-count): /activity -> Daily activity card -> Recurring -> add Walk, Every day, 100 cal -> Save; add Walk again (same name), 100 cal -> Save. Both show due today. Tap Done on the first Walk, then Done on the second.\n  Expected: two ActivityLog(source=recurring) rows -> 200 cal + both count toward today's activity total/streak.\n  Actual: mark_done (recurring_activities.py:232-236) finds an existing ActivityLog by user_id+log_date+source=recurring+activity_name=Walk = the FIRST Walk's log -> skips the insert and only bumps the 2nd row's last_done_date. Both render Done, but only ONE log (100 cal) exists -> the 2nd Walk's calories/streak are silently uncounted. Undo the first Walk -> its single log is deleted, leaving the 2nd Walk showing Done with zero backing logs.\n\nREPRO 2 (rename a done activity -> orphaned phantom calories + double count): add Treadmill, 200 cal, Every day -> Save. Tap Done -> ActivityLog(name=Treadmill, 200 cal, source=recurring), last_done_date=today, shows Done. Tap the row -> rename to Running -> Save (PUT). done_today stays true (last_done_date untouched) so it still shows Done. Tap Undo -> undo_done (recurring_activities.py:271-276) matches the log by activity_name=Running -> NO match -> the Treadmill log is NOT deleted, but last_done_date==today is cleared -> row flips to not-done.\n  Result: the orphaned ActivityLog(name=Treadmill, 200 cal) keeps counting toward today's calorie total + streak with NO UI affordance to remove it. Tap Done again on Running -> creates a SECOND log (name=Running, 200 cal) -> today's recurring calories double-counted (400 for one activity).\n\nBoth repros confirmed by code trace across FE (src/components/activity/DailyActivityCard.tsx done/undo/edit + src/services/recurring-activity.service.ts) and backend (app/routes/recurring_activities.py + db_models.py:2096 RecurringActivity — no recurring_activity_id on ActivityLog). tsc --noEmit clean.\n\nFIX: bind done/undo/idempotency to the specific recurring activity, not its display name — add a nullable ActivityLog.recurring_activity_id (FK + migration), write it on mark_done, and match on it in undo_done + the idempotency guard. (Lighter interim: rename the today ActivityLog when the recurring row is renamed and reject/merge duplicate recurring names — but the id link is the robust fix.)",
       "author": "shakeebshaan",
       "tags": [
-        "suggestion",
+        "bug-hunt",
         "auto"
       ],
       "imagePath": null,
+      "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: recurring Daily-activity completions were matched to their calorie log by the activity name, so two activities with the same name shared one log (the second one's calories vanished) and renaming a completed activity left an uncountable phantom log. Fix: each completion is now linked to its specific activity by id, so same-named activities count independently and renames no longer orphan a log (backend commit 9110417 + migration, deployed live). Verified on the live app: two Walk activities both log 100 cal (200 total) and undo removes exactly the right one, plus a backend integration test that fails on the old code and passes on the fix.",
+        "imagePath": "images/i-20260713-9d98-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-9d98-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ca1ee5582d85f04507f8ab6f2a2a52c87fbd6db1",
+        "imageCommits": [
+          "ca1ee5582d85f04507f8ab6f2a2a52c87fbd6db1"
+        ],
+        "fixedAt": "2026-07-13T23:01:20.586Z",
+        "by": "shakeebshaan",
+        "appCommit": "7397280b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-cause id-binding (FK), not name-match; surgical; deployed + migration applied; integration test red-before/green-after; verified live on prod (2 recurring logs/200 cal, clean undo-by-id)."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Already shipped — this suggestion's exact v1 exists in the app today. The 'Recent' one-tap re-log surface lives in the /nutrition Add-Food modal (src/components/nutrition/CustomMealModal.tsx:491-511): a horizontal 'Recent' chip row at the top of the Quick Log tab, fed by GET /logs/meal/recent?limit=8 (backend app/routes/logging.py:510 get_recent_meals — the prod-winning logging_bp) and re-logging on tap via fillFromRecent (CustomMealModal.tsx:217). The suggestion's grep only scanned src/pages/_components/nutrition + components/plan-builder, so it missed src/components/nutrition/ where the row actually lives (the plan-builder FoodSearchSheet also has a separate localStorage 'Recent' tab). No new endpoint or schema needed — recommend Resolve/dismiss. If you want it richer (e.g. show macros per chip, favorites/pin, or surface it on the diary card too), reopen with the specific ask and I'll extend it.",
-      "reviewedAt": "2026-07-13T23:05:24.129Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-13T23:35:17.467Z",
+      "needsReview": false,
+      "resolvedAt": "2026-07-13T23:37:03.189Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T23:35:17.467Z"
+      "archivedAt": "2026-07-13T23:37:03.189Z"
     }
   ]
 }
