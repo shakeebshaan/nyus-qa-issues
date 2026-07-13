@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260713-c7a3",
+      "description": "[bug-hunt] Shopping List category grouping is dead — every item renders under a single \"OTHER\" header. src/pages/ShoppingList.tsx groups items by `item.category ?? \"Other\"` and renders an uppercase category header per group, but the endpoint it calls, GET /diet/shopping-list (backend ShoppingListResource, backend.py:7522-7676), never sets a `category` on its serialized items — only name/quantity/unit/ingredient_id (backend.py:7628-7633). So item.category is always undefined, all items fall into one \"Other\" group, and the header shows \"OTHER\" over the whole list; the category-grouping UI is inert. The FE type ShoppingListItem also declares category? and est_price_inr? (src/types/api.ts:427) that the endpoint never returns. The DEV fix-proof preview (src/pages/dev/ShoppingListPreview.tsx) SEEDS fake categories (Dairy/Grains/Vegetables), so the capture looked correctly grouped while production shows one \"OTHER\" bucket. Expected: items grouped under real categories (Dairy, Grains, Vegetables, ...). Actual: single \"OTHER\" group. Repro: open /shopping-list with an active diet plan -> all items sit under one \"OTHER\" header. Fix: add category (and optionally est_price_inr) to ShoppingListResource serialization — Ingredient already has a .category column (used as ing.category in app/routes/plan_builder_routes.py:542); or point the page at the richer /grocery endpoint (app/routes/grocery.py) which already returns category+est_price_inr.",
+      "createdAt": "2026-07-13T21:53:31Z",
+      "status": "open",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "author": "shakeebshaan",
+      "route": "/shopping-list",
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260713-f81a",
       "description": "[discovery] Outlets added: 2. Pitch-ready: FnB News (fnbnews.com — editorial@saffronmedia.in). Escalated: 1.",
       "createdAt": "2026-07-13T18:41:00.000Z",
