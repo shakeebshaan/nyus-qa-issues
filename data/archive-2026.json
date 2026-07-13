@@ -19867,12 +19867,14 @@
       "archivedAt": "2026-07-13T03:18:42.454Z"
     },
     {
-      "id": "i-20260713-a731",
-      "createdAt": "2026-07-13T01:37:48.726Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
+      "id": "i-20260713-d9a4",
+      "createdAt": "2026-07-13T01:39:23.388Z",
+      "route": "/recipe-detail",
       "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -19881,13 +19883,14 @@
       "status": "resolved",
       "fix": null,
       "history": [],
+      "description": "[bug-hunt] On the Recipe Detail meal editor (/recipe-detail), any Save silently DELETES \"unmatched\" ingredient rows from today's recipe — even when the user only meant to tweak a different ingredient — while still showing a \"Recipe updated for today\" success toast.\n\nROOT CAUSE:\n- The backend serves ingredient rows it could not resolve to a food-DB entry with id=null + _unmatched:true (backend.py:7081-7089, the _expand_combined public-DB-miss + no-serving-size fallback). RecipeDetail renders these identically to normal rows — full stepper + qty input + remove button (RecipeDetail.tsx:420-524). The \"prompt the user to set a quantity\" comment at RecipeDetail.tsx:76-79 is NOT actually implemented; an unmatched row just looks like any other editable ingredient (it only lacks the \"N cal\" subline because it has no resolved macros).\n- handleSaveChanges (RecipeDetail.tsx:146-177) builds the save payload by iterating currentIngredients with `if (ing.id == null) continue;` (line ~152) — so EVERY unmatched row (id=null) is skipped from the modifications payload.\n- POST /diet/log-modification is a full REPLACE (backend.py:7418-7420) and the next GET rebuilds the ingredient list SOLELY from the saved modification's ingredients (backend.py:7110-7126). Because the unmatched rows were never sent, they are absent from the modification and vanish from the recipe on reload.\n\nSo: open a recipe that contains ANY unmatched ingredient, tweak an unrelated MATCHED ingredient's quantity, tap Save -> success toast -> reopen -> the unmatched ingredient(s) are gone. The user never asked to remove them and got no warning. (Distinct from i-20260713-c3f1: that is the combined-row re-split revert; this is the id==null skip on save.)\n\nEXPECTED: Save preserves ingredients the user did not remove (or at minimum warns that unmatched items can't be saved).\nACTUAL: unmatched rows are silently dropped on the first Save of any change; false success toast.\n\nREPRO: open a recipe whose ingredient list shows a row with no \"N cal\" subline (an unmatched row) alongside normal rows -> change any OTHER ingredient's quantity -> Save -> reopen the recipe: the macro-less row is gone.\n\nFIX: don't skip id==null rows on save — carry unmatched rows through the modification (e.g. by name/index so the backend can re-attach them), or block/flag the save with a clear message instead of silently dropping them; align with the render comment that promises the user can set their quantity.",
       "needsReview": true,
-      "reviewReason": "Release status: the app is continuously shipped to the Google Play CLOSED TESTING (alpha) track via fastlane after each shipping tick — the current build is v203 / 1.9.23 (com.nyus.nyusand), which already carries the latest QA fixes (supplements card, macro-targets editor, plan-edit reconcile, etc). Promoting alpha -> PRODUCTION (the public Play Store listing) is the owner-gated 'release the app' action: per project policy I auto-deploy the backend and push builds to alpha, but never auto-promote to production without your go-ahead. Reply 'release' (or say 'release the app') and I'll run 'fastlane release' to promote the current alpha to production. New commits since v203 (health-score Refresh recompute + Consistency cold-start) can be rolled into a v204 alpha first if you want them included — tell me and I'll bump + build.",
-      "reviewedAt": "2026-07-13T02:55:52.026Z",
+      "reviewReason": "FIXED + shipped (FE fc5eedf2, backend 2efde98 deployed to prod, health OK). Root cause: unmatched ingredient rows (id==null, no resolved macros) were skipped from the save payload ('if (ing.id == null) continue'), so the full-replace modification dropped them on reload while still showing a success toast. Fix: save now sends every displayed row verbatim by name (schema rows_v2, unmatched flag preserved) and the backend returns them as-is. Verified by a new RecipeDetail page test asserting an unmatched row survives a save that only tweaked a matched row — full suite 29/29 green. Flagging for review because the live /recipe-detail round-trip can't be screenshotted headlessly (data-less QA test account, empty /nutrition). Please verify on-device, or it rides the next alpha build.",
+      "reviewedAt": "2026-07-13T03:13:57.737Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-13T03:25:43.391Z",
+      "resolvedAt": "2026-07-13T03:26:11.169Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T03:25:43.391Z"
+      "archivedAt": "2026-07-13T03:26:11.169Z"
     }
   ]
 }
