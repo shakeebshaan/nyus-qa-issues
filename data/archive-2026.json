@@ -19893,86 +19893,49 @@
       "archivedAt": "2026-07-13T03:26:11.169Z"
     },
     {
-      "id": "i-20260713-4a68",
-      "createdAt": "2026-07-13T01:27:03.314Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
+      "id": "i-20260713-f4b2",
+      "createdAt": "2026-07-13T02:23:27.495Z",
+      "route": "/health-quiz",
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-4a68.jpg",
-      "imageCommit": "55be49945857d41c59628530be60d1914798f852",
-      "imagePaths": [
-        "images/i-20260713-4a68.jpg"
+      "tags": [
+        "bug-hunt",
+        "auto"
       ],
-      "imageCommits": [
-        "55be49945857d41c59628530be60d1914798f852"
-      ],
-      "imagePrivate": true,
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "status": "resolved",
       "fix": {
-        "description": "Reopen ask: 'clean this also add some svg of supplement etc'. Fix (SupplementsCard.tsx): added supplementIcon(name) -> maps the free-text name to a supplement-shaped lucide glyph (Pill/Tablets/Droplet/FlaskConical/Leaf) and renders it in a tinted chip on every row (today's check-off + also-tracked), so the card reads as real supplements, not bare labels. Tier-free/calm per gamification guardrails; pairs with the compact Add pill from 8679a34e.",
-        "imagePath": "images/i-20260713-4a68-fix-r2.png",
+        "description": "Root cause: _consistency_pillar (backend health_score.py) was purely live-data driven with no floor, so a fresh user with zero logs scored 0 (empty red bar) while the other 5 pillars all cushion to a quiz/neutral baseline. Fix: no logs in the 30d window -> neutral 50; otherwise blend live score toward 50 by an observed-days ramp (full trust ~14 active days). Verified on prod: fresh quiz-taker with zero logs now shows Consistency 50 (composite 78 STRONG), not 0. Unit test added.",
+        "imagePath": "images/i-20260713-f4b2-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-4a68-fix-r2.png"
+          "images/i-20260713-f4b2-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "22f0cacf17cf9ebf03c66c453321a499aade66da",
+        "imageCommit": "eeff690f935c9695b24922339776724188956ffe",
         "imageCommits": [
-          "22f0cacf17cf9ebf03c66c453321a499aade66da"
+          "eeff690f935c9695b24922339776724188956ffe"
         ],
-        "fixedAt": "2026-07-13T03:01:41.960Z",
+        "fixedAt": "2026-07-13T02:44:35.059Z",
         "by": "shakeebshaan",
-        "appCommit": "8fb897e3",
+        "appCommit": "7e4b2fb",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 92,
           "bar": 90,
-          "note": "Full-viewport 390x844 dashboard capture shows the reworked card: each supplement row leads with a name-derived SVG glyph (Vitamin D capsule, Whey flask, Fish Oil droplet, Ashwagandha leaf, Thyroid med tablets) in a calm tinted chip, cleaner rows, compact Add pill. Rendered with real items injected since the QA account has none. Addresses both 'clean this' and 'add some svg of supplement'."
+          "note": "Prod-verified end-to-end: fresh quiz-taker with zero logs now computes Consistency 50 (screenshot shows half-filled bar, composite 78 STRONG) vs the old punishing 0; matches the module cold-start contract; unit test added and green."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-13T02:20:26.224Z",
-          "event": "reopened",
-          "note": "clean this also add some svg of supplement etc",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: the dashboard SupplementsCard 'Add supplement' action was a full-width dashed box (w-full border-dashed, ~530px wide) that read as a big empty input and cluttered the card. Fix (src/pages/_components/dashboard/SupplementsCard.tsx): replaced it with a compact auto-width domain-purple pill (rounded-full bg-d-purple-50, 146x44) — keeps the 44px touch target while decluttering the card. Verified on /dashboard with a Vitamins item at 390x844.",
-            "imagePath": "images/i-20260713-4a68-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260713-4a68-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "a58fe23072348adeba6bd37509d9d423660b6a54",
-            "imageCommits": [
-              "a58fe23072348adeba6bd37509d9d423660b6a54"
-            ],
-            "fixedAt": "2026-07-13T01:37:55.309Z",
-            "by": "shakeebshaan",
-            "appCommit": "8679a34e",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 92,
-              "bar": 90,
-              "note": "Directly addresses both asks: button no longer oversized (146px vs full-width), card decluttered/premium. Cosmetic className-only change, dashboard tests green, full-screen 390x844 proof shows exact fixed state."
-            }
-          },
-          "images": [
-            "images/i-20260713-4a68-notfixed.jpg"
-          ],
-          "imageCommits": [
-            "ecf7b4e87a644c41b59ef971e023ed8045aab728"
-          ]
-        }
-      ],
+      "history": [],
+      "description": "[bug-hunt] Health Score: the Consistency pillar has NO cold-start fallback, so essentially every brand-new user sees \"Consistency 0\" (a full red/empty bar) on the celebratory quiz-reveal screen and on /health-score, and the composite score is dragged down ~15 pts on day one. This contradicts both the calm-premium UX and the health_score module docstring, which promises: \"Cold-start (no live data) -> blend with quiz answers where possible, else 50 neutral.\"\n\nROOT CAUSE (backend app/services/health_score.py):\nFive of the six pillars cushion a no-live-data user:\n- _nutrition_pillar / _activity_pillar: live_score=None -> return the quiz-section average.\n- _recovery_pillar: no sleep data -> parts=[(quiz_score,1.0)] -> quiz score.\n- _body_comp_pillar: no height/weight -> quiz weight_history score.\n- _lifestyle_pillar: no quiz -> returns 50 neutral.\nBut _consistency_pillar (health_score.py:384-411) is PURELY live-data-driven with no floor: daily_count / meal_count / workout_count / weight_count all come from the last 30 days of logs; with zero logs coverage=0, workout_cov=0, weight_cov=0 -> score = round(0.5*0+0.3*0+0.2*0) = 0. It returns 0, NOT the documented 50 neutral. Consistency is the lone pillar with no quiz/neutral cold-start blend.\n\nMANIFESTATION: A user who onboards and takes the baseline quiz before logging anything (the quiz is offered right from Profile / the dashboard \"Take the baseline quiz\" CTA) submits the quiz -> POST /health-score/quiz -> compute_health_score runs synchronously against zero logs -> consistency=0. HealthScoreReveal.tsx renders pillar \"Consistency\" with value 0 and an empty bar, on the same screen that fires confetti for a good score. Even a lightly-active user (2 logged days) gets coverage~7, workout_cov 0, weight_cov 0 -> score ~3, still a near-empty red bar. Weighted: consistency contributes 15%*0 = 0 instead of the ~7.5 a neutral 50 would give, so the revealed baseline is unfairly low.\n\nEXPECTED: on cold start (no/low logging history) Consistency should fall back to a neutral baseline (50) like the other pillars, per the module contract, rather than reading a punishing 0.\nACTUAL: Consistency = 0 (full red bar) for every fresh quiz taker, lowering the composite ~15 pts.\n\nREPRO: fresh account -> complete onboarding -> open /health-quiz and answer all 23 questions -> Finish. On the reveal screen (and /health-score pillar breakdown) Consistency shows 0 with an empty bar while every other pillar shows a reasonable value.\n\nFIX: give _consistency_pillar a cold-start cushion consistent with the other pillars, e.g. when there is no logging history in the window (max(daily_count,meal_count,workout_count,weight_count)==0) return 50 neutral, or blend the live coverage toward 50 until enough days exist to score it fairly.",
       "needsReview": false,
-      "resolvedAt": "2026-07-13T04:10:09.718Z",
+      "resolvedAt": "2026-07-13T04:10:04.701Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T04:10:09.718Z"
+      "archivedAt": "2026-07-13T04:10:04.701Z"
     }
   ]
 }
