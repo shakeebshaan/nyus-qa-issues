@@ -111,47 +111,6 @@
       "imagePrivate": false
     },
     {
-      "id": "i-20260713-q9x4",
-      "createdAt": "2026-07-13T17:39:15.733Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Shipped the per-item delivery-order affordance. ShoppingList.tsx: each still-to-buy item now has a small Truck button that opens a menu -> Blinkit / Zepto, each launching a PRE-FILLED SEARCH for that item name (blinkit.com/s/?q=<item> / zeptonow.com/search?query=<item>) via openExternal (Capacitor in-app browser on native, new tab on web). Neither platform exposes a public cart API, so qty is added by the user in the delivery app (as scoped). Checked items hide the button to keep rows calm. No backend change. Proof: /dev/shopping-list-preview with the Paneer menu open (Search 'Paneer' -> Blinkit/Zepto). tsc clean, shopping/nutrition tests 39/39, gate green.",
-        "imagePath": "images/i-20260713-q9x4-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-q9x4-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "40661215f5b59564de0ea58a12ee41c811ffce7e",
-        "imageCommits": [
-          "40661215f5b59564de0ea58a12ee41c811ffce7e"
-        ],
-        "fixedAt": "2026-07-13T18:16:13.074Z",
-        "by": "shakeebshaan",
-        "appCommit": "27f8993b",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Implements the v1 scope exactly (per-item pre-filled search, no cart injection, both platforms), calm design (button only on unchecked rows), reuses openExternal + DropdownMenu. Full 390x844 proof shows buttons + open menu. Verified via seeded dev preview (no data QA account headless)."
-        }
-      },
-      "history": [],
-      "route": "/shopping-list",
-      "description": "[suggestion] One-tap \"Order on Blinkit/Zepto\" per shopping-list item. Problem: ShoppingList.tsx (route /shopping-list) auto-builds the weekly grocery list from the diet plan but the only action is Share2 — user still has to manually re-type every item name into a delivery app search bar (India users overwhelmingly use 10-min grocery delivery, not weekly big-basket shops). Evidence: grep of src/ finds zero references to blinkit/zepto/instamart/bigbasket — no delivery hook exists anywhere in the app despite the shopping list already being structured per-item with name+qty+unit. Comparable trackers (HealthifyMe, Cult.fit) don't solve this either, so it is a real differentiator, not catch-up. v1 scope: per unchecked item, a small icon button opens a deep link / web search URL for Blinkit (blinkit.com/s/?q=<item>) and Zepto (zeptonow.com/search?query=<item>) in a new tab/app — no cart-injection API (neither platform exposes one publicly), just pre-filled search, so item + qty must still be added manually by the user in the delivery app. Optional \"Copy full list\" fallback for the checked-but-missing items. Effort: small — 1 new button component in ShoppingList.tsx + 2 URL builders, no backend change.",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
       "id": "i-20260713-dd12",
       "createdAt": "2026-07-13T17:27:00.523Z",
       "status": "fixed",
