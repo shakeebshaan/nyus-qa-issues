@@ -773,12 +773,34 @@
         "ab01b59a79fa2c40b547eaa63fc87e763caa2791"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Added a Share button on the Fasting screen that generates a branded shareable card - NYUS mark, the fasting ring (e.g. 10h 44m of 16h), your current streak + N/7-this-week, nyus.in tag - via the app's existing capture-to-native-share pipeline. Appears whenever there's an active fast or fasting history.",
+        "imagePath": "images/i-20260713-518b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-518b-fix-r1.png",
+          "images/i-20260713-518b-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "eb977fba8df16094bc22ea9fff62b3369ff9b640",
+        "imageCommits": [
+          "eb977fba8df16094bc22ea9fff62b3369ff9b640",
+          "2d469222d6c1a7da30a7bd3403206228262f19e0"
+        ],
+        "fixedAt": "2026-07-13T06:49:57.894Z",
+        "by": "shakeebshaan",
+        "appCommit": "5d474b08",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Verified live: branded share card renders + Share button on /fasting; calm design, matches the scroll-stopper ask."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Open-ended new feature, not a bug: build a branded, shareable social card showing fasting progress + streak + achievements. Needs a card design direction, an image-render pipeline (html-to-canvas or a backend OG-image endpoint) and native share-sheet integration (Capacitor Share) - a multi-day tracked feature the one-pass QA fix loop is not scoped for and cannot verify to the 90 satisfaction bar. Recommend owner approve a card design first (I can propose 3 layouts) then implement as a tracked feature.",
-      "reviewedAt": "2026-07-13T04:27:26.080Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "feature",
