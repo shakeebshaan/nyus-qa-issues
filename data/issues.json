@@ -349,12 +349,32 @@
         "f495b3b1f7b68cf3823abbda72f0b2bddd24177f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the daily-volume ring used weekly_volume_target_kg/7 (last week's ACTUAL logged volume x1.05), unrelated to today's session, so 2 exercises nearly filled it. Fix (full-stack): backend /activity/overview now returns planned_volume_today_kg = sum over today's session of target_sets x target_reps x reference_weight (reference proxied from each exercise's last logged top set; _parse_target_reps handles 8-12 ranges), and TodaysActivityCard prefers it, falling back to weekly/7 only when null. Verified live on the strength QA account: ring now reads 10440 / 9148 kg (9148 = today's planned session) vs the old 10962. Backend 78a0e6d deployed+healthy; FE 2c254c17 + 2 new tests (16/16).",
+        "imagePath": "images/i-20260713-4364-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-4364-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2376c97cf7ce11b715a01bb2cb825a6c7b6a57dd",
+        "imageCommits": [
+          "2376c97cf7ce11b715a01bb2cb825a6c7b6a57dd"
+        ],
+        "fixedAt": "2026-07-13T08:41:06.557Z",
+        "by": "shakeebshaan",
+        "appCommit": "52321edb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-cause full-stack fix verified live (ring shows the new today-derived denominator), backward-compatible fallback, unit tests lock both branches."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Root cause found: the Daily Volume TARGET is not derived from today's plan at all. The app shows weekly_volume_target_kg / 7, and that weekly figure is last week's ACTUAL logged volume x1.05 (from backend /activity/overview). So the denominator has no relation to today's 11 exercises / 29 planned sets, which is why 2 exercises nearly fill it. Recommended fix (full-stack): backend adds planned_volume_today_kg = sum over today's exercises of target_sets x reps x reference_weight (reference weight proxied from each exercise's last logged set, since the plan stores no target weight); FE reads that instead of weekly/7. This changes what 'daily volume target' means (a product decision) and needs a backend deploy, so flagging for your call. Can implement next tick on approval.",
-      "reviewedAt": "2026-07-13T07:49:15.743Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "activity",
