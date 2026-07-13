@@ -743,7 +743,16 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Loop-runner / scheduler infrastructure, not an app-source bug. It asks the automation to auto-resume issue work when Claude hits a usage limit and to wake on new issues. That lives in the snapfix loops runner + Windows Task Scheduler on the owner machine (NYUS-Loops tasks enabled + Administrator logged on), not in app code, so it cannot be reproduced or verified from the app dev server. Known related runner bug: it once mis-read a session-limit message as normal output, skipping backoff. Owner action: confirm the scheduled tasks are enabled and point me at the runner script if backoff/wake logic is the target.",
+      "reviewedAt": "2026-07-13T04:27:22.573Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "infra",
+        "ops",
+        "blocked"
+      ]
     },
     {
       "id": "i-20260713-518b",
