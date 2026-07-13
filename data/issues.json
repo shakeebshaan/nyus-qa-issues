@@ -838,49 +838,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260713-2749",
-      "createdAt": "2026-07-13T03:19:06.981Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-2749.jpg",
-      "imageCommit": "8148dba8f0ef26191527750ace7ca684672bca1c",
-      "imagePaths": [
-        "images/i-20260713-2749.jpg"
-      ],
-      "imageCommits": [
-        "8148dba8f0ef26191527750ace7ca684672bca1c"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the 'Adjust macro targets' bottom sheet had no max-height/scroll, so on native the soft keyboard covered the Daily-calories input. Fix (MacroTargetsSheet.tsx, shipped with the a3ec editor rebuild): SheetContent now uses max-h-[90dvh] + overflow-y-auto, so the sheet sits above the keyboard (Android default resize=native shrinks the webview) and scrolls the focused field into view. Verified by simulating the shrunk viewport at 390x420 — the calorie input stays fully visible (screenshot). Note: reported instance fixed; a full app-wide keyboard-overlap sweep is a broader follow-up.",
-        "imagePath": "images/i-20260713-2749-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-2749-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f9e89722a04568f9bd42f1c1aac343d83fc03a38",
-        "imageCommits": [
-          "f9e89722a04568f9bd42f1c1aac343d83fc03a38"
-        ],
-        "fixedAt": "2026-07-13T04:10:12.013Z",
-        "by": "shakeebshaan",
-        "appCommit": "11552517",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Reported instance (macro-targets sheet) verified: in a keyboard-shrunk 390x420 viewport the focused Daily-calories input stays fully on-screen (top=193,bottom=237 within vh=420) because the sheet scrolls it into view. Web headless has no soft keyboard, so a shrunk viewport is the faithful equivalent of Android resize=native."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260713-53b4",
       "createdAt": "2026-07-13T03:50:09.743Z",
       "route": null,
