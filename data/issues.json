@@ -962,51 +962,6 @@
       "history": []
     },
     {
-      "id": "i-20260713-84c7",
-      "createdAt": "2026-07-13T03:19:50.668Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-84c7-0.jpg",
-      "imageCommit": "39f37c70fa656e2e2818ed695af660455d430c98",
-      "imagePaths": [
-        "images/i-20260713-84c7-0.jpg",
-        "images/i-20260713-84c7-1.jpg"
-      ],
-      "imageCommits": [
-        "39f37c70fa656e2e2818ed695af660455d430c98",
-        "a6a8d5a29d40d4db018cbd75b5ed89c3fc109445"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: GET /profile/macro-targets read only the raw UserProfile.target_*_grams columns (stale onboarding defaults), while the nutrition ring reads the active plan's WeeklyMacroTarget via /diet/plan, so the editor opened with wrong 'default' numbers. Fix: _snapshot() (app/routes/profile.py) now prefers the current-week WeeklyMacroTarget row (week-1 fallback), mirroring DietPlanResource. Verified live: /profile/macro-targets and /diet/plan both return P220/C230/F100 and the editor opens with those exact current values (screenshot).",
-        "imagePath": "images/i-20260713-84c7-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-84c7-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "57cbdbefd98553ce6810edbbd9cc505efa72c03b",
-        "imageCommits": [
-          "57cbdbefd98553ce6810edbbd9cc505efa72c03b"
-        ],
-        "fixedAt": "2026-07-13T04:06:50.907Z",
-        "by": "shakeebshaan",
-        "appCommit": "e6b6855",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root-caused to a read/write source asymmetry, fixed by mirroring the canonical DietPlanResource read; verified end-to-end on prod (API returns P220/C230/F100 matching /diet/plan) AND on the real authenticated editor screen (screenshot). Deployed + healthy."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260713-a3ec",
       "createdAt": "2026-07-13T03:20:19.282Z",
       "route": null,
