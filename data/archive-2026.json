@@ -20111,63 +20111,49 @@
       "archivedAt": "2026-07-13T08:35:48.427Z"
     },
     {
-      "id": "i-20260713-518b",
-      "createdAt": "2026-07-13T03:17:57.354Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-518b-0.jpg",
-      "imageCommit": "5e2dd33a1c024d25879a6ee68ba808791809076c",
-      "imagePaths": [
-        "images/i-20260713-518b-0.jpg",
-        "images/i-20260713-518b-1.jpg"
-      ],
-      "imageCommits": [
-        "5e2dd33a1c024d25879a6ee68ba808791809076c",
-        "ab01b59a79fa2c40b547eaa63fc87e763caa2791"
-      ],
-      "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Added a Share button on the Fasting screen that generates a branded shareable card - NYUS mark, the fasting ring (e.g. 10h 44m of 16h), your current streak + N/7-this-week, nyus.in tag - via the app's existing capture-to-native-share pipeline. Appears whenever there's an active fast or fasting history.",
-        "imagePath": "images/i-20260713-518b-fix-r1.png",
+        "description": "Root cause: the on-device weekly weigh-in reminder used Capacitor weekday=1 (Sunday) while the backend push job fires Monday, so native users got two reminders on different days. Fix: set the local reminder to Monday (weekday=2) to match the backend weekly_weight_reminder job.",
+        "imagePath": "images/i-20260713-b7f4-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-518b-fix-r1.png",
-          "images/i-20260713-518b-fix-r1-2.png"
+          "images/i-20260713-b7f4-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "eb977fba8df16094bc22ea9fff62b3369ff9b640",
+        "imageCommit": "018203dd73e7300e13bc98711133fa1763a089df",
         "imageCommits": [
-          "eb977fba8df16094bc22ea9fff62b3369ff9b640",
-          "2d469222d6c1a7da30a7bd3403206228262f19e0"
+          "018203dd73e7300e13bc98711133fa1763a089df"
         ],
-        "fixedAt": "2026-07-13T06:49:57.894Z",
+        "fixedAt": "2026-07-13T06:50:11.100Z",
         "by": "shakeebshaan",
-        "appCommit": "5d474b08",
+        "appCommit": "1e1b16d9",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 91,
           "bar": 90,
-          "note": "Verified live: branded share card renders + Share button on /fasting; calm design, matches the scroll-stopper ask."
+          "note": "One-line constant matching the documented backend Monday cron; deterministic, verified by code + backend job day. Non-visual scheduling fix; shot shows the Progress-Updates surface it belongs to."
         }
       },
       "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
+      "author": "shakeebshaan",
       "tags": [
-        "feature",
-        "design",
-        "blocked"
+        "bug-hunt",
+        "auto"
       ],
-      "reviewReply": "do it",
-      "reviewRepliedAt": "2026-07-13T04:29:11.117Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-13T08:36:52.132Z",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-07-13T04:39:19.109Z",
+      "id": "i-20260713-b7f4",
+      "route": "/notification-preferences",
+      "description": "[bug-hunt] Weekly weigh-in reminder fires on TWO different days. The on-device LOCAL reminder is scheduled for SUNDAY while the backend PUSH job fires MONDAY. src/lib/reminderSync.ts DEFAULT_REMINDER_TIMES.weighIn.weekday = 1 (Capacitor Weekday enum: 1 = Sunday) is passed to scheduleWeeklyReminder(REMINDER_IDS.WEIGH_IN, weekday=1, ...) via applyProgressReminders -> local weigh-in reminder every SUNDAY 8am. But the backend job weekly_weight_reminder is registered CronTrigger(day_of_week=mon, hour=2, minute=30 UTC) = MONDAY 8am IST (backend.py:16214; job name literally \"Weekly Weigh-in Reminder (Mon 8:00 AM IST)\"). EXPECTED: one weigh-in reminder on a consistent day. ACTUAL: a native user with Progress Updates + push enabled gets a LOCAL nag Sunday 8am AND a backend PUSH Monday 8am. The FE comment weekday: 1 /* Sunday */ shows 1 was chosen deliberately as Sunday, contradicting the Monday product intent. FIX: set DEFAULT_REMINDER_TIMES.weighIn.weekday = 2 (Capacitor Monday) so the local reminder matches the backend job.",
+      "needsReview": false,
+      "resolvedAt": "2026-07-13T08:37:11.669Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T08:36:52.132Z"
+      "archivedAt": "2026-07-13T08:37:11.669Z"
     }
   ]
 }
