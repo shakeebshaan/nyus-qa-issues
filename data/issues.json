@@ -972,7 +972,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "This 'Something went wrong — Check that Google Play is enabled … up-to-date … try reinstalling' dialog is the standard error surfaced by Google Play services SDKs (Google Identity Services / Credential Manager sign-in, or Play Integrity / In-App Update / In-App Review), NOT NYUS app-source code — it cannot be reproduced from the web dev server. Same OWNER-SIDE class as the earlier '[16] Account reauth failed' (fixed v140 via R8 keep rules). Likely causes on the device: (1) the installed build is not from a Play track that matches the OAuth client's Play App Signing SHA-1, (2) Google Play services on the device is outdated/disabled, or (3) the app was sideloaded (Credential Manager/GIS require a Play-distributed build). Owner action to confirm: install the latest alpha (v199+) FROM the Play track on the test device, update Google Play services, and verify the Play App Signing SHA-1 is registered on the OAuth client + the OAuth consent screen is in Testing with the tester added. If it still repros on a Play-track install, capture which action triggers it (login? update prompt?) and I'll trace the specific SDK call.",
+      "reviewedAt": "2026-07-13T06:36:45.468Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-3e76",
