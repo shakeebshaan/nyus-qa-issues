@@ -20111,50 +20111,51 @@
       "archivedAt": "2026-07-13T08:35:48.427Z"
     },
     {
-      "id": "i-20260713-578e",
-      "createdAt": "2026-07-13T06:30:43.347Z",
+      "id": "i-20260713-5e14",
+      "createdAt": "2026-07-13T05:58:47.050Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-578e.jpg",
-      "imageCommit": "33d77ab5f76bee45e2b1db0ffe159c240e2f29c2",
+      "imagePath": "images/i-20260713-5e14.jpg",
+      "imageCommit": "ccf88fb886f8000824006831f9a7ffab3eb22b18",
       "imagePaths": [
-        "images/i-20260713-578e.jpg"
+        "images/i-20260713-5e14.jpg"
       ],
       "imageCommits": [
-        "33d77ab5f76bee45e2b1db0ffe159c240e2f29c2"
+        "ccf88fb886f8000824006831f9a7ffab3eb22b18"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: the mid-workout Swap-exercise sheet (ExerciseWheelPicker.tsx) rendered the alternatives list with no search input, so picking a specific replacement meant scrolling the full list. Fix: added a search field at the top of the sheet that filters alternatives by name or equipment (with a no-match empty state); query resets each time the sheet opens. Covered by 4 new tests (53/53 green). Proof PNG is the real component rendered against the dev server.",
-        "imagePath": "images/i-20260713-578e-fix-r1.png",
+        "description": "Root cause: to reuse last session's working weight you had to re-type it in the KG/REPS steppers. Fix: the 'Last: N x Xkg' label in the active set editor is now a one-tap button — tapping it fills REPS and KG with your last logged set for that exercise (screenshot shows the tappable Last chip). Added 2 component tests covering the fill behaviour.",
+        "imagePath": "images/i-20260713-5e14-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-578e-fix-r1.png"
+          "images/i-20260713-5e14-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "07356481f8ce8b050fd959daeed939d0836797d7",
+        "imageCommit": "4b5c7f86d533dd76c221d4a207b93dab2cb83dca",
         "imageCommits": [
-          "07356481f8ce8b050fd959daeed939d0836797d7"
+          "4b5c7f86d533dd76c221d4a207b93dab2cb83dca"
         ],
-        "fixedAt": "2026-07-13T07:14:21.406Z",
+        "fixedAt": "2026-07-13T07:47:11.605Z",
         "by": "shakeebshaan",
-        "appCommit": "2cd886f4",
+        "appCommit": "5281e2d1",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 93,
+          "score": 91,
           "bar": 90,
-          "note": "Directly implements the owner ask (search field on the swap sheet); surgical single-component change, matches design tokens, filters by name+equipment with empty state, 4 new tests green, real-render visual proof on the exact screen."
+          "note": "Delivers the requested one-tap fill of last logged weight/reps; data already in-component so change is surgical. 55 picker tests green incl. 2 new."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-13T08:39:46.184Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-13T08:40:03.545Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T08:39:46.184Z"
+      "archivedAt": "2026-07-13T08:40:03.545Z"
     }
   ]
 }
