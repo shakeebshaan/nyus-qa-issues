@@ -360,60 +360,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260713-4364",
-      "createdAt": "2026-07-13T06:03:28.532Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-4364-0.jpg",
-      "imageCommit": "55950784afd7f0c452b464cd03145fc302b1cd98",
-      "imagePaths": [
-        "images/i-20260713-4364-0.jpg",
-        "images/i-20260713-4364-1.jpg"
-      ],
-      "imageCommits": [
-        "55950784afd7f0c452b464cd03145fc302b1cd98",
-        "f495b3b1f7b68cf3823abbda72f0b2bddd24177f"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the daily-volume ring used weekly_volume_target_kg/7 (last week's ACTUAL logged volume x1.05), unrelated to today's session, so 2 exercises nearly filled it. Fix (full-stack): backend /activity/overview now returns planned_volume_today_kg = sum over today's session of target_sets x target_reps x reference_weight (reference proxied from each exercise's last logged top set; _parse_target_reps handles 8-12 ranges), and TodaysActivityCard prefers it, falling back to weekly/7 only when null. Verified live on the strength QA account: ring now reads 10440 / 9148 kg (9148 = today's planned session) vs the old 10962. Backend 78a0e6d deployed+healthy; FE 2c254c17 + 2 new tests (16/16).",
-        "imagePath": "images/i-20260713-4364-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-4364-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "2376c97cf7ce11b715a01bb2cb825a6c7b6a57dd",
-        "imageCommits": [
-          "2376c97cf7ce11b715a01bb2cb825a6c7b6a57dd"
-        ],
-        "fixedAt": "2026-07-13T08:41:06.557Z",
-        "by": "shakeebshaan",
-        "appCommit": "52321edb",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Root-cause full-stack fix verified live (ring shows the new today-derived denominator), backward-compatible fallback, unit tests lock both branches."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "activity",
-        "volume",
-        "backend"
-      ],
-      "reviewReply": "Fix",
-      "reviewRepliedAt": "2026-07-13T08:27:34.204Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260713-7aea",
       "createdAt": "2026-07-13T06:40:34.651Z",
       "route": null,
