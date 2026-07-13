@@ -305,7 +305,11 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Already shipped — this suggestion's exact v1 exists in the app today. The 'Recent' one-tap re-log surface lives in the /nutrition Add-Food modal (src/components/nutrition/CustomMealModal.tsx:491-511): a horizontal 'Recent' chip row at the top of the Quick Log tab, fed by GET /logs/meal/recent?limit=8 (backend app/routes/logging.py:510 get_recent_meals — the prod-winning logging_bp) and re-logging on tap via fillFromRecent (CustomMealModal.tsx:217). The suggestion's grep only scanned src/pages/_components/nutrition + components/plan-builder, so it missed src/components/nutrition/ where the row actually lives (the plan-builder FoodSearchSheet also has a separate localStorage 'Recent' tab). No new endpoint or schema needed — recommend Resolve/dismiss. If you want it richer (e.g. show macros per chip, favorites/pin, or surface it on the diary card too), reopen with the specific ask and I'll extend it.",
+      "reviewedAt": "2026-07-13T23:05:24.129Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-9f7c",
