@@ -19893,86 +19893,50 @@
       "archivedAt": "2026-07-13T03:26:11.169Z"
     },
     {
-      "id": "i-20260713-4a68",
-      "createdAt": "2026-07-13T01:27:03.314Z",
+      "id": "i-20260713-a3ec",
+      "createdAt": "2026-07-13T03:20:19.282Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-4a68.jpg",
-      "imageCommit": "55be49945857d41c59628530be60d1914798f852",
+      "imagePath": "images/i-20260713-a3ec.jpg",
+      "imageCommit": "2c03babffe03327749d6b543d2a9b3b60308c699",
       "imagePaths": [
-        "images/i-20260713-4a68.jpg"
+        "images/i-20260713-a3ec.jpg"
       ],
       "imageCommits": [
-        "55be49945857d41c59628530be60d1914798f852"
+        "2c03babffe03327749d6b543d2a9b3b60308c699"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Reopen ask: 'clean this also add some svg of supplement etc'. Fix (SupplementsCard.tsx): added supplementIcon(name) -> maps the free-text name to a supplement-shaped lucide glyph (Pill/Tablets/Droplet/FlaskConical/Leaf) and renders it in a tinted chip on every row (today's check-off + also-tracked), so the card reads as real supplements, not bare labels. Tier-free/calm per gamification guardrails; pairs with the compact Add pill from 8679a34e.",
-        "imagePath": "images/i-20260713-4a68-fix-r2.png",
+        "description": "Root cause: the Nutrition \"Fine-tune your plan\" macro row called handleRequestMacroChange, which navigated to /coach-chat with a prefill message instead of opening the macro editor. Fix: extracted the editor into a reusable MacroTargetsSheet and wired the Diet row to open it directly (same sheet as Profile), also made the sheet scroll so the keyboard cannot hide the input. Proof shows the editor opening on /nutrition (URL unchanged, no coach chat).",
+        "imagePath": "images/i-20260713-a3ec-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-4a68-fix-r2.png"
+          "images/i-20260713-a3ec-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "22f0cacf17cf9ebf03c66c453321a499aade66da",
+        "imageCommit": "36713e305337886ab440654e5daf096e419d1af4",
         "imageCommits": [
-          "22f0cacf17cf9ebf03c66c453321a499aade66da"
+          "36713e305337886ab440654e5daf096e419d1af4"
         ],
-        "fixedAt": "2026-07-13T03:01:41.960Z",
+        "fixedAt": "2026-07-13T03:38:34.210Z",
         "by": "shakeebshaan",
-        "appCommit": "8fb897e3",
+        "appCommit": "87dc2c60",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 92,
           "bar": 90,
-          "note": "Full-viewport 390x844 dashboard capture shows the reworked card: each supplement row leads with a name-derived SVG glyph (Vitamin D capsule, Whey flask, Fish Oil droplet, Ashwagandha leaf, Thyroid med tablets) in a calm tinted chip, cleaner rows, compact Add pill. Rendered with real items injected since the QA account has none. Addresses both 'clean this' and 'add some svg of supplement'."
+          "note": "Deterministic scenario-render proof: after clicking the row on /nutrition the URL stays /nutrition (wentToCoachChat=false) and the Daily calories editor sheet is visible. Root cause removed at source (orphan coach-chat handler deleted); shared component keeps Profile behavior identical. tsc clean, test:unit green."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-13T02:20:26.224Z",
-          "event": "reopened",
-          "note": "clean this also add some svg of supplement etc",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: the dashboard SupplementsCard 'Add supplement' action was a full-width dashed box (w-full border-dashed, ~530px wide) that read as a big empty input and cluttered the card. Fix (src/pages/_components/dashboard/SupplementsCard.tsx): replaced it with a compact auto-width domain-purple pill (rounded-full bg-d-purple-50, 146x44) — keeps the 44px touch target while decluttering the card. Verified on /dashboard with a Vitamins item at 390x844.",
-            "imagePath": "images/i-20260713-4a68-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260713-4a68-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "a58fe23072348adeba6bd37509d9d423660b6a54",
-            "imageCommits": [
-              "a58fe23072348adeba6bd37509d9d423660b6a54"
-            ],
-            "fixedAt": "2026-07-13T01:37:55.309Z",
-            "by": "shakeebshaan",
-            "appCommit": "8679a34e",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 92,
-              "bar": 90,
-              "note": "Directly addresses both asks: button no longer oversized (146px vs full-width), card decluttered/premium. Cosmetic className-only change, dashboard tests green, full-screen 390x844 proof shows exact fixed state."
-            }
-          },
-          "images": [
-            "images/i-20260713-4a68-notfixed.jpg"
-          ],
-          "imageCommits": [
-            "ecf7b4e87a644c41b59ef971e023ed8045aab728"
-          ]
-        }
-      ],
+      "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-13T04:10:30.017Z",
+      "resolvedAt": "2026-07-13T04:10:28.195Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T04:10:30.017Z"
+      "archivedAt": "2026-07-13T04:10:28.195Z"
     }
   ]
 }
