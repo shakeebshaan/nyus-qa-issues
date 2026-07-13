@@ -44,48 +44,6 @@
       "needsReview": false
     },
     {
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the on-device weekly weigh-in reminder used Capacitor weekday=1 (Sunday) while the backend push job fires Monday, so native users got two reminders on different days. Fix: set the local reminder to Monday (weekday=2) to match the backend weekly_weight_reminder job.",
-        "imagePath": "images/i-20260713-b7f4-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-b7f4-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "018203dd73e7300e13bc98711133fa1763a089df",
-        "imageCommits": [
-          "018203dd73e7300e13bc98711133fa1763a089df"
-        ],
-        "fixedAt": "2026-07-13T06:50:11.100Z",
-        "by": "shakeebshaan",
-        "appCommit": "1e1b16d9",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 91,
-          "bar": 90,
-          "note": "One-line constant matching the documented backend Monday cron; deterministic, verified by code + backend job day. Non-visual scheduling fix; shot shows the Progress-Updates surface it belongs to."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "createdAt": "2026-07-13T04:39:19.109Z",
-      "id": "i-20260713-b7f4",
-      "route": "/notification-preferences",
-      "description": "[bug-hunt] Weekly weigh-in reminder fires on TWO different days. The on-device LOCAL reminder is scheduled for SUNDAY while the backend PUSH job fires MONDAY. src/lib/reminderSync.ts DEFAULT_REMINDER_TIMES.weighIn.weekday = 1 (Capacitor Weekday enum: 1 = Sunday) is passed to scheduleWeeklyReminder(REMINDER_IDS.WEIGH_IN, weekday=1, ...) via applyProgressReminders -> local weigh-in reminder every SUNDAY 8am. But the backend job weekly_weight_reminder is registered CronTrigger(day_of_week=mon, hour=2, minute=30 UTC) = MONDAY 8am IST (backend.py:16214; job name literally \"Weekly Weigh-in Reminder (Mon 8:00 AM IST)\"). EXPECTED: one weigh-in reminder on a consistent day. ACTUAL: a native user with Progress Updates + push enabled gets a LOCAL nag Sunday 8am AND a backend PUSH Monday 8am. The FE comment weekday: 1 /* Sunday */ shows 1 was chosen deliberately as Sunday, contradicting the Monday product intent. FIX: set DEFAULT_REMINDER_TIMES.weighIn.weekday = 2 (Capacitor Monday) so the local reminder matches the backend job.",
-      "needsReview": false
-    },
-    {
       "id": "i-20260713-1d9e",
       "createdAt": "2026-07-13T02:50:00.000Z",
       "status": "open",
