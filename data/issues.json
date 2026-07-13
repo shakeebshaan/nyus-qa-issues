@@ -1137,9 +1137,14 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "The screenshot is a native Android system dialog ('Something went wrong... check Google Play is enabled... try reinstalling') - a Google Play services / Play Integrity / Credential Manager error around the app, NOT an app screen. Cannot be reproduced or verified on the web dev server (no device), so it can't be fixed to the screenshot bar headless. Needs on-device repro from the Play track: which device / Android version / account, and does it recur after clearing Play Store cache or reinstalling? Likely Google Sign-In / Credential Manager init (cf. the [16] reauth issue fixed v140). Please capture device details + reproducibility and I'll investigate the native path.",
-      "reviewedAt": "2026-07-13T06:52:15.767Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewReason": "This is a native Android Google sign-in / Play Services error ('Something went wrong; check Google Play is enabled...'), not reproducible in the web app, so I cannot repro/fix it headless here. It is the same family as the earlier [16] reauth error fixed in v140 via R8/proguard keep-rules for Credential Manager. If it recurs on a current build it likely needs up-to-date Play Services on the device and testing a fresh Play-track build (not a sideload). Can you confirm the app version and whether it is a Play-track install? Then I can dig into the native auth path.",
+      "reviewedAt": "2026-07-13T07:49:50.312Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "android",
+        "auth",
+        "native"
+      ]
     },
     {
       "id": "i-20260713-3e76",
