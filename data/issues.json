@@ -489,31 +489,45 @@
         "4044203733d9136ba22628dbffb6a106e666325f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Built the recurring 'Daily activity' feature you approved ('Do all'). New recurring_activities table + endpoints (deployed to prod): a regularly-repeated off-plan activity (e.g. treadmill after every workout) that shows on /activity as its own 'Daily activity' card SEPARATE from the workout, with schedule (daily / every-other-day / specific weekdays), duration, calories, optional start-time + reminder (default OFF). One-tap Done writes an ActivityLog(source='recurring') so it counts toward calories + the activity streak. Also added a skippable onboarding step after Health & Food ('Any activity you do regularly?'). Screenshot: the card live on /activity with a Treadmill 60min/150cal Every day + Done button. Files: DailyActivityCard/RecurringActivityForm/RecurringActivityStep + recurring_activities backend route/model/migration.",
-        "imagePath": "images/i-20260713-2f33-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-2f33-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "cbca26750144ee6765f08cf266cac12b938c73d9",
-        "imageCommits": [
-          "cbca26750144ee6765f08cf266cac12b938c73d9"
-        ],
-        "fixedAt": "2026-07-13T12:38:03.617Z",
-        "by": "shakeebshaan",
-        "appCommit": "1ecc10d6",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Feature complete + deployed; endpoint verified end-to-end on prod (create/list/done/delete) and the Activity card captured live populated. tsc clean, unit tests 6/6, verify gate green. Caveat: onboarding step + the opt-in start-time reminder job are code-verified (default OFF, inert) but not separately live-captured — onboarding needs a fresh un-onboarded account."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-13T14:32:35.418Z",
+          "event": "reopened",
+          "note": "remove also logged today one all in single UI like the exercise ui, no redundant",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Built the recurring 'Daily activity' feature you approved ('Do all'). New recurring_activities table + endpoints (deployed to prod): a regularly-repeated off-plan activity (e.g. treadmill after every workout) that shows on /activity as its own 'Daily activity' card SEPARATE from the workout, with schedule (daily / every-other-day / specific weekdays), duration, calories, optional start-time + reminder (default OFF). One-tap Done writes an ActivityLog(source='recurring') so it counts toward calories + the activity streak. Also added a skippable onboarding step after Health & Food ('Any activity you do regularly?'). Screenshot: the card live on /activity with a Treadmill 60min/150cal Every day + Done button. Files: DailyActivityCard/RecurringActivityForm/RecurringActivityStep + recurring_activities backend route/model/migration.",
+            "imagePath": "images/i-20260713-2f33-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260713-2f33-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "cbca26750144ee6765f08cf266cac12b938c73d9",
+            "imageCommits": [
+              "cbca26750144ee6765f08cf266cac12b938c73d9"
+            ],
+            "fixedAt": "2026-07-13T12:38:03.617Z",
+            "by": "shakeebshaan",
+            "appCommit": "1ecc10d6",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "Feature complete + deployed; endpoint verified end-to-end on prod (create/list/done/delete) and the Activity card captured live populated. tsc clean, unit tests 6/6, verify gate green. Caveat: onboarding step + the opt-in start-time reminder job are code-verified (default OFF, inert) but not separately live-captured — onboarding needs a fresh un-onboarded account."
+            }
+          },
+          "images": [
+            "images/i-20260713-2f33-notfixed.jpg"
+          ],
+          "imageCommits": [
+            "2af4e5d5f5c11beeb2ce2693fdbb03b5ccbdc5af"
+          ]
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do all",
