@@ -7,6 +7,7 @@
 //   node tools/qa.mjs review <id> --reason "<text>" [--tags a,b,c]
 //   node tools/qa.mjs unreview <id>
 //   node tools/qa.mjs archive <id> | archive --all-fixed
+//   node tools/qa.mjs archive-auto [--older-than <days>]   (clear informational auto-log cards)
 //
 // Repo names are NOT hardcoded — they are read from qa.config.json (written by
 // `npx github:OWNER/snapfix init`). See loadConfig() below.
@@ -464,8 +465,49 @@ try {
     git("commit", "-m", all ? `archive: ${targets.length} fixed issue(s)` : `issue ${idArg}: archived`);
     gitPush();
     console.log(`Archived ${targets.length} -> data/archive-${year}.json`);
+  } else if (cmd === "archive-auto") {
+    // Auto-log cards (content/discovery/press/suggestion + the `auto` tag) are
+    // informational status posts from the content/outreach loops, NOT bugs. They
+    // pile up on the board and read as "pending from 2 days ago". Archive open
+    // auto-log cards older than N days (default 2) into data/archive-<year>.json —
+    // preserved (not deleted), just cleared off the open board. Skips anything an
+    // owner has touched (needsReview / reviewReply) so a genuine ask is never lost.
+    // (owner i-20260713-f852: "Fix those also when there is limit and make sure all are addressed")
+    const AUTO_LOG_TAGS = new Set(["content", "discovery", "press", "suggestion"]);
+    const daysArg = flag("older-than");
+    const days = daysArg !== undefined ? Number(daysArg) : 2;
+    if (!Number.isFinite(days) || days < 0) throw new Error("--older-than must be a non-negative number of days");
+    git("pull", "--rebase", "origin", BRANCH);
+    const db = loadDb();
+    const cutoff = Date.now() - days * 86400000;
+    const targets = db.issues.filter((i) =>
+      i.status === "open" &&
+      Array.isArray(i.tags) && i.tags.includes("auto") &&
+      i.tags.some((t) => AUTO_LOG_TAGS.has(t)) &&
+      !i.needsReview && !i.reviewReply && !i.reopenNote &&
+      new Date(i.createdAt || 0).getTime() < cutoff
+    );
+    if (!targets.length) { console.log(`No auto-log cards older than ${days}d to archive.`); process.exit(0); }
+    const year = new Date().getFullYear();
+    const archPath = join(ROOT, "data", `archive-${year}.json`);
+    const arch = existsSync(archPath) ? JSON.parse(readFileSync(archPath, "utf8")) : { version: 1, issues: [] };
+    const now = new Date().toISOString();
+    for (const t of targets) {
+      if (!arch.issues.some((a) => a.id === t.id)) {
+        arch.issues.push({ ...t, status: "archived", archivedAt: now, archivedReason: "auto-log card (informational) — archived by archive-auto" });
+      }
+    }
+    const ids = new Set(targets.map((t) => t.id));
+    db.issues = db.issues.filter((i) => !ids.has(i.id));
+    writeFileSync(archPath, JSON.stringify(arch, null, 2) + "\n");
+    saveDb(db);
+    git("add", "data");
+    git("commit", "-m", `archive: ${targets.length} auto-log card(s) (>${days}d)`);
+    gitPush();
+    console.log(`Archived ${targets.length} auto-log card(s) -> data/archive-${year}.json`);
+    targets.forEach((t) => console.log(`  ${t.id}  ${(t.tags || []).join(",")}  ${t.description.replace(/\s+/g, " ").slice(0, 56)}`));
   } else {
-    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note <t>] | review <id> --reason <t> [--tags a,b] | unreview <id> | report <id> --file <html> [--label <t>] | reopen <id> --note <t> | archive <id> | archive --all-fixed");
+    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note <t>] | review <id> --reason <t> [--tags a,b] | unreview <id> | report <id> --file <html> [--label <t>] | reopen <id> --note <t> | archive <id> | archive --all-fixed | archive-auto [--older-than <days>]");
     process.exit(cmd ? 1 : 0);
   }
 } catch (e) {
