@@ -5,20 +5,43 @@
       "id": "i-20260713-c7a3",
       "description": "[bug-hunt] Shopping List category grouping is dead — every item renders under a single \"OTHER\" header. src/pages/ShoppingList.tsx groups items by `item.category ?? \"Other\"` and renders an uppercase category header per group, but the endpoint it calls, GET /diet/shopping-list (backend ShoppingListResource, backend.py:7522-7676), never sets a `category` on its serialized items — only name/quantity/unit/ingredient_id (backend.py:7628-7633). So item.category is always undefined, all items fall into one \"Other\" group, and the header shows \"OTHER\" over the whole list; the category-grouping UI is inert. The FE type ShoppingListItem also declares category? and est_price_inr? (src/types/api.ts:427) that the endpoint never returns. The DEV fix-proof preview (src/pages/dev/ShoppingListPreview.tsx) SEEDS fake categories (Dairy/Grains/Vegetables), so the capture looked correctly grouped while production shows one \"OTHER\" bucket. Expected: items grouped under real categories (Dairy, Grains, Vegetables, ...). Actual: single \"OTHER\" group. Repro: open /shopping-list with an active diet plan -> all items sit under one \"OTHER\" header. Fix: add category (and optionally est_price_inr) to ShoppingListResource serialization — Ingredient already has a .category column (used as ing.category in app/routes/plan_builder_routes.py:542); or point the page at the richer /grocery endpoint (app/routes/grocery.py) which already returns category+est_price_inr.",
       "createdAt": "2026-07-13T21:53:31Z",
-      "status": "open",
+      "status": "fixed",
       "tags": [
         "bug-hunt",
         "auto"
       ],
       "author": "shakeebshaan",
       "route": "/shopping-list",
-      "fix": null,
+      "fix": {
+        "description": "Root cause: GET /diet/shopping-list (ShoppingListResource) never serialized a category, and ingredients.category is 'other'/'meal'/NULL for ~all foods used in recipes, so the FE grouped everything under one 'OTHER' header. Fix: backend now derives a real grocery aisle from the ingredient NAME (_grocery_display_category keyword map, DB category used only when it's a real food class) and sets it per item; verified on prod (106,079 recipe ingredients: 'Other' dropped ~100%->11%). FE ShoppingList.tsx tidies underscores in the header label. Live proof capture shows 5 real aisles (Dairy, Grains, Oils & Fats, Protein, Vegetables) - Paneer->Dairy, Wheat Flour->Grains.",
+        "imagePath": "images/i-20260713-c7a3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-c7a3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a0d80c44d6fc2b924b3cdc04b3ed004dfd52a41d",
+        "imageCommits": [
+          "a0d80c44d6fc2b924b3cdc04b3ed004dfd52a41d"
+        ],
+        "fixedAt": "2026-07-13T22:11:01.769Z",
+        "by": "shakeebshaan",
+        "appCommit": "b59a1067",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused (missing serialization + polluted DB category), fixed backend+FE, deployed to prod, verified classifier on 106k real recipe ingredients and captured 5 real aisles on the live fixed backend. Note: heavy duplicate AI-ingredient rows remain a separate data-quality issue."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260713-f81a",
