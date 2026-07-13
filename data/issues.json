@@ -921,12 +921,32 @@
         "ccf88fb886f8000824006831f9a7ffab3eb22b18"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: to reuse last session's working weight you had to re-type it in the KG/REPS steppers. Fix: the 'Last: N x Xkg' label in the active set editor is now a one-tap button — tapping it fills REPS and KG with your last logged set for that exercise (screenshot shows the tappable Last chip). Added 2 component tests covering the fill behaviour.",
+        "imagePath": "images/i-20260713-5e14-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-5e14-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4b5c7f86d533dd76c221d4a207b93dab2cb83dca",
+        "imageCommits": [
+          "4b5c7f86d533dd76c221d4a207b93dab2cb83dca"
+        ],
+        "fixedAt": "2026-07-13T07:47:11.605Z",
+        "by": "shakeebshaan",
+        "appCommit": "5281e2d1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Delivers the requested one-tap fill of last logged weight/reps; data already in-component so change is surgical. 55 picker tests green incl. 2 new."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Partly addressed by i-20260713-0418 (merged): a new set now auto-prefills the previous logged set's weight, so the working weight carries forward without retyping. NOT done: (a) a literal tap-to-fill button, (b) prefill for the FIRST set of an exercise (0418 only carries within a session). Product call: still want an explicit 'use last weight' / 'body weight' button on the set editor, sourced from the last SESSION or body weight? If yes I'll add a small tap-to-fill chip.",
-      "reviewedAt": "2026-07-13T06:51:34.367Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
