@@ -1176,7 +1176,7 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "This is a native Android Google sign-in / Play Services error ('Something went wrong; check Google Play is enabled...'), not reproducible in the web app, so I cannot repro/fix it headless here. It is the same family as the earlier [16] reauth error fixed in v140 via R8/proguard keep-rules for Credential Manager. If it recurs on a current build it likely needs up-to-date Play Services on the device and testing a fresh Play-track build (not a sideload). Can you confirm the app version and whether it is a Play-track install? Then I can dig into the native auth path.",
       "reviewedAt": "2026-07-13T07:49:50.312Z",
       "reviewedBy": "shakeebshaan",
@@ -1184,7 +1184,10 @@
         "android",
         "auth",
         "native"
-      ]
+      ],
+      "reviewReply": "It it's from internal testing track",
+      "reviewRepliedAt": "2026-07-13T08:27:05.033Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-3e76",
