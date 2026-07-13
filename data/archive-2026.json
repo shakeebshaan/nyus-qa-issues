@@ -19891,6 +19891,52 @@
       "resolvedAt": "2026-07-13T03:26:11.169Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-13T03:26:11.169Z"
+    },
+    {
+      "id": "i-20260713-da55",
+      "createdAt": "2026-07-13T03:25:22.800Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260713-da55.jpg",
+      "imageCommit": "9dccafebd8bba038f7d7e2e06bcadb3975ecfad3",
+      "imagePaths": [
+        "images/i-20260713-da55.jpg"
+      ],
+      "imageCommits": [
+        "9dccafebd8bba038f7d7e2e06bcadb3975ecfad3"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the coach-chat quick-action chip row (CoachChatComposer.tsx) used flex-wrap, so the four chips wrapped onto two rows at 390px. Fix: switched the row to flex-nowrap + overflow-x-auto (no-scrollbar) with shrink-0 chips, so it stays one minimal horizontal line and scrolls sideways if needed. Verified in-app at 390x844 (screenshot).",
+        "imagePath": "images/i-20260713-da55-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-da55-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c9f6fce5f34d6ba2345eec1a43f2513f81780d98",
+        "imageCommits": [
+          "c9f6fce5f34d6ba2345eec1a43f2513f81780d98"
+        ],
+        "fixedAt": "2026-07-13T04:08:36.127Z",
+        "by": "shakeebshaan",
+        "appCommit": "11552517",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Owner ask directly satisfied: chips now render as a single horizontal row (verified full-screen at 390px) via flex-nowrap + overflow-x-auto; no wasted vertical space, no wrap. Surgical CSS-only change."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-13T04:09:17.707Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-13T04:09:17.707Z"
     }
   ]
 }
