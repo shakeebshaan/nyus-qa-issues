@@ -20298,6 +20298,61 @@
       "resolvedAt": "2026-07-13T14:27:10.352Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-13T14:27:10.352Z"
+    },
+    {
+      "id": "i-20260713-7aea",
+      "createdAt": "2026-07-13T06:40:34.651Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260713-7aea.jpg",
+      "imageCommit": "521d7d9194debed8e5dfa4a96ae47b9a05332841",
+      "imagePaths": [
+        "images/i-20260713-7aea.jpg"
+      ],
+      "imageCommits": [
+        "521d7d9194debed8e5dfa4a96ae47b9a05332841"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Added a 'Volume records' card on Achievements (right below Personal bests) showing the best single-session training volume per muscle group (Chest/Back/Legs/Shoulders/Arms/Core), from a new GET /strength/volume-records endpoint that MAXes reps*weight of completed SetLogs grouped by the exercise's muscle_group_primary. Self-hides when the athlete has no completed sessions. Files: VolumeRecordsCard.tsx, Achievements.tsx, activity.service.ts, api.ts; backend strength route + aggregation.",
+        "imagePath": "images/i-20260713-7aea-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-7aea-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ee98fcbe6ee11584037db681def130b9ca25a2f5",
+        "imageCommits": [
+          "ee98fcbe6ee11584037db681def130b9ca25a2f5"
+        ],
+        "fixedAt": "2026-07-13T12:06:19.161Z",
+        "by": "shakeebshaan",
+        "appCommit": "d7434cb7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Matches the ask (per-muscle-group session volume records) on the exact screen from the issue screenshot (Achievements). Verified: BE aggregation test 3/3 (max-per-muscle + empty), FE card test 2/2, real-component render proof shows the 6 muscle rows with volume+date, endpoint deployed+healthy."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "activity",
+        "volume",
+        "feature"
+      ],
+      "reviewReply": "Do it",
+      "reviewRepliedAt": "2026-07-13T10:03:52.589Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-13T14:32:46.533Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-13T14:32:46.533Z"
     }
   ]
 }
