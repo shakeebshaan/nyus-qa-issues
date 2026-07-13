@@ -822,49 +822,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260713-a3ec",
-      "createdAt": "2026-07-13T03:20:19.282Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-a3ec.jpg",
-      "imageCommit": "2c03babffe03327749d6b543d2a9b3b60308c699",
-      "imagePaths": [
-        "images/i-20260713-a3ec.jpg"
-      ],
-      "imageCommits": [
-        "2c03babffe03327749d6b543d2a9b3b60308c699"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Nutrition \"Fine-tune your plan\" macro row called handleRequestMacroChange, which navigated to /coach-chat with a prefill message instead of opening the macro editor. Fix: extracted the editor into a reusable MacroTargetsSheet and wired the Diet row to open it directly (same sheet as Profile), also made the sheet scroll so the keyboard cannot hide the input. Proof shows the editor opening on /nutrition (URL unchanged, no coach chat).",
-        "imagePath": "images/i-20260713-a3ec-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-a3ec-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "36713e305337886ab440654e5daf096e419d1af4",
-        "imageCommits": [
-          "36713e305337886ab440654e5daf096e419d1af4"
-        ],
-        "fixedAt": "2026-07-13T03:38:34.210Z",
-        "by": "shakeebshaan",
-        "appCommit": "87dc2c60",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Deterministic scenario-render proof: after clicking the row on /nutrition the URL stays /nutrition (wentToCoachChat=false) and the Daily calories editor sheet is visible. Root cause removed at source (orphan coach-chat handler deleted); shared component keeps Profile behavior identical. tsc clean, test:unit green."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260713-43a9",
       "createdAt": "2026-07-13T03:21:44.473Z",
       "route": null,
