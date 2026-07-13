@@ -1235,7 +1235,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "PART 1 (the bug) FIXED + shipped (5281e2d1): logged off-plan activities now SHOW on the Activity page. Root cause — the Log activity sheet POSTed the adhoc entry fine, but the only place it rendered was inside the sheet when reopened; nothing surfaced on the Activity page, so your Treadmill (60 min, 150 cal) 'didn't show'. Added a read-only 'Also logged today' section (TodaysOffPlanActivities.tsx) above the Log-activity button that lists today's adhoc activity_logs (icon + name + duration/distance/cal/steps). Verified in a 390-wide harness with a seeded treadmill+swim: both render. PART 2 (product decision, why this is flagged not auto-resolved): the rest of your ask is a real feature build, not a one-tick fix — a recurring 'daily activity' concept (e.g. treadmill after every workout, done daily/alternate days), set during ONBOARDING, shown SEPARATE from the workout, with a start-time and full stats. That needs a new data model (recurring-activity schedule), an onboarding screen, and Activity-page surfacing = product/UX call. Confirm you want it and I'll scope+build it standalone: (a) daily vs alternate-day vs custom-days scheduling, (b) does it count toward calories/streaks like the workout, (c) reminder at the start-time? Also FYI: the board test-gate ('npm test' full suite incl. Playwright/a11y) is infra-unsatisfiable headless, so I can't click Resolve here even for part 1 — recommend scoping loop.json testCommand to a unit subset.",
+      "reviewedAt": "2026-07-13T07:41:56.212Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
