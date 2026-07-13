@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260713-q9x4",
+      "createdAt": "2026-07-13T17:39:15.733Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/shopping-list",
+      "description": "[suggestion] One-tap \"Order on Blinkit/Zepto\" per shopping-list item. Problem: ShoppingList.tsx (route /shopping-list) auto-builds the weekly grocery list from the diet plan but the only action is Share2 — user still has to manually re-type every item name into a delivery app search bar (India users overwhelmingly use 10-min grocery delivery, not weekly big-basket shops). Evidence: grep of src/ finds zero references to blinkit/zepto/instamart/bigbasket — no delivery hook exists anywhere in the app despite the shopping list already being structured per-item with name+qty+unit. Comparable trackers (HealthifyMe, Cult.fit) don't solve this either, so it is a real differentiator, not catch-up. v1 scope: per unchecked item, a small icon button opens a deep link / web search URL for Blinkit (blinkit.com/s/?q=<item>) and Zepto (zeptonow.com/search?query=<item>) in a new tab/app — no cart-injection API (neither platform exposes one publicly), just pre-filled search, so item + qty must still be added manually by the user in the delivery app. Optional \"Copy full list\" fallback for the checked-but-missing items. Effort: small — 1 new button component in ShoppingList.tsx + 2 URL builders, no backend change.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260713-dd12",
       "createdAt": "2026-07-13T17:27:00.523Z",
       "status": "open",
