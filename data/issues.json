@@ -1057,9 +1057,14 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Confirmed root cause (live): daily Volume target = weekly_volume_target / 7 calendar days, and for users without a full prior week the weekly target is just projected from the current week actuals x1.05 -> daily target ~= today's own volume (live 8,440 done / 8,862 target = 95%). So the bar fills after ~2 exercises by construction. A correct per-session target needs a product decision: the plan stores NO prescribed weight, target_reps is unreliable (e.g. '1xhold'), history is sparse -> 'planned session volume' cannot be computed cleanly. Options: (a) weekly / actual training-days-per-week, (b) hide the bar until >=1 full prior week, (c) show today's volume as a plain stat with no target. Please pick one.",
-      "reviewedAt": "2026-07-13T06:51:37.912Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewReason": "Root cause found: the Daily Volume TARGET is not derived from today's plan at all. The app shows weekly_volume_target_kg / 7, and that weekly figure is last week's ACTUAL logged volume x1.05 (from backend /activity/overview). So the denominator has no relation to today's 11 exercises / 29 planned sets, which is why 2 exercises nearly fill it. Recommended fix (full-stack): backend adds planned_volume_today_kg = sum over today's exercises of target_sets x reps x reference_weight (reference weight proxied from each exercise's last logged set, since the plan stores no target weight); FE reads that instead of weekly/7. This changes what 'daily volume target' means (a product decision) and needs a backend deploy, so flagging for your call. Can implement next tick on approval.",
+      "reviewedAt": "2026-07-13T07:49:15.743Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "activity",
+        "volume",
+        "backend"
+      ]
     },
     {
       "id": "i-20260713-c450",
