@@ -20111,50 +20111,50 @@
       "archivedAt": "2026-07-13T08:35:48.427Z"
     },
     {
-      "id": "i-20260713-0418",
-      "createdAt": "2026-07-13T06:01:10.791Z",
+      "id": "i-20260713-13d0",
+      "createdAt": "2026-07-13T06:02:33.206Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-0418.jpg",
-      "imageCommit": "c40369447d4a32c97b073e37e276d010dfa23104",
+      "imagePath": "images/i-20260713-13d0.jpg",
+      "imageCommit": "5cdec104c8891bd28d2fa7d0dbb3f6c5da3df0e7",
       "imagePaths": [
-        "images/i-20260713-0418.jpg"
+        "images/i-20260713-13d0.jpg"
       ],
       "imageCommits": [
-        "c40369447d4a32c97b073e37e276d010dfa23104"
+        "5cdec104c8891bd28d2fa7d0dbb3f6c5da3df0e7"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: a new/bonus set defaulted to a static 20kg instead of carrying the working load from the set just logged this session (ExerciseWheelPicker.tsx). Fix: compute lastLoggedSet (highest-numbered logged set) and pass it as prefillSet; when an unlogged set becomes active it seeds reps/weight from it. Verified live: logging Set 1 at 79kg makes Set 2 default to 79kg (Vol 790) instead of 20.",
-        "imagePath": "images/i-20260713-0418-fix-r1.png",
+        "description": "Root cause: exercise cards showed only a set count, no volume. Fix: each card now appends this session's total volume next to the set count (e.g. '3 sets logged - 1,770 kg'), from logged reps x weight; bodyweight moves omit it.",
+        "imagePath": "images/i-20260713-13d0-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-0418-fix-r1.png"
+          "images/i-20260713-13d0-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "49f145f453a7fd26887f518ba4546fd293033024",
+        "imageCommit": "d9ba4d9a41522eee6bf6a0451491ad53b1d378a6",
         "imageCommits": [
-          "49f145f453a7fd26887f518ba4546fd293033024"
+          "d9ba4d9a41522eee6bf6a0451491ad53b1d378a6"
         ],
-        "fixedAt": "2026-07-13T06:35:28.812Z",
+        "fixedAt": "2026-07-13T06:49:43.931Z",
         "by": "shakeebshaan",
-        "appCommit": "5fa201a2",
+        "appCommit": "2d1e2426",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 93,
           "bar": 90,
-          "note": "Prefill lands the previous logged set's weight+reps onto the next/bonus set; verified live (Set1 logged 79kg -> Set2 auto = 79kg, Vol 790)."
+          "note": "Verified live: every exercise card now shows per-exercise volume (Lat Pulldown 1,770 / Back-ext 400 / Bench 2,200 kg)."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-13T08:38:47.845Z",
+      "resolvedAt": "2026-07-13T08:39:00.454Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T08:38:47.845Z"
+      "archivedAt": "2026-07-13T08:39:00.454Z"
     }
   ]
 }
