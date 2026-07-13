@@ -20510,49 +20510,48 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260713-dd12",
-      "createdAt": "2026-07-13T17:27:00.523Z",
+      "id": "i-20260712-9f7c",
+      "createdAt": "2026-07-12T14:10:00.000Z",
       "status": "resolved",
-      "route": "/onboarding",
-      "description": "[bug-hunt] Onboarding pregnancy/postpartum SAFETY pace-block is dead code — pregnant/nursing users get an unsafe deficit plan with no warning.\n\nArea: onboarding pace sanity gate (src/lib/onboarding-pace.ts + src/pages/onboarding/Screen4_Goal.tsx).\n\nThe pace gate defines medical hard-blocks REJECT_PREGNANCY_DEFICIT (block ANY deficit while pregnant/nursing) and REJECT_POSTPARTUM_PACE (block >0.5%/wk), surfaced via isMedicalBlock() and gated in Screen4_Goal.canProceed. Both branches only fire when data.pregnancy_status is 'pregnant'/'nursing'/'postpartum'.\n\nBut pregnancy_status is NEVER collected during onboarding:\n- OnboardingFlow.tsx:290 initializes it to \"none\".\n- No onboarding screen ever calls updateData({pregnancy_status}) — grep-provable. The only screen that asked it, Screen5_Health, is commented OUT of the shipped condensed flow (ScreenC_HealthFood.tsx:5 — \"Health Check sub-step removed per request\").\n- pregnancy_status is listed in DEFERRED_INTAKE_KEYS (OnboardingFlow.tsx:576), i.e. deliberately EXCLUDED from the /onboarding/responses batch and left for the post-onboarding coach-intake drip (coach-intake-questions.ts:370).\n\nNet effect: evaluateOnboardingPace() always sees pregnancy_status='none', so isMedicalBlock() can never be true during onboarding. A pregnant/nursing user picking fat_loss with a calorie deficit passes the gate and the deficit plan is generated at finalize — the medical safeguard the code builds is inert. Pregnancy is only asked LATER (coach drip), after the unsafe plan already exists.\n\nExpected: a pregnant/nursing user is prevented from (or at minimum warned before) generating a deficit plan at onboarding, per onboarding-pace.ts docstring + MEDICAL_BLOCK_CODES intent.\nActual: no question, no block, no warning — unsafe deficit plan generated.\n\nRepro: run the release condensed onboarding as a female user; on the Goal tab pick fat_loss with goal_weight < current_weight and any date. Observe there is no pregnancy question anywhere in the flow and Continue is never gated by a medical block.\n\nSuggested fix: collect pregnancy_status minimally in the shipped flow (e.g. a female-conditional one-tap on the Body/Goal tab) so the existing medical pace-block re-arms; OR if collection is intentionally deferred, remove the now-unreachable medical-block code path so the gate isn't presented as active.",
+      "route": "/plan-pause",
+      "description": "[suggestion] Injury-aware exercise substitution when a plan is paused for injury. Problem: PlanPauseScreen (src/pages/PlanPauseScreen.tsx) already has an \"Injury\" pause reason but only stores it as a label — no body-part capture and no downstream effect, so on resume the workout plan generator/coach can re-serve the exact movement that caused the injury (e.g. shoulder press after a shoulder injury). Evidence: REASONS array has injury as a flat enum value with no follow-up field; workout-plan generation and AI coach have no injury-exclusion input anywhere in the codebase. Comparable apps (Fitbod, Future) ask which body part and auto-avoid loading it. V1 scope: when reason=injury, show one extra step \"Which area?\" (shoulder/knee/back/wrist/ankle/other) + optional note; store on the pause record; on resume, pass the flagged body part(s) to the workout-plan builder/coach system prompt to exclude/soften exercises targeting that area for the first 1-2 weeks back, with a banner reminding the user to clear it manually if resolved sooner. Effort: ~1-2 days (1 new field + storage, 1 builder-prompt condition, 1 UI step).",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
+        "suggestion",
         "auto"
       ],
       "imagePath": null,
-      "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
       "fix": {
-        "description": "Root cause: onboarding never asked pregnancy status, so the built-in safety rule that blocks weight-loss plans during pregnancy/nursing never ran and a pregnant user could set up an unsafe calorie-deficit plan. Fix: female users now get a quick Pregnancy status question on the Body step; picking Pregnant or Nursing with a weight-loss goal shows a clear safety warning and disables Continue until the goal is switched to Maintain. Verified end-to-end on the real onboarding screen.",
-        "imagePath": "images/i-20260713-dd12-fix-r1.png",
+        "description": "Shipped injury-aware plan resume end-to-end. Root cause: the FE half (9b1d6e57) shipped an injury-area picker but its commit wrongly claimed the backend 'already ships' — the backend exclusion was uncommitted/undeployed, so a shoulder injury could still get shoulder press on resume; that same commit also left 4 PlanPauseScreen tests red (unupdated pausePlan arity). Fix: committed + deployed backend (plans.py stores sanitized injury_areas[] in the pause snapshot; plan_generator._active_injury_areas reads it for a 14-day post-resume window and _build_workout_prompt injects an ACTIVE INJURY avoid/soften clause into every workout-gen path) and realigned the 4 tests. Proof: /plan-pause with Injury -> 8-area picker, Shoulder+Knee selected. Tests green: FE 63/63, backend injury 2/2.",
+        "imagePath": "images/i-20260712-9f7c-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-dd12-fix-r1.png"
+          "images/i-20260712-9f7c-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "3c462899b928652a42eab799c96ca24e63ef75ce",
+        "imageCommit": "4c12a4616a96db5b018f4536a24ceec8d688236d",
         "imageCommits": [
-          "3c462899b928652a42eab799c96ca24e63ef75ce"
+          "4c12a4616a96db5b018f4536a24ceec8d688236d"
         ],
-        "fixedAt": "2026-07-13T18:00:48.587Z",
+        "fixedAt": "2026-07-13T21:37:06.123Z",
         "by": "shakeebshaan",
-        "appCommit": "ce71d9da",
+        "appCommit": "cbd7685d",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 91,
+          "score": 92,
           "bar": 90,
-          "note": "Uncollected pregnancy_status fixed on shipped Body tab; existing medical block re-arms. Verified E2E: female shows the question, pregnant+deficit hard-blocks Continue (no acknowledge bypass). Surgical, i18n 4-bundle parity, 5 new component tests + pace/parity/pseudo green (84). Configured test:unit is a no-op exit-0; real vitest run backs the pass."
+          "note": "Complete end-to-end: backend committed+deployed to prod (verified _active_injury_areas live), FE already shipped, 4 rotted tests fixed, real live /plan-pause proof capture shows the area picker + selected state. Both test suites green."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-13T23:37:27.845Z",
+      "resolvedAt": "2026-07-13T23:37:39.107Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T23:37:27.845Z"
+      "archivedAt": "2026-07-13T23:37:39.107Z"
     }
   ]
 }
