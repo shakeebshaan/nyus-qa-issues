@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: DietEditPanel/WorkoutEditPanel appended an optimistic add row with a client temp id ('add-0') that addMut.onSuccess never reconciled, so Swap/Adjust/Remove sent that unresolvable id and 404'd (Remove even rolled back). Fix: onSuccess reconcile in each handleAddConfirm — DietEditPanel maps temp id -> String(meal_id) (server DietPlan.id); WorkoutEditPanel maps temp id -> exercise name (name-only add has no server id; backend resolves by name). Proof: 2 new reconciliation tests green (44/44); non-visual logic bug (panel only renders on a live LLM coach block, not headless-reproducible) so proof is the passing tests + code, not a screen capture.",
+        "imagePath": "images/i-20260713-a7d2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-a7d2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a4d79235c8559740c38508e633517b24a80512d6",
+        "imageCommits": [
+          "a4d79235c8559740c38508e633517b24a80512d6"
+        ],
+        "fixedAt": "2026-07-13T01:12:06.633Z",
+        "by": "shakeebshaan",
+        "appCommit": "ec4dee9f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Exact root cause from the report addressed in both panels; unique server id used for meals, name locator for name-only workout adds (verified against backend _resolve_meal_row/_resolve_exercise_slot). 2 new reconciliation tests green, tsc clean. -7: non-visual proof (behavioral, not headless-reproducible in the live coach panel)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260713-8f2c",
