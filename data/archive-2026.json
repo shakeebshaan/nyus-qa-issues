@@ -20111,50 +20111,50 @@
       "archivedAt": "2026-07-13T08:35:48.427Z"
     },
     {
-      "id": "i-20260713-3e76",
-      "createdAt": "2026-07-13T06:23:44.387Z",
+      "id": "i-20260713-578e",
+      "createdAt": "2026-07-13T06:30:43.347Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-3e76.jpg",
-      "imageCommit": "7d1803e544a291007c890ccc85ab709ca116820a",
+      "imagePath": "images/i-20260713-578e.jpg",
+      "imageCommit": "33d77ab5f76bee45e2b1db0ffe159c240e2f29c2",
       "imagePaths": [
-        "images/i-20260713-3e76.jpg"
+        "images/i-20260713-578e.jpg"
       ],
       "imageCommits": [
-        "7d1803e544a291007c890ccc85ab709ca116820a"
+        "33d77ab5f76bee45e2b1db0ffe159c240e2f29c2"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: live-workout Set editor reps/kg fields (ExerciseWheelPicker.tsx) are controlled type=number inputs whose onChange coerced empty->0/1, so the value could never be cleared and tapping left the caret after the existing digit (the '0'/'20' wouldn't go away when typing 79). Fix: onFocus select-all on both inputs so a tap highlights the value and the first digit typed replaces it. Verified on the real workout screen: KG default 20 -> tap + type 79 = 79 (not 2079), Vol updates to 790.",
-        "imagePath": "images/i-20260713-3e76-fix-r1.png",
+        "description": "Root cause: the mid-workout Swap-exercise sheet (ExerciseWheelPicker.tsx) rendered the alternatives list with no search input, so picking a specific replacement meant scrolling the full list. Fix: added a search field at the top of the sheet that filters alternatives by name or equipment (with a no-match empty state); query resets each time the sheet opens. Covered by 4 new tests (53/53 green). Proof PNG is the real component rendered against the dev server.",
+        "imagePath": "images/i-20260713-578e-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-3e76-fix-r1.png"
+          "images/i-20260713-578e-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "e0b449fc8a84a3a965473659e1a7c5c7eff2f1a2",
+        "imageCommit": "07356481f8ce8b050fd959daeed939d0836797d7",
         "imageCommits": [
-          "e0b449fc8a84a3a965473659e1a7c5c7eff2f1a2"
+          "07356481f8ce8b050fd959daeed939d0836797d7"
         ],
-        "fixedAt": "2026-07-13T06:34:17.042Z",
+        "fixedAt": "2026-07-13T07:14:21.406Z",
         "by": "shakeebshaan",
-        "appCommit": "5fa201a2",
+        "appCommit": "2cd886f4",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 93,
           "bar": 90,
-          "note": "Root-caused to controlled type=number coercion; minimal 2-line select-on-focus fix; verified live on the real Set editor (KG 20 -> typing 79 yields 79 not 2079, Vol 790)."
+          "note": "Directly implements the owner ask (search field on the swap sheet); surgical single-component change, matches design tokens, filters by name+equipment with empty state, 4 new tests green, real-render visual proof on the exact screen."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-13T08:39:29.170Z",
+      "resolvedAt": "2026-07-13T08:39:41.121Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T08:39:29.170Z"
+      "archivedAt": "2026-07-13T08:39:41.121Z"
     }
   ]
 }
