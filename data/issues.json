@@ -943,14 +943,17 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "The build now caps training days at 7 by design (one day per weekday). Your screenshot showing 'Day 1 of 10' is from an older build; the cap was lowered 10->7 on 2026-07-10 (commit 0bb48735) to fix i-20260710-7a3f, because the backend maps each day to a distinct weekday and an 8th+ day silently collapses onto Sunday. So an 11th training day cannot be represented in the current weekly-plan model. Your call between: (a) keep 7/week and I add a small helper line ('7 days = one full week, the weekly max') so the Add button does not just vanish; or (b) you want true multi-session scheduling (>7 sessions/week or 2-a-days), which is a data-model change in the backend. Which do you prefer?",
       "reviewedAt": "2026-07-13T07:49:19.453Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "workout-builder",
         "product"
-      ]
+      ],
+      "reviewReply": "I want to add as many days possible I have a plan of 13 days done one after another not tie to the week days fix it completely",
+      "reviewRepliedAt": "2026-07-13T08:28:53.942Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-5e14",
