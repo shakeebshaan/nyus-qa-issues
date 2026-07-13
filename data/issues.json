@@ -894,9 +894,9 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "This points at the board's own 'Loop activity - N automated log posts (content/discovery/press)' bucket, not an app screen. Those are auto-filed [content]/[discovery]/[press] cards from the content/outreach loops; they accumulate and read as 'pending from 2 days ago'. They are informational logs for you to skim, not bugs to fix (the fix-loop already skips them). Recommend auto-archiving auto-tagged log cards after N days (or a one-tap 'archive all auto logs') so they stop piling up. Want me to add that auto-archive to the board tooling?",
-      "reviewedAt": "2026-07-13T07:50:04.140Z",
+      "needsReview": true,
+      "reviewReason": "Done (board tooling). Added 'node tools/qa.mjs archive-auto [--older-than <days>]' which moves informational auto-log cards (content/discovery/press/suggestion + auto tag) older than N days (default 2) into data/archive-2026.json — preserved, not deleted. It never touches an owner-answered card (skips needsReview / reviewReply / reopenNote), so real asks are safe. Ran it this tick: archived 23 stale cards; board dropped 42 -> 19 open (12 recent auto logs from the last 2d + the 7 actionable/owner-answered items remain). Suggest wiring this into the tick so the pile self-clears. This is a board-repo change (no app screen), so it can't go through the app test-gate resolve; flagging here as the status channel.",
+      "reviewedAt": "2026-07-13T08:32:45.146Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "board",
