@@ -2,8 +2,30 @@
   "version": 1,
   "issues": [
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: update_auto_pause() was never called in production, so auto_paused never turned true - the 'Notifications paused' banner never showed and disengaged users kept getting nagged. Fix: a nightly APScheduler sweep (00:15 IST) now runs update_auto_pause() for every active user. Verified in prod: job registered + service healthy.",
+        "imagePath": "images/i-20260713-a1c9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-a1c9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a0bbfb29aafa6d68b70721c90b3bb9498b19e77a",
+        "imageCommits": [
+          "a0bbfb29aafa6d68b70721c90b3bb9498b19e77a"
+        ],
+        "fixedAt": "2026-07-13T06:50:22.722Z",
+        "by": "shakeebshaan",
+        "appCommit": "10db4f0",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Backend fix; prod log shows the auto-pause-sweep job registered + health OK after deploy 10db4f0."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,8 @@
       "createdAt": "2026-07-13T04:39:19.109Z",
       "id": "i-20260713-a1c9",
       "route": "/notification-preferences",
-      "description": "[bug-hunt] Notification auto-pause feature is dead code in production. update_auto_pause() (backend app/services/notification_service.py:410) is never called anywhere outside tests, so NotificationPreference.auto_paused is never set to True. Consequences: (1) the \"Notifications paused / Resume Notifications\" warning banner in src/pages/NotificationPreferences.tsx (gated on prefs.auto_paused, lines 285-305) NEVER renders - dead UI; (2) suppression Check 3 in send_notification (if prefs.auto_paused and trigger_source==scheduled, line 320) never fires, so a user who ignores 3+ consecutive scheduled pushes keeps getting nagged forever - the exact behavior the feature was built to prevent. EXPECTED: a nightly/post-send path calls update_auto_pause() per active user. ACTUAL: no call site and no APScheduler job exists (grep update_auto_pause across backend returns only tests; the scheduler block backend.py:15600-16230 has no auto-pause job). The reset path (reset_auto_pause wired to POST /notifications/:id/track-open) AND unit tests for update_auto_pause both exist, confirming the trigger was dropped, not intentionally omitted. REPRO: ignore every scheduled push for a week -> still receiving them; open /notification-preferences -> paused banner never appears. FIX: register a scheduled job (or call after sends) that runs update_auto_pause() for active users."
+      "description": "[bug-hunt] Notification auto-pause feature is dead code in production. update_auto_pause() (backend app/services/notification_service.py:410) is never called anywhere outside tests, so NotificationPreference.auto_paused is never set to True. Consequences: (1) the \"Notifications paused / Resume Notifications\" warning banner in src/pages/NotificationPreferences.tsx (gated on prefs.auto_paused, lines 285-305) NEVER renders - dead UI; (2) suppression Check 3 in send_notification (if prefs.auto_paused and trigger_source==scheduled, line 320) never fires, so a user who ignores 3+ consecutive scheduled pushes keeps getting nagged forever - the exact behavior the feature was built to prevent. EXPECTED: a nightly/post-send path calls update_auto_pause() per active user. ACTUAL: no call site and no APScheduler job exists (grep update_auto_pause across backend returns only tests; the scheduler block backend.py:15600-16230 has no auto-pause job). The reset path (reset_auto_pause wired to POST /notifications/:id/track-open) AND unit tests for update_auto_pause both exist, confirming the trigger was dropped, not intentionally omitted. REPRO: ignore every scheduled push for a week -> still receiving them; open /notification-preferences -> paused banner never appears. FIX: register a scheduled job (or call after sends) that runs update_auto_pause() for active users.",
+      "needsReview": false
     },
     {
       "status": "fixed",
