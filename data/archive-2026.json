@@ -20510,48 +20510,49 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260713-q9x4",
-      "createdAt": "2026-07-13T17:39:15.733Z",
+      "id": "i-20260713-dd12",
+      "createdAt": "2026-07-13T17:27:00.523Z",
       "status": "resolved",
+      "route": "/onboarding",
+      "description": "[bug-hunt] Onboarding pregnancy/postpartum SAFETY pace-block is dead code — pregnant/nursing users get an unsafe deficit plan with no warning.\n\nArea: onboarding pace sanity gate (src/lib/onboarding-pace.ts + src/pages/onboarding/Screen4_Goal.tsx).\n\nThe pace gate defines medical hard-blocks REJECT_PREGNANCY_DEFICIT (block ANY deficit while pregnant/nursing) and REJECT_POSTPARTUM_PACE (block >0.5%/wk), surfaced via isMedicalBlock() and gated in Screen4_Goal.canProceed. Both branches only fire when data.pregnancy_status is 'pregnant'/'nursing'/'postpartum'.\n\nBut pregnancy_status is NEVER collected during onboarding:\n- OnboardingFlow.tsx:290 initializes it to \"none\".\n- No onboarding screen ever calls updateData({pregnancy_status}) — grep-provable. The only screen that asked it, Screen5_Health, is commented OUT of the shipped condensed flow (ScreenC_HealthFood.tsx:5 — \"Health Check sub-step removed per request\").\n- pregnancy_status is listed in DEFERRED_INTAKE_KEYS (OnboardingFlow.tsx:576), i.e. deliberately EXCLUDED from the /onboarding/responses batch and left for the post-onboarding coach-intake drip (coach-intake-questions.ts:370).\n\nNet effect: evaluateOnboardingPace() always sees pregnancy_status='none', so isMedicalBlock() can never be true during onboarding. A pregnant/nursing user picking fat_loss with a calorie deficit passes the gate and the deficit plan is generated at finalize — the medical safeguard the code builds is inert. Pregnancy is only asked LATER (coach drip), after the unsafe plan already exists.\n\nExpected: a pregnant/nursing user is prevented from (or at minimum warned before) generating a deficit plan at onboarding, per onboarding-pace.ts docstring + MEDICAL_BLOCK_CODES intent.\nActual: no question, no block, no warning — unsafe deficit plan generated.\n\nRepro: run the release condensed onboarding as a female user; on the Goal tab pick fat_loss with goal_weight < current_weight and any date. Observe there is no pregnancy question anywhere in the flow and Continue is never gated by a medical block.\n\nSuggested fix: collect pregnancy_status minimally in the shipped flow (e.g. a female-conditional one-tap on the Body/Goal tab) so the existing medical pace-block re-arms; OR if collection is intentionally deferred, remove the now-unreachable medical-block code path so the gate isn't presented as active.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "fix": {
-        "description": "Shipped the per-item delivery-order affordance. ShoppingList.tsx: each still-to-buy item now has a small Truck button that opens a menu -> Blinkit / Zepto, each launching a PRE-FILLED SEARCH for that item name (blinkit.com/s/?q=<item> / zeptonow.com/search?query=<item>) via openExternal (Capacitor in-app browser on native, new tab on web). Neither platform exposes a public cart API, so qty is added by the user in the delivery app (as scoped). Checked items hide the button to keep rows calm. No backend change. Proof: /dev/shopping-list-preview with the Paneer menu open (Search 'Paneer' -> Blinkit/Zepto). tsc clean, shopping/nutrition tests 39/39, gate green.",
-        "imagePath": "images/i-20260713-q9x4-fix-r1.png",
+        "description": "Root cause: onboarding never asked pregnancy status, so the built-in safety rule that blocks weight-loss plans during pregnancy/nursing never ran and a pregnant user could set up an unsafe calorie-deficit plan. Fix: female users now get a quick Pregnancy status question on the Body step; picking Pregnant or Nursing with a weight-loss goal shows a clear safety warning and disables Continue until the goal is switched to Maintain. Verified end-to-end on the real onboarding screen.",
+        "imagePath": "images/i-20260713-dd12-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-q9x4-fix-r1.png"
+          "images/i-20260713-dd12-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "40661215f5b59564de0ea58a12ee41c811ffce7e",
+        "imageCommit": "3c462899b928652a42eab799c96ca24e63ef75ce",
         "imageCommits": [
-          "40661215f5b59564de0ea58a12ee41c811ffce7e"
+          "3c462899b928652a42eab799c96ca24e63ef75ce"
         ],
-        "fixedAt": "2026-07-13T18:16:13.074Z",
+        "fixedAt": "2026-07-13T18:00:48.587Z",
         "by": "shakeebshaan",
-        "appCommit": "27f8993b",
+        "appCommit": "ce71d9da",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 91,
           "bar": 90,
-          "note": "Implements the v1 scope exactly (per-item pre-filled search, no cart injection, both platforms), calm design (button only on unchecked rows), reuses openExternal + DropdownMenu. Full 390x844 proof shows buttons + open menu. Verified via seeded dev preview (no data QA account headless)."
+          "note": "Uncollected pregnancy_status fixed on shipped Body tab; existing medical block re-arms. Verified E2E: female shows the question, pregnant+deficit hard-blocks Continue (no acknowledge bypass). Surgical, i18n 4-bundle parity, 5 new component tests + pace/parity/pseudo green (84). Configured test:unit is a no-op exit-0; real vitest run backs the pass."
         }
       },
       "history": [],
-      "route": "/shopping-list",
-      "description": "[suggestion] One-tap \"Order on Blinkit/Zepto\" per shopping-list item. Problem: ShoppingList.tsx (route /shopping-list) auto-builds the weekly grocery list from the diet plan but the only action is Share2 — user still has to manually re-type every item name into a delivery app search bar (India users overwhelmingly use 10-min grocery delivery, not weekly big-basket shops). Evidence: grep of src/ finds zero references to blinkit/zepto/instamart/bigbasket — no delivery hook exists anywhere in the app despite the shopping list already being structured per-item with name+qty+unit. Comparable trackers (HealthifyMe, Cult.fit) don't solve this either, so it is a real differentiator, not catch-up. v1 scope: per unchecked item, a small icon button opens a deep link / web search URL for Blinkit (blinkit.com/s/?q=<item>) and Zepto (zeptonow.com/search?query=<item>) in a new tab/app — no cart-injection API (neither platform exposes one publicly), just pre-filled search, so item + qty must still be added manually by the user in the delivery app. Optional \"Copy full list\" fallback for the checked-but-missing items. Effort: small — 1 new button component in ShoppingList.tsx + 2 URL builders, no backend change.",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
       "needsReview": false,
-      "resolvedAt": "2026-07-13T23:37:16.002Z",
+      "resolvedAt": "2026-07-13T23:37:27.845Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T23:37:16.002Z"
+      "archivedAt": "2026-07-13T23:37:27.845Z"
     }
   ]
 }
