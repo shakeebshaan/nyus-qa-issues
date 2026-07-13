@@ -865,9 +865,32 @@
         "c40369447d4a32c97b073e37e276d010dfa23104"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: a new/bonus set defaulted to a static 20kg instead of carrying the working load from the set just logged this session (ExerciseWheelPicker.tsx). Fix: compute lastLoggedSet (highest-numbered logged set) and pass it as prefillSet; when an unlogged set becomes active it seeds reps/weight from it. Verified live: logging Set 1 at 79kg makes Set 2 default to 79kg (Vol 790) instead of 20.",
+        "imagePath": "images/i-20260713-0418-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-0418-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "49f145f453a7fd26887f518ba4546fd293033024",
+        "imageCommits": [
+          "49f145f453a7fd26887f518ba4546fd293033024"
+        ],
+        "fixedAt": "2026-07-13T06:35:28.812Z",
+        "by": "shakeebshaan",
+        "appCommit": "5fa201a2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Prefill lands the previous logged set's weight+reps onto the next/bonus set; verified live (Set1 logged 79kg -> Set2 auto = 79kg, Vol 790)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260713-13d0",
