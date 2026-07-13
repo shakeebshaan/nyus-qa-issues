@@ -291,30 +291,8 @@
         "4044203733d9136ba22628dbffb6a106e666325f"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Reopen 'seeing 2': after r2 merged the logged-today LIST into the Daily activity card, a standalone 'Log activity' surface still rendered separately below the card — two activity UIs. Fix (DailyActivityCard.tsx + Activity.tsx): the one-off Log-activity trigger now lives INSIDE the single Daily activity card as its second add button ('Add another' recurring + 'Log activity' one-off); the standalone surface was removed. One activity card holds both row types (recurring 'Treadmill 60min/150cal Every day' + 'Also logged today' one-off) and both add affordances — no redundant second card. Proof captured on /dev/daily-activity. tsc clean, Activity page tests 34/34, test gate green.",
-        "imagePath": "images/i-20260713-2f33-fix-r3.png",
-        "imagePaths": [
-          "images/i-20260713-2f33-fix-r3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "03f519ab430c14dbc1e632e4799c30e64c1c44ed",
-        "imageCommits": [
-          "03f519ab430c14dbc1e632e4799c30e64c1c44ed"
-        ],
-        "fixedAt": "2026-07-13T18:06:27.252Z",
-        "by": "shakeebshaan",
-        "appCommit": "decddd12",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Third-pass fix directly targets the reopen: removes the separate Log-activity surface so there is exactly one activity card. Full 390x844 proof shows both row types + both add buttons in one card. Caveat: proof rendered via seeded dev preview (no data QA account headless), not a live authenticated /activity capture."
-        }
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "at": "2026-07-13T14:32:35.418Z",
@@ -377,6 +355,35 @@
               "score": 92,
               "bar": 90,
               "note": "Directly implements reopen ask: single unified card, no redundant list. Full-screen 390x844 proof shows both row types (recurring + adhoc) in one Daily activity card with X-remove. tsc clean."
+            }
+          }
+        },
+        {
+          "at": "2026-07-13T23:38:42.323Z",
+          "event": "reopened",
+          "note": "Don't show already logged today just track it as done on the first activity itself like the exercise",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Reopen 'seeing 2': after r2 merged the logged-today LIST into the Daily activity card, a standalone 'Log activity' surface still rendered separately below the card — two activity UIs. Fix (DailyActivityCard.tsx + Activity.tsx): the one-off Log-activity trigger now lives INSIDE the single Daily activity card as its second add button ('Add another' recurring + 'Log activity' one-off); the standalone surface was removed. One activity card holds both row types (recurring 'Treadmill 60min/150cal Every day' + 'Also logged today' one-off) and both add affordances — no redundant second card. Proof captured on /dev/daily-activity. tsc clean, Activity page tests 34/34, test gate green.",
+            "imagePath": "images/i-20260713-2f33-fix-r3.png",
+            "imagePaths": [
+              "images/i-20260713-2f33-fix-r3.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "03f519ab430c14dbc1e632e4799c30e64c1c44ed",
+            "imageCommits": [
+              "03f519ab430c14dbc1e632e4799c30e64c1c44ed"
+            ],
+            "fixedAt": "2026-07-13T18:06:27.252Z",
+            "by": "shakeebshaan",
+            "appCommit": "decddd12",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "Third-pass fix directly targets the reopen: removes the separate Log-activity surface so there is exactly one activity card. Full 390x844 proof shows both row types + both add buttons in one card. Caveat: proof rendered via seeded dev preview (no data QA account headless), not a live authenticated /activity capture."
             }
           }
         }
