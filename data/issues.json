@@ -442,49 +442,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260713-578e",
-      "createdAt": "2026-07-13T06:30:43.347Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-578e.jpg",
-      "imageCommit": "33d77ab5f76bee45e2b1db0ffe159c240e2f29c2",
-      "imagePaths": [
-        "images/i-20260713-578e.jpg"
-      ],
-      "imageCommits": [
-        "33d77ab5f76bee45e2b1db0ffe159c240e2f29c2"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the mid-workout Swap-exercise sheet (ExerciseWheelPicker.tsx) rendered the alternatives list with no search input, so picking a specific replacement meant scrolling the full list. Fix: added a search field at the top of the sheet that filters alternatives by name or equipment (with a no-match empty state); query resets each time the sheet opens. Covered by 4 new tests (53/53 green). Proof PNG is the real component rendered against the dev server.",
-        "imagePath": "images/i-20260713-578e-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-578e-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "07356481f8ce8b050fd959daeed939d0836797d7",
-        "imageCommits": [
-          "07356481f8ce8b050fd959daeed939d0836797d7"
-        ],
-        "fixedAt": "2026-07-13T07:14:21.406Z",
-        "by": "shakeebshaan",
-        "appCommit": "2cd886f4",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Directly implements the owner ask (search field on the swap sheet); surgical single-component change, matches design tokens, filters by name+equipment with empty state, 4 new tests green, real-render visual proof on the exact screen."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260713-7aea",
       "createdAt": "2026-07-13T06:40:34.651Z",
       "route": null,
