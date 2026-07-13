@@ -757,12 +757,34 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Built the Transformation Wall on the nyus.in homepage (NYUSLANDING static/index.html, #transformations section + nav link). Before/after member cards with weight/body-fat/lean-mass deltas + timeframe, an honest 'Illustrative' label and disclaimer (no fabricated named photo testimonials on a health site per legal/trust), and a 'Share your transformation' CTA to /contact for real opt-in stories. Reuses the existing design tokens/card system; deployed live to the Oracle VM and verified (200, section present) + rendered at 390px.",
+        "imagePath": "images/i-20260713-c031-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-c031-fix-r1.png",
+          "images/i-20260713-c031-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "24321b3cb712522819bc208bc455806659473744",
+        "imageCommits": [
+          "24321b3cb712522819bc208bc455806659473744",
+          "416b317ab8b66e9742c04f7fa84567c4c02c0c4c"
+        ],
+        "fixedAt": "2026-07-13T08:04:48.102Z",
+        "by": "shakeebshaan",
+        "appCommit": "c6d13723",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Owner said 'do it' after being offered placeholders; shipped a premium, brand-consistent before/after wall using the placeholder path (silhouette tiles + Illustrative label) so no fabricated testimonials, live-deployed + verified. Drop-in slots ready for real member photos when supplied."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "On it, but one blocker before a real Transformation Wall can ship. It belongs on the marketing site (nyus.in / NYUSLANDING repo), and a credible before/after wall needs REAL member transformation photos plus consented names/stats. I will not fabricate testimonials on a health site (misleading + legal exposure). Please provide 3-6 transformation images + captions (or say 'use placeholders for now') and confirm placement (home-page section vs a dedicated /transformations page). Note the landing deploy is via pscp to the Oracle VM (gh-pages is inert), which I can run once content exists. With assets + go-ahead I will build and deploy it.",
-      "reviewedAt": "2026-07-13T07:49:46.131Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "website",
