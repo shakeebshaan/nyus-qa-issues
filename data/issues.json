@@ -514,7 +514,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Release prep DONE and pushed (commit 99c82c15): versionCode 203->204, versionName 1.9.24, Play changelog written (activity single-card + recurring fasting), web bundle built, cap sync android OK. BUT the AAB build could NOT complete on this dev machine: Gradle/R8 crashed with a JVM native out-of-memory error (hs_err, 'malloc failed to allocate') on BOTH attempts — this 8GB build host has only ~2GB free with the agent resident, and an Android release build needs ~3-4GB peak. This is an infra memory limit, not a code problem (matches the pre-existing hs_err dumps on this box). To ship to Play alpha: run 'cd android && fastlane beta' (env PLAY_STORE_JSON_KEY set) on the main machine, OR on this box when the agent isn't resident / after adding RAM/pagefile. Version + changelog are already committed so the build will pick up 204 automatically.",
+      "reviewedAt": "2026-07-13T16:58:13.797Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
