@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260713-a7d2",
+      "createdAt": "2026-07-13T00:54:32.525Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] In the inline coach-chat \"Today’s Meals\" editor (DietEditPanel), a meal you just added can’t be Swapped, Adjusted, or Removed in the same panel session — those actions error (\"Swap failed\" / \"Adjust failed\" / \"Remove failed\") and a Remove even makes the row reappear — because the optimistic row keeps a client temp id that the backend can never resolve.\n\nROOT CAUSE (missing optimistic-id reconciliation, fresh code from commit d4a38446 \"DietEditPanel add/remove meal\"):\n- handleAddConfirm (src/components/blocks/DietEditPanel.tsx:268) appends an optimistic PlannedMeal with id = `add-${tempIdRef.current++}` (e.g. \"add-0\").\n- addMut.onSuccess (DietEditPanel.tsx:129-134) only invalidate()s the plan-week query and toasts; it NEVER swaps the temp id for the real meal_id the server returns (POST /plans/:id/meals responds { meal_id: dp.id, ... } — app/routes/plan_edits.py:945-950). The panel’s meals[] is local useState seeded once from the chat-message snapshot and is never re-synced from the refetch, so the temp id \"add-0\" persists for the whole panel lifetime.\n- Swap / Adjust / Remove all send meal.id as the server LOCATOR: planService.swapMeal / adjustPortion / removeMeal (plan.service.ts:130/136/180). The backend resolves it with _resolve_meal_row (plan_edits.py:120): \"add-0\" is not a digit; _norm_key(\"add-0\")=\"add0\" matches no meal_name; the trailing-digit fallback yields meal_number 0, and meals start at slot 1 — so it returns None → 404 \"Meal not found in plan\".\n- Skip / Log Eaten are NOT affected: they POST a MealLog by name/value (loggingService.logMeal, DietEditPanel.tsx:83/95), not by id, so they work on an added meal.\n- REAL (LLM-provided) meals are fine — _resolve_meal_row falls back to a meal-name match for them; only the freshly-added optimistic row (whose locator is the temp id, not the name) is unresolvable.\n\nEXPECTED: after adding a meal, its Remove/Swap/Adjust buttons operate on that meal.\nACTUAL: Remove → optimistic delete then rollback (onError, DietEditPanel.tsx:233-241) so the meal snaps back + \"Remove failed\"; Swap/Adjust → \"Swap failed\"/\"Adjust failed\". Only skip/log work.\n\nREPRO: in coach chat, get the diet edit panel (ask the coach to change today’s meals). Tap \"Add meal\", enter a name + macros, Add. Then on that new card tap Remove → \"Just today\" (or Swap/Adjust). The action errors; the removed row reappears.\n\nFIX: in addMut.onSuccess, reconcile the temp row’s id to the returned meal_id (setMeals: map the just-added temp id → String(response.meal_id)); mirror it for the tempId captured in handleAddConfirm. The sibling WorkoutEditPanel add-exercise flow (WorkoutEditPanel.tsx:191-197, commit f1b9da7d) shares the exact same temp-id-never-reconciled pattern — fix both.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260713-8f2c",
       "createdAt": "2026-07-13T00:00:00.000Z",
       "status": "open",
