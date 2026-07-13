@@ -490,12 +490,12 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Part 1 (off-plan activities now show on Activity) already shipped 5281e2d1. Part 2 - the recurring 'daily activity' concept (e.g. treadmill after every workout, done daily/alternate days, set at onboarding, shown separate from the workout with a start-time + stats) - is a standalone feature build (new schema + onboarding screen + Activity surfacing), so I'm scoping+building it as its own unit next tick rather than rushing it at the end of this one. Per your 'do it' + our no-questions directive I'll build with these sensible defaults (tell me to change any): (a) SCHEDULING - support daily / alternate-day / custom weekdays; (b) COUNTS - yes, it counts toward calories + the activity streak like a logged activity (it IS real movement); (c) REMINDER - optional start-time reminder via the existing notification prefs, default OFF. Plan: new recurring_activities table (user_id, name, type, schedule_kind, weekdays, start_time, duration_min, est_calories, active) + migration; an onboarding step after Health & Food ('Any activity you do regularly? e.g. 20-min treadmill after workouts') that's skippable; a 'Daily activity' card on /activity separate from the workout that auto-lists today's due recurring activities with a one-tap 'Done' that writes an ActivityLog(source='recurring'); designed to the calm/precise system (no arcade). Will deploy + 390x844 capture when it ships. Flagging only to record the defaults - no action needed unless you want to change (a)/(b)/(c).",
       "reviewedAt": "2026-07-13T08:43:21.419Z",
       "reviewedBy": "shakeebshaan",
-      "reviewReply": "Do the other part",
-      "reviewRepliedAt": "2026-07-13T08:24:06.724Z",
+      "reviewReply": "Do all",
+      "reviewRepliedAt": "2026-07-13T09:57:52.253Z",
       "reviewReplyBy": "shakeebshaan"
     },
     {
