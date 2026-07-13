@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260713-9d98",
+      "createdAt": "2026-07-13T22:38:21Z",
+      "status": "open",
+      "route": "/activity",
+      "title": "Recurring Daily-activity done-state matched by name, not id — dup-name under-count + rename orphans calorie log",
+      "description": "[bug-hunt] Recurring \"Daily activity\" done-state is matched by name string, not by id (no FK link) — duplicate-name completions under-count, and renaming a done activity orphans its calorie log.\n\nArea: recurring off-plan \"Daily activity\" (NEW feature, commit 2f33). Route: /activity.\n\nROOT CAUSE: a recurring completion is tracked two disjoint ways — the scalar RecurringActivity.last_done_date (drives done_today in recurring_activities.py:_serialize line 112) AND an ActivityLog(source=recurring) that mark_done/undo_done match purely by activity_name string (recurring_activities.py:234 and :273). db_models RecurringActivity/ActivityLog have NO id link (no recurring_activity_id column/FK), so the name is the only join key. Any two recurring rows that share a name — or a rename after being marked done — desyncs the scalar from the log.\n\nREPRO 1 (duplicate name -> silent under-count): /activity -> Daily activity card -> Recurring -> add Walk, Every day, 100 cal -> Save; add Walk again (same name), 100 cal -> Save. Both show due today. Tap Done on the first Walk, then Done on the second.\n  Expected: two ActivityLog(source=recurring) rows -> 200 cal + both count toward today's activity total/streak.\n  Actual: mark_done (recurring_activities.py:232-236) finds an existing ActivityLog by user_id+log_date+source=recurring+activity_name=Walk = the FIRST Walk's log -> skips the insert and only bumps the 2nd row's last_done_date. Both render Done, but only ONE log (100 cal) exists -> the 2nd Walk's calories/streak are silently uncounted. Undo the first Walk -> its single log is deleted, leaving the 2nd Walk showing Done with zero backing logs.\n\nREPRO 2 (rename a done activity -> orphaned phantom calories + double count): add Treadmill, 200 cal, Every day -> Save. Tap Done -> ActivityLog(name=Treadmill, 200 cal, source=recurring), last_done_date=today, shows Done. Tap the row -> rename to Running -> Save (PUT). done_today stays true (last_done_date untouched) so it still shows Done. Tap Undo -> undo_done (recurring_activities.py:271-276) matches the log by activity_name=Running -> NO match -> the Treadmill log is NOT deleted, but last_done_date==today is cleared -> row flips to not-done.\n  Result: the orphaned ActivityLog(name=Treadmill, 200 cal) keeps counting toward today's calorie total + streak with NO UI affordance to remove it. Tap Done again on Running -> creates a SECOND log (name=Running, 200 cal) -> today's recurring calories double-counted (400 for one activity).\n\nBoth repros confirmed by code trace across FE (src/components/activity/DailyActivityCard.tsx done/undo/edit + src/services/recurring-activity.service.ts) and backend (app/routes/recurring_activities.py + db_models.py:2096 RecurringActivity — no recurring_activity_id on ActivityLog). tsc --noEmit clean.\n\nFIX: bind done/undo/idempotency to the specific recurring activity, not its display name — add a nullable ActivityLog.recurring_activity_id (FK + migration), write it on mark_done, and match on it in undo_done + the idempotency guard. (Lighter interim: rename the today ActivityLog when the recurring row is renamed and reject/merge duplicate recurring names — but the id link is the robust fix.)",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260713-f2d1",
       "description": "[content] Published: Paneer vs Tofu for Weight Loss (India) — https://nyus.in/blog/paneer-vs-tofu-for-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
       "createdAt": "2026-07-13T22:28:31Z",
