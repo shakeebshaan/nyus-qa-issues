@@ -534,53 +534,6 @@
       "imagePath": null,
       "imagePaths": [],
       "imageCommittedAt": null
-    },
-    {
-      "id": "i-20260713-e4f5",
-      "createdAt": "2026-07-13T10:37:02.648Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-e4f5-0.jpg",
-      "imageCommit": "14f574c2269ddd943c15215e6c66edd8dedfd584",
-      "imagePaths": [
-        "images/i-20260713-e4f5-0.jpg",
-        "images/i-20260713-e4f5-1.jpg",
-        "images/i-20260713-e4f5-2.jpg"
-      ],
-      "imageCommits": [
-        "14f574c2269ddd943c15215e6c66edd8dedfd584",
-        "8fc812ff3c165f9b1806a418855adf0d6d5b08a9",
-        "8c776e7febabb081b125d88082bd343a90863b26"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the dashboard + Activity 'exercises done' ring counted only completed exercises, so skipping 2 of 11 stuck at 9/11 with 2 remaining. Fix: backend /dashboard/overview now unions SkippedExerciseLog exercise_ids with completed set-log ids (backend.py, deployed to prod), and the Activity page TodaysActivityCard uses countResolvedExercises (completed OR skipped). Verified on your account: API now returns 11/11 and the card shows '11 of 11 exercises done - Complete!' (full ring, 0 remaining).",
-        "imagePath": "images/i-20260713-e4f5-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-e4f5-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a4d5c8750ca065ac08b675137fc2bb48a93926d1",
-        "imageCommits": [
-          "a4d5c8750ca065ac08b675137fc2bb48a93926d1"
-        ],
-        "fixedAt": "2026-07-13T11:37:56.000Z",
-        "by": "shakeebshaan",
-        "appCommit": "3a3105b8",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root-caused across both surfaces (backend dashboard + FE Activity page), deployed to prod, verified end-to-end on the reporter's own account: /dashboard/overview now returns current:11/target:11 and the recaptured 390x844 dashboard shows the full green ring + 'Complete!'. Unit tests 12/12 green; skip dedups a partial exercise."
-        }
-      },
-      "history": [],
-      "needsReview": false
     }
   ]
 }
