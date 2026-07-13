@@ -967,9 +967,32 @@
         "7d1803e544a291007c890ccc85ab709ca116820a"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: live-workout Set editor reps/kg fields (ExerciseWheelPicker.tsx) are controlled type=number inputs whose onChange coerced empty->0/1, so the value could never be cleared and tapping left the caret after the existing digit (the '0'/'20' wouldn't go away when typing 79). Fix: onFocus select-all on both inputs so a tap highlights the value and the first digit typed replaces it. Verified on the real workout screen: KG default 20 -> tap + type 79 = 79 (not 2079), Vol updates to 790.",
+        "imagePath": "images/i-20260713-3e76-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-3e76-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e0b449fc8a84a3a965473659e1a7c5c7eff2f1a2",
+        "imageCommits": [
+          "e0b449fc8a84a3a965473659e1a7c5c7eff2f1a2"
+        ],
+        "fixedAt": "2026-07-13T06:34:17.042Z",
+        "by": "shakeebshaan",
+        "appCommit": "5fa201a2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused to controlled type=number coercion; minimal 2-line select-on-focus fix; verified live on the real Set editor (KG 20 -> typing 79 yields 79 not 2079, Vol 790)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260713-578e",
