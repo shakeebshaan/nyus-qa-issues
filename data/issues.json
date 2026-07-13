@@ -316,12 +316,32 @@
         "d4d7a15548f98a54d91210b847e65caf0f76944f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: at the day cap the workout builder's Add-day button silently vanished, so it looked broken. Your screenshot is a pre-cap build (Day 9 & Day 10 both on Sunday) - the plan maps one training day per weekday, so it can't exceed 7 distinct days (owner cap i-20260710-7a3f). Fix (WorkoutDayTabs.tsx): at the cap the '+' is replaced by a clear hint 'Max 7 days - one per weekday' so the limit is explained instead of the button just disappearing. NOTE: if you want programs longer than a week (multi-week rotations), that needs a backend model change - tell me and I'll scope it.",
+        "imagePath": "images/i-20260713-ae38-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-ae38-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0ea0f471d36d960779b1e9fd58b5dce2f2b98ebd",
+        "imageCommits": [
+          "0ea0f471d36d960779b1e9fd58b5dce2f2b98ebd"
+        ],
+        "fixedAt": "2026-07-13T09:04:49.437Z",
+        "by": "shakeebshaan",
+        "appCommit": "43a373ad",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Verified via component harness at 7/7 days: '+' replaced by the explanatory hint. Fully resolves the confusion; cap value itself is owner-mandated (7a3f) so not raised. Flagged multi-week as an owner option."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "The build now caps training days at 7 by design (one day per weekday). Your screenshot showing 'Day 1 of 10' is from an older build; the cap was lowered 10->7 on 2026-07-10 (commit 0bb48735) to fix i-20260710-7a3f, because the backend maps each day to a distinct weekday and an 8th+ day silently collapses onto Sunday. So an 11th training day cannot be represented in the current weekly-plan model. Your call between: (a) keep 7/week and I add a small helper line ('7 days = one full week, the weekly max') so the Add button does not just vanish; or (b) you want true multi-session scheduling (>7 sessions/week or 2-a-days), which is a data-model change in the backend. Which do you prefer?",
-      "reviewedAt": "2026-07-13T07:49:19.453Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "workout-builder",
