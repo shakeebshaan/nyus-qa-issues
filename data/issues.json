@@ -394,8 +394,30 @@
         "4044203733d9136ba22628dbffb6a106e666325f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen (single UI, no redundant logged-today list) fixed. Root cause: adhoc 'logged today' entries rendered in two places (LogActivitySheet + standalone TodaysOffPlanActivities) beside the recurring Daily activity card. Fix: DailyActivityCard now holds BOTH recurring rows AND today's adhoc logs under one 'Also logged today' section with X-remove; LogActivitySheet is input-only; TodaysOffPlanActivities deleted. Proof shows recurring Treadmill + adhoc Treadmill in one card.",
+        "imagePath": "images/i-20260713-2f33-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260713-2f33-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fd4fcf55c6fa0ebd79131b3eff4158fc7bf2b461",
+        "imageCommits": [
+          "fd4fcf55c6fa0ebd79131b3eff4158fc7bf2b461"
+        ],
+        "fixedAt": "2026-07-13T16:33:13.063Z",
+        "by": "shakeebshaan",
+        "appCommit": "756469bc",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Directly implements reopen ask: single unified card, no redundant list. Full-screen 390x844 proof shows both row types (recurring + adhoc) in one Daily activity card with X-remove. tsc clean."
+        }
+      },
       "history": [
         {
           "at": "2026-07-13T14:32:35.418Z",
