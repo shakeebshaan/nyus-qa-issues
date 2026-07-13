@@ -841,8 +841,30 @@
         "55be49945857d41c59628530be60d1914798f852"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen ask: 'clean this also add some svg of supplement etc'. Fix (SupplementsCard.tsx): added supplementIcon(name) -> maps the free-text name to a supplement-shaped lucide glyph (Pill/Tablets/Droplet/FlaskConical/Leaf) and renders it in a tinted chip on every row (today's check-off + also-tracked), so the card reads as real supplements, not bare labels. Tier-free/calm per gamification guardrails; pairs with the compact Add pill from 8679a34e.",
+        "imagePath": "images/i-20260713-4a68-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260713-4a68-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "22f0cacf17cf9ebf03c66c453321a499aade66da",
+        "imageCommits": [
+          "22f0cacf17cf9ebf03c66c453321a499aade66da"
+        ],
+        "fixedAt": "2026-07-13T03:01:41.960Z",
+        "by": "shakeebshaan",
+        "appCommit": "8fb897e3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Full-viewport 390x844 dashboard capture shows the reworked card: each supplement row leads with a name-derived SVG glyph (Vitamin D capsule, Whey flask, Fish Oil droplet, Ashwagandha leaf, Thyroid med tablets) in a calm tinted chip, cleaner rows, compact Add pill. Rendered with real items injected since the QA account has none. Addresses both 'clean this' and 'add some svg of supplement'."
+        }
+      },
       "history": [
         {
           "at": "2026-07-13T02:20:26.224Z",
