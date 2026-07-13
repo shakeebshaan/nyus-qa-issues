@@ -20510,48 +20510,49 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260712-9f7c",
-      "createdAt": "2026-07-12T14:10:00.000Z",
+      "id": "i-20260713-c7a3",
+      "description": "[bug-hunt] Shopping List category grouping is dead — every item renders under a single \"OTHER\" header. src/pages/ShoppingList.tsx groups items by `item.category ?? \"Other\"` and renders an uppercase category header per group, but the endpoint it calls, GET /diet/shopping-list (backend ShoppingListResource, backend.py:7522-7676), never sets a `category` on its serialized items — only name/quantity/unit/ingredient_id (backend.py:7628-7633). So item.category is always undefined, all items fall into one \"Other\" group, and the header shows \"OTHER\" over the whole list; the category-grouping UI is inert. The FE type ShoppingListItem also declares category? and est_price_inr? (src/types/api.ts:427) that the endpoint never returns. The DEV fix-proof preview (src/pages/dev/ShoppingListPreview.tsx) SEEDS fake categories (Dairy/Grains/Vegetables), so the capture looked correctly grouped while production shows one \"OTHER\" bucket. Expected: items grouped under real categories (Dairy, Grains, Vegetables, ...). Actual: single \"OTHER\" group. Repro: open /shopping-list with an active diet plan -> all items sit under one \"OTHER\" header. Fix: add category (and optionally est_price_inr) to ShoppingListResource serialization — Ingredient already has a .category column (used as ing.category in app/routes/plan_builder_routes.py:542); or point the page at the richer /grocery endpoint (app/routes/grocery.py) which already returns category+est_price_inr.",
+      "createdAt": "2026-07-13T21:53:31Z",
       "status": "resolved",
-      "route": "/plan-pause",
-      "description": "[suggestion] Injury-aware exercise substitution when a plan is paused for injury. Problem: PlanPauseScreen (src/pages/PlanPauseScreen.tsx) already has an \"Injury\" pause reason but only stores it as a label — no body-part capture and no downstream effect, so on resume the workout plan generator/coach can re-serve the exact movement that caused the injury (e.g. shoulder press after a shoulder injury). Evidence: REASONS array has injury as a flat enum value with no follow-up field; workout-plan generation and AI coach have no injury-exclusion input anywhere in the codebase. Comparable apps (Fitbod, Future) ask which body part and auto-avoid loading it. V1 scope: when reason=injury, show one extra step \"Which area?\" (shoulder/knee/back/wrist/ankle/other) + optional note; store on the pause record; on resume, pass the flagged body part(s) to the workout-plan builder/coach system prompt to exclude/soften exercises targeting that area for the first 1-2 weeks back, with a banner reminding the user to clear it manually if resolved sooner. Effort: ~1-2 days (1 new field + storage, 1 builder-prompt condition, 1 UI step).",
-      "author": "shakeebshaan",
       "tags": [
-        "suggestion",
+        "bug-hunt",
         "auto"
       ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "author": "shakeebshaan",
+      "route": "/shopping-list",
       "fix": {
-        "description": "Shipped injury-aware plan resume end-to-end. Root cause: the FE half (9b1d6e57) shipped an injury-area picker but its commit wrongly claimed the backend 'already ships' — the backend exclusion was uncommitted/undeployed, so a shoulder injury could still get shoulder press on resume; that same commit also left 4 PlanPauseScreen tests red (unupdated pausePlan arity). Fix: committed + deployed backend (plans.py stores sanitized injury_areas[] in the pause snapshot; plan_generator._active_injury_areas reads it for a 14-day post-resume window and _build_workout_prompt injects an ACTIVE INJURY avoid/soften clause into every workout-gen path) and realigned the 4 tests. Proof: /plan-pause with Injury -> 8-area picker, Shoulder+Knee selected. Tests green: FE 63/63, backend injury 2/2.",
-        "imagePath": "images/i-20260712-9f7c-fix-r1.png",
+        "description": "Root cause: GET /diet/shopping-list (ShoppingListResource) never serialized a category, and ingredients.category is 'other'/'meal'/NULL for ~all foods used in recipes, so the FE grouped everything under one 'OTHER' header. Fix: backend now derives a real grocery aisle from the ingredient NAME (_grocery_display_category keyword map, DB category used only when it's a real food class) and sets it per item; verified on prod (106,079 recipe ingredients: 'Other' dropped ~100%->11%). FE ShoppingList.tsx tidies underscores in the header label. Live proof capture shows 5 real aisles (Dairy, Grains, Oils & Fats, Protein, Vegetables) - Paneer->Dairy, Wheat Flour->Grains.",
+        "imagePath": "images/i-20260713-c7a3-fix-r1.png",
         "imagePaths": [
-          "images/i-20260712-9f7c-fix-r1.png"
+          "images/i-20260713-c7a3-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "4c12a4616a96db5b018f4536a24ceec8d688236d",
+        "imageCommit": "a0d80c44d6fc2b924b3cdc04b3ed004dfd52a41d",
         "imageCommits": [
-          "4c12a4616a96db5b018f4536a24ceec8d688236d"
+          "a0d80c44d6fc2b924b3cdc04b3ed004dfd52a41d"
         ],
-        "fixedAt": "2026-07-13T21:37:06.123Z",
+        "fixedAt": "2026-07-13T22:11:01.769Z",
         "by": "shakeebshaan",
-        "appCommit": "cbd7685d",
+        "appCommit": "b59a1067",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 92,
           "bar": 90,
-          "note": "Complete end-to-end: backend committed+deployed to prod (verified _active_injury_areas live), FE already shipped, 4 rotted tests fixed, real live /plan-pause proof capture shows the area picker + selected state. Both test suites green."
+          "note": "Root-caused (missing serialization + polluted DB category), fixed backend+FE, deployed to prod, verified classifier on 106k real recipe ingredients and captured 5 real aisles on the live fixed backend. Note: heavy duplicate AI-ingredient rows remain a separate data-quality issue."
         }
       },
       "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "needsReview": false,
-      "resolvedAt": "2026-07-13T23:37:39.107Z",
+      "resolvedAt": "2026-07-13T23:39:10.648Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T23:37:39.107Z"
+      "archivedAt": "2026-07-13T23:39:10.648Z"
     }
   ]
 }
