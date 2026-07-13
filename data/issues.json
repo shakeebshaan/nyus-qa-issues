@@ -1055,7 +1055,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "The dumbbell glyph tapped is the plate-calculator button (aria-label 'Open plate calculator'), NOT an equipment indicator - every exercise shows it. A true barbell-by-equipment icon isn't shippable as-is: the active-workout exercise payload has no 'equipment' field (needs a backend add) and lucide has no barbell glyph (needs a custom SVG). Low-risk option now: swap the plate-calc button's dumbbell for a neutral Calculator icon so it stops reading as an equipment claim. Want the neutral relabel, or the full equipment-aware barbell (backend field + custom SVG)?",
+      "reviewedAt": "2026-07-13T06:51:44.944Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-f980",
