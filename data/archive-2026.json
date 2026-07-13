@@ -20508,6 +20508,31 @@
       "imageCommits": [],
       "archivedAt": "2026-07-13T22:28:46.236Z",
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
+    },
+    {
+      "id": "i-20260712-b4e1",
+      "createdAt": "2026-07-12T23:41:55.249Z",
+      "status": "resolved",
+      "route": "/nutrition",
+      "description": "[suggestion] Quick-add \"Recent meals\" row for one-tap re-logging of frequently eaten foods. Problem: meal logging (FoodSearchSheet) requires a full search+select+qty flow every time, even for the same dal/roti/protein-shake a user eats daily — the highest-frequency action in the app has the highest friction, which is a known churn driver in nutrition trackers (MyFitnessPal/Cronometer both ship \"recent\" and \"favorites\" as their #1 speed feature). Evidence: grepped src/pages/_components/nutrition + components/plan-builder — no favorites/recent/quick-add/log-again surface exists anywhere in the logging flow today. Proposed v1: backend endpoint returning the user’s last 8 distinct logged foods (query existing meal-log table, group by food_id, order by last-logged desc) + a \"Recent\" chip row atop FoodSearchSheet; tapping re-logs the same food/qty at current time via the existing log-meal endpoint (no new write path). Effort: ~1 backend endpoint (S) + ~1 FE component insert (S), no schema change — half-day.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Already shipped — this suggestion's exact v1 exists in the app today. The 'Recent' one-tap re-log surface lives in the /nutrition Add-Food modal (src/components/nutrition/CustomMealModal.tsx:491-511): a horizontal 'Recent' chip row at the top of the Quick Log tab, fed by GET /logs/meal/recent?limit=8 (backend app/routes/logging.py:510 get_recent_meals — the prod-winning logging_bp) and re-logging on tap via fillFromRecent (CustomMealModal.tsx:217). The suggestion's grep only scanned src/pages/_components/nutrition + components/plan-builder, so it missed src/components/nutrition/ where the row actually lives (the plan-builder FoodSearchSheet also has a separate localStorage 'Recent' tab). No new endpoint or schema needed — recommend Resolve/dismiss. If you want it richer (e.g. show macros per chip, favorites/pin, or surface it on the diary card too), reopen with the specific ask and I'll extend it.",
+      "reviewedAt": "2026-07-13T23:05:24.129Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-13T23:35:17.467Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-13T23:35:17.467Z"
     }
   ]
 }
