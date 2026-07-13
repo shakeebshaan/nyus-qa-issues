@@ -19719,6 +19719,51 @@
       "resolvedAt": "2026-07-13T00:43:29.834Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-13T00:43:29.834Z"
+    },
+    {
+      "id": "i-20260712-569f",
+      "createdAt": "2026-07-12T12:57:39.546Z",
+      "route": "/partners/:groupId",
+      "description": "[bug-hunt] Partner-group activity events show the wrong relative time and sort out of order in the partner chat thread, because the /events endpoint serializes their UTC timestamp WITHOUT a Z suffix while every sibling timestamp in the same thread DOES append Z.\n\nROOT CAUSE (offset-less UTC — same class as the already-fixed social-feed + coach-social cases, but a distinct THIRD endpoint):\n- Backend: app/routes/partner_groups.py:1250 (GET /partner-groups/<group_id>/events) returns 'created_at': r.created_at.isoformat() with NO Z. PartnerGroupEvent.created_at is a naive UTC column (db_models.py:2286, default=datetime.utcnow). The codebase convention is .isoformat() + \"Z\" (admin_v2/ai_dashboard.py, coach.py:85, and the partner-group MESSAGE serializer backend.py:5617/5679/5748 all append Z).\n- Frontend: SessionStartedCard.tsx:29 and MealLoggedCard.tsx:28 compute relativeTime = Date.now() - new Date(iso).getTime(). An offset-less ISO string is parsed as LOCAL time, so for the primary market (IST, +5:30) a just-created event is read ~5.5h in the past. PartnerChatThread.tsx:292 also uses timestampOf(e.created_at) as the interleave sortKey, while chat messages use sent_at (which IS Z-suffixed / true UTC).\n\nEXPECTED: an event that just happened shows \"just now\"; events and messages interleave in true chronological order.\nACTUAL (IST viewer): a just-happened \"Mike started Push A\" / meal-logged card shows \"5h\" ago; and because same-moment messages carry a Z (real UTC epoch) while events are shifted -5.5h, events sort ~5.5h earlier than messages that actually happened at the same time, so events cluster wrongly early in the thread. US/negative-offset viewers hit the mirror case: relativeTime clamps with Math.max(0,...) so everything reads \"just now\".\n\nREPRO: open /partners/:groupId as an IST-timezone user; have a group member start a session or log a meal; observe the event card timestamp (\"5h\" instead of \"just now\") and its position relative to same-time chat messages.\n\nFIX: append Z in partner_groups.py:1250 (r.created_at.isoformat() + \"Z\") to match the message serializers — one line, mirrors the b3f0/c1a7 fixes. (partner_groups.py:1393 reaction created_at is offset-less too but renders no relative time; optional for consistency.)",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the GET /partner-groups/<id>/events endpoint serialized each event's UTC created_at with .isoformat() but WITHOUT a 'Z' suffix, while every sibling timestamp in the thread (chat messages) does append Z. The app parsed the offset-less string as LOCAL time, so for IST users a just-created event card showed '5h' ago instead of 'just now' and sorted ~5.5h out of order against messages. Fix: append '+Z' to the events serializer (and the DM-reaction serializer) so both are true UTC, matching the message serializers. Capture shows the thread now rendering a just-logged meal as 'just now' and a 6-min-old session as '6m', in correct order.",
+        "imagePath": "images/i-20260712-569f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260712-569f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "94e62b0ba0bc86d5bb9c48fec4baf71bbd0c4173",
+        "imageCommits": [
+          "94e62b0ba0bc86d5bb9c48fec4baf71bbd0c4173"
+        ],
+        "fixedAt": "2026-07-12T15:23:50.905Z",
+        "by": "shakeebshaan",
+        "appCommit": "9d00a8f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused + one-line fix mirroring the two prior offset-less-UTC fixes; backend regression test asserts Z-suffix (32/32 green); scenario capture confirms FE renders correct relative time + order; deployed live to prod."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-13T01:30:50.356Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-13T01:30:50.356Z"
     }
   ]
 }
