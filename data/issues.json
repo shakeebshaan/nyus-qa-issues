@@ -761,8 +761,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Substantial multi-part WEBSITE feature (nyus.in / NYUSLANDING repo), not a one-file app-QA fix: needs a before/after gallery UI + user-submission flow + moderation + image storage. Beyond one fix-issues tick and in a different repo. Proposed scope for a dedicated build: (1) submission form (photos + consent) -> (2) moderation queue -> (3) public wall section on the landing. You replied 'do it' - flagging so it's tracked as its own project rather than lost in the bug loop; confirm scope/consent model and I'll build it standalone.",
-      "reviewedAt": "2026-07-13T06:52:08.702Z",
+      "reviewReason": "Got your 'do it' on the Transformation Wall. This is a genuine standalone build in the NYUSLANDING repo (nyus.in), not an app-QA one-tick fix, so I'm scoping it here before writing it rather than half-shipping a public user-photo feature in a 30-min tick. Plan (3 parts): (1) public submission form (before/after photos + name/handle + EXPLICIT consent checkbox) -> POST to a backend endpoint that stores images + a pending record; (2) moderation queue (admin-only) to approve/reject before anything goes public; (3) a 'Transformation Wall' section on the landing rendering only approved entries. ONE owner decision blocks the build: the CONSENT + MODERATION model for real before/after body photos (a privacy-sensitive, publicly-visible UGC surface) — confirm: (a) explicit written consent text you want on the form, (b) moderation is approve-before-public (recommended) vs auto-publish, (c) where images are stored (reuse nyus-qa-private-style repo, or the Oracle VM /home/ubuntu/nyus-landing). Reply with those three and I'll build it standalone next tick. Everything else (form UI, wall UI, endpoint) I can do without further input.",
+      "reviewedAt": "2026-07-13T07:15:22.377Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "website",
