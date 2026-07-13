@@ -20382,6 +20382,92 @@
       "resolvedAt": "2026-07-13T14:33:55.741Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-13T14:33:55.741Z"
+    },
+    {
+      "id": "i-20260713-c031",
+      "createdAt": "2026-07-13T01:36:48.082Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-13T14:36:11.855Z",
+          "event": "reopened",
+          "note": "add all the we already have side by side",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Built the Transformation Wall on the nyus.in homepage (NYUSLANDING static/index.html, #transformations section + nav link). Before/after member cards with weight/body-fat/lean-mass deltas + timeframe, an honest 'Illustrative' label and disclaimer (no fabricated named photo testimonials on a health site per legal/trust), and a 'Share your transformation' CTA to /contact for real opt-in stories. Reuses the existing design tokens/card system; deployed live to the Oracle VM and verified (200, section present) + rendered at 390px.",
+            "imagePath": "images/i-20260713-c031-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260713-c031-fix-r1.png",
+              "images/i-20260713-c031-fix-r1-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "24321b3cb712522819bc208bc455806659473744",
+            "imageCommits": [
+              "24321b3cb712522819bc208bc455806659473744",
+              "416b317ab8b66e9742c04f7fa84567c4c02c0c4c"
+            ],
+            "fixedAt": "2026-07-13T08:04:48.102Z",
+            "by": "shakeebshaan",
+            "appCommit": "c6d13723",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "Owner said 'do it' after being offered placeholders; shipped a premium, brand-consistent before/after wall using the placeholder path (silhouette tiles + Illustrative label) so no fabricated testimonials, live-deployed + verified. Drop-in slots ready for real member photos when supplied."
+            }
+          },
+          "images": [
+            "images/i-20260713-c031-notfixed-0.jpg",
+            "images/i-20260713-c031-notfixed-1.jpg",
+            "images/i-20260713-c031-notfixed-2.jpg",
+            "images/i-20260713-c031-notfixed-3.jpg",
+            "images/i-20260713-c031-notfixed-4.jpg",
+            "images/i-20260713-c031-notfixed-5.jpg",
+            "images/i-20260713-c031-notfixed-6.jpg",
+            "images/i-20260713-c031-notfixed-7.jpg",
+            "images/i-20260713-c031-notfixed-8.jpg"
+          ],
+          "imageCommits": [
+            "25a9eb54cd74193226326b1294535b4a354c0db9",
+            "4e286d95a837baa1e9e729e8b54053379483c4de",
+            "90f37690d2c2d1801550d6bc16d7b1bf4977519d",
+            "849ea7354c5b2280f3d95bb07d843077972030e1",
+            "5d46d3bb90610a79d6673178547146134ec71389",
+            "28c17cc4e8f1e21f1596b5929f5029fd6c977db1",
+            "f3abe2c1c02dce6a8b57b56c4bd504c0706fb655",
+            "32fca7e296d5c2e74c5e0f94e576e46f3d545e07",
+            "7c41ad010312c20d58f315eb18c7fa58f81f6f48"
+          ]
+        }
+      ],
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "website",
+        "asset-needed"
+      ],
+      "reviewReply": "do it",
+      "reviewRepliedAt": "2026-07-13T04:30:56.462Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "Re-fix done + live (per 'add all the we already have side by side'). All three member results we have — Arjun (Mumbai), Priya (Bangalore), Rahul (Delhi) — are shown SIDE BY SIDE on the Transformation Wall, each as a distinct BEFORE->AFTER card with stats + quote. The reopen's core issue (before/after didn't visibly read as a change) is fixed: BEFORE figures are now clearly rounder/softer and AFTER figures a lean athletic V-taper (Rahul's muscle-gain card the broadest). Deployed to the Oracle VM and verified live (HTTPS 200, new markup served). See attached 'Fix proof' report (inline) or open https://nyus.in/#transformations. IMPORTANT: only 3 real member results exist anywhere in the product (same 3 in ChoosePlan + 'What members achieve') — I did NOT fabricate extra members (RETRO rule: real/matching only, no placeholders). To add MORE side-by-side cards or real named PHOTOS, please drop the member image files + written consent and I'll swap the illustrative silhouettes. NOTE: board resolve gate (testGate npm run test:unit + satisfaction 90) is app-only and infra-blocked headless (loop.mjs verify spawnSync ENOENT), and irrelevant to a static-HTML landing change, so I flagged for review rather than faking --tests pass. NYUSLANDING commit 58f3a542. Resolve if good.",
+      "reviewedAt": "2026-07-13T17:38:40.348Z",
+      "reportPath": "reports/c031-report.html",
+      "reportLabel": "Fix proof — Transformation Wall (live)",
+      "resolvedAt": "2026-07-13T17:48:47.182Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-13T17:48:47.182Z"
     }
   ]
 }
