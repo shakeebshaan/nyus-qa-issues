@@ -744,9 +744,32 @@
         "55be49945857d41c59628530be60d1914798f852"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the dashboard SupplementsCard 'Add supplement' action was a full-width dashed box (w-full border-dashed, ~530px wide) that read as a big empty input and cluttered the card. Fix (src/pages/_components/dashboard/SupplementsCard.tsx): replaced it with a compact auto-width domain-purple pill (rounded-full bg-d-purple-50, 146x44) — keeps the 44px touch target while decluttering the card. Verified on /dashboard with a Vitamins item at 390x844.",
+        "imagePath": "images/i-20260713-4a68-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-4a68-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a58fe23072348adeba6bd37509d9d423660b6a54",
+        "imageCommits": [
+          "a58fe23072348adeba6bd37509d9d423660b6a54"
+        ],
+        "fixedAt": "2026-07-13T01:37:55.309Z",
+        "by": "shakeebshaan",
+        "appCommit": "8679a34e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Directly addresses both asks: button no longer oversized (146px vs full-width), card decluttered/premium. Cosmetic className-only change, dashboard tests green, full-screen 390x844 proof shows exact fixed state."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260713-5f95",
