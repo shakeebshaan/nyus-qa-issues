@@ -20111,50 +20111,51 @@
       "archivedAt": "2026-07-13T08:35:48.427Z"
     },
     {
-      "id": "i-20260713-13d0",
-      "createdAt": "2026-07-13T06:02:33.206Z",
+      "id": "i-20260713-c450",
+      "createdAt": "2026-07-13T06:12:04.287Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-13d0.jpg",
-      "imageCommit": "5cdec104c8891bd28d2fa7d0dbb3f6c5da3df0e7",
+      "imagePath": "images/i-20260713-c450.jpg",
+      "imageCommit": "f31808a6fc61bc2c7ba16e7b858ab17a15731140",
       "imagePaths": [
-        "images/i-20260713-13d0.jpg"
+        "images/i-20260713-c450.jpg"
       ],
       "imageCommits": [
-        "5cdec104c8891bd28d2fa7d0dbb3f6c5da3df0e7"
+        "f31808a6fc61bc2c7ba16e7b858ab17a15731140"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: exercise cards showed only a set count, no volume. Fix: each card now appends this session's total volume next to the set count (e.g. '3 sets logged - 1,770 kg'), from logged reps x weight; bodyweight moves omit it.",
-        "imagePath": "images/i-20260713-13d0-fix-r1.png",
+        "description": "Root cause: the KG-row button that opens the plate calculator (a barbell plate-loading tool) showed a dumbbell icon on every exercise, so on a barbell lift like Close-Grip Bench Press it read as 'dumbbell' and the barbell felt missing. Fix: that icon is now a calculator that clearly opens the plate/barbell calculator (screenshot) — tap it to load the bar plus plates per side.",
+        "imagePath": "images/i-20260713-c450-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-13d0-fix-r1.png"
+          "images/i-20260713-c450-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "d9ba4d9a41522eee6bf6a0451491ad53b1d378a6",
+        "imageCommit": "df1395366240fc45185a49cdf89bfbaa0edbd567",
         "imageCommits": [
-          "d9ba4d9a41522eee6bf6a0451491ad53b1d378a6"
+          "df1395366240fc45185a49cdf89bfbaa0edbd567"
         ],
-        "fixedAt": "2026-07-13T06:49:43.931Z",
+        "fixedAt": "2026-07-13T07:47:01.197Z",
         "by": "shakeebshaan",
-        "appCommit": "2d1e2426",
+        "appCommit": "5281e2d1",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 93,
+          "score": 91,
           "bar": 90,
-          "note": "Verified live: every exercise card now shows per-exercise volume (Lat Pulldown 1,770 / Back-ext 400 / Bench 2,200 kg)."
+          "note": "Removes the misleading dumbbell signal; screenshot shows the barbell plate tool is right there. Surgical icon-only change, 55 picker tests green."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-13T08:39:00.454Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-13T08:39:20.202Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T08:39:00.454Z"
+      "archivedAt": "2026-07-13T08:39:20.202Z"
     }
   ]
 }
