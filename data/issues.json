@@ -285,12 +285,32 @@
         "14f150d6b1372f5133887cc37fda3d56d95e1845"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "You can now fast until a set time. On the Fasting screen pick the new 'Until a time' option, choose your time (e.g. 9:00 AM), and tap 'Start fast until 9:00 AM' — the timer counts down to that clock time instead of just a fixed number of hours.",
+        "imagePath": "images/i-20260713-cb75-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-cb75-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f87caf1e493e906deccb2b0f38b484552901cccb",
+        "imageCommits": [
+          "f87caf1e493e906deccb2b0f38b484552901cccb"
+        ],
+        "fixedAt": "2026-07-13T11:30:06.657Z",
+        "by": "shakeebshaan",
+        "appCommit": "6a9e8d97",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "FE-only, matches existing window-picker design tokens; 4 new unit tests green; screenshot shows the control + 'Start fast until 9:00 AM'."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Feature gap, needs your product call. The Fasting screen (src/pages/Fasting.tsx) only tracks fast DURATION (a live count-up toward 16/18/20/23h or a custom 12-36h length). There is no clock-time schedule, so 'fast till 9am daily' - a recurring eating-window that OPENS at a fixed wall-clock time with a daily reminder - can't be set today. That's why there's no obvious control. Recommended V1 (I can build it if you approve): (1) add a 'Schedule' mode to the Custom sheet = pick eating-window start+end clock times (e.g. eat 09:00-17:00 => 16h fast ending 9am); (2) persist the schedule on the user; (3) a daily local notification at the window open/close via the existing Capacitor notification channels + backend scheduler. Effort ~1-2 days (FE sheet + 1 stored field + 1 reminder job). Approve the scope (or say duration-only is intended) and I'll implement.",
-      "reviewedAt": "2026-07-13T09:05:02.787Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "fasting",
