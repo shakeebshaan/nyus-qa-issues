@@ -354,52 +354,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260713-ab7b",
-      "createdAt": "2026-07-13T03:14:23.281Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Built the wake-on-new-issue watcher you asked for. New scheduled task \\NYUS-Loops\\issue-watch (runs every 5 min) reads the board and, when a NEW actionable issue lands, fires an EARLY fix-issues tick instead of waiting for the fixed 30-min slot — so Claude no longer 'sits there'. Because it retries every 5 min, it also auto-resumes the instant a usage-limit window opens (the '...if Claude has a limit it works on the issues' part). Fully guarded so it can't spiral/double-run: 8-min min-kick-gap, runner.lock + running-task check, and an opus limit-gate that defers (and retries) when both model windows are blocked. It excludes auto-log [content]/[discovery]/[press] cards and owner-blocked review items. Verified live: detected 3 actionable open issues and correctly deferred while another tick was running (see proof). This is infra (the desktop loop runner), not app code.",
-        "imagePath": "images/i-20260713-ab7b-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-ab7b-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c8df545d950ebab3e99e15e03e583335e8733cdf",
-        "imageCommits": [
-          "c8df545d950ebab3e99e15e03e583335e8733cdf"
-        ],
-        "fixedAt": "2026-07-13T08:10:16.370Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Delivers the ask end-to-end (wake-on-new-issue + limit-aware auto-resume) as a guarded, additive watcher that cannot break the existing fleet; detection+defer verified live. A 5-min poll is the right tool here (the board exposes no push webhook) and gives near-instant pickup."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "infra",
-        "runner"
-      ],
-      "reviewReply": "search desktop",
-      "reviewRepliedAt": "2026-07-13T04:29:55.047Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260713-518b",
       "createdAt": "2026-07-13T03:17:57.354Z",
       "route": null,
