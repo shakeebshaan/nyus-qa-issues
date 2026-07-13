@@ -195,10 +195,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Deploy pipeline root cause + this-tick manual fix. WHY inert: package.json \"deploy\"=gh-pages -d dist targets GitHub Pages, but nyus.in/blog is served from the Oracle VM (/home/ubuntu/nyus-landing/), so gh-pages could never make blog URLs live (and it also throws ENAMETOOLONG on Windows from the 1700+ file arg list). The CORRECT auto-deploy already exists: .github/workflows/deploy.yml rsyncs static/+dist/ to the VM on every push to main — but it is INERT until you set the repo secret DEPLOY_SSH_KEY. FIX (one-time, owner-only, ~5 min): 1) generate a deploy keypair: ssh-keygen -t ed25519 -f deploy_key -N ''; 2) append deploy_key.pub to ubuntu@140.245.238.38:~/.ssh/authorized_keys; 3) gh secret set DEPLOY_SSH_KEY --repo shakeebshaan/NYUSLANDING < deploy_key. After that every content-loop push auto-goes-live. THIS TICK I manually pscp'd the 5 dead articles (mango/bananas/brown-rice/breakfast/eggs) + sitemap-blog.xml to the VM; all now HTTP 200 and IndexNow-submitted. I did NOT auto-provision the prod SSH key myself — adding a standing credential to the production server is your security call.",
       "reviewedAt": "2026-07-12T21:38:22.921Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Don't use the actions directly deploy it you have the access",
+      "reviewRepliedAt": "2026-07-13T01:27:37.308Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260712-e7a2",
