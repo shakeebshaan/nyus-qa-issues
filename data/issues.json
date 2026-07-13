@@ -788,13 +788,12 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Searched the desktop runner again as asked (C:\\Users\\Administrator\\.claude\\nyus-loops\\ + runner.ps1 + limit-block.json). CONFIRMED, unchanged: the loop already self-heals after a usage limit — each blocked model's resetAt is written to limit-block.json, the gate skips blocked models, and the FIRST 30-min cron tick after the reset epoch resumes automatically (the UTF-16 mis-detect that once broke this was fixed 2026-07-12; today's ticks are running). So Claude does NOT sit idle after a limit — it wakes itself on the next tick. The ONE real gap vs your ask ('whenever we add an issue, wake it and solve it') is LATENCY only: both resume and new-issue pickup wait up to ~30 min for the next cron tick — there is no instant board poller. I can add a lightweight ~5-min poller task that fires the fix loop early WHEN the board has open issues AND there is no active limit-block (so it costs nothing while idle/limited). That raises tick frequency + token spend only while a backlog exists = a cost/cadence call, which is why I'm confirming rather than changing your runner cadence autonomously. Reply 'yes poller' and I'll install it (gated on open-issues + no-limit); or say keep-30min and I'll leave cadence as-is.",
-      "reviewedAt": "2026-07-13T07:42:58.127Z",
+      "reviewReason": "Checked the desktop loop runner as asked. The headless runner that wakes Claude to work the board had its session-limit handling hardened on 2026-07-12: it was misreading Claude's 'session limit' notice as normal output and skipping backoff (which burned quota); now fixed with a null-strip + attempt-counter reset, and a scheduled ~30-min tick already re-enters the fix-issues loop. What you are asking for - 'if Claude is rate-limited do not sit there; wake and process new issues when they land' - is a watcher/backoff enhancement on that runner (infra, not app code). I can do a full runner audit + add a limit-aware wake-on-new-issue watcher as a separate infra task; confirm and I will take it on. Leaving flagged since it is not an app bug.",
+      "reviewedAt": "2026-07-13T07:50:07.614Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "infra",
-        "ops",
-        "blocked"
+        "runner"
       ],
       "reviewReply": "search desktop",
       "reviewRepliedAt": "2026-07-13T04:29:55.047Z",
