@@ -288,9 +288,9 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "This is a feature gap plus a how-to. Today the fasting timer only offers DURATION windows (16:8, 18:6, 20:4, OMAD, or Custom 12-36h) that start when you tap Start; there is no way to set a fixed daily END time like 'fast until 9am'. To approximate now: start the fast the prior evening and pick the window length that lands at ~9am (e.g. start 5pm + 16:8 = 9am). If you want a real 'fast until <clock time> daily' scheduler (fixed end-time + daily reminder), that is a new feature. Confirm and I will scope and build it.",
-      "reviewedAt": "2026-07-13T07:49:22.676Z",
+      "needsReview": true,
+      "reviewReason": "Feature gap, needs your product call. The Fasting screen (src/pages/Fasting.tsx) only tracks fast DURATION (a live count-up toward 16/18/20/23h or a custom 12-36h length). There is no clock-time schedule, so 'fast till 9am daily' - a recurring eating-window that OPENS at a fixed wall-clock time with a daily reminder - can't be set today. That's why there's no obvious control. Recommended V1 (I can build it if you approve): (1) add a 'Schedule' mode to the Custom sheet = pick eating-window start+end clock times (e.g. eat 09:00-17:00 => 16h fast ending 9am); (2) persist the schedule on the user; (3) a daily local notification at the window open/close via the existing Capacitor notification channels + backend scheduler. Effort ~1-2 days (FE sheet + 1 stored field + 1 reminder job). Approve the scope (or say duration-only is intended) and I'll implement.",
+      "reviewedAt": "2026-07-13T09:05:02.787Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "fasting",
