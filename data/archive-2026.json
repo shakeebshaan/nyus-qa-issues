@@ -20384,90 +20384,88 @@
       "archivedAt": "2026-07-13T14:33:55.741Z"
     },
     {
-      "id": "i-20260713-c031",
-      "createdAt": "2026-07-13T01:36:48.082Z",
+      "id": "i-20260713-cb75",
+      "createdAt": "2026-07-13T05:01:45.230Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "imagePath": "images/i-20260713-cb75.jpg",
+      "imageCommit": "14f150d6b1372f5133887cc37fda3d56d95e1845",
+      "imagePaths": [
+        "images/i-20260713-cb75.jpg"
+      ],
+      "imageCommits": [
+        "14f150d6b1372f5133887cc37fda3d56d95e1845"
+      ],
+      "imagePrivate": true,
       "status": "resolved",
-      "fix": null,
+      "fix": {
+        "description": "Reopen (daily/alternate recurrence) fixed. The 'until a time' target now supports a recurring plan. Root cause: fasting could target 9am but not repeat. Fix (src/pages/Fasting.tsx + src/lib/fasting.ts): a REPEAT selector (Off / Every day / Every other day). On Start the window/time + cadence save device-local (nyus_fasting_plan); a due day pre-fills the setup and shows a 'Your fasting plan' summary. Calm manual-start (never auto-starts). Proof: 'Until a time' 09:00 + REPEAT=Every day + 'Start fast until 9:00 AM'.",
+        "imagePath": "images/i-20260713-cb75-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260713-cb75-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "99ad99c74ff7d79947b2bf16015846eec5fc9c28",
+        "imageCommits": [
+          "99ad99c74ff7d79947b2bf16015846eec5fc9c28"
+        ],
+        "fixedAt": "2026-07-13T16:37:23.367Z",
+        "by": "shakeebshaan",
+        "appCommit": "8801beba",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Implements both original ask (fast till 9am) and reopen (daily/alternate). Full-screen proof shows the recurrence selector + saved-plan hint. tsc clean, device-local, respects calm-fasting manual-start guardrail."
+        }
+      },
       "history": [
         {
-          "at": "2026-07-13T14:36:11.855Z",
+          "at": "2026-07-13T14:33:14.414Z",
           "event": "reopened",
-          "note": "add all the we already have side by side",
+          "note": "this can be daily alternate so on",
           "by": "shakeebshaan",
           "previousFix": {
-            "description": "Built the Transformation Wall on the nyus.in homepage (NYUSLANDING static/index.html, #transformations section + nav link). Before/after member cards with weight/body-fat/lean-mass deltas + timeframe, an honest 'Illustrative' label and disclaimer (no fabricated named photo testimonials on a health site per legal/trust), and a 'Share your transformation' CTA to /contact for real opt-in stories. Reuses the existing design tokens/card system; deployed live to the Oracle VM and verified (200, section present) + rendered at 390px.",
-            "imagePath": "images/i-20260713-c031-fix-r1.png",
+            "description": "You can now fast until a set time. On the Fasting screen pick the new 'Until a time' option, choose your time (e.g. 9:00 AM), and tap 'Start fast until 9:00 AM' — the timer counts down to that clock time instead of just a fixed number of hours.",
+            "imagePath": "images/i-20260713-cb75-fix-r1.png",
             "imagePaths": [
-              "images/i-20260713-c031-fix-r1.png",
-              "images/i-20260713-c031-fix-r1-2.png"
+              "images/i-20260713-cb75-fix-r1.png"
             ],
             "imagePrivate": true,
-            "imageCommit": "24321b3cb712522819bc208bc455806659473744",
+            "imageCommit": "f87caf1e493e906deccb2b0f38b484552901cccb",
             "imageCommits": [
-              "24321b3cb712522819bc208bc455806659473744",
-              "416b317ab8b66e9742c04f7fa84567c4c02c0c4c"
+              "f87caf1e493e906deccb2b0f38b484552901cccb"
             ],
-            "fixedAt": "2026-07-13T08:04:48.102Z",
+            "fixedAt": "2026-07-13T11:30:06.657Z",
             "by": "shakeebshaan",
-            "appCommit": "c6d13723",
+            "appCommit": "6a9e8d97",
             "tests": {
               "passed": true
             },
             "judge": {
-              "score": 90,
+              "score": 92,
               "bar": 90,
-              "note": "Owner said 'do it' after being offered placeholders; shipped a premium, brand-consistent before/after wall using the placeholder path (silhouette tiles + Illustrative label) so no fabricated testimonials, live-deployed + verified. Drop-in slots ready for real member photos when supplied."
+              "note": "FE-only, matches existing window-picker design tokens; 4 new unit tests green; screenshot shows the control + 'Start fast until 9:00 AM'."
             }
-          },
-          "images": [
-            "images/i-20260713-c031-notfixed-0.jpg",
-            "images/i-20260713-c031-notfixed-1.jpg",
-            "images/i-20260713-c031-notfixed-2.jpg",
-            "images/i-20260713-c031-notfixed-3.jpg",
-            "images/i-20260713-c031-notfixed-4.jpg",
-            "images/i-20260713-c031-notfixed-5.jpg",
-            "images/i-20260713-c031-notfixed-6.jpg",
-            "images/i-20260713-c031-notfixed-7.jpg",
-            "images/i-20260713-c031-notfixed-8.jpg"
-          ],
-          "imageCommits": [
-            "25a9eb54cd74193226326b1294535b4a354c0db9",
-            "4e286d95a837baa1e9e729e8b54053379483c4de",
-            "90f37690d2c2d1801550d6bc16d7b1bf4977519d",
-            "849ea7354c5b2280f3d95bb07d843077972030e1",
-            "5d46d3bb90610a79d6673178547146134ec71389",
-            "28c17cc4e8f1e21f1596b5929f5029fd6c977db1",
-            "f3abe2c1c02dce6a8b57b56c4bd504c0706fb655",
-            "32fca7e296d5c2e74c5e0f94e576e46f3d545e07",
-            "7c41ad010312c20d58f315eb18c7fa58f81f6f48"
-          ]
+          }
         }
       ],
-      "needsReview": true,
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "website",
-        "asset-needed"
+        "fasting",
+        "feature"
       ],
-      "reviewReply": "do it",
-      "reviewRepliedAt": "2026-07-13T04:30:56.462Z",
+      "reviewReply": "Do it",
+      "reviewRepliedAt": "2026-07-13T09:59:48.562Z",
       "reviewReplyBy": "shakeebshaan",
-      "reviewReason": "Re-fix done + live (per 'add all the we already have side by side'). All three member results we have — Arjun (Mumbai), Priya (Bangalore), Rahul (Delhi) — are shown SIDE BY SIDE on the Transformation Wall, each as a distinct BEFORE->AFTER card with stats + quote. The reopen's core issue (before/after didn't visibly read as a change) is fixed: BEFORE figures are now clearly rounder/softer and AFTER figures a lean athletic V-taper (Rahul's muscle-gain card the broadest). Deployed to the Oracle VM and verified live (HTTPS 200, new markup served). See attached 'Fix proof' report (inline) or open https://nyus.in/#transformations. IMPORTANT: only 3 real member results exist anywhere in the product (same 3 in ChoosePlan + 'What members achieve') — I did NOT fabricate extra members (RETRO rule: real/matching only, no placeholders). To add MORE side-by-side cards or real named PHOTOS, please drop the member image files + written consent and I'll swap the illustrative silhouettes. NOTE: board resolve gate (testGate npm run test:unit + satisfaction 90) is app-only and infra-blocked headless (loop.mjs verify spawnSync ENOENT), and irrelevant to a static-HTML landing change, so I flagged for review rather than faking --tests pass. NYUSLANDING commit 58f3a542. Resolve if good.",
-      "reviewedAt": "2026-07-13T17:38:40.348Z",
-      "reportPath": "reports/c031-report.html",
-      "reportLabel": "Fix proof — Transformation Wall (live)",
-      "resolvedAt": "2026-07-13T17:48:47.182Z",
+      "resolvedAt": "2026-07-13T17:50:18.075Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T17:48:47.182Z"
+      "archivedAt": "2026-07-13T17:50:18.075Z"
     }
   ]
 }
