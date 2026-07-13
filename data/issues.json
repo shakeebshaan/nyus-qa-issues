@@ -1103,7 +1103,7 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Root cause found: the Daily Volume TARGET is not derived from today's plan at all. The app shows weekly_volume_target_kg / 7, and that weekly figure is last week's ACTUAL logged volume x1.05 (from backend /activity/overview). So the denominator has no relation to today's 11 exercises / 29 planned sets, which is why 2 exercises nearly fill it. Recommended fix (full-stack): backend adds planned_volume_today_kg = sum over today's exercises of target_sets x reps x reference_weight (reference weight proxied from each exercise's last logged set, since the plan stores no target weight); FE reads that instead of weekly/7. This changes what 'daily volume target' means (a product decision) and needs a backend deploy, so flagging for your call. Can implement next tick on approval.",
       "reviewedAt": "2026-07-13T07:49:15.743Z",
       "reviewedBy": "shakeebshaan",
@@ -1111,7 +1111,10 @@
         "activity",
         "volume",
         "backend"
-      ]
+      ],
+      "reviewReply": "Fix",
+      "reviewRepliedAt": "2026-07-13T08:27:34.204Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-c450",
