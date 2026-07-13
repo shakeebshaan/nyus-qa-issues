@@ -336,8 +336,30 @@
         "d4d7a15548f98a54d91210b847e65caf0f76944f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the custom workout builder produced a WEEKLY plan (day_of_week 0-6) capped at 7 days, tying each day to a weekday. Fix: it now produces a SEQUENTIAL multi-day PROGRESSIVE program - days run one after another (Day 1..N, up to 30, not weekday-bound). Complete a session -> next unlocks; miss a day -> the SAME session repeats (backend get_current_unlocked_session, proven by test_custom_plan_progressive: N=11 uncapped, advance-on-complete/repeat-on-miss). FE: WorkoutDayTabs drops the weekday chip and reads 'Day N', cap 7->30; CustomWorkoutBuilder drops weekday seed/assign. BE: save_custom_plan stores a 0-based sequential index and bridges via _bridge_workout_sequential.",
+        "imagePath": "images/i-20260713-ae38-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260713-ae38-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9de906ce392e5dacbc4b358f819853e5ebbd0dd7",
+        "imageCommits": [
+          "9de906ce392e5dacbc4b358f819853e5ebbd0dd7"
+        ],
+        "fixedAt": "2026-07-13T12:04:18.252Z",
+        "by": "shakeebshaan",
+        "appCommit": "d7434cb7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Directly matches reopenNote: sessions one-after-another (up to 30, was 7), not weekday-tied, advance-on-complete/repeat-on-miss. Verified end-to-end: BE progressive test 4/4 (N=11, advance+repeat), FE render proof shows Day 8/Day 9 sequential chips + Add past 7 with no weekday, save-route test 9/9, tsc clean, deployed+healthy."
+        }
+      },
       "history": [
         {
           "at": "2026-07-13T10:06:52.270Z",
