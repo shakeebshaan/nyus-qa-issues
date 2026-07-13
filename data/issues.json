@@ -845,9 +845,32 @@
         "6892e1145d27d5ca1066383caa999cd75d489624"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Restored the manual 'I'll build it myself' button on empty meal slots in the diet builder. Root cause: in MealSlotCard.tsx the secondary button was gated behind 'onCoachBuild ? undefined : (…)', but CustomDietBuilder always wires onCoachBuild, so the manual add-ingredient path never rendered — leaving only 'Coach can build' while the footer said 'Add an ingredient to continue'. Now the secondary renders unconditionally; tapping it reveals the unchanged add-ingredient + describe-meal editor. Coach build stays the primary CTA.",
+        "imagePath": "images/i-20260713-5f95-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-5f95-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d30211e24bfb3db1ae3cc4665d10d0a764b6e5cd",
+        "imageCommits": [
+          "d30211e24bfb3db1ae3cc4665d10d0a764b6e5cd"
+        ],
+        "fixedAt": "2026-07-13T03:22:21.664Z",
+        "by": "shakeebshaan",
+        "appCommit": "683a9256",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Minimal, surgical one-condition change; typecheck clean; unit suite green; both build paths now reachable. Note-only resolve (no live onboarding recapture) per owner request."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260713-c031",
