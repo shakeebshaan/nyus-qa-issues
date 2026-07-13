@@ -788,9 +788,9 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "Loop-runner / scheduler infrastructure, not an app-source bug. It asks the automation to auto-resume issue work when Claude hits a usage limit and to wake on new issues. That lives in the snapfix loops runner + Windows Task Scheduler on the owner machine (NYUS-Loops tasks enabled + Administrator logged on), not in app code, so it cannot be reproduced or verified from the app dev server. Known related runner bug: it once mis-read a session-limit message as normal output, skipping backoff. Owner action: confirm the scheduled tasks are enabled and point me at the runner script if backoff/wake logic is the target.",
-      "reviewedAt": "2026-07-13T04:27:22.573Z",
+      "needsReview": true,
+      "reviewReason": "Searched the desktop runner (nyus-loops/runner.ps1). It ALREADY backs off on usage-limit and auto-resumes: limit-block.json records each model resetAt, the gate skips blocked models, and after the reset epoch the next tick proceeds (verified: today's block expired 06:10 UTC and the 06:11 tick ran; the UTF-16 detect bug was fixed 2026-07-12). Remaining gaps are cost/cadence decisions: (1) resume waits for the next 30-min cron tick (up to ~30 min idle after a limit clears); (2) no board-polling so a new issue also waits up to 30 min. I can add a ~5-min poller task that fires fix-issues early when open issues exist AND no limit-block is active - but it raises tick frequency and cost with backlog. Approve the faster-wake poller? Did not change the runner autonomously since it affects run cost + fleet stability.",
+      "reviewedAt": "2026-07-13T06:52:12.272Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "infra",
