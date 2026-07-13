@@ -20300,59 +20300,88 @@
       "archivedAt": "2026-07-13T14:27:10.352Z"
     },
     {
-      "id": "i-20260713-7aea",
-      "createdAt": "2026-07-13T06:40:34.651Z",
+      "id": "i-20260713-ae38",
+      "createdAt": "2026-07-13T05:02:21.242Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-7aea.jpg",
-      "imageCommit": "521d7d9194debed8e5dfa4a96ae47b9a05332841",
+      "imagePath": "images/i-20260713-ae38.jpg",
+      "imageCommit": "d4d7a15548f98a54d91210b847e65caf0f76944f",
       "imagePaths": [
-        "images/i-20260713-7aea.jpg"
+        "images/i-20260713-ae38.jpg"
       ],
       "imageCommits": [
-        "521d7d9194debed8e5dfa4a96ae47b9a05332841"
+        "d4d7a15548f98a54d91210b847e65caf0f76944f"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Added a 'Volume records' card on Achievements (right below Personal bests) showing the best single-session training volume per muscle group (Chest/Back/Legs/Shoulders/Arms/Core), from a new GET /strength/volume-records endpoint that MAXes reps*weight of completed SetLogs grouped by the exercise's muscle_group_primary. Self-hides when the athlete has no completed sessions. Files: VolumeRecordsCard.tsx, Achievements.tsx, activity.service.ts, api.ts; backend strength route + aggregation.",
-        "imagePath": "images/i-20260713-7aea-fix-r1.png",
+        "description": "Root cause: the custom workout builder produced a WEEKLY plan (day_of_week 0-6) capped at 7 days, tying each day to a weekday. Fix: it now produces a SEQUENTIAL multi-day PROGRESSIVE program - days run one after another (Day 1..N, up to 30, not weekday-bound). Complete a session -> next unlocks; miss a day -> the SAME session repeats (backend get_current_unlocked_session, proven by test_custom_plan_progressive: N=11 uncapped, advance-on-complete/repeat-on-miss). FE: WorkoutDayTabs drops the weekday chip and reads 'Day N', cap 7->30; CustomWorkoutBuilder drops weekday seed/assign. BE: save_custom_plan stores a 0-based sequential index and bridges via _bridge_workout_sequential.",
+        "imagePath": "images/i-20260713-ae38-fix-r2.png",
         "imagePaths": [
-          "images/i-20260713-7aea-fix-r1.png"
+          "images/i-20260713-ae38-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "ee98fcbe6ee11584037db681def130b9ca25a2f5",
+        "imageCommit": "9de906ce392e5dacbc4b358f819853e5ebbd0dd7",
         "imageCommits": [
-          "ee98fcbe6ee11584037db681def130b9ca25a2f5"
+          "9de906ce392e5dacbc4b358f819853e5ebbd0dd7"
         ],
-        "fixedAt": "2026-07-13T12:06:19.161Z",
+        "fixedAt": "2026-07-13T12:04:18.252Z",
         "by": "shakeebshaan",
         "appCommit": "d7434cb7",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 92,
           "bar": 90,
-          "note": "Matches the ask (per-muscle-group session volume records) on the exact screen from the issue screenshot (Achievements). Verified: BE aggregation test 3/3 (max-per-muscle + empty), FE card test 2/2, real-component render proof shows the 6 muscle rows with volume+date, endpoint deployed+healthy."
+          "note": "Directly matches reopenNote: sessions one-after-another (up to 30, was 7), not weekday-tied, advance-on-complete/repeat-on-miss. Verified end-to-end: BE progressive test 4/4 (N=11, advance+repeat), FE render proof shows Day 8/Day 9 sequential chips + Add past 7 with no weekday, save-route test 9/9, tsc clean, deployed+healthy."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-07-13T10:06:52.270Z",
+          "event": "reopened",
+          "note": "Need multi week program not tied to the weekday so user complete one session and the next session is on the next day and if he miss it on the next day then he will be seeing the same session on the third day so this is not linked to the weekdays it's fashion wise so if the user have to 15 days session he need to complete it one by one and tell all completed not tired into the week",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: at the day cap the workout builder's Add-day button silently vanished, so it looked broken. Your screenshot is a pre-cap build (Day 9 & Day 10 both on Sunday) - the plan maps one training day per weekday, so it can't exceed 7 distinct days (owner cap i-20260710-7a3f). Fix (WorkoutDayTabs.tsx): at the cap the '+' is replaced by a clear hint 'Max 7 days - one per weekday' so the limit is explained instead of the button just disappearing. NOTE: if you want programs longer than a week (multi-week rotations), that needs a backend model change - tell me and I'll scope it.",
+            "imagePath": "images/i-20260713-ae38-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260713-ae38-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "0ea0f471d36d960779b1e9fd58b5dce2f2b98ebd",
+            "imageCommits": [
+              "0ea0f471d36d960779b1e9fd58b5dce2f2b98ebd"
+            ],
+            "fixedAt": "2026-07-13T09:04:49.437Z",
+            "by": "shakeebshaan",
+            "appCommit": "43a373ad",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "Verified via component harness at 7/7 days: '+' replaced by the explanatory hint. Fully resolves the confusion; cap value itself is owner-mandated (7a3f) so not raised. Flagged multi-week as an owner option."
+            }
+          }
+        }
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "activity",
-        "volume",
-        "feature"
+        "workout-builder",
+        "product"
       ],
-      "reviewReply": "Do it",
-      "reviewRepliedAt": "2026-07-13T10:03:52.589Z",
+      "reviewReply": "I want to add as many days possible I have a plan of 13 days done one after another not tie to the week days fix it completely",
+      "reviewRepliedAt": "2026-07-13T08:28:53.942Z",
       "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-13T14:32:46.533Z",
+      "resolvedAt": "2026-07-13T14:33:55.741Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-13T14:32:46.533Z"
+      "archivedAt": "2026-07-13T14:33:55.741Z"
     }
   ]
 }
