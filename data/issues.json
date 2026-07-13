@@ -406,38 +406,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260713-f980",
-      "createdAt": "2026-07-13T06:12:58.894Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-f980.jpg",
-      "imageCommit": "055bf38678a7a0e6f940939ee4cad4d478e9166a",
-      "imagePaths": [
-        "images/i-20260713-f980.jpg"
-      ],
-      "imageCommits": [
-        "055bf38678a7a0e6f940939ee4cad4d478e9166a"
-      ],
-      "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Thanks - internal-testing-track is the key detail. That track uses Play App Signing, so the installed app is signed with GOOGLE'S app-signing key, NOT your upload key. Google sign-in (Credential Manager) then fails on the Play-track build even though a sideloaded debug build works, because the OAuth client only trusts the upload-key SHA-1. Verified code-side is already correct: the v140 R8 keep-rules for Credential Manager are still in android/app/proguard-rules.pro (-keep com.google.android.libraries.identity.googleid.**, androidx.credentials.**, androidx.credentials.playservices.**), current build is versionCode 203 / 1.9.23. So this is a Console config fix, not code. Exact steps: (1) Play Console -> Test and release -> App integrity -> App signing -> copy the SHA-1 of the 'App signing key certificate'. (2) Google Cloud Console -> APIs & Services -> Credentials -> the Android OAuth client for com.nyus.nyusand -> add that SHA-1 (keep the upload-key SHA-1 too). (3) Confirm the OAuth consent screen is Testing/Published and your tester email is on the testers list. (4) On the device, ensure Google Play services is up to date and the account is signed into the Play Store, then reinstall from the internal track (not a sideload). If it still fails after that, send me the exact on-screen text + the app version and I'll dig into the native path. (Same family as the earlier [16] reauth item 16b7 - that one was also App-Signing SHA-1 not on the OAuth client.)",
-      "reviewedAt": "2026-07-13T08:41:57.736Z",
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "android",
-        "auth",
-        "native"
-      ],
-      "reviewReply": "It it's from internal testing track",
-      "reviewRepliedAt": "2026-07-13T08:27:05.033Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260713-7aea",
       "createdAt": "2026-07-13T06:40:34.651Z",
       "route": null,
