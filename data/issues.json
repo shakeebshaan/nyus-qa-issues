@@ -183,47 +183,6 @@
       "history": []
     },
     {
-      "id": "i-20260712-9f7c",
-      "createdAt": "2026-07-12T14:10:00.000Z",
-      "status": "fixed",
-      "route": "/plan-pause",
-      "description": "[suggestion] Injury-aware exercise substitution when a plan is paused for injury. Problem: PlanPauseScreen (src/pages/PlanPauseScreen.tsx) already has an \"Injury\" pause reason but only stores it as a label — no body-part capture and no downstream effect, so on resume the workout plan generator/coach can re-serve the exact movement that caused the injury (e.g. shoulder press after a shoulder injury). Evidence: REASONS array has injury as a flat enum value with no follow-up field; workout-plan generation and AI coach have no injury-exclusion input anywhere in the codebase. Comparable apps (Fitbod, Future) ask which body part and auto-avoid loading it. V1 scope: when reason=injury, show one extra step \"Which area?\" (shoulder/knee/back/wrist/ankle/other) + optional note; store on the pause record; on resume, pass the flagged body part(s) to the workout-plan builder/coach system prompt to exclude/soften exercises targeting that area for the first 1-2 weeks back, with a banner reminding the user to clear it manually if resolved sooner. Effort: ~1-2 days (1 new field + storage, 1 builder-prompt condition, 1 UI step).",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Shipped injury-aware plan resume end-to-end. Root cause: the FE half (9b1d6e57) shipped an injury-area picker but its commit wrongly claimed the backend 'already ships' — the backend exclusion was uncommitted/undeployed, so a shoulder injury could still get shoulder press on resume; that same commit also left 4 PlanPauseScreen tests red (unupdated pausePlan arity). Fix: committed + deployed backend (plans.py stores sanitized injury_areas[] in the pause snapshot; plan_generator._active_injury_areas reads it for a 14-day post-resume window and _build_workout_prompt injects an ACTIVE INJURY avoid/soften clause into every workout-gen path) and realigned the 4 tests. Proof: /plan-pause with Injury -> 8-area picker, Shoulder+Knee selected. Tests green: FE 63/63, backend injury 2/2.",
-        "imagePath": "images/i-20260712-9f7c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260712-9f7c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "4c12a4616a96db5b018f4536a24ceec8d688236d",
-        "imageCommits": [
-          "4c12a4616a96db5b018f4536a24ceec8d688236d"
-        ],
-        "fixedAt": "2026-07-13T21:37:06.123Z",
-        "by": "shakeebshaan",
-        "appCommit": "cbd7685d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Complete end-to-end: backend committed+deployed to prod (verified _active_injury_areas live), FE already shipped, 4 rotted tests fixed, real live /plan-pause proof capture shows the area picker + selected state. Both test suites green."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260712-w7lk",
       "createdAt": "2026-07-12T13:05:00.000Z",
       "route": null,
