@@ -788,49 +788,6 @@
       "reviewReply": "do it",
       "reviewRepliedAt": "2026-07-13T04:29:11.117Z",
       "reviewReplyBy": "shakeebshaan"
-    },
-    {
-      "id": "i-20260713-53b4",
-      "createdAt": "2026-07-13T03:50:09.743Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-53b4.jpg",
-      "imageCommit": "53cad3f328f31b58bdc7054b72e668c339adf3c1",
-      "imagePaths": [
-        "images/i-20260713-53b4.jpg"
-      ],
-      "imageCommits": [
-        "53cad3f328f31b58bdc7054b72e668c339adf3c1"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Ended fasts were saved correctly, but the Last 7 days chart had a layout bug that rendered every bar at zero height, so a completed fast showed only as a number with no bar and looked missing from history. Fixed the chart so each day now fills its bar (teal when the target window is reached, indigo when under). Note: fasting does not yet feed a streak counter; that is a separate upcoming feature.",
-        "imagePath": "images/i-20260713-53b4-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260713-53b4-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "e74b396fd7413cabd0036de42572d1a36f5a6d6d",
-        "imageCommits": [
-          "e74b396fd7413cabd0036de42572d1a36f5a6d6d"
-        ],
-        "fixedAt": "2026-07-13T04:26:43.063Z",
-        "by": "shakeebshaan",
-        "appCommit": "a9d06687",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root cause found and proven by browser DOM measurement (11h bar 0px to 60px); surgical one-class fix (items-end to items-stretch), no regressions, capture shows bars rendering on the correct authed /fasting screen. Streak is a nonexistent feature (documented fast-follow), not part of this bug."
-        }
-      },
-      "history": [],
-      "needsReview": false
     }
   ]
 }
