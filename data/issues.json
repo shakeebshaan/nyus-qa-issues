@@ -1027,7 +1027,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Confirmed root cause (live): daily Volume target = weekly_volume_target / 7 calendar days, and for users without a full prior week the weekly target is just projected from the current week actuals x1.05 -> daily target ~= today's own volume (live 8,440 done / 8,862 target = 95%). So the bar fills after ~2 exercises by construction. A correct per-session target needs a product decision: the plan stores NO prescribed weight, target_reps is unreliable (e.g. '1xhold'), history is sparse -> 'planned session volume' cannot be computed cleanly. Options: (a) weekly / actual training-days-per-week, (b) hide the bar until >=1 full prior week, (c) show today's volume as a plain stat with no target. Please pick one.",
+      "reviewedAt": "2026-07-13T06:51:37.912Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-c450",
