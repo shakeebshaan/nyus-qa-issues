@@ -404,9 +404,9 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "This is a native Android Google sign-in / Play Services error ('Something went wrong; check Google Play is enabled...'), not reproducible in the web app, so I cannot repro/fix it headless here. It is the same family as the earlier [16] reauth error fixed in v140 via R8/proguard keep-rules for Credential Manager. If it recurs on a current build it likely needs up-to-date Play Services on the device and testing a fresh Play-track build (not a sideload). Can you confirm the app version and whether it is a Play-track install? Then I can dig into the native auth path.",
-      "reviewedAt": "2026-07-13T07:49:50.312Z",
+      "needsReview": true,
+      "reviewReason": "Thanks - internal-testing-track is the key detail. That track uses Play App Signing, so the installed app is signed with GOOGLE'S app-signing key, NOT your upload key. Google sign-in (Credential Manager) then fails on the Play-track build even though a sideloaded debug build works, because the OAuth client only trusts the upload-key SHA-1. Verified code-side is already correct: the v140 R8 keep-rules for Credential Manager are still in android/app/proguard-rules.pro (-keep com.google.android.libraries.identity.googleid.**, androidx.credentials.**, androidx.credentials.playservices.**), current build is versionCode 203 / 1.9.23. So this is a Console config fix, not code. Exact steps: (1) Play Console -> Test and release -> App integrity -> App signing -> copy the SHA-1 of the 'App signing key certificate'. (2) Google Cloud Console -> APIs & Services -> Credentials -> the Android OAuth client for com.nyus.nyusand -> add that SHA-1 (keep the upload-key SHA-1 too). (3) Confirm the OAuth consent screen is Testing/Published and your tester email is on the testers list. (4) On the device, ensure Google Play services is up to date and the account is signed into the Play Store, then reinstall from the internal track (not a sideload). If it still fails after that, send me the exact on-screen text + the app version and I'll dig into the native path. (Same family as the earlier [16] reauth item 16b7 - that one was also App-Signing SHA-1 not on the OAuth client.)",
+      "reviewedAt": "2026-07-13T08:41:57.736Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "android",
