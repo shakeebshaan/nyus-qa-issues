@@ -901,9 +901,13 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "By design: the workout builder caps at 7 training days (a plan is a weekly template; each day maps to weekday 0-6, and days >7 collapse onto Sunday - locked by i-20260710-7a3f). An 11th+ day needs a backend redesign for multi-week/N-day cycles = product decision, not a cap bump. Separately found a real latent bug: /ai/create-workout-plan loads a stored plan UNCLAMPED (CustomWorkoutPlanCreation.tsx:340 passes existingWorkout.days raw), so a legacy 8+ day plan shows 'Day X of 10', hides the Add button, and silently collapses days 8-10 onto Sunday on save. Want (a) the safe clamp fix for that route, and/or (b) multi-week programs scoped?",
-      "reviewedAt": "2026-07-13T06:51:41.420Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewReason": "The build now caps training days at 7 by design (one day per weekday). Your screenshot showing 'Day 1 of 10' is from an older build; the cap was lowered 10->7 on 2026-07-10 (commit 0bb48735) to fix i-20260710-7a3f, because the backend maps each day to a distinct weekday and an 8th+ day silently collapses onto Sunday. So an 11th training day cannot be represented in the current weekly-plan model. Your call between: (a) keep 7/week and I add a small helper line ('7 days = one full week, the weekly max') so the Add button does not just vanish; or (b) you want true multi-session scheduling (>7 sessions/week or 2-a-days), which is a data-model change in the backend. Which do you prefer?",
+      "reviewedAt": "2026-07-13T07:49:19.453Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "workout-builder",
+        "product"
+      ]
     },
     {
       "id": "i-20260713-5e14",
