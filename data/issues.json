@@ -800,56 +800,6 @@
         "shipped",
         "needs-account"
       ]
-    },
-    {
-      "id": "i-20260712-3d81",
-      "createdAt": "2026-07-12T09:44:58.175Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Done -- meals half now shipped end-to-end (frontend d4a38446 + backend 7835019, deployed to prod; migration 20260712_002_plan_meal_override applied, table live). DietEditPanel gains an \"Add meal\" form (name/type/calories/PCF + \"Keep on future weeks\") and a per-meal \"Remove\" that PROMPTS \"just today / keep off future weeks\" -- the save-this-new-plan step, mirroring the exercise half. carry_forward=true writes a durable PlanMealOverride so the change reappears on every AI-regenerated week; a one-time edit touches only the current week. Optimistic UI with rollback. Screenshots: the remove carry-forward prompt + the add-meal form (rendered from the shipped component). Tests 47/47 green (DietEditPanel + plan.service). Both halves (exercise + meals) of your ask are complete.",
-        "imagePath": "images/i-20260712-3d81-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260712-3d81-fix-r1.png",
-          "images/i-20260712-3d81-fix-r1-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "84eff00787eacabfdf7543dda6525e02ed058b3c",
-        "imageCommits": [
-          "84eff00787eacabfdf7543dda6525e02ed058b3c",
-          "dfcd081201d02b0b7d16f8d04d26174397f2d6cf"
-        ],
-        "fixedAt": "2026-07-12T21:04:16.397Z",
-        "by": "shakeebshaan",
-        "appCommit": "d4a38446",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Feature complete both halves, backend deployed + migrated on prod, scoped tests green, live component render proves add + carry-forward remove prompt. Live in-chat capture needs coach-chat + a diet plan (QA data acct unavailable headless), so proof is a faithful isolated render of the shipped DietEditPanel."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Tell me once done",
-      "reviewRepliedAt": "2026-07-12T11:15:22.079Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "architecture",
-        "multi-tick",
-        "slice-1-done"
-      ]
     }
   ]
 }
