@@ -1057,12 +1057,32 @@
         "f31808a6fc61bc2c7ba16e7b858ab17a15731140"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the KG-row button that opens the plate calculator (a barbell plate-loading tool) showed a dumbbell icon on every exercise, so on a barbell lift like Close-Grip Bench Press it read as 'dumbbell' and the barbell felt missing. Fix: that icon is now a calculator that clearly opens the plate/barbell calculator (screenshot) — tap it to load the bar plus plates per side.",
+        "imagePath": "images/i-20260713-c450-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-c450-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "df1395366240fc45185a49cdf89bfbaa0edbd567",
+        "imageCommits": [
+          "df1395366240fc45185a49cdf89bfbaa0edbd567"
+        ],
+        "fixedAt": "2026-07-13T07:47:01.197Z",
+        "by": "shakeebshaan",
+        "appCommit": "5281e2d1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Removes the misleading dumbbell signal; screenshot shows the barbell plate tool is right there. Surgical icon-only change, 55 picker tests green."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "The dumbbell glyph tapped is the plate-calculator button (aria-label 'Open plate calculator'), NOT an equipment indicator - every exercise shows it. A true barbell-by-equipment icon isn't shippable as-is: the active-workout exercise payload has no 'equipment' field (needs a backend add) and lucide has no barbell glyph (needs a custom SVG). Low-risk option now: swap the plate-calc button's dumbbell for a neutral Calculator icon so it stops reading as an equipment claim. Want the neutral relabel, or the full equipment-aware barbell (backend field + custom SVG)?",
-      "reviewedAt": "2026-07-13T06:51:44.944Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
