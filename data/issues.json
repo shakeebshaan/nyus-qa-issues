@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260714-rp2m",
+      "createdAt": "2026-07-14T08:38:53.867Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[suggestion] Quick re-log a past meal (\"Log again\") on the Nutrition screen. Problem: Indian daily eating is repetitive (same roti-dal-sabzi, same protein shake) but every entry today requires re-typing/re-searching the meal from scratch (or photo/barcode) even when it was logged yesterday or last week. Evidence: repo has no copy-previous-meal/quick-repeat action (grepped NutritionMealCard, CustomMealModal, meal-log flow — only diet-plan-builder has an unrelated \"repeat\" match for weekly plan structure, not daily logging); comparable trackers (MyFitnessPal \"Copy from previous day\", Cronometer favorites) ship this as a core retention lever. v1 scope: add a \"Log again\" action on past meal-history entries (NutritionMealCard / meal detail) that duplicates the stored meal_name + macros + quantity into a new log row for today at the tapped meal slot, no AI/recompute needed since macros are already persisted. No new screen, no favorites list yet (that would be v2). Effort: ~1-2 days FE (action + duplicate-log API call) + confirm backend already exposes a create-meal-log endpoint that accepts prefilled macros (likely yes, reused by manual entry).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260714-d1hk",
       "createdAt": "2026-07-14T05:40:39.052Z",
       "status": "open",
