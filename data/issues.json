@@ -367,7 +367,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Two asks, one needs an owner product call. (1) 'Choose image for the meal' = an image picker on the built meal card (the screenshot shows Milkshake protein carrying a wrong curry photo). Buildable: add an image-select/upload affordance on the BuilderMealSlot card that sets slot.image_url (field already exists in BuilderMealSlot). (2) 'Save the meal for different USERS' = a CROSS-USER shared meal library — this is a PRODUCT + PRIVACY/moderation decision, not just code: who can see/reuse another user's saved meals, is it global vs. friends-only, is the image user-uploaded (needs moderation/storage)? Please decide the scope of (2). Meanwhile the wrong-image root cause (curry photo on 'Milkshake protein') is the same meal-image-mismatch class as prior issues (463e/522a) and is independently worth fixing. Confirm scope for (2) and whether a user-upload image path is acceptable.",
+      "reviewedAt": "2026-07-14T18:09:30.458Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260714-6e48",
