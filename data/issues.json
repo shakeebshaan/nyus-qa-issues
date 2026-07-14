@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260714-9f2a",
+      "createdAt": "2026-07-14T18:57:18Z",
+      "status": "open",
+      "route": "/goal-change",
+      "description": "[bug-hunt] Goal-change wizard changes only the macro TARGETS — it never rebuilds the diet plan's meals or the workout plan, despite the wizard and the FAQ both promising it does. After confirming, the user keeps eating the OLD goal's meals against a NEW goal's macro budget.\n\nROUTE: /goal-change (Profile -> Plan Management -> Change Goal; also reached from a coach quick-action and from PlanResumeScreen).\n\nPROMISE vs BEHAVIOR:\n- Wizard step 2 copy (src/pages/GoalChangeWizard.tsx:406): \"...We'll use this to rebuild your meal plan.\"\n- FAQ (src/lib/faq-fallback.ts:322): \"NYUS ... rebuilds upcoming meals and workouts to match.\"\n- Backend confirm (BACKEND app/routes/plans.py change_goal, lines 742-870): marks the old FitnessPlan completed, updates the health profile (goal_type / target_kcal / bmr / tdee), and creates a NEW FitnessPlan + ONE WeeklyMacroTarget (week 1). It NEVER touches the diet plan or workout plan — no meal builder/generator is invoked (grep shows no generate_diet / build_diet / regenerate call inside change_goal; the docstring \"Trigger full plan regeneration\" is aspirational).\n\nWHY MEALS GO STALE: UserDietPlan (BACKEND db_models.py:528) is user-scoped (user_id + is_active) and is NOT linked to FitnessPlan. Today's meals are served from UserDietPlan.query.filter_by(user_id, is_active=True) + its AssignedMeal rows (backend.py:4659 / 6787, plan_builder_routes.py:3600). change_goal leaves that diet plan is_active=True and its AssignedMeals unchanged. WorkoutPlan is likewise user-scoped and untouched.\n\nEXPECTED: confirming a goal change rebuilds the assigned meals + workout to fit the new goal/macros (or the copy is corrected so it stops promising a rebuild).\nACTUAL: the macro budget jumps to the new goal while the assigned meals/workouts stay built for the old goal. e.g. fat_loss -> muscle_gain: the calorie target rises several hundred kcal but the plate still shows the old low-cal fat-loss meals, so the user under-eats vs target with no new suggestions; muscle_gain -> fat_loss: meals now overshoot the new deficit target.\n\nREPRO (needs an account with an active plan): open /goal-change, pick a different goal, tap through to Confirm, then open /nutrition — today's meals are identical to before the change; only the macro budget/targets differ.\n\nCONFIRMED by code trace across both repos. NOTE: a SECOND, safety-gated goal-change endpoint exists (/re-onboard, onboarding.py:1315 re_onboard, runs evaluate_plan_safety) but the FE never calls it — the shipped wizard uses /plans/<id>/change-goal. Never-hunted area (goal-change was not a prior bug-hunt focus); not on the board.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260714-4e7c",
+      "createdAt": "2026-07-14T18:57:18Z",
+      "status": "open",
+      "route": "/goal-change",
+      "description": "[bug-hunt] Switching to a Maintenance / Recomp goal produces a plan whose \"weekly weight target\" contradicts its calories: the target shows a non-zero kg/week change while the calorie target is exactly TDEE (no deficit/surplus), so the advertised pace can never be reached.\n\nROUTE: /goal-change (Preview step -> \"Plan Details\" -> \"Weekly weight target\").\n\nROOT: BACKEND app/services/macro_calculator.py calculate_weekly_weight_target (lines 422-443) clamps ONLY fat_loss (-> [-0.75, 0]) and muscle_gain (-> [0, 0.35]); maintenance / recomp / endurance fall through and return the RAW pace (goal_weight - current_weight) / duration_weeks — uncapped and never zeroed. But calculate_target_calories uses GOAL_ADJUSTMENTS (lines 33-39) where maintenance & recomp = delta 0, so target_kcal == TDEE (no calorie deficit/surplus). The plan is calorically \"maintain\" yet advertises a weight-change pace.\n\nWHY THE WIZARD TRIGGERS IT: GoalChangeWizard pre-fills Goal Weight from the OLD plan (src/pages/GoalChangeWizard.tsx:94, newGoalWeight = goalWeight ?? 65) and never resets it to current weight when a non-directional goal is picked. So a user switching e.g. fat_loss (current 70 / goal 65) -> Maintenance keeps goal 65 != current 70.\n\nEXPECTED: for maintenance/recomp (delta-0 calories) the weekly weight target is 0; endurance's small surplus should map to a capped small gain, not an arbitrary pace derived from a stale goal weight.\nACTUAL: the preview AND the persisted plan (WeeklyMacroTarget.weekly_weight_loss_target_kg, FitnessPlan.weekly_weight_target_kg) carry e.g. -0.42 kg/week for a Maintenance goal eating at TDEE. PlanDetailsCollapsible (GoalChangeWizard.tsx:604-610) renders \"Weekly weight target: -0.42 kg\" under a Maintenance switch.\n\nREPRO (needs an active plan whose goal weight != current weight): /goal-change -> pick Maintenance -> do NOT touch Goal Weight -> Next -> Preview -> expand \"Plan Details\": \"Weekly weight target\" is non-zero although calories == TDEE.\n\nCONFIRMED by code trace (the clamp table + GOAL_ADJUSTMENTS + the wizard prefill). FIX: clamp maintenance & recomp to 0 (and cap endurance to its surplus-implied pace) in calculate_weekly_weight_target, and/or reset Goal Weight to current weight when a maintenance/recomp goal is selected in the wizard. Never-hunted area; not a dup of the onboarding pace-gate items.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260714-a3f9",
       "createdAt": "2026-07-14T15:53:21Z",
       "status": "open",
