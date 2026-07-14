@@ -4,7 +4,7 @@
     {
       "id": "i-20260714-9f2a",
       "createdAt": "2026-07-14T18:57:18Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/goal-change",
       "description": "[bug-hunt] Goal-change wizard changes only the macro TARGETS — it never rebuilds the diet plan's meals or the workout plan, despite the wizard and the FAQ both promising it does. After confirming, the user keeps eating the OLD goal's meals against a NEW goal's macro budget.\n\nROUTE: /goal-change (Profile -> Plan Management -> Change Goal; also reached from a coach quick-action and from PlanResumeScreen).\n\nPROMISE vs BEHAVIOR:\n- Wizard step 2 copy (src/pages/GoalChangeWizard.tsx:406): \"...We'll use this to rebuild your meal plan.\"\n- FAQ (src/lib/faq-fallback.ts:322): \"NYUS ... rebuilds upcoming meals and workouts to match.\"\n- Backend confirm (BACKEND app/routes/plans.py change_goal, lines 742-870): marks the old FitnessPlan completed, updates the health profile (goal_type / target_kcal / bmr / tdee), and creates a NEW FitnessPlan + ONE WeeklyMacroTarget (week 1). It NEVER touches the diet plan or workout plan — no meal builder/generator is invoked (grep shows no generate_diet / build_diet / regenerate call inside change_goal; the docstring \"Trigger full plan regeneration\" is aspirational).\n\nWHY MEALS GO STALE: UserDietPlan (BACKEND db_models.py:528) is user-scoped (user_id + is_active) and is NOT linked to FitnessPlan. Today's meals are served from UserDietPlan.query.filter_by(user_id, is_active=True) + its AssignedMeal rows (backend.py:4659 / 6787, plan_builder_routes.py:3600). change_goal leaves that diet plan is_active=True and its AssignedMeals unchanged. WorkoutPlan is likewise user-scoped and untouched.\n\nEXPECTED: confirming a goal change rebuilds the assigned meals + workout to fit the new goal/macros (or the copy is corrected so it stops promising a rebuild).\nACTUAL: the macro budget jumps to the new goal while the assigned meals/workouts stay built for the old goal. e.g. fat_loss -> muscle_gain: the calorie target rises several hundred kcal but the plate still shows the old low-cal fat-loss meals, so the user under-eats vs target with no new suggestions; muscle_gain -> fat_loss: meals now overshoot the new deficit target.\n\nREPRO (needs an account with an active plan): open /goal-change, pick a different goal, tap through to Confirm, then open /nutrition — today's meals are identical to before the change; only the macro budget/targets differ.\n\nCONFIRMED by code trace across both repos. NOTE: a SECOND, safety-gated goal-change endpoint exists (/re-onboard, onboarding.py:1315 re_onboard, runs evaluate_plan_safety) but the FE never calls it — the shipped wizard uses /plans/<id>/change-goal. Never-hunted area (goal-change was not a prior bug-hunt focus); not on the board.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: change_goal (plans.py) only swapped the FitnessPlan header + week-1 WeeklyMacroTarget; UserDietPlan/AssignedMeal and WorkoutPlan are user-scoped and unlinked to FitnessPlan, so they stayed built for the OLD goal while the macro budget jumped to the new goal -> user ate old-goal meals against a new-goal target, contradicting the wizard ('rebuild your meal plan') + FAQ ('rebuilds upcoming meals and workouts'). Fix: after committing the new plan, change_goal now calls generate_diet_for_user_fast + generate_workout_for_user_fast (no-LLM fast assemblers, self-deactivate the prior user-scoped plans), each guarded so a rebuild failure degrades gracefully without rolling back the committed goal switch; response returns diet_rebuilt/workout_rebuilt. Deployed to prod (backend a603be6, health OK). Verified: 7 scoped route tests pass (rebuild + graceful-failure). Proof is a code/flow panel because driving the live wizard end-to-end needs an active-plan account (none headless since 2026-07-12).",
+        "imagePath": "images/i-20260714-9f2a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-9f2a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c33e3f6da31aa2bb72d8a2f245a61bd5dd61441e",
+        "imageCommits": [
+          "c33e3f6da31aa2bb72d8a2f245a61bd5dd61441e"
+        ],
+        "fixedAt": "2026-07-14T19:35:31.902Z",
+        "by": "shakeebshaan",
+        "appCommit": "111b48e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root-caused across both repos, invokes the existing fast assemblers (no new LLM path), graceful-degradation guard prevents corrupting a committed goal switch, deployed+healthy, 7 route tests green. Not higher because live end-to-end wizard capture needs an active-plan account unavailable headless; behavior proven via route tests + response flags."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260714-4e7c",
