@@ -23,7 +23,7 @@
     {
       "id": "i-20260713-3b7e",
       "createdAt": "2026-07-13T23:28:42Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/coach-chat",
       "description": "[bug-hunt] Coach-chat outbox replay DOUBLE-PERSISTS a message when the offline gap exceeds the backend 5-min nonce-dedup TTL (or a backend restart clears the cache).\n\nThe IndexedDB message outbox re-sends a failed message carrying its ORIGINAL nonce (src/pages/_components/coach-chat/hooks/useSendMessage.tsx:190 enqueue on ack-reject; useChatOutbox.ts:31-63 replay on reconnect), and the FE EXPLICITLY relies on the server deduping that replay (chat.service.ts:427-429, useChatOutbox.ts:44-46, useSendMessage.tsx:137-139 -- \"a lost ack cannot double-persist\"). But the servers ONLY dedup layer is an in-process cache with a 5-minute TTL, cleared on restart (backend.py:15044 _MSG_NONCE_TTL_S=300; _msg_nonce_seen/_msg_nonce_record). Message rows have NO nonce column / unique constraint (backend.py:15180 insert), so once the cache entry is gone nothing stops a re-insert.\n\nThe outbox is designed to retry after ARBITRARY offline periods (toast: \"We will retry automatically when you are back online\" + IndexedDB persistence surviving app close), which routinely exceeds 5 min on mobile -- so the dedup window is far shorter than the retry window it is meant to protect.\n\nRepro A (TTL expiry): send a coach message; drop connectivity in the ~15s window right AFTER the socket emit but AFTER the server persisted + recorded the nonce (common on mobile: background the app / lose signal). sendRealtimeMessageAck rejects -> message enqueued to outbox. Reconnect >5 min later -> replayOutbox re-sends with the same nonce -> _msg_nonce_seen misses (entry expired) -> message persisted AGAIN + re-broadcast. Expected: replay deduped to one copy. Actual: TWO identical user messages in the thread; if directed_to=ai the coach LLM ALSO runs twice (extra token cost + a 2nd AI reply to the same line).\n\nRepro B (backend restart, even <5 min): same lost-ack enqueue, then a backend deploy/restart clears _msg_nonce_cache, then the FE reconnects and replays -> double-persist. Backend deploys are frequent (auto-deploy directive).\n\nRoot cause: dedup window (5 min, process-local, restart-volatile) << outbox retry window (arbitrary). Fix: persist the nonce to a Message.client_nonce column with a UNIQUE index on (sender_id, client_nonce) and dedupe at insert (catch IntegrityError -> ack the existing id), or back the nonce cache with a persistent store (DB/Redis) whose TTL matches the outbox lifetime. Confirmed both repos (FE useChatOutbox.ts + useSendMessage.tsx + chat.service.ts; BE backend.py handle_send_message).",
       "author": "shakeebshaan",
@@ -36,8 +36,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: after going offline for more than ~5 minutes (or when the backend restarted), the app's automatic message-resend could save the same coach-chat message twice — two identical messages in the thread, and for AI messages the coach even replied twice. Fix (backend): every message now carries a unique client tag enforced by a database unique index, so a resend can never create a duplicate — the server just re-confirms the existing message. Deployed and verified live on production; covered by 3 new tests.",
+        "imagePath": "images/i-20260713-3b7e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-3b7e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "98de3b317564a87a6435e252e66b0c809803ac11",
+        "imageCommits": [
+          "98de3b317564a87a6435e252e66b0c809803ac11"
+        ],
+        "fixedAt": "2026-07-14T00:19:05.924Z",
+        "by": "shakeebshaan",
+        "appCommit": "6412591",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-cause fix (durable unique index + insert dedup + LLM double-run guard); deployed to prod, live schema verified, 3 tests red-before/green-after. Proof is an evidence card (backend fix has no app-screen surface)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260713-f2d1",
