@@ -644,30 +644,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260713-f91d",
-      "createdAt": "2026-07-13T23:49:24.115Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-f91d.jpg",
-      "imageCommit": "93255d4c071fe7aabcbbe5d1cd8c04a8834ac84e",
-      "imagePaths": [
-        "images/i-20260713-f91d.jpg"
-      ],
-      "imageCommits": [
-        "93255d4c071fe7aabcbbe5d1cd8c04a8834ac84e"
-      ],
-      "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "ROOT CAUSE FOUND + FIXED + DEPLOYED (backend commit 624589c, live on prod, health OK). The 'Failed to finalize custom plan' error was a backend 500 (BRIDGE_FAILED): _add_session_exercises inserted the client exercise_id directly, so an id orphaned by a catalog re-ingest/dedup FK-violated on flush and aborted the whole save. Fix validates the id first - an unknown id falls through to name lookup, then skip - matching the helper's documented skip-unresolvable contract; regression test added + green (5/5). Flagging instead of auto-resolving because a bar-clearing screenshot isn't safe headless: the 500 only fires when your stored plan contains an exercise_id missing from the catalog, and reproducing that on your live account would mean POSTing a bogus plan that overwrites your real one. Please retry Save plan on your device to confirm it no longer errors, then close.",
-      "reviewedAt": "2026-07-14T02:55:24.902Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260713-93ea",
       "createdAt": "2026-07-13T23:50:38.738Z",
       "route": null,
