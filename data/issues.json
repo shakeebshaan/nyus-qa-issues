@@ -339,8 +339,30 @@
         "8134b8655bfb5dc0454a04bf8e0405521d9559fc"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the diet-style 'Build your plan' card was rendered mid-page, right after the Daily activity card, not at the end. Fix (src/pages/Activity.tsx): moved the card block to the end of the workout/exercises section (before the wheel-picker modal) so it now sits at the bottom of the page after the exercises, per the reopen. Card style unchanged (icon-square + title + subtitle + chevron rows, mirrors the Diet Fine-tune-your-plan hub). Full-page proof shows it below the exercise list.",
+        "imagePath": "images/i-20260713-93ea-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260713-93ea-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "495574cccadca2c1061532df9690441f2a01caa1",
+        "imageCommits": [
+          "495574cccadca2c1061532df9690441f2a01caa1"
+        ],
+        "fixedAt": "2026-07-14T07:34:04.668Z",
+        "by": "shakeebshaan",
+        "appCommit": "4f77ed0b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Recaptured full-page /activity shows BUILD YOUR PLAN card at the very bottom, directly below the last exercise (Seated Calf Raise) and above the bottom nav; matches the reopen ('show it at the end after exercises'). Style already matched the diet hub 1:1; only position changed."
+        }
+      },
       "history": [
         {
           "at": "2026-07-14T06:34:25.780Z",
