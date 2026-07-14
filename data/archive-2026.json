@@ -20555,31 +20555,49 @@
       "archivedAt": "2026-07-13T23:39:10.648Z"
     },
     {
-      "id": "i-20260713-f91d",
-      "createdAt": "2026-07-13T23:49:24.115Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-f91d.jpg",
-      "imageCommit": "93255d4c071fe7aabcbbe5d1cd8c04a8834ac84e",
-      "imagePaths": [
-        "images/i-20260713-f91d.jpg"
-      ],
-      "imageCommits": [
-        "93255d4c071fe7aabcbbe5d1cd8c04a8834ac84e"
-      ],
-      "imagePrivate": true,
+      "id": "i-20260714-f51e",
+      "createdAt": "2026-07-14T03:53:04Z",
       "status": "resolved",
-      "fix": null,
+      "route": "/fasting",
+      "description": "[bug-hunt] Fasting recurring auto-start cannot be turned OFF without tapping Start or Clear — a disabled plan keeps auto-starting fasts.\n\nRoot: the plan-persist effect in src/pages/Fasting.tsx:123-144 only WRITES the saved plan (savePlan) when `repeat !== \"off\" && autoStartReady`; it never reconciles the disabled case. Turning Repeat back to \"Off\" (Fasting.tsx:318 setRepeat) or clearing the \"Start automatically at\" time (Fasting.tsx:340-347, makes autoStartReady=false) makes the effect early-return, leaving the previously-persisted nyus_fasting_plan (with repeat:\"daily\"/\"alternate\" + startTime) UNTOUCHED in localStorage. The plan is only ever cleared by handleStart when repeat===\"off\" (Fasting.tsx:88-90) or the explicit Clear button (clearSavedPlan, Fasting.tsx:111-117). Meanwhile useFasting.maybeAutoStart (src/hooks/useFasting.ts:132-161) reads loadPlan() straight from localStorage on mount / every 60s / on visibilitychange and calls resolveAutoStart (src/lib/fasting.ts:319-346), which still fires.\n\nAsymmetry that makes it a real bug: per i-20260713-a27c the feature auto-COMMITS \"on\" the instant a repeat + start time are set (no Start tap needed), but there is no matching auto-commit for \"off\" — so the two controls that visually disable it do nothing to the armed plan.\n\nExpected: setting Repeat=Off, or clearing the auto-start time, disarms the recurring auto-start (fast no longer begins on its own).\nActual: a fast auto-starts on the next due day at the old start time even though the user turned it off.\n\nRepro:\n1. /fasting → Repeat = \"Every day\" → \"Start automatically at\" = 08:00. (Plan persisted + auto-start armed.)\n2. Clear the \"Start automatically at\" input (or set Repeat back to \"Off\"). Caption/UI now imply auto-start is off; do NOT tap Start or Clear.\n3. Leave the page / close the app. localStorage nyus_fasting_plan still has {repeat:\"daily\", startTime:\"08:00\", ...}.\n4. Next day at 08:00 (or reopen the app after 08:00) → a fast auto-starts on its own.\n\nFix: when repeat===\"off\", clearPlan(); when repeat!==\"off\" but the start time was cleared, re-save the plan with startTime:undefined (drop auto-start) instead of early-returning — i.e. reconcile the persisted plan on every relevant change, not only when arming.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": {
+        "description": "Root cause: the plan-persist effect in Fasting.tsx only saved the plan while arming (repeat!=off && autoStartReady) and early-returned otherwise, so toggling Repeat=Off or clearing the auto-start time left the armed nyus_fasting_plan in localStorage and useFasting kept auto-starting fasts. Fix: reconcile on every change — Repeat=Off now clearPlan()s + drops the autostart guard; a cleared start time re-saves the plan with startTime:undefined (auto-start off, window still remembered). Verified in-browser: Off -> plan=null; clear-time -> startTime dropped so resolveAutoStart no-ops.",
+        "imagePath": "images/i-20260714-f51e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-f51e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "01bcbd2ed09efaa467b4cf9c5b5e882edf8a8346",
+        "imageCommits": [
+          "01bcbd2ed09efaa467b4cf9c5b5e882edf8a8346"
+        ],
+        "fixedAt": "2026-07-14T04:04:48.967Z",
+        "by": "shakeebshaan",
+        "appCommit": "4cb3de52",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root cause matched the issue's own diagnosis; both disarm paths (Repeat=Off + cleared start time) verified end-to-end in the live app (localStorage plan cleared / startTime dropped). Scoped 1-file change, existing fasting unit tests (33) green, no tsc errors."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "ROOT CAUSE FOUND + FIXED + DEPLOYED (backend commit 624589c, live on prod, health OK). The 'Failed to finalize custom plan' error was a backend 500 (BRIDGE_FAILED): _add_session_exercises inserted the client exercise_id directly, so an id orphaned by a catalog re-ingest/dedup FK-violated on flush and aborted the whole save. Fix validates the id first - an unknown id falls through to name lookup, then skip - matching the helper's documented skip-unresolvable contract; regression test added + green (5/5). Flagging instead of auto-resolving because a bar-clearing screenshot isn't safe headless: the 500 only fires when your stored plan contains an exercise_id missing from the catalog, and reproducing that on your live account would mean POSTing a bogus plan that overwrites your real one. Please retry Save plan on your device to confirm it no longer errors, then close.",
-      "reviewedAt": "2026-07-14T02:55:24.902Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-14T05:06:41.621Z",
+      "needsReview": false,
+      "resolvedAt": "2026-07-14T05:06:55.447Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-14T05:06:41.621Z"
+      "archivedAt": "2026-07-14T05:06:55.447Z"
     }
   ]
 }
