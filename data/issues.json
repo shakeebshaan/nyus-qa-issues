@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260714-4f7c",
+      "createdAt": "2026-07-14T04:37:56Z",
+      "status": "open",
+      "route": "/partners/:groupId/follow-mode",
+      "description": "[bug-hunt] Partner-group follow mode can never be set — the picker POSTs the wrong JSON key, so the backend rejects every follow-mode selection with 400.\n\nContract mismatch across repos:\n- Frontend src/services/partner-groups.service.ts:267-279 setFollowMode() POSTs /partner-groups/:id/follow-mode with body { mode, custom_diet_plan_id, custom_workout_plan_id } — the mode value is under the key `mode`.\n- Backend app/routes/partner_groups.py:708 reads follow_mode = body.get('follow_mode'). Since the FE never sends a `follow_mode` key, this is always None, so line 709 `if follow_mode not in _VALID_FOLLOW_MODES` is true and the handler returns 400 INVALID_FOLLOW_MODE for EVERY request.\n\nThe sibling scaling-mode endpoint proves the deviation: FE sends { mode } and backend partner_groups.py:741 reads body.get('mode') — consistent. Only follow-mode is out of sync (FE `mode` vs BE `follow_mode`). The mode string VALUES all match _VALID_FOLLOW_MODES exactly (both/diet_only/workout_only/custom_diet_leader_workout/leader_diet_custom_workout); only the wrapping JSON key is wrong.\n\nBlast radius: FollowModePicker (src/components/partners/FollowModePicker.tsx:121-138) is the ONLY caller. Every tap on any of the 5 follow-mode cards fires the mutation -> 400 -> onError toast 'Couldn't update follow mode' -> my_follow_mode stays null. A member who accepts a partner-group invite is routed straight to /partners/:groupId/follow-mode (PartnerInvites.tsx:48) and is physically unable to complete setup: the picker's whole purpose (choose how to follow the leader's plan) is dead. Settings -> Change is equally broken.\n\nExpected: tapping a follow-mode option persists it (200) and the group hub reflects the chosen mode; the diet/workout views scale to that mode.\nActual: 400 INVALID_FOLLOW_MODE on every attempt; a red 'Couldn't update follow mode' toast; follow mode never changes from 'Not set'.\n\nRepro:\n1. Be a member of a partner group with follow mode unset (accept an invite, or Group settings -> Follow mode -> Change).\n2. Tap any option in the follow-mode picker (e.g. 'Both').\n3. Network: POST /api/v1/partner-groups/<id>/follow-mode with body {\"mode\":\"both\",...} returns 400 {\"code\":\"INVALID_FOLLOW_MODE\"}.\n4. UI shows the error toast; the mode stays 'Not set'.\n\nFix (pick one, keep both repos in sync): change the FE service to send { follow_mode: mode, ... } (matches backend + the follow_mode_changed discord log key), OR make the backend accept follow_mode = body.get('follow_mode') or body.get('mode'). Sending the key as follow_mode is the smaller, contract-correct change.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260714-b8k2",
       "createdAt": "2026-07-14T04:30:00Z",
       "status": "open",
