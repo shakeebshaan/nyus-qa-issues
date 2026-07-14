@@ -344,12 +344,36 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Audit done - full report attached (tap 'Full Audit Report'). Ran 3 parallel review agents over FE + BE + website/store/product, evidence-cited. Codebase is healthy overall (tsc 0 errors, 317 tests, code-split, strong LLM/auth guards). SHIPPED this tick (commit 43936467): gitignored _qa_creds.json (held a LIVE JWT) + ~34 root scratch files that were one 'git add -A' from a credential push. 4 owner-only items need YOU: (1) [P0] rotate 2 leaked backend creds - GCP service-account key nyus-and-28394d25990f.json is git-tracked with a live private_key, and the MySQL password sits in CLAUDE.md:50; revoke+scrub history. (2) [P0] pick ONE pricing model - landing says 'Free forever', store/blog say '30-day trial', app has Rs499-2499 tiers; reconcile all surfaces. (3) [P1] verify/soften legal claims (GDPR+DPDP 'compliant', AES-256-at-rest, 'never trains', Mumbai residency). (4) [P1] confirm shipped onboarding matches the '<10 min, few questions' promise or update APPLICATION_FLOW.md. Safe backlog Claude can take next ticks: delete dead logging_service.py shadow, widen 64KB TEXT cols, fix privacy canonical, bump axios/sentry minors.",
       "reviewedAt": "2026-07-14T03:10:13.541Z",
       "reviewedBy": "shakeebshaan",
       "reportPath": "reports/b07f-audit-report.html",
-      "reportLabel": "Full Audit Report"
+      "reportLabel": "Full Audit Report",
+      "reviewReply": "Fix all in the screenshots and make sure we have the 499 plan everywhere and working remove \"Free forever\" from everywhere",
+      "reviewRepliedAt": "2026-07-14T05:12:47.507Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReplyImagePaths": [
+        "images/i-20260714-b07f-reply-0.jpg",
+        "images/i-20260714-b07f-reply-1.jpg",
+        "images/i-20260714-b07f-reply-2.jpg",
+        "images/i-20260714-b07f-reply-3.jpg",
+        "images/i-20260714-b07f-reply-4.jpg",
+        "images/i-20260714-b07f-reply-5.jpg",
+        "images/i-20260714-b07f-reply-6.jpg",
+        "images/i-20260714-b07f-reply-7.jpg"
+      ],
+      "reviewReplyImageCommits": [
+        "0a6d86171dd5bb12c9ed627e427a547f477f18b2",
+        "457f89778ef496ab18fb4d05799e1b0ec402d3fe",
+        "549b6b3856130b5e9f3ae9bf0d93f6d321565c80",
+        "a167314123cdfae9ee62b03ae49b6ecfe0f55c21",
+        "5b8f40321f566256a55876babf2dcb811d1b7ec9",
+        "789297bf86dd224f9a00328e36e8c472708bc15f",
+        "77675d5782d7d21a3b89193433ee434314eee1e3",
+        "435e37b761bc014d4bd56b0336f981e542f51d61"
+      ],
+      "reviewReplyImagePrivate": true
     }
   ]
 }
