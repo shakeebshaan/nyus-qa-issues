@@ -361,7 +361,11 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "\"Send app to play store\" maps to the release pipeline, which per CLAUDE.md is the heavier OWNER-GATED action (distinct from the auto backend-deploy + git-push directive) — a headless tick shouldn't autonomously fire a Play Store submission (signing/crash/track risk, one-build-per-session caution). Confirm scope and I'll run it in a supervised tick:\n\nState now: local android/app/build.gradle = versionCode 205 / versionName 1.9.25; Play metadata + changelog already staged for v205. Frontend main HEAD e0aa1a19 with recent fixes (6e48 egg-count sheet, a3f9 Razorpay identifiers, c9f2 crisis filter, FAQ data-location) that may be ahead of the current alpha build.\n\nTwo paths — which do you want?\n1) ALPHA build+upload (fastlane beta): build web + cap sync + upload v205 to closed-testing alpha. Autonomous-safe, non-production.\n2) PROMOTE to PRODUCTION (fastlane release): push the alpha build live to all users. Production release = owner-only per the release policy; needs your explicit go.\n\nReply with 1 or 2 (and bump the version first if you want a fresh code) and I'll execute the full pipeline.",
+      "reviewedAt": "2026-07-14T19:06:06.447Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260714-ddc2",
