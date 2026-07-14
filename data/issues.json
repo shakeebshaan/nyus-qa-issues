@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260714-wk9r",
+      "createdAt": "2026-07-14T23:39:05.493Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/activity",
+      "description": "[suggestion] Add a one-tap \"Reschedule\" quick-action on a missed workout day directly in the Activity page. USER PROBLEM: today a missed/skipped workout day just silently rolls forward to the next day's plan (src/pages/Activity.tsx skip logic, ~line 181-1140) with no reschedule option on that surface; reschedule ONLY exists buried inside the coach-chat WorkoutEditPanel block (src/components/blocks/WorkoutEditPanel.tsx handleReschedule/handleRescheduleConfirm, ~line 219-229), so a user has to think to open chat and ask the coach to move a workout — most won't. EVIDENCE: docs/APPLICATION_FLOW.md:550-551 lists reschedule/skip as chat-block actions only; no equivalent entry point from the Activity day view. PROPOSED V1: on Activity, when a day is marked skipped/missed, show a small inline \"Reschedule to...\" chip/button next to the existing skip indicator, reusing the same PUT /plans/{id} reschedule backend call the chat block already uses (planService) — no new backend endpoint needed, just wire the existing mutation to a lightweight day-picker sheet. EFFORT: small-medium (~1 day) — one new UI affordance + existing mutation, no backend change.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260714-fav1",
       "createdAt": "2026-07-14T22:41:20.812Z",
       "status": "open",
