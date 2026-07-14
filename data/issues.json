@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260714-ph07",
+      "createdAt": "2026-07-14T12:00:00.000Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[suggestion] Photo-based meal logging: snap a plate photo, AI estimates dish + macros, user confirms/adjusts before logging. Problem: current logging is search/plan-based only (voice/text logging already filed separately, i-20260714-vlog) - no camera capture path exists in Nutrition.tsx/MealDetail.tsx, forcing manual entry for every ad-hoc Indian meal (thali, home-cooked mixed dishes) that has no clean plan match. Evidence: comparable trackers (Cronometer, Noom, HealthifyMe - the dominant India competitor) all ship photo logging as a core differentiator; NYUS has none, and existing plan-based flow (AIMealCustomization.tsx) assumes a known dish, not an arbitrary photographed plate. V1 scope: camera/gallery picker on Nutrition screen -> send image to existing llm_service vision path -> return best-guess dish name + macro estimate as an editable confirm sheet (reuse MealIngredients.tsx portion-adjust UI) -> log on confirm; no barcode scanning, no multi-item photo segmentation in v1. Effort: medium (new capture UI + one backend vision endpoint + confirm sheet reuse).",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260714-6b3e",
       "createdAt": "2026-07-14T20:35:00Z",
       "status": "open",
