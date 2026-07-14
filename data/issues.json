@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260714-d1hk",
+      "createdAt": "2026-07-14T05:40:39.052Z",
+      "status": "open",
+      "route": null,
+      "description": "[suggestion] Day-1 activation push: send one notification ~20-22h after onboarding finalize showing the AI-built plan is ready to log today (deep-link to first meal/workout), before any inactivity drip fires. User problem: growth-insights report (i-20260712-a91c) shows retention stuck at 0% on a growing cohort and WAU collapsing -86% over 2 reports, yet retention_sequences.py only fires reminders starting at days_inactive=3 (backend/app/services/retention_sequences.py) and a day-7 weekly_report — there is no Day-0/Day-1 touchpoint pulling a fresh signup back in while the onboarding plan is still top-of-mind. Evidence: onboarding already auto-starts a 30-day trial and always-custom builds a full plan (docs/APPLICATION_FLOW.md onboarding section) so day-1 content genuinely exists to show off; comparable trackers (HealthifyMe, Cult.fit) send a first-24h activation push as standard. V1 scope: one new LIFECYCLE_SEQUENCE entry {hours_since_signup: 20, type: activation, title/body referencing todays first planned meal or workout} in retention_sequences.py, reuse existing notification dispatch + frequency-cap plumbing, deep-link to /nutrition or /activity. Effort: small (~1 backend job + 1 notif template, no new infra).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260714-0d41",
       "createdAt": "2026-07-14T05:22:23.511Z",
       "status": "open",
