@@ -308,34 +308,6 @@
       "imagePath": null,
       "imagePaths": [],
       "imageCommittedAt": null
-    },
-    {
-      "id": "i-20260714-a8b7",
-      "createdAt": "2026-07-14T12:06:02.228Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "\"Do all\" acknowledged. Status: the py3.8-SAFE CVE subset is already shipped to prod (72->57 vulns, pinned in requirements.txt 38a6532). The remaining 57 all require fix versions that dropped Python 3.8, so they are ONLY closable by the 3.8->3.11 runtime migration. That migration is NOT something I will run blindly in a headless 30-min tick: it's live prod with no staging clone, no human to catch a bad bump, and CLAUDE.md records a prior cryptography/pyOpenSSL upgrade that broke eventlet. I will drive it END-TO-END (rebuild venv on a py3.11 base, reinstall, run the backend suite, snapshot + verify + redeploy with rollback ready) the moment you give a supervised/windowed go -- reply here with a window and I take it start to finish that session. Nothing further on this item is safely doable headless.",
-      "reviewedAt": "2026-07-14T16:07:02.099Z",
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Do all",
-      "reviewRepliedAt": "2026-07-14T14:32:26.182Z",
-      "reviewReplyBy": "shakeebshaan",
-      "tags": [
-        "security",
-        "python38",
-        "needs-migration"
-      ]
     }
   ]
 }
