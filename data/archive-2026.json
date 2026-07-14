@@ -20555,50 +20555,54 @@
       "archivedAt": "2026-07-13T23:39:10.648Z"
     },
     {
-      "id": "i-20260713-bea0",
-      "createdAt": "2026-07-13T23:43:01.979Z",
+      "id": "i-20260713-20a7",
+      "createdAt": "2026-07-13T23:41:22.823Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-bea0.jpg",
-      "imageCommit": "5195eeb3cbe811fc88cbd882d1f06e3109f24ae5",
+      "imagePath": "images/i-20260713-20a7.jpg",
+      "imageCommit": "a5f18c4820ea8802651d65fd43b7f29c2dec0b62",
       "imagePaths": [
-        "images/i-20260713-bea0.jpg"
+        "images/i-20260713-20a7.jpg"
       ],
       "imageCommits": [
-        "5195eeb3cbe811fc88cbd882d1f06e3109f24ae5"
+        "a5f18c4820ea8802651d65fd43b7f29c2dec0b62"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: the dashboard 'coach wants to know you' check-in card was the only section card missing a bottom margin, so when the cards between it and the next one self-gate to null it butted directly against 'Today's supplements' (the cramped seam). Fix: add mb-4 to the card root, matching the exact vertical rhythm every other dashboard card uses. Now there is a clean, standard gap between the two cards.",
-        "imagePath": "images/i-20260713-bea0-fix-r1.png",
+        "description": "Root cause: coach-suggested core meals (breakfast/lunch/dinner) had no delete button, so you couldn't remove a meal you didn't want. Fix: every meal now has a delete option (with a confirm before wiping a built meal), plus a 'Build it myself instead' button on suggested meals that clears the AI pick and drops you straight into the manual editor to build your own. A day always keeps at least one meal.",
+        "imagePath": "images/i-20260713-20a7-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-bea0-fix-r1.png"
+          "images/i-20260713-20a7-fix-r1.png",
+          "images/i-20260713-20a7-fix-r1-2.png",
+          "images/i-20260713-20a7-fix-r1-3.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "ff97e4bc73d1018802a990432fdb8d0145bb827a",
+        "imageCommit": "940319ab642b861125d7d29015a3a0ef3e7861c7",
         "imageCommits": [
-          "ff97e4bc73d1018802a990432fdb8d0145bb827a"
+          "940319ab642b861125d7d29015a3a0ef3e7861c7",
+          "ad75fd1e94b21ece9773f94c126adee799e0df85",
+          "a60023f13ec584ee698079e6170562569f5711ca"
         ],
-        "fixedAt": "2026-07-14T02:25:34.014Z",
+        "fixedAt": "2026-07-14T00:08:21.340Z",
         "by": "shakeebshaan",
-        "appCommit": "7947b78c",
+        "appCommit": "23b76ef9",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 91,
+          "score": 92,
           "bar": 90,
-          "note": "Scenario capture forces the check-in card on; it now shows the standard mb-4 gap above the supplements card instead of touching it."
+          "note": "Both asks (delete any meal + build-myself) delivered surgically; verified on the real diet-builder render (dev preview), 3 proof shots, +2 tests green, no regressions."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-14T05:07:45.920Z",
+      "resolvedAt": "2026-07-14T05:08:03.975Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-14T05:07:45.920Z"
+      "archivedAt": "2026-07-14T05:08:03.975Z"
     }
   ]
 }
