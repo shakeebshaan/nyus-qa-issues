@@ -97,7 +97,8 @@
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
-        "auto"
+        "payments",
+        "backend"
       ],
       "imagePath": null,
       "imageCommit": null,
@@ -107,8 +108,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED to prod (backend ac66cf6, live 2026-07-14T16:05Z, service active, health 200; frontend 674169f0). Root cause confirmed exactly as reported: verify-payment granted the CLIENT-sent duration_months with no binding to the amount paid, and create-order fell to the legacy amount-only branch for every shipped client (FE never sent plan_id), so _resolve_plan_price_rupees returned (None,None) and the client amount was honored verbatim. Exploit: pay Re1 (or the Rs499 monthly price) -> verify with duration_months:6 -> 6-month entitlement.\n\nFIX (server-authoritative, closes it regardless of client):\n1. create-order pins the resolved plan_id/tier/duration into the Razorpay order `notes` (backend.py RazorpayCreateOrderResource) when the plan resolves from the catalog.\n2. verify-payment IGNORES client duration_months; new pure helper _derive_paid_entitlement(order_amount_paise, order_notes) re-derives duration + expected charge from the order Razorpay actually billed: from the pinned plan (rejecting a 400 when billed != plan price), or for legacy amount-only orders by matching the billed amount to the catalog. Unknown amounts (Rs49 launch offer) grant the MINIMUM 1 month.\n3. FE payments.service.createRazorpayOrder now forwards plan_id/tier/duration_months so the server-authoritative amount path is used at create-time (defense in depth).\n\nVERIFIED: live prod _derive_paid_entitlement(100,{plan_id:3})=REJECT (None); (100,None)=1 month (NOT 6); standalone extraction of the exact helper passes all 8 exploit cases (Elite full=6mo, underpaid pinned=reject, Re1 legacy=1mo, amount==Elite=6mo, launch49=1mo, client-duration-never-consulted). Added tests/test_razorpay_price_binding.py (7 cases).\n\nNO UI SCREENSHOT: backend payment-verification logic, no user-facing screen state to capture -- proof is the code trace + live prod helper check + passing tests. CANNOT self-resolve under the board testGate: it runs the FRONTEND `npm run test:unit` via loop.mjs verify (spawn-ENOENT headless) and this is a backend-only fix that gate doesn't cover. Ready for your Resolve.",
-      "reviewedAt": "2026-07-14T16:06:18.586Z",
+      "reviewReason": "Retry-tick re-verify: prior fix ac66cf6 closed the client-duration and bound-order amount-mismatch exploits, but a residual downgrade tamper survived. A crafted POST create-order {amount:1} with no plan_id makes an UNBOUND order; _derive_paid_entitlement then defaulted to (1 month, no error) for any amount matching no catalog plan -- minting a 1-month active subscription for Rs1, repeatable (launch once-per-user guard bypassed since amount != Rs49). Deeper fix 5422d24: unbound orders grant only when the paid amount matches a real paid catalog plan price OR equals the sanctioned Rs49 launch offer; any other unbound amount returns entitlement_error and verify-payment rejects with HTTP 400. Verified: bound-correct, legacy-catalog and launch-offer grant; Rs1, arbitrary Rs10, and wrong-amount bound order all rejected. Deployed to prod (health 200). Backend-only payment-integrity fix -- no screen to screenshot; owner can confirm via API repro.",
+      "reviewedAt": "2026-07-14T19:55:46.858Z",
       "reviewedBy": "shakeebshaan"
     },
     {
