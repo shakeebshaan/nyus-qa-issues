@@ -566,7 +566,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + DEPLOYED (backend migration) — awaiting board test-gate only. Root cause: the custom-plan builder's Save plan hit a backend 500 'Failed to finalize custom plan' (BRIDGE_FAILED). Prod traceback (nyus_app.log 23:49, your account) pinned it to plan_generator._bridge_workout_sequential db.session.flush() raising IntegrityError 1048 'Column day_of_week cannot be null'. The sequential/progressive custom-workout bridge (i-20260713-ae38) inserts WorkoutSession(day_of_week=None) — a progressive program is not weekday-bound — but the prod workout_sessions.day_of_week column was still NOT NULL even though the ORM model already declared it nullable (the model change was never applied to the DB). Fix: migration 20260714_002_workout_session_day_nullable.py (idempotent ALTER ... MODIFY day_of_week INT NULL), committed to nyu_backend (6534ecc), pushed, deployed to prod, migration applied, backend healthy. Verified end-to-end on prod: the exact INSERT of day_of_week=NULL into workout_sessions now succeeds (previously IntegrityError 1048), run in a rolled-back txn so no data was written. Column confirmed Null=YES. This is a backend-only fix (no frontend code changed), so the frontend loop.mjs test-gate is not applicable and is infra-blocked headless — could not resolve with --tests pass. Please Resolve on the board, or scope loop.json testCommand to a unit subset.",
+      "reviewedAt": "2026-07-14T02:40:35.569Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-93ea",
