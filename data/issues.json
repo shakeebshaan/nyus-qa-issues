@@ -456,7 +456,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Understood: img-0 is the ONBOARDING diet builder (empty 'Coach can build / I'll build it myself' slots); img-1 is the live Diet page with the user's actual meals (Milkshake protein / Egg Chilla Plate / Egg Fish Poha). Ask = when you open the builder to EDIT, pre-load the SAME meals from the active plan as editable slots, not empty ones. Good news: CustomDietBuilder.tsx ALREADY supports this via the initialDays prefill prop (line 84+, 'seed days/repeat-mode from the user's EXISTING diet plan', precedence over the onboarding draft). So the fix is wiring the Customize/Edit entry point to pass the active plan into initialDays (the ONBOARDING entry correctly starts empty — that's first-time build, before any plan exists). Need to confirm WHICH entry the screenshot is from: are you hitting the empty builder from Diet > Edit (a bug — should prefill), or from first-time onboarding (expected empty)? Building+verifying the Edit-prefill path needs the live plan on a meal-rendering account (none headless since 2026-07-12). Confirm the entry point and I'll wire initialDays + verify in an interactive tick.",
+      "reviewedAt": "2026-07-14T18:09:46.613Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
