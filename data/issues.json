@@ -268,8 +268,30 @@
         "4044203733d9136ba22628dbffb6a106e666325f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Reopen fix: logging a one-off activity (e.g. Treadmill) that matches a recurring activity due today no longer double-shows. New reconcileDailyActivity() (recurring-activity.ts) attributes the matching adhoc log to its recurring row, flipping it to Done (a check, like ticking an exercise) and dropping the duplicate 'logged today' entry; non-matching one-offs still list. DailyActivityCard.tsx wired to it. FE-only; recurring-activity.test.ts +5 (11/11). Proof PNG: Treadmill shows once as recurring row with '✓ Done', no duplicate.",
+        "imagePath": "images/i-20260713-2f33-fix-r4.png",
+        "imagePaths": [
+          "images/i-20260713-2f33-fix-r4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "47541b65c6894a357600c7db3eb1e9b31c82dd35",
+        "imageCommits": [
+          "47541b65c6894a357600c7db3eb1e9b31c82dd35"
+        ],
+        "fixedAt": "2026-07-14T00:15:10.187Z",
+        "by": "shakeebshaan",
+        "appCommit": "736046e7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Directly satisfies the reopen note ('track as done on the first activity like the exercise, no already-logged-today'): matching adhoc log now ticks the recurring row done instead of duplicating it. Pure helper unit-tested (5 cases, incl case-insensitive/not-due/already-done); faithful full-screen 390px scenario capture on /activity shows Treadmill once (recurring, Done). Minor: undo on an adhoc-attributed row is a soft no-op (row stays done while the adhoc log exists) — truthful state, low impact."
+        }
+      },
       "history": [
         {
           "at": "2026-07-13T14:32:35.418Z",
