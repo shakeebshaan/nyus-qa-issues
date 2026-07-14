@@ -20555,52 +20555,52 @@
       "archivedAt": "2026-07-13T23:39:10.648Z"
     },
     {
-      "id": "i-20260713-a27c",
-      "createdAt": "2026-07-13T23:53:54.594Z",
+      "id": "i-20260713-fa77",
+      "createdAt": "2026-07-13T23:55:18.493Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-a27c.jpg",
-      "imageCommit": "627b4a8a3e2a4d4870a39cea1a8ec420a0559100",
+      "imagePath": "images/i-20260713-fa77.jpg",
+      "imageCommit": "d3c359771b77f2111b0e50373cd628d40ca192b4",
       "imagePaths": [
-        "images/i-20260713-a27c.jpg"
+        "images/i-20260713-fa77.jpg"
       ],
       "imageCommits": [
-        "627b4a8a3e2a4d4870a39cea1a8ec420a0559100"
+        "d3c359771b77f2111b0e50373cd628d40ca192b4"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Added a 'Start automatically at' time to the recurring fasting plan (the from-time the owner asked for). When set on a repeating plan, the fast now starts automatically at that clock time each due day - back-dated so the ring is correct even if the app opens late - with no manual tap. The plan is remembered the moment the time is set, so it takes effect on the next occurrence. Manual 'Start fast until <time>' is unchanged when no start time is set. New pure helpers + 7 unit tests; a once-per-day guard prevents an early End from re-triggering.",
-        "imagePath": "images/i-20260713-a27c-fix-r1.png",
+        "description": "Added a 'Daily weigh-in reminder' card on the Log Weight screen (below Body Composition): a toggle + time picker. Turning it on requests notification permission then schedules a device-local daily reminder on the existing progress_updates channel; the time picker reschedules it and the preference persists across reloads. Reuses the app's localNotifications infra (dedicated id 1031 so it never collides with the weekly weigh-in). i18n added in all 4 bundles.",
+        "imagePath": "images/i-20260713-fa77-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-a27c-fix-r1.png",
-          "images/i-20260713-a27c-fix-r1-2.png"
+          "images/i-20260713-fa77-fix-r1.png",
+          "images/i-20260713-fa77-fix-r1-2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "6dea790cf75fd4412b6255cc41660a463f7f2e3f",
+        "imageCommit": "f8420dfe5c6cbeb4028243d75362ba2c329a9057",
         "imageCommits": [
-          "6dea790cf75fd4412b6255cc41660a463f7f2e3f",
-          "d6dd4cd4ed671b28b9288f6dc7d24048c0a252dc"
+          "f8420dfe5c6cbeb4028243d75362ba2c329a9057",
+          "bda50b976ce5296275d5e4a4771493ea4c24af3e"
         ],
-        "fixedAt": "2026-07-14T02:51:13.901Z",
+        "fixedAt": "2026-07-14T02:31:11.134Z",
         "by": "shakeebshaan",
-        "appCommit": "b0ca35c6",
+        "appCommit": "7023fabc",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 92,
           "bar": 90,
-          "note": "Config shot shows the new 'Start automatically at 10:00 AM' row + plan chip '10:00 AM -> 6:00 PM . auto'; second shot shows an overnight fast auto-started (5h38m OF 12H, ends 9:00 AM) with no tap. 25/25 fasting tests green; adversarially reviewed."
+          "note": "Recaptured /log-weight shows the new reminder card; toggled-on state shows the 'Remind me at 08:00 AM' time picker wired to the local-notification scheduler."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-14T05:07:03.146Z",
+      "resolvedAt": "2026-07-14T05:07:08.048Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-14T05:07:03.146Z"
+      "archivedAt": "2026-07-14T05:07:08.048Z"
     }
   ]
 }
