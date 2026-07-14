@@ -8,7 +8,10 @@
       "route": null,
       "description": "[content] Published: Jaggery vs Sugar for Weight Loss (India) — https://nyus.in/blog/jaggery-vs-sugar-for-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
       "author": "shakeebshaan",
-      "tags": ["content", "auto"],
+      "tags": [
+        "content",
+        "auto"
+      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -524,8 +527,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Done: cleaned machine space as asked. Dropped stale Playwright browser versions (chromium/headless_shell rev 1208+1217 — only rev 1223 is pinned by the live playwright 1.60.0, so these were dead) = 1.29 GB, plus npm cache + %TEMP% = ~0.1 GB. C: went 8.9 GB -> 10.3 GB free. Left in place (in use / needed): rev-1223 browsers (live QA capture), VS Code data, and both repos' node_modules (dev server is live). Still available on request: ~/.gradle caches, older node_modules. The 'send to Play Store' half is still awaiting your explicit go — it's an owner-gated release (fastlane beta -> alpha), distinct from backend auto-deploy, so I won't auto-cut it. Say 'cut the alpha' and I'll run it; there's now enough build headroom.",
-      "reviewedAt": "2026-07-14T03:29:57.024Z",
+      "reviewReason": "Machine-space clean done again this tick: purged npm cache (~420MB), pip cache (~20MB), %TEMP%. C: sits at ~10.3GB free. Everything still on disk is in-use and needed for headroom: playwright rev-1223 (+MCP chromes) for live QA capture, ~/.gradle/wrapper (460MB, android-build), and both repos' node_modules (dev server live) - deleting these just forces slow re-downloads before the next build, so I left them. The release half ('send to Play Store') is still owner-gated: it's a fastlane beta->alpha cut, distinct from backend auto-deploy, so I won't auto-run it. Say 'cut the alpha' and I'll run it - build headroom is fine now.",
+      "reviewedAt": "2026-07-14T04:29:48.997Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "release",
