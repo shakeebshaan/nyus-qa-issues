@@ -563,9 +563,32 @@
         "8134b8655bfb5dc0454a04bf8e0405521d9559fc"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Activity page showed two small side-by-side 'Build Workout Plan' / 'Build Activity Plan' buttons that did not match the Diet page's 'Fine-tune your plan' hub. Fix: replaced them with a single 'Build your plan' list card mirroring the diet hub exactly - icon-square + title + subtitle + chevron rows, divide-y, same tokens (orange dumbbell for workout, teal footprints for activity). i18n added across all 4 bundles.",
+        "imagePath": "images/i-20260713-93ea-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260713-93ea-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f26e2f921b9882bddfd120d876058de2db47a2f4",
+        "imageCommits": [
+          "f26e2f921b9882bddfd120d876058de2db47a2f4"
+        ],
+        "fixedAt": "2026-07-14T02:21:40.418Z",
+        "by": "shakeebshaan",
+        "appCommit": "fdbaec8f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Recaptured /activity shows the new BUILD YOUR PLAN card matching the diet page's row style 1:1."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260713-a27c",
