@@ -388,56 +388,6 @@
       "imagePrivate": false
     },
     {
-      "id": "i-20260714-b07f",
-      "createdAt": "2026-07-14T00:30:22.865Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Done this tick (backend commit 9c6c7c0, test-only, no prod deploy). Closed the two biggest remaining isolated-fail files in scripts/run_tests_isolated.py — all genuine test rot from deliberate source changes, ZERO source edits so no regression risk:\n\n- test_plan_generator.py (29 fails -> 0, 389 pass): (1) added PlanVersion to the db_models MagicMock stub — source generate_workout_plan + pause/resume detection does 'from db_models import PlanVersion' (11 ImportError). (2) stubbed ActivityTarget/GroceryList .query...first() -> None — source gained idempotency guards (QA i-20260709-09de) that return an existing row before the constructor, so the MagicMock's truthy .first() short-circuited the insert (12+5 NoneType-subscript fails). (3) stubbed the 'requests' module (undeclared transitive dep via public_food_lookup, absent in this headless py3.12 env) so its import resolves; the test monkeypatches lookup_food so no real HTTP runs (1 env-drift).\n- test_scheduler_jobs.py (3 fails -> 0, 62 pass): stubbed Notification .query...first() -> None in the inactivity-push tier tests — source now refreshes an existing unread nudge in place before create_notification, so the truthy MagicMock took the refresh branch and never hit the first-send path.\n\nIsolated-fail set: prior 7 + this tick 2 files closed. routes_reviews now passes ALONE (32 pass) — stale on the remaining list, drop it. Remaining for follow-up ticks: image_enqueue/prompts. notification_service + coach_rules stay env-drift-only (missing Asia/Kolkata tzdata / openai pkg headless — green in the full suite, not code defects). Supervised-only items (py3.8->3.11, Capacitor 7->8) still await your window. Keeping this flagged as scheduled-debt; will keep chipping per tick.",
-      "reviewedAt": "2026-07-14T23:08:10.321Z",
-      "reviewedBy": "shakeebshaan",
-      "reportPath": "reports/b07f-audit-status.html",
-      "reportLabel": "Audit status: re-verified",
-      "reviewReply": "Do it Scheduled debt",
-      "reviewRepliedAt": "2026-07-14T14:31:09.435Z",
-      "reviewReplyBy": "shakeebshaan",
-      "reviewReplyImagePaths": [
-        "images/i-20260714-b07f-reply-0.jpg",
-        "images/i-20260714-b07f-reply-1.jpg",
-        "images/i-20260714-b07f-reply-2.jpg",
-        "images/i-20260714-b07f-reply-3.jpg",
-        "images/i-20260714-b07f-reply-4.jpg",
-        "images/i-20260714-b07f-reply-5.jpg",
-        "images/i-20260714-b07f-reply-6.jpg",
-        "images/i-20260714-b07f-reply-7.jpg"
-      ],
-      "reviewReplyImageCommits": [
-        "0a6d86171dd5bb12c9ed627e427a547f477f18b2",
-        "457f89778ef496ab18fb4d05799e1b0ec402d3fe",
-        "549b6b3856130b5e9f3ae9bf0d93f6d321565c80",
-        "a167314123cdfae9ee62b03ae49b6ecfe0f55c21",
-        "5b8f40321f566256a55876babf2dcb811d1b7ec9",
-        "789297bf86dd224f9a00328e36e8c472708bc15f",
-        "77675d5782d7d21a3b89193433ee434314eee1e3",
-        "435e37b761bc014d4bd56b0336f981e542f51d61"
-      ],
-      "reviewReplyImagePrivate": true,
-      "tags": [
-        "audit",
-        "scheduled-debt"
-      ]
-    },
-    {
       "id": "i-20260714-out1",
       "createdAt": "2026-07-14T09:21:36.000Z",
       "status": "open",
