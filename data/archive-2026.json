@@ -20555,150 +20555,49 @@
       "archivedAt": "2026-07-13T23:39:10.648Z"
     },
     {
-      "id": "i-20260713-2f33",
-      "createdAt": "2026-07-13T06:53:56.351Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260713-2f33-0.jpg",
-      "imageCommit": "e23d0092c86691fadf70195dee76d72936f4502c",
-      "imagePaths": [
-        "images/i-20260713-2f33-0.jpg",
-        "images/i-20260713-2f33-1.jpg"
-      ],
-      "imageCommits": [
-        "e23d0092c86691fadf70195dee76d72936f4502c",
-        "4044203733d9136ba22628dbffb6a106e666325f"
-      ],
-      "imagePrivate": true,
+      "id": "i-20260714-4f7c",
+      "createdAt": "2026-07-14T04:37:56Z",
       "status": "resolved",
+      "route": "/partners/:groupId/follow-mode",
+      "description": "[bug-hunt] Partner-group follow mode can never be set — the picker POSTs the wrong JSON key, so the backend rejects every follow-mode selection with 400.\n\nContract mismatch across repos:\n- Frontend src/services/partner-groups.service.ts:267-279 setFollowMode() POSTs /partner-groups/:id/follow-mode with body { mode, custom_diet_plan_id, custom_workout_plan_id } — the mode value is under the key `mode`.\n- Backend app/routes/partner_groups.py:708 reads follow_mode = body.get('follow_mode'). Since the FE never sends a `follow_mode` key, this is always None, so line 709 `if follow_mode not in _VALID_FOLLOW_MODES` is true and the handler returns 400 INVALID_FOLLOW_MODE for EVERY request.\n\nThe sibling scaling-mode endpoint proves the deviation: FE sends { mode } and backend partner_groups.py:741 reads body.get('mode') — consistent. Only follow-mode is out of sync (FE `mode` vs BE `follow_mode`). The mode string VALUES all match _VALID_FOLLOW_MODES exactly (both/diet_only/workout_only/custom_diet_leader_workout/leader_diet_custom_workout); only the wrapping JSON key is wrong.\n\nBlast radius: FollowModePicker (src/components/partners/FollowModePicker.tsx:121-138) is the ONLY caller. Every tap on any of the 5 follow-mode cards fires the mutation -> 400 -> onError toast 'Couldn't update follow mode' -> my_follow_mode stays null. A member who accepts a partner-group invite is routed straight to /partners/:groupId/follow-mode (PartnerInvites.tsx:48) and is physically unable to complete setup: the picker's whole purpose (choose how to follow the leader's plan) is dead. Settings -> Change is equally broken.\n\nExpected: tapping a follow-mode option persists it (200) and the group hub reflects the chosen mode; the diet/workout views scale to that mode.\nActual: 400 INVALID_FOLLOW_MODE on every attempt; a red 'Couldn't update follow mode' toast; follow mode never changes from 'Not set'.\n\nRepro:\n1. Be a member of a partner group with follow mode unset (accept an invite, or Group settings -> Follow mode -> Change).\n2. Tap any option in the follow-mode picker (e.g. 'Both').\n3. Network: POST /api/v1/partner-groups/<id>/follow-mode with body {\"mode\":\"both\",...} returns 400 {\"code\":\"INVALID_FOLLOW_MODE\"}.\n4. UI shows the error toast; the mode stays 'Not set'.\n\nFix (pick one, keep both repos in sync): change the FE service to send { follow_mode: mode, ... } (matches backend + the follow_mode_changed discord log key), OR make the backend accept follow_mode = body.get('follow_mode') or body.get('mode'). Sending the key as follow_mode is the smaller, contract-correct change.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "fix": {
-        "description": "Reopen fix: logging a one-off activity (e.g. Treadmill) that matches a recurring activity due today no longer double-shows. New reconcileDailyActivity() (recurring-activity.ts) attributes the matching adhoc log to its recurring row, flipping it to Done (a check, like ticking an exercise) and dropping the duplicate 'logged today' entry; non-matching one-offs still list. DailyActivityCard.tsx wired to it. FE-only; recurring-activity.test.ts +5 (11/11). Proof PNG: Treadmill shows once as recurring row with '✓ Done', no duplicate.",
-        "imagePath": "images/i-20260713-2f33-fix-r4.png",
+        "description": "Root cause: the follow-mode picker sent your choice under the JSON key 'mode', but the server only reads 'follow_mode', so every selection was rejected (400 INVALID_FOLLOW_MODE) and members could never finish partner-group setup. Fix: the app now sends 'follow_mode', and the server also still accepts the legacy 'mode' key so already-installed apps work immediately after the backend deploy. Verified end-to-end: tapping a mode now saves and shows as Current.",
+        "imagePath": "images/i-20260714-4f7c-fix-r1.png",
         "imagePaths": [
-          "images/i-20260713-2f33-fix-r4.png"
+          "images/i-20260714-4f7c-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "47541b65c6894a357600c7db3eb1e9b31c82dd35",
+        "imageCommit": "11c313b54d0bc4c027de5a4023ea39b31d3a4864",
         "imageCommits": [
-          "47541b65c6894a357600c7db3eb1e9b31c82dd35"
+          "11c313b54d0bc4c027de5a4023ea39b31d3a4864"
         ],
-        "fixedAt": "2026-07-14T00:15:10.187Z",
+        "fixedAt": "2026-07-14T04:57:32.766Z",
         "by": "shakeebshaan",
-        "appCommit": "736046e7",
+        "appCommit": "ad0991e7",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 92,
           "bar": 90,
-          "note": "Directly satisfies the reopen note ('track as done on the first activity like the exercise, no already-logged-today'): matching adhoc log now ticks the recurring row done instead of duplicating it. Pure helper unit-tested (5 cases, incl case-insensitive/not-due/already-done); faithful full-screen 390px scenario capture on /activity shows Treadmill once (recurring, Done). Minor: undo on an adhoc-attributed row is a soft no-op (row stays done while the adhoc log exists) — truthful state, low impact."
+          "note": "Contract fix in both repos (FE key rename + BE tolerant read); FE 49 + BE 5 tests green; two adversarial reviews clean; scenario capture shows POST {follow_mode:both} -> 200, success toast + Current badge. Backend live+healthy on prod."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-13T14:32:35.418Z",
-          "event": "reopened",
-          "note": "remove also logged today one all in single UI like the exercise ui, no redundant",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Built the recurring 'Daily activity' feature you approved ('Do all'). New recurring_activities table + endpoints (deployed to prod): a regularly-repeated off-plan activity (e.g. treadmill after every workout) that shows on /activity as its own 'Daily activity' card SEPARATE from the workout, with schedule (daily / every-other-day / specific weekdays), duration, calories, optional start-time + reminder (default OFF). One-tap Done writes an ActivityLog(source='recurring') so it counts toward calories + the activity streak. Also added a skippable onboarding step after Health & Food ('Any activity you do regularly?'). Screenshot: the card live on /activity with a Treadmill 60min/150cal Every day + Done button. Files: DailyActivityCard/RecurringActivityForm/RecurringActivityStep + recurring_activities backend route/model/migration.",
-            "imagePath": "images/i-20260713-2f33-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260713-2f33-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "cbca26750144ee6765f08cf266cac12b938c73d9",
-            "imageCommits": [
-              "cbca26750144ee6765f08cf266cac12b938c73d9"
-            ],
-            "fixedAt": "2026-07-13T12:38:03.617Z",
-            "by": "shakeebshaan",
-            "appCommit": "1ecc10d6",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 90,
-              "bar": 90,
-              "note": "Feature complete + deployed; endpoint verified end-to-end on prod (create/list/done/delete) and the Activity card captured live populated. tsc clean, unit tests 6/6, verify gate green. Caveat: onboarding step + the opt-in start-time reminder job are code-verified (default OFF, inert) but not separately live-captured — onboarding needs a fresh un-onboarded account."
-            }
-          },
-          "images": [
-            "images/i-20260713-2f33-notfixed.jpg"
-          ],
-          "imageCommits": [
-            "2af4e5d5f5c11beeb2ce2693fdbb03b5ccbdc5af"
-          ]
-        },
-        {
-          "at": "2026-07-13T17:50:44.491Z",
-          "event": "reopened",
-          "note": "seeing 2",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Reopen (single UI, no redundant logged-today list) fixed. Root cause: adhoc 'logged today' entries rendered in two places (LogActivitySheet + standalone TodaysOffPlanActivities) beside the recurring Daily activity card. Fix: DailyActivityCard now holds BOTH recurring rows AND today's adhoc logs under one 'Also logged today' section with X-remove; LogActivitySheet is input-only; TodaysOffPlanActivities deleted. Proof shows recurring Treadmill + adhoc Treadmill in one card.",
-            "imagePath": "images/i-20260713-2f33-fix-r2.png",
-            "imagePaths": [
-              "images/i-20260713-2f33-fix-r2.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "fd4fcf55c6fa0ebd79131b3eff4158fc7bf2b461",
-            "imageCommits": [
-              "fd4fcf55c6fa0ebd79131b3eff4158fc7bf2b461"
-            ],
-            "fixedAt": "2026-07-13T16:33:13.063Z",
-            "by": "shakeebshaan",
-            "appCommit": "756469bc",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 92,
-              "bar": 90,
-              "note": "Directly implements reopen ask: single unified card, no redundant list. Full-screen 390x844 proof shows both row types (recurring + adhoc) in one Daily activity card with X-remove. tsc clean."
-            }
-          }
-        },
-        {
-          "at": "2026-07-13T23:38:42.323Z",
-          "event": "reopened",
-          "note": "Don't show already logged today just track it as done on the first activity itself like the exercise",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Reopen 'seeing 2': after r2 merged the logged-today LIST into the Daily activity card, a standalone 'Log activity' surface still rendered separately below the card — two activity UIs. Fix (DailyActivityCard.tsx + Activity.tsx): the one-off Log-activity trigger now lives INSIDE the single Daily activity card as its second add button ('Add another' recurring + 'Log activity' one-off); the standalone surface was removed. One activity card holds both row types (recurring 'Treadmill 60min/150cal Every day' + 'Also logged today' one-off) and both add affordances — no redundant second card. Proof captured on /dev/daily-activity. tsc clean, Activity page tests 34/34, test gate green.",
-            "imagePath": "images/i-20260713-2f33-fix-r3.png",
-            "imagePaths": [
-              "images/i-20260713-2f33-fix-r3.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "03f519ab430c14dbc1e632e4799c30e64c1c44ed",
-            "imageCommits": [
-              "03f519ab430c14dbc1e632e4799c30e64c1c44ed"
-            ],
-            "fixedAt": "2026-07-13T18:06:27.252Z",
-            "by": "shakeebshaan",
-            "appCommit": "decddd12",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 90,
-              "bar": 90,
-              "note": "Third-pass fix directly targets the reopen: removes the separate Log-activity surface so there is exactly one activity card. Full 390x844 proof shows both row types + both add buttons in one card. Caveat: proof rendered via seeded dev preview (no data QA account headless), not a live authenticated /activity capture."
-            }
-          }
-        }
-      ],
+      "history": [],
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Do all",
-      "reviewRepliedAt": "2026-07-13T09:57:52.253Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-14T05:08:20.741Z",
+      "resolvedAt": "2026-07-14T05:08:23.366Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-14T05:08:20.741Z"
+      "archivedAt": "2026-07-14T05:08:23.366Z"
     }
   ]
 }
