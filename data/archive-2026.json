@@ -20942,31 +20942,50 @@
       "archivedAt": "2026-07-14T17:34:20.909Z"
     },
     {
-      "id": "i-20260714-a3f9",
-      "createdAt": "2026-07-14T15:53:21Z",
-      "status": "resolved",
-      "route": "/choose-plan",
-      "description": "[bug-hunt] Razorpay checkout has NO server-side binding between the amount paid and the subscription granted — a crafted client can buy a long plan for a tiny/short-plan price (price tampering, revenue loss).\n\nROOT: the server never validates that (amount actually paid) matches the (plan/duration) it grants. Two facets, same root:\n\n1) CREATE ORDER trusts client amount. FE createRazorpayOrder (src/services/payments.service.ts:41) POSTs only { amount } to /payments/razorpay/create-order — it never sends plan_id/tier/duration_months. So backend RazorpayCreateOrderResource (backend.py:2392-2420) calls _resolve_plan_price_rupees(None,None,None) -> (None,None) and falls to the legacy branch amount = client_amount (2415-2418). The server-authoritative pricing added as FIX-WARN-06 is therefore INERT for every shipped client; the only guarded value is exactly ₹49 (LAUNCH_OFFER guard at 2432). Any other positive amount (e.g. 100 paise = ₹1) is accepted verbatim.\n\n2) VERIFY grants client-chosen duration. RazorpayVerifyPaymentResource (backend.py:2485-2558) reads duration_months = data.get('duration_months', 1) straight from the client and sets days_to_add = duration_months*30 (2520). It fetches the REAL amount_paid from Razorpay (2517) but NEVER checks that amount_paid corresponds to a plan of that duration. Signature validation only proves order_id|payment_id are authentic — it does not bind the granted entitlement to what was paid.\n\nEXPECTED: server derives the chargeable price and the granted duration from the canonical catalog (_get_plans_catalog), independent of client-sent amount/duration; verify rejects if amount_paid does not match the plan being granted.\nACTUAL: client controls both the order amount and the granted duration.\n\nREPRO (needs a valid JWT):\na. Pay ₹1 for 6 months: POST /payments/razorpay/create-order { amount: 1 } -> pay ₹1 in Razorpay -> POST /payments/razorpay/verify-payment { order/payment/signature, duration_months: 6 } -> Subscription current_period_end = now + 180 days.\nb. Or pay the legit Active price (₹499, 1 month) then verify with duration_months: 6 -> 6 months for a 1-month payment.\n\nCONFIRMED by code trace across both repos (frontend + backend). Impact is currently muted because the app ships UNGATED (FEATURE_SUBSCRIPTION_GATE off), but the checkout is live and the exploit charges the attacker only the tampered amount while granting full premium.\n\nFIX: (a) FE should send plan_id/tier so create-order uses the server-authoritative path; (b) persist the resolved plan_id on the order at create-time and, in verify, derive duration + expected amount from that plan and reject when payment.amount != expected. Do NOT trust client duration_months. Not a dup of i-20260708-9c2e (soft-cancel) or b7a4 (restore toast); tick #12 reviewed only verifyRazorpayPayment FE closure stability, never the amount<->duration binding.",
+      "id": "i-20260714-6e48",
+      "createdAt": "2026-07-14T17:49:36.940Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
       "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "payments",
-        "backend"
+      "imagePath": "images/i-20260714-6e48.jpg",
+      "imageCommit": "9916ae75dba03b2a819167fca8835783ece1e00f",
+      "imagePaths": [
+        "images/i-20260714-6e48.jpg"
       ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
+      "imageCommits": [
+        "9916ae75dba03b2a819167fca8835783ece1e00f"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: FoodDetailSheet showed only a gram portion for egg foods, no piece count. Fix: added eggEquivalent() in src/components/plan-builder/FoodDetailSheet.tsx — egg foods now render 'Total 175 g · ≈ 3.5 eggs' next to the total, derived from portion grams and USDA size grade (jumbo/large/medium/small, default 50g); skips egg-white/powder/substitute. Unit-tested (3 cases green).",
+        "imagePath": "images/i-20260714-6e48-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-6e48-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "496d2a9845c96ecf29a588cf6bd878c2631b2409",
+        "imageCommits": [
+          "496d2a9845c96ecf29a588cf6bd878c2631b2409"
+        ],
+        "fixedAt": "2026-07-14T18:07:45.801Z",
+        "by": "shakeebshaan",
+        "appCommit": "e0aa1a19",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Exact ask met (piece count on egg ingredient sheet); real-component render proof via harness shows 'Total 175 g / 3.5 eggs'; pure-logic unit tests pass; surgical, no regressions."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Retry-tick adversarial re-verify found a residual REPLAY hole the prior fix (ac66cf6/5422d24) left open: verify-payment had NO idempotency guard. The signature is a deterministic HMAC over order|payment, so replaying the SAME {order,payment,signature} triple re-validates; since the user normally already has an active (trial) sub, control re-enters the extend branch and does current_period_end += days_to_add on the SAME row every call -- one real payment replayed (up to 10/min) buys unlimited months. The DB unique index on razorpay_payment_id does NOT catch it (the extend path rewrites the same row id, no new INSERT). Fix 5dd41f6: dedup on (user_id, razorpay_payment_id) -> idempotent no-op if already applied; fully closes single-payment replay. NOTE for your call: full cross-renewal dedup would need a payment-ledger table (schema migration); the narrow residual (alternately replaying two DISTINCT genuine payments) is left for that follow-up -- live impact is muted while the app ships UNGATED. Also aligned the stale price-binding unit tests to shipped behaviour. Deployed to prod (health 200). Backend-only payment-integrity fix -- no screen to screenshot; owner confirms via API repro.",
-      "reviewedAt": "2026-07-14T22:34:56.345Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-14T23:16:26.526Z",
+      "needsReview": false,
+      "resolvedAt": "2026-07-14T23:17:59.583Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-14T23:16:26.526Z"
+      "archivedAt": "2026-07-14T23:17:59.583Z"
     }
   ]
 }
