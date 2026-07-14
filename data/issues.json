@@ -381,9 +381,9 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": "Audit done - full report attached (tap 'Full Audit Report'). Ran 3 parallel review agents over FE + BE + website/store/product, evidence-cited. Codebase is healthy overall (tsc 0 errors, 317 tests, code-split, strong LLM/auth guards). SHIPPED this tick (commit 43936467): gitignored _qa_creds.json (held a LIVE JWT) + ~34 root scratch files that were one 'git add -A' from a credential push. 4 owner-only items need YOU: (1) [P0] rotate 2 leaked backend creds - GCP service-account key nyus-and-28394d25990f.json is git-tracked with a live private_key, and the MySQL password sits in CLAUDE.md:50; revoke+scrub history. (2) [P0] pick ONE pricing model - landing says 'Free forever', store/blog say '30-day trial', app has Rs499-2499 tiers; reconcile all surfaces. (3) [P1] verify/soften legal claims (GDPR+DPDP 'compliant', AES-256-at-rest, 'never trains', Mumbai residency). (4) [P1] confirm shipped onboarding matches the '<10 min, few questions' promise or update APPLICATION_FLOW.md. Safe backlog Claude can take next ticks: delete dead logging_service.py shadow, widen 64KB TEXT cols, fix privacy canonical, bump axios/sentry minors.",
-      "reviewedAt": "2026-07-14T03:10:13.541Z",
+      "needsReview": true,
+      "reviewReason": "SHIPPED the pricing reconciliation you asked for (removed 'Free forever' everywhere + ₹499 plan everywhere & working). ONE model now: 30-day free trial -> ₹499/mo (Active), then Core/Elite. APP (commit e0ad3fbb): dropped the ₹0 Free tier from ChoosePlan; carousel leads with Active ₹499 (Founder ₹49 launch offer still applies), then Core/Elite; reworded the plans FAQ + footer in all 4 locale bundles (en/hi/hinglish/xx-AE) - no 'Free forever' string left in the app. tsc 0 errors, ChoosePlan.recommend.test.ts 5/5, screenshot confirms no Free card + Active ₹499. LANDING (deployed live to nyus.in + nyus.in/faq/): hero chip/pill 'Free forever' -> '30-day free trial', ₹0 stat + comparison table + CTA/how notes -> ₹499/trial, SoftwareApplication JSON-LD offer price 0->499, FAQ answers reworded (visible + FAQPage JSON-LD). Live-verified: 0 'Free forever', ₹499 present. CLAUDE.md + APPLICATION_FLOW Section 30 updated so this doesn't regress. STILL NEEDS YOU (owner-only, from the audit): (1) [P0] rotate the 2 leaked backend creds (GCP SA key + MySQL pw in backend CLAUDE.md) - can't do that headless. (2) Play Store listing copy still says 'free trial' - only you can edit the store listing; confirm/align it to the 30-day-trial->₹499 wording. (3) ~1,670 templated blog pages carry mixed free/JSON-LD pricing - that's a bulk regen; say the word and I'll regenerate blog pricing+JSON-LD to the new model next ticks. NOTE: could not use 'resolve' - the board test gate needs a green full 'npm test'/loop.mjs verify which is infra-unsatisfiable headless (Playwright/PACT/canvas ~39min); scoped tests for this fix are green. Recommend scoping loop.json testCommand to a unit subset so future fixes can resolve cleanly.",
+      "reviewedAt": "2026-07-14T05:44:52.368Z",
       "reviewedBy": "shakeebshaan",
       "reportPath": "reports/b07f-audit-report.html",
       "reportLabel": "Full Audit Report",
@@ -410,7 +410,12 @@
         "77675d5782d7d21a3b89193433ee434314eee1e3",
         "435e37b761bc014d4bd56b0336f981e542f51d61"
       ],
-      "reviewReplyImagePrivate": true
+      "reviewReplyImagePrivate": true,
+      "tags": [
+        "pricing",
+        "shipped",
+        "owner-action"
+      ]
     }
   ]
 }
