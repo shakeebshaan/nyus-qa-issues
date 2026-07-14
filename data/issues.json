@@ -399,7 +399,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Progress page: user completed 2 workout SESSIONS but Activity days shows 0/14, Activity streak 0d, and 0/N activities logged. Root cause (verified in backend.py): the page draws from TWO independent data sources. 'Sessions X/Y' counts WorkoutSessionLog rows (completed workouts, calculate_on_track_metrics). 'Activity days', 'activities logged (N%)', and the Diet/Activity/Healthy/Weeks STREAKS all count DailyLog.activity_completed (calculate_activities_done + the streak helpers) - a separate daily activity/walk marker set by the 'Log Activity' button. Completing a scheduled workout does NOT set DailyLog.activity_completed, so a user who does their workouts but never taps 'Log Activity' sees sessions>0 while every activity/streak metric stays 0, which reads as 'activity data is missing'. This is currently by design (the weekly-insight copy says 'a short walk counts', implying activities are supplementary movement distinct from planned workouts). PRODUCT DECISION: should completing a workout session auto-mark that day's activity done (so Activity days + Activity/Healthy/Week streaks reflect it)? RECOMMENDATION: yes - on WorkoutSessionLog completion, set DailyLog.activity_completed for that date; makes effort visible and matches expectation. CAVEAT: changes activity/streak semantics for ALL users retroactively and feeds gamification XP/badges, and I cannot verify headless (no QA account with a plan+streak; provisioning declined). Confirm and I will implement + deploy. Side-find: coach FAB briefly shows a doubled 'Ask Jasmine' label (img-3) during the nudge-in transition (two AnimatePresence label nodes overlap); I can fix that independently.",
+      "reviewedAt": "2026-07-14T12:30:42.862Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260714-a8b7",
