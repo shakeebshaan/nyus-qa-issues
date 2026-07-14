@@ -441,10 +441,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Grounded plan: the 'No foods found for X' empty state lives in src/components/plan-builder/FoodSearchSheet.tsx (line ~264). Approach = render a 'Request \"X\" — let the AI add it' button there; on tap POST to a NEW backend endpoint /api/v1/foods/request that LLM-generates per-100g macros + micros for the named food (Indian-availability filtered per RETRO rules), persists it as a custom FoodSearchItem, logs via discord_logger.log_ai_update, and returns it so the detail sheet opens immediately. This is a full-stack feature (new route + LLM prompt + rate-limit bucket + FE wiring) requiring a backend deploy AND an end-to-end verify on the live add-ingredient flow — which is unreachable in the headless loop (no meal-rendering QA account exists since the 2026-07-12 deletion). Flagging so it's built+verified in an interactive tick rather than shipped unverified. Confirm the approach and I'll build it.",
       "reviewedAt": "2026-07-14T18:09:12.706Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Do",
+      "reviewRepliedAt": "2026-07-14T23:15:51.268Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260714-7de8",
