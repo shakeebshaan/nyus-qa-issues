@@ -435,12 +435,34 @@
         "c80e88ec30071467430cae76555de87f4ed58b59"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Built the \"Request X - let the AI add it\" flow you asked for. Root cause: the Add-ingredient search only queried the existing food KB, so a food it lacks (your \"Skimmed Milk powder\") dead-ended at \"No foods found\". Fix (full-stack, deployed): new POST /api/v1/foods/request LLM-estimates the exact food per-100g macros + 12 micros (Indian-availability aware), persists it as a custom food, and returns it; the FE now shows a \"Request X\" button in that empty state which opens the portion/detail sheet on the AI-added food. Verified live: requested \"Skimmed Milk Powder\" -> 360 kcal, 36g protein, dairy (also now searchable); and end-to-end in the builder \"Ragi Malt Drink Powder\" -> detail sheet with macros + 7/12 micros + Add CTA (screenshots). Rate-limited 40/day; discord-logged. NOTE: your other note about saving a meal image/library for different users is tracked on i-20260714-7de8.",
+        "imagePath": "images/i-20260714-ddc2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-ddc2-fix-r1.png",
+          "images/i-20260714-ddc2-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a12fd457b0f87f3ec0ab81836ea9f5d1fbebb4b9",
+        "imageCommits": [
+          "a12fd457b0f87f3ec0ab81836ea9f5d1fbebb4b9",
+          "d8eda1e8557c0613a805eda2db929c0fdca1b7fa"
+        ],
+        "fixedAt": "2026-07-14T23:46:04.072Z",
+        "by": "shakeebshaan",
+        "appCommit": "72c28c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Full-stack feature deployed to prod + verified end-to-end live (backend request/detail/search round-trip + FE Request button -> detail sheet). Additive route, no existing flow touched; py-compile + tsc clean; gate green."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Grounded plan: the 'No foods found for X' empty state lives in src/components/plan-builder/FoodSearchSheet.tsx (line ~264). Approach = render a 'Request \"X\" — let the AI add it' button there; on tap POST to a NEW backend endpoint /api/v1/foods/request that LLM-generates per-100g macros + micros for the named food (Indian-availability filtered per RETRO rules), persists it as a custom FoodSearchItem, logs via discord_logger.log_ai_update, and returns it so the detail sheet opens immediately. This is a full-stack feature (new route + LLM prompt + rate-limit bucket + FE wiring) requiring a backend deploy AND an end-to-end verify on the live add-ingredient flow — which is unreachable in the headless loop (no meal-rendering QA account exists since the 2026-07-12 deletion). Flagging so it's built+verified in an interactive tick rather than shipped unverified. Confirm the approach and I'll build it.",
-      "reviewedAt": "2026-07-14T18:09:12.706Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do",
       "reviewRepliedAt": "2026-07-14T23:15:51.268Z",
