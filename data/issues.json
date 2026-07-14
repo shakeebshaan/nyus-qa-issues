@@ -2,48 +2,6 @@
   "version": 1,
   "issues": [
     {
-      "id": "i-20260714-4f7c",
-      "createdAt": "2026-07-14T04:37:56Z",
-      "status": "fixed",
-      "route": "/partners/:groupId/follow-mode",
-      "description": "[bug-hunt] Partner-group follow mode can never be set — the picker POSTs the wrong JSON key, so the backend rejects every follow-mode selection with 400.\n\nContract mismatch across repos:\n- Frontend src/services/partner-groups.service.ts:267-279 setFollowMode() POSTs /partner-groups/:id/follow-mode with body { mode, custom_diet_plan_id, custom_workout_plan_id } — the mode value is under the key `mode`.\n- Backend app/routes/partner_groups.py:708 reads follow_mode = body.get('follow_mode'). Since the FE never sends a `follow_mode` key, this is always None, so line 709 `if follow_mode not in _VALID_FOLLOW_MODES` is true and the handler returns 400 INVALID_FOLLOW_MODE for EVERY request.\n\nThe sibling scaling-mode endpoint proves the deviation: FE sends { mode } and backend partner_groups.py:741 reads body.get('mode') — consistent. Only follow-mode is out of sync (FE `mode` vs BE `follow_mode`). The mode string VALUES all match _VALID_FOLLOW_MODES exactly (both/diet_only/workout_only/custom_diet_leader_workout/leader_diet_custom_workout); only the wrapping JSON key is wrong.\n\nBlast radius: FollowModePicker (src/components/partners/FollowModePicker.tsx:121-138) is the ONLY caller. Every tap on any of the 5 follow-mode cards fires the mutation -> 400 -> onError toast 'Couldn't update follow mode' -> my_follow_mode stays null. A member who accepts a partner-group invite is routed straight to /partners/:groupId/follow-mode (PartnerInvites.tsx:48) and is physically unable to complete setup: the picker's whole purpose (choose how to follow the leader's plan) is dead. Settings -> Change is equally broken.\n\nExpected: tapping a follow-mode option persists it (200) and the group hub reflects the chosen mode; the diet/workout views scale to that mode.\nActual: 400 INVALID_FOLLOW_MODE on every attempt; a red 'Couldn't update follow mode' toast; follow mode never changes from 'Not set'.\n\nRepro:\n1. Be a member of a partner group with follow mode unset (accept an invite, or Group settings -> Follow mode -> Change).\n2. Tap any option in the follow-mode picker (e.g. 'Both').\n3. Network: POST /api/v1/partner-groups/<id>/follow-mode with body {\"mode\":\"both\",...} returns 400 {\"code\":\"INVALID_FOLLOW_MODE\"}.\n4. UI shows the error toast; the mode stays 'Not set'.\n\nFix (pick one, keep both repos in sync): change the FE service to send { follow_mode: mode, ... } (matches backend + the follow_mode_changed discord log key), OR make the backend accept follow_mode = body.get('follow_mode') or body.get('mode'). Sending the key as follow_mode is the smaller, contract-correct change.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Root cause: the follow-mode picker sent your choice under the JSON key 'mode', but the server only reads 'follow_mode', so every selection was rejected (400 INVALID_FOLLOW_MODE) and members could never finish partner-group setup. Fix: the app now sends 'follow_mode', and the server also still accepts the legacy 'mode' key so already-installed apps work immediately after the backend deploy. Verified end-to-end: tapping a mode now saves and shows as Current.",
-        "imagePath": "images/i-20260714-4f7c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260714-4f7c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "11c313b54d0bc4c027de5a4023ea39b31d3a4864",
-        "imageCommits": [
-          "11c313b54d0bc4c027de5a4023ea39b31d3a4864"
-        ],
-        "fixedAt": "2026-07-14T04:57:32.766Z",
-        "by": "shakeebshaan",
-        "appCommit": "ad0991e7",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Contract fix in both repos (FE key rename + BE tolerant read); FE 49 + BE 5 tests green; two adversarial reviews clean; scenario capture shows POST {follow_mode:both} -> 200, success toast + Current badge. Backend live+healthy on prod."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260714-b8k2",
       "createdAt": "2026-07-14T04:30:00Z",
       "status": "open",
