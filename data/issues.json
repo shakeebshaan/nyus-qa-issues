@@ -516,12 +516,32 @@
         "effb48a0a5e7dd67d64ceb1125fd91953fe4833d"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Nutrition Refresh/Create-plan entry (/ai/create-diet-plan -> CustomDietPlanCreation) mounted CustomDietBuilder with no initialDays, so opening it to EDIT an existing plan showed an empty \"Build your meals - 0 built\" builder instead of your current meals (same bug the workout twin already had, i-20260618-e470). Fix: added the getCurrentDiet() prefill query + passed initialDays/initialRepeatMode, mirroring CustomizeDiet. Verified live on your account: the builder now opens prefilled with \"Milkshake protein\" (438 kcal) and macros filled (1762/3174 kcal) as editable slots. New users with no plan still get an empty builder.",
+        "imagePath": "images/i-20260714-626a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-626a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "73890bcc69efc19db4aed24ffb0e8b8b8b3c9718",
+        "imageCommits": [
+          "73890bcc69efc19db4aed24ffb0e8b8b8b3c9718"
+        ],
+        "fixedAt": "2026-07-14T23:35:14.330Z",
+        "by": "shakeebshaan",
+        "appCommit": "8d7c6425",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Live-verified on owner account: builder opens prefilled with the active plan's meals; direct mirror of shipped workout-twin fix; tsc clean; gate green."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Understood: img-0 is the ONBOARDING diet builder (empty 'Coach can build / I'll build it myself' slots); img-1 is the live Diet page with the user's actual meals (Milkshake protein / Egg Chilla Plate / Egg Fish Poha). Ask = when you open the builder to EDIT, pre-load the SAME meals from the active plan as editable slots, not empty ones. Good news: CustomDietBuilder.tsx ALREADY supports this via the initialDays prefill prop (line 84+, 'seed days/repeat-mode from the user's EXISTING diet plan', precedence over the onboarding draft). So the fix is wiring the Customize/Edit entry point to pass the active plan into initialDays (the ONBOARDING entry correctly starts empty — that's first-time build, before any plan exists). Need to confirm WHICH entry the screenshot is from: are you hitting the empty builder from Diet > Edit (a bug — should prefill), or from first-time onboarding (expected empty)? Building+verifying the Edit-prefill path needs the live plan on a meal-rendering account (none headless since 2026-07-12). Confirm the entry point and I'll wire initialDays + verify in an interactive tick.",
-      "reviewedAt": "2026-07-14T18:09:46.613Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do it",
       "reviewRepliedAt": "2026-07-14T23:14:10.787Z",
