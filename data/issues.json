@@ -466,8 +466,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Re: 'Clean the machine space' — did the safe part: cleared npm cache + %TEMP% (~0.24 GB). C: is now 9.0 GB free of 59.5 GB (was 8.8). The remaining big consumers are things I won't auto-delete because they're in use or needed for builds: ms-playwright browsers (2.2 GB, used by QA capture), VS Code data (2.3 GB), and the repos' node_modules (dev server is live). Say the word and I'll reclaim any of these (e.g. drop old Playwright browser versions, stale node_modules, ~/.gradle caches). Separately, 'send to play store' is a release — a heavy owner-gated action per project rules (distinct from backend auto-deploy), so I don't auto-run it. Confirm you want the alpha release cut and I'll run the fastlane beta pipeline (needs the ~4-5 GB build headroom, hence the cleanup ask).",
-      "reviewedAt": "2026-07-14T03:00:07.616Z",
+      "reviewReason": "Done: cleaned machine space as asked. Dropped stale Playwright browser versions (chromium/headless_shell rev 1208+1217 — only rev 1223 is pinned by the live playwright 1.60.0, so these were dead) = 1.29 GB, plus npm cache + %TEMP% = ~0.1 GB. C: went 8.9 GB -> 10.3 GB free. Left in place (in use / needed): rev-1223 browsers (live QA capture), VS Code data, and both repos' node_modules (dev server is live). Still available on request: ~/.gradle caches, older node_modules. The 'send to Play Store' half is still awaiting your explicit go — it's an owner-gated release (fastlane beta -> alpha), distinct from backend auto-deploy, so I won't auto-cut it. Say 'cut the alpha' and I'll run it; there's now enough build headroom.",
+      "reviewedAt": "2026-07-14T03:29:57.024Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "release",
