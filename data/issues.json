@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260714-c9f2",
+      "createdAt": "2026-07-14T15:12:03.793Z",
+      "status": "open",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat output safety filter SUPPRESSES the mandated crisis/self-harm referral (validate_output Layer 4 over-match). Route: /coach-chat.\n\nWHAT IS WRONG: In the live coach pipeline (nyu_backend/llm_service.py get_coach_response -> validate_output, lines 320-326) Layer 4 runs _harmful_health_regex over the COACH RESPONSE. That regex includes (?:self[- ]?harm|suicid) (line 111). When a user is in crisis and the coach replies -- per its own SOP (llm_prompts.py:905 \"For self-harm/eating disorder: surface iCall (9152987821) and Vandrevala Foundation (1860-2662-345) by name\"; llm_prompts.py:94) -- with an empathetic message that names \"suicide\"/\"self-harm\" and those helplines, validate_output matches the words, DISCARDS the whole response, and returns the generic deflection (line 326): \"I want to make sure I give you safe advice. For this topic, I would recommend consulting with a healthcare professional. Can I help you with something else?\" (passed=False). get_coach_response returns that string (line 1288) to the user.\n\nEXPECTED: user disclosing suicidal ideation gets the empathetic RED-tier response WITH iCall + Vandrevala numbers by name.\nACTUAL: most-vulnerable user gets a dismissive deflection, NO helpline numbers, ending \"Can I help you with something else?\". The filter meant to stop the LLM ADVOCATING self-harm over-matches any mention -- including the protective referral the system is REQUIRED to give.\n\nREPRO (backend code trace):\n1. /coach-chat, user: \"I keep having thoughts of suicide / hurting myself.\"\n2. LLM (per llm_prompts.py:905/94) returns a caring reply containing \"suicide\"/\"self-harm\" + the two helpline numbers.\n3. llm_service.py:321 _harmful_health_regex.search(response) matches -> line 326 returns the deflection, replacing the real answer (returned at :1288).\nNet: crisis referral gagged on the live coach path. (First PHQ-9 prefill \"...took the PHQ-9...would like to talk\" passes; the follow-up crisis turn is where it triggers.)\n\nSECONDARY (same root): Layer 4 also gags legitimate eating-disorder referrals that name \"purging\"/\"laxative abuse\" (HARMFUL_HEALTH_PATTERNS line 109) or \"starvation diet\" (line 106) -- any coach reply naming the behaviour to refer the user is replaced.\n\nFIX: make Layer 4 context-aware for protective/referral content -- exempt responses that contain the helpline numbers/referral phrasing, or drop self-harm|suicid from the OUTPUT harmful-advice regex (it belongs to input-intent detection, not to gating the coach caring reply). Files: llm_service.py:104-113 (HARMFUL_HEALTH_PATTERNS), :320-326 (validate_output Layer 4), :1269 (call site); contract in llm_prompts.py:94,905.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260714-hk3q",
       "createdAt": "2026-07-14T13:00:00.000Z",
       "status": "open",
