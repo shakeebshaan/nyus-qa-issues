@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-r3pt",
+      "createdAt": "2026-07-15T12:00:00.000Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/nutrition",
+      "description": "[suggestion] One-tap \"Repeat meal\" on the Nutrition diary — long-press or a small repeat-icon on any past meal card re-logs the same food(s)/quantities to today with one confirm tap, instead of requiring the CustomMealModal. Problem: athletes eat the same breakfast/post-workout shake most days but must reopen the manual-entry modal, hunt the food again via search or the buried \"Recent meals\" chip row (CustomMealModal.tsx:514-533), and resubmit every time — friction that discourages consistent logging (the exact behavior daily-completion/streak scoring depends on). Evidence: repo scan confirmed barcode scan, water tracker, and streak-freeze already exist, but no true repeat-log exists anywhere in src/pages/Nutrition.tsx or src/pages/_components/nutrition/ — the closest is the modal's prefill-only \"Recent meals\" row, which still requires opening the modal and resubmitting. Comparable trackers (MyFitnessPal \"Copy meal\", Cronometer \"Copy from previous day\") ship this as a core retention feature. v1 scope: add a repeat icon/swipe action on each meal-diary row (today or yesterday) that calls the existing add-meal/log endpoint with the same food_items + quantities, no new backend route needed; skip cross-day \"copy whole day\" for v1. Effort: ~0.5-1 day FE-only (new button + reuse existing log-meal service call).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260715-d8k2",
       "createdAt": "2026-07-15T00:00:00.000Z",
       "status": "open",
