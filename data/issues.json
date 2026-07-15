@@ -1035,7 +1035,7 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Broad design revamp - flagging for your direction rather than guessing on live flows. Your reference is a clean food-search screen: a \"Search by Food Name/Dish\" bar, a \"Track with Images\" banner (camera + barcode), and a \"Frequently Tracked Foods\" list with calories + serving + a round + button per row. You want THIS pattern everywhere we select ingredients. Today that UI is spread across components with different looks: the nutrition Add Food modal (src/components/nutrition/CustomMealModal.tsx), the plan-builder food search (FoodSearchSheet + src/components/plan-builder/IngredientRow.tsx), and quick-log. Unifying them onto one clean pattern is a multi-screen design task, and it overlaps with f54d (portion UI). Before I touch these live logging flows, tell me the scope: (A) build ONE shared FoodSearch/IngredientPicker component to this reference and adopt it in ALL selection surfaces, or (B) start with one surface first (which one)? Give me A or B (and the first surface for B) and I will execute next tick.",
       "reviewedAt": "2026-07-15T06:05:30.742Z",
       "reviewedBy": "shakeebshaan",
@@ -1043,7 +1043,10 @@
         "product",
         "design",
         "nutrition"
-      ]
+      ],
+      "reviewReply": "A",
+      "reviewRepliedAt": "2026-07-15T10:09:24.722Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260715-c9ae",
