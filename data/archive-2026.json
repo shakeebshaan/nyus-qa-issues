@@ -21079,35 +21079,49 @@
       "archivedAt": "2026-07-15T03:02:52.541Z"
     },
     {
-      "id": "i-20260715-1190",
-      "createdAt": "2026-07-15T03:08:02.939Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-1190.jpg",
-      "imageCommit": "e69529bf1b23b4abd0489f5326db4bc34b5fba5d",
-      "imagePaths": [
-        "images/i-20260715-1190.jpg"
-      ],
-      "imageCommits": [
-        "e69529bf1b23b4abd0489f5326db4bc34b5fba5d"
-      ],
-      "imagePrivate": true,
+      "id": "i-20260715-e7b1",
+      "createdAt": "2026-07-15T03:55:02.707Z",
       "status": "resolved",
-      "fix": null,
+      "fix": {
+        "description": "Root cause: eggEquivalent() in FoodDetailSheet.tsx gated on /\\begg/ (leading word-boundary, no trailing), so it fired the '~ N eggs' count inside 'eggplant'/'eggnog'. Fix: anchored to /\\beggs?\\b/ matching unitFor()'s contract in food-units.ts; added eggplant/eggnog regression cases. Proof: real FoodDetailSheet rendered for 'Eggplant, raw' now shows 'Total 100 g' with no egg count.",
+        "imagePath": "images/i-20260715-e7b1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-e7b1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "266455d1dcdcb78e5ce85ab154b95297ea559fd0",
+        "imageCommits": [
+          "266455d1dcdcb78e5ce85ab154b95297ea559fd0"
+        ],
+        "fixedAt": "2026-07-15T04:09:23.176Z",
+        "by": "shakeebshaan",
+        "appCommit": "f0bcfdfe",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Exact root cause (regex boundary); fix mirrors sibling unitFor contract; regression test fails pre-fix and passes post-fix (verified); real-component UI proof shows eggplant with no egg count."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Fixed in FE commit 529d950e (pushed to main): with the keyboard open, the ingredient search/detail sheet reserved only a flat 1.5rem at the top, so on notched/status-bar devices the sheet header (All/Recent tabs) slid under the status bar - exactly what your screenshot shows. It now reserves the real safe-area top inset via max(env(safe-area-inset-top), var(--statusbar-fallback-android,34px)), matching the app-wide safe-area convention. Flagging instead of auto-resolving because this only reproduces on a native device with the soft keyboard up (the keyboard-avoidance code no-ops in a browser), so no headless proof screenshot is possible. Please verify on an alpha build: Build your meals > Add ingredient, open the keyboard, confirm the All/Recent header stays clear of the status bar. Requires a native rebuild (npm run build + cap sync), not just an OTA.",
-      "reviewedAt": "2026-07-15T03:41:08.821Z",
-      "reviewedBy": "shakeebshaan",
+      "route": "/ai/create-diet-plan",
+      "description": "[bug-hunt] Ingredient detail sheet shows a bogus '≈ N eggs' for EGGPLANT (and eggnog). In src/components/plan-builder/FoodDetailSheet.tsx eggEquivalent() gates on /\\begg/ — a leading word boundary but NO trailing one — so it fires on 'eggplant'/'eggnog'; the exclusion list (white|powder|substitute|replacer) doesn't cover them. The sibling unitFor() in src/lib/food-units.ts deliberately uses /\\beggs?\\b/i and test/food-units.test.ts:49 asserts unitFor('Eggplant') === null, so the intended contract is 'egg must not fire inside eggplant'. eggEquivalent violates it. Verified: /\\begg/.test('eggplant') === true; eggEquivalent('Eggplant', 100) returns '≈ 2 eggs'. Expected: null (no egg count for eggplant). Repro: open the diet builder (/ai/create-diet-plan or CustomizeDiet), search/add 'Eggplant', tap the result to open the FoodDetailSheet — the total line reads 'Total 100 g · ≈ 2 eggs'. Fix: anchor with a trailing boundary, e.g. /\\beggs?\\b/ (matching food-units), and add an eggplant case to test/FoodDetailSheet.eggEquivalent.test.ts.",
+      "author": "shakeebshaan",
       "tags": [
-        "fixed",
-        "needs-device"
+        "bug-hunt",
+        "auto"
       ],
-      "resolvedAt": "2026-07-15T05:08:11.236Z",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false,
+      "resolvedAt": "2026-07-15T05:09:19.987Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T05:08:11.236Z"
+      "archivedAt": "2026-07-15T05:09:19.987Z"
     }
   ]
 }
