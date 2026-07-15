@@ -852,34 +852,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260715-1190",
-      "createdAt": "2026-07-15T03:08:02.939Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-1190.jpg",
-      "imageCommit": "e69529bf1b23b4abd0489f5326db4bc34b5fba5d",
-      "imagePaths": [
-        "images/i-20260715-1190.jpg"
-      ],
-      "imageCommits": [
-        "e69529bf1b23b4abd0489f5326db4bc34b5fba5d"
-      ],
-      "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Fixed in FE commit 529d950e (pushed to main): with the keyboard open, the ingredient search/detail sheet reserved only a flat 1.5rem at the top, so on notched/status-bar devices the sheet header (All/Recent tabs) slid under the status bar - exactly what your screenshot shows. It now reserves the real safe-area top inset via max(env(safe-area-inset-top), var(--statusbar-fallback-android,34px)), matching the app-wide safe-area convention. Flagging instead of auto-resolving because this only reproduces on a native device with the soft keyboard up (the keyboard-avoidance code no-ops in a browser), so no headless proof screenshot is possible. Please verify on an alpha build: Build your meals > Add ingredient, open the keyboard, confirm the All/Recent header stays clear of the status bar. Requires a native rebuild (npm run build + cap sync), not just an OTA.",
-      "reviewedAt": "2026-07-15T03:41:08.821Z",
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "fixed",
-        "needs-device"
-      ]
-    },
-    {
       "id": "i-20260715-23dd",
       "createdAt": "2026-07-15T03:08:39.306Z",
       "route": null,
