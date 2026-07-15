@@ -1366,7 +1366,13 @@ async function putPrivFile(path, b64, message) {
   return r.json();
 }
 async function mutateJson(path, message, mutator, init) {
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  // Re-fetches the freshest sha each attempt, so a lost race just replays the
+  // mutation against the newer base. Bumped 3 → 6 attempts with jittered backoff
+  // because the automated 30-min fix tick writes data/issues.json concurrently
+  // with the owner's live board clicks; 3 tries could still surface a scary
+  // "Sync conflict" toast during a burst (i-20260715-948b).
+  const MAX = 6;
+  for (let attempt = 1; attempt <= MAX; attempt++) {
     const { data, sha, missing } = await loadJson(path);
     const obj = missing ? JSON.parse(JSON.stringify(init || null)) : data;
     if (!obj) throw new Error("Missing " + path);
@@ -1375,8 +1381,10 @@ async function mutateJson(path, message, mutator, init) {
       await putFile(path, b64encodeUtf8(JSON.stringify(obj, null, 2)), message, sha || undefined);
       return obj;
     } catch (e) {
-      if (!e.conflict || attempt === 3) throw e.conflict ? new Error("Sync conflict — try again.") : e;
-      await new Promise((r) => setTimeout(r, 800 * attempt));
+      if (!e.conflict || attempt === MAX) throw e.conflict ? new Error("Sync conflict — try again.") : e;
+      // jittered backoff: 500·attempt + up to 400ms random, so parallel writers
+      // don't retry in lock-step and re-collide.
+      await new Promise((r) => setTimeout(r, 500 * attempt + Math.floor(Math.random() * 400)));
     }
   }
 }
