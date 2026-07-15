@@ -21155,35 +21155,29 @@
       "archivedAt": "2026-07-15T10:13:20.815Z"
     },
     {
-      "id": "i-20260715-1bd1",
-      "createdAt": "2026-07-15T02:32:54.901Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-1bd1.jpg",
-      "imageCommit": "ab4b34318861eb6bea7f95b23a41d1ef9a760045",
-      "imagePaths": [
-        "images/i-20260715-1bd1.jpg"
-      ],
-      "imageCommits": [
-        "ab4b34318861eb6bea7f95b23a41d1ef9a760045"
-      ],
-      "imagePrivate": true,
+      "id": "i-20260714-ph07",
+      "createdAt": "2026-07-14T12:00:00.000Z",
       "status": "resolved",
+      "route": "/nutrition",
+      "description": "[suggestion] Photo-based meal logging: snap a plate photo, AI estimates dish + macros, user confirms/adjusts before logging. Problem: current logging is search/plan-based only (voice/text logging already filed separately, i-20260714-vlog) - no camera capture path exists in Nutrition.tsx/MealDetail.tsx, forcing manual entry for every ad-hoc Indian meal (thali, home-cooked mixed dishes) that has no clean plan match. Evidence: comparable trackers (Cronometer, Noom, HealthifyMe - the dominant India competitor) all ship photo logging as a core differentiator; NYUS has none, and existing plan-based flow (AIMealCustomization.tsx) assumes a known dish, not an arbitrary photographed plate. V1 scope: camera/gallery picker on Nutrition screen -> send image to existing llm_service vision path -> return best-guess dish name + macro estimate as an editable confirm sheet (reuse MealIngredients.tsx portion-adjust UI) -> log on confirm; no barcode scanning, no multi-item photo segmentation in v1. Effort: medium (new capture UI + one backend vision endpoint + confirm sheet reuse).",
       "fix": null,
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Fixed in FE commit 16bcf6b2 (pushed to main): the 'Free trial - N days left' pill froze because the app only wrote the user snapshot at login/onboarding-finalize and never refreshed it. The backend /auth/me already computes trial_days_remaining live (max(0, (period_end - now).days), confirmed in backend.py), so the app just never re-fetched it. It now refreshes the user from /auth/me on every cold-start (alongside the existing token refresh); refreshUser merges over the cached blob so it can't clobber locally-set name/avatar that /me omits. Flagging instead of auto-resolving because the symptom is temporal (the count only visibly drops across days) and the pill only shows with the subscription gate on + a trial account, so it can't be shown in one headless screenshot. Verify on a trial device: relaunch the app the next day and confirm the count decreases.",
-      "reviewedAt": "2026-07-15T03:41:21.125Z",
-      "reviewedBy": "shakeebshaan",
+      "author": "shakeebshaan",
       "tags": [
-        "fixed",
-        "needs-device"
+        "suggestion",
+        "auto"
       ],
-      "resolvedAt": "2026-07-15T10:15:07.805Z",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": true,
+      "reviewReason": "Already shipped — stale-grep duplicate. Photo-based meal logging already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): 'Snap meal — AI identifies it' button (lines 478-489) -> handlePhotoSelected downscales the image and POSTs to /ai/analyze-meal-photo (backend app/routes/plan_builder_routes.py), returns best-guess dish + macro estimate, prefills the editable Quick Log fields for confirm-before-save (lines 230-274). Exactly the suggested V1 (camera/gallery -> vision -> editable confirm -> log). The claim 'no camera capture path exists in Nutrition.tsx' is outdated. Recommend archiving as done.",
+      "reviewedAt": "2026-07-15T09:35:57.187Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-15T10:15:20.996Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T10:15:07.805Z"
+      "archivedAt": "2026-07-15T10:15:20.996Z"
     }
   ]
 }
