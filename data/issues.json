@@ -24,48 +24,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260715-9c3a",
-      "createdAt": "2026-07-15T03:55:02.707Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the inline +/- minute stepper (adjustDuration) in DailyActivityCard.tsx reused updateMut, whose mutation-level onSuccess calls setSheet(null). In React Query v5 that callback ALWAYS runs in addition to the per-mutate one, so a background stepper save resolving while an Add/Edit sheet was open closed it (discarding edits). Fix: gave the stepper its own stepMut whose onSuccess only invalidates - never setSheet; kept busy-gating parity. Proof: real DailyActivityCard - opened Edit sheet, fired the + stepper, waited for the save to resolve; the Edit sheet stays open (screenshot). Regression test added that fails pre-fix / passes post-fix (verified).",
-        "imagePath": "images/i-20260715-9c3a-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-9c3a-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "13c6ff12095aa389eb94f4fc3ba5ef5099d78d6c",
-        "imageCommits": [
-          "13c6ff12095aa389eb94f4fc3ba5ef5099d78d6c"
-        ],
-        "fixedAt": "2026-07-15T04:09:39.273Z",
-        "by": "shakeebshaan",
-        "appCommit": "f0bcfdfe",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 94,
-          "bar": 90,
-          "note": "Exact RQ-v5 semantic root cause; minimal fix (dedicated mutation); regression test verified to fail on the old updateMut path and pass on stepMut; timing behavior can't be shown in a still, so proof is the real component with the sheet still open after the save resolves."
-        }
-      },
-      "history": [],
-      "route": "/activity",
-      "description": "[bug-hunt] DailyActivity ± stepper save can auto-close the Add/Edit-activity sheet. In src/components/activity/DailyActivityCard.tsx the inline +/- minute stepper (adjustDuration) fires updateMut.mutate(). updateMut's mutation-level onSuccess (~line 144) runs invalidate() AND setSheet(null); in React Query v5 the mutation-level callback ALWAYS runs in addition to the per-mutate onSuccess (flashSaved). So a background stepper save closes any sheet opened before its round-trip resolves. Expected: an inline stepper save must not affect an open sheet. Actual: the sheet closes on its own. Repro (/activity, DailyActivityCard with a recurring activity): 1) tap + or - on a row's minute stepper (fires an update; ~200-800ms on mobile). 2) immediately tap the row's edit (pencil) or 'Add a regular activity' to open the sheet. 3) when the stepper's server response lands, the sheet auto-closes; in Edit mode any in-progress edits are discarded. Fix: give the stepper its own mutation (or pass mutate-level callbacks that don't call setSheet/full-invalidate) instead of reusing the sheet-save updateMut.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
       "id": "i-20260715-8f4c",
       "createdAt": "2026-07-15T00:56:47.000Z",
       "status": "fixed",
