@@ -874,31 +874,39 @@
         "8e9281eb804758fe5db33e7aeb5924b73565098b"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the diet builder mounts as a fixed z-[60] layer, but the delete-meal confirmation used the default shadcn AlertDialog (z-50), so it rendered BEHIND the builder — invisible/untappable on device, making delete look broken. Fix: added an optional overlayClassName prop to AlertDialogContent and set className=z-[80]/overlayClassName=z-[75] on the confirm in MealSlotCard.tsx (mirrors the Make-recipe Dialog's existing lift). Verified: confirm now renders on top of the dimmed builder, elementFromPoint at its center hits the dialog, and a real tap on Delete removes the meal.",
-        "imagePath": "images/i-20260715-32fe-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-32fe-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "28fb3f1e915f64208c97e043448ae7f65edca198",
-        "imageCommits": [
-          "28fb3f1e915f64208c97e043448ae7f65edca198"
-        ],
-        "fixedAt": "2026-07-15T06:11:07.395Z",
-        "by": "shakeebshaan",
-        "appCommit": "98e9a376",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root cause isolated (z-index stacking under the z-[60] builder layer, a documented class in CLAUDE.md); minimal surgical fix (optional prop + one usage site, tsc clean). Verified end-to-end at 390x844: dialog z=80/overlay z=75 both above builder 60, elementFromPoint hits inside-dialog, real Delete click removes the meal. 33/33 AlertDialog-consumer tests green; loop.mjs verify green."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-15T10:12:00.661Z",
+          "event": "reopened",
+          "note": "verify and aftrer verifying send the installer to playstore",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the diet builder mounts as a fixed z-[60] layer, but the delete-meal confirmation used the default shadcn AlertDialog (z-50), so it rendered BEHIND the builder — invisible/untappable on device, making delete look broken. Fix: added an optional overlayClassName prop to AlertDialogContent and set className=z-[80]/overlayClassName=z-[75] on the confirm in MealSlotCard.tsx (mirrors the Make-recipe Dialog's existing lift). Verified: confirm now renders on top of the dimmed builder, elementFromPoint at its center hits the dialog, and a real tap on Delete removes the meal.",
+            "imagePath": "images/i-20260715-32fe-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260715-32fe-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "28fb3f1e915f64208c97e043448ae7f65edca198",
+            "imageCommits": [
+              "28fb3f1e915f64208c97e043448ae7f65edca198"
+            ],
+            "fixedAt": "2026-07-15T06:11:07.395Z",
+            "by": "shakeebshaan",
+            "appCommit": "98e9a376",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 93,
+              "bar": 90,
+              "note": "Root cause isolated (z-index stacking under the z-[60] builder layer, a documented class in CLAUDE.md); minimal surgical fix (optional prop + one usage site, tsc clean). Verified end-to-end at 390x844: dialog z=80/overlay z=75 both above builder 60, elementFromPoint hits inside-dialog, real Delete click removes the meal. 33/33 AlertDialog-consumer tests green; loop.mjs verify green."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
