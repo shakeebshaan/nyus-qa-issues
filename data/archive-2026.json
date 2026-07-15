@@ -21299,6 +21299,81 @@
       "resolvedAt": "2026-07-15T12:31:27.664Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-15T12:31:27.664Z"
+    },
+    {
+      "id": "i-20260715-8f4c",
+      "createdAt": "2026-07-15T00:56:47.000Z",
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: MealSlotCard 'Saved' state was derived purely from the meal NAME, so after editing a saved meal the badge stayed 'Saved', the toggle ran the UNSAVE branch, and 'My meals' kept the stale pre-edit copy. Fix: savedDirty = saved && savedMealNeedsUpdate(meal) (meal-favorites.ts compares ingredient food_id/quantity_g, count and image vs the stored copy — reacts to quantity edits too), and the button now shows a third 'Update saved' state that re-persists the edits in place (saveMeal upserts by name id). Committed 8d1718ea.",
+        "imagePath": "images/i-20260715-8f4c-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260715-8f4c-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4ffce5a9d5757520e63ea79ed943875cd3a87ef0",
+        "imageCommits": [
+          "4ffce5a9d5757520e63ea79ed943875cd3a87ef0"
+        ],
+        "fixedAt": "2026-07-15T13:48:08.204Z",
+        "by": "shakeebshaan",
+        "appCommit": "608f8f28",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Root fix: dirty-state derived from actual ingredient diff (not name), with an explicit 'Update saved' re-persist affordance — no more silent stale reuse. Proof is a faithful 3-state render (live capture of a diverged saved meal needs a seeded builder draft). -9 for the illustrated vs live capture."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-07-15T10:15:55.339Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the card's 'Saved' state derived only from the meal NAME, so after editing a saved meal the badge stayed 'Saved', tapping ran the UNSAVE branch, and the stored copy was never rewritten (edits silently lost on reuse). Fix: added savedMealNeedsUpdate() (meal-favorites.ts) comparing the built meal vs the stored copy (ingredients + photo), derived every render in MealSlotCard so quantity edits register too; when dirty the button becomes 'Update saved' and re-persists in place. Proof: real MealSlotCard rendered with a saved 'Oats Bowl' edited 40g->80g now shows the pink 'Update saved' affordance. +6 unit tests (test:unit gate green, tsc clean).",
+            "imagePath": "images/i-20260715-8f4c-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260715-8f4c-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "d562438e41c00f90ec53dfdd84c6c419a4add670",
+            "imageCommits": [
+              "d562438e41c00f90ec53dfdd84c6c419a4add670"
+            ],
+            "fixedAt": "2026-07-15T01:08:20.192Z",
+            "by": "shakeebshaan",
+            "appCommit": "8d1718ea",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 92,
+              "bar": 90,
+              "note": "Exact root cause fixed (name-only saved state), edits now persist via Update-saved; proven on the real component + 6 unit tests."
+            }
+          }
+        }
+      ],
+      "route": "/ai/create-diet-plan",
+      "description": "[bug-hunt] Editing an already-saved meal in the diet builder never updates its saved copy — the 'Saved' badge stays lit while 'My meals' keeps the stale pre-edit version, silently discarding your edits when you reuse it.\n\nROUTE: the meal card (src/components/plan-builder/MealSlotCard.tsx) in the diet builder — /ai/create-diet-plan (CustomDietPlanCreation), /customize-diet, and the onboarding always-custom CustomDietBuilder.\n\nROOT: the card's 'Saved' state is derived PURELY from the meal NAME (MealSlotCard.tsx:312-314, `setSaved(isMealSaved(meal.name))`; meal-favorites.ts identity = normalized name), and saveMeal() has a SINGLE call site (MealSlotCard.tsx:322) inside the not-saved branch of handleToggleSave (315-325). Once a meal is saved, `saved` stays true across any ingredient edit, so tapping the button runs the UNSAVE branch instead of re-persisting, and nothing ever rewrites the stored copy. Quantity edits don't even re-run the effect (deps are [meal.name, meal.ingredients.length], and changing a quantity leaves the count unchanged).\n\nEXPECTED: after I edit a saved meal, either the saved copy updates in place, or the badge shows the current state isn't saved so I can re-save.\nACTUAL: badge stays 'Saved' but the stored copy is frozen at save-time; the only way to persist edits is unsave-then-save (two taps, non-obvious), and a user who trusts the 'Saved' badge never does that.\n\nREPRO (diet builder, a meal with ingredients): 1) build 'Oats Bowl' (oats 40g + milk + banana), tap 'Save to my meals' → badge shows 'Saved'. 2) bump oats 40g→80g (or add an ingredient). Badge still 'Saved'. 3) open 'My meals' → 'Use' the saved 'Oats Bowl' → it applies the ORIGINAL 40g version; the 80g edit is gone, no warning.\n\nCONFIRMED by code trace (single saveMeal call site + name-only saved-state; grep confirms saveMeal( appears once in src). FIX: on save, re-persist whenever the built meal differs from the stored copy (compare ingredients), or add an 'Update saved meal' affordance when a saved meal has unsaved edits. Fresh feature (commit 8c795c1d, QA 7de8/fav1 scope 2:A) — first bug-hunt of it; not on the board.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false,
+      "resolvedAt": "2026-07-15T13:55:15.567Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-15T13:55:15.567Z"
     }
   ]
 }
