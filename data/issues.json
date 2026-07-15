@@ -360,7 +360,11 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Already shipped — stale-grep duplicate. Quick re-log of a past meal already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): a 'Recent' chip row (lines 491-511) fed by GET /logs/meal/recent?limit=8 (backend app/routes/logging.py:510) shows each recent meal name + kcal; tapping a chip (fillFromRecent, lines 217-228) prefills the stored meal_name + macros, and Log Meal duplicates it into today's log via POST /logs/meal — no re-typing, no AI recompute (macros come straight from the stored row). This is exactly the suggested V1 'Log again'. The claim 'repo has no copy-previous-meal/quick-repeat action' is outdated. Recommend archiving as done. (A dedicated persistent Favorites list is the only genuine v2 delta.)",
+      "reviewedAt": "2026-07-15T09:36:09.300Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260714-d1hk",
