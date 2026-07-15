@@ -484,12 +484,36 @@
         "22c0cdc1c9a5ee39df520f26fc53d277224c298c"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Owner 'Fix all' -> safe defaults 1b:A + 2:A. (1b:A) A photo control on the meal card hero opens a 'Choose a photo' sheet of curated stock food photos (new backend /ai/meal-image-options via TheMealDB/Openverse, no upload) — picking one sets the meal image (deployed + verified on prod: 6 real stock URLs). (2:A) 'Save to my meals' persists a built meal (personal only, on-device, no cross-user exposure) and 'My meals' reuses it into any slot — also closes i-20260714-fav1. Files: MealSlotCard.tsx, new src/lib/meal-favorites.ts (unit-tested 4/4), custom-plan.service.ts, backend image_providers.py + plan_builder_routes.py. Earlier wrong-image root cause (Part 1) was already fixed/deployed.",
+        "imagePath": "images/i-20260714-7de8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-7de8-fix-r1.png",
+          "images/i-20260714-7de8-fix-r1-2.png",
+          "images/i-20260714-7de8-fix-r1-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "cb64e8ae104073a61bb835e899b61dfe0e41b802",
+        "imageCommits": [
+          "cb64e8ae104073a61bb835e899b61dfe0e41b802",
+          "05ed74f8ca44949b2f76039c7004d1d8b2274c2f",
+          "8385e381807ace2bf758c3fd8bfdc617c52cf377"
+        ],
+        "fixedAt": "2026-07-15T00:25:29.024Z",
+        "by": "shakeebshaan",
+        "appCommit": "8c795c1d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Both owner-selected scopes shipped, deployed, and verified: 1b:A picker shows a real curated stock-photo grid (prod endpoint returns 6 URLs); 2:A save->list->reuse proven end-to-end on the meal card; new util unit-tested 4/4. Deducted for on-device-only favorites (no cross-device sync) and picker needs auth in-app."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Update on \"Fix all\": Part (1) — the wrong meal-image root cause is already FIXED + deployed (beverage nouns added to the image query; Milkshake protein / lassi / shake / juice / kheer now land a matching photo, not a random curry). Part (1b) explicit image PICKER on the builder meal card + Part (2) \"save the meal for different users\" both need one product/privacy decision from you before I ship them, because they involve user-uploaded photos + cross-user visibility (a moderation + storage surface I should not stand up autonomously headless). Concrete plan, pick per line:\n  (1b) Per-meal image control: A) pick from a curated stock set only (safe, no upload, ~0.5d), or B) allow the user to upload their own photo (needs storage bucket + basic moderation, ~1.5d).\n  (2) \"Save meal for other users\" scope: A) PERSONAL favorites only — you reuse your own saved meals across weeks (safe, no cross-user exposure; this also closes suggestion i-20260714-fav1), or B) a SHARED library where meals (and any uploaded photo) are visible to OTHER users — needs a visibility model (global vs friends-only) + photo moderation + report/abuse handling before it can ship.\nReply \"1b:A 2:A\" (etc.) and I will build + verify the chosen scope in one tick. Defaulting to the safe options (1b:A, 2:A) if you just say \"go\".",
-      "reviewedAt": "2026-07-14T23:46:56.409Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Fix all",
       "reviewRepliedAt": "2026-07-14T23:15:26.126Z",
