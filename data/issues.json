@@ -44,48 +44,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260715-2a7e",
-      "createdAt": "2026-07-15T00:56:47.000Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: openImagePicker fetched customPlanService.mealImageOptions(meal.name) once and guarded on cached imgOptions with no reset when the name changed, so after a rename the picker showed the PREVIOUS name's photos. Fix: added a [meal.name] effect that clears imgOptions (MealSlotCard.tsx), mirroring the sibling nameDraft/imgBroken resets, so reopening after a rename refetches for the current name. Proof: real MealSlotCard picker opened as 'Snack' (SNACK tiles), renamed to 'Greek Yogurt with Berries', reopened -> now shows YOGURT tiles, not the stale cache. tsc clean, test:unit gate green.",
-        "imagePath": "images/i-20260715-2a7e-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-2a7e-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "349dc954a8df2ee0b5502c00889a8668e79833db",
-        "imageCommits": [
-          "349dc954a8df2ee0b5502c00889a8668e79833db"
-        ],
-        "fixedAt": "2026-07-15T01:08:34.056Z",
-        "by": "shakeebshaan",
-        "appCommit": "8d1718ea",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 91,
-          "bar": 90,
-          "note": "Stale-cache root cause fixed with a name-keyed reset effect; proven end-to-end on the real component (open->rename->reopen shows fresh options)."
-        }
-      },
-      "history": [],
-      "route": "/ai/create-diet-plan",
-      "description": "[bug-hunt] The meal-card 'Choose a photo' picker caches its stock-photo options for the FIRST meal name it was opened with and never refreshes them after the meal is renamed — so reopening it offers photos for the OLD name.\n\nROUTE: the meal card photo picker (src/components/plan-builder/MealSlotCard.tsx) in the diet builder — /ai/create-diet-plan, /customize-diet, onboarding CustomDietBuilder.\n\nROOT: openImagePicker (MealSlotCard.tsx:289-300) fetches customPlanService.mealImageOptions(meal.name) once, guarded by `if (imgOptions.length > 0) return` (line 292), and stores the result in component state (imgOptions). There is NO effect resetting imgOptions when meal.name changes — contrast the sibling effects that DO reset on prop change: imgBroken resets on [meal.image_url] (231-233) and nameDraft on [meal.name] (227-229). So after a rename the cached options for the previous name are shown.\n\nEXPECTED: reopening the picker after a rename fetches photos for the current meal name.\nACTUAL: it shows the previous name's photos (stale cache); the header still says 'Choose a photo' with no hint they're for the old name.\n\nREPRO (diet builder, a meal with ingredients): 1) meal named 'Snack' → tap the photo (ImageIcon) control on the hero → picker loads generic 'snack' photos. 2) close, rename the meal to 'Greek Yogurt with Berries'. 3) tap the photo control again → the SAME generic snack photos appear (early-return on cached imgOptions), not yogurt photos.\n\nCONFIRMED by code trace (cached imgOptions + no meal.name reset; grep shows setImgOptions only at line 296). FIX: reset imgOptions (and imgLoading) in an effect on [meal.name], or key the cache by the name it was fetched for. Same fresh commit (8c795c1d, QA 7de8 scope 1b:A); not on the board.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
       "id": "i-20260715-d8k2",
       "createdAt": "2026-07-15T00:00:00.000Z",
       "status": "open",
