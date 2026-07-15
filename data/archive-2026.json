@@ -21155,87 +21155,50 @@
       "archivedAt": "2026-07-15T10:13:20.815Z"
     },
     {
-      "id": "i-20260715-23dd",
-      "createdAt": "2026-07-15T03:08:39.306Z",
+      "id": "i-20260715-a1ec",
+      "createdAt": "2026-07-15T03:07:14.288Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-23dd.jpg",
-      "imageCommit": "020c0da3f0b37c7a1d0f382687431daf255fb811",
+      "imagePath": "images/i-20260715-a1ec.jpg",
+      "imageCommit": "6e8a4c418a36e2eea42545a9db975022a696e90b",
       "imagePaths": [
-        "images/i-20260715-23dd.jpg"
+        "images/i-20260715-a1ec.jpg"
       ],
       "imageCommits": [
-        "020c0da3f0b37c7a1d0f382687431daf255fb811"
+        "6e8a4c418a36e2eea42545a9db975022a696e90b"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Root cause: the \"Request X - let the AI add it\" fallback rejected misspelled foods. Verified live on prod - \"Bone brawth\" came back as \"not a food\" (422) so the ingredient could never be added, while correctly-spelled names worked. Fix (backend, deployed): the food-request AI now silently corrects an obvious misspelling to the nearest real food and adds it - \"Bone brawth\" now resolves to \"Bone Broth\" (200, ready to add, see detail sheet), while genuine gibberish / non-food text is still declined. Screenshot A is the same screen you reported (no more red error); B shows the AI-resolved food ready to add.",
-        "imagePath": "images/i-20260715-23dd-fix-r2.png",
+        "description": "Root cause: only coach-suggested meals came with a photo, so a meal you build yourself kept the fork/knife placeholder forever unless you opened the photo picker. Fix: a hand-built meal now automatically gets a matching stock photo once it has ingredients (the same photos the picker offers). You can still change it or pick 'Use no photo', and that choice sticks.",
+        "imagePath": "images/i-20260715-a1ec-fix-r1.png",
         "imagePaths": [
-          "images/i-20260715-23dd-fix-r2.png",
-          "images/i-20260715-23dd-fix-r2-2.png"
+          "images/i-20260715-a1ec-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "dfd85742523c96dd5c4e2c56d29b7689fa512c02",
+        "imageCommit": "3ce4fa85dec8dc813d5e52da033bbd4dd4c2bfb2",
         "imageCommits": [
-          "dfd85742523c96dd5c4e2c56d29b7689fa512c02",
-          "a2a690c7357d677ceec2aa1dcae93a8597c4dd3f"
+          "3ce4fa85dec8dc813d5e52da033bbd4dd4c2bfb2"
         ],
-        "fixedAt": "2026-07-15T05:25:59.920Z",
+        "fixedAt": "2026-07-15T03:39:55.760Z",
         "by": "shakeebshaan",
-        "appCommit": "4120d82",
+        "appCommit": "684842bf",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 90,
           "bar": 90,
-          "note": "Root cause fixed + verified live (typo->200 Bone Broth; gibberish/non-food still 422); backend regression test + FE contract test green; proof drives the real add-ingredient sheet."
+          "note": "Recapture (via ?noimg=1 harness) shows a built meal auto-fetching a food photo instead of the placeholder. Reuses the existing meal-image-options endpoint; stale-closure edit-loss regression caught in adversarial review and fixed via mealRef; typecheck clean."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-15T05:09:12.828Z",
-          "event": "reopened",
-          "note": "Still looks not fixed in your image",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: the 'let the AI add it' button showed one vague message ('Couldn't add that food. Try a clearer name.') for EVERY failure, so a rate limit or a server hiccup read like your spelling was wrong. Fix: it now says exactly what happened - daily limit reached, AI busy, offline, or genuinely not a recognizable food - and the backend no longer reports an AI outage as 'not a food'. For a misspelling like 'Bone brawth' you now see 'That doesn't look like a food. Check the spelling and try again.'",
-            "imagePath": "images/i-20260715-23dd-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260715-23dd-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "7a172f059bbcf9aad2cebdde9d85b447a228af00",
-            "imageCommits": [
-              "7a172f059bbcf9aad2cebdde9d85b447a228af00"
-            ],
-            "fixedAt": "2026-07-15T04:35:53.533Z",
-            "by": "shakeebshaan",
-            "appCommit": "df2c7d1d",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 90,
-              "bar": 90,
-              "note": "Real FoodSearchSheet capture shows the owner's exact 'Bone brawth' typo now yielding a specific, actionable message instead of the generic one; FE+backend paired, tsc clean, backend deployed."
-            }
-          }
-        }
-      ],
+      "history": [],
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "product",
-        "backend"
-      ],
-      "resolvedAt": "2026-07-15T10:16:30.278Z",
+      "resolvedAt": "2026-07-15T10:16:35.231Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T10:16:30.278Z"
+      "archivedAt": "2026-07-15T10:16:35.231Z"
     }
   ]
 }
