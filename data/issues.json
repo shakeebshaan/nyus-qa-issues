@@ -677,12 +677,32 @@
         "23d8fb6252598ebd2a0bdb2063cbc150547948e4"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "The Add Food -> Ingredients screen now uses the same rich portion picker as onboarding: a calorie ring, quick-portion chips (1/2, 1, 2, 3 servings), and a servings stepper, instead of the plain servings box. Macros update live as you change the amount.",
+        "imagePath": "images/i-20260715-f54d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-f54d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ce978fb036f3f7b16698f3a3cf6bf18c4484b88d",
+        "imageCommits": [
+          "ce978fb036f3f7b16698f3a3cf6bf18c4484b88d"
+        ],
+        "fixedAt": "2026-07-15T11:12:23.974Z",
+        "by": "shakeebshaan",
+        "appCommit": "71db4a80",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Paneer capture shows the macro ring + portion chips + stepper in the live Add Food modal, reusing the onboarding MacroRing component."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "This is a design/scope decision on the live logging flow, so flagging rather than guessing. Today the nutrition Add Food flow (Ingredients tab -> tap a food) sets portion as whole/fractional Servings via a - / + stepper (src/components/nutrition/CustomMealModal.tsx), and macros = per-serving x servings. You are asking for the SAME portion UI as the plan builder / onboarding, which uses a gram amount with a g / cups unit toggle (src/components/plan-builder/IngredientRow.tsx), where macros = per-100g x grams. Matching them means switching the logging modal from servings to grams+unit, which changes how the food data feeds the macro math and how the entry is stored - a real change to how meals get logged, not a cosmetic tweak. I can build it; I just want your call on scope first: (A) fully REPLACE the Servings stepper with a gram amount + g/cups toggle in Add Food, or (B) ADD a gram/unit option alongside the existing servings control? Tell me A or B and I will ship it next tick.",
-      "reviewedAt": "2026-07-15T06:03:18.345Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "product",
