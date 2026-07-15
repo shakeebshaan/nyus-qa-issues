@@ -550,57 +550,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260714-7de8",
-      "createdAt": "2026-07-14T17:41:59.796Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260714-7de8.jpg",
-      "imageCommit": "22c0cdc1c9a5ee39df520f26fc53d277224c298c",
-      "imagePaths": [
-        "images/i-20260714-7de8.jpg"
-      ],
-      "imageCommits": [
-        "22c0cdc1c9a5ee39df520f26fc53d277224c298c"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Owner 'Fix all' -> safe defaults 1b:A + 2:A. (1b:A) A photo control on the meal card hero opens a 'Choose a photo' sheet of curated stock food photos (new backend /ai/meal-image-options via TheMealDB/Openverse, no upload) — picking one sets the meal image (deployed + verified on prod: 6 real stock URLs). (2:A) 'Save to my meals' persists a built meal (personal only, on-device, no cross-user exposure) and 'My meals' reuses it into any slot — also closes i-20260714-fav1. Files: MealSlotCard.tsx, new src/lib/meal-favorites.ts (unit-tested 4/4), custom-plan.service.ts, backend image_providers.py + plan_builder_routes.py. Earlier wrong-image root cause (Part 1) was already fixed/deployed.",
-        "imagePath": "images/i-20260714-7de8-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260714-7de8-fix-r1.png",
-          "images/i-20260714-7de8-fix-r1-2.png",
-          "images/i-20260714-7de8-fix-r1-3.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "cb64e8ae104073a61bb835e899b61dfe0e41b802",
-        "imageCommits": [
-          "cb64e8ae104073a61bb835e899b61dfe0e41b802",
-          "05ed74f8ca44949b2f76039c7004d1d8b2274c2f",
-          "8385e381807ace2bf758c3fd8bfdc617c52cf377"
-        ],
-        "fixedAt": "2026-07-15T00:25:29.024Z",
-        "by": "shakeebshaan",
-        "appCommit": "8c795c1d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Both owner-selected scopes shipped, deployed, and verified: 1b:A picker shows a real curated stock-photo grid (prod endpoint returns 6 URLs); 2:A save->list->reuse proven end-to-end on the meal card; new util unit-tested 4/4. Deducted for on-device-only favorites (no cross-device sync) and picker needs auth in-app."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Fix all",
-      "reviewRepliedAt": "2026-07-14T23:15:26.126Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260714-6e48",
       "createdAt": "2026-07-14T17:49:36.940Z",
       "route": null,
