@@ -21299,6 +21299,69 @@
       "resolvedAt": "2026-07-15T12:31:27.664Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-15T12:31:27.664Z"
+    },
+    {
+      "id": "i-20260715-a642",
+      "createdAt": "2026-07-15T02:35:44.462Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260715-a642.jpg",
+      "imageCommit": "62bcff5eb22f8bde94fa304c38c6ee203945d7cb",
+      "imagePaths": [
+        "images/i-20260715-a642.jpg"
+      ],
+      "imageCommits": [
+        "62bcff5eb22f8bde94fa304c38c6ee203945d7cb"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-15T10:14:27.527Z",
+          "event": "reopened",
+          "note": "logo is should be different",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the +/- minute stepper on a Daily activity item saved your change right away, but gave no feedback - the number only updated after a slow server refresh, so it looked like nothing happened and there was no obvious way to confirm. Fix: the minutes now move instantly on tap and briefly turn teal to confirm the change was saved. It auto-saves, so no separate Done button is needed.",
+            "imagePath": "images/i-20260715-a642-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260715-a642-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "74d5ed0a08f309c5e7fcebed49cc43ecc5e8e030",
+            "imageCommits": [
+              "74d5ed0a08f309c5e7fcebed49cc43ecc5e8e030"
+            ],
+            "fixedAt": "2026-07-15T03:39:41.115Z",
+            "by": "shakeebshaan",
+            "appCommit": "14fbbd64",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "Recapture shows Cycling 30->35 min in teal (saved cue) while Treadmill stays 60; instant move + confirmation directly answers 'where is the done button'. Surgical, typecheck clean, adversarially reviewed."
+            }
+          },
+          "images": [
+            "images/i-20260715-a642-notfixed.jpg"
+          ],
+          "imageCommits": [
+            "1096d72a882c44d4f935162a4f3ec5ce740c172d"
+          ]
+        }
+      ],
+      "needsReview": true,
+      "reviewReason": "FIXED + verified (committed 61d661b3, pushed to main) — flagging only because the headless test gate (full npm test + bar 100) can't pass here, not an owner blocker. Two sub-asks addressed: (1) 'Where is the done button' — the inline minus/plus minutes stepper auto-saves and now flashes the row's minutes teal on save (aria-live), so no Done button is needed (prior commit). (2) Reopen 'logo should be different' — Treadmill and Standing both drew the same bicycle because the icon keyed only on activity_type ('cardio'). Added iconForActivity(name,type): treadmill/run -> Footprints, cycle/bike -> Bike, walk/stand -> PersonStanding, swim -> Waves, weights -> Dumbbell, etc., with the type icon as fallback. Verified by rendering the real DailyActivityCard in a Vite harness seeded with Treadmill/Standing/Cycling/Swimming rows: screenshot shows four DISTINCT icons (feet / person / bike / waves). Recommend: scope data/loop.json testCommand to a unit subset so headless ticks can resolve, then Resolve.",
+      "reviewedAt": "2026-07-15T10:40:24.240Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-15T12:58:59.571Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-15T12:58:59.571Z"
     }
   ]
 }
