@@ -604,7 +604,7 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "You chose A (one shared FoodSearch/IngredientPicker adopted in ALL ingredient-selection surfaces). Progress + scope so you can steer: DONE so far - the rich portion-detail UI (kcal macro ring + natural-unit quick-portion chips + servings stepper) is now shared across the nutrition Add-Food modal (CustomMealModal) and the plan-builder FoodDetailSheet (shipped under f54d/32f3). KEY FINDING - the SEARCH pattern in your reference screenshot (Search by Food Name/Dish bar + a Track with Images camera/barcode banner + a Frequently Tracked Foods list with a round + per row) does not exist anywhere in the app yet; it is a new screen to build from scratch, not just a component to point the existing surfaces at. SCOPE/RISK - adopting one shared search component across all four surfaces (nutrition CustomMealModal, plan-builder FoodSearchSheet, IngredientRow, quick-log) rewrites the core meal-LOGGING write paths; doing that in one unattended pass risks breaking live logging and cannot honestly clear the 90 satisfaction bar in a single shot, so I am not rushing it. PLAN - I will build the shared component to your reference and roll it out surface-by-surface, starting with the highest-traffic nutrition Add-Food surface first, then the plan-builder sheets, verifying logging after each. ONE DESIGN CALL I should not guess: should Track with Images (camera + barcode scan) appear in the PLAN BUILDER ingredient picker too, or only in the live-logging surfaces (nutrition + quick-log)? Reply with that and I will execute the rollout across ticks.",
       "reviewedAt": "2026-07-15T13:50:03.693Z",
       "reviewedBy": "shakeebshaan",
@@ -612,8 +612,8 @@
         "design",
         "multi-surface"
       ],
-      "reviewReply": "A",
-      "reviewRepliedAt": "2026-07-15T10:09:24.722Z",
+      "reviewReply": "Do all",
+      "reviewRepliedAt": "2026-07-15T13:54:34.711Z",
       "reviewReplyBy": "shakeebshaan"
     },
     {
