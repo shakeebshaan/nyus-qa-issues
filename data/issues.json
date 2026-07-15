@@ -211,28 +211,6 @@
       "history": []
     },
     {
-      "id": "i-20260714-rp2m",
-      "createdAt": "2026-07-14T08:38:53.867Z",
-      "status": "open",
-      "route": "/nutrition",
-      "description": "[suggestion] Quick re-log a past meal (\"Log again\") on the Nutrition screen. Problem: Indian daily eating is repetitive (same roti-dal-sabzi, same protein shake) but every entry today requires re-typing/re-searching the meal from scratch (or photo/barcode) even when it was logged yesterday or last week. Evidence: repo has no copy-previous-meal/quick-repeat action (grepped NutritionMealCard, CustomMealModal, meal-log flow — only diet-plan-builder has an unrelated \"repeat\" match for weekly plan structure, not daily logging); comparable trackers (MyFitnessPal \"Copy from previous day\", Cronometer favorites) ship this as a core retention lever. v1 scope: add a \"Log again\" action on past meal-history entries (NutritionMealCard / meal detail) that duplicates the stored meal_name + macros + quantity into a new log row for today at the tapped meal slot, no AI/recompute needed since macros are already persisted. No new screen, no favorites list yet (that would be v2). Effort: ~1-2 days FE (action + duplicate-log API call) + confirm backend already exposes a create-meal-log endpoint that accepts prefilled macros (likely yes, reused by manual entry).",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Already shipped — stale-grep duplicate. Quick re-log of a past meal already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): a 'Recent' chip row (lines 491-511) fed by GET /logs/meal/recent?limit=8 (backend app/routes/logging.py:510) shows each recent meal name + kcal; tapping a chip (fillFromRecent, lines 217-228) prefills the stored meal_name + macros, and Log Meal duplicates it into today's log via POST /logs/meal — no re-typing, no AI recompute (macros come straight from the stored row). This is exactly the suggested V1 'Log again'. The claim 'repo has no copy-previous-meal/quick-repeat action' is outdated. Recommend archiving as done. (A dedicated persistent Favorites list is the only genuine v2 delta.)",
-      "reviewedAt": "2026-07-15T09:36:09.300Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260714-d1hk",
       "createdAt": "2026-07-14T05:40:39.052Z",
       "status": "open",
