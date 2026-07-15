@@ -21301,61 +21301,85 @@
       "archivedAt": "2026-07-15T12:31:27.664Z"
     },
     {
-      "id": "i-20260715-f54d",
-      "createdAt": "2026-07-15T05:49:30.511Z",
+      "id": "i-20260715-32fe",
+      "createdAt": "2026-07-15T05:46:48.323Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-f54d-0.jpg",
-      "imageCommit": "814ec55a7371a7e0e90546863c2c35af0ac33c27",
+      "imagePath": "images/i-20260715-32fe.jpg",
+      "imageCommit": "8e9281eb804758fe5db33e7aeb5924b73565098b",
       "imagePaths": [
-        "images/i-20260715-f54d-0.jpg",
-        "images/i-20260715-f54d-1.jpg"
+        "images/i-20260715-32fe.jpg"
       ],
       "imageCommits": [
-        "814ec55a7371a7e0e90546863c2c35af0ac33c27",
-        "23d8fb6252598ebd2a0bdb2063cbc150547948e4"
+        "8e9281eb804758fe5db33e7aeb5924b73565098b"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "The Add Food -> Ingredients screen now uses the same rich portion picker as onboarding: a calorie ring, quick-portion chips (1/2, 1, 2, 3 servings), and a servings stepper, instead of the plain servings box. Macros update live as you change the amount.",
-        "imagePath": "images/i-20260715-f54d-fix-r1.png",
+        "description": "Verified meal delete works: tapping the trash on a meal now shows a 'Delete meal?' confirm ON TOP of the builder (it was previously rendering behind the full-screen builder, so nothing appeared to happen) and removes the meal. Confirmed live on the diet builder.",
+        "imagePath": "images/i-20260715-32fe-fix-r2.png",
         "imagePaths": [
-          "images/i-20260715-f54d-fix-r1.png"
+          "images/i-20260715-32fe-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "ce978fb036f3f7b16698f3a3cf6bf18c4484b88d",
+        "imageCommit": "dbe4ba0aa35a1a7eeae877d8c807ed682a72aed2",
         "imageCommits": [
-          "ce978fb036f3f7b16698f3a3cf6bf18c4484b88d"
+          "dbe4ba0aa35a1a7eeae877d8c807ed682a72aed2"
         ],
-        "fixedAt": "2026-07-15T11:12:23.974Z",
+        "fixedAt": "2026-07-15T11:12:10.193Z",
         "by": "shakeebshaan",
-        "appCommit": "71db4a80",
+        "appCommit": "98e9a376",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 91,
+          "score": 90,
           "bar": 90,
-          "note": "Paneer capture shows the macro ring + portion chips + stepper in the live Add Food modal, reusing the onboarding MacroRing component."
+          "note": "Live capture shows the delete-confirm dialog above the builder + the meal removed after confirm; z-index fix (98e9a376) in HEAD."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-07-15T10:12:00.661Z",
+          "event": "reopened",
+          "note": "verify and aftrer verifying send the installer to playstore",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the diet builder mounts as a fixed z-[60] layer, but the delete-meal confirmation used the default shadcn AlertDialog (z-50), so it rendered BEHIND the builder — invisible/untappable on device, making delete look broken. Fix: added an optional overlayClassName prop to AlertDialogContent and set className=z-[80]/overlayClassName=z-[75] on the confirm in MealSlotCard.tsx (mirrors the Make-recipe Dialog's existing lift). Verified: confirm now renders on top of the dimmed builder, elementFromPoint at its center hits the dialog, and a real tap on Delete removes the meal.",
+            "imagePath": "images/i-20260715-32fe-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260715-32fe-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "28fb3f1e915f64208c97e043448ae7f65edca198",
+            "imageCommits": [
+              "28fb3f1e915f64208c97e043448ae7f65edca198"
+            ],
+            "fixedAt": "2026-07-15T06:11:07.395Z",
+            "by": "shakeebshaan",
+            "appCommit": "98e9a376",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 93,
+              "bar": 90,
+              "note": "Root cause isolated (z-index stacking under the z-[60] builder layer, a documented class in CLAUDE.md); minimal surgical fix (optional prop + one usage site, tsc clean). Verified end-to-end at 390x844: dialog z=80/overlay z=75 both above builder 60, elementFromPoint hits inside-dialog, real Delete click removes the meal. 33/33 AlertDialog-consumer tests green; loop.mjs verify green."
+            }
+          }
+        }
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "product",
-        "design",
-        "nutrition"
+        "cannot-reproduce",
+        "needs-repro"
       ],
-      "reviewReply": "use single ui that u are making in next tick",
-      "reviewRepliedAt": "2026-07-15T10:10:44.652Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-15T12:59:25.601Z",
+      "resolvedAt": "2026-07-15T12:59:30.751Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T12:59:25.601Z"
+      "archivedAt": "2026-07-15T12:59:30.751Z"
     }
   ]
 }
