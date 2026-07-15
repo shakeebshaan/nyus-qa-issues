@@ -159,7 +159,11 @@
       "imagePath": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": true,
+      "reviewReason": "Genuine (not yet shipped) but larger than the 'small ~1 day' estimate. Confirmed: Activity.tsx has only per-EXERCISE skip/unskip within today's workout (skipExerciseMutation ~line 545, no 'reschedule' anywhere in the file); day-level reschedule exists ONLY in the coach-chat WorkoutEditPanel block (src/components/blocks/WorkoutEditPanel.tsx handleReschedule). The blocker: Activity has NO 'missed/skipped workout DAY' surface to attach a 'Reschedule to...' chip to — a missed day (app not opened) currently just rolls forward with no card rendered, so V1 needs (1) a missed-day affordance on the Activity day view FIRST, then (2) a day-picker sheet wired to the existing PUT /plans reschedule mutation. Aligns with owner pref (inline/in-context over chat-only). Recommend building, but it is a real UI feature (missed-day surface + picker), not a one-affordance wire-up. Greenlight and I'll build + harness-verify. Left open pending priority.",
+      "reviewedAt": "2026-07-15T09:36:46.400Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260714-ph07",
