@@ -4,7 +4,7 @@
     {
       "id": "i-20260715-994c",
       "createdAt": "2026-07-15T18:53:52.670Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/onboarding",
       "description": "[bug-hunt] Onboarding shows two DIFFERENT \"Weekly pace\" numbers for the same plan — the CoachPreview \"Plan Created\" card overstates the pace. Onboarding requires a target completion date (src/pages/onboarding/OnboardingFlow.tsx:730). When it is set alongside a weight delta, calcOnboardingStats OVERRIDES weeklyChange to the required-to-hit-date rate (src/lib/onboarding-calc.ts:124-131) while keeping achievableWeeklyChange at the honest calorie-derived rate (onboarding-calc.ts:111). Owner ruling i-20260708-pc1a: every user-facing \"Weekly pace\" label MUST show the ACHIEVABLE rate. PostPlanTour (src/pages/onboarding/PostPlanTour.tsx:263-265) and PlanReadyOverview already comply, but Screen9_CoachPreview still reads the date-driven calc.weeklyChange for its user-facing pace: the \"Plan Created\" card \"Weekly pace\" row (src/pages/onboarding/Screen9_CoachPreview.tsx:1316-1318), the pace coach-notes (:557-561), the goal insight text (:777) and the debug summary line (:304). EXPECTED: CoachPreview and the immediately-following PostPlanTour show the SAME weekly pace = the pace the built calorie target actually delivers. ACTUAL: they disagree, and the card overstates a pace the plan cannot deliver — the exact defect pc1a fixed on the other two screens. REPRO (verified by replicating the calc): onboard as male, current 90kg -> goal 80kg, 180cm, 30yr, moderate activity. Built daily target = 2414 kcal which only delivers achievableWeeklyChange = 0.45 kg/wk. With a target date 10 weeks out, the \"Plan Created\" card shows \"Weekly pace 1.0 kg/week\" (date-driven 10kg/10wk); PostPlanTour hero shows \"0.45 kg/week\". With a 20-week date the card shows 0.50 vs 0.45. FIX: in Screen9_CoachPreview use calc.achievableWeeklyChange (not calc.weeklyChange) for ALL user-facing \"Weekly pace\" displays, matching PostPlanTour/PlanReadyOverview per pc1a.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: Screen9_CoachPreview read the date-driven calc.weeklyChange for its user-facing Weekly pace displays, which calcOnboardingStats overrides to the required-to-hit-date rate, overstating a pace the built calorie target cannot deliver (the defect owner ruling pc1a fixed on PostPlanTour/PlanReadyOverview). Fix: switched all 5 pace sites in Screen9_CoachPreview.tsx (Plan Created card row, coach notes, goal insight, build-animation safety validator, debug summary) to calc.achievableWeeklyChange. Verified via /dev/coach-preview: CoachPreview goal card and the following PostPlanTour hero now both show 0.45 kg/week (was 0.53 vs 0.45).",
+        "imagePath": "images/i-20260715-994c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-994c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5888dc6f7abb91c481590b691e2838cf2fdf0304",
+        "imageCommits": [
+          "5888dc6f7abb91c481590b691e2838cf2fdf0304"
+        ],
+        "fixedAt": "2026-07-15T19:07:11.755Z",
+        "by": "shakeebshaan",
+        "appCommit": "c408b631",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-cause fix (all 5 user-facing pace sites -> achievableWeeklyChange), compile-clean, matches owner ruling pc1a. Verified end-to-end via /dev/coach-preview: CoachPreview goal card (-0.45) and following PostPlanTour hero (0.45 kg/week) now agree, the exact EXPECTED behavior; was 0.53 vs 0.45. Slight discount: the standard non-coach 'Plan Created' card row uses the same fixed variable but that specific variant isn't reachable in the dev harness for a pixel capture."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260715-2f91",
