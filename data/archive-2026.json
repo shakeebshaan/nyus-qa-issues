@@ -21153,6 +21153,39 @@
       "resolvedAt": "2026-07-15T10:13:20.815Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-15T10:13:20.815Z"
+    },
+    {
+      "id": "i-20260715-e078",
+      "createdAt": "2026-07-15T03:04:05.587Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260715-e078.jpg",
+      "imageCommit": "4f8878f5a28f42c6f1818196ff65d2b4c907c251",
+      "imagePaths": [
+        "images/i-20260715-e078.jpg"
+      ],
+      "imageCommits": [
+        "4f8878f5a28f42c6f1818196ff65d2b4c907c251"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Update on the three things in your note. (1) MISMATCH (\"this is milkshake and non matched\"): fixed + live on prod (backend 6b21466) - drink names now query \"<name> drink\" and food-noun matching is word-boundary, so a milkshake gallery no longer returns burgers/salads. (2) \"NEED MORE\": now shipped - the \"Choose a photo\" picker offers up to 12 options instead of 6 (frontend 311508ab on main; backend 91c884c deployed - widened the Openverse pool from 8 to 16 so 12 actually fills after de-dup). You will see it on the next alpha build. (3) \"OPEN GALLARY\" (upload YOUR OWN photo from your device): this is the one item I am NOT guessing on - it is a new feature, not a bug. The picker is curated stock only; there is no photo-upload/storage endpoint today, and wiring the paid image API in as a meal failsafe is blocked by your 2026-06-14 directive (paid images = coach portraits only). Do you want me to build device-upload (needs a storage decision), or leave the picker curated-stock? That is the only open decision here.",
+      "reviewedAt": "2026-07-15T05:52:40.674Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "backend",
+        "frontend",
+        "partially-fixed",
+        "product"
+      ],
+      "resolvedAt": "2026-07-15T10:15:05.505Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-15T10:15:05.505Z"
     }
   ]
 }
