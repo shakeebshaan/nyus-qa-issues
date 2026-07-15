@@ -812,7 +812,15 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "'Bone brawth' is a misspelling of 'bone broth', and the AI food-request correctly could not match the gibberish - so this is partly working-as-intended, but there are two real issues that need your call. (1) The FE collapses EVERY failure of the 'let the AI add it' request (rate-limit 429, server 500, timeout, AND genuine not-a-food) into one message: 'Couldn't add that food. Try a clearer name.' So a real outage reads to the user as bad spelling. Recommended FE fix (safe, shippable): show the specific reason - hit today's limit / AI busy, try again / not a recognized food. (2) The backend conflates a total LLM failure (call returns None) with an explicit not-a-food verdict - both return the same 422 NOT_A_FOOD - and the prompt does no typo-correction, so a 1-letter typo of a real food is rejected. Making typos like brawth->broth succeed is a product/LLM-quality decision touching a live, rate-limited LLM endpoint, so I'm flagging rather than guessing. Want me to ship the FE error-clarity fix, and/or add typo-tolerance + failure/not-a-food distinction to the backend?",
+      "reviewedAt": "2026-07-15T03:41:52.209Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "product",
+        "backend"
+      ]
     },
     {
       "id": "i-20260715-717c",
