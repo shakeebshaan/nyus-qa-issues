@@ -21155,37 +21155,35 @@
       "archivedAt": "2026-07-15T10:13:20.815Z"
     },
     {
-      "id": "i-20260715-e078",
-      "createdAt": "2026-07-15T03:04:05.587Z",
+      "id": "i-20260715-1bd1",
+      "createdAt": "2026-07-15T02:32:54.901Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-e078.jpg",
-      "imageCommit": "4f8878f5a28f42c6f1818196ff65d2b4c907c251",
+      "imagePath": "images/i-20260715-1bd1.jpg",
+      "imageCommit": "ab4b34318861eb6bea7f95b23a41d1ef9a760045",
       "imagePaths": [
-        "images/i-20260715-e078.jpg"
+        "images/i-20260715-1bd1.jpg"
       ],
       "imageCommits": [
-        "4f8878f5a28f42c6f1818196ff65d2b4c907c251"
+        "ab4b34318861eb6bea7f95b23a41d1ef9a760045"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Update on the three things in your note. (1) MISMATCH (\"this is milkshake and non matched\"): fixed + live on prod (backend 6b21466) - drink names now query \"<name> drink\" and food-noun matching is word-boundary, so a milkshake gallery no longer returns burgers/salads. (2) \"NEED MORE\": now shipped - the \"Choose a photo\" picker offers up to 12 options instead of 6 (frontend 311508ab on main; backend 91c884c deployed - widened the Openverse pool from 8 to 16 so 12 actually fills after de-dup). You will see it on the next alpha build. (3) \"OPEN GALLARY\" (upload YOUR OWN photo from your device): this is the one item I am NOT guessing on - it is a new feature, not a bug. The picker is curated stock only; there is no photo-upload/storage endpoint today, and wiring the paid image API in as a meal failsafe is blocked by your 2026-06-14 directive (paid images = coach portraits only). Do you want me to build device-upload (needs a storage decision), or leave the picker curated-stock? That is the only open decision here.",
-      "reviewedAt": "2026-07-15T05:52:40.674Z",
+      "reviewReason": "Fixed in FE commit 16bcf6b2 (pushed to main): the 'Free trial - N days left' pill froze because the app only wrote the user snapshot at login/onboarding-finalize and never refreshed it. The backend /auth/me already computes trial_days_remaining live (max(0, (period_end - now).days), confirmed in backend.py), so the app just never re-fetched it. It now refreshes the user from /auth/me on every cold-start (alongside the existing token refresh); refreshUser merges over the cached blob so it can't clobber locally-set name/avatar that /me omits. Flagging instead of auto-resolving because the symptom is temporal (the count only visibly drops across days) and the pill only shows with the subscription gate on + a trial account, so it can't be shown in one headless screenshot. Verify on a trial device: relaunch the app the next day and confirm the count decreases.",
+      "reviewedAt": "2026-07-15T03:41:21.125Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "backend",
-        "frontend",
-        "partially-fixed",
-        "product"
+        "fixed",
+        "needs-device"
       ],
-      "resolvedAt": "2026-07-15T10:15:05.505Z",
+      "resolvedAt": "2026-07-15T10:15:07.805Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T10:15:05.505Z"
+      "archivedAt": "2026-07-15T10:15:07.805Z"
     }
   ]
 }
