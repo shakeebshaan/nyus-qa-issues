@@ -277,12 +277,32 @@
         "8e496c62f7ac9213cc8ea2302a435fa3067c1f59"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Owner picked option D (A+C). A: untracked water now scores neutral 0.5 (like steps) in _evaluate_streak instead of a 0.0 penalty, so the common meal+workout-no-water day clears the 0.75 streak bar. C: the 30-Day Challenge ring is decoupled from the day_score streak — /reports/streak returns active_days_30 (distinct days in the last 30 with any logging: wellness, a completed workout, or an eaten meal) and ProfileChallengeCard reads it. Verified live: prod endpoint returns active_days_30:4 and the ring now shows '4 of 30 days . 26 days to go' (was '0 of 30'). Backend deployed; FE e45214fd.",
+        "imagePath": "images/i-20260715-3206-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-3206-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4208b1102fb2dd5e23c7f42c2a7515d708e8fe6f",
+        "imageCommits": [
+          "4208b1102fb2dd5e23c7f42c2a7515d708e8fe6f"
+        ],
+        "fixedAt": "2026-07-15T14:44:16.618Z",
+        "by": "shakeebshaan",
+        "appCommit": "e45214fd",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Both owner-chosen options (A water-neutral + C active-days ring) implemented, unit-tested (daily_report + route suites green), backend deployed, and verified END-TO-END on prod: endpoint returns active_days_30:4 and the captured ring reads '4 of 30' (was 0). Minor open follow-up the owner already flagged (day_score persisting NULL on generation) is diagnostic, not part of A+C."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Root-caused — needs a product call before I touch it (streak logic drives all gamification XP/badges). The Profile '30-Day Challenge' ring reads current_streak from the nightly day-score engine (daily_report.py _evaluate_streak): a day counts toward the streak only if day_score >= 0.75, weighted calorie .30 / workout .25 / steps .20 / water .15 / logging .10. On your account right now: current_streak=0, longest_streak=0 (no day has ever qualified), and your recent daily reports (only 2026-07-12 and 07-14 exist — sparse) have day_score=NULL. TWO things make 0.75 hard to reach: (1) a day needs BROAD consistency — an accurate-calorie + workout + full-meal-logging day lands right at ~0.75-0.80, but a workout-only or meal-only day scores ~0.35-0.45 and never counts; (2) untracked WATER is scored 0.0 (penalty) while untracked STEPS is scored 0.5 (neutral) — an asymmetry that quietly drags most users below the bar, BUT the current tests explicitly lock water=0 when untracked, so that's intentional, not an accident. So the card is 'tracking' correctly per the current rules — it just rarely fires. Pick the intended behaviour and I'll implement + deploy: (A) make untracked water NEUTRAL (0.5) like steps — small, fairer, lifts the common meal+workout day comfortably over 0.75; (B) lower STREAK_THRESHOLD (e.g. 0.6) so a solid-but-not-perfect day counts; (C) redefine the 30-Day Challenge to count 'any day you logged something' (decouple from day_score) — most intuitive to a user who sees '0 of 30' despite using the app; or (D) combination. Recommend A+C. Also flagging that day_score is persisting as NULL on your reports — I'll confirm whether the score is being stored on generation once you pick a direction. (I can't verify a streak-engine change end-to-end from the headless QA account — it has no rich multi-day logs — so I'm not shipping a blind gamification-wide change without your call.)",
-      "reviewedAt": "2026-07-15T14:05:39.763Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "D",
       "reviewRepliedAt": "2026-07-15T14:26:59.017Z",
