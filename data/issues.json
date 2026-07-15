@@ -4,7 +4,7 @@
     {
       "id": "i-20260715-eo41",
       "createdAt": "2026-07-15T19:39:20.873Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/nutrition",
       "description": "[suggestion] Add an \"Eating out\" quick-log mode on Nutrition: instead of exact food search, let user type/say a restaurant dish name (e.g. \"Swiggy chicken biryani, medium\") or pick from a curated India eating-out list (biryani, thali, dosa, pizza, momos, etc.) and get an AI-estimated calorie/macro range (with a +/- confidence note) logged as one entry. Problem: FAQ already tells users \"estimate as best you can\" for restaurant meals (src/lib/faq-fallback.ts) but there is no dedicated flow — users must force-fit takeout into the packaged-food/barcode/recipe search UI, which has no restaurant coverage, so eating-out days (very common for India users, Swiggy/Zomato culture) get skipped or badly mis-logged, breaking streak + daily-report accuracy. Evidence: grep across src/ shows barcode scanner, food-photo snap, and recipe search all exist for home/packaged food but zero restaurant/eating-out affordance; only mention of \"restaurant\" in the whole app is FAQ copy. v1 scope: one \"Eating out\" entry point on the Nutrition add-meal sheet -> free-text/voice input (useSpeechInput already exists) -> LLM estimates calories/macros with a visible \"estimated\" badge -> logs as a normal meal entry, no new backend tables (reuse existing custom-meal logging path). Effort: ~1-2 days FE (new sheet + prompt) + backend LLM prompt addition, no schema change.",
       "imagePath": null,
@@ -16,8 +16,31 @@
         "suggestion",
         "auto"
       ],
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: Quick Log had photo->AI estimate + voice + manual macros but no text->AI estimate, so eating-out/takeout dishes (Swiggy/Zomato) couldn't be quick-logged despite the FAQ promising it. Fix: new backend POST /ai/estimate-meal-text (mirrors the photo route; deployed + live) + an 'Estimate with AI - eating out?' action on CustomMealModal Quick Log that estimates calories/macros and shows an inline 'AI estimated - <confidence>' badge, logged via the existing path (no schema change).",
+        "imagePath": "images/i-20260715-eo41-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-eo41-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1fb416d0f4235c73adcd123298e1e44216c4857b",
+        "imageCommits": [
+          "1fb416d0f4235c73adcd123298e1e44216c4857b"
+        ],
+        "fixedAt": "2026-07-15T20:06:39.959Z",
+        "by": "shakeebshaan",
+        "appCommit": "88e35c2c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "v1 scope met exactly: free-text/voice dish -> AI single-serving estimate -> visible estimated+confidence badge -> logged via existing custom-meal path, no schema change. Also fixes the FAQ promise (faq-fallback.ts:175). Verified end-to-end: prod endpoint live (biryani 600kcal), FE badge renders at 390x844, tsc clean, 0 console errors. Below 100 only because the broader curated India eating-out list is deferred beyond v1."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260715-994c",
