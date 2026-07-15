@@ -642,7 +642,15 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fixed in FE commit 16bcf6b2 (pushed to main): the 'Free trial - N days left' pill froze because the app only wrote the user snapshot at login/onboarding-finalize and never refreshed it. The backend /auth/me already computes trial_days_remaining live (max(0, (period_end - now).days), confirmed in backend.py), so the app just never re-fetched it. It now refreshes the user from /auth/me on every cold-start (alongside the existing token refresh); refreshUser merges over the cached blob so it can't clobber locally-set name/avatar that /me omits. Flagging instead of auto-resolving because the symptom is temporal (the count only visibly drops across days) and the pill only shows with the subscription gate on + a trial account, so it can't be shown in one headless screenshot. Verify on a trial device: relaunch the app the next day and confirm the count decreases.",
+      "reviewedAt": "2026-07-15T03:41:21.125Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "fixed",
+        "needs-device"
+      ]
     },
     {
       "id": "i-20260715-a642",
