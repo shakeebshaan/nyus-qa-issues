@@ -431,7 +431,11 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Already shipped — this is a stale-grep duplicate. Voice + free-text meal logging already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): a 'Describe what you ate' free-text textarea (line ~526) PLUS a mic dictation button wired to useSpeechInput with app-language locale en-IN/hi-IN (lines 79-83, 533-544) — so the suggestion's claim 'no SpeechRecognition usage anywhere in src' and 'no free-text path' is outdated. Photo logging (i-20260714-ph07 dup) and recent-meal re-log (i-20260714-rp2m dup) are in the same modal. Recommend archiving as duplicate/done. If a NEW dedicated /nutrition/parse-meal-text NLP endpoint (parse free prose into structured multi-item macros, vs today's single free-text entry) is wanted as a v2 upgrade, that's a separate product call — flag it fresh.",
+      "reviewedAt": "2026-07-15T09:35:44.078Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260713-f2d1",
