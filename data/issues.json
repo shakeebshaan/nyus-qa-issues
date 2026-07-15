@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-8b4c",
+      "createdAt": "2026-07-15T16:37:53.372Z",
+      "status": "open",
+      "route": "/social",
+      "description": "[bug-hunt] Challenge invitations cannot be accepted or declined — Join/Decline buttons never render. Social > Challenges is the only UI that calls joinChallenge/declineChallenge, and both buttons render only inside the isInvited branch (src/components/ChallengesView.tsx:451). isInvited is computed as challenge.my_status === \"invited\" (ChallengesView.tsx:376), but the backend challenge serializer _serialize_challenge (nyu_backend/backend.py:11056-11072) NEVER emits a my_status field (grep confirms zero occurrences of my_status in the backend). So challenge.my_status is undefined for every challenge => isInvited is always false. EXPECTED: a user invited to a friend’s challenge sees Join + Decline buttons. ACTUAL: they instead see the not-invited branch — a \"Your Progress 0 / target\" bar (ChallengesView.tsx:433) — and have no way to accept/decline; the invite is permanently un-actionable. REPRO: User A creates a challenge inviting friend B (backend adds B as participant status=\"invited\", backend.py:11157). B opens Social > Challenges > Active. The card shows a progress bar and NO Join/Decline buttons. B is stuck. FIX: backend add \"my_status\" to _serialize_challenge (the current-user participant’s status); OR FE derive it from participants.find(p => p.user_id === currentUserId)?.status. NOTE backend participant status values are \"accepted\"/\"invited\"/\"declined\" (backend.py:11139/11157/11223), not \"active\" as the FE Challenge/Participant types assume (ChallengesView.tsx:11,27) — align both.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260715-3f7e",
+      "createdAt": "2026-07-15T16:37:53.372Z",
+      "status": "open",
+      "route": "/social",
+      "description": "[bug-hunt] \"Started a challenge\" activity-feed events are silently dropped and never shown. When a challenge is created the backend writes an ActivityFeedEvent with event_type=\"challenge_created\" (nyu_backend/backend.py:11167) and the /social/activity-feed endpoint serves it to friends (backend.py:11329-11353). But ActivityFeedView filters events to only those present in EVENT_CONFIG (src/components/ActivityFeedView.tsx:75-77), and EVENT_CONFIG (ActivityFeedView.tsx:56-64) + EVENT_LABEL (:17-25) have NO \"challenge_created\" entry => every such event is filtered out. EXPECTED: a friend creating a challenge shows \"Started a challenge: X\" in the feed (backend comment at backend.py:11165 states the description key \"is what the frontend feed renders\", i.e. it was meant to display). ACTUAL: the event is persisted to the DB but never rendered for anyone. REPRO: A and B are friends. A creates any challenge. B opens Social > Activity feed — the challenge_created event is absent. FIX: add \"challenge_created\" to EVENT_CONFIG (e.g. Trophy icon) and EVENT_LABEL (\"started a challenge\") in ActivityFeedView.tsx; eventText() already returns data.description so the copy will render.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260715-f2a9",
       "createdAt": "2026-07-15T18:30:00Z",
       "status": "open",
