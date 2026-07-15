@@ -98,47 +98,6 @@
       "imagePrivate": false
     },
     {
-      "id": "i-20260714-fav1",
-      "createdAt": "2026-07-14T22:41:20.812Z",
-      "status": "fixed",
-      "route": "/nutrition",
-      "description": "[suggestion] Favorite/save a meal so it can be reused across weeks instead of only swapped once. USER PROBLEM: MealSwapBlock (src/components/blocks/MealSwapBlock.tsx) and RecipeDetail let a user accept a meal for TODAY only -- there is no bookmark/favorite action anywhere in the meal-browsing surfaces (grepped: no favorite/bookmark/save-recipe handling in RecipeDetail.tsx, NutritionMealCard, or MealSwapBlock; onboarding Screen6_FoodPrefs only captures static dislikes once, not an ongoing liked-meals list). Weekly diet-plan regeneration has no signal for \"the user liked this specific dish, keep suggesting it\" -- users who find a meal they like via swap must remember the name and search for it again next week, or just accept whatever the regenerated plan assigns. Comparable trackers (MyFitnessPal, Cronometer) ship recipe/meal favorites as a baseline retention feature. EVIDENCE: existing Log-again suggestion (i-20260714-rp2m, filed same tick) solves re-logging an already-eaten entry from history; this is different -- it is bookmarking from the BROWSE/DISCOVER surfaces (recipe detail, swap alternatives) before ever logging it, so the two do not overlap. V1 SCOPE: add a heart/save icon-button on RecipeDetail.tsx and each MealSwapBlock alternative card; POST to a new /api/v1/nutrition/favorite-meal endpoint (meal_id, favorited: bool); a simple \"Favorites\" filter/section on the existing meal-browse list (reuse NutritionMealCard). No auto-injection into plan regeneration in v1 (that is a v2 once favorites data exists to train on). EFFORT: ~1 day FE (heart button + favorites list reuse) + ~0.5 day BE (one table + one endpoint).",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Implemented via i-20260714-7de8 (2:A): 'Save to my meals' on a built meal card persists it (personal/on-device, localStorage) and 'My meals' reuses a saved meal into any slot across weeks. Files: MealSlotCard.tsx + new src/lib/meal-favorites.ts (unit-tested 4/4).",
-        "imagePath": "images/i-20260714-fav1-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260714-fav1-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "8dda6e092bdcc767c1a42fde893c37f90c38211f",
-        "imageCommits": [
-          "8dda6e092bdcc767c1a42fde893c37f90c38211f"
-        ],
-        "fixedAt": "2026-07-15T00:29:09.944Z",
-        "by": "shakeebshaan",
-        "appCommit": "859f8d99",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Directly implemented as the 2:A 'My meals' feature in i-20260714-7de8: save a built meal (personal, on-device) and reuse it into any slot across weeks. Proven end-to-end (save->list->reuse)."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260714-ph07",
       "createdAt": "2026-07-14T12:00:00.000Z",
       "status": "open",
