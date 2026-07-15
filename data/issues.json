@@ -660,9 +660,32 @@
         "62bcff5eb22f8bde94fa304c38c6ee203945d7cb"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the +/- minute stepper on a Daily activity item saved your change right away, but gave no feedback - the number only updated after a slow server refresh, so it looked like nothing happened and there was no obvious way to confirm. Fix: the minutes now move instantly on tap and briefly turn teal to confirm the change was saved. It auto-saves, so no separate Done button is needed.",
+        "imagePath": "images/i-20260715-a642-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-a642-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "74d5ed0a08f309c5e7fcebed49cc43ecc5e8e030",
+        "imageCommits": [
+          "74d5ed0a08f309c5e7fcebed49cc43ecc5e8e030"
+        ],
+        "fixedAt": "2026-07-15T03:39:41.115Z",
+        "by": "shakeebshaan",
+        "appCommit": "14fbbd64",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Recapture shows Cycling 30->35 min in teal (saved cue) while Treadmill stays 60; instant move + confirmation directly answers 'where is the done button'. Surgical, typecheck clean, adversarially reviewed."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260715-e078",
