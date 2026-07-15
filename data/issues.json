@@ -269,53 +269,6 @@
       "reviewReply": "D",
       "reviewRepliedAt": "2026-07-15T14:26:59.017Z",
       "reviewReplyBy": "shakeebshaan"
-    },
-    {
-      "id": "i-20260715-6ea8",
-      "createdAt": "2026-07-15T13:47:11.649Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-6ea8-0.jpg",
-      "imageCommit": "0de745264de49535daf51125f909dc7412eea66c",
-      "imagePaths": [
-        "images/i-20260715-6ea8-0.jpg",
-        "images/i-20260715-6ea8-1.jpg"
-      ],
-      "imageCommits": [
-        "0de745264de49535daf51125f909dc7412eea66c",
-        "2a8efeaff9c56f86cc24cddc9ba2088f2ac76b6e"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Two Health Score spacing/cutoff bugs. (1) 'What changed' detail text used truncate, cutting long lines ('Improved 26 pts (50 → ...'); now wraps (li items-start, span min-w-0 + leading-snug, no truncate) so the full '(50 → 76)' shows — see capture. (2) Pillar breakdown used pl-6 pr-20, insetting every card 80px on the right vs the px-6 used everywhere else; switched to px-6 so cards are full-width and values right-align inside them. Verified live at /health-score?seed=1 (390x844): full driver text + aligned pillar cards. src/pages/HealthScore.tsx.",
-        "imagePath": "images/i-20260715-6ea8-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-6ea8-fix-r1.png",
-          "images/i-20260715-6ea8-fix-r1-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "8740178942a4dc3640c0168c30f3a01f15c2329e",
-        "imageCommits": [
-          "8740178942a4dc3640c0168c30f3a01f15c2329e",
-          "2848eff234034fb2df8d54c1124e71e1f592eb1f"
-        ],
-        "fixedAt": "2026-07-15T14:02:07.402Z",
-        "by": "shakeebshaan",
-        "appCommit": "193de031",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Both circled defects fixed at root (truncate->wrap; pr-20->px-6) and PROVEN on the real screen with realistic long values — 'Improved 26 pts (50 → 76)' renders in full, pillars align. tsc clean, surgical 7-line diff. -7: FAB can still transiently overlap a right-aligned value mid-scroll (app-wide behavior, not this bug)."
-        }
-      },
-      "history": [],
-      "needsReview": false
     }
   ]
 }
