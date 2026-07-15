@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-9c3a",
+      "createdAt": "2026-07-15T03:55:02.707Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/activity",
+      "description": "[bug-hunt] DailyActivity ± stepper save can auto-close the Add/Edit-activity sheet. In src/components/activity/DailyActivityCard.tsx the inline +/- minute stepper (adjustDuration) fires updateMut.mutate(). updateMut's mutation-level onSuccess (~line 144) runs invalidate() AND setSheet(null); in React Query v5 the mutation-level callback ALWAYS runs in addition to the per-mutate onSuccess (flashSaved). So a background stepper save closes any sheet opened before its round-trip resolves. Expected: an inline stepper save must not affect an open sheet. Actual: the sheet closes on its own. Repro (/activity, DailyActivityCard with a recurring activity): 1) tap + or - on a row's minute stepper (fires an update; ~200-800ms on mobile). 2) immediately tap the row's edit (pencil) or 'Add a regular activity' to open the sheet. 3) when the stepper's server response lands, the sheet auto-closes; in Edit mode any in-progress edits are discarded. Fix: give the stepper its own mutation (or pass mutate-level callbacks that don't call setSheet/full-invalidate) instead of reusing the sheet-save updateMut.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
+      "id": "i-20260715-e7b1",
+      "createdAt": "2026-07-15T03:55:02.707Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/ai/create-diet-plan",
+      "description": "[bug-hunt] Ingredient detail sheet shows a bogus '≈ N eggs' for EGGPLANT (and eggnog). In src/components/plan-builder/FoodDetailSheet.tsx eggEquivalent() gates on /\\begg/ — a leading word boundary but NO trailing one — so it fires on 'eggplant'/'eggnog'; the exclusion list (white|powder|substitute|replacer) doesn't cover them. The sibling unitFor() in src/lib/food-units.ts deliberately uses /\\beggs?\\b/i and test/food-units.test.ts:49 asserts unitFor('Eggplant') === null, so the intended contract is 'egg must not fire inside eggplant'. eggEquivalent violates it. Verified: /\\begg/.test('eggplant') === true; eggEquivalent('Eggplant', 100) returns '≈ 2 eggs'. Expected: null (no egg count for eggplant). Repro: open the diet builder (/ai/create-diet-plan or CustomizeDiet), search/add 'Eggplant', tap the result to open the FoodDetailSheet — the total line reads 'Total 100 g · ≈ 2 eggs'. Fix: anchor with a trailing boundary, e.g. /\\beggs?\\b/ (matching food-units), and add an eggplant case to test/FoodDetailSheet.eggEquivalent.test.ts.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260715-8f4c",
       "createdAt": "2026-07-15T00:56:47.000Z",
       "status": "fixed",
