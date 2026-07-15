@@ -571,12 +571,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Sent the app to the Play Store closed-testing (alpha) track. The previous attempt failed at the R8 minify step with an out-of-memory error; that was fixed by raising the Gradle build heap (1024M -> 4096M), and this time version 1.9.28 (build 208) built and uploaded to alpha cleanly. Production promotion is a separate owner-only step and was not done.",
+        "imagePath": "images/i-20260714-5419-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-5419-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5ab73aacbcf3057276a2d90842df6098c33ce105",
+        "imageCommits": [
+          "5ab73aacbcf3057276a2d90842df6098c33ce105"
+        ],
+        "fixedAt": "2026-07-15T01:43:35.722Z",
+        "by": "shakeebshaan",
+        "appCommit": "0ad19551",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "fastlane beta lane completed with no failures (report.xml): clean bundleRelease 9m + upload_to_play_store 42s; app-release.aab (22MB) built 01:39 and accepted by the Play Console API to the ALPHA track. Verifiable gate here = the successful full release build+upload (R8 minify over the whole app compiles clean), not the FE unit suite. Alpha only; production promotion stays owner-only."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Path 1 (ALPHA build+upload) attempted this tick per your reply. Bundled v207 (1.9.27) = versionCode 207, incl. the new meal-card photo picker + saved meals (i-20260714-7de8). npm build + cap sync succeeded, but 'fastlane beta' FAILED at :app:minifyReleaseWithR8 with java.lang.OutOfMemoryError: Java heap space after ~30 min. Root cause: android/gradle.properties had org.gradle.jvmargs=-Xmx1024M — too small for R8 on this Capacitor app (mlkit/firebase/sentry). FIXED in commit 60cbe0bf (heap 1024M->4096M, ParallelGC, 1024m metaspace). Did NOT auto-retry the 30-min build this tick (one-build-per-session caution + a concurrent session had uncommitted edits in src/). Next release tick will retry fastlane beta with the larger heap and should complete the alpha upload. No production promotion (path 2) done — that stays owner-only.",
-      "reviewedAt": "2026-07-15T01:01:41.626Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "1",
       "reviewRepliedAt": "2026-07-14T23:16:18.235Z",
