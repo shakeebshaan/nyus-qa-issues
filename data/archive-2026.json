@@ -21301,114 +21301,78 @@
       "archivedAt": "2026-07-15T12:31:27.664Z"
     },
     {
-      "id": "i-20260714-ddc2",
-      "createdAt": "2026-07-14T17:38:56.011Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260714-ddc2.jpg",
-      "imageCommit": "c80e88ec30071467430cae76555de87f4ed58b59",
-      "imagePaths": [
-        "images/i-20260714-ddc2.jpg"
-      ],
-      "imageCommits": [
-        "c80e88ec30071467430cae76555de87f4ed58b59"
-      ],
-      "imagePrivate": true,
+      "id": "i-20260714-4e7c",
+      "createdAt": "2026-07-14T18:57:18Z",
       "status": "resolved",
+      "route": "/goal-change",
+      "description": "[bug-hunt] Switching to a Maintenance / Recomp goal produces a plan whose \"weekly weight target\" contradicts its calories: the target shows a non-zero kg/week change while the calorie target is exactly TDEE (no deficit/surplus), so the advertised pace can never be reached.\n\nROUTE: /goal-change (Preview step -> \"Plan Details\" -> \"Weekly weight target\").\n\nROOT: BACKEND app/services/macro_calculator.py calculate_weekly_weight_target (lines 422-443) clamps ONLY fat_loss (-> [-0.75, 0]) and muscle_gain (-> [0, 0.35]); maintenance / recomp / endurance fall through and return the RAW pace (goal_weight - current_weight) / duration_weeks — uncapped and never zeroed. But calculate_target_calories uses GOAL_ADJUSTMENTS (lines 33-39) where maintenance & recomp = delta 0, so target_kcal == TDEE (no calorie deficit/surplus). The plan is calorically \"maintain\" yet advertises a weight-change pace.\n\nWHY THE WIZARD TRIGGERS IT: GoalChangeWizard pre-fills Goal Weight from the OLD plan (src/pages/GoalChangeWizard.tsx:94, newGoalWeight = goalWeight ?? 65) and never resets it to current weight when a non-directional goal is picked. So a user switching e.g. fat_loss (current 70 / goal 65) -> Maintenance keeps goal 65 != current 70.\n\nEXPECTED: for maintenance/recomp (delta-0 calories) the weekly weight target is 0; endurance's small surplus should map to a capped small gain, not an arbitrary pace derived from a stale goal weight.\nACTUAL: the preview AND the persisted plan (WeeklyMacroTarget.weekly_weight_loss_target_kg, FitnessPlan.weekly_weight_target_kg) carry e.g. -0.42 kg/week for a Maintenance goal eating at TDEE. PlanDetailsCollapsible (GoalChangeWizard.tsx:604-610) renders \"Weekly weight target: -0.42 kg\" under a Maintenance switch.\n\nREPRO (needs an active plan whose goal weight != current weight): /goal-change -> pick Maintenance -> do NOT touch Goal Weight -> Next -> Preview -> expand \"Plan Details\": \"Weekly weight target\" is non-zero although calories == TDEE.\n\nCONFIRMED by code trace (the clamp table + GOAL_ADJUSTMENTS + the wizard prefill). FIX: clamp maintenance & recomp to 0 (and cap endurance to its surplus-implied pace) in calculate_weekly_weight_target, and/or reset Goal Weight to current weight when a maintenance/recomp goal is selected in the wizard. Never-hunted area; not a dup of the onboarding pace-gate items.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "fix": {
-        "description": "When a food search in the Add-ingredient sheet finds no matches, there is now a Request X - let the AI add it button. It asks the AI to add the missing food, then opens it so you can set the portion. Verified live in the plan builder: searching a food that is not in the catalog shows the No foods found message plus the purple Request button.",
-        "imagePath": "images/i-20260714-ddc2-fix-r3.png",
+        "description": "Root cause: calculate_weekly_weight_target (macro_calculator.py) clamped only fat_loss/muscle_gain; maintenance/recomp/endurance returned the raw (goal-current)/weeks pace even though those goals eat at TDEE (delta 0) — so a Maintenance switch carrying a stale goal weight advertised e.g. -0.42 kg/wk while calories == TDEE. Fix: clamp maintenance & recomp to 0, and cap endurance to its surplus-implied pace (0 to +0.2, never a loss). Verified: live function returns 0.00 for maintenance/recomp/endurance with current 70 / stale goal 65, fat_loss still -0.42. Committed a603be6, deployed to prod.",
+        "imagePath": "images/i-20260714-4e7c-fix-r2.png",
         "imagePaths": [
-          "images/i-20260714-ddc2-fix-r3.png"
+          "images/i-20260714-4e7c-fix-r2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "56c705212c87a229394d862d7a5a1aec51282dd6",
+        "imageCommit": "7637878c493b518b6d9a62f3f61b05863182406d",
         "imageCommits": [
-          "56c705212c87a229394d862d7a5a1aec51282dd6"
+          "7637878c493b518b6d9a62f3f61b05863182406d"
         ],
-        "fixedAt": "2026-07-15T13:47:53.981Z",
+        "fixedAt": "2026-07-15T13:46:31.068Z",
         "by": "shakeebshaan",
-        "appCommit": "72c28c95",
+        "appCommit": "608f8f28",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 93,
           "bar": 90,
-          "note": "Fix matches owner ask exactly; button renders on empty results and calls the real /foods/request endpoint; verified live."
+          "note": "Backend clamp directly removes the calorie/pace contradiction; verified via live function output across all goal types incl. the exact stale-goal repro. Deployed to prod. -7: FE GoalChangeWizard goal-weight prefill left as-is (backend clamp fully resolves the displayed contradiction, so the FE reset is redundant)."
         }
       },
       "history": [
         {
-          "at": "2026-07-15T10:09:49.816Z",
+          "at": "2026-07-15T10:14:36.715Z",
           "event": "reopened",
-          "note": "not adding all the things i tell it",
+          "note": null,
           "previousFix": {
-            "description": "Built the \"Request X - let the AI add it\" flow you asked for. Root cause: the Add-ingredient search only queried the existing food KB, so a food it lacks (your \"Skimmed Milk powder\") dead-ended at \"No foods found\". Fix (full-stack, deployed): new POST /api/v1/foods/request LLM-estimates the exact food per-100g macros + 12 micros (Indian-availability aware), persists it as a custom food, and returns it; the FE now shows a \"Request X\" button in that empty state which opens the portion/detail sheet on the AI-added food. Verified live: requested \"Skimmed Milk Powder\" -> 360 kcal, 36g protein, dairy (also now searchable); and end-to-end in the builder \"Ragi Malt Drink Powder\" -> detail sheet with macros + 7/12 micros + Add CTA (screenshots). Rate-limited 40/day; discord-logged. NOTE: your other note about saving a meal image/library for different users is tracked on i-20260714-7de8.",
-            "imagePath": "images/i-20260714-ddc2-fix-r1.png",
+            "description": "Root cause: calculate_weekly_weight_target (macro_calculator.py) only clamped fat_loss/muscle_gain; maintenance/recomp/endurance fell through and returned the raw stale-goal pace, while their calories == TDEE (GOAL_ADJUSTMENTS delta 0) -> the preview + persisted WeeklyMacroTarget advertised e.g. -0.42 kg/wk under a maintenance switch eating at TDEE. Fix: clamp maintenance & recomp to 0 and cap endurance to its surplus-implied 0.2 kg/wk (directional goals unchanged). Deployed to prod (backend a603be6, health OK). Verified: 25 scoped unit tests pass + live eval (maintenance/recomp stale-goal -> 0.00). Proof is a backend calc panel because the live wizard preview needs an active-plan account (none headless since 2026-07-12); the value the wizard renders is exactly this backend output.",
+            "imagePath": "images/i-20260714-4e7c-fix-r1.png",
             "imagePaths": [
-              "images/i-20260714-ddc2-fix-r1.png",
-              "images/i-20260714-ddc2-fix-r1-2.png"
+              "images/i-20260714-4e7c-fix-r1.png"
             ],
             "imagePrivate": true,
-            "imageCommit": "a12fd457b0f87f3ec0ab81836ea9f5d1fbebb4b9",
+            "imageCommit": "732439651b8d02ad1c506abcccc01f046ee3b079",
             "imageCommits": [
-              "a12fd457b0f87f3ec0ab81836ea9f5d1fbebb4b9",
-              "d8eda1e8557c0613a805eda2db929c0fdca1b7fa"
+              "732439651b8d02ad1c506abcccc01f046ee3b079"
             ],
-            "fixedAt": "2026-07-14T23:46:04.072Z",
+            "fixedAt": "2026-07-14T19:33:44.181Z",
             "by": "shakeebshaan",
-            "appCommit": "72c28c95",
+            "appCommit": "a603be6",
             "tests": {
               "passed": true
             },
             "judge": {
-              "score": 90,
+              "score": 92,
               "bar": 90,
-              "note": "Full-stack feature deployed to prod + verified end-to-end live (backend request/detail/search round-trip + FE Request button -> detail sheet). Additive route, no existing flow touched; py-compile + tsc clean; gate green."
-            }
-          }
-        },
-        {
-          "at": "2026-07-15T12:33:10.560Z",
-          "event": "reopened",
-          "note": "verify by adding",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "The 'Request ... let the AI add it' button already appears when a food isn't found. Additionally, describing a meal in plain text ('Or describe this meal') now AI-fetches any items missing from the database instead of dropping them, so every food you list gets added - matched or AI-estimated. Only genuinely unrecognisable items are left out.",
-            "imagePath": "images/i-20260714-ddc2-fix-r2.png",
-            "imagePaths": [
-              "images/i-20260714-ddc2-fix-r2.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "82b6e5e509987f801f83b4fe00bd9b5de290ee74",
-            "imageCommits": [
-              "82b6e5e509987f801f83b4fe00bd9b5de290ee74"
-            ],
-            "fixedAt": "2026-07-15T11:12:50.877Z",
-            "by": "shakeebshaan",
-            "appCommit": "608f8f28",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 90,
-              "bar": 90,
-              "note": "Capture shows the AI Request button in the empty state; describe-meal now calls /foods/request for each unmatched item (capped, best-effort) and appends them."
+              "note": "Root-caused across both repos, minimal clamp fix matching the issue's own proposed fix, deployed+healthy, 25 tests + live eval prove the contradiction is gone. Not 100 because proof is a backend eval panel rather than a live wizard capture (documented: no active-plan account headless)."
             }
           }
         }
       ],
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "Do",
-      "reviewRepliedAt": "2026-07-14T23:15:51.268Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-15T13:58:02.753Z",
+      "resolvedAt": "2026-07-15T13:58:19.005Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T13:58:02.753Z"
+      "archivedAt": "2026-07-15T13:58:19.005Z"
     }
   ]
 }
