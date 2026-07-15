@@ -713,7 +713,15 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "This is 3 asks, and the main ones are a backend/product call I should not guess on. (1) Photos don't match the dish (milkshake showing burger/salad): a REAL defect but entirely in the backend image-provider chain (image_providers.py + image_prompts.py), not the FE - the FE already sends the correct dish name. Cause: TheMealDB has no drinks/desserts and the ingredient-thumb map is solid-food only, so drinks fall through to a weak Openverse full-text search padded with generic 'food dish meal' tokens, with no relevance check, returning arbitrary food photos. A surgical backend fix (lead the fallback query with the dish name, add beverage/dessert routing, word-boundary matching to stop egg-in-veggie false positives) would help but quality is provider-dependent/subjective; the robust fix is wiring the already-present paid OpenAI image generation into food_preview_options, which has real per-image cost. That cost/quality tradeoff is your decision. (2) 'Need more' options: backend allows up to 12 but the FE requests 6 with no 'load more' - small FE add if wanted. (3) 'Open gallery' to upload your own photo: a NEW feature - no upload/storage endpoint exists for meal-card photos (current one is curated-stock only). Which of these should I build?",
+      "reviewedAt": "2026-07-15T03:41:38.501Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "product",
+        "backend"
+      ]
     },
     {
       "id": "i-20260715-a1ec",
