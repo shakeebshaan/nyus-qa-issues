@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-eo41",
+      "createdAt": "2026-07-15T19:39:20.873Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[suggestion] Add an \"Eating out\" quick-log mode on Nutrition: instead of exact food search, let user type/say a restaurant dish name (e.g. \"Swiggy chicken biryani, medium\") or pick from a curated India eating-out list (biryani, thali, dosa, pizza, momos, etc.) and get an AI-estimated calorie/macro range (with a +/- confidence note) logged as one entry. Problem: FAQ already tells users \"estimate as best you can\" for restaurant meals (src/lib/faq-fallback.ts) but there is no dedicated flow — users must force-fit takeout into the packaged-food/barcode/recipe search UI, which has no restaurant coverage, so eating-out days (very common for India users, Swiggy/Zomato culture) get skipped or badly mis-logged, breaking streak + daily-report accuracy. Evidence: grep across src/ shows barcode scanner, food-photo snap, and recipe search all exist for home/packaged food but zero restaurant/eating-out affordance; only mention of \"restaurant\" in the whole app is FAQ copy. v1 scope: one \"Eating out\" entry point on the Nutrition add-meal sheet -> free-text/voice input (useSpeechInput already exists) -> LLM estimates calories/macros with a visible \"estimated\" badge -> logs as a normal meal entry, no new backend tables (reuse existing custom-meal logging path). Effort: ~1-2 days FE (new sheet + prompt) + backend LLM prompt addition, no schema change.",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260715-994c",
       "createdAt": "2026-07-15T18:53:52.670Z",
       "status": "fixed",
