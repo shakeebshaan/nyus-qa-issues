@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-a4e9",
+      "createdAt": "2026-07-15T15:10:52Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/social",
+      "description": "[bug-hunt] \"My Group\" leaderboard silently drops any partner-group member ranked outside the global top 50 (and hides your own rank card if you are below #50 globally).\n\nRoot cause (src/components/LeaderboardView.tsx): the board is built from a SINGLE call to leaderboardService.getLeaderboard(selectedType, selectedPeriod) at line 96, which uses the service defaults page=1, limit=50 and sends NO group parameter — so it returns only the GLOBAL top 50. The \"My Group\" tab is then produced (line 207-213) by intersecting those 50 rows with the partner-group member IDs (groupMemberIds) and re-ranking 1..n. There is no other query that fetches group members' scores/streaks. partnerGroups only supplies member IDs, not scores.\n\nConsequence: a partner-group member whose global rank is > 50 (very common with any real user base) never appears on \"My Group\". Worse, currentUserRankCard (line 221-228) in group scope is derived from groupResults.find(e=>e.is_current_user); if the current user is ranked > 50 globally, they are absent from the 50 rows, so me is undefined -> the \"Your Rank\" card is hidden, and if none of the group is in the top 50 the tab shows the empty state \"No group members on this board yet\" even though the group is active. The inline comment at line 189-190 claims this \"works correctly today\" — it does not for the common below-top-50 case.\n\nExpected: My Group ranks ALL members of the group against each other regardless of global rank; your own group rank always shows.\nActual: only members who happen to sit in the global top 50 are shown; everyone else (often including you) vanishes.\n\nRepro: 1) Be in a partner group. 2) Ensure you (or a group member) are ranked below #50 on the global board for the selected type (e.g. wellness_streak / all_time on a populated board). 3) Social -> Leaderboard -> tap \"My Group\". Observe missing members and/or missing \"Your Rank\" card / empty-state despite an active group.\n\nFix: pass a group filter to the /leaderboards endpoint (backend-side member filtering) OR fetch each group member's score and rank the full member set client-side, instead of intersecting the global top-50 page.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260715-r3pt",
       "createdAt": "2026-07-15T12:00:00.000Z",
       "status": "open",
