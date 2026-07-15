@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-c3d7",
+      "createdAt": "2026-07-15T15:58:34Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat grocery list renders BLANK category headers (Produce / Dairy / etc. section titles are empty).\n\nRoot cause (full-stack field-name contract mismatch):\n- Backend tool schema `show_grocery_list` (nyu_backend/app/services/coach_tools.py:332-352) defines each category object with the property `category_name`.\n- The block payload is the LLM tool-call arguments passed through VERBATIM by response_parser.py — both the non-streaming path (parse_openai_response, line ~179-185) and the streaming path (parse_streaming_response, line ~265-271) do `\"data\": data` with NO grocery normalization. Only `meal_logger` gets a field remap (`suggested_foods`->`suggestions`, lines 163-177); grocery was never given the equivalent.\n- The frontend expects `name`: type `GroceryCategory.name` (src/components/blocks/types.ts:238) and GroceryListBlock renders the section header as `{cat.name}` (src/components/blocks/GroceryListBlock.tsx:157). The normalizer at GroceryListBlock.tsx:67-72 spreads `...cat` but never maps `category_name`->`name`.\n\nSo a schema-compliant coach tool call emits `{category_name, items:[...]}`, the block reads `cat.name` = undefined, and every category `<h4>` header renders empty — the grocery list looks like ungrouped items under blank titles.\n\nThis is the SAME class as the already-fixed `suggested_foods`->`suggestions` mismatch (which was normalized for meal_logger in response_parser); grocery_list was missed. NOTE: distinct from tick #44 c7a3 (that was the standalone /shopping-list PAGE serializer) and from the tick #23 GroceryListBlock check-state-reset / currency-cosmetic notes.\n\nExpected: each grocery category section shows its name (Produce, Dairy, Grains, ...).\nActual: category header text is blank for every section.\n\nRepro: 1) Open Coach Chat (/coach-chat). 2) Ask the coach to show your grocery list (fires the `show_grocery_list` tool). 3) The rendered grocery block shows category sections with empty headers above the items.\n\nFix (pick one): normalize `category_name`->`name` for `grocery_list` in response_parser.py (both paths, mirroring the meal_logger precedent); OR rename the tool schema property to `name`; OR read `cat.category_name ?? cat.name` in GroceryListBlock + the type. Related (not filed): the block also carries no `id`, so per-item checkbox toggles never persist (GroceryListBlock.tsx:109 `if (data.id)` is always false) — appears intentional (checks are local UI), noted for context only.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false
+    },
+    {
       "id": "i-20260715-f6q1",
       "createdAt": "2026-07-15T15:41:57.000Z",
       "status": "open",
