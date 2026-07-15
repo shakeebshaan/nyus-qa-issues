@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-shr1",
+      "createdAt": "2026-07-15T00:00:00.000Z",
+      "status": "open",
+      "route": "/achievements",
+      "description": "[suggestion] Add a shareable milestone card to Achievements (level-up + badge unlock) and the personal-record moment on Activity, reusing the existing ShareButton/html2canvas pattern. Problem: the calm-gamification system (levels, ~40 badges, PR detection) already exists per CLAUDE.md and users hit real milestones, but there is zero way to share one — ShareButton is wired only into Fasting/WeeklyProgress/MonthlyProgress/DailyFocus (grep confirms it is absent from Achievements.tsx and any PR/SetLog flow), so a proud moment (new PR, level-up, gold badge) dies inside the app instead of becoming a WhatsApp-status/Instagram post — a major organic-acquisition channel for the India audience. Evidence: FastingShareCard already proves the exact pattern (capture a card, Capacitor Share sheet) works end-to-end for one surface; it just was never extended to gamification. v1 scope: on CelebrationOverlay (level-up) and AchievementProvider badge-toast, add a small \"Share\" affordance that renders a branded card (badge/level art + NYUS wordmark) via the same ShareButton component, no new capture surface needed for PRs yet (defer that to v2). Effort: ~0.5-1 day (reuse ShareButton + html2canvas, add 2 new card components, wire into 2 existing celebration components).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260715-c41d",
       "createdAt": "2026-07-15T20:22:21.539Z",
       "status": "fixed",
