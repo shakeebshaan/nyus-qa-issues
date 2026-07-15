@@ -553,31 +553,38 @@
         "effb48a0a5e7dd67d64ceb1125fd91953fe4833d"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Nutrition Refresh/Create-plan entry (/ai/create-diet-plan -> CustomDietPlanCreation) mounted CustomDietBuilder with no initialDays, so opening it to EDIT an existing plan showed an empty \"Build your meals - 0 built\" builder instead of your current meals (same bug the workout twin already had, i-20260618-e470). Fix: added the getCurrentDiet() prefill query + passed initialDays/initialRepeatMode, mirroring CustomizeDiet. Verified live on your account: the builder now opens prefilled with \"Milkshake protein\" (438 kcal) and macros filled (1762/3174 kcal) as editable slots. New users with no plan still get an empty builder.",
-        "imagePath": "images/i-20260714-626a-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260714-626a-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "73890bcc69efc19db4aed24ffb0e8b8b8b3c9718",
-        "imageCommits": [
-          "73890bcc69efc19db4aed24ffb0e8b8b8b3c9718"
-        ],
-        "fixedAt": "2026-07-14T23:35:14.330Z",
-        "by": "shakeebshaan",
-        "appCommit": "8d7c6425",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Live-verified on owner account: builder opens prefilled with the active plan's meals; direct mirror of shipped workout-twin fix; tsc clean; gate green."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-15T10:13:13.452Z",
+          "event": "reopened",
+          "note": "I want to edit the meals in the diet page from diet page use singular ui for all edits",
+          "previousFix": {
+            "description": "Root cause: the Nutrition Refresh/Create-plan entry (/ai/create-diet-plan -> CustomDietPlanCreation) mounted CustomDietBuilder with no initialDays, so opening it to EDIT an existing plan showed an empty \"Build your meals - 0 built\" builder instead of your current meals (same bug the workout twin already had, i-20260618-e470). Fix: added the getCurrentDiet() prefill query + passed initialDays/initialRepeatMode, mirroring CustomizeDiet. Verified live on your account: the builder now opens prefilled with \"Milkshake protein\" (438 kcal) and macros filled (1762/3174 kcal) as editable slots. New users with no plan still get an empty builder.",
+            "imagePath": "images/i-20260714-626a-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260714-626a-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "73890bcc69efc19db4aed24ffb0e8b8b8b3c9718",
+            "imageCommits": [
+              "73890bcc69efc19db4aed24ffb0e8b8b8b3c9718"
+            ],
+            "fixedAt": "2026-07-14T23:35:14.330Z",
+            "by": "shakeebshaan",
+            "appCommit": "8d7c6425",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 92,
+              "bar": 90,
+              "note": "Live-verified on owner account: builder opens prefilled with the active plan's meals; direct mirror of shipped workout-twin fix; tsc clean; gate green."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do it",
