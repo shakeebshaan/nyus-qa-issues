@@ -808,7 +808,15 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Fixed in FE commit 63dccac4 (pushed to main): the save handler was holding the 'Saving your plan...' overlay while it awaited 3 post-save cache refetches on top of the save POST. It now fires those without awaiting and navigates to /nutrition immediately, cutting the biggest avoidable chunk of the spinner time. Flagging instead of auto-resolving because a timing/perf fix can't be proven by a headless still screenshot - please confirm on an alpha build that the save feels fast. Note: a genuinely slow backend write (up to a 90s axios timeout plus a silent ~30s 409 retry backoff) can still feel slow; lowering the timeout + adding a 'still saving...' state is a larger separate change if you want it.",
+      "reviewedAt": "2026-07-15T03:40:56.475Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "fixed",
+        "needs-device"
+      ]
     }
   ]
 }
