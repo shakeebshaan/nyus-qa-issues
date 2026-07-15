@@ -46,7 +46,7 @@
     {
       "id": "i-20260715-3f7e",
       "createdAt": "2026-07-15T16:37:53.372Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/social",
       "description": "[bug-hunt] \"Started a challenge\" activity-feed events are silently dropped and never shown. When a challenge is created the backend writes an ActivityFeedEvent with event_type=\"challenge_created\" (nyu_backend/backend.py:11167) and the /social/activity-feed endpoint serves it to friends (backend.py:11329-11353). But ActivityFeedView filters events to only those present in EVENT_CONFIG (src/components/ActivityFeedView.tsx:75-77), and EVENT_CONFIG (ActivityFeedView.tsx:56-64) + EVENT_LABEL (:17-25) have NO \"challenge_created\" entry => every such event is filtered out. EXPECTED: a friend creating a challenge shows \"Started a challenge: X\" in the feed (backend comment at backend.py:11165 states the description key \"is what the frontend feed renders\", i.e. it was meant to display). ACTUAL: the event is persisted to the DB but never rendered for anyone. REPRO: A and B are friends. A creates any challenge. B opens Social > Activity feed — the challenge_created event is absent. FIX: add \"challenge_created\" to EVENT_CONFIG (e.g. Trophy icon) and EVENT_LABEL (\"started a challenge\") in ActivityFeedView.tsx; eventText() already returns data.description so the copy will render.",
       "author": "shakeebshaan",
@@ -59,8 +59,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: when a friend creates a challenge the backend logs a 'challenge_created' activity-feed event, but ActivityFeedView only renders event types present in EVENT_CONFIG and this type was missing from EVENT_LABEL + EVENT_CONFIG, so every such row was persisted yet silently filtered out. Fix: registered 'challenge_created' in the FeedEventType union, EVENT_LABEL ('started a challenge') and EVENT_CONFIG (Target icon); unknown/future types still drop rather than crash. The feed now renders 'Started a challenge: <name>' as the backend intended.",
+        "imagePath": "images/i-20260715-3f7e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-3f7e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1d665e30ed31d6d9a516067454c2d7af4fe2ac43",
+        "imageCommits": [
+          "1d665e30ed31d6d9a516067454c2d7af4fe2ac43"
+        ],
+        "fixedAt": "2026-07-15T18:19:06.791Z",
+        "by": "shakeebshaan",
+        "appCommit": "37e5fbce",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Recaptured Activity feed: challenge_created row 'Started a challenge: April Streak Challenge' renders with Target icon + timestamp; FE-only, tests pass"
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260715-f2a9",
