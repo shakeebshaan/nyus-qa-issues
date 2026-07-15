@@ -21124,30 +21124,57 @@
       "archivedAt": "2026-07-15T05:09:19.987Z"
     },
     {
-      "id": "i-20260714-vlog",
-      "createdAt": "2026-07-14T00:00:00Z",
-      "status": "resolved",
-      "route": "/nutrition",
-      "description": "[suggestion] Voice/text meal logging: speak or type what you ate in your own words and let the coach AI parse it into a food entry, instead of only manual fields or a photo. USER PROBLEM: Add Custom Meal (src/components/nutrition/CustomMealModal.tsx) only takes manual name/calories/macro fields today -- no free-text or voice path exists (grepped: no parse/describe/freeform handling in that modal, no SpeechRecognition usage anywhere in src). Snap-to-log (photo, i-20260706-sn4p) covers the visual case but not hands-busy moments (cooking, eating out, driving) or dishes that photograph poorly (mixed thali, soup, chai+snack). Competitors (MyFitnessPal voice log, Cal AI) ship this; NYUS has neither text-freeform nor voice entry. EVIDENCE: backend already has an LLM meal-estimation path for the photo flow (llm_service.py) -- the same prompt pattern (food description -> structured items+macros) can be reused for a transcript/typed string, so this is largely a UI + one new endpoint, not new AI infra. Also ties into the in-flight i18n directive: Hindi/Hinglish speech-to-text + parsing is a natural differentiator for the India-focused base. V1 SCOPE: in the Add Custom Meal sheet, add a \"Describe it\" text field (mic button using the Web Speech API on web / native STT on Capacitor where available, falling back to typed text) -> POST the transcript to a new /api/v1/nutrition/parse-meal-text endpoint -> LLM returns items+macros -> prefill the existing manual fields, editable before save (same edit-then-confirm pattern already used for photo logging). No new logging surfaces, no schema changes to DailyLog. EFFORT: ~1-2 days FE (mic capture + prefill wiring reusing existing food-item form) + ~0.5 day BE (one endpoint, reuse llm_service prompt scaffolding).",
+      "id": "i-20260714-7de8",
+      "createdAt": "2026-07-14T17:41:59.796Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
       "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
+      "imagePath": "images/i-20260714-7de8.jpg",
+      "imageCommit": "22c0cdc1c9a5ee39df520f26fc53d277224c298c",
+      "imagePaths": [
+        "images/i-20260714-7de8.jpg"
       ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
+      "imageCommits": [
+        "22c0cdc1c9a5ee39df520f26fc53d277224c298c"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": {
+        "description": "Owner 'Fix all' -> safe defaults 1b:A + 2:A. (1b:A) A photo control on the meal card hero opens a 'Choose a photo' sheet of curated stock food photos (new backend /ai/meal-image-options via TheMealDB/Openverse, no upload) — picking one sets the meal image (deployed + verified on prod: 6 real stock URLs). (2:A) 'Save to my meals' persists a built meal (personal only, on-device, no cross-user exposure) and 'My meals' reuses it into any slot — also closes i-20260714-fav1. Files: MealSlotCard.tsx, new src/lib/meal-favorites.ts (unit-tested 4/4), custom-plan.service.ts, backend image_providers.py + plan_builder_routes.py. Earlier wrong-image root cause (Part 1) was already fixed/deployed.",
+        "imagePath": "images/i-20260714-7de8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-7de8-fix-r1.png",
+          "images/i-20260714-7de8-fix-r1-2.png",
+          "images/i-20260714-7de8-fix-r1-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "cb64e8ae104073a61bb835e899b61dfe0e41b802",
+        "imageCommits": [
+          "cb64e8ae104073a61bb835e899b61dfe0e41b802",
+          "05ed74f8ca44949b2f76039c7004d1d8b2274c2f",
+          "8385e381807ace2bf758c3fd8bfdc617c52cf377"
+        ],
+        "fixedAt": "2026-07-15T00:25:29.024Z",
+        "by": "shakeebshaan",
+        "appCommit": "8c795c1d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Both owner-selected scopes shipped, deployed, and verified: 1b:A picker shows a real curated stock-photo grid (prod endpoint returns 6 URLs); 2:A save->list->reuse proven end-to-end on the meal card; new util unit-tested 4/4. Deducted for on-device-only favorites (no cross-device sync) and picker needs auth in-app."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Already shipped — this is a stale-grep duplicate. Voice + free-text meal logging already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): a 'Describe what you ate' free-text textarea (line ~526) PLUS a mic dictation button wired to useSpeechInput with app-language locale en-IN/hi-IN (lines 79-83, 533-544) — so the suggestion's claim 'no SpeechRecognition usage anywhere in src' and 'no free-text path' is outdated. Photo logging (i-20260714-ph07 dup) and recent-meal re-log (i-20260714-rp2m dup) are in the same modal. Recommend archiving as duplicate/done. If a NEW dedicated /nutrition/parse-meal-text NLP endpoint (parse free prose into structured multi-item macros, vs today's single free-text entry) is wanted as a v2 upgrade, that's a separate product call — flag it fresh.",
-      "reviewedAt": "2026-07-15T09:35:44.078Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-15T10:09:12.568Z",
-      "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T10:09:12.568Z"
+      "reviewReply": "Fix all",
+      "reviewRepliedAt": "2026-07-14T23:15:26.126Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-15T10:10:08.203Z",
+      "archivedAt": "2026-07-15T10:10:08.203Z"
     }
   ]
 }
