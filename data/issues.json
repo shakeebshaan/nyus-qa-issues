@@ -556,7 +556,10 @@
           ]
         }
       ],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED + verified (committed 61d661b3, pushed to main) — flagging only because the headless test gate (full npm test + bar 100) can't pass here, not an owner blocker. Two sub-asks addressed: (1) 'Where is the done button' — the inline minus/plus minutes stepper auto-saves and now flashes the row's minutes teal on save (aria-live), so no Done button is needed (prior commit). (2) Reopen 'logo should be different' — Treadmill and Standing both drew the same bicycle because the icon keyed only on activity_type ('cardio'). Added iconForActivity(name,type): treadmill/run -> Footprints, cycle/bike -> Bike, walk/stand -> PersonStanding, swim -> Waves, weights -> Dumbbell, etc., with the type icon as fallback. Verified by rendering the real DailyActivityCard in a Vite harness seeded with Treadmill/Standing/Cycling/Swimming rows: screenshot shows four DISTINCT icons (feet / person / bike / waves). Recommend: scope data/loop.json testCommand to a unit subset so headless ticks can resolve, then Resolve.",
+      "reviewedAt": "2026-07-15T10:40:24.240Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260715-32fe",
