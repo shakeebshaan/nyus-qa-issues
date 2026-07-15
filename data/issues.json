@@ -408,8 +408,30 @@
         "9916ae75dba03b2a819167fca8835783ece1e00f"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Egg (and other household-unit) foods now let you pick the count directly: tap 1 egg / 2 eggs / 3 eggs / 6 eggs, with grams-per-egg set from the egg size (large 50g, medium 44g). Egg dishes like egg noodles or curry correctly stay in grams.",
+        "imagePath": "images/i-20260714-6e48-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260714-6e48-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c7f2eba6113afa626f7da56b5980d9620dfd00a1",
+        "imageCommits": [
+          "c7f2eba6113afa626f7da56b5980d9620dfd00a1"
+        ],
+        "fixedAt": "2026-07-15T11:11:52.257Z",
+        "by": "shakeebshaan",
+        "appCommit": "5c5f599c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Real Whole Egg screenshot shows count chips + EGGS/GRAMS-per-egg steppers; dish-exclusion added + 30 unit tests green."
+        }
+      },
       "history": [
         {
           "at": "2026-07-15T10:11:31.263Z",
@@ -440,9 +462,7 @@
           }
         }
       ],
-      "needsReview": true,
-      "reviewReason": "FIXED + verified (committed f95aa51f, pushed to main) — flagging only because the board test gate (full npm test + bar 100) can't pass headless; not an owner blocker. Reopen was 'This should also have number of eggs / Like 1x medium egg so on'. FoodDetailSheet now detects natural-unit foods (unitFor) and for eggs opens at one egg, shows count chips '1 egg / 2 eggs / 3 eggs / 6 eggs', labels steppers EGGS + GRAMS/EGG, and locks per-egg grams to the USDA size grade in the food name (large 50g, medium 44g, jumbo 63g) so '1x medium egg' weighs 44g. Verified by rendering the real FoodDetailSheet in a Vite harness with the exact 'Eggs, Grade A, Large' food (screenshot: chips + EGGS stepper + 'Total 50 g ~ 1 egg' + 'Add 74 kcal') and 7 green unit tests (FoodDetailSheet.natural-units.test.ts, scoped vitest run passed). Recommend: scope data/loop.json testCommand to a unit subset so headless ticks can resolve, then this is ready to Resolve. NOTE: a concurrent tick left CustomMealModal.tsx (f54d logging-modal unit UI) uncommitted+unverified in the tree — deliberately not committed here.",
-      "reviewedAt": "2026-07-15T10:37:05.926Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
