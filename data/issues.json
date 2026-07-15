@@ -4,8 +4,30 @@
     {
       "id": "i-20260715-8f4c",
       "createdAt": "2026-07-15T00:56:47.000Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: MealSlotCard 'Saved' state was derived purely from the meal NAME, so after editing a saved meal the badge stayed 'Saved', the toggle ran the UNSAVE branch, and 'My meals' kept the stale pre-edit copy. Fix: savedDirty = saved && savedMealNeedsUpdate(meal) (meal-favorites.ts compares ingredient food_id/quantity_g, count and image vs the stored copy — reacts to quantity edits too), and the button now shows a third 'Update saved' state that re-persists the edits in place (saveMeal upserts by name id). Committed 8d1718ea.",
+        "imagePath": "images/i-20260715-8f4c-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260715-8f4c-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4ffce5a9d5757520e63ea79ed943875cd3a87ef0",
+        "imageCommits": [
+          "4ffce5a9d5757520e63ea79ed943875cd3a87ef0"
+        ],
+        "fixedAt": "2026-07-15T13:48:08.204Z",
+        "by": "shakeebshaan",
+        "appCommit": "608f8f28",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Root fix: dirty-state derived from actual ingredient diff (not name), with an explicit 'Update saved' re-persist affordance — no more silent stale reuse. Proof is a faithful 3-state render (live capture of a diverged saved meal needs a seeded builder draft). -9 for the illustrated vs live capture."
+        }
+      },
       "history": [
         {
           "at": "2026-07-15T10:15:55.339Z",
