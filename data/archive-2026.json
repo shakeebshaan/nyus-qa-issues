@@ -21124,29 +21124,35 @@
       "archivedAt": "2026-07-15T05:09:19.987Z"
     },
     {
-      "id": "i-20260715-cyc9",
-      "createdAt": "2026-07-15T05:39:46.324Z",
+      "id": "i-20260715-717c",
+      "createdAt": "2026-07-15T03:09:39.485Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260715-717c.jpg",
+      "imageCommit": "4c2963da5d456993b6a5766e7db8237c14de5239",
+      "imagePaths": [
+        "images/i-20260715-717c.jpg"
+      ],
+      "imageCommits": [
+        "4c2963da5d456993b6a5766e7db8237c14de5239"
+      ],
+      "imagePrivate": true,
       "status": "resolved",
       "fix": null,
       "history": [],
-      "route": null,
-      "description": "[suggestion] Persist the menstrual-cycle anchor (last period date + cycle length) to the backend so the AI coach reasons about cycle phase server-side, not just the local phase card. USER PROBLEM: src/lib/cycle.ts ships a device-local (localStorage-only) phase card per QA i-20260710-cyc1 explicitly deferring server sync — its own top comment says the backend coach prompts already reason about follicular/luteal phases and ship phase-specific diet content, but never receive a real anchor date, so that coach logic is dead code today. Any female user who sets her cycle in the app gets a quiet phase pill on one screen but zero phase-aware coaching, meal, or workout-intensity adjustments elsewhere (chat, diet plan, activity plan) and it resets if she reinstalls or switches device. EVIDENCE: cycle.ts lines 9-16 (in-code TODO), dormant user_profiles.menstrual_cycle_tracking / cycle_length_days columns already exist per the same comment, no last_period_date column yet. V1 SCOPE: add last_period_date column (migration), a PUT endpoint to save the 3 fields from the existing local UI, and wire llm_prompts.py to read it instead of the current no-anchor fallback; no new UI needed, the phase card already collects the data locally, just add a one-time upload + periodic resync. EFFORT: small-medium (1 migration + 1 endpoint + 1 backend prompt-context read + FE save call) — this is closing a gap the codebase already flagged, not net-new UI work.",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
       "needsReview": true,
-      "reviewReason": "SHIPPED (frontend 0bdda911 + backend 36b1990 deployed to prod; migration 20260715_001 applied live, /health OK). Closed the codebase-flagged gap end-to-end: (1) added nullable user_health_profiles.last_period_date DATE column; (2) new app/services/cycle_phase.py computes the phase server-side (pure mirror of src/lib/cycle.ts, +7 unit tests green) honoring the no-prediction promise (a stale anchor is skipped, never fabricated); (3) PUT /profile/health now saves menstrual_cycle_tracking + cycle_length_days + last_period_date, and GET /profile serializes them; (4) context_assembler injects a 'Menstrual cycle phase: <phase> (day N of M)' line into the coach USER PROFILE block so follicular/luteal guidance fires on real data; (5) CyclePhaseCard uploads the anchor on save (best-effort, offline-safe) and hydrates from the server cross-device when the local store is empty. No new UI (the existing card collects the data). Flagging rather than board-resolving ONLY because the testGate's full 'npm test' (e2e/Playwright/contract/a11y) is unsatisfiable in the headless CI env; the fix's own scoped tests pass (cycle_phase 7, routes_profile 28, context_assembler 48; FE tsc clean). To auto-resolve future fixes, consider scoping loop.json testCommand to a unit subset. Please confirm the phase-aware coaching on an alpha build.",
-      "reviewedAt": "2026-07-15T08:41:04.829Z",
+      "reviewReason": "Fixed in FE commit 63dccac4 (pushed to main): the save handler was holding the 'Saving your plan...' overlay while it awaited 3 post-save cache refetches on top of the save POST. It now fires those without awaiting and navigates to /nutrition immediately, cutting the biggest avoidable chunk of the spinner time. Flagging instead of auto-resolving because a timing/perf fix can't be proven by a headless still screenshot - please confirm on an alpha build that the save feels fast. Note: a genuinely slow backend write (up to a 90s axios timeout plus a silent ~30s 409 retry backoff) can still feel slow; lowering the timeout + adding a 'still saving...' state is a larger separate change if you want it.",
+      "reviewedAt": "2026-07-15T03:40:56.475Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-15T10:12:04.092Z",
+      "tags": [
+        "fixed",
+        "needs-device"
+      ],
+      "resolvedAt": "2026-07-15T10:13:20.815Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T10:12:04.092Z"
+      "archivedAt": "2026-07-15T10:13:20.815Z"
     }
   ]
 }
