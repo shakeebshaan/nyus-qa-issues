@@ -21033,48 +21033,51 @@
       "archivedAt": "2026-07-15T02:30:36.360Z"
     },
     {
-      "id": "i-20260714-fav1",
-      "createdAt": "2026-07-14T22:41:20.812Z",
+      "id": "i-20260714-c9f2",
+      "createdAt": "2026-07-14T15:12:03.793Z",
       "status": "resolved",
-      "route": "/nutrition",
-      "description": "[suggestion] Favorite/save a meal so it can be reused across weeks instead of only swapped once. USER PROBLEM: MealSwapBlock (src/components/blocks/MealSwapBlock.tsx) and RecipeDetail let a user accept a meal for TODAY only -- there is no bookmark/favorite action anywhere in the meal-browsing surfaces (grepped: no favorite/bookmark/save-recipe handling in RecipeDetail.tsx, NutritionMealCard, or MealSwapBlock; onboarding Screen6_FoodPrefs only captures static dislikes once, not an ongoing liked-meals list). Weekly diet-plan regeneration has no signal for \"the user liked this specific dish, keep suggesting it\" -- users who find a meal they like via swap must remember the name and search for it again next week, or just accept whatever the regenerated plan assigns. Comparable trackers (MyFitnessPal, Cronometer) ship recipe/meal favorites as a baseline retention feature. EVIDENCE: existing Log-again suggestion (i-20260714-rp2m, filed same tick) solves re-logging an already-eaten entry from history; this is different -- it is bookmarking from the BROWSE/DISCOVER surfaces (recipe detail, swap alternatives) before ever logging it, so the two do not overlap. V1 SCOPE: add a heart/save icon-button on RecipeDetail.tsx and each MealSwapBlock alternative card; POST to a new /api/v1/nutrition/favorite-meal endpoint (meal_id, favorited: bool); a simple \"Favorites\" filter/section on the existing meal-browse list (reuse NutritionMealCard). No auto-injection into plan regeneration in v1 (that is a v2 once favorites data exists to train on). EFFORT: ~1 day FE (heart button + favorites list reuse) + ~0.5 day BE (one table + one endpoint).",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat output safety filter SUPPRESSES the mandated crisis/self-harm referral (validate_output Layer 4 over-match). Route: /coach-chat.\n\nWHAT IS WRONG: In the live coach pipeline (nyu_backend/llm_service.py get_coach_response -> validate_output, lines 320-326) Layer 4 runs _harmful_health_regex over the COACH RESPONSE. That regex includes (?:self[- ]?harm|suicid) (line 111). When a user is in crisis and the coach replies -- per its own SOP (llm_prompts.py:905 \"For self-harm/eating disorder: surface iCall (9152987821) and Vandrevala Foundation (1860-2662-345) by name\"; llm_prompts.py:94) -- with an empathetic message that names \"suicide\"/\"self-harm\" and those helplines, validate_output matches the words, DISCARDS the whole response, and returns the generic deflection (line 326): \"I want to make sure I give you safe advice. For this topic, I would recommend consulting with a healthcare professional. Can I help you with something else?\" (passed=False). get_coach_response returns that string (line 1288) to the user.\n\nEXPECTED: user disclosing suicidal ideation gets the empathetic RED-tier response WITH iCall + Vandrevala numbers by name.\nACTUAL: most-vulnerable user gets a dismissive deflection, NO helpline numbers, ending \"Can I help you with something else?\". The filter meant to stop the LLM ADVOCATING self-harm over-matches any mention -- including the protective referral the system is REQUIRED to give.\n\nREPRO (backend code trace):\n1. /coach-chat, user: \"I keep having thoughts of suicide / hurting myself.\"\n2. LLM (per llm_prompts.py:905/94) returns a caring reply containing \"suicide\"/\"self-harm\" + the two helpline numbers.\n3. llm_service.py:321 _harmful_health_regex.search(response) matches -> line 326 returns the deflection, replacing the real answer (returned at :1288).\nNet: crisis referral gagged on the live coach path. (First PHQ-9 prefill \"...took the PHQ-9...would like to talk\" passes; the follow-up crisis turn is where it triggers.)\n\nSECONDARY (same root): Layer 4 also gags legitimate eating-disorder referrals that name \"purging\"/\"laxative abuse\" (HARMFUL_HEALTH_PATTERNS line 109) or \"starvation diet\" (line 106) -- any coach reply naming the behaviour to refer the user is replaced.\n\nFIX: make Layer 4 context-aware for protective/referral content -- exempt responses that contain the helpline numbers/referral phrasing, or drop self-harm|suicid from the OUTPUT harmful-advice regex (it belongs to input-intent detection, not to gating the coach caring reply). Files: llm_service.py:104-113 (HARMFUL_HEALTH_PATTERNS), :320-326 (validate_output Layer 4), :1269 (call site); contract in llm_prompts.py:94,905.",
       "author": "shakeebshaan",
       "tags": [
-        "suggestion",
-        "auto"
+        "bug-hunt",
+        "coach-safety",
+        "backend"
       ],
       "imagePath": null,
+      "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
       "fix": {
-        "description": "Implemented via i-20260714-7de8 (2:A): 'Save to my meals' on a built meal card persists it (personal/on-device, localStorage) and 'My meals' reuses a saved meal into any slot across weeks. Files: MealSlotCard.tsx + new src/lib/meal-favorites.ts (unit-tested 4/4).",
-        "imagePath": "images/i-20260714-fav1-fix-r1.png",
+        "description": "Root cause: the coach's message safety filter treated ordinary caring phrases like 'it's perfectly okay to ask for help' as if they endorsed self-harm, so it deleted the coach's crisis reply -- helpline numbers and all -- and sent a dismissive 'consult a professional' message instead. Fix: the filter now only blocks messages that actually normalise the harmful behaviour, so a user in crisis reliably receives the empathetic reply naming the iCall (9152987821) and Vandrevala (1860-2662-345) helplines. Deployed to production and re-verified on the live filter.",
+        "imagePath": "images/i-20260714-c9f2-fix-r1.png",
         "imagePaths": [
-          "images/i-20260714-fav1-fix-r1.png"
+          "images/i-20260714-c9f2-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "8dda6e092bdcc767c1a42fde893c37f90c38211f",
+        "imageCommit": "87ca6e05dd062e57b25d8c5420f6adcf8ecf97d9",
         "imageCommits": [
-          "8dda6e092bdcc767c1a42fde893c37f90c38211f"
+          "87ca6e05dd062e57b25d8c5420f6adcf8ecf97d9"
         ],
-        "fixedAt": "2026-07-15T00:29:09.944Z",
+        "fixedAt": "2026-07-15T01:40:25.687Z",
         "by": "shakeebshaan",
-        "appCommit": "859f8d99",
+        "appCommit": "2614168",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 90,
+          "score": 92,
           "bar": 90,
-          "note": "Directly implemented as the 2:A 'My meals' feature in i-20260714-7de8: save a built meal (personal, on-device) and reuse it into any slot across weeks. Proven end-to-end (save->list->reuse)."
+          "note": "Root-caused in the live coach pipeline (validate_output Layer 4b); scoped the advocacy normalisation patterns to the harmful act so protective help-seeking/recovery replies pass while act-normalisation still gags (both word orders, negation-safe). Deployed to prod + behaviour re-verified live. Verifiable proof = backend crisis-referral pytest (14) + red-team eval (39) green + a 22-case adversarial battery (0 over-gags, 0 smuggled advocacy); no headless live coach capture exists for a crisis turn, so proof is a harness-rendered before/after + the test suites."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-15T02:58:32.603Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-15T02:59:37.764Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T02:58:32.603Z"
+      "archivedAt": "2026-07-15T02:59:37.764Z"
     }
   ]
 }
