@@ -4,7 +4,7 @@
     {
       "id": "i-20260715-c41d",
       "createdAt": "2026-07-15T20:22:21.539Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/social/friend-requests",
       "description": "[bug-hunt] Canceling a friend request you SENT always fails with an \"Unauthorized\" error — the sent request can never be withdrawn.\n\nRepro:\n1. Go to /social/search, send a friend request to any user (they now see it as pending; you see it under Sent).\n2. Open /social/friend-requests → Sent tab.\n3. Tap Cancel on the request you sent.\n\nExpected: the sent request is withdrawn and disappears from the Sent list.\nActual: a red toast \"Couldn't cancel request — Unauthorized\" appears and the request stays. It can NEVER be canceled from the app.\n\nRoot cause (cross-repo, confirmed by code trace):\n- FE FriendRequests.tsx cancelMutation (Sent tab) calls socialService.rejectFriendRequest(friendship_id) -> POST /friends/reject/<id> (src/pages/FriendRequests.tsx:105-108, src/services/social.service.ts:134).\n- Backend RejectFriendRequestResource (backend.py:10808-10810) authorizes ONLY the addressee: if friendship.addressee_id != user_id -> return 403 Unauthorized.\n- But a SENT request has requester_id == current user (FriendRequestsSentResource filters requester_id==user_id, backend.py:10629-10632). The sender is the requester, never the addressee -> the addressee check fails -> 403 on every cancel.\n- The Received-tab Reject works because there the current user IS the addressee. Only the Sent-tab Cancel is dead.\n\nFix: cancel a sent request via a route that authorizes the requester — e.g. FE cancelMutation should call socialService.unfriend(friendship_id) (DELETE /friends/<id>, backend UnfriendResource:10832-10834 already allows requester OR addressee), OR backend RejectFriendRequestResource should also permit friendship.requester_id == user_id (delete the pending row). Prefer the FE swap to unfriend for cancel.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: Sent-tab Cancel called POST /friends/reject/<id>, which RejectFriendRequestResource authorizes ONLY for the addressee; a sent request's current user is the requester, so it always 403'd 'Unauthorized' and could never be withdrawn. Fix: cancelMutation in src/pages/FriendRequests.tsx now calls socialService.unfriend (DELETE /friends/<id>) — UnfriendResource already permits requester OR addressee and deletes the pending row. Verified: mocked one pending sent request (QA acct has none live headless); network trace confirms Cancel now fires DELETE /api/v1/friends/<id> and the UI shows the 'Request cancelled' success toast (screenshot) instead of the red 'Couldn't cancel — Unauthorized'.",
+        "imagePath": "images/i-20260715-c41d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-c41d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1e92daadc877b00f4537c361eedb5b773b6826c1",
+        "imageCommits": [
+          "1e92daadc877b00f4537c361eedb5b773b6826c1"
+        ],
+        "fixedAt": "2026-07-15T20:33:33.455Z",
+        "by": "shakeebshaan",
+        "appCommit": "34db1313",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Exact root cause fixed (addressee-only authz vs requester-sent request); minimal 1-line FE swap to the requester-authorized unfriend route; verified end-to-end via network trace (Cancel now fires DELETE /friends/<id>, not the 403 reject route) + success-toast screenshot. Not 100: live proof used a mocked sent request since the QA acct has no real pending sent request headless."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260715-eo41",
