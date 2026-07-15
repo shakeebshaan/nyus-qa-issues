@@ -775,11 +775,12 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "SHIPPED + DEPLOYED the photo-mismatch fix (backend commit 6b21466, live on prod now). Root cause: a drink's meal-photo query was built as 'milkshake food dish' and Openverse's 'food dish' token biases hard to solid plates, so it returned a burger + salads (reproduced live - your exact screenshot). Fix: drink names now query '<name> drink', and food-noun matching is word-boundary (so 'egg' no longer matches 'veggie'/'eggplant' and 'oat' not 'goat'). Verified live against the deployed backend: the 'Chocolate Milkshake' gallery now returns real milkshakes/shakes, not burgers/salads. TWO items remain and are genuinely your call, not bugs I should guess on: (1) 'Open gallery' to upload YOUR OWN photo is a NEW feature - there is no upload/storage endpoint for meal-card photos today (current picker is curated-stock only), so it needs a storage + product decision. (2) Making ANY drink/dish photo bulletproof would mean wiring the PAID OpenAI image generation into the gallery, which has per-image cost and is currently constrained by your 2026-06-14 directive (paid image API = coach portraits only, never a meal failsafe) - I won't flip that without your say-so. Minor: the gallery fetches 6 options but the backend already supports up to 12, so a 'Load more' is a small add if you want it.",
-      "reviewedAt": "2026-07-15T04:36:28.082Z",
+      "reviewReason": "Update on the three things in your note. (1) MISMATCH (\"this is milkshake and non matched\"): fixed + live on prod (backend 6b21466) - drink names now query \"<name> drink\" and food-noun matching is word-boundary, so a milkshake gallery no longer returns burgers/salads. (2) \"NEED MORE\": now shipped - the \"Choose a photo\" picker offers up to 12 options instead of 6 (frontend 311508ab on main; backend 91c884c deployed - widened the Openverse pool from 8 to 16 so 12 actually fills after de-dup). You will see it on the next alpha build. (3) \"OPEN GALLARY\" (upload YOUR OWN photo from your device): this is the one item I am NOT guessing on - it is a new feature, not a bug. The picker is curated stock only; there is no photo-upload/storage endpoint today, and wiring the paid image API in as a meal failsafe is blocked by your 2026-06-14 directive (paid images = coach portraits only). Do you want me to build device-upload (needs a storage decision), or leave the picker curated-stock? That is the only open decision here.",
+      "reviewedAt": "2026-07-15T05:52:40.674Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "backend",
+        "frontend",
         "partially-fixed",
         "product"
       ]
