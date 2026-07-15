@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-d4bf",
+      "createdAt": "2026-07-15T21:09:29.145Z",
+      "status": "open",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat macro_edit_request block crashes the ENTIRE chat when the LLM payload omits current_macros. src/components/blocks/MacroEditRequest.tsx dereferences data.current_macros.calories.target UNGUARDED in its useState initializer (lines 23-28) and again in currentValues (lines 50-55). Block data is untrusted LLM/backend output; EVERY sibling block guards this exact shape-drift class — MacroTargetCard.tsx uses (data.calories ?? z).target with the comment \"a required nested object can be missing on shape drift ... instead of crashing the whole chat screen\"; MicroTargetCard/MealSwapBlock/WorkoutPlanCard/MealPlanCard all normalize via Array.isArray/??. MacroEditRequest is the ONLY block that does not. InteractiveBlock.tsx has NO per-block ErrorBoundary (only Suspense for lazy-load) and there is no ErrorBoundary anywhere in src/components/coach or CoachChat.tsx, so the render throw propagates up and blanks the whole coach-chat view. EXPECTED: a partial/malformed macro_edit_request renders a degraded card (zeroed macros) like MacroTargetCard. ACTUAL: React render throws \"Cannot read properties of undefined (reading calories)\" (node-verified) → chat crashes. REPRO: coach emits a macro_edit_request block whose current_macros is null/missing (or whose current_macros.calories is missing) → chat view crashes on mount. Block is still registered (BLOCK_COMPONENTS line 42) though noted \"replaced by meal_swap\". FIX: default current_macros + each macro leaf to {target:0} mirroring MacroTargetCard z-guard, OR early-return a degraded card when current_macros is absent.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260715-shr1",
       "createdAt": "2026-07-15T00:00:00.000Z",
       "status": "fixed",
