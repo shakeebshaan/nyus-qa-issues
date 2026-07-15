@@ -213,7 +213,7 @@
     {
       "id": "i-20260714-d1hk",
       "createdAt": "2026-07-14T05:40:39.052Z",
-      "status": "open",
+      "status": "fixed",
       "route": null,
       "description": "[suggestion] Day-1 activation push: send one notification ~20-22h after onboarding finalize showing the AI-built plan is ready to log today (deep-link to first meal/workout), before any inactivity drip fires. User problem: growth-insights report (i-20260712-a91c) shows retention stuck at 0% on a growing cohort and WAU collapsing -86% over 2 reports, yet retention_sequences.py only fires reminders starting at days_inactive=3 (backend/app/services/retention_sequences.py) and a day-7 weekly_report — there is no Day-0/Day-1 touchpoint pulling a fresh signup back in while the onboarding plan is still top-of-mind. Evidence: onboarding already auto-starts a 30-day trial and always-custom builds a full plan (docs/APPLICATION_FLOW.md onboarding section) so day-1 content genuinely exists to show off; comparable trackers (HealthifyMe, Cult.fit) send a first-24h activation push as standard. V1 scope: one new LIFECYCLE_SEQUENCE entry {hours_since_signup: 20, type: activation, title/body referencing todays first planned meal or workout} in retention_sequences.py, reuse existing notification dispatch + frequency-cap plumbing, deep-link to /nutrition or /activity. Effort: small (~1 backend job + 1 notif template, no new infra).",
       "author": "shakeebshaan",
@@ -225,11 +225,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Implemented owner-approved option B: a net-new Day-1 activation push. New run_activation_push() (app/services/retention_sequences.py) sends one 'Your plan is ready to log' notification 20-30h after signup, gated on onboarding_complete with one-time title dedup, deep-linking to /nutrition (first meal) BEFORE the day-3 inactivity drip — reusing send_notification prefs/quiet-hours/frequency caps. New 'activation_push' scheduler job (backend.py, CronTrigger */3h) so the window is always caught. Deployed to prod (backend 5d7cdea; job 'Day-1 Activation Push (every 3h)' registered; health OK). 7 new unit tests, 26 pass. Screenshot is a config/verification card (scheduled server-side push, no single UI moment).",
+        "imagePath": "images/i-20260714-d1hk-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260714-d1hk-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "188dc02cd201d88aac09833f088ae18947050528",
+        "imageCommits": [
+          "188dc02cd201d88aac09833f088ae18947050528"
+        ],
+        "fixedAt": "2026-07-15T13:44:31.462Z",
+        "by": "shakeebshaan",
+        "appCommit": "608f8f28",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Delivers owner's explicit choice B exactly: hours-based ~20-30h push, deep-linked, before day-3 drip, one-time dedup, reuses caps. Deployed+verified on prod, 26 tests pass. -8: meal-name personalization deferred (deep-links to /nutrition generically); can enrich next."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Partial correction + product call. A Day-0 AND Day-1 activation drip ALREADY exist in app/services/retention_sequences.py ACTIVATION_DRIPS (day 0 'Welcome to NYUS!', day 1 'Start your streak / Log today to begin your journey'), so the premise 'no Day-0/Day-1 touchpoint' is not fully accurate. The genuine gap is that the existing day-1 drip is GENERIC and does not surface the freshly-built AI plan / deep-link to the first meal or workout. Two options: (A) low-risk, non-additive — upgrade the existing day-1 drip copy to be plan-aware + carry a meta_data deep-link (same slot/cadence, no net-new push); (B) the suggested net-new ~20-22h hours-based push (needs an hours_since_signup trigger + more frequent job runs + per-user plan lookup, bigger than 'one entry'). Because this fires an outward-facing notification to all new users, it is an owner product call: confirm (A) vs (B) and the copy, and I will implement + deploy. Recommend (A).",
-      "reviewedAt": "2026-07-15T09:36:31.838Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "B",
       "reviewRepliedAt": "2026-07-15T10:15:47.491Z",
