@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-8f4c",
+      "createdAt": "2026-07-15T00:56:47.000Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/ai/create-diet-plan",
+      "description": "[bug-hunt] Editing an already-saved meal in the diet builder never updates its saved copy — the 'Saved' badge stays lit while 'My meals' keeps the stale pre-edit version, silently discarding your edits when you reuse it.\n\nROUTE: the meal card (src/components/plan-builder/MealSlotCard.tsx) in the diet builder — /ai/create-diet-plan (CustomDietPlanCreation), /customize-diet, and the onboarding always-custom CustomDietBuilder.\n\nROOT: the card's 'Saved' state is derived PURELY from the meal NAME (MealSlotCard.tsx:312-314, `setSaved(isMealSaved(meal.name))`; meal-favorites.ts identity = normalized name), and saveMeal() has a SINGLE call site (MealSlotCard.tsx:322) inside the not-saved branch of handleToggleSave (315-325). Once a meal is saved, `saved` stays true across any ingredient edit, so tapping the button runs the UNSAVE branch instead of re-persisting, and nothing ever rewrites the stored copy. Quantity edits don't even re-run the effect (deps are [meal.name, meal.ingredients.length], and changing a quantity leaves the count unchanged).\n\nEXPECTED: after I edit a saved meal, either the saved copy updates in place, or the badge shows the current state isn't saved so I can re-save.\nACTUAL: badge stays 'Saved' but the stored copy is frozen at save-time; the only way to persist edits is unsave-then-save (two taps, non-obvious), and a user who trusts the 'Saved' badge never does that.\n\nREPRO (diet builder, a meal with ingredients): 1) build 'Oats Bowl' (oats 40g + milk + banana), tap 'Save to my meals' → badge shows 'Saved'. 2) bump oats 40g→80g (or add an ingredient). Badge still 'Saved'. 3) open 'My meals' → 'Use' the saved 'Oats Bowl' → it applies the ORIGINAL 40g version; the 80g edit is gone, no warning.\n\nCONFIRMED by code trace (single saveMeal call site + name-only saved-state; grep confirms saveMeal( appears once in src). FIX: on save, re-persist whenever the built meal differs from the stored copy (compare ingredients), or add an 'Update saved meal' affordance when a saved meal has unsaved edits. Fresh feature (commit 8c795c1d, QA 7de8/fav1 scope 2:A) — first bug-hunt of it; not on the board.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
+      "id": "i-20260715-2a7e",
+      "createdAt": "2026-07-15T00:56:47.000Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/ai/create-diet-plan",
+      "description": "[bug-hunt] The meal-card 'Choose a photo' picker caches its stock-photo options for the FIRST meal name it was opened with and never refreshes them after the meal is renamed — so reopening it offers photos for the OLD name.\n\nROUTE: the meal card photo picker (src/components/plan-builder/MealSlotCard.tsx) in the diet builder — /ai/create-diet-plan, /customize-diet, onboarding CustomDietBuilder.\n\nROOT: openImagePicker (MealSlotCard.tsx:289-300) fetches customPlanService.mealImageOptions(meal.name) once, guarded by `if (imgOptions.length > 0) return` (line 292), and stores the result in component state (imgOptions). There is NO effect resetting imgOptions when meal.name changes — contrast the sibling effects that DO reset on prop change: imgBroken resets on [meal.image_url] (231-233) and nameDraft on [meal.name] (227-229). So after a rename the cached options for the previous name are shown.\n\nEXPECTED: reopening the picker after a rename fetches photos for the current meal name.\nACTUAL: it shows the previous name's photos (stale cache); the header still says 'Choose a photo' with no hint they're for the old name.\n\nREPRO (diet builder, a meal with ingredients): 1) meal named 'Snack' → tap the photo (ImageIcon) control on the hero → picker loads generic 'snack' photos. 2) close, rename the meal to 'Greek Yogurt with Berries'. 3) tap the photo control again → the SAME generic snack photos appear (early-return on cached imgOptions), not yogurt photos.\n\nCONFIRMED by code trace (cached imgOptions + no meal.name reset; grep shows setImgOptions only at line 296). FIX: reset imgOptions (and imgLoading) in an effect on [meal.name], or key the cache by the name it was fetched for. Same fresh commit (8c795c1d, QA 7de8 scope 1b:A); not on the board.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260715-d8k2",
       "createdAt": "2026-07-15T00:00:00.000Z",
       "status": "open",
