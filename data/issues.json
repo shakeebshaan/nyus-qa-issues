@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260715-cyc9",
+      "createdAt": "2026-07-15T05:39:46.324Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": null,
+      "description": "[suggestion] Persist the menstrual-cycle anchor (last period date + cycle length) to the backend so the AI coach reasons about cycle phase server-side, not just the local phase card. USER PROBLEM: src/lib/cycle.ts ships a device-local (localStorage-only) phase card per QA i-20260710-cyc1 explicitly deferring server sync — its own top comment says the backend coach prompts already reason about follicular/luteal phases and ship phase-specific diet content, but never receive a real anchor date, so that coach logic is dead code today. Any female user who sets her cycle in the app gets a quiet phase pill on one screen but zero phase-aware coaching, meal, or workout-intensity adjustments elsewhere (chat, diet plan, activity plan) and it resets if she reinstalls or switches device. EVIDENCE: cycle.ts lines 9-16 (in-code TODO), dormant user_profiles.menstrual_cycle_tracking / cycle_length_days columns already exist per the same comment, no last_period_date column yet. V1 SCOPE: add last_period_date column (migration), a PUT endpoint to save the 3 fields from the existing local UI, and wire llm_prompts.py to read it instead of the current no-anchor fallback; no new UI needed, the phase card already collects the data locally, just add a one-time upload + periodic resync. EFFORT: small-medium (1 migration + 1 endpoint + 1 backend prompt-context read + FE save call) — this is closing a gap the codebase already flagged, not net-new UI work.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260715-9c3a",
       "createdAt": "2026-07-15T03:55:02.707Z",
       "status": "fixed",
