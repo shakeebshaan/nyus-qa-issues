@@ -21155,52 +21155,29 @@
       "archivedAt": "2026-07-15T10:13:20.815Z"
     },
     {
-      "id": "i-20260714-9f2a",
-      "createdAt": "2026-07-14T18:57:18Z",
+      "id": "i-20260714-rp2m",
+      "createdAt": "2026-07-14T08:38:53.867Z",
       "status": "resolved",
-      "route": "/goal-change",
-      "description": "[bug-hunt] Goal-change wizard changes only the macro TARGETS — it never rebuilds the diet plan's meals or the workout plan, despite the wizard and the FAQ both promising it does. After confirming, the user keeps eating the OLD goal's meals against a NEW goal's macro budget.\n\nROUTE: /goal-change (Profile -> Plan Management -> Change Goal; also reached from a coach quick-action and from PlanResumeScreen).\n\nPROMISE vs BEHAVIOR:\n- Wizard step 2 copy (src/pages/GoalChangeWizard.tsx:406): \"...We'll use this to rebuild your meal plan.\"\n- FAQ (src/lib/faq-fallback.ts:322): \"NYUS ... rebuilds upcoming meals and workouts to match.\"\n- Backend confirm (BACKEND app/routes/plans.py change_goal, lines 742-870): marks the old FitnessPlan completed, updates the health profile (goal_type / target_kcal / bmr / tdee), and creates a NEW FitnessPlan + ONE WeeklyMacroTarget (week 1). It NEVER touches the diet plan or workout plan — no meal builder/generator is invoked (grep shows no generate_diet / build_diet / regenerate call inside change_goal; the docstring \"Trigger full plan regeneration\" is aspirational).\n\nWHY MEALS GO STALE: UserDietPlan (BACKEND db_models.py:528) is user-scoped (user_id + is_active) and is NOT linked to FitnessPlan. Today's meals are served from UserDietPlan.query.filter_by(user_id, is_active=True) + its AssignedMeal rows (backend.py:4659 / 6787, plan_builder_routes.py:3600). change_goal leaves that diet plan is_active=True and its AssignedMeals unchanged. WorkoutPlan is likewise user-scoped and untouched.\n\nEXPECTED: confirming a goal change rebuilds the assigned meals + workout to fit the new goal/macros (or the copy is corrected so it stops promising a rebuild).\nACTUAL: the macro budget jumps to the new goal while the assigned meals/workouts stay built for the old goal. e.g. fat_loss -> muscle_gain: the calorie target rises several hundred kcal but the plate still shows the old low-cal fat-loss meals, so the user under-eats vs target with no new suggestions; muscle_gain -> fat_loss: meals now overshoot the new deficit target.\n\nREPRO (needs an account with an active plan): open /goal-change, pick a different goal, tap through to Confirm, then open /nutrition — today's meals are identical to before the change; only the macro budget/targets differ.\n\nCONFIRMED by code trace across both repos. NOTE: a SECOND, safety-gated goal-change endpoint exists (/re-onboard, onboarding.py:1315 re_onboard, runs evaluate_plan_safety) but the FE never calls it — the shipped wizard uses /plans/<id>/change-goal. Never-hunted area (goal-change was not a prior bug-hunt focus); not on the board.",
+      "route": "/nutrition",
+      "description": "[suggestion] Quick re-log a past meal (\"Log again\") on the Nutrition screen. Problem: Indian daily eating is repetitive (same roti-dal-sabzi, same protein shake) but every entry today requires re-typing/re-searching the meal from scratch (or photo/barcode) even when it was logged yesterday or last week. Evidence: repo has no copy-previous-meal/quick-repeat action (grepped NutritionMealCard, CustomMealModal, meal-log flow — only diet-plan-builder has an unrelated \"repeat\" match for weekly plan structure, not daily logging); comparable trackers (MyFitnessPal \"Copy from previous day\", Cronometer favorites) ship this as a core retention lever. v1 scope: add a \"Log again\" action on past meal-history entries (NutritionMealCard / meal detail) that duplicates the stored meal_name + macros + quantity into a new log row for today at the tapped meal slot, no AI/recompute needed since macros are already persisted. No new screen, no favorites list yet (that would be v2). Effort: ~1-2 days FE (action + duplicate-log API call) + confirm backend already exposes a create-meal-log endpoint that accepts prefilled macros (likely yes, reused by manual entry).",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
+        "suggestion",
         "auto"
       ],
       "imagePath": null,
-      "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": {
-        "description": "Root cause: change_goal (plans.py) only swapped the FitnessPlan header + week-1 WeeklyMacroTarget; UserDietPlan/AssignedMeal and WorkoutPlan are user-scoped and unlinked to FitnessPlan, so they stayed built for the OLD goal while the macro budget jumped to the new goal -> user ate old-goal meals against a new-goal target, contradicting the wizard ('rebuild your meal plan') + FAQ ('rebuilds upcoming meals and workouts'). Fix: after committing the new plan, change_goal now calls generate_diet_for_user_fast + generate_workout_for_user_fast (no-LLM fast assemblers, self-deactivate the prior user-scoped plans), each guarded so a rebuild failure degrades gracefully without rolling back the committed goal switch; response returns diet_rebuilt/workout_rebuilt. Deployed to prod (backend a603be6, health OK). Verified: 7 scoped route tests pass (rebuild + graceful-failure). Proof is a code/flow panel because driving the live wizard end-to-end needs an active-plan account (none headless since 2026-07-12).",
-        "imagePath": "images/i-20260714-9f2a-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260714-9f2a-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c33e3f6da31aa2bb72d8a2f245a61bd5dd61441e",
-        "imageCommits": [
-          "c33e3f6da31aa2bb72d8a2f245a61bd5dd61441e"
-        ],
-        "fixedAt": "2026-07-14T19:35:31.902Z",
-        "by": "shakeebshaan",
-        "appCommit": "111b48e",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Root-caused across both repos, invokes the existing fast assemblers (no new LLM path), graceful-degradation guard prevents corrupting a committed goal switch, deployed+healthy, 7 route tests green. Not higher because live end-to-end wizard capture needs an active-plan account unavailable headless; behavior proven via route tests + response flags."
-        }
-      },
+      "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED to prod (backend 111b48e, live 2026-07-14T19:34Z, service active, health 200). Root cause confirmed exactly as reported: change_goal (app/routes/plans.py) only swapped the FitnessPlan header + week-1 macros; the user-facing UserDietPlan/AssignedMeal + WorkoutPlan are user-scoped (no FK to FitnessPlan) and were left built for the OLD goal, so after a goal change users kept the old meals against the new macro budget - contradicting the wizard copy and the FAQ that both promise a rebuild. FIX: after the goal-change commit, invoke the deterministic no-LLM assemblers generate_diet_for_user_fast + generate_workout_for_user_fast (the same path onboarding and update_intensity_tier use) - they re-derive from the just-committed profile and self-deactivate the prior user-scoped plans. Guarded so a rebuild failure (e.g. no matching skeleton) degrades gracefully instead of rolling back the goal switch; each except rolls back to stop a mid-flush DELETE from one generator being committed by the next. An adversarial code review caught and fixed exactly that cross-generator session-leak before commit. Added 2 route tests (rebuild invoked on confirm; graceful degradation on failure) - green. Also verified: preview mode never rebuilds; no duplicate active plan (prepare_fitness_plan_for_user reuses the active plan); no plan_gen_lock in this path. CANNOT self-resolve headless: the board testGate runs the FRONTEND npm test:unit (spawn-ENOENT headless + does not cover this backend fix), and meal RENDERING cannot be verified headless (no meal-rendering QA account since the 2026-07-12 deletion). Flagging for your Resolve after a quick interactive check that /nutrition + /activity show the rebuilt plan after a goal change. Docs: APPLICATION_FLOW.md Section 30 updated (frontend e02fee91).",
-      "reviewedAt": "2026-07-14T19:35:43.682Z",
+      "reviewReason": "Already shipped — stale-grep duplicate. Quick re-log of a past meal already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): a 'Recent' chip row (lines 491-511) fed by GET /logs/meal/recent?limit=8 (backend app/routes/logging.py:510) shows each recent meal name + kcal; tapping a chip (fillFromRecent, lines 217-228) prefills the stored meal_name + macros, and Log Meal duplicates it into today's log via POST /logs/meal — no re-typing, no AI recompute (macros come straight from the stored row). This is exactly the suggested V1 'Log again'. The claim 'repo has no copy-previous-meal/quick-repeat action' is outdated. Recommend archiving as done. (A dedicated persistent Favorites list is the only genuine v2 delta.)",
+      "reviewedAt": "2026-07-15T09:36:09.300Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-15T10:15:28.412Z",
+      "resolvedAt": "2026-07-15T10:16:08.394Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T10:15:28.412Z"
+      "archivedAt": "2026-07-15T10:16:08.394Z"
     }
   ]
 }
