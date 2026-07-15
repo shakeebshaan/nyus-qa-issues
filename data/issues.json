@@ -984,7 +984,16 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "This is a design/scope decision on the live logging flow, so flagging rather than guessing. Today the nutrition Add Food flow (Ingredients tab -> tap a food) sets portion as whole/fractional Servings via a - / + stepper (src/components/nutrition/CustomMealModal.tsx), and macros = per-serving x servings. You are asking for the SAME portion UI as the plan builder / onboarding, which uses a gram amount with a g / cups unit toggle (src/components/plan-builder/IngredientRow.tsx), where macros = per-100g x grams. Matching them means switching the logging modal from servings to grams+unit, which changes how the food data feeds the macro math and how the entry is stored - a real change to how meals get logged, not a cosmetic tweak. I can build it; I just want your call on scope first: (A) fully REPLACE the Servings stepper with a gram amount + g/cups toggle in Add Food, or (B) ADD a gram/unit option alongside the existing servings control? Tell me A or B and I will ship it next tick.",
+      "reviewedAt": "2026-07-15T06:03:18.345Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "product",
+        "design",
+        "nutrition"
+      ]
     },
     {
       "id": "i-20260715-32f3",
