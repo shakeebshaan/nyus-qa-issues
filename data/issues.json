@@ -177,7 +177,11 @@
       "imagePath": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": true,
+      "reviewReason": "Already shipped — stale-grep duplicate. Photo-based meal logging already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): 'Snap meal — AI identifies it' button (lines 478-489) -> handlePhotoSelected downscales the image and POSTs to /ai/analyze-meal-photo (backend app/routes/plan_builder_routes.py), returns best-guess dish + macro estimate, prefills the editable Quick Log fields for confirm-before-save (lines 230-274). Exactly the suggested V1 (camera/gallery -> vision -> editable confirm -> log). The claim 'no camera capture path exists in Nutrition.tsx' is outdated. Recommend archiving as done.",
+      "reviewedAt": "2026-07-15T09:35:57.187Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260714-6b3e",
