@@ -262,10 +262,13 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Root-caused — needs a product call before I touch it (streak logic drives all gamification XP/badges). The Profile '30-Day Challenge' ring reads current_streak from the nightly day-score engine (daily_report.py _evaluate_streak): a day counts toward the streak only if day_score >= 0.75, weighted calorie .30 / workout .25 / steps .20 / water .15 / logging .10. On your account right now: current_streak=0, longest_streak=0 (no day has ever qualified), and your recent daily reports (only 2026-07-12 and 07-14 exist — sparse) have day_score=NULL. TWO things make 0.75 hard to reach: (1) a day needs BROAD consistency — an accurate-calorie + workout + full-meal-logging day lands right at ~0.75-0.80, but a workout-only or meal-only day scores ~0.35-0.45 and never counts; (2) untracked WATER is scored 0.0 (penalty) while untracked STEPS is scored 0.5 (neutral) — an asymmetry that quietly drags most users below the bar, BUT the current tests explicitly lock water=0 when untracked, so that's intentional, not an accident. So the card is 'tracking' correctly per the current rules — it just rarely fires. Pick the intended behaviour and I'll implement + deploy: (A) make untracked water NEUTRAL (0.5) like steps — small, fairer, lifts the common meal+workout day comfortably over 0.75; (B) lower STREAK_THRESHOLD (e.g. 0.6) so a solid-but-not-perfect day counts; (C) redefine the 30-Day Challenge to count 'any day you logged something' (decouple from day_score) — most intuitive to a user who sees '0 of 30' despite using the app; or (D) combination. Recommend A+C. Also flagging that day_score is persisting as NULL on your reports — I'll confirm whether the score is being stored on generation once you pick a direction. (I can't verify a streak-engine change end-to-end from the headless QA account — it has no rich multi-day logs — so I'm not shipping a blind gamification-wide change without your call.)",
       "reviewedAt": "2026-07-15T14:05:39.763Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "D",
+      "reviewRepliedAt": "2026-07-15T14:26:59.017Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260715-6ea8",
