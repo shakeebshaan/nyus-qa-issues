@@ -952,12 +952,32 @@
         "8e9281eb804758fe5db33e7aeb5924b73565098b"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the diet builder mounts as a fixed z-[60] layer, but the delete-meal confirmation used the default shadcn AlertDialog (z-50), so it rendered BEHIND the builder — invisible/untappable on device, making delete look broken. Fix: added an optional overlayClassName prop to AlertDialogContent and set className=z-[80]/overlayClassName=z-[75] on the confirm in MealSlotCard.tsx (mirrors the Make-recipe Dialog's existing lift). Verified: confirm now renders on top of the dimmed builder, elementFromPoint at its center hits the dialog, and a real tap on Delete removes the meal.",
+        "imagePath": "images/i-20260715-32fe-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-32fe-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "28fb3f1e915f64208c97e043448ae7f65edca198",
+        "imageCommits": [
+          "28fb3f1e915f64208c97e043448ae7f65edca198"
+        ],
+        "fixedAt": "2026-07-15T06:11:07.395Z",
+        "by": "shakeebshaan",
+        "appCommit": "98e9a376",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Root cause isolated (z-index stacking under the z-[60] builder layer, a documented class in CLAUDE.md); minimal surgical fix (optional prop + one usage site, tsc clean). Verified end-to-end at 390x844: dialog z=80/overlay z=75 both above builder 60, elementFromPoint hits inside-dialog, real Delete click removes the meal. 33/33 AlertDialog-consumer tests green; loop.mjs verify green."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Could not reproduce a delete failure. I loaded the meal builder and drove all three delete actions in the actual app: (1) the red trash on a meal WITH ingredients opens a \"Delete <meal>?\" confirm dialog and tapping Delete removes the meal; (2) the trash on an empty meal deletes it instantly; (3) the X on an ingredient row removes that ingredient. All three worked, and the confirm dialog (added earlier to stop accidental wipes of a built meal) renders correctly with a green Delete + a Cancel. So the delete code paths are healthy. To pin YOUR case, two quick things: (a) WHICH delete - the whole meal card (red trash), or an ingredient (the X)? (b) When you tap it, does nothing happen at all, or does a \"Delete <meal>?\" confirm pop up (you must then tap Delete inside it to remove a meal that has ingredients), or does the item come back afterwards? A short screen recording or the exact meal name would let me reproduce and fix immediately.",
-      "reviewedAt": "2026-07-15T06:03:01.320Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "cannot-reproduce",
