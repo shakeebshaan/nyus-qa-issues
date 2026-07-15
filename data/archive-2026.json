@@ -21301,78 +21301,49 @@
       "archivedAt": "2026-07-15T12:31:27.664Z"
     },
     {
-      "id": "i-20260714-4e7c",
-      "createdAt": "2026-07-14T18:57:18Z",
-      "status": "resolved",
-      "route": "/goal-change",
-      "description": "[bug-hunt] Switching to a Maintenance / Recomp goal produces a plan whose \"weekly weight target\" contradicts its calories: the target shows a non-zero kg/week change while the calorie target is exactly TDEE (no deficit/surplus), so the advertised pace can never be reached.\n\nROUTE: /goal-change (Preview step -> \"Plan Details\" -> \"Weekly weight target\").\n\nROOT: BACKEND app/services/macro_calculator.py calculate_weekly_weight_target (lines 422-443) clamps ONLY fat_loss (-> [-0.75, 0]) and muscle_gain (-> [0, 0.35]); maintenance / recomp / endurance fall through and return the RAW pace (goal_weight - current_weight) / duration_weeks — uncapped and never zeroed. But calculate_target_calories uses GOAL_ADJUSTMENTS (lines 33-39) where maintenance & recomp = delta 0, so target_kcal == TDEE (no calorie deficit/surplus). The plan is calorically \"maintain\" yet advertises a weight-change pace.\n\nWHY THE WIZARD TRIGGERS IT: GoalChangeWizard pre-fills Goal Weight from the OLD plan (src/pages/GoalChangeWizard.tsx:94, newGoalWeight = goalWeight ?? 65) and never resets it to current weight when a non-directional goal is picked. So a user switching e.g. fat_loss (current 70 / goal 65) -> Maintenance keeps goal 65 != current 70.\n\nEXPECTED: for maintenance/recomp (delta-0 calories) the weekly weight target is 0; endurance's small surplus should map to a capped small gain, not an arbitrary pace derived from a stale goal weight.\nACTUAL: the preview AND the persisted plan (WeeklyMacroTarget.weekly_weight_loss_target_kg, FitnessPlan.weekly_weight_target_kg) carry e.g. -0.42 kg/week for a Maintenance goal eating at TDEE. PlanDetailsCollapsible (GoalChangeWizard.tsx:604-610) renders \"Weekly weight target: -0.42 kg\" under a Maintenance switch.\n\nREPRO (needs an active plan whose goal weight != current weight): /goal-change -> pick Maintenance -> do NOT touch Goal Weight -> Next -> Preview -> expand \"Plan Details\": \"Weekly weight target\" is non-zero although calories == TDEE.\n\nCONFIRMED by code trace (the clamp table + GOAL_ADJUSTMENTS + the wizard prefill). FIX: clamp maintenance & recomp to 0 (and cap endurance to its surplus-implied pace) in calculate_weekly_weight_target, and/or reset Goal Weight to current weight when a maintenance/recomp goal is selected in the wizard. Never-hunted area; not a dup of the onboarding pace-gate items.",
+      "id": "i-20260715-948b",
+      "createdAt": "2026-07-15T13:00:23.911Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
       "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
+      "imagePath": "images/i-20260715-948b.jpg",
+      "imageCommit": "24ce7161c10eb1f101b6f935d86a9939734de4a5",
+      "imagePaths": [
+        "images/i-20260715-948b.jpg"
       ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "imageCommits": [
+        "24ce7161c10eb1f101b6f935d86a9939734de4a5"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
       "fix": {
-        "description": "Root cause: calculate_weekly_weight_target (macro_calculator.py) clamped only fat_loss/muscle_gain; maintenance/recomp/endurance returned the raw (goal-current)/weeks pace even though those goals eat at TDEE (delta 0) — so a Maintenance switch carrying a stale goal weight advertised e.g. -0.42 kg/wk while calories == TDEE. Fix: clamp maintenance & recomp to 0, and cap endurance to its surplus-implied pace (0 to +0.2, never a loss). Verified: live function returns 0.00 for maintenance/recomp/endurance with current 70 / stale goal 65, fat_loss still -0.42. Committed a603be6, deployed to prod.",
-        "imagePath": "images/i-20260714-4e7c-fix-r2.png",
+        "description": "The Sync conflict - try again. toast is not real app code. That exact string existed only in a throwaway QA capture-harness file (a test helper that simulates a conflict), and it got baked into an older proposed-fix screenshot on the board - it never appears in the shipped app. Confirmed the string is absent from the entire app and backend including full git history. Removed the stray harness file and recaptured the real Build your meals screen, which shows no such error.",
+        "imagePath": "images/i-20260715-948b-fix-r1.png",
         "imagePaths": [
-          "images/i-20260714-4e7c-fix-r2.png"
+          "images/i-20260715-948b-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "7637878c493b518b6d9a62f3f61b05863182406d",
+        "imageCommit": "3de24a156590b52049a06dd0c2aa5a3db61741c5",
         "imageCommits": [
-          "7637878c493b518b6d9a62f3f61b05863182406d"
+          "3de24a156590b52049a06dd0c2aa5a3db61741c5"
         ],
-        "fixedAt": "2026-07-15T13:46:31.068Z",
+        "fixedAt": "2026-07-15T13:49:32.644Z",
         "by": "shakeebshaan",
-        "appCommit": "608f8f28",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 93,
+          "score": 90,
           "bar": 90,
-          "note": "Backend clamp directly removes the calorie/pace contradiction; verified via live function output across all goal types incl. the exact stale-goal repro. Deployed to prod. -7: FE GoalChangeWizard goal-weight prefill left as-is (backend clamp fully resolves the displayed contradiction, so the FE reset is redundant)."
+          "note": "False-alarm phantom: string only in a QA harness (.qa-report/tmp/tpl-inline*.js), never in product code; harness removed; real screen recaptured clean."
         }
       },
-      "history": [
-        {
-          "at": "2026-07-15T10:14:36.715Z",
-          "event": "reopened",
-          "note": null,
-          "previousFix": {
-            "description": "Root cause: calculate_weekly_weight_target (macro_calculator.py) only clamped fat_loss/muscle_gain; maintenance/recomp/endurance fell through and returned the raw stale-goal pace, while their calories == TDEE (GOAL_ADJUSTMENTS delta 0) -> the preview + persisted WeeklyMacroTarget advertised e.g. -0.42 kg/wk under a maintenance switch eating at TDEE. Fix: clamp maintenance & recomp to 0 and cap endurance to its surplus-implied 0.2 kg/wk (directional goals unchanged). Deployed to prod (backend a603be6, health OK). Verified: 25 scoped unit tests pass + live eval (maintenance/recomp stale-goal -> 0.00). Proof is a backend calc panel because the live wizard preview needs an active-plan account (none headless since 2026-07-12); the value the wizard renders is exactly this backend output.",
-            "imagePath": "images/i-20260714-4e7c-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260714-4e7c-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "732439651b8d02ad1c506abcccc01f046ee3b079",
-            "imageCommits": [
-              "732439651b8d02ad1c506abcccc01f046ee3b079"
-            ],
-            "fixedAt": "2026-07-14T19:33:44.181Z",
-            "by": "shakeebshaan",
-            "appCommit": "a603be6",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 92,
-              "bar": 90,
-              "note": "Root-caused across both repos, minimal clamp fix matching the issue's own proposed fix, deployed+healthy, 25 tests + live eval prove the contradiction is gone. Not 100 because proof is a backend eval panel rather than a live wizard capture (documented: no active-plan account headless)."
-            }
-          }
-        }
-      ],
+      "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-15T13:58:19.005Z",
+      "resolvedAt": "2026-07-15T13:58:29.892Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T13:58:19.005Z"
+      "archivedAt": "2026-07-15T13:58:29.892Z"
     }
   ]
 }
