@@ -799,12 +799,13 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "This is 3 asks, and the main ones are a backend/product call I should not guess on. (1) Photos don't match the dish (milkshake showing burger/salad): a REAL defect but entirely in the backend image-provider chain (image_providers.py + image_prompts.py), not the FE - the FE already sends the correct dish name. Cause: TheMealDB has no drinks/desserts and the ingredient-thumb map is solid-food only, so drinks fall through to a weak Openverse full-text search padded with generic 'food dish meal' tokens, with no relevance check, returning arbitrary food photos. A surgical backend fix (lead the fallback query with the dish name, add beverage/dessert routing, word-boundary matching to stop egg-in-veggie false positives) would help but quality is provider-dependent/subjective; the robust fix is wiring the already-present paid OpenAI image generation into food_preview_options, which has real per-image cost. That cost/quality tradeoff is your decision. (2) 'Need more' options: backend allows up to 12 but the FE requests 6 with no 'load more' - small FE add if wanted. (3) 'Open gallery' to upload your own photo: a NEW feature - no upload/storage endpoint exists for meal-card photos (current one is curated-stock only). Which of these should I build?",
-      "reviewedAt": "2026-07-15T03:41:38.501Z",
+      "reviewReason": "SHIPPED + DEPLOYED the photo-mismatch fix (backend commit 6b21466, live on prod now). Root cause: a drink's meal-photo query was built as 'milkshake food dish' and Openverse's 'food dish' token biases hard to solid plates, so it returned a burger + salads (reproduced live - your exact screenshot). Fix: drink names now query '<name> drink', and food-noun matching is word-boundary (so 'egg' no longer matches 'veggie'/'eggplant' and 'oat' not 'goat'). Verified live against the deployed backend: the 'Chocolate Milkshake' gallery now returns real milkshakes/shakes, not burgers/salads. TWO items remain and are genuinely your call, not bugs I should guess on: (1) 'Open gallery' to upload YOUR OWN photo is a NEW feature - there is no upload/storage endpoint for meal-card photos today (current picker is curated-stock only), so it needs a storage + product decision. (2) Making ANY drink/dish photo bulletproof would mean wiring the PAID OpenAI image generation into the gallery, which has per-image cost and is currently constrained by your 2026-06-14 directive (paid image API = coach portraits only, never a meal failsafe) - I won't flip that without your say-so. Minor: the gallery fetches 6 options but the backend already supports up to 12, so a 'Load more' is a small add if you want it.",
+      "reviewedAt": "2026-07-15T04:36:28.082Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "product",
-        "backend"
+        "backend",
+        "partially-fixed",
+        "product"
       ]
     },
     {
