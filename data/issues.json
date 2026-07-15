@@ -954,7 +954,15 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Could not reproduce a delete failure. I loaded the meal builder and drove all three delete actions in the actual app: (1) the red trash on a meal WITH ingredients opens a \"Delete <meal>?\" confirm dialog and tapping Delete removes the meal; (2) the trash on an empty meal deletes it instantly; (3) the X on an ingredient row removes that ingredient. All three worked, and the confirm dialog (added earlier to stop accidental wipes of a built meal) renders correctly with a green Delete + a Cancel. So the delete code paths are healthy. To pin YOUR case, two quick things: (a) WHICH delete - the whole meal card (red trash), or an ingredient (the X)? (b) When you tap it, does nothing happen at all, or does a \"Delete <meal>?\" confirm pop up (you must then tap Delete inside it to remove a meal that has ingredients), or does the item come back afterwards? A short screen recording or the exact meal name would let me reproduce and fix immediately.",
+      "reviewedAt": "2026-07-15T06:03:01.320Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "cannot-reproduce",
+        "needs-repro"
+      ]
     },
     {
       "id": "i-20260715-f54d",
