@@ -431,29 +431,6 @@
       "history": []
     },
     {
-      "id": "i-20260714-vlog",
-      "createdAt": "2026-07-14T00:00:00Z",
-      "status": "open",
-      "route": "/nutrition",
-      "description": "[suggestion] Voice/text meal logging: speak or type what you ate in your own words and let the coach AI parse it into a food entry, instead of only manual fields or a photo. USER PROBLEM: Add Custom Meal (src/components/nutrition/CustomMealModal.tsx) only takes manual name/calories/macro fields today -- no free-text or voice path exists (grepped: no parse/describe/freeform handling in that modal, no SpeechRecognition usage anywhere in src). Snap-to-log (photo, i-20260706-sn4p) covers the visual case but not hands-busy moments (cooking, eating out, driving) or dishes that photograph poorly (mixed thali, soup, chai+snack). Competitors (MyFitnessPal voice log, Cal AI) ship this; NYUS has neither text-freeform nor voice entry. EVIDENCE: backend already has an LLM meal-estimation path for the photo flow (llm_service.py) -- the same prompt pattern (food description -> structured items+macros) can be reused for a transcript/typed string, so this is largely a UI + one new endpoint, not new AI infra. Also ties into the in-flight i18n directive: Hindi/Hinglish speech-to-text + parsing is a natural differentiator for the India-focused base. V1 SCOPE: in the Add Custom Meal sheet, add a \"Describe it\" text field (mic button using the Web Speech API on web / native STT on Capacitor where available, falling back to typed text) -> POST the transcript to a new /api/v1/nutrition/parse-meal-text endpoint -> LLM returns items+macros -> prefill the existing manual fields, editable before save (same edit-then-confirm pattern already used for photo logging). No new logging surfaces, no schema changes to DailyLog. EFFORT: ~1-2 days FE (mic capture + prefill wiring reusing existing food-item form) + ~0.5 day BE (one endpoint, reuse llm_service prompt scaffolding).",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Already shipped — this is a stale-grep duplicate. Voice + free-text meal logging already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): a 'Describe what you ate' free-text textarea (line ~526) PLUS a mic dictation button wired to useSpeechInput with app-language locale en-IN/hi-IN (lines 79-83, 533-544) — so the suggestion's claim 'no SpeechRecognition usage anywhere in src' and 'no free-text path' is outdated. Photo logging (i-20260714-ph07 dup) and recent-meal re-log (i-20260714-rp2m dup) are in the same modal. Recommend archiving as duplicate/done. If a NEW dedicated /nutrition/parse-meal-text NLP endpoint (parse free prose into structured multi-item macros, vs today's single free-text entry) is wanted as a v2 upgrade, that's a separate product call — flag it fresh.",
-      "reviewedAt": "2026-07-15T09:35:44.078Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260713-f2d1",
       "description": "[content] Published: Paneer vs Tofu for Weight Loss (India) — https://nyus.in/blog/paneer-vs-tofu-for-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
       "createdAt": "2026-07-13T22:28:31Z",
