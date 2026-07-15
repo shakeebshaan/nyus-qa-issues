@@ -21155,13 +21155,13 @@
       "archivedAt": "2026-07-15T10:13:20.815Z"
     },
     {
-      "id": "i-20260714-ph07",
-      "createdAt": "2026-07-14T12:00:00.000Z",
+      "id": "i-20260714-wk9r",
+      "createdAt": "2026-07-14T23:39:05.493Z",
       "status": "resolved",
-      "route": "/nutrition",
-      "description": "[suggestion] Photo-based meal logging: snap a plate photo, AI estimates dish + macros, user confirms/adjusts before logging. Problem: current logging is search/plan-based only (voice/text logging already filed separately, i-20260714-vlog) - no camera capture path exists in Nutrition.tsx/MealDetail.tsx, forcing manual entry for every ad-hoc Indian meal (thali, home-cooked mixed dishes) that has no clean plan match. Evidence: comparable trackers (Cronometer, Noom, HealthifyMe - the dominant India competitor) all ship photo logging as a core differentiator; NYUS has none, and existing plan-based flow (AIMealCustomization.tsx) assumes a known dish, not an arbitrary photographed plate. V1 scope: camera/gallery picker on Nutrition screen -> send image to existing llm_service vision path -> return best-guess dish name + macro estimate as an editable confirm sheet (reuse MealIngredients.tsx portion-adjust UI) -> log on confirm; no barcode scanning, no multi-item photo segmentation in v1. Effort: medium (new capture UI + one backend vision endpoint + confirm sheet reuse).",
       "fix": null,
       "history": [],
+      "route": "/activity",
+      "description": "[suggestion] Add a one-tap \"Reschedule\" quick-action on a missed workout day directly in the Activity page. USER PROBLEM: today a missed/skipped workout day just silently rolls forward to the next day's plan (src/pages/Activity.tsx skip logic, ~line 181-1140) with no reschedule option on that surface; reschedule ONLY exists buried inside the coach-chat WorkoutEditPanel block (src/components/blocks/WorkoutEditPanel.tsx handleReschedule/handleRescheduleConfirm, ~line 219-229), so a user has to think to open chat and ask the coach to move a workout — most won't. EVIDENCE: docs/APPLICATION_FLOW.md:550-551 lists reschedule/skip as chat-block actions only; no equivalent entry point from the Activity day view. PROPOSED V1: on Activity, when a day is marked skipped/missed, show a small inline \"Reschedule to...\" chip/button next to the existing skip indicator, reusing the same PUT /plans/{id} reschedule backend call the chat block already uses (planService) — no new backend endpoint needed, just wire the existing mutation to a lightweight day-picker sheet. EFFORT: small-medium (~1 day) — one new UI affordance + existing mutation, no backend change.",
       "author": "shakeebshaan",
       "tags": [
         "suggestion",
@@ -21172,12 +21172,12 @@
       "imageCommits": [],
       "imagePrivate": false,
       "needsReview": true,
-      "reviewReason": "Already shipped — stale-grep duplicate. Photo-based meal logging already exists in the Add Food sheet (src/components/nutrition/CustomMealModal.tsx): 'Snap meal — AI identifies it' button (lines 478-489) -> handlePhotoSelected downscales the image and POSTs to /ai/analyze-meal-photo (backend app/routes/plan_builder_routes.py), returns best-guess dish + macro estimate, prefills the editable Quick Log fields for confirm-before-save (lines 230-274). Exactly the suggested V1 (camera/gallery -> vision -> editable confirm -> log). The claim 'no camera capture path exists in Nutrition.tsx' is outdated. Recommend archiving as done.",
-      "reviewedAt": "2026-07-15T09:35:57.187Z",
+      "reviewReason": "Genuine (not yet shipped) but larger than the 'small ~1 day' estimate. Confirmed: Activity.tsx has only per-EXERCISE skip/unskip within today's workout (skipExerciseMutation ~line 545, no 'reschedule' anywhere in the file); day-level reschedule exists ONLY in the coach-chat WorkoutEditPanel block (src/components/blocks/WorkoutEditPanel.tsx handleReschedule). The blocker: Activity has NO 'missed/skipped workout DAY' surface to attach a 'Reschedule to...' chip to — a missed day (app not opened) currently just rolls forward with no card rendered, so V1 needs (1) a missed-day affordance on the Activity day view FIRST, then (2) a day-picker sheet wired to the existing PUT /plans reschedule mutation. Aligns with owner pref (inline/in-context over chat-only). Recommend building, but it is a real UI feature (missed-day surface + picker), not a one-affordance wire-up. Greenlight and I'll build + harness-verify. Left open pending priority.",
+      "reviewedAt": "2026-07-15T09:36:46.400Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-15T10:15:20.996Z",
+      "resolvedAt": "2026-07-15T10:15:10.199Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-15T10:15:20.996Z"
+      "archivedAt": "2026-07-15T10:15:10.199Z"
     }
   ]
 }
