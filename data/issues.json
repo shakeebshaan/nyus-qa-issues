@@ -435,11 +435,13 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Do",
       "reviewRepliedAt": "2026-07-14T23:15:51.268Z",
-      "reviewReplyBy": "shakeebshaan"
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "Verified by adding — the feature works end-to-end. Prod logs today 05:14-05:22 show 6+ successful /foods/request calls (HTTP 200) that AI-estimated the food and persisted it as a FoodDatabase row, and the search 'No foods found' state already renders the 'Request X — let the AI add it' button (FoodSearchSheet.tsx:314) wired to that endpoint. WHY YOU'RE SEEING IT FAIL RIGHT NOW: your test taps just now (13:25 'Bone brawth', 13:32 'Skimmed Milk powder') returned 503 because your account hit the daily LLM COST CAP — prod log: 'user_cost_cap reached user=395c47c7... reason=daily_cost_cap_reached -> fallback'. When capped, the LLM returns a non-JSON fallback string, so foods/request answers 503 'AI busy'. It's not a code defect — it resets daily and worked fine earlier today. OWNER CALL: (a) it's genuinely working, resolve as-is; or (b) you want the per-user daily LLM cost cap raised (a cost decision) so heavy testing doesn't hit it. If you retry tomorrow (or on an un-capped account) the add succeeds. Separately I can improve the capped-state message from 'try again in a moment' to 'daily usage limit reached' — say the word and I'll ship it.",
+      "reviewedAt": "2026-07-15T13:45:09.467Z"
     },
     {
       "id": "i-20260714-626a",
