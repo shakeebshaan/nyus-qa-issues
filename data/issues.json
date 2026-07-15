@@ -894,12 +894,32 @@
         "020c0da3f0b37c7a1d0f382687431daf255fb811"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the 'let the AI add it' button showed one vague message ('Couldn't add that food. Try a clearer name.') for EVERY failure, so a rate limit or a server hiccup read like your spelling was wrong. Fix: it now says exactly what happened - daily limit reached, AI busy, offline, or genuinely not a recognizable food - and the backend no longer reports an AI outage as 'not a food'. For a misspelling like 'Bone brawth' you now see 'That doesn't look like a food. Check the spelling and try again.'",
+        "imagePath": "images/i-20260715-23dd-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-23dd-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7a172f059bbcf9aad2cebdde9d85b447a228af00",
+        "imageCommits": [
+          "7a172f059bbcf9aad2cebdde9d85b447a228af00"
+        ],
+        "fixedAt": "2026-07-15T04:35:53.533Z",
+        "by": "shakeebshaan",
+        "appCommit": "df2c7d1d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Real FoodSearchSheet capture shows the owner's exact 'Bone brawth' typo now yielding a specific, actionable message instead of the generic one; FE+backend paired, tsc clean, backend deployed."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "'Bone brawth' is a misspelling of 'bone broth', and the AI food-request correctly could not match the gibberish - so this is partly working-as-intended, but there are two real issues that need your call. (1) The FE collapses EVERY failure of the 'let the AI add it' request (rate-limit 429, server 500, timeout, AND genuine not-a-food) into one message: 'Couldn't add that food. Try a clearer name.' So a real outage reads to the user as bad spelling. Recommended FE fix (safe, shippable): show the specific reason - hit today's limit / AI busy, try again / not a recognized food. (2) The backend conflates a total LLM failure (call returns None) with an explicit not-a-food verdict - both return the same 422 NOT_A_FOOD - and the prompt does no typo-correction, so a 1-letter typo of a real food is rejected. Making typos like brawth->broth succeed is a product/LLM-quality decision touching a live, rate-limited LLM endpoint, so I'm flagging rather than guessing. Want me to ship the FE error-clarity fix, and/or add typo-tolerance + failure/not-a-food distinction to the backend?",
-      "reviewedAt": "2026-07-15T03:41:52.209Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "product",
