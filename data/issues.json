@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260716-e3b7",
+      "createdAt": "2026-07-16T10:38:52.391Z",
+      "status": "open",
+      "route": "/measurements",
+      "description": "[bug-hunt] Progress Photos \"Compare\" view: the per-pane stepper arrows are inverted relative to the numeric \"X/N\" counter — the right/next (→) arrow moves the counter DOWN and the left/prev (←) arrow is disabled at position \"N/N\".\n\nRoute: /measurements (Progress Photos card → \"Compare\" button; opens the full-screen CompareView). Requires >=2 progress photos.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx, CompareView stepper (left pane lines 61-68, right pane 82-89).\n  - The <ChevronLeft/> (←) button does setLeftIdx(i => Math.min(i+1, len-1)) and is disabled when leftIdx >= len-1.\n  - The <ChevronRight/> (→) button does setLeftIdx(i => Math.max(i-1, 0)) and is disabled when leftIdx <= 0.\n  - The counter renders {leftIdx+1}/{photos.length}.\nSame inversion in the right (\"After\") pane with setRightIdx.\n\nWHY: photos come newest-first from the backend (ProgressPhoto.query.order_by(taken_at.desc()), backend.py:9980), so index 0 = newest, index N-1 = oldest. Left pane initializes to leftIdx = N-1 (oldest, labeled \"Before\"), so its counter opens at \"N/N\". At that position the ← (previous) button is disabled and the → (next) button is enabled; tapping → decrements the index and the counter counts DOWN (N/N → (N-1)/N → 1/N). The arrow direction contradicts the counter progression: → decreases the shown number, ← increases it.\n\nEXPECTED: standard pagination — ← decrements the \"X/N\" counter (disabled at 1/N), → increments it (disabled at N/N).\nACTUAL: arrows are swapped vs the counter; → makes the counter go down, ← makes it go up, and ← is disabled while the counter reads \"N/N\".\n\nREPRO: log in, upload >=2 progress photos, open /measurements, tap \"Compare\", then tap the → arrow under the left (Before) image — the \"X/N\" counter decreases instead of increasing (and ← is disabled at \"N/N\").\n\nFIX: swap the icons (ChevronLeft ↔ ChevronRight) OR swap the onClick/disabled handlers so the ← button decrements toward index 0 and → increments toward N-1, keeping the counter and arrow direction consistent. Apply to both panes.\n\nNOT a dup: no existing issue references Progress Photos or the Compare view (checked data/issues.json all statuses). LOW severity (both photos still reachable; default oldest-vs-newest compare is correct).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260716-r8j2",
       "createdAt": "2026-07-16T09:00:00Z",
       "status": "open",
