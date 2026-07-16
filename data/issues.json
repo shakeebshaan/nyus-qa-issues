@@ -296,7 +296,7 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "No frontend change or Play Store update is needed - verified end to end (FE + backend). The app never decides which workout is 'today'; it only displays whatever session the server sends, and the 'build it myself' builder already saves your plan as a sequential program with NO weekday attached. Your wrong 'Day 4' came purely from the server picking a session by calendar weekday on your OLD plan row; the server now advances by what you have actually completed, and both plan-save paths write progressive plans (the live builder since 07-13, the AI/customize path fixed today). The only thing still old is your existing plan row. 30-second fix: open Activity, rebuild/re-save your plan once - the re-save writes a progressive plan and Day 3 Push will show next. Or reply 'backfill' and I will write + run a one-time migration to convert your existing plan in place so you do not have to re-save.",
       "reviewedAt": "2026-07-16T07:31:04.652Z",
       "reviewedBy": "shakeebshaan",
@@ -305,9 +305,16 @@
         "backend",
         "shipped"
       ],
-      "reviewReply": "Do I need to update the frontend app also ?",
-      "reviewRepliedAt": "2026-07-16T07:21:09.121Z",
-      "reviewReplyBy": "shakeebshaan"
+      "reviewReply": "this is wrong I still see the weekly Thursdays workout which is wrong",
+      "reviewRepliedAt": "2026-07-16T07:34:36.520Z",
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReplyImagePaths": [
+        "images/i-20260716-718e-reply.jpg"
+      ],
+      "reviewReplyImageCommits": [
+        "8944ee42841d991a2260b80f1e467f9d37184295"
+      ],
+      "reviewReplyImagePrivate": true
     },
     {
       "id": "i-20260716-21d5",
