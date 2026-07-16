@@ -4,7 +4,7 @@
     {
       "id": "i-20260716-c297",
       "createdAt": "2026-07-16T07:36:54.576Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/settings/subscription",
       "description": "[bug-hunt] Cancel-subscription confirmation dialog renders \"until —\" (bare em-dash) instead of a date or fallback phrase.\n\nRoute: /settings/subscription (Profile → Subscription → Cancel subscription).\n\nWHERE: src/pages/SubscriptionSettings.tsx AlertDialogDescription (lines 416-419):\n  \"You'll keep Pro access until <strong>{formatDate(info?.next_charge_date ?? null)}</strong>. After that, your plan will revert to the free tier.\"\nformatDate(null) returns \"—\" (lines 77-78: if (!iso) return \"—\").\n\nWHY IT ALWAYS SHOWS: the file's own comment (lines 265-270) states the backend \"doesn't expose renewal details yet\", so next_charge_date is null for active/trial subscribers in production — the NORMAL case, not an edge. Every subscriber who taps \"Cancel subscription\" sees: \"You'll keep Pro access until —. After that, your plan will revert to the free tier.\"\n\nINCONSISTENCY: the success toast (handleCancel, lines 159-161) and the pending-cancel banner (lines 312-317) BOTH already guard null and fall back to \"the end of your current period\" / \"the end of your current billing period\". Only this pre-cancel AlertDialog lacks the guard.\n\nEXPECTED: when next_charge_date is null, dialog should read \"...keep Pro access until the end of your current billing period.\" (mirror the toast/banner).\nACTUAL: \"...keep Pro access until —.\"\n\nREPRO: log in as an active/trial subscriber (next_charge_date not surfaced by BE), open /settings/subscription, tap Cancel subscription, read the confirmation dialog body.\n\nNOT a dup: prior subscription sweep (tick #12) reviewed only the handleCancel TOAST (which has the null fallback and was ruled fine); 9c2e = soft-cancel access-timing, b7a4 = restore false-success toast. This is the confirmation-dialog copy — a distinct, unguarded location.\n\nFIX: replace formatDate(info?.next_charge_date ?? null) in the dialog with a null-conditional matching the banner: info?.next_charge_date ? formatDate(info.next_charge_date) : \"the end of your current billing period\".",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: the cancel-subscription confirmation popup read 'keep Pro access until —' because the backend does not send a renewal date for active plans and the dash was the empty fallback. Fix: when no renewal date is available the dialog now reads 'until the end of your current billing period' — the same wording already used by the success toast and the pending-cancel banner.",
+        "imagePath": "images/i-20260716-c297-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-c297-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "793509bf0c7f960bb72dec5cac32e74bbc26695b",
+        "imageCommits": [
+          "793509bf0c7f960bb72dec5cac32e74bbc26695b"
+        ],
+        "fixedAt": "2026-07-16T08:15:34.348Z",
+        "by": "shakeebshaan",
+        "appCommit": "7524fcba",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "One-line conditional mirroring two existing null-guards in the same file; screenshot shows the fixed copy in the live dialog."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260716-sl33",
