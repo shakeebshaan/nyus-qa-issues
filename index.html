@@ -46,10 +46,13 @@
     border-bottom: 1px solid var(--line);
     padding-top: env(safe-area-inset-top);
   }
-  .bar { display: flex; align-items: center; gap: 10px; padding: 14px 0; }
+  .bar { display: flex; align-items: center; gap: 10px; padding: 14px 0; flex-wrap: wrap; }
   .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; letter-spacing: -.01em; }
   .logo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
-  .chips { display: flex; gap: 6px; margin-left: auto; align-items: center; }
+  /* Wrap the toolbar so the status/loop/connect chips + icon buttons reflow onto
+     a second row on narrow phones instead of overflowing the viewport and making
+     the whole board scroll sideways (i-20260716-7b66 "It always don't fit screen"). */
+  .chips { display: flex; gap: 6px; margin-left: auto; align-items: center; flex-wrap: wrap; justify-content: flex-end; row-gap: 6px; min-width: 0; }
   .chip {
     font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
     border: 1px solid transparent; white-space: nowrap;
@@ -1767,6 +1770,10 @@ document.addEventListener("click", (ev) => {
 /* ── lightbox ──────────────────────────────────────────── */
 document.addEventListener("click", (ev) => {
   const b = ev.target.closest(".shot");
+  // A shot ON a board card opens the issue THREAD, not the zoom lightbox — the
+  // owner taps the card's screenshot expecting the conversation (i-20260716-21d5
+  // "Still same"). Only shots inside the thread viewer / other surfaces zoom.
+  if (b && b.closest("article.card")) return;
   if (b && !b.classList.contains("priv-lock")) {
     const full = b.dataset.full;
     if (full) {
@@ -1805,10 +1812,19 @@ document.addEventListener("click", (ev) => {
   // Explicit thread button first — it's a <button>, so the guard below would skip it.
   const tb = ev.target.closest("[data-thread]");
   if (tb) { openThread(tb.dataset.thread); return; }
-  // Clicking any interactive control keeps its own behaviour (resolve, copy-id,
-  // lightbox, respond, radio options) — only a click on the card's own surface
-  // opens the thread.
-  if (ev.target.closest("button, a, input, label, summary, .iid, .shot, .desc-opts")) return;
+  // The screenshot IS a <button class="shot">, so the generic `button` guard below
+  // would swallow it — yet on a dense mobile card the shot covers almost the whole
+  // surface and is the natural thing to tap to see the conversation. Open the thread
+  // for a card-shot tap explicitly, before the guard (the lightbox handler already
+  // declines card-shots). (i-20260716-21d5 "Still same": a prior attempt only removed
+  // .shot from the guard string, but .shot still matched `button`, so tapping the
+  // screenshot did nothing.)
+  const shotCard = ev.target.closest("article.card .shot") ? ev.target.closest("article.card") : null;
+  if (shotCard && shotCard.id) { openThread(shotCard.id); return; }
+  // Other genuinely interactive controls keep their own behaviour (resolve, copy-id,
+  // respond, radio options). Everything else on the card — including the description
+  // text — opens the thread, so a tap anywhere on a dense mobile card works.
+  if (ev.target.closest("button, a, input, label, summary, .iid, .desc-opts")) return;
   const card = ev.target.closest("article.card");
   if (card && card.id) openThread(card.id);
 });
