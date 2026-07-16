@@ -23,7 +23,7 @@
     {
       "id": "i-20260715-eo41",
       "createdAt": "2026-07-15T19:39:20.873Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/nutrition",
       "description": "[suggestion] Add an \"Eating out\" quick-log mode on Nutrition: instead of exact food search, let user type/say a restaurant dish name (e.g. \"Swiggy chicken biryani, medium\") or pick from a curated India eating-out list (biryani, thali, dosa, pizza, momos, etc.) and get an AI-estimated calorie/macro range (with a +/- confidence note) logged as one entry. Problem: FAQ already tells users \"estimate as best you can\" for restaurant meals (src/lib/faq-fallback.ts) but there is no dedicated flow — users must force-fit takeout into the packaged-food/barcode/recipe search UI, which has no restaurant coverage, so eating-out days (very common for India users, Swiggy/Zomato culture) get skipped or badly mis-logged, breaking streak + daily-report accuracy. Evidence: grep across src/ shows barcode scanner, food-photo snap, and recipe search all exist for home/packaged food but zero restaurant/eating-out affordance; only mention of \"restaurant\" in the whole app is FAQ copy. v1 scope: one \"Eating out\" entry point on the Nutrition add-meal sheet -> free-text/voice input (useSpeechInput already exists) -> LLM estimates calories/macros with a visible \"estimated\" badge -> logs as a normal meal entry, no new backend tables (reuse existing custom-meal logging path). Effort: ~1-2 days FE (new sheet + prompt) + backend LLM prompt addition, no schema change.",
       "imagePath": null,
@@ -35,7 +35,29 @@
         "suggestion",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the Add Food bottom sheet reserved only the BOTTOM safe-area, so at its 92dvh max height the top rows (dish input, header) were clipped under the status bar / notch on device — the 'cutoff'. Fix (CustomMealModal.tsx): reserve top safe-area inset (paddingTop max(env(safe-area-inset-top),1.5rem)) and cap maxHeight to min(92dvh, 100dvh - safe-area-top - 12px) so top content is never cut off. Proof: modal rendered at 390x844 opens with the 'Add Food' header + eating-out estimate flow fully visible, comfortable top margin (desktop web has 0 insets; the clip was device-only safe-area).",
+        "imagePath": "images/i-20260715-eo41-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260715-eo41-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9d1146d7649f9ff798b842d6c2eaf63714235ac2",
+        "imageCommits": [
+          "9d1146d7649f9ff798b842d6c2eaf63714235ac2"
+        ],
+        "fixedAt": "2026-07-16T04:38:57.351Z",
+        "by": "shakeebshaan",
+        "appCommit": "c4384b2d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Genuine missing-top-safe-area on a full-height sheet per CLAUDE.md safe-area rules; modal now renders header+content unclipped. Device-only clip not web-reproducible (insets=0) so closest faithful proof attached."
+        }
+      },
       "history": [
         {
           "at": "2026-07-16T00:59:45.552Z",
