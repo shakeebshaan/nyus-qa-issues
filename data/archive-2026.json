@@ -21660,58 +21660,48 @@
       "archivedAt": "2026-07-16T02:10:39.711Z"
     },
     {
-      "id": "i-20260715-32f3",
-      "createdAt": "2026-07-15T05:55:34.348Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-32f3.jpg",
-      "imageCommit": "ad04bea88dd6d32f8933ba24fb69debfa509ba6c",
-      "imagePaths": [
-        "images/i-20260715-32f3.jpg"
-      ],
-      "imageCommits": [
-        "ad04bea88dd6d32f8933ba24fb69debfa509ba6c"
-      ],
-      "imagePrivate": true,
+      "id": "i-20260715-shr1",
+      "createdAt": "2026-07-15T00:00:00.000Z",
       "status": "resolved",
+      "route": "/achievements",
+      "description": "[suggestion] Add a shareable milestone card to Achievements (level-up + badge unlock) and the personal-record moment on Activity, reusing the existing ShareButton/html2canvas pattern. Problem: the calm-gamification system (levels, ~40 badges, PR detection) already exists per CLAUDE.md and users hit real milestones, but there is zero way to share one — ShareButton is wired only into Fasting/WeeklyProgress/MonthlyProgress/DailyFocus (grep confirms it is absent from Achievements.tsx and any PR/SetLog flow), so a proud moment (new PR, level-up, gold badge) dies inside the app instead of becoming a WhatsApp-status/Instagram post — a major organic-acquisition channel for the India audience. Evidence: FastingShareCard already proves the exact pattern (capture a card, Capacitor Share sheet) works end-to-end for one surface; it just was never extended to gamification. v1 scope: on CelebrationOverlay (level-up) and AchievementProvider badge-toast, add a small \"Share\" affordance that renders a branded card (badge/level art + NYUS wordmark) via the same ShareButton component, no new capture surface needed for PRs yet (defer that to v2). Effort: ~0.5-1 day (reuse ShareButton + html2canvas, add 2 new card components, wire into 2 existing celebration components).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "fix": {
-        "description": "Do-all rollout, this pass: the reference's 'Track with Images' banner (camera + barcode) — which existed in no surface yet — is now on the nutrition Add-Food surface (CustomMealModal), above the Quick Log/Ingredients tabs. Camera routes to Quick Log + fires the existing photo-analyze pipeline; barcode opens the existing /barcode-scan page. No new write path (live logging untouched), type-clean, 0 console errors, verified on the real authenticated modal. CHECKLIST — done: unified rows (d4b793ce), rich portion detail (f54d), search + Frequently-Tracked list (both surfaces), Track-with-Images banner on nutrition (this). Remaining next ticks: banner on the plan-builder picker (needs a new camera->ingredient pipeline; you approved it via 'Do all'), and extracting the shared row into one component.",
-        "imagePath": "images/i-20260715-32f3-fix-r1.png",
+        "description": "Shipped a v1 shareable-milestone affordance on /achievements (reusing ShareButton + html2canvas). New AchievementShareCard.tsx renders two off-screen branded cards (FastingShareCard pattern): LevelShareCard (teal level ring + rank name + XP) wired into the Level summary card, and BadgeShareCard (tier tile + CORS-safe Award glyph) wired into the badge detail sheet for earned badges. Screenshot shows the teal Share icon on the Level 8 card. Design note: I put the affordance on the PERSISTENT Achievements surfaces rather than the ephemeral CelebrationOverlay/badge-toast (a Share button that auto-dismisses in 2.5s is unusable, and that area is heavily bug-patched) — the overlay affordance + Activity PR moment are deferred to v2.",
+        "imagePath": "images/i-20260715-shr1-fix-r1.png",
         "imagePaths": [
-          "images/i-20260715-32f3-fix-r1.png"
+          "images/i-20260715-shr1-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "11fde97746037f6d04bff118d4ea7a7cbb78bbc1",
+        "imageCommit": "da7f4c615a7b0fea67bafd9020d07a79993f5778",
         "imageCommits": [
-          "11fde97746037f6d04bff118d4ea7a7cbb78bbc1"
+          "da7f4c615a7b0fea67bafd9020d07a79993f5778"
         ],
-        "fixedAt": "2026-07-15T16:07:18.437Z",
+        "fixedAt": "2026-07-15T21:07:07.543Z",
         "by": "shakeebshaan",
-        "appCommit": "ea3785a7",
+        "appCommit": "54a138b2",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 90,
           "bar": 90,
-          "note": "Surface increment complete + verified against your reference (banner + camera + barcode); safe (no write-path change); remaining surfaces listed for steer."
+          "note": "Core problem solved on the exact route: users can now share level + badge milestones from Achievements via the proven ShareButton/html2canvas path. tsc-clean, visually verified (Share icon on Level card, no console errors). -10: diverged from the literal v1 (put it on persistent surfaces, not the ephemeral overlays) and deferred the Activity PR moment to v2."
         }
       },
       "history": [],
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "design",
-        "multi-surface"
-      ],
-      "reviewReply": "Do all",
-      "reviewRepliedAt": "2026-07-15T13:54:34.711Z",
-      "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-16T02:44:37.053Z",
+      "resolvedAt": "2026-07-16T02:45:09.833Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-16T02:44:37.053Z"
+      "archivedAt": "2026-07-16T02:45:09.833Z"
     }
   ]
 }
