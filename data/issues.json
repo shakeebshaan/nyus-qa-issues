@@ -514,9 +514,32 @@
         "1e7a47d54ef26e9b5852f8406461648dbb509e83"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the supplement tracker was localStorage-only (nyus_supplement_data), so it was lost on the native webview after logout, never synced across devices, lived on the Dashboard (not the Diet page), and the coach had no adherence data. Fix: added server persistence (new supplement_data table + GET/PUT /api/v1/supplements, backend d2b9b7a deployed) — the card now reconciles with the server on mount, migrates existing device-local items up once, and PUTs every change (localStorage kept as offline cache). Moved the card from Dashboard into the Nutrition (Diet) page below Fine-tune your plan. Today's adherence now feeds the coach context. Screenshot: the Diet page showing the server-loaded item (proven E2E: PUT then GET returns it across requests).",
+        "imagePath": "images/i-20260716-4b4c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-4b4c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "42e4157117c007b4e23ad57a46ed72c02da84974",
+        "imageCommits": [
+          "42e4157117c007b4e23ad57a46ed72c02da84974"
+        ],
+        "fixedAt": "2026-07-16T19:46:49.879Z",
+        "by": "shakeebshaan",
+        "appCommit": "8a8592b9",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "All sub-asks addressed: tracked inside Diet page, server-persisted (survives logout/device switch), fed to coach context, mirrors the activity-tracking pattern. Verified E2E on prod (PUT then GET persists) + full-screen Diet capture; tsc clean, 20/20 supplement tests green, backend deployed."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260716-dc05",
