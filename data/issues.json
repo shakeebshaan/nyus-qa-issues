@@ -273,12 +273,32 @@
         "cc7376f40fd5f347ec6548421c1ac19c5481bf79"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: your existing plan row (id 616, saved 07-12 before the save-path fix) was still stored weekday-pinned, so the app served the Thursday session (Pull) instead of your next unfinished day. Fix: ran a targeted backfill (scripts/backfill_progressive_plan.py, backend 2788bc5) converting plan 616 in place to a PROGRESSIVE sequential program (session ids kept, so your 2 completed days are preserved). Verified server-side via get_current_unlocked_session -> now unlocks Session #3 'Push', Cycle 1. Screenshot shows the resulting header: 'Today's Workout - Progressive Plan - Session #3 - Push' (was 'Weekly Schedule / Thursday'). No app update needed; reopen Activity and Day 3 Push shows now.",
+        "imagePath": "images/i-20260716-718e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-718e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c2cf1c54f94855fc4d3fd1bffe0d316391b80112",
+        "imageCommits": [
+          "c2cf1c54f94855fc4d3fd1bffe0d316391b80112"
+        ],
+        "fixedAt": "2026-07-16T08:14:29.915Z",
+        "by": "shakeebshaan",
+        "appCommit": "4ce4a8e5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Real root cause (owner plan 616 still weekday-pinned), fixed via targeted backfill and verified server-side that the engine now unlocks Session #3 Push; capture shows the corrected Progressive Plan header. Only gap: capture is the FE rendering the now-live payload (owner's own authenticated screen can't be driven headless), not a screenshot of his device."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "No frontend change or Play Store update is needed - verified end to end (FE + backend). The app never decides which workout is 'today'; it only displays whatever session the server sends, and the 'build it myself' builder already saves your plan as a sequential program with NO weekday attached. Your wrong 'Day 4' came purely from the server picking a session by calendar weekday on your OLD plan row; the server now advances by what you have actually completed, and both plan-save paths write progressive plans (the live builder since 07-13, the AI/customize path fixed today). The only thing still old is your existing plan row. 30-second fix: open Activity, rebuild/re-save your plan once - the re-save writes a progressive plan and Day 3 Push will show next. Or reply 'backfill' and I will write + run a one-time migration to convert your existing plan in place so you do not have to re-save.",
-      "reviewedAt": "2026-07-16T07:31:04.652Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "workout",
