@@ -4,7 +4,7 @@
     {
       "id": "i-20260716-3af1",
       "createdAt": "2026-07-16T21:08:47.816Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/weekly-review",
       "description": "[bug-hunt] Weekly Review page shows enabled \"Approve All Changes\" / \"Keep Current\" buttons on an ALREADY-REVIEWED week, and tapping either always fails with a red \"Couldn't save. Try again.\" toast — with no indication the week was already reviewed. Root cause: WeeklyReviewScreen (src/pages/WeeklyReviewScreen.tsx) renders the actionable <AcceptChangesFlow> whenever a review object exists and NEVER reads review.status. reviewService.getLatest()/getById() (src/services/review.service.ts:115-125) return the review regardless of status, and the backend GET /reviews/latest|current (nyu_backend/app/routes/reviews.py:185-239) returns the current-week (or previous-week) review even when status===\"reviewed\". But the POST handlers reject any non-pending review: approve_review/modify_review/reject_review (reviews.py:279-280, 320-321, 416-417) each guard with \"if review.status not in (pending_review, pending_data): return _err(Review is already {status})\" (HTTP 400). AcceptChangesFlow.handleSubmit (src/components/review/AcceptChangesFlow.tsx:43-64) catches that and only shows toast({title:\"Couldn't save\", description:\"Try again.\"}) — so every tap errors identically and the user is stuck. Repro: (1) open a weekly review and Approve (or Keep Current) once so status flips to \"reviewed\"; (2) re-enter /weekly-review — tap the weekly-review card in the Notifications inbox (src/pages/Notifications.tsx:438 navigate(\"/weekly-review\") -> getLatest) or re-tap the push (src/capacitor/push.ts:257 /weekly-review?id=); (3) swipe to the \"Plan Changes\" section — the Approve/Keep Current buttons are enabled with no \"already reviewed\" state; (4) tap \"Approve All Changes\" or \"Keep Current\" -> red \"Couldn't save. Try again.\" toast; retrying fails the same way. Expected: an already-reviewed week should render a read-only / \"You've already reviewed this week\" state (mirror the existing 'completed' success block) or disable the action buttons — not enabled CTAs that always 400. Fix: gate AcceptChangesFlow behind review.status — when status is not \"pending_review\"/\"pending_data\", show the reviewed summary instead of the actionable flow (and/or seed the 'completed'-style branch from review.status on mount).",
       "author": "shakeebshaan",
@@ -12,7 +12,31 @@
         "bug-hunt",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "Root cause ran deeper than the UI: after the Saturday 'review ready' push a weekly review sits in the 'notified' state for the whole action window, but the backend AND the screen only allowed Approve/Keep on a 'pending' review -- so tapping the push's Approve CTA always failed with 'Couldn't save', and re-opening any finished week showed the same dead-end buttons. Fix (full-stack): the backend now accepts approve/keep/modify on a notified review and the screen keeps those actions live through the review window (first image), while a genuinely finished week (already reviewed/applied) shows a clean read-only summary instead of buttons that always error (second image).",
+        "imagePath": "images/i-20260716-3af1-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260716-3af1-fix-r2.png",
+          "images/i-20260716-3af1-fix-r2-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "399e47189bc1bcf4535da8e9f7733ed2d7a73d08",
+        "imageCommits": [
+          "399e47189bc1bcf4535da8e9f7733ed2d7a73d08",
+          "eb729fe5aa3d65903f6e7afea6bd865282d6ce39"
+        ],
+        "fixedAt": "2026-07-16T21:43:12.098Z",
+        "by": "shakeebshaan",
+        "appCommit": "5063703c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Full-stack root-cause fix: backend guard + FE gate + type union all widened to 'notified'; both notified->actionable and reviewed->read-only proven on /weekly-review; FE 23/23 + backend 35/35 green, tsc clean, backend deployed+healthy."
+        }
+      },
       "history": [
         {
           "at": "2026-07-16T21:42:57.608Z",
