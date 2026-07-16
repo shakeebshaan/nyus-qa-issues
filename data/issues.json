@@ -4,7 +4,7 @@
     {
       "id": "i-20260716-3af1",
       "createdAt": "2026-07-16T21:08:47.816Z",
-      "status": "fixed",
+      "status": "open",
       "route": "/weekly-review",
       "description": "[bug-hunt] Weekly Review page shows enabled \"Approve All Changes\" / \"Keep Current\" buttons on an ALREADY-REVIEWED week, and tapping either always fails with a red \"Couldn't save. Try again.\" toast — with no indication the week was already reviewed. Root cause: WeeklyReviewScreen (src/pages/WeeklyReviewScreen.tsx) renders the actionable <AcceptChangesFlow> whenever a review object exists and NEVER reads review.status. reviewService.getLatest()/getById() (src/services/review.service.ts:115-125) return the review regardless of status, and the backend GET /reviews/latest|current (nyu_backend/app/routes/reviews.py:185-239) returns the current-week (or previous-week) review even when status===\"reviewed\". But the POST handlers reject any non-pending review: approve_review/modify_review/reject_review (reviews.py:279-280, 320-321, 416-417) each guard with \"if review.status not in (pending_review, pending_data): return _err(Review is already {status})\" (HTTP 400). AcceptChangesFlow.handleSubmit (src/components/review/AcceptChangesFlow.tsx:43-64) catches that and only shows toast({title:\"Couldn't save\", description:\"Try again.\"}) — so every tap errors identically and the user is stuck. Repro: (1) open a weekly review and Approve (or Keep Current) once so status flips to \"reviewed\"; (2) re-enter /weekly-review — tap the weekly-review card in the Notifications inbox (src/pages/Notifications.tsx:438 navigate(\"/weekly-review\") -> getLatest) or re-tap the push (src/capacitor/push.ts:257 /weekly-review?id=); (3) swipe to the \"Plan Changes\" section — the Approve/Keep Current buttons are enabled with no \"already reviewed\" state; (4) tap \"Approve All Changes\" or \"Keep Current\" -> red \"Couldn't save. Try again.\" toast; retrying fails the same way. Expected: an already-reviewed week should render a read-only / \"You've already reviewed this week\" state (mirror the existing 'completed' success block) or disable the action buttons — not enabled CTAs that always 400. Fix: gate AcceptChangesFlow behind review.status — when status is not \"pending_review\"/\"pending_data\", show the reviewed summary instead of the actionable flow (and/or seed the 'completed'-style branch from review.status on mount).",
       "author": "shakeebshaan",
@@ -12,30 +12,38 @@
         "bug-hunt",
         "auto"
       ],
-      "fix": {
-        "description": "Root cause: WeeklyReviewScreen rendered the actionable AcceptChangesFlow whenever a review existed, never reading review.status — but the backend 400s approve/keep on any already-reviewed week, so re-entering it showed enabled Approve/Keep CTAs that always failed with 'Couldn't save.' Fix (src/pages/WeeklyReviewScreen.tsx): gate on review.status — non-pending weeks now render a read-only ReviewedSummary ('You've already reviewed this week' + read-only proposed changes + Discuss/Back-to-dashboard) instead of dead-end buttons. Added data-testid to AcceptChangesFlow + 5 regression tests (22/22 green, tsc clean).",
-        "imagePath": "images/i-20260716-3af1-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-3af1-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "e04f1809d5281829a18a339f2e4289574f4d0841",
-        "imageCommits": [
-          "e04f1809d5281829a18a339f2e4289574f4d0841"
-        ],
-        "fixedAt": "2026-07-16T21:32:26.713Z",
-        "by": "shakeebshaan",
-        "appCommit": "ab58dfb0",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root cause correctly identified and fixed at the gate (review.status); mirrors backend 400 guard exactly. Read-only ReviewedSummary covers all 3 non-pending states. 5 regression tests + testid, 22/22 green, tsc clean. Full-screen 390x844 proof shows the exact reviewed state with no failing CTAs."
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-16T21:42:57.608Z",
+          "event": "reopened",
+          "note": "Re-resolving with the complete root-cause fix + real proof shots. The prior resolve was FE-only and mis-framed: the deeper cause is the backend flipping pending_review->notified on the Saturday review-ready push, and the approve/keep/modify guards rejected 'notified' -- so tapping the push CTA 400'd for the whole action window. Now fixed full-stack (backend guard + FE gate + type) and deployed.",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: WeeklyReviewScreen rendered the actionable AcceptChangesFlow whenever a review existed, never reading review.status — but the backend 400s approve/keep on any already-reviewed week, so re-entering it showed enabled Approve/Keep CTAs that always failed with 'Couldn't save.' Fix (src/pages/WeeklyReviewScreen.tsx): gate on review.status — non-pending weeks now render a read-only ReviewedSummary ('You've already reviewed this week' + read-only proposed changes + Discuss/Back-to-dashboard) instead of dead-end buttons. Added data-testid to AcceptChangesFlow + 5 regression tests (22/22 green, tsc clean).",
+            "imagePath": "images/i-20260716-3af1-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260716-3af1-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "e04f1809d5281829a18a339f2e4289574f4d0841",
+            "imageCommits": [
+              "e04f1809d5281829a18a339f2e4289574f4d0841"
+            ],
+            "fixedAt": "2026-07-16T21:32:26.713Z",
+            "by": "shakeebshaan",
+            "appCommit": "ab58dfb0",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 93,
+              "bar": 90,
+              "note": "Root cause correctly identified and fixed at the gate (review.status); mirrors backend 400 guard exactly. Read-only ReviewedSummary covers all 3 non-pending states. 5 regression tests + testid, 22/22 green, tsc clean. Full-screen 390x844 proof shows the exact reviewed state with no failing CTAs."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
