@@ -21,50 +21,6 @@
       "history": []
     },
     {
-      "id": "i-20260716-5ec9",
-      "createdAt": "2026-07-16T05:22:12.784Z",
-      "status": "fixed",
-      "route": "/social/search",
-      "description": "[bug-hunt] Blocking a user is a one-way trap: there is NO unblock UI anywhere in the app. On /social/search, the per-result \"...\" menu has a single-tap \"Block User\" action (UserSearch.tsx:258-265) that fires immediately with NO confirmation dialog. After tapping, a toast says \"User blocked. They won't appear in future searches.\" But the app never exposes any screen to view or reverse this. social.service.ts DEFINES getBlockedUsers() (GET /friends/blocked) and unblockUser() (DELETE /friends/unblock/<id>) plus a BlockedUser/BlockedUsersResponse type, yet a repo-wide grep shows those two methods are called from ZERO components (dead code) — no /blocked route in App.tsx, no blocked-users list in Privacy or any settings screen. Expected: either a confirm step before blocking AND a manageable blocked-users list (unblock), or at minimum a way to undo. Actual: one accidental tap permanently blocks someone with no in-app recourse; the backend unblock endpoint is unreachable from the UI. Repro: /social/search -> search a name -> tap the vertical \"...\" on any result -> \"Block User\" (blocks instantly) -> now try to find any screen to unblock -> none exists.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Root cause: blocking had no reversal path — getBlockedUsers/unblockUser existed but were called from zero components (no /blocked route), and the search menu blocked instantly with no confirm. Fix: added /social/blocked route + BlockedUsers.tsx (lists blocked users, per-row Unblock via DELETE /friends/unblock/<id>), a 'Blocked' entry point in the Find Friends header, and an AlertDialog confirm before UserSearch fires a block.",
-        "imagePath": "images/i-20260716-5ec9-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-5ec9-fix-r1.png",
-          "images/i-20260716-5ec9-fix-r1-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "f1943d6b04a8893213a4190eaf1370bbf2d3f0eb",
-        "imageCommits": [
-          "f1943d6b04a8893213a4190eaf1370bbf2d3f0eb",
-          "696becd731544a51e845290a85b25abc3f3c6332"
-        ],
-        "fixedAt": "2026-07-16T06:11:42.809Z",
-        "by": "shakeebshaan",
-        "appCommit": "c19fb2b6",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 94,
-          "bar": 90,
-          "note": "Full two-way flow: confirm before block + dedicated manageable Blocked Users screen with unblock. Backend routes already existed; tsc clean. Proof shows the new screen + header entry point (empty state, QA acct has none blocked)."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260715-f2c1",
       "createdAt": "2026-07-15T00:00:00.000Z",
       "status": "open",
