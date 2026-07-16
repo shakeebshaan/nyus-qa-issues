@@ -312,33 +312,41 @@
         "6f575709f8f9f9bfd1567f83e1aed7679ccf5b22"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the board only showed a two-column Issue|Fix layout with no way to see the back-and-forth. Fix: index.html now renders a per-issue THREAD — click any issue card (or the new 🧵 Thread button) to open a chronological conversation modal (Reported → prior proposed fixes/rejections → flag-for-direction → your reply → current proposed fix), with owner/Claude bubbles, timestamps and per-turn screenshots, built from existing issue fields. (Proof captured tokenless, so private screenshots show as locked; they render normally when you're connected.)",
-        "imagePath": "images/i-20260716-21d5-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-21d5-fix-r1.png",
-          "images/i-20260716-21d5-fix-r1-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "42938e93ea3deb70241c4d00aeee2bc73a408791",
-        "imageCommits": [
-          "42938e93ea3deb70241c4d00aeee2bc73a408791",
-          "031847459317394abcff573c220f69915fb02de5"
-        ],
-        "fixedAt": "2026-07-16T06:37:02.576Z",
-        "by": "shakeebshaan",
-        "appCommit": "ebde1c7",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Exactly matches the ask: clicking an issue opens a chronological thread (submission -> proposal -> your response -> ...). Verified live both paths (card-surface click + 🧵 button), multi-turn 718e thread renders owner/Claude bubbles+timestamps+shots, 0 console errors. -7: proof captured tokenless so private shots show locked."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-16T07:54:42.558Z",
+          "event": "reopened",
+          "note": "Still same",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: the board only showed a two-column Issue|Fix layout with no way to see the back-and-forth. Fix: index.html now renders a per-issue THREAD — click any issue card (or the new 🧵 Thread button) to open a chronological conversation modal (Reported → prior proposed fixes/rejections → flag-for-direction → your reply → current proposed fix), with owner/Claude bubbles, timestamps and per-turn screenshots, built from existing issue fields. (Proof captured tokenless, so private screenshots show as locked; they render normally when you're connected.)",
+            "imagePath": "images/i-20260716-21d5-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260716-21d5-fix-r1.png",
+              "images/i-20260716-21d5-fix-r1-2.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "42938e93ea3deb70241c4d00aeee2bc73a408791",
+            "imageCommits": [
+              "42938e93ea3deb70241c4d00aeee2bc73a408791",
+              "031847459317394abcff573c220f69915fb02de5"
+            ],
+            "fixedAt": "2026-07-16T06:37:02.576Z",
+            "by": "shakeebshaan",
+            "appCommit": "ebde1c7",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 93,
+              "bar": 90,
+              "note": "Exactly matches the ask: clicking an issue opens a chronological thread (submission -> proposal -> your response -> ...). Verified live both paths (card-surface click + 🧵 button), multi-turn 718e thread renders owner/Claude bubbles+timestamps+shots, 0 console errors. -7: proof captured tokenless so private shots show locked."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     },
     {
