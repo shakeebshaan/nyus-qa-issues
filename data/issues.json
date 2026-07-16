@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260716-sl33",
+      "createdAt": "2026-07-16T00:00:00.000Z",
+      "status": "open",
+      "route": "/dashboard",
+      "description": "[suggestion] Surface synced sleep data as a Sleep card on Dashboard/Progress. Problem: Health Connect sync already pulls sleep_minutes every day (health-connect.service.ts, POST /api/v1/health/sync -> health_sync.py) and the backend stores it, but nothing in the app ever reads it back -- no dashboard card, no Weekly Insights mention, no coaching-prompt use. Users grant sleep permission for a data point the app silently swallows and never shows them, which reads as broken/pointless once noticed. v1 scope: a Dashboard card (or Progress tab section) showing last-night sleep + 7-day avg/trend, sourced from the existing synced field -- no new sync work needed. Stretch: mention short-sleep nights in Weekly Insights copy. Effort: small-medium (FE-only for v1: one card + one query; backend already has the data).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260716-5ec9",
       "createdAt": "2026-07-16T05:22:12.784Z",
       "status": "open",
