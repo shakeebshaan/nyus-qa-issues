@@ -400,12 +400,12 @@
   .tok-state.bad { color: var(--danger); font-weight: 600; }
 
   /* ── Lightbox ───────────────────────────────────────── */
-  #lightbox { background: transparent; max-width: none; width: 100vw; height: 100dvh; margin: 0; border-radius: 0; }
+  #lightbox { background: transparent; max-width: none; max-height: 100dvh; width: 100vw; height: 100dvh; margin: 0; border-radius: 0; }
   #lightbox::backdrop { background: rgb(10 12 14 / .92); }
   #lightbox img { width: 100vw; height: 100dvh; object-fit: contain; cursor: zoom-out; }
 
   /* ── Report viewer (private HTML report rendered inline, on click) ── */
-  #report-viewer { width: 100vw; max-width: none; height: 100dvh; margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--bg); }
+  #report-viewer { width: 100vw; max-width: none; max-height: 100dvh; height: 100dvh; margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--bg); }
   #report-viewer::backdrop { background: rgb(10 12 14 / .92); }
   .rv-bar { position: sticky; top: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--ink); color: #fff; }
   .rv-bar .rv-title { font-size: 13.5px; font-weight: 700; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -414,8 +414,12 @@
   #rv-frame { width: 100%; height: calc(100dvh - 60px); border: 0; background: var(--bg); }
   .rv-state { padding: 48px 22px; text-align: center; color: var(--muted); font-size: 14.5px; }
 
-  /* ── Thread viewer (issue conversation, opened on card click) ── */
-  #thread-viewer { width: 100vw; max-width: none; height: 100dvh; margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--bg); }
+  /* ── Thread viewer (issue conversation, opened on card click) ──
+     max-height:100dvh overrides the UA `dialog:modal` cap of
+     calc(100% - 6px - 2em) — without it the modal stops ~38px short of the
+     screen bottom and the semi-transparent backdrop lets the board show
+     through, reading as "doesn't fit the screen" (i-20260716-7b66). */
+  #thread-viewer { width: 100vw; max-width: none; max-height: 100dvh; height: 100dvh; margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--bg); }
   #thread-viewer::backdrop { background: rgb(10 12 14 / .55); }
   .tv-body { height: calc(100dvh - 60px); overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .tv-inner { max-width: 620px; margin: 0 auto; padding: 18px 16px calc(30px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 14px; }
