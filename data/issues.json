@@ -292,7 +292,7 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "needsReview": true,
+      "needsReview": false,
       "reviewReason": "Root-caused + core fix SHIPPED & DEPLOYED (backend ab0ff39, prod healthy). Cause: custom 'build it myself' plans (POST /workout/save-plan) were saved non-progressive with each Day N pinned to a calendar weekday. A rest day let the calendar advance past the next unfinished day, so after Day1/Day2 + a rest day the app jumped to Day4 (Pull) instead of Day3 (Push) — exactly your screenshots. Now the builder-save path builds a PROGRESSIVE sequential plan (session_number 1..N, day_of_week=NULL) that advances on completion via get_current_unlocked_session, matching the onboarding-finalize path. IMMEDIATE REMEDY for your current plan: rebuild/re-save it once (Activity -> plan builder) — the new save will be correct and show Day3 Push next. The fix only affects plans saved from now on; your EXISTING plan row is still weekday-pinned. DECISION NEEDED: want me to also write a one-time backfill migration converting already-created weekday-pinned sequential plans to progressive? Risk: a genuine fixed-weekday plan (user really trains Mon/Wed/Fri) is stored the same way, so a blind bulk convert could wrongly de-pin those — I'd scope it to plans whose sessions are named 'Day N' with contiguous weekdays, but it's still heuristic on prod data, so I'm not running it unattended. Reply 'backfill' to have me author+run the scoped migration, or 'rebuild' if you'll just re-save.",
       "reviewedAt": "2026-07-16T06:15:30.973Z",
       "reviewedBy": "shakeebshaan",
@@ -300,7 +300,10 @@
         "workout",
         "backend",
         "shipped"
-      ]
+      ],
+      "reviewReply": "Do I need to update the frontend app also ?",
+      "reviewRepliedAt": "2026-07-16T07:21:09.121Z",
+      "reviewReplyBy": "shakeebshaan"
     },
     {
       "id": "i-20260716-21d5",
