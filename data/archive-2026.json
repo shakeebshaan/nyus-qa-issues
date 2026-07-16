@@ -21830,6 +21830,51 @@
       "resolvedAt": "2026-07-16T06:15:01.490Z",
       "resolvedBy": "shakeebshaan",
       "archivedAt": "2026-07-16T06:15:01.490Z"
+    },
+    {
+      "id": "i-20260716-625e",
+      "createdAt": "2026-07-16T06:54:06.943Z",
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: /weight/log-data only returns daily_weight_history (a fixed 7-day window), and LogWeight.tsx derived the 'N-day logging streak' chip/success line from it, so the count silently capped at 7 regardless of the real run. Fix: backend now computes a true unbounded consecutive-day streak over ALL WeightLog rows (distinct-date query, today-not-logged = grace day) and returns it as logging_streak (backend.py WeightLogDataResource); LogWeight.tsx prefers that field and only falls back to the old client loop when absent. Deployed to prod (8239577, healthy). PROOF: live prod GET /weight/log-data now returns logging_streak as a computed field independent of the 7-cap (verified). Note: demonstrating a >7 value requires 8+ consecutive real log days, which the QA account lacks (streak=1 -> chip hidden, renders only at >=2), so the attached capture shows the page rendering cleanly post-fix and the API response is the authoritative proof.",
+        "imagePath": "images/i-20260716-625e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-625e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5230940d550bd15043fcc195882aa7550675a825",
+        "imageCommits": [
+          "5230940d550bd15043fcc195882aa7550675a825"
+        ],
+        "fixedAt": "2026-07-16T07:05:17.509Z",
+        "by": "shakeebshaan",
+        "appCommit": "4ce4a8e5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root cause code-traced in both repos and confirmed against the live API; fix applied at source (BE distinct-date query + FE prefers new field), deployed+verified on prod, TS/py/test-gate green. Visual can't show >7 without 8+ days of QA data (honestly noted) but the API-response proof is authoritative."
+        }
+      },
+      "history": [],
+      "route": "/log-weight",
+      "description": "[bug-hunt] Weight logging streak silently caps at 7 days (understates real streaks).\n\nWHERE: /log-weight — the \"N-day logging streak\" chip (LogWeight.tsx:694-699, i18n log_weight.logging_streak \"🔥 {{count}}-day logging streak\") and the post-save success line (LogWeight.tsx:570, log_weight.success.streak).\n\nWHAT: loggingStreak (LogWeight.tsx:424-442) counts consecutive logged days backward from today using a 400-iteration loop (for i<400) over a Set built from weightData.daily_weight_history. The author clearly intends an unbounded count (400 days ~= 13 months). But daily_weight_history is the ONLY source and the backend builds it with exactly 7 entries: WeightLogDataResource.get in backend.py:6328-6356 loops for i in range(6,-1,-1) i.e. today + 6 prior days, with no length param. So the Set holds at most 7 ISO dates and the streak is hard-capped at 7.\n\nEXPECTED: A user who logs weight daily for e.g. 20 days sees \"🔥 20-day logging streak\".\nACTUAL: The chip/success line never exceed \"7-day\" no matter how long the true consecutive-logging run is — it silently plateaus at 7.\n\nREPRO (code trace, deterministic): log weight on 8+ consecutive days -> GET /weight/log-data returns daily_weight_history of length 7 -> loggingStreak Set has <=7 dates -> streak maxes at 7. Confirmed both repos: FE LogWeight.tsx:424-442 (single source = daily_weight_history) + BE backend.py:6328-6356 (range(6,-1,-1), 7 rows, logged flag). No other longer-history source exists.\n\nFIX: either expose a real consecutive-log-days count from the backend (it already computes streaks elsewhere, e.g. FitnessPlan.current_streak / summary streaks), or drop the misleading 400-loop and label it honestly as a rolling 7-day window. Note WeeklyProgress/MonthlyProgress streak cards read backend streak values directly and are NOT affected.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false,
+      "resolvedAt": "2026-07-16T07:54:17.543Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-16T07:54:17.543Z"
     }
   ]
 }
