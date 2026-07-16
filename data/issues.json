@@ -293,8 +293,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "No — you don't need to update the app/frontend. The fix is 100% server-side (backend.py, already live on prod as ab0ff39). The app already sends the plan in the exact format that now triggers the correct progressive build, so nothing in the frontend changed or needs to. The 'Weekly Schedule / Thursday' badge in your screenshot is only because your CURRENT plan row was saved under the old weekday-pinned logic. One-time remedy: open Activity -> plan builder and re-save your plan once — the new save is progressive (Day 1..N, advances on completion) and will correctly show Day 3 Push next instead of jumping to Day 4. New plans and all other users are already correct automatically. Still pending your call from before: reply 'backfill' if you'd rather I author+run a scoped migration to auto-convert existing weekday-pinned plans (no re-save needed), or 'rebuild' if you'll just re-save yours.",
-      "reviewedAt": "2026-07-16T07:29:38.633Z",
+      "reviewReason": "No frontend change or Play Store update is needed - verified end to end (FE + backend). The app never decides which workout is 'today'; it only displays whatever session the server sends, and the 'build it myself' builder already saves your plan as a sequential program with NO weekday attached. Your wrong 'Day 4' came purely from the server picking a session by calendar weekday on your OLD plan row; the server now advances by what you have actually completed, and both plan-save paths write progressive plans (the live builder since 07-13, the AI/customize path fixed today). The only thing still old is your existing plan row. 30-second fix: open Activity, rebuild/re-save your plan once - the re-save writes a progressive plan and Day 3 Push will show next. Or reply 'backfill' and I will write + run a one-time migration to convert your existing plan in place so you do not have to re-save.",
+      "reviewedAt": "2026-07-16T07:31:04.652Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "workout",
