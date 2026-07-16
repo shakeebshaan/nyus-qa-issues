@@ -382,31 +382,39 @@
     {
       "id": "i-20260715-r3pt",
       "createdAt": "2026-07-15T12:00:00.000Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: no true re-log existed on /nutrition — diary rows (NutritionDiaryCard) were display-only, so repeating a meal meant reopening CustomMealModal and re-searching. Fix (FE-only): one-tap round Repeat (RotateCcw) button on each diary row re-logs that row's exact foods + macros to today via existing POST /logs/meal (new repeatMealMutation/handleRepeatMeal in useNutritionData, next free meal_number, cache invalidation + toast). Proof: tapping Repeat on Masala Oats fired 'Meal logged' and grew the diary 2->3 items (450->770 kcal).",
-        "imagePath": "images/i-20260715-r3pt-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-r3pt-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c",
-        "imageCommits": [
-          "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c"
-        ],
-        "fixedAt": "2026-07-15T16:35:18.522Z",
-        "by": "shakeebshaan",
-        "appCommit": "96c6ee24",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Delivers the card's exact v1 scope: one-tap re-log of a diary row's foods/macros to today via existing POST /logs/meal, no new backend route. Verified end-to-end (tap -> 'Meal logged' toast, diary 2->3 items 450->770 kcal), tsc + test:unit gate green, Section 30 updated. Honest scope note: lands on the food-diary rows (NutritionDiaryCard), the only true meal-diary surface; plan users tick meals via the plan list which already has per-meal actions."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-16T01:00:53.710Z",
+          "event": "reopened",
+          "note": "not like this show it properly like the meals we have",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: no true re-log existed on /nutrition — diary rows (NutritionDiaryCard) were display-only, so repeating a meal meant reopening CustomMealModal and re-searching. Fix (FE-only): one-tap round Repeat (RotateCcw) button on each diary row re-logs that row's exact foods + macros to today via existing POST /logs/meal (new repeatMealMutation/handleRepeatMeal in useNutritionData, next free meal_number, cache invalidation + toast). Proof: tapping Repeat on Masala Oats fired 'Meal logged' and grew the diary 2->3 items (450->770 kcal).",
+            "imagePath": "images/i-20260715-r3pt-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260715-r3pt-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c",
+            "imageCommits": [
+              "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c"
+            ],
+            "fixedAt": "2026-07-15T16:35:18.522Z",
+            "by": "shakeebshaan",
+            "appCommit": "96c6ee24",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "Delivers the card's exact v1 scope: one-tap re-log of a diary row's foods/macros to today via existing POST /logs/meal, no new backend route. Verified end-to-end (tap -> 'Meal logged' toast, diary 2->3 items 450->770 kcal), tsc + test:unit gate green, Section 30 updated. Honest scope note: lands on the food-diary rows (NutritionDiaryCard), the only true meal-diary surface; plan users tick meals via the plan list which already has per-meal actions."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "route": "/nutrition",
       "description": "[suggestion] One-tap \"Repeat meal\" on the Nutrition diary — long-press or a small repeat-icon on any past meal card re-logs the same food(s)/quantities to today with one confirm tap, instead of requiring the CustomMealModal. Problem: athletes eat the same breakfast/post-workout shake most days but must reopen the manual-entry modal, hunt the food again via search or the buried \"Recent meals\" chip row (CustomMealModal.tsx:514-533), and resubmit every time — friction that discourages consistent logging (the exact behavior daily-completion/streak scoring depends on). Evidence: repo scan confirmed barcode scan, water tracker, and streak-freeze already exist, but no true repeat-log exists anywhere in src/pages/Nutrition.tsx or src/pages/_components/nutrition/ — the closest is the modal's prefill-only \"Recent meals\" row, which still requires opening the modal and resubmitting. Comparable trackers (MyFitnessPal \"Copy meal\", Cronometer \"Copy from previous day\") ship this as a core retention feature. v1 scope: add a repeat icon/swipe action on each meal-diary row (today or yesterday) that calls the existing add-meal/log endpoint with the same food_items + quantities, no new backend route needed; skip cross-day \"copy whole day\" for v1. Effort: ~0.5-1 day FE-only (new button + reuse existing log-meal service call).",
       "author": "shakeebshaan",
