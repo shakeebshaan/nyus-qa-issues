@@ -21877,49 +21877,52 @@
       "archivedAt": "2026-07-16T07:54:17.543Z"
     },
     {
-      "id": "i-20260716-e3b7",
-      "createdAt": "2026-07-16T10:38:52.391Z",
-      "status": "resolved",
-      "route": "/measurements",
-      "description": "[bug-hunt] Progress Photos \"Compare\" view: the per-pane stepper arrows are inverted relative to the numeric \"X/N\" counter — the right/next (→) arrow moves the counter DOWN and the left/prev (←) arrow is disabled at position \"N/N\".\n\nRoute: /measurements (Progress Photos card → \"Compare\" button; opens the full-screen CompareView). Requires >=2 progress photos.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx, CompareView stepper (left pane lines 61-68, right pane 82-89).\n  - The <ChevronLeft/> (←) button does setLeftIdx(i => Math.min(i+1, len-1)) and is disabled when leftIdx >= len-1.\n  - The <ChevronRight/> (→) button does setLeftIdx(i => Math.max(i-1, 0)) and is disabled when leftIdx <= 0.\n  - The counter renders {leftIdx+1}/{photos.length}.\nSame inversion in the right (\"After\") pane with setRightIdx.\n\nWHY: photos come newest-first from the backend (ProgressPhoto.query.order_by(taken_at.desc()), backend.py:9980), so index 0 = newest, index N-1 = oldest. Left pane initializes to leftIdx = N-1 (oldest, labeled \"Before\"), so its counter opens at \"N/N\". At that position the ← (previous) button is disabled and the → (next) button is enabled; tapping → decrements the index and the counter counts DOWN (N/N → (N-1)/N → 1/N). The arrow direction contradicts the counter progression: → decreases the shown number, ← increases it.\n\nEXPECTED: standard pagination — ← decrements the \"X/N\" counter (disabled at 1/N), → increments it (disabled at N/N).\nACTUAL: arrows are swapped vs the counter; → makes the counter go down, ← makes it go up, and ← is disabled while the counter reads \"N/N\".\n\nREPRO: log in, upload >=2 progress photos, open /measurements, tap \"Compare\", then tap the → arrow under the left (Before) image — the \"X/N\" counter decreases instead of increasing (and ← is disabled at \"N/N\").\n\nFIX: swap the icons (ChevronLeft ↔ ChevronRight) OR swap the onClick/disabled handlers so the ← button decrements toward index 0 and → increments toward N-1, keeping the counter and arrow direction consistent. Apply to both panes.\n\nNOT a dup: no existing issue references Progress Photos or the Compare view (checked data/issues.json all statuses). LOW severity (both photos still reachable; default oldest-vs-newest compare is correct).",
+      "id": "i-20260716-b76c",
+      "createdAt": "2026-07-16T08:19:40.951Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
       "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
+      "imagePath": "images/i-20260716-b76c-0.jpg",
+      "imageCommit": "150a98ff4d7f79df399c71cd91f5c77fc31ddb60",
+      "imagePaths": [
+        "images/i-20260716-b76c-0.jpg",
+        "images/i-20260716-b76c-1.jpg"
       ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "imageCommits": [
+        "150a98ff4d7f79df399c71cd91f5c77fc31ddb60",
+        "7363a727cea4b175c9ec4427f05e9b28fe5d021c"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
       "fix": {
-        "description": "In the Progress Photos 'Compare' view, the left/right arrows fought the 1/N counter: the left arrow moved the count up (and was greyed out at the last photo) while the right arrow moved it down. Swapped the arrows in both panes so they follow the counter normally — left goes back (disabled on the first photo), right goes forward (disabled on the last).",
-        "imagePath": "images/i-20260716-e3b7-fix-r1.png",
+        "description": "Root cause: the live-workout set editor (ExerciseWheelPicker) only let you log/update or add sets — there was no way to remove a set logged by mistake. Fix: expanded logged sets now show a 'Remove set' button (two-tap confirm, calm/no-modal) that optimistically drops the set and calls a new backend DELETE /activity/workout/log-set (WorkoutLogSetResource.delete, verifies ownership + not-completed, idempotent), restoring the set if the call fails. Backend deployed to prod; Activity.tsx resyncs activity-overview + strength-summary after removal.",
+        "imagePath": "images/i-20260716-b76c-fix-r1.png",
         "imagePaths": [
-          "images/i-20260716-e3b7-fix-r1.png"
+          "images/i-20260716-b76c-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "74121c54eb8821f5541832bf553ae3739a1f9fff",
+        "imageCommit": "8f999916def15469232c3bc0447cf71a25d51e92",
         "imageCommits": [
-          "74121c54eb8821f5541832bf553ae3739a1f9fff"
+          "8f999916def15469232c3bc0447cf71a25d51e92"
         ],
-        "fixedAt": "2026-07-16T10:47:35.827Z",
+        "fixedAt": "2026-07-16T09:52:13.975Z",
         "by": "shakeebshaan",
-        "appCommit": "8acc1e7f",
+        "appCommit": "ba645ee5",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 94,
+          "score": 90,
           "bar": 90,
-          "note": "Root cause (inverted onClick/disabled) fixed in both panes; capture shows correct arrow-enabled/counter direction; surgical, reviewer-confirmed, test gate green."
+          "note": "Reproduced the gap: a logged set had only Update/Add-Bonus, no remove. Built a Vite dev harness (logged set) and verified: expanded logged set now shows a red 'Remove set' button (screenshot), tapping it -> 'Tap to confirm' two-tap guard (aria 'Confirm remove set 1'), second tap fires DELETE /activity/workout/log-set. Backend delete() method deployed to prod (endpoint now 401 auth-gated, was 405). -10: end-to-end persistence not driven with a live authed session headless; optimistic-remove + restore-on-failure proven via console (405 pre-deploy -> restore)."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-16T12:05:45.202Z",
+      "resolvedAt": "2026-07-16T12:06:46.094Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-16T12:05:45.202Z"
+      "archivedAt": "2026-07-16T12:06:46.094Z"
     }
   ]
 }
