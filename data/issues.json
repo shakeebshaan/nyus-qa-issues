@@ -15,9 +15,13 @@
       "history": [],
       "author": "shakeebshaan",
       "tags": [
-        "suggestion",
-        "auto"
-      ]
+        "shipped",
+        "ux-call"
+      ],
+      "needsReview": true,
+      "reviewReason": "Already shipped — this suggestion is a stale dupe born from grepping only src/lib/fasting.ts. The vrat-day concept and ALL THREE requested behaviors already exist, just not in fasting.ts (which is intentionally the device-local IF-timer only):\n(1) Vrat toggle + type selector: src/pages/Nutrition.tsx FastingBanner (FASTING_TYPES = vrat/full/intermittent), persisted via nutrition.service.setFastingStatus -> backend PUT /daily-logs/fasting (backend.py:15824) into DailyLog.fasting_type (db_models.py:259, migration 20260702_001).\n(2) Vrat-friendly meal filter: llm_prompts.py:1988 swaps the diet prompt for vrat foods (sabudana/kuttu/singhare/rajgira/sendha namak/fruits/dahi/paneer) and STRICTLY AVOIDS atta/rice/dal/table-salt/onion/garlic — more complete than the card asks.\n(3) Streak-exemption: app/services/daily_report.py:343 makes full/vrat days streak-neutral (auto-maintains). (4) Reminder suppression: app/services/notification_jobs.py:133 skips fasting-day users from the log-a-meal push.\nThe ONLY real delta vs the card is entry-point placement: the toggle lives on the /nutrition banner, not /fasting. /fasting is deliberately the IF count-up timer; vrat/full are whole-day meal-plan concepts keyed to the daily log. OWNER UX CALL: do you want the existing vrat toggle ALSO surfaced on /fasting for discoverability (adds a getFastingStatus fetch + mutation + i18n to Fasting.tsx), or keep the surfaces separate as designed? No code shipped this tick to avoid duplicating a shipped feature.",
+      "reviewedAt": "2026-07-16T20:59:53.268Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260716-9f2e",
