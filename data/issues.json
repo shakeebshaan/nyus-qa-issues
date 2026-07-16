@@ -338,48 +338,6 @@
       "imagePrivate": false
     },
     {
-      "id": "i-20260715-a4e9",
-      "createdAt": "2026-07-15T15:10:52Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: My Group was built by intersecting the GLOBAL top-50 leaderboard page with partner-group member IDs client-side, so any member (incl. you) ranked below #50 globally vanished and the 'Your Rank' card was hidden. Fix: LeaderboardView now sends the group's member IDs to /leaderboards (new member_ids param); the backend filters+re-ranks the FULL member set server-side (all 3 calculators) and returns your group rank. Verified live on prod (member_ids filters both directions) + FE regression test; screenshot shows My Group with a below-top member and the Your Rank card now present.",
-        "imagePath": "images/i-20260715-a4e9-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-a4e9-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "313646ca02134e45237a25a4fe156096869436cd",
-        "imageCommits": [
-          "313646ca02134e45237a25a4fe156096869436cd"
-        ],
-        "fixedAt": "2026-07-15T15:40:43.438Z",
-        "by": "shakeebshaan",
-        "appCommit": "3560e721",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Root-caused; correct server-side re-rank across all 3 calculators (default member_ids=None keeps global behavior). Verified live on prod both directions (self->ranked #1 w/ group rank, non-member->0 rows) + new FE regression test + faithful route-mocked render showing the own-rank card and a below-top member under My Group."
-        }
-      },
-      "history": [],
-      "route": "/social",
-      "description": "[bug-hunt] \"My Group\" leaderboard silently drops any partner-group member ranked outside the global top 50 (and hides your own rank card if you are below #50 globally).\n\nRoot cause (src/components/LeaderboardView.tsx): the board is built from a SINGLE call to leaderboardService.getLeaderboard(selectedType, selectedPeriod) at line 96, which uses the service defaults page=1, limit=50 and sends NO group parameter — so it returns only the GLOBAL top 50. The \"My Group\" tab is then produced (line 207-213) by intersecting those 50 rows with the partner-group member IDs (groupMemberIds) and re-ranking 1..n. There is no other query that fetches group members' scores/streaks. partnerGroups only supplies member IDs, not scores.\n\nConsequence: a partner-group member whose global rank is > 50 (very common with any real user base) never appears on \"My Group\". Worse, currentUserRankCard (line 221-228) in group scope is derived from groupResults.find(e=>e.is_current_user); if the current user is ranked > 50 globally, they are absent from the 50 rows, so me is undefined -> the \"Your Rank\" card is hidden, and if none of the group is in the top 50 the tab shows the empty state \"No group members on this board yet\" even though the group is active. The inline comment at line 189-190 claims this \"works correctly today\" — it does not for the common below-top-50 case.\n\nExpected: My Group ranks ALL members of the group against each other regardless of global rank; your own group rank always shows.\nActual: only members who happen to sit in the global top 50 are shown; everyone else (often including you) vanishes.\n\nRepro: 1) Be in a partner group. 2) Ensure you (or a group member) are ranked below #50 on the global board for the selected type (e.g. wellness_streak / all_time on a populated board). 3) Social -> Leaderboard -> tap \"My Group\". Observe missing members and/or missing \"Your Rank\" card / empty-state despite an active group.\n\nFix: pass a group filter to the /leaderboards endpoint (backend-side member filtering) OR fetch each group member's score and rank the full member set client-side, instead of intersecting the global top-50 page.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
       "id": "i-20260715-r3pt",
       "createdAt": "2026-07-15T12:00:00.000Z",
       "status": "open",
