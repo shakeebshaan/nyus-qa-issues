@@ -21877,14 +21877,14 @@
       "archivedAt": "2026-07-16T07:54:17.543Z"
     },
     {
-      "id": "i-20260716-c297",
-      "createdAt": "2026-07-16T07:36:54.576Z",
+      "id": "i-20260716-sl33",
+      "createdAt": "2026-07-16T00:00:00.000Z",
       "status": "resolved",
-      "route": "/settings/subscription",
-      "description": "[bug-hunt] Cancel-subscription confirmation dialog renders \"until —\" (bare em-dash) instead of a date or fallback phrase.\n\nRoute: /settings/subscription (Profile → Subscription → Cancel subscription).\n\nWHERE: src/pages/SubscriptionSettings.tsx AlertDialogDescription (lines 416-419):\n  \"You'll keep Pro access until <strong>{formatDate(info?.next_charge_date ?? null)}</strong>. After that, your plan will revert to the free tier.\"\nformatDate(null) returns \"—\" (lines 77-78: if (!iso) return \"—\").\n\nWHY IT ALWAYS SHOWS: the file's own comment (lines 265-270) states the backend \"doesn't expose renewal details yet\", so next_charge_date is null for active/trial subscribers in production — the NORMAL case, not an edge. Every subscriber who taps \"Cancel subscription\" sees: \"You'll keep Pro access until —. After that, your plan will revert to the free tier.\"\n\nINCONSISTENCY: the success toast (handleCancel, lines 159-161) and the pending-cancel banner (lines 312-317) BOTH already guard null and fall back to \"the end of your current period\" / \"the end of your current billing period\". Only this pre-cancel AlertDialog lacks the guard.\n\nEXPECTED: when next_charge_date is null, dialog should read \"...keep Pro access until the end of your current billing period.\" (mirror the toast/banner).\nACTUAL: \"...keep Pro access until —.\"\n\nREPRO: log in as an active/trial subscriber (next_charge_date not surfaced by BE), open /settings/subscription, tap Cancel subscription, read the confirmation dialog body.\n\nNOT a dup: prior subscription sweep (tick #12) reviewed only the handleCancel TOAST (which has the null fallback and was ruled fine); 9c2e = soft-cancel access-timing, b7a4 = restore false-success toast. This is the confirmation-dialog copy — a distinct, unguarded location.\n\nFIX: replace formatDate(info?.next_charge_date ?? null) in the dialog with a null-conditional matching the banner: info?.next_charge_date ? formatDate(info.next_charge_date) : \"the end of your current billing period\".",
+      "route": "/dashboard",
+      "description": "[suggestion] Surface synced sleep data as a Sleep card on Dashboard/Progress. Problem: Health Connect sync already pulls sleep_minutes every day (health-connect.service.ts, POST /api/v1/health/sync -> health_sync.py) and the backend stores it, but nothing in the app ever reads it back -- no dashboard card, no Weekly Insights mention, no coaching-prompt use. Users grant sleep permission for a data point the app silently swallows and never shows them, which reads as broken/pointless once noticed. v1 scope: a Dashboard card (or Progress tab section) showing last-night sleep + 7-day avg/trend, sourced from the existing synced field -- no new sync work needed. Stretch: mention short-sleep nights in Weekly Insights copy. Effort: small-medium (FE-only for v1: one card + one query; backend already has the data).",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
+        "suggestion",
         "auto"
       ],
       "imagePath": null,
@@ -21893,33 +21893,37 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": {
-        "description": "Root cause: the cancel-subscription confirmation popup read 'keep Pro access until —' because the backend does not send a renewal date for active plans and the dash was the empty fallback. Fix: when no renewal date is available the dialog now reads 'until the end of your current billing period' — the same wording already used by the success toast and the pending-cancel banner.",
-        "imagePath": "images/i-20260716-c297-fix-r1.png",
+        "description": "Root cause: the app synced and stored your sleep (Health Connect + the manual log) but never displayed it back anywhere. Fix: added a calm Sleep card to the Dashboard showing last night's hours, your 7-day average, and a 7-day trend chart (reusing the built-but-unused sleep chart). It appears once there is at least one night of sleep data and stays out of the way otherwise.",
+        "imagePath": "images/i-20260716-sl33-fix-r1.png",
         "imagePaths": [
-          "images/i-20260716-c297-fix-r1.png"
+          "images/i-20260716-sl33-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "793509bf0c7f960bb72dec5cac32e74bbc26695b",
+        "imageCommit": "7fceb4533df6a43025a93ddef53cd054dc4e0656",
         "imageCommits": [
-          "793509bf0c7f960bb72dec5cac32e74bbc26695b"
+          "7fceb4533df6a43025a93ddef53cd054dc4e0656"
         ],
-        "fixedAt": "2026-07-16T08:15:34.348Z",
+        "fixedAt": "2026-07-16T08:15:49.542Z",
         "by": "shakeebshaan",
-        "appCommit": "7524fcba",
+        "appCommit": "2018c31d",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 93,
+          "score": 91,
           "bar": 90,
-          "note": "One-line conditional mirroring two existing null-guards in the same file; screenshot shows the fixed copy in the live dialog."
+          "note": "Owner replied 'Fix it' on the review; built the v1 card per that scope. Scenario capture shows the card rendering last-night + 7-day avg + trend on the real Dashboard."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-16T12:08:06.817Z",
+      "reviewedBy": "shakeebshaan",
+      "reviewReply": "Fix it",
+      "reviewRepliedAt": "2026-07-16T07:35:02.130Z",
+      "reviewReplyBy": "shakeebshaan",
+      "resolvedAt": "2026-07-16T12:09:26.480Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-16T12:08:06.817Z"
+      "archivedAt": "2026-07-16T12:09:26.480Z"
     }
   ]
 }
