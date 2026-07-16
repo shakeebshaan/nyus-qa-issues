@@ -60,7 +60,11 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Verified against code before building. The premise is partly inaccurate: synced sleep_minutes is NOT silently swallowed — health_sync.py:131-133 writes it into daily_log.sleep_hours, which (a) feeds Weekly Review's avg_sleep_hours, (b) auto-hides the manual SleepLogPrompt on the dashboard once present, and (c) is already API-readable via GET /logs (logging.py:205). The genuine unbuilt gap is only a DEDICATED dashboard/Progress card showing last-night sleep + 7-day trend. Note: a SleepQualityChart component already exists in src/components/charts but is currently unused — a v1 card could wire it to the existing /logs sleep_hours history (no backend work). This is a real enhancement but a product-scope call, and I can't verify a new card renders end-to-end headless (no test account with synced sleep history). Want me to build the v1 card (wire SleepQualityChart + last-night/7-day-avg tile on Dashboard)? Reply 'build sleep card' and I'll ship it next tick.",
+      "reviewedAt": "2026-07-16T07:31:31.668Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260715-f2c1",
