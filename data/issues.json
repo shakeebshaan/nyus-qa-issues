@@ -506,7 +506,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root cause is a missing-asset problem, not a fixable frontend bug. AI-named plan exercises (e.g. 'Pec stretch in doorway', 'Overhead Arm Raise') have no image in the exercise catalog, so the card correctly shows the branded placeholder. The backend's only fallback is a loremflickr keyword URL, which the frontend intentionally blocks (BAD_IMAGE_HOSTS in src/lib/api-config.ts) because loremflickr returns wrong matches. I tested un-blocking loremflickr for exercises and captured the result: it returns irrelevant/duplicate stock photos (the SAME street-statue photo on 4 of 5 exercises) - clearly worse than the clean placeholder, so the block is protecting the premium look. Real exercise images need real demo assets populated in the catalog (backend/asset data-ops). Product call - which do you want: (a) invest in real exercise demo images (image worker / curated set), (b) keep the current clean placeholder, or (c) accept loremflickr stock photos despite the mismatches? No frontend-only change produces good images.",
+      "reviewedAt": "2026-07-16T09:54:38.056Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260716-b76c",
