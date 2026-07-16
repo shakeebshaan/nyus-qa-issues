@@ -21570,11 +21570,11 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260715-d4bf",
-      "createdAt": "2026-07-15T21:09:29.145Z",
+      "id": "i-20260715-8b4c",
+      "createdAt": "2026-07-15T16:37:53.372Z",
       "status": "resolved",
-      "route": "/coach-chat",
-      "description": "[bug-hunt] Coach-chat macro_edit_request block crashes the ENTIRE chat when the LLM payload omits current_macros. src/components/blocks/MacroEditRequest.tsx dereferences data.current_macros.calories.target UNGUARDED in its useState initializer (lines 23-28) and again in currentValues (lines 50-55). Block data is untrusted LLM/backend output; EVERY sibling block guards this exact shape-drift class — MacroTargetCard.tsx uses (data.calories ?? z).target with the comment \"a required nested object can be missing on shape drift ... instead of crashing the whole chat screen\"; MicroTargetCard/MealSwapBlock/WorkoutPlanCard/MealPlanCard all normalize via Array.isArray/??. MacroEditRequest is the ONLY block that does not. InteractiveBlock.tsx has NO per-block ErrorBoundary (only Suspense for lazy-load) and there is no ErrorBoundary anywhere in src/components/coach or CoachChat.tsx, so the render throw propagates up and blanks the whole coach-chat view. EXPECTED: a partial/malformed macro_edit_request renders a degraded card (zeroed macros) like MacroTargetCard. ACTUAL: React render throws \"Cannot read properties of undefined (reading calories)\" (node-verified) → chat crashes. REPRO: coach emits a macro_edit_request block whose current_macros is null/missing (or whose current_macros.calories is missing) → chat view crashes on mount. Block is still registered (BLOCK_COMPONENTS line 42) though noted \"replaced by meal_swap\". FIX: default current_macros + each macro leaf to {target:0} mirroring MacroTargetCard z-guard, OR early-return a degraded card when current_macros is absent.",
+      "route": "/social",
+      "description": "[bug-hunt] Challenge invitations cannot be accepted or declined — Join/Decline buttons never render. Social > Challenges is the only UI that calls joinChallenge/declineChallenge, and both buttons render only inside the isInvited branch (src/components/ChallengesView.tsx:451). isInvited is computed as challenge.my_status === \"invited\" (ChallengesView.tsx:376), but the backend challenge serializer _serialize_challenge (nyu_backend/backend.py:11056-11072) NEVER emits a my_status field (grep confirms zero occurrences of my_status in the backend). So challenge.my_status is undefined for every challenge => isInvited is always false. EXPECTED: a user invited to a friend’s challenge sees Join + Decline buttons. ACTUAL: they instead see the not-invited branch — a \"Your Progress 0 / target\" bar (ChallengesView.tsx:433) — and have no way to accept/decline; the invite is permanently un-actionable. REPRO: User A creates a challenge inviting friend B (backend adds B as participant status=\"invited\", backend.py:11157). B opens Social > Challenges > Active. The card shows a progress bar and NO Join/Decline buttons. B is stuck. FIX: backend add \"my_status\" to _serialize_challenge (the current-user participant’s status); OR FE derive it from participants.find(p => p.user_id === currentUserId)?.status. NOTE backend participant status values are \"accepted\"/\"invited\"/\"declined\" (backend.py:11139/11157/11223), not \"active\" as the FE Challenge/Participant types assume (ChallengesView.tsx:11,27) — align both.",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -21586,33 +21586,33 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": {
-        "description": "Root cause: MacroEditRequest.tsx dereferenced data.current_macros.<macro>.target unguarded (useState init + currentValues); a macro_edit_request block with missing/null current_macros threw on render and, with no per-block ErrorBoundary, blanked the whole coach-chat. Fix: mirror MacroTargetCard z-guard - default current_macros + each leaf to {target:0}, so a malformed payload renders a degraded zeroed card. Proof shows two shape-drift cases rendering without crash (top: current_macros missing -> all zeroed; bottom: calories leaf missing -> 0 cal, others intact). 30/30 unit tests green (2 new shape-drift regressions), tsc clean.",
-        "imagePath": "images/i-20260715-d4bf-fix-r1.png",
+        "description": "Root cause: Join/Decline only render inside the isInvited branch, but the backend challenge serializer never emitted the current user's own status (my_status), so it was always undefined and every invite showed a progress bar instead — permanently un-actionable. The FE status types also used 'active' where the backend uses 'accepted', and avatars read a non-existent 'user_name' key so they showed '?'. Fix: backend _serialize_challenge now returns my_status; the FE reads it (with a participants[] fallback), aligns the status union to accepted/invited/declined/completed, and reads the 'name' key. An invited challenge now shows working Join + Decline buttons and real participant avatars.",
+        "imagePath": "images/i-20260715-8b4c-fix-r1.png",
         "imagePaths": [
-          "images/i-20260715-d4bf-fix-r1.png"
+          "images/i-20260715-8b4c-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "302aea9be97101e8e656d1abc0f85ba854b34c3d",
+        "imageCommit": "0b6e985f83fdda035c455e13bf3aec8425cd4c5b",
         "imageCommits": [
-          "302aea9be97101e8e656d1abc0f85ba854b34c3d"
+          "0b6e985f83fdda035c455e13bf3aec8425cd4c5b"
         ],
-        "fixedAt": "2026-07-15T21:35:50.971Z",
+        "fixedAt": "2026-07-15T18:18:53.067Z",
         "by": "shakeebshaan",
-        "appCommit": "537ec330",
+        "appCommit": "328e2ceb",
         "tests": {
           "passed": true
         },
         "judge": {
           "score": 95,
           "bar": 90,
-          "note": "Root-cause fix mirroring the established sibling-block z-guard pattern; minimal surgical change, 2 new shape-drift regression tests (30/30 green), tsc clean, real-render proof shows both drift cases degrade gracefully instead of crashing chat."
+          "note": "Recaptured Challenges>Active: invited card shows Join+Decline (no progress bar) and R/Y avatars; backend deployed + FE tests pass"
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-16T00:59:25.403Z",
+      "resolvedAt": "2026-07-16T00:59:59.405Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-16T00:59:25.403Z"
+      "archivedAt": "2026-07-16T00:59:59.405Z"
     }
   ]
 }
