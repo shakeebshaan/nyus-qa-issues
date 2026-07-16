@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260716-625e",
+      "createdAt": "2026-07-16T06:54:06.943Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/log-weight",
+      "description": "[bug-hunt] Weight logging streak silently caps at 7 days (understates real streaks).\n\nWHERE: /log-weight — the \"N-day logging streak\" chip (LogWeight.tsx:694-699, i18n log_weight.logging_streak \"🔥 {{count}}-day logging streak\") and the post-save success line (LogWeight.tsx:570, log_weight.success.streak).\n\nWHAT: loggingStreak (LogWeight.tsx:424-442) counts consecutive logged days backward from today using a 400-iteration loop (for i<400) over a Set built from weightData.daily_weight_history. The author clearly intends an unbounded count (400 days ~= 13 months). But daily_weight_history is the ONLY source and the backend builds it with exactly 7 entries: WeightLogDataResource.get in backend.py:6328-6356 loops for i in range(6,-1,-1) i.e. today + 6 prior days, with no length param. So the Set holds at most 7 ISO dates and the streak is hard-capped at 7.\n\nEXPECTED: A user who logs weight daily for e.g. 20 days sees \"🔥 20-day logging streak\".\nACTUAL: The chip/success line never exceed \"7-day\" no matter how long the true consecutive-logging run is — it silently plateaus at 7.\n\nREPRO (code trace, deterministic): log weight on 8+ consecutive days -> GET /weight/log-data returns daily_weight_history of length 7 -> loggingStreak Set has <=7 dates -> streak maxes at 7. Confirmed both repos: FE LogWeight.tsx:424-442 (single source = daily_weight_history) + BE backend.py:6328-6356 (range(6,-1,-1), 7 rows, logged flag). No other longer-history source exists.\n\nFIX: either expose a real consecutive-log-days count from the backend (it already computes streaks elsewhere, e.g. FitnessPlan.current_streak / summary streaks), or drop the misleading 400-loop and label it honestly as a rolling 7-day window. Note WeeklyProgress/MonthlyProgress streak cards read backend streak values directly and are NOT affected.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260716-sl33",
       "createdAt": "2026-07-16T00:00:00.000Z",
       "status": "open",
