@@ -21785,11 +21785,11 @@
       "archivedAt": "2026-07-16T05:18:40.189Z"
     },
     {
-      "id": "i-20260716-30f4",
+      "id": "i-20260716-5ec9",
       "createdAt": "2026-07-16T05:22:12.784Z",
       "status": "resolved",
-      "route": "/social",
-      "description": "[bug-hunt] Group-chat message send fails SILENTLY — no error toast, typed text just sits there looking half-sent. In GroupChatView.tsx the sendMessageMutation (lines 40-48) has ONLY an onSuccess handler and NO onError. The QueryClient (App.tsx:162-172) sets no MutationCache/global onError either, so a failed POST /group-chat/<type>/messages produces zero user feedback: onSuccess (which clears the input) never runs, so the text lingers, and nothing tells the user it failed or to retry. This is the exact bug that was already fixed for 1:1 DMs in MessagesView.tsx (see its onError toast \"Message not sent / Check your connection\", ref i-20260708-b2f9) — but the parallel fix was never applied to group chat. Expected: on send failure show a destructive toast and keep the typed text so the user can retry (mirror MessagesView). Actual: silent no-op. Repro: Social -> Groups -> open any leaderboard group -> go offline (or induce a 500) -> type a message -> tap Send -> nothing happens, no toast, text stays in the box with no indication it did not send.",
+      "route": "/social/search",
+      "description": "[bug-hunt] Blocking a user is a one-way trap: there is NO unblock UI anywhere in the app. On /social/search, the per-result \"...\" menu has a single-tap \"Block User\" action (UserSearch.tsx:258-265) that fires immediately with NO confirmation dialog. After tapping, a toast says \"User blocked. They won't appear in future searches.\" But the app never exposes any screen to view or reverse this. social.service.ts DEFINES getBlockedUsers() (GET /friends/blocked) and unblockUser() (DELETE /friends/unblock/<id>) plus a BlockedUser/BlockedUsersResponse type, yet a repo-wide grep shows those two methods are called from ZERO components (dead code) — no /blocked route in App.tsx, no blocked-users list in Privacy or any settings screen. Expected: either a confirm step before blocking AND a manageable blocked-users list (unblock), or at minimum a way to undo. Actual: one accidental tap permanently blocks someone with no in-app recourse; the backend unblock endpoint is unreachable from the UI. Repro: /social/search -> search a name -> tap the vertical \"...\" on any result -> \"Block User\" (blocks instantly) -> now try to find any screen to unblock -> none exists.",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -21801,33 +21801,35 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": {
-        "description": "Root cause: GroupChatView's sendMessageMutation had only onSuccess and no onError, and the QueryClient sets no global mutation onError — a failed send produced zero feedback (text lingered, input never cleared). Fix: added an onError that shows a destructive 'Message not sent' toast and keeps the typed text for retry, mirroring the shipped 1:1 DM fix in MessagesView (i-20260708-b2f9). Note: the toast is a send-failure one-shot; the capture shows the Social/Groups surface as context.",
-        "imagePath": "images/i-20260716-30f4-fix-r1.png",
+        "description": "Root cause: blocking had no reversal path — getBlockedUsers/unblockUser existed but were called from zero components (no /blocked route), and the search menu blocked instantly with no confirm. Fix: added /social/blocked route + BlockedUsers.tsx (lists blocked users, per-row Unblock via DELETE /friends/unblock/<id>), a 'Blocked' entry point in the Find Friends header, and an AlertDialog confirm before UserSearch fires a block.",
+        "imagePath": "images/i-20260716-5ec9-fix-r1.png",
         "imagePaths": [
-          "images/i-20260716-30f4-fix-r1.png"
+          "images/i-20260716-5ec9-fix-r1.png",
+          "images/i-20260716-5ec9-fix-r1-2.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "4b54d5b98fdec9906757d4e91ae259aa25984c9b",
+        "imageCommit": "f1943d6b04a8893213a4190eaf1370bbf2d3f0eb",
         "imageCommits": [
-          "4b54d5b98fdec9906757d4e91ae259aa25984c9b"
+          "f1943d6b04a8893213a4190eaf1370bbf2d3f0eb",
+          "696becd731544a51e845290a85b25abc3f3c6332"
         ],
-        "fixedAt": "2026-07-16T06:12:20.327Z",
+        "fixedAt": "2026-07-16T06:11:42.809Z",
         "by": "shakeebshaan",
         "appCommit": "c19fb2b6",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 94,
           "bar": 90,
-          "note": "Direct parallel of the already-accepted DM onError fix; surfaces failure + preserves text. tsc clean. Toast is failure-path only so it can't be forced in a static recapture; code diff is the proof."
+          "note": "Full two-way flow: confirm before block + dedicated manageable Blocked Users screen with unblock. Backend routes already existed; tsc clean. Proof shows the new screen + header entry point (empty state, QA acct has none blocked)."
         }
       },
       "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-16T06:14:51.470Z",
+      "resolvedAt": "2026-07-16T06:15:01.490Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-16T06:14:51.470Z"
+      "archivedAt": "2026-07-16T06:15:01.490Z"
     }
   ]
 }
