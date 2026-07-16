@@ -60,48 +60,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260716-b90b",
-      "createdAt": "2026-07-16T15:10:27.236Z",
-      "route": "/barcode-scan",
-      "description": "[bug-hunt] Food logged via the barcode scanner does not appear in the Nutrition food diary. BarcodeScanner.handleLog (src/pages/BarcodeScanner.tsx:213-215) POSTs the free-form meal to /logs/meal then invalidates ONLY [\"diet-plan\"], [\"dashboard-overview\"], [\"daily-focus\"] — it never invalidates [\"daily-logs\"]. The Nutrition diary reads plan-independent free-form logs from useQuery([\"daily-logs\", today]) (src/pages/_components/nutrition/useNutritionData.tsx:50-54, staleTime 30s). The sibling free-form logger CustomMealModal (same POST /logs/meal) DOES invalidate [\"daily-logs\"] with a comment citing QA fix i-20260711-fdry (\"no-plan users read MealLog via [daily-logs, today]\"); BarcodeScanner was missed. EXPECTED: scanned+logged food shows in the diary right after the redirect to /nutrition. ACTUAL: within the 30s staleTime the [\"daily-logs\", today] query serves stale cache so the just-logged food is absent from the diary despite the \"Logged … added to your snacks\" toast — user sees no entry and may re-scan/re-log (duplicate). REPRO: open /nutrition (populates+freshens daily-logs) -> tap the barcode icon in the nutrition header -> /barcode-scan -> scan/log a product -> land back on /nutrition within 30s: new food missing from diary; wait 30s or refocus tab -> it appears. FIX: add queryClient.invalidateQueries({ queryKey: [\"daily-logs\"] }) in handleLog, mirroring CustomMealModal.tsx:469.",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: after logging a scanned food the barcode screen refreshed the diet-plan/dashboard caches but not the plan-independent food diary, so the Nutrition diary kept serving its 30-second-old cache and the just-logged food didn't appear until it went stale. Fix: the scanner now refreshes the food-diary cache on log (same as the manual food logger), so scanned food shows in the diary immediately after you return to Nutrition. Verified by an integration test that drives scan then log and confirms the diary is refreshed (the camera scan flow itself is Android-only, so the screenshot shows the scanner screen).",
-        "imagePath": "images/i-20260716-b90b-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-b90b-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a073c5621d1d6a4fa894b5b6fe735877f24d790c",
-        "imageCommits": [
-          "a073c5621d1d6a4fa894b5b6fe735877f24d790c"
-        ],
-        "fixedAt": "2026-07-16T15:38:49.809Z",
-        "by": "shakeebshaan",
-        "appCommit": "faf8bab9",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Root-cause 1-line cache invalidation mirroring owner-accepted i-20260711-fdry; new integration test drives the real component scan->log and asserts ['daily-logs'] invalidation; gate green."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
       "id": "i-20260716-365d",
       "createdAt": "2026-07-16T15:10:27.236Z",
       "route": "/shopping-list",
