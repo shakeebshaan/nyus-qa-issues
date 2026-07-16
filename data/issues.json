@@ -439,9 +439,32 @@
         "81ec1000db971292a9c34211885a8963ba396941"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the board header toolbar (.chips: status/judge/connect chips + refresh/report icons) had no flex-wrap, so its ~429px of content overflowed a ~375px phone and the whole board scrolled sideways ('always don't fit'). Fix: index.html .bar + .chips now flex-wrap onto a second row on narrow screens. Verified docScrollW 502->375 at 375px width — no horizontal overflow.",
+        "imagePath": "images/i-20260716-7b66-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-7b66-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "952fd2054d3c439b03dfd650b8587e4fe3deae93",
+        "imageCommits": [
+          "952fd2054d3c439b03dfd650b8587e4fe3deae93"
+        ],
+        "fixedAt": "2026-07-16T09:40:25.908Z",
+        "by": "shakeebshaan",
+        "appCommit": "5281360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Header overflow reproduced at 375px (docScrollW 502>375, offender=.chips 429px). Fix: .bar/.chips flex-wrap; re-measured docScrollW=375=vw, no horizontal scroll. Full-viewport 375px capture shows the wrapped 2-row header and board fitting."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260716-9e05",
