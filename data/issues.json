@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260716-vrt1",
+      "createdAt": "2026-07-16T00:00:00.000Z",
+      "status": "open",
+      "route": "/fasting",
+      "description": "[suggestion] Add a \"Vrat / Festival Fast\" mode to the Fasting page for religious single-day fasts (Navratri, Ekadashi, Karva Chauth, Sawan Somwar) distinct from the existing 16:8/18:6/OMAD intermittent-fasting timer. Problem: NYUS is India-focused but src/lib/fasting.ts only models time-restricted IF windows -- it has no concept of a vrat day, so on a fast day the diet plan keeps pushing regular macro targets/meal reminders and a skipped non-vrat meal dents the diet streak, which is wrong for users observing a religious fast (a real, recurring pattern for a large slice of the Indian user base, unaddressed by MyFitnessPal/HealthifyMe-style global trackers too). Evidence: grep of src/lib/fasting.ts + Fasting.tsx shows only device-local time-window presets, no vrat/religious-fast concept; no vrat-friendly recipe tag found in the meal-suggestion/recipe code. V1 scope: a one-tap \"Mark today as Vrat day\" toggle on /fasting that (1) swaps that day into a vrat-friendly meal filter (sabudana, kuttu/singhare atta, fruits, dairy -- reuse existing recipe tagging), (2) exempts that day from the diet-streak miss penalty, (3) pauses the regular \"log your meal\" reminder push for the day. No new backend fasting types needed -- store as a flag on the existing daily log record. Rough effort: 2-3 days (recipe tag pass + 1 toggle UI + streak-exemption check + 1 notification suppression check).",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ]
+    },
+    {
       "id": "i-20260716-9f2e",
       "createdAt": "2026-07-16T16:45:00.000Z",
       "status": "open",
