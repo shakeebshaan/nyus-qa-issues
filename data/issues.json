@@ -335,7 +335,16 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root cause found and fix DEPLOYED to production (backend ab0ff39). The workout builder was saving each sequential day (Day 1/2/3/4) pinned to a calendar weekday, and 'Today's Workout' picked whichever day matched today's weekday — so taking a rest day let the calendar skip your next unfinished day (you did Day 1 + Day 2, rested, and it jumped to Day 4 Pull instead of Day 3 Push). New or rebuilt builder plans now advance by COMPLETION — finishing a day unlocks the next, a rest day repeats instead of skipping. WHY NOT MARKED FIXED: your CURRENT plan was saved before this fix and is still stored weekday-pinned, so the app will keep showing the wrong day until the plan is rebuilt. Fastest fix on your end: Activity -> Customize Workout -> Save (re-saves it under the corrected sequential engine). Right now, your correct next workout is Day 3 Push (the next unfinished day). I can also run a one-time migration to convert your existing plan in place — reply and I'll do it.",
+      "reviewedAt": "2026-07-16T06:14:26.694Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "workout",
+        "backend",
+        "deployed"
+      ]
     },
     {
       "id": "i-20260716-21d5",
