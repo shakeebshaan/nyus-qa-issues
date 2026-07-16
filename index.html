@@ -411,6 +411,32 @@
   #rv-frame { width: 100%; height: calc(100dvh - 60px); border: 0; background: var(--bg); }
   .rv-state { padding: 48px 22px; text-align: center; color: var(--muted); font-size: 14.5px; }
 
+  /* ── Thread viewer (issue conversation, opened on card click) ── */
+  #thread-viewer { width: 100vw; max-width: none; height: 100dvh; margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--bg); }
+  #thread-viewer::backdrop { background: rgb(10 12 14 / .55); }
+  .tv-body { height: calc(100dvh - 60px); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .tv-inner { max-width: 620px; margin: 0 auto; padding: 18px 16px calc(30px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 14px; }
+  .tv-route { align-self: center; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  .tv-row { display: flex; gap: 10px; align-items: flex-start; }
+  .tv-av { width: 30px; height: 30px; border-radius: 50%; flex: 0 0 30px; display: grid; place-items: center; font-size: 15px; background: var(--line); overflow: hidden; }
+  img.tv-av { object-fit: cover; }
+  .tv-owner .tv-av { background: var(--accent-soft); }
+  .tv-claude .tv-av { background: hsl(263 60% 94%); }
+  .tv-bubble { flex: 1; min-width: 0; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--line); border-radius: 12px; padding: 10px 13px; }
+  .tv-owner .tv-bubble { border-left-color: var(--accent); }
+  .tv-claude .tv-bubble { border-left-color: hsl(263 50% 58%); }
+  .tv-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  .tv-meta b { color: var(--ink); font-size: 12.5px; }
+  .tv-title-chip { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--accent-ink); background: var(--accent-soft); border-radius: 999px; padding: 1px 7px; }
+  .tv-claude .tv-title-chip { color: hsl(263 50% 38%); background: hsl(263 60% 94%); }
+  .tv-when { margin-left: auto; }
+  .tv-text { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .tv-bubble .shot, .tv-bubble .shots-grid, .tv-bubble .goalbadges { margin-top: 8px; }
+  .tv-foot { align-self: center; margin-top: 4px; font-size: 12px; color: var(--muted); }
+  .thread-btn { margin-left: auto; border: 1px solid var(--line); background: var(--card); color: var(--muted); font: inherit; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 4px 11px; min-height: 32px; cursor: pointer; }
+  .thread-btn:hover { border-color: var(--accent); color: var(--accent-ink); }
+  .card { cursor: pointer; }
+
   /* ── Tabs + Metrics dashboard ──────────────────────────── */
   .tabs { display: flex; gap: 6px; margin: 14px 0 4px; }
   .tab { font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 999px; padding: 7px 18px; min-height: 40px; }
@@ -720,6 +746,10 @@
 <dialog id="report-viewer">
   <div class="rv-bar"><span class="rv-title" id="rv-title">Report</span><button type="button" class="rv-x" id="rv-close" aria-label="Close report">✕ Close</button></div>
   <iframe id="rv-frame" title="Report" sandbox referrerpolicy="no-referrer"></iframe>
+</dialog>
+<dialog id="thread-viewer">
+  <div class="rv-bar"><span class="rv-title" id="tv-title">Thread</span><button type="button" class="rv-x" id="tv-close" aria-label="Close thread">✕ Close</button></div>
+  <div id="tv-body" class="tv-body"></div>
 </dialog>
 <div id="toast" role="status"></div>
 
@@ -1188,6 +1218,7 @@ function cardHtml(it, archived) {
       ${badge}
       ${it.route ? `<span class="route-pill">${esc(it.route)}</span>` : ""}
       <span class="meta">${archived ? "resolved " + fmtDate(it.archivedAt) : fmtDate(it.createdAt)}</span>
+      <button type="button" class="thread-btn" data-thread="${esc(it.id)}" aria-label="View conversation thread">🧵 Thread</button>
       <span class="iid" title="Click to copy ID" role="button" tabindex="0">${esc(it.id)}</span>
     </div>
     <div class="sides">
@@ -1209,6 +1240,87 @@ function cardHtml(it, archived) {
       </div>
     </div>
   </article>`;
+}
+/* ── Issue thread (chronological conversation, opened on card click) ──
+   The card shows Issue | Fix side by side; clicking it opens the full
+   back-and-forth as a comment thread — report → prior fixes/rejections →
+   flag → owner reply → proposed fix — built entirely from existing fields. */
+function threadMessages(it) {
+  const msgs = [];
+  // 1. Original report — the owner who filed it.
+  msgs.push({
+    role: "owner", who: it.author, at: it.createdAt, title: "Reported",
+    text: it.descPrivate ? null : it.description,
+    privDescId: it.descPrivate ? it.id : null,
+    paths: it.imagePaths || (it.imagePath ? [it.imagePath] : []),
+    commits: it.imageCommits || (it.imageCommit ? [it.imageCommit] : []),
+    priv: it.imagePrivate,
+  });
+  // 2. Prior fix/reject cycles (history is already chronological).
+  for (const h of it.history || []) {
+    if (h.event !== "reopened") continue;
+    const pf = h.previousFix;
+    if (pf) {
+      const pp = pf.imagePaths || (pf.imagePath ? [pf.imagePath] : []);
+      msgs.push({
+        role: "claude", who: pf.by, at: pf.fixedAt, title: "Proposed fix",
+        text: pf.description, paths: pp, commits: pp.map(() => pf.imageCommit), priv: pf.imagePrivate,
+      });
+    }
+    msgs.push({ role: "owner", who: it.author, at: h.at, title: "Not fixed", text: h.note });
+  }
+  // 3. Flagged for direction (Claude asked a question).
+  if (it.reviewReason)
+    msgs.push({ role: "claude", who: it.reviewedBy, at: it.reviewedAt, title: "Flagged for direction", text: it.reviewReason });
+  // 4. Owner's answer to the flag.
+  if (it.reviewReply)
+    msgs.push({
+      role: "owner", who: it.reviewReplyBy, at: it.reviewRepliedAt, title: "Your response", text: it.reviewReply,
+      paths: it.reviewReplyImagePaths || [], commits: it.reviewReplyImageCommits || [], priv: it.reviewReplyImagePrivate,
+    });
+  // 5. Current proposed fix (only once one is posted).
+  if (it.fix && (it.status === "fixed" || it.archivedAt)) {
+    const fp = it.fix.imagePaths || (it.fix.imagePath ? [it.fix.imagePath] : []);
+    msgs.push({
+      role: "claude", who: it.fix.by, at: it.fix.fixedAt, title: "Proposed fix",
+      text: it.fix.description, paths: fp, commits: fp.map(() => it.fix.imageCommit), priv: it.fix.imagePrivate, fix: it.fix,
+    });
+  }
+  return msgs;
+}
+function threadBubble(m) {
+  const side = m.role === "owner" ? "owner" : "claude";
+  const name = m.who ? esc(m.who) : (side === "owner" ? "Owner" : "Claude");
+  const av = m.who
+    ? `<img class="tv-av" src="https://github.com/${esc(m.who)}.png?size=48" alt="" loading="lazy">`
+    : `<span class="tv-av">${side === "owner" ? "🧑" : "🤖"}</span>`;
+  const shots = m.paths && m.paths.length ? shotsHtml(m.paths, m.commits, m.title.toLowerCase(), m.priv) : "";
+  const badges = m.fix ? goalBadgesHtml(m.fix) : "";
+  const body = m.privDescId
+    ? `<p class="tv-text" data-priv-desc-id="${esc(m.privDescId)}">${token ? "Loading…" : "🔒 Private — connect your token to view"}</p>`
+    : m.text ? `<p class="tv-text">${esc(m.text)}</p>` : "";
+  return `<div class="tv-row tv-${side}">
+    ${av}
+    <div class="tv-bubble">
+      <div class="tv-meta"><b>${name}</b><span class="tv-title-chip">${esc(m.title)}</span>${m.at ? `<span class="tv-when">${fmtDate(m.at)}</span>` : ""}</div>
+      ${body}${badges}${shots}
+    </div>
+  </div>`;
+}
+function openThread(id) {
+  const it = (db?.issues || []).find((i) => i.id === id) || (archCache || []).find((i) => i.id === id);
+  if (!it) return;
+  const msgs = threadMessages(it);
+  $("tv-title").textContent = it.id;
+  $("tv-body").innerHTML = `<div class="tv-inner">
+    ${it.route ? `<div class="tv-route">${esc(it.route)}</div>` : ""}
+    ${msgs.map(threadBubble).join("")}
+    <div class="tv-foot">Reply, resolve or reject from the card on the board.</div>
+  </div>`;
+  $("thread-viewer").showModal();
+  $("tv-body").scrollTop = 0;
+  resolvePrivImages();
+  resolvePrivDescriptions();
 }
 function renderTagbar(issues) {
   const counts = new Map();
@@ -1686,6 +1798,20 @@ $("rv-close").addEventListener("click", () => {
   f.removeAttribute("srcdoc"); // unload so a reopen starts clean
 });
 $("report-viewer").addEventListener("cancel", () => $("rv-frame").removeAttribute("srcdoc"));
+
+/* ── issue thread (conversation view, opened by clicking a card) ── */
+$("tv-close").addEventListener("click", () => $("thread-viewer").close());
+document.addEventListener("click", (ev) => {
+  // Explicit thread button first — it's a <button>, so the guard below would skip it.
+  const tb = ev.target.closest("[data-thread]");
+  if (tb) { openThread(tb.dataset.thread); return; }
+  // Clicking any interactive control keeps its own behaviour (resolve, copy-id,
+  // lightbox, respond, radio options) — only a click on the card's own surface
+  // opens the thread.
+  if (ev.target.closest("button, a, input, label, summary, .iid, .shot, .desc-opts")) return;
+  const card = ev.target.closest("article.card");
+  if (card && card.id) openThread(card.id);
+});
 
 /* ── metrics dashboard (real data, private store, token-gated, charts) ── */
 let metricsLoaded = false;
