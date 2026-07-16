@@ -4,8 +4,29 @@
     {
       "id": "i-20260716-c4e7",
       "createdAt": "2026-07-16T22:36:11.295Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Accept/Decline buttons on the invites screen had no error handling, so if the request failed (e.g. the invite was already used or cancelled on another device) nothing happened on screen and people would just keep tapping. Fix: both actions now show a clear red error message with the reason and refresh the list, so a used-up invite disappears instead of lingering.",
+        "imagePath": "images/i-20260716-c4e7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-c4e7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "14511584c4180db9f83a50fc593ae9ff018fcab5",
+        "imageCommits": [
+          "14511584c4180db9f83a50fc593ae9ff018fcab5"
+        ],
+        "fixedAt": "2026-07-16T22:51:10.777Z",
+        "appCommit": "82eb62da",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Mirrors the already-fixed FriendRequests accept/decline pattern (onError toast + refetch + canceled-tap guard); live capture shows the destructive toast with the server message; 2 regression tests + full test:unit gate green + tsc clean."
+        }
+      },
       "history": [],
       "route": "/partners/invites",
       "description": "[bug-hunt] Partner invites: Accept and Decline fail silently — zero feedback on any error.\n\nRoute: /partners/invites (src/pages/PartnerInvites.tsx).\n\nWhat is wrong: acceptMutation (lines 37-52) and declineMutation (lines 54-60) have ONLY onSuccess/onSettled — NO onError handler. The app QueryClient (src/App.tsx:163-173) sets defaultOptions.queries only; there is NO mutations MutationCache/global onError. So when either POST rejects, react-query swallows it: onSettled clears busyId (button re-enables), but there is no toast, no navigation, and the mutation does NOT refetch, so the invite row stays on screen unchanged.\n\nConcrete failure modes (backend app/routes/partner_groups.py accept_invite:595 / decline_invite:659):\n- Accept 400 INVITE_NOT_PENDING when the invite was already accepted/declined on another device — very reachable because the list is cached (staleTime not forced) and not refetched on failure.\n- Accept/Decline 404 GROUP_NOT_FOUND (leader deleted the group) or 404 NOT_INVITED (invite rescinded).\n- 500 ACCEPT_FAILED / DECLINE_FAILED on a DB error.\nIn every case the user taps Accept/Decline and NOTHING visibly happens — no error, no removal, no navigation — so they re-tap indefinitely.\n\nExpected: on failure show an error toast (and refetch [partner-invites] so a stale/consumed invite disappears), matching the exact pattern already fixed elsewhere for the same class — MessagesView (i-20260708-b2f9) and GroupChatView send (i-20260715-30f4) both added onError toasts. PartnerInvites was missed.\n\nRepro: open /partners/invites with an invite that has already been consumed (accept it on a second session first, or have the leader delete the group), tap Accept (or Decline) → observe no feedback and the row remaining.\n\nFix: add onError to both mutations — toast the error and invalidate/refetch [partner-invites].",
@@ -18,7 +39,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260716-8b2e",
