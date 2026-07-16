@@ -4,7 +4,7 @@
     {
       "id": "i-20260716-4d54",
       "createdAt": "2026-07-16T13:03:48.387Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/measurements",
       "description": "[bug-hunt] Body Measurements: typing a value into the measurement number field does nothing — the field silently reverts to the previously-logged value (or 0.00 if none) on the very next render, so a typed value can never be committed. Only the +/- stepper buttons work.\n\nRepro: 1) Open /measurements. 2) Tap the large number field under \"Record New Measurement\". 3) Type any number (e.g. 45). Expected: field shows 45. Actual: field immediately snaps back to the seeded value (last-logged value for that body part, or 0.00 for a first-ever measurement).\n\nVerified via Playwright on localhost:8080 with a mocked /measurements/ overview (seeded history=33 for Right Arm): typing \"45\" left the input at \"33\"; the + button by contrast updates correctly (33 -> steps).\n\nRoot cause: the re-seed effect in src/pages/Measurements.tsx (lines 310-321) re-runs on every render (its dep allTypeHistories is a fresh array each render from useQueries) and calls seedFromLatest() whenever userEdited.current is false, overwriting the input. The +/- buttons set userEdited.current=true (lines 580 & 589) so they are exempt, but the text <input> onChange (lines 560-567) never sets userEdited.current, so every keystroke is wiped. Same class as the prior QA i-20260704-22f4 fix (which guarded the steppers) — the text-input path was missed.\n\nFix: set userEdited.current=true inside the input onChange when a valid value is entered (mirror the stepper buttons). Impact: a first-ever measurement (0 seed) can otherwise only be reached by tapping + up to ~190 times to hit 95cm.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Typing a value into the Body Measurements field did nothing — it snapped back to the last-logged value (or 0) on the next render, because only the +/- buttons were treated as a user edit. The text field now records typed input as an edit too, so a typed value sticks. Proof: seeded to 33, typed 45, and it stayed 45.",
+        "imagePath": "images/i-20260716-4d54-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-4d54-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "69544ac9822344235cfb015cc29740962ca01cbc",
+        "imageCommits": [
+          "69544ac9822344235cfb015cc29740962ca01cbc"
+        ],
+        "fixedAt": "2026-07-16T13:26:49.778Z",
+        "by": "shakeebshaan",
+        "appCommit": "ac40d0cf",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Root-cause fix mirrors the stepper's userEdited guard; regression test fails-before/passes-after; live screenshot shows typed 45 persisting over the 33 seed."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260716-r8j2",
