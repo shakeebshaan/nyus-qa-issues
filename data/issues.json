@@ -48,8 +48,30 @@
       "createdAt": "2026-07-16T15:10:27.236Z",
       "route": "/shopping-list",
       "description": "[bug-hunt] The Shopping List page (/shopping-list, linked from Diet Plan Week) never sets a descriptive browser/tab title — it falls back to the generic \"NYUS\". The PATH_TITLES map in src/App.tsx (309-370) that powers the WCAG 2.4.2 \"set a descriptive page title on every route change\" effect lists ~60 routes but omits \"/shopping-list\". Resolution (App.tsx:373-375) does an exact lookup then a prefix scan (path.startsWith(k+\"/\")); no key matches \"/shopping-list\", so document.title=\"NYUS\" instead of \"Shopping List | NYUS\". Every sibling nutrition route (/nutrition, /meal-ingredients, /diet-plan-week, /barcode-scan …) is present, so this is an inconsistency + minor a11y gap. EXPECTED: title \"Shopping List | NYUS\". ACTUAL: \"NYUS\". REPRO: navigate to /shopping-list, inspect document.title. FIX: add \"/shopping-list\": \"Shopping List\" to PATH_TITLES.",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Shopping List page was the one nutrition route missing from the browser-title map, so its tab/page title fell back to the generic 'NYUS' while every sibling page (Nutrition, Ingredients, Diet Plan, Scan Barcode) had a proper one. Fix: added the entry so the page now titles itself 'Shopping List | NYUS'. Verified live: navigating to /shopping-list now reports document.title 'Shopping List | NYUS' (was 'NYUS').",
+        "imagePath": "images/i-20260716-365d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-365d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c5982820b3d50d3790d0cc9d24c556303463ab7a",
+        "imageCommits": [
+          "c5982820b3d50d3790d0cc9d24c556303463ab7a"
+        ],
+        "fixedAt": "2026-07-16T15:39:04.486Z",
+        "by": "shakeebshaan",
+        "appCommit": "edfcd825",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 90,
+          "note": "Trivial map entry; proven by execution (document.title = 'Shopping List | NYUS'); real /shopping-list screen renders; no prefix collision with /dev/shopping-list-preview."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -60,7 +82,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260716-1e56",
