@@ -367,53 +367,6 @@
       "reviewReplyBy": "shakeebshaan"
     },
     {
-      "id": "i-20260715-3206",
-      "createdAt": "2026-07-15T13:42:24.906Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-3206.jpg",
-      "imageCommit": "8e496c62f7ac9213cc8ea2302a435fa3067c1f59",
-      "imagePaths": [
-        "images/i-20260715-3206.jpg"
-      ],
-      "imageCommits": [
-        "8e496c62f7ac9213cc8ea2302a435fa3067c1f59"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Owner picked option D (A+C). A: untracked water now scores neutral 0.5 (like steps) in _evaluate_streak instead of a 0.0 penalty, so the common meal+workout-no-water day clears the 0.75 streak bar. C: the 30-Day Challenge ring is decoupled from the day_score streak — /reports/streak returns active_days_30 (distinct days in the last 30 with any logging: wellness, a completed workout, or an eaten meal) and ProfileChallengeCard reads it. Verified live: prod endpoint returns active_days_30:4 and the ring now shows '4 of 30 days . 26 days to go' (was '0 of 30'). Backend deployed; FE e45214fd.",
-        "imagePath": "images/i-20260715-3206-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-3206-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "4208b1102fb2dd5e23c7f42c2a7515d708e8fe6f",
-        "imageCommits": [
-          "4208b1102fb2dd5e23c7f42c2a7515d708e8fe6f"
-        ],
-        "fixedAt": "2026-07-15T14:44:16.618Z",
-        "by": "shakeebshaan",
-        "appCommit": "e45214fd",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 91,
-          "bar": 90,
-          "note": "Both owner-chosen options (A water-neutral + C active-days ring) implemented, unit-tested (daily_report + route suites green), backend deployed, and verified END-TO-END on prod: endpoint returns active_days_30:4 and the captured ring reads '4 of 30' (was 0). Minor open follow-up the owner already flagged (day_score persisting NULL on generation) is diagnostic, not part of A+C."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "reviewReply": "D",
-      "reviewRepliedAt": "2026-07-15T14:26:59.017Z",
-      "reviewReplyBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260715-out1",
       "createdAt": "2026-07-15T19:23:22.169Z",
       "status": "open",
