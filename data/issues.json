@@ -526,9 +526,32 @@
         "7363a727cea4b175c9ec4427f05e9b28fe5d021c"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the live-workout set editor (ExerciseWheelPicker) only let you log/update or add sets — there was no way to remove a set logged by mistake. Fix: expanded logged sets now show a 'Remove set' button (two-tap confirm, calm/no-modal) that optimistically drops the set and calls a new backend DELETE /activity/workout/log-set (WorkoutLogSetResource.delete, verifies ownership + not-completed, idempotent), restoring the set if the call fails. Backend deployed to prod; Activity.tsx resyncs activity-overview + strength-summary after removal.",
+        "imagePath": "images/i-20260716-b76c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-b76c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8f999916def15469232c3bc0447cf71a25d51e92",
+        "imageCommits": [
+          "8f999916def15469232c3bc0447cf71a25d51e92"
+        ],
+        "fixedAt": "2026-07-16T09:52:13.975Z",
+        "by": "shakeebshaan",
+        "appCommit": "ba645ee5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Reproduced the gap: a logged set had only Update/Add-Bonus, no remove. Built a Vite dev harness (logged set) and verified: expanded logged set now shows a red 'Remove set' button (screenshot), tapping it -> 'Tap to confirm' two-tap guard (aria 'Confirm remove set 1'), second tap fires DELETE /activity/workout/log-set. Backend delete() method deployed to prod (endpoint now 401 auth-gated, was 405). -10: end-to-end persistence not driven with a live authed session headless; optimistic-remove + restore-on-failure proven via console (405 pre-deploy -> restore)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
