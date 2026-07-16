@@ -102,48 +102,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260716-1e56",
-      "createdAt": "2026-07-16T14:36:28.795Z",
-      "status": "fixed",
-      "route": "/dashboard",
-      "description": "[bug-hunt] Dashboard Weight card: for a MAINTENANCE goal (start weight == goal weight), the weight status message is permanently stuck on the lowest tier (\"keep going\") no matter how well the user is actually holding their weight. The intended maintain-progress logic (a +/-0.5 kg tolerance band that should read as 100% on-track when stable) never runs.\n\nExpected: a maintenance user holding within ~0.5 kg of goal sees an on-track / goal-achieved style message. Actual: they always see the bottom-tier \"keep going\" subline, identical to a user who is 4 kg off target.\n\nRoot cause (code trace): src/pages/_components/dashboard/useDashboardData.ts:222 computes overall progress as computeWeightProgress(start, cw, start && target ? Math.abs(start - target) : 0, direction). For a maintain goal start === target, so the 3rd arg (targetDelta) is Math.abs(start - target) = 0. computeWeightProgress (src/pages/_components/dashboard/dashboard.constants.ts:52) starts with the guard \"if (!weekStartWeight || !currentWeight || !targetDelta) return 0;\" — because targetDelta is 0 (falsy) it returns 0 immediately, before ever reaching the maintain branch (lines 60-67) that the author wrote to compute a tolerance-based score. So the maintain branch is dead for the overall/status calc. overallProgressPercent is therefore always 0 and getWeightStatusMessage(0, hasLoggedToday, false, t) falls through to the weight_keep_going tier.\n\nNode repro (exact call reproduced): computeWeightProgress(75, 75.2, Math.abs(75-75)=0, \"maintain\") => 0, whereas the intended maintain path computeWeightProgress(75, 75.2, 0.5, \"maintain\") => 1 (perfectly maintained). A user 4 kg off (current 79) also yields 0 — no differentiation between well-maintained and badly-off.\n\nNote: the milestone track itself is correctly hidden for maintain (hasTrack gates on startWeight !== targetWeight in DashboardWeightCard.tsx:66-70), so this only affects the status subline copy — LOW severity, maintenance-goal users only. Fix: pass a non-zero effective delta for maintain, OR special-case direction===\"maintain\" so the tolerance branch runs, OR give maintain its own status-message set.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Root cause: the weight-progress helper bailed out early whenever its target-delta was zero, and a maintenance goal (start weight = goal weight) always passes zero — so the maintain-progress logic never ran and the status line was permanently pinned to the lowest 'keep going' tier. Fix: only require the target-delta for lose/gain goals (which divide by it); maintenance now scores how tightly you're holding within a 0.5 kg band. A user staying near goal reads 'Keep momentum, consistency matters', while someone well off target still reads low, restoring the difference.",
-        "imagePath": "images/i-20260716-1e56-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-1e56-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "3383184aa12d71270214b842c0356fde4d6c7ba2",
-        "imageCommits": [
-          "3383184aa12d71270214b842c0356fde4d6c7ba2"
-        ],
-        "fixedAt": "2026-07-16T14:53:33.793Z",
-        "by": "shakeebshaan",
-        "appCommit": "d0236453",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root-cause guard fix, surgical; maintain+zero-delta regression tests pass; recapture shows the on-track subline on the correct dashboard card."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260716-b7f3",
       "createdAt": "2026-07-16T13:40:04.000Z",
       "status": "fixed",
