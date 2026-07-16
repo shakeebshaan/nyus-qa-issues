@@ -386,8 +386,30 @@
         "6f575709f8f9f9bfd1567f83e1aed7679ccf5b22"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause of 'Still same': the issue screenshot is a <button class=shot>, so the thread click-handler's generic button guard swallowed the tap and the lightbox zoomed instead — tapping the card screenshot (the biggest target on a dense mobile card) never opened the conversation. Fix: index.html now opens the thread on a card-shot tap explicitly (before the guard) and the lightbox declines card-shots; tapping the screenshot, description, or the thread button all open the chronological thread.",
+        "imagePath": "images/i-20260716-21d5-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260716-21d5-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7ec66f526b7d71bfe1c207b5ef472282493dc5bb",
+        "imageCommits": [
+          "7ec66f526b7d71bfe1c207b5ef472282493dc5bb"
+        ],
+        "fixedAt": "2026-07-16T09:40:42.634Z",
+        "by": "shakeebshaan",
+        "appCommit": "5281360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Reproduced: tapping the card screenshot did NOT open the thread (shot is a <button class=shot>, swallowed by the button-guard; lightbox zoomed instead). Fix verified via DOM: shotOpensThread=true, shotOpensLightbox=false, descOpensThread=true, threadBtn=true. Thread modal fits 375px (Close bar + bubble + footer, no h-scroll). -9: proof captured tokenless so private shots show locked (render normally when connected)."
+        }
+      },
       "history": [
         {
           "at": "2026-07-16T07:54:42.558Z",
