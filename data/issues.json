@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260716-1e2e",
+      "createdAt": "2026-07-16T16:40:02.051Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Add-Food portion sheet: for step-5 natural-unit foods (paneer cubes, almonds, walnut halves) the largest quick-amount chip offers a count ABOVE the servings cap, so tapping it then touching the +/- stepper silently drops part of the portion. Route: /nutrition (Add food) and the AI diet plan-builder Add-ingredient flow -- both mount src/components/plan-builder/FoodDetailSheet.tsx. Root cause: naturalChipCounts(u) returns [step, step*2, step*4, step*6] for step>=5 (FoodDetailSheet.tsx:106-110). food-units.ts gives step:5 to paneer (cube,15g), almond (1.2g) and walnut (walnut half,2g), so the quick chips are [5,10,20,30]. But the servings stepper/input enforce SERVINGS_MAX=20 (FoodDetailSheet.tsx:40). The chip onClick does a raw setServings(n) with NO clamp (lines 479-484), so the 30-unit chip sets servings=30, while stepServings (line 366) and commitServings (line 377) both clamp to 20. Expected: the largest quick chip and the stepper agree; picking 30 cubes and nudging the stepper decrements to 29.75, not a silent jump. Actual (node-verified): after tapping the 30-cube chip (servings=30, quantity_g=450), a single tap on the servings +/- stepper collapses servings 30 -> 20, silently dropping 150 g (10 cubes) from the portion; typing 30 and blurring also clamps to 20. The macro ring and \"Add - N kcal\" CTA then reflect the reduced 20-unit portion the user did not pick. Repro: /nutrition -> Add food -> search \"paneer\" -> tap a paneer result -> in the portion sheet tap the \"30 cubes\" chip -> tap the Servings \"-\" (or \"+\") once -> servings snaps to 20 cubes (300 g) instead of 29.75. Same for almonds/walnuts. Fix: clamp the chip count to SERVINGS_MAX in the natural-chip onClick (or cap naturalChipCounts so it never emits a count > SERVINGS_MAX). Note the tiny-unit foods (almond 1.2g, walnut 2g) also cannot reach a realistic count via the unit stepper since 20 units = 24 g / 40 g -- worth raising SERVINGS_MAX for step-5 units or letting the grams field carry large piece-counts.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260716-9f2e",
       "createdAt": "2026-07-16T16:45:00.000Z",
       "status": "open",
