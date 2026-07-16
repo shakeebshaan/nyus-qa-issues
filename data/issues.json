@@ -220,48 +220,6 @@
       "history": []
     },
     {
-      "id": "i-20260715-8b4c",
-      "createdAt": "2026-07-15T16:37:53.372Z",
-      "status": "fixed",
-      "route": "/social",
-      "description": "[bug-hunt] Challenge invitations cannot be accepted or declined — Join/Decline buttons never render. Social > Challenges is the only UI that calls joinChallenge/declineChallenge, and both buttons render only inside the isInvited branch (src/components/ChallengesView.tsx:451). isInvited is computed as challenge.my_status === \"invited\" (ChallengesView.tsx:376), but the backend challenge serializer _serialize_challenge (nyu_backend/backend.py:11056-11072) NEVER emits a my_status field (grep confirms zero occurrences of my_status in the backend). So challenge.my_status is undefined for every challenge => isInvited is always false. EXPECTED: a user invited to a friend’s challenge sees Join + Decline buttons. ACTUAL: they instead see the not-invited branch — a \"Your Progress 0 / target\" bar (ChallengesView.tsx:433) — and have no way to accept/decline; the invite is permanently un-actionable. REPRO: User A creates a challenge inviting friend B (backend adds B as participant status=\"invited\", backend.py:11157). B opens Social > Challenges > Active. The card shows a progress bar and NO Join/Decline buttons. B is stuck. FIX: backend add \"my_status\" to _serialize_challenge (the current-user participant’s status); OR FE derive it from participants.find(p => p.user_id === currentUserId)?.status. NOTE backend participant status values are \"accepted\"/\"invited\"/\"declined\" (backend.py:11139/11157/11223), not \"active\" as the FE Challenge/Participant types assume (ChallengesView.tsx:11,27) — align both.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Root cause: Join/Decline only render inside the isInvited branch, but the backend challenge serializer never emitted the current user's own status (my_status), so it was always undefined and every invite showed a progress bar instead — permanently un-actionable. The FE status types also used 'active' where the backend uses 'accepted', and avatars read a non-existent 'user_name' key so they showed '?'. Fix: backend _serialize_challenge now returns my_status; the FE reads it (with a participants[] fallback), aligns the status union to accepted/invited/declined/completed, and reads the 'name' key. An invited challenge now shows working Join + Decline buttons and real participant avatars.",
-        "imagePath": "images/i-20260715-8b4c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260715-8b4c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "0b6e985f83fdda035c455e13bf3aec8425cd4c5b",
-        "imageCommits": [
-          "0b6e985f83fdda035c455e13bf3aec8425cd4c5b"
-        ],
-        "fixedAt": "2026-07-15T18:18:53.067Z",
-        "by": "shakeebshaan",
-        "appCommit": "328e2ceb",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 90,
-          "note": "Recaptured Challenges>Active: invited card shows Join+Decline (no progress bar) and R/Y avatars; backend deployed + FE tests pass"
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260715-3f7e",
       "createdAt": "2026-07-15T16:37:53.372Z",
       "status": "fixed",
