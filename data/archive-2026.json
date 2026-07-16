@@ -22008,35 +22008,11 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260716-b90b",
-      "createdAt": "2026-07-16T15:10:27.236Z",
-      "route": "/barcode-scan",
-      "description": "[bug-hunt] Food logged via the barcode scanner does not appear in the Nutrition food diary. BarcodeScanner.handleLog (src/pages/BarcodeScanner.tsx:213-215) POSTs the free-form meal to /logs/meal then invalidates ONLY [\"diet-plan\"], [\"dashboard-overview\"], [\"daily-focus\"] — it never invalidates [\"daily-logs\"]. The Nutrition diary reads plan-independent free-form logs from useQuery([\"daily-logs\", today]) (src/pages/_components/nutrition/useNutritionData.tsx:50-54, staleTime 30s). The sibling free-form logger CustomMealModal (same POST /logs/meal) DOES invalidate [\"daily-logs\"] with a comment citing QA fix i-20260711-fdry (\"no-plan users read MealLog via [daily-logs, today]\"); BarcodeScanner was missed. EXPECTED: scanned+logged food shows in the diary right after the redirect to /nutrition. ACTUAL: within the 30s staleTime the [\"daily-logs\", today] query serves stale cache so the just-logged food is absent from the diary despite the \"Logged … added to your snacks\" toast — user sees no entry and may re-scan/re-log (duplicate). REPRO: open /nutrition (populates+freshens daily-logs) -> tap the barcode icon in the nutrition header -> /barcode-scan -> scan/log a product -> land back on /nutrition within 30s: new food missing from diary; wait 30s or refocus tab -> it appears. FIX: add queryClient.invalidateQueries({ queryKey: [\"daily-logs\"] }) in handleLog, mirroring CustomMealModal.tsx:469.",
+      "id": "i-20260716-1e56",
+      "createdAt": "2026-07-16T14:36:28.795Z",
       "status": "resolved",
-      "fix": {
-        "description": "Root cause: after logging a scanned food the barcode screen refreshed the diet-plan/dashboard caches but not the plan-independent food diary, so the Nutrition diary kept serving its 30-second-old cache and the just-logged food didn't appear until it went stale. Fix: the scanner now refreshes the food-diary cache on log (same as the manual food logger), so scanned food shows in the diary immediately after you return to Nutrition. Verified by an integration test that drives scan then log and confirms the diary is refreshed (the camera scan flow itself is Android-only, so the screenshot shows the scanner screen).",
-        "imagePath": "images/i-20260716-b90b-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-b90b-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "a073c5621d1d6a4fa894b5b6fe735877f24d790c",
-        "imageCommits": [
-          "a073c5621d1d6a4fa894b5b6fe735877f24d790c"
-        ],
-        "fixedAt": "2026-07-16T15:38:49.809Z",
-        "by": "shakeebshaan",
-        "appCommit": "faf8bab9",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Root-cause 1-line cache invalidation mirroring owner-accepted i-20260711-fdry; new integration test drives the real component scan->log and asserts ['daily-logs'] invalidation; gate green."
-        }
-      },
-      "history": [],
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard Weight card: for a MAINTENANCE goal (start weight == goal weight), the weight status message is permanently stuck on the lowest tier (\"keep going\") no matter how well the user is actually holding their weight. The intended maintain-progress logic (a +/-0.5 kg tolerance band that should read as 100% on-track when stable) never runs.\n\nExpected: a maintenance user holding within ~0.5 kg of goal sees an on-track / goal-achieved style message. Actual: they always see the bottom-tier \"keep going\" subline, identical to a user who is 4 kg off target.\n\nRoot cause (code trace): src/pages/_components/dashboard/useDashboardData.ts:222 computes overall progress as computeWeightProgress(start, cw, start && target ? Math.abs(start - target) : 0, direction). For a maintain goal start === target, so the 3rd arg (targetDelta) is Math.abs(start - target) = 0. computeWeightProgress (src/pages/_components/dashboard/dashboard.constants.ts:52) starts with the guard \"if (!weekStartWeight || !currentWeight || !targetDelta) return 0;\" — because targetDelta is 0 (falsy) it returns 0 immediately, before ever reaching the maintain branch (lines 60-67) that the author wrote to compute a tolerance-based score. So the maintain branch is dead for the overall/status calc. overallProgressPercent is therefore always 0 and getWeightStatusMessage(0, hasLoggedToday, false, t) falls through to the weight_keep_going tier.\n\nNode repro (exact call reproduced): computeWeightProgress(75, 75.2, Math.abs(75-75)=0, \"maintain\") => 0, whereas the intended maintain path computeWeightProgress(75, 75.2, 0.5, \"maintain\") => 1 (perfectly maintained). A user 4 kg off (current 79) also yields 0 — no differentiation between well-maintained and badly-off.\n\nNote: the milestone track itself is correctly hidden for maintain (hasTrack gates on startWeight !== targetWeight in DashboardWeightCard.tsx:66-70), so this only affects the status subline copy — LOW severity, maintenance-goal users only. Fix: pass a non-zero effective delta for maintain, OR special-case direction===\"maintain\" so the tolerance branch runs, OR give maintain its own status-message set.",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -22047,10 +22023,34 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
+      "fix": {
+        "description": "Root cause: the weight-progress helper bailed out early whenever its target-delta was zero, and a maintenance goal (start weight = goal weight) always passes zero — so the maintain-progress logic never ran and the status line was permanently pinned to the lowest 'keep going' tier. Fix: only require the target-delta for lose/gain goals (which divide by it); maintenance now scores how tightly you're holding within a 0.5 kg band. A user staying near goal reads 'Keep momentum, consistency matters', while someone well off target still reads low, restoring the difference.",
+        "imagePath": "images/i-20260716-1e56-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-1e56-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3383184aa12d71270214b842c0356fde4d6c7ba2",
+        "imageCommits": [
+          "3383184aa12d71270214b842c0356fde4d6c7ba2"
+        ],
+        "fixedAt": "2026-07-16T14:53:33.793Z",
+        "by": "shakeebshaan",
+        "appCommit": "d0236453",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Root-cause guard fix, surgical; maintain+zero-delta regression tests pass; recapture shows the on-track subline on the correct dashboard card."
+        }
+      },
+      "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-16T17:34:59.830Z",
+      "resolvedAt": "2026-07-16T17:35:15.731Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-16T17:34:59.830Z"
+      "archivedAt": "2026-07-16T17:35:15.731Z"
     }
   ]
 }
