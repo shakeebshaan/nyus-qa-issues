@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260716-supr",
+      "createdAt": "2026-07-16T12:00:00.000Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/dashboard",
+      "description": "[suggestion] Add daily reminders + Weekly Review adherence summary for the Supplement/Medication check-off card. Problem: SupplementsCard.tsx already lets users log supplements/meds taken per day and computes daily+weekly adherence %, but the card itself says reminders and Weekly-Review wiring are a documented fast-follow that was never built (src/pages/_components/dashboard/SupplementsCard.tsx top-of-file comment) - so a user who forgets to open the dashboard never gets nudged, and the adherence number they worked for never surfaces anywhere else. Evidence: repo scan confirms no scheduled reminder exists for supplements (NotificationPreferences.tsx has no supplement category; the 5 existing Android notification channels + behavior-triggered scheduler jobs cover workout/meal/streak but not this), and WeeklyReviewScreen.tsx has no adherence-% line despite the backend already computing it via supplements.service.ts. v1 scope: (1) one daily local/push reminder per user at their chosen check-in time (reuse existing notification dispatch service + frequency caps, one new notification type, no new channel) that deep-links to the dashboard card; (2) one line in the Weekly Review summary - \"Supplements: 5/7 days\" per tracked item, pulled from the adherence data that already exists server-side. Skip per-dose/multiple-times-a-day scheduling and interaction warnings for v1. Effort: ~1-1.5 days (FE reminder-time picker + BE one scheduler job + one Weekly Review summary line; no new schema, adherence data already persisted).",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false
+    },
+    {
       "id": "i-20260716-c4e7",
       "createdAt": "2026-07-16T22:36:11.295Z",
       "status": "fixed",
