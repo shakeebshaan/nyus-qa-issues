@@ -1264,7 +1264,7 @@ function threadMessages(it) {
       const pp = pf.imagePaths || (pf.imagePath ? [pf.imagePath] : []);
       msgs.push({
         role: "claude", who: pf.by, at: pf.fixedAt, title: "Proposed fix",
-        text: pf.description, paths: pp, commits: pp.map(() => pf.imageCommit), priv: pf.imagePrivate,
+        text: pf.description, paths: pp, commits: pf.imageCommits || pp.map(() => pf.imageCommit), priv: pf.imagePrivate,
       });
     }
     msgs.push({ role: "owner", who: it.author, at: h.at, title: "Not fixed", text: h.note });
@@ -1283,7 +1283,7 @@ function threadMessages(it) {
     const fp = it.fix.imagePaths || (it.fix.imagePath ? [it.fix.imagePath] : []);
     msgs.push({
       role: "claude", who: it.fix.by, at: it.fix.fixedAt, title: "Proposed fix",
-      text: it.fix.description, paths: fp, commits: fp.map(() => it.fix.imageCommit), priv: it.fix.imagePrivate, fix: it.fix,
+      text: it.fix.description, paths: fp, commits: it.fix.imageCommits || fp.map(() => it.fix.imageCommit), priv: it.fix.imagePrivate, fix: it.fix,
     });
   }
   return msgs;
