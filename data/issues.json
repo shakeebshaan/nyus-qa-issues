@@ -131,8 +131,30 @@
     {
       "id": "i-20260715-r3pt",
       "createdAt": "2026-07-15T12:00:00.000Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the food-diary logged rows were plain (pink circle icon + text + a tiny ghost repeat icon), not the rich plan meal cards. Fix (NutritionDiaryCard.tsx): each logged meal now renders as a full meal card — image thumbnail, meal name, prominent kcal, colored P/C/F macro chips, and a proper 'Repeat this meal' action row — matching the plan meal cards the app already ships. Proof: harness render of the diary with 3 logged meals.",
+        "imagePath": "images/i-20260715-r3pt-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260715-r3pt-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4c8b299379d2396993a3b9aded5c21e15de5d5cc",
+        "imageCommits": [
+          "4c8b299379d2396993a3b9aded5c21e15de5d5cc"
+        ],
+        "fixedAt": "2026-07-16T04:38:41.761Z",
+        "by": "shakeebshaan",
+        "appCommit": "c4384b2d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Rebuilt to the exact rich meal-card visual language (thumbnail + kcal + P/C/F chips + action row); verified via component harness at 390x844."
+        }
+      },
       "history": [
         {
           "at": "2026-07-16T01:00:53.710Z",
