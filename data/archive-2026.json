@@ -21660,54 +21660,58 @@
       "archivedAt": "2026-07-16T02:10:39.711Z"
     },
     {
-      "id": "i-20260715-3206",
-      "createdAt": "2026-07-15T13:42:24.906Z",
+      "id": "i-20260715-32f3",
+      "createdAt": "2026-07-15T05:55:34.348Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260715-3206.jpg",
-      "imageCommit": "8e496c62f7ac9213cc8ea2302a435fa3067c1f59",
+      "imagePath": "images/i-20260715-32f3.jpg",
+      "imageCommit": "ad04bea88dd6d32f8933ba24fb69debfa509ba6c",
       "imagePaths": [
-        "images/i-20260715-3206.jpg"
+        "images/i-20260715-32f3.jpg"
       ],
       "imageCommits": [
-        "8e496c62f7ac9213cc8ea2302a435fa3067c1f59"
+        "ad04bea88dd6d32f8933ba24fb69debfa509ba6c"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": {
-        "description": "Owner picked option D (A+C). A: untracked water now scores neutral 0.5 (like steps) in _evaluate_streak instead of a 0.0 penalty, so the common meal+workout-no-water day clears the 0.75 streak bar. C: the 30-Day Challenge ring is decoupled from the day_score streak — /reports/streak returns active_days_30 (distinct days in the last 30 with any logging: wellness, a completed workout, or an eaten meal) and ProfileChallengeCard reads it. Verified live: prod endpoint returns active_days_30:4 and the ring now shows '4 of 30 days . 26 days to go' (was '0 of 30'). Backend deployed; FE e45214fd.",
-        "imagePath": "images/i-20260715-3206-fix-r1.png",
+        "description": "Do-all rollout, this pass: the reference's 'Track with Images' banner (camera + barcode) — which existed in no surface yet — is now on the nutrition Add-Food surface (CustomMealModal), above the Quick Log/Ingredients tabs. Camera routes to Quick Log + fires the existing photo-analyze pipeline; barcode opens the existing /barcode-scan page. No new write path (live logging untouched), type-clean, 0 console errors, verified on the real authenticated modal. CHECKLIST — done: unified rows (d4b793ce), rich portion detail (f54d), search + Frequently-Tracked list (both surfaces), Track-with-Images banner on nutrition (this). Remaining next ticks: banner on the plan-builder picker (needs a new camera->ingredient pipeline; you approved it via 'Do all'), and extracting the shared row into one component.",
+        "imagePath": "images/i-20260715-32f3-fix-r1.png",
         "imagePaths": [
-          "images/i-20260715-3206-fix-r1.png"
+          "images/i-20260715-32f3-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "4208b1102fb2dd5e23c7f42c2a7515d708e8fe6f",
+        "imageCommit": "11fde97746037f6d04bff118d4ea7a7cbb78bbc1",
         "imageCommits": [
-          "4208b1102fb2dd5e23c7f42c2a7515d708e8fe6f"
+          "11fde97746037f6d04bff118d4ea7a7cbb78bbc1"
         ],
-        "fixedAt": "2026-07-15T14:44:16.618Z",
+        "fixedAt": "2026-07-15T16:07:18.437Z",
         "by": "shakeebshaan",
-        "appCommit": "e45214fd",
+        "appCommit": "ea3785a7",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 91,
+          "score": 90,
           "bar": 90,
-          "note": "Both owner-chosen options (A water-neutral + C active-days ring) implemented, unit-tested (daily_report + route suites green), backend deployed, and verified END-TO-END on prod: endpoint returns active_days_30:4 and the captured ring reads '4 of 30' (was 0). Minor open follow-up the owner already flagged (day_score persisting NULL on generation) is diagnostic, not part of A+C."
+          "note": "Surface increment complete + verified against your reference (banner + camera + barcode); safe (no write-path change); remaining surfaces listed for steer."
         }
       },
       "history": [],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
-      "reviewReply": "D",
-      "reviewRepliedAt": "2026-07-15T14:26:59.017Z",
+      "tags": [
+        "design",
+        "multi-surface"
+      ],
+      "reviewReply": "Do all",
+      "reviewRepliedAt": "2026-07-15T13:54:34.711Z",
       "reviewReplyBy": "shakeebshaan",
-      "resolvedAt": "2026-07-16T02:44:35.775Z",
+      "resolvedAt": "2026-07-16T02:44:37.053Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-16T02:44:35.775Z"
+      "archivedAt": "2026-07-16T02:44:37.053Z"
     }
   ]
 }
