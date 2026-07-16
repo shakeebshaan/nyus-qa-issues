@@ -21568,6 +21568,51 @@
       "imageCommittedAt": null,
       "archivedAt": "2026-07-15T14:44:46.431Z",
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
+    },
+    {
+      "id": "i-20260715-d4bf",
+      "createdAt": "2026-07-15T21:09:29.145Z",
+      "status": "resolved",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat macro_edit_request block crashes the ENTIRE chat when the LLM payload omits current_macros. src/components/blocks/MacroEditRequest.tsx dereferences data.current_macros.calories.target UNGUARDED in its useState initializer (lines 23-28) and again in currentValues (lines 50-55). Block data is untrusted LLM/backend output; EVERY sibling block guards this exact shape-drift class — MacroTargetCard.tsx uses (data.calories ?? z).target with the comment \"a required nested object can be missing on shape drift ... instead of crashing the whole chat screen\"; MicroTargetCard/MealSwapBlock/WorkoutPlanCard/MealPlanCard all normalize via Array.isArray/??. MacroEditRequest is the ONLY block that does not. InteractiveBlock.tsx has NO per-block ErrorBoundary (only Suspense for lazy-load) and there is no ErrorBoundary anywhere in src/components/coach or CoachChat.tsx, so the render throw propagates up and blanks the whole coach-chat view. EXPECTED: a partial/malformed macro_edit_request renders a degraded card (zeroed macros) like MacroTargetCard. ACTUAL: React render throws \"Cannot read properties of undefined (reading calories)\" (node-verified) → chat crashes. REPRO: coach emits a macro_edit_request block whose current_macros is null/missing (or whose current_macros.calories is missing) → chat view crashes on mount. Block is still registered (BLOCK_COMPONENTS line 42) though noted \"replaced by meal_swap\". FIX: default current_macros + each macro leaf to {target:0} mirroring MacroTargetCard z-guard, OR early-return a degraded card when current_macros is absent.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": {
+        "description": "Root cause: MacroEditRequest.tsx dereferenced data.current_macros.<macro>.target unguarded (useState init + currentValues); a macro_edit_request block with missing/null current_macros threw on render and, with no per-block ErrorBoundary, blanked the whole coach-chat. Fix: mirror MacroTargetCard z-guard - default current_macros + each leaf to {target:0}, so a malformed payload renders a degraded zeroed card. Proof shows two shape-drift cases rendering without crash (top: current_macros missing -> all zeroed; bottom: calories leaf missing -> 0 cal, others intact). 30/30 unit tests green (2 new shape-drift regressions), tsc clean.",
+        "imagePath": "images/i-20260715-d4bf-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260715-d4bf-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "302aea9be97101e8e656d1abc0f85ba854b34c3d",
+        "imageCommits": [
+          "302aea9be97101e8e656d1abc0f85ba854b34c3d"
+        ],
+        "fixedAt": "2026-07-15T21:35:50.971Z",
+        "by": "shakeebshaan",
+        "appCommit": "537ec330",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Root-cause fix mirroring the established sibling-block z-guard pattern; minimal surgical change, 2 new shape-drift regression tests (30/30 green), tsc clean, real-render proof shows both drift cases degrade gracefully instead of crashing chat."
+        }
+      },
+      "history": [],
+      "needsReview": false,
+      "resolvedAt": "2026-07-16T00:59:25.403Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-16T00:59:25.403Z"
     }
   ]
 }
