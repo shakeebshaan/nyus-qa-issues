@@ -864,7 +864,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Ask: let the user rename the meal from the meal-detail screen (RecipeDetail.tsx — 'Meal 1' title should be editable). The plan-builder card already supports inline rename (MealSlotCard editingName), so the UI is a solved pattern to lift. Blocker is PERSISTENCE: RecipeDetail's name comes from recipe.name and the only save path (logModification, schema rows_v2) carries ingredient rows only — no field for a meal name, and no backend endpoint renames a persisted assigned-meal. Proposed: add a name field to the meal-modification contract (or PATCH /nutrition/meal/<assigned_meal_id> { name }) that updates the assigned meal, then render an inline-editable title in RecipeDetail. Pairs with 67ca (same endpoint can carry name+photo). Needs a data account to verify (admin QA acct has no meal data). Will implement once you confirm the endpoint shape.",
+      "reviewedAt": "2026-07-17T06:07:17.730Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260717-65e9",
