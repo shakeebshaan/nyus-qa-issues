@@ -1204,9 +1204,32 @@
         "082c4d17d73d89fcf8282f2016dd153bbb59b081"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the workout list (TodaysExerciseList) preferred the backend image_url, a YouTube video thumbnail, and only fell back to the bundled catalog art. Fix: new useExerciseThumbnail hook flips priority to the clean exercise-catalog anatomical illustration first (same art as the 'How to perform' detail card), backend thumb only when no confident catalog match. Proof rendered via component harness with real catalog exercises + a fake YouTube image_url — every card shows the clean illustration, not the YT thumb.",
+        "imagePath": "images/i-20260717-8063-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-8063-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "87db647c451cded184044ccfb92a462a4d154c1f",
+        "imageCommits": [
+          "87db647c451cded184044ccfb92a462a4d154c1f"
+        ],
+        "fixedAt": "2026-07-17T10:35:41.905Z",
+        "by": "shakeebshaan",
+        "appCommit": "b7a2264d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Directly does what owner asked: workout cards now use the same clean catalog illustration as the How-to-perform card, backend YT thumb only as last resort. tsc clean, test:unit green. Proof is a faithful component harness (QA account has no active workout plan so /activity can't render the real list) with real catalog names + a fake YouTube image_url, confirming catalog art wins."
+        }
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
