@@ -6,8 +6,30 @@
       "createdAt": "2026-07-17T01:40:38.034Z",
       "route": null,
       "description": "[bug-hunt] The pseudo-locale xx-AE never actually renders — the documented \"manual QA via ?lng=xx-AE\" path silently shows English, defeating the pseudo-locale overflow / missing-key guard.\n\nRoot cause: src/i18n/config.ts initI18n() sets `supportedLngs: [\"en\", \"hi\", \"hinglish\"]` (line 76) which OMITS \"xx-AE\", even though SUPPORTED_LOCALES (line 35) and the resources map (line 56) both include it, and the code comment (lines 91-92) explicitly states xx-AE is \"for tests / manual QA via ?lng=xx-AE\". With `load: \"currentOnly\"` and xx-AE absent from supportedLngs, i18next filters the locale out and falls back to en.\n\nEXPECTED: requesting xx-AE (via ?lng=xx-AE, or nyus_locale=xx-AE in localStorage) renders the inflated/accented pseudo strings so text-overflow bugs and missing translation keys surface loudly.\nACTUAL: it renders plain English, so the pseudo-locale QA/overflow-detection path is a silent no-op.\n\nREPRO (node-verified against installed i18next): init with supportedLngs:[\"en\",\"hi\",\"hinglish\"] + load:\"currentOnly\" + an xx-AE resource, then changeLanguage(\"xx-AE\") -> i18n.language=\"xx-AE\" but resolvedLanguage=\"en\" and t(key) returns the ENGLISH value. Adding \"xx-AE\" to supportedLngs makes resolvedLanguage=\"xx-AE\" and t(key) return the pseudo value. In-app: append ?lng=xx-AE to any route (querystring detection is enabled) — UI stays English instead of showing pseudo glyphs.\n\nFIX: add \"xx-AE\" to the supportedLngs array in src/i18n/config.ts (safe — no real browser reports xx-AE as its navigator language, so it will never auto-detect; it only becomes reachable via the explicit ?lng / localStorage paths the comment already documents). Impact: LOW-MED — internal QA tooling, not an end-user crash, but it defeats the overflow/missing-key guard the team relies on.",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: initI18n's supportedLngs omitted 'xx-AE' while load:'currentOnly' filtered it out, so ?lng=xx-AE silently fell back to English. Fix: added 'xx-AE' to supportedLngs in src/i18n/config.ts (still never browser-auto-detected). Proof: intro screen now shows the inflated pseudo glyphs.",
+        "imagePath": "images/i-20260717-e5f1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-e5f1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5cacf58b8cb0653b6d3c1cbece172a2009b98eb2",
+        "imageCommits": [
+          "5cacf58b8cb0653b6d3c1cbece172a2009b98eb2"
+        ],
+        "fixedAt": "2026-07-17T05:43:40.026Z",
+        "by": "shakeebshaan",
+        "appCommit": "30585c8a",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Captured /dev/intro?lng=xx-AE now rendering accented pseudo strings ([NOURISH xx], [Get Started xxxx]) instead of plain English — the overflow/missing-key QA path is live again."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260717-9d4b",
