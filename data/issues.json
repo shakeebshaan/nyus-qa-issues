@@ -1,5 +1,23 @@
 [
   {
+    "id": "i-20260717-rdy1",
+    "createdAt": "2026-07-17T19:39:52.662Z",
+    "status": "open",
+    "route": "/activity",
+    "description": "[suggestion] Daily Readiness nudge on Activity/Dashboard before a workout. Problem: NYUS logs sleep_hours nightly (Health Connect sync -> DailyLog.sleep_hours) and computes a recovery pillar in HealthScore, but nothing surfaces day-to-day - a user with 4hrs sleep gets the exact same workout prompt as one with 8hrs. Competitors (Whoop, Oura) lead with a daily readiness/strain-adjust signal; the brand direction here explicitly cites Whoop elite-data-confidence as a reference. Evidence: DashboardSleepCard already reads sleep_hours; Activity.tsx has no readiness-aware messaging; HealthScore recovery pillar recomputes on its own cadence, not tied to today. v1 scope: small readiness chip/banner on Activity (and optionally Dashboard) using last-night sleep_hours + yesterday completed-workout intensity (existing WorkoutSession/SetLog data, no new sensors) -> 3-tier label (Recharged / Steady / Run Down) with one-line copy (\"Shorter sleep last night - consider an easier session or a mobility day\"). No new backend model: derive client-side or a small backend endpoint reading DailyLog + last WorkoutSession. No blocking gates, purely informational, dismissible. Effort: ~1-2 days FE, +0.5 day BE if a dedicated endpoint is preferred over deriving from existing /activity/overview payload.",
+    "fix": null,
+    "history": [],
+    "author": "shakeebshaan",
+    "tags": [
+      "suggestion",
+      "auto"
+    ],
+    "imagePath": null,
+    "imagePaths": [],
+    "imageCommits": [],
+    "imagePrivate": false
+  },
+  {
     "id": "i-20260717-7c1d",
     "createdAt": "2026-07-17T18:55:32.866Z",
     "route": "/coach-chat",
