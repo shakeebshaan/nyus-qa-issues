@@ -13,8 +13,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: useChatScroll computed the 'N new' pill delta from the RAW messages array length (CoachChat.tsx:225), so it counted the user's own sends and raw items the rendered list drops (block_response envelopes, dev pings, dedup'd duplicates). Fix: pass visibleMessages to useChatScroll and derive the delta from incoming-only (!is_from_me) additions, so the count matches the bubbles a tap reveals and never appears for your own actions. Added useChatScroll.test.ts regression test. NOTE: the pill's spurious state is a dynamic scroll-up+incoming interaction that a static screen capture can't show; attached proof is the healthy /coach-chat screen (user at bottom, correctly no pill) — the logic is verified by the passing regression test.",
+        "imagePath": "images/i-20260717-7c1d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-7c1d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e00bcdd56744c2b6ff58982dd895a4d89d033266",
+        "imageCommits": [
+          "e00bcdd56744c2b6ff58982dd895a4d89d033266"
+        ],
+        "fixedAt": "2026-07-17T19:03:44.260Z",
+        "by": "shakeebshaan",
+        "appCommit": "da645c08",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused to raw-length delta; fed visibleMessages + incoming-only count; new renderHook regression test (2 cases) green, tsc clean."
+        }
+      },
       "history": [],
       "needsReview": false,
       "tags": [
