@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260717-sf9k",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "createdAt": "2026-07-17T12:00:00.000Z",
+      "route": "/progress",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "description": "[suggestion] Add a \"Share progress report\" export on the Progress page — a shareable image/PDF summarizing weight trend, macro adherence, and workout consistency over a chosen date range (7/30/90 days). Problem: NYUS users are dedicated athletes in India who routinely see a doctor, dietitian, or trainer for periodic check-ins, but there is no way to hand off structured progress data today — codebase grep confirms zero PDF/report-export code and the only navigator.share() usages are ShoppingList and the referral card (no Progress/Achievements export exists). Competitors (MyFitnessPal, Cronometer) ship a printable/exportable report precisely for this reason. V1 scope: one \"Share report\" button on Progress → renders a single portrait canvas (weight chart + macro-adherence % + workout completion %, NYUS branding) client-side (no new backend endpoint) → native Web Share / save-to-gallery via existing Capacitor share plugin, same pattern as ShoppingList’s share flow. No new AI/LLM cost. Effort: ~1-2 days (canvas/chart-to-image render + share wiring + one QA pass on real device for the gallery/share-sheet)."
+    },
+    {
       "id": "i-20260717-gr7a",
       "tags": [
         "content",
