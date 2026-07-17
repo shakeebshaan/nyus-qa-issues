@@ -679,9 +679,32 @@
         "ce053898c3c5b864426956870b84d1a20739c98c"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: protein powders showed a generic 'servings x serving-size' pair with no natural dose. Fix: added a 'scoop' unit (30 g) for whey/casein/protein powders (src/lib/food-units.ts) so FoodDetailSheet now offers a Scoops/Grams toggle over ONE field (0.5/1/1.5/2 scoop chips).",
+        "imagePath": "images/i-20260717-0bb5-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-0bb5-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c8d779c42b859a7305e0eee3be6f1ae8716a3696",
+        "imageCommits": [
+          "c8d779c42b859a7305e0eee3be6f1ae8716a3696"
+        ],
+        "fixedAt": "2026-07-17T05:43:27.608Z",
+        "by": "shakeebshaan",
+        "appCommit": "30585c8a",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Verified on Whey Protein Concentrate: 1 scoop = 30g, Scoops/Grams toggle + scoop chips, single field."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260717-abf5",
