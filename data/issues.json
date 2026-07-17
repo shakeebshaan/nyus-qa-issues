@@ -415,8 +415,30 @@
         "1e7a47d54ef26e9b5852f8406461648dbb509e83"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Yes — verified end-to-end on prod. Reopen was correct: the prior fix wired supplement adherence into gather_user_context/build_chat_system_prompt, but the LIVE Socket.IO coach chat builds its context via ContextAssembler.snapshot() (backend.py:15007), which had NO supplement block — so the coach never saw it. Fix: added a P2 _supplement_adherence block to app/services/context_assembler.py (backend 0d8798d, deployed to prod). PROOF: ran the live pipeline on prod for this account — the deployed coach replied: 'You're tracking 2 supplements today: Vitamin D3 and Whey Protein, and your adherence is 0/2 taken so far…'. Screenshot = that live prod coach reply + the injected [SUPPLEMENTS — TODAY] context block. Regression test added (51/51 green).",
+        "imagePath": "images/i-20260716-4b4c-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260716-4b4c-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "92cdb7e20f1064ce999c1a9aeb7e1583d8659782",
+        "imageCommits": [
+          "92cdb7e20f1064ce999c1a9aeb7e1583d8659782"
+        ],
+        "fixedAt": "2026-07-17T01:10:53.218Z",
+        "by": "shakeebshaan",
+        "appCommit": "0d8798d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Reopen answered definitively: root-caused to the live coach using ContextAssembler (not the deprecated gather_user_context the prior fix touched); added+deployed the P2 supplement block; live prod coach now names the user's real supplements & adherence (behavioral proof captured); regression test added, 51/51 green."
+        }
+      },
       "history": [
         {
           "at": "2026-07-17T00:47:09.486Z",
