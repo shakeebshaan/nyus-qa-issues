@@ -636,9 +636,32 @@
         "652d912a3ea11e031de0e46c9a9e8042cbc5b4d0"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: 'Skimmed Milk Powder' matched the liquid-milk 'cup' unit (240 g/cup), giving a wrong/confusing measurement. Fix: milk powder/solids are excluded from the cup unit (src/lib/food-units.ts), so it now uses a single clean Grams field with 50/100/150/200 g quick chips.",
+        "imagePath": "images/i-20260717-a593-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-a593-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "59245176239732acb693684ebcd9fa6991648a0b",
+        "imageCommits": [
+          "59245176239732acb693684ebcd9fa6991648a0b"
+        ],
+        "fixedAt": "2026-07-17T05:43:22.876Z",
+        "by": "shakeebshaan",
+        "appCommit": "30585c8a",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Verified on Skimmed Milk Powder: single Grams field + gram chips, no bogus '1 cup = 240g'. Milk powder now excluded from the liquid-cup unit."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260717-0bb5",
