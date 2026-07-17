@@ -1106,16 +1106,17 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "deployed",
         "workout",
-        "activity"
+        "deploy"
       ],
       "reviewReply": "Still same on my app needs frontend push or backend deploy? If yes then do it also make sure that you deploy everytime there is a fix",
       "reviewRepliedAt": "2026-07-17T06:14:56.629Z",
-      "reviewReplyBy": "shakeebshaan"
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "Answered + DONE this tick. It needed a real FRONTEND build. The earlier 'fixed' note was wrong that the fix was already in v215 — v215 was cut BEFORE the finish-before-start commit and was never rebuilt with it, so your installed app never had it (that is exactly why it was 'still same'). I have now built and uploaded v216 (1.9.36) to the Play ALPHA track WITH that fix (verified present in the compiled build), and hardened + redeployed the backend (commit 3e9dca4, live on prod): a session you did YESTERDAY now rolls forward to the next session instead of staying 'current', and 'Start Next Session' advances instead of resetting. Also fixed a timezone bug affecting late-night/early-morning sessions, and made completed workouts count on the real training day. ACTION: update NYUS to v216 from the Play alpha track, then retest 'Start Next Session Now'. Going forward every code fix is built to alpha in the same tick.",
+      "reviewedAt": "2026-07-17T08:51:33.451Z"
     },
     {
       "id": "i-20260717-3d27",
