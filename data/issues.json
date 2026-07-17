@@ -599,9 +599,32 @@
         "85f5fdb144fdb7263be24f3e207276c3a10ec272"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the diet plan-builder gated the delete control on meals.length > 1, so the last remaining meal ('Meat and rice' here) had no delete option. Fix: canRemove is now always true in CustomDietBuilder.tsx — the last meal shows its trash control (3rd hero button, verified: deleted down to one meal and the delete stayed). 'Add a meal' + the Continue guard keep an empty day recoverable.",
+        "imagePath": "images/i-20260717-d46a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-d46a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4053b33dbed0a4613692d91cb0ef9559ba1922f4",
+        "imageCommits": [
+          "4053b33dbed0a4613692d91cb0ef9559ba1922f4"
+        ],
+        "fixedAt": "2026-07-17T06:05:32.956Z",
+        "by": "shakeebshaan",
+        "appCommit": "2750d104",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Exact reported ask (delete the last meal) fixed and verified end-to-end via the plan-builder: after deleting one of two meals, the sole 'Meat and rice' card still exposes the trash control. One-line, surgical, no regression; empty day recoverable via always-present Add a meal + Continue guard."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260717-938c",
