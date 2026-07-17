@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260717-af2c",
+      "createdAt": "2026-07-17T00:06:50.054Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/nutrition",
+      "description": "[bug-hunt] Add Food modal (CustomMealModal) never resets its Ingredients-tab state on close — a stale ingredient selection or half-filled \"Add new\" custom-macros form reappears on reopen and can be logged by accident.\n\nRoute: /nutrition (Add Food bottom sheet, Ingredients tab).\n\nExpected: closing the modal returns it to a fresh state (Quick Log tab, empty ingredient search, no selected ingredient, empty new-ingredient form) — the same way the Quick-Log macro fields already reset on close (QA i-20260711-d0ca).\n\nActual: the reset-on-close effect (src/components/nutrition/CustomMealModal.tsx:131-137) clears ONLY quickMacros / showQuickMacros / estimateConfidence. It never clears activeTab, ingredientQuery, selectedIngredient, ingServings, ingIsSaved, isAddingNew, customMacros, or photoMacros. The modal is mounted unconditionally by Nutrition.tsx (only its inner DOM is gated on isOpen — see mic-cleanup note, CustomMealModal.tsx:118-127), so this state survives every open/close. Parent closeCustomMealModal (src/pages/Nutrition.tsx:368-371) resets only customMealText, not the modal internal ingredient state.\n\nRepro:\n1. Nutrition -> tap \"+ Log Food\" to open Add Food.\n2. Tap the \"Ingredients\" tab -> tap \"Add new ingredient with custom macros\".\n3. Type name \"Dark chocolate\", Calories 500, Protein 5.\n4. Close the modal with the X (do NOT log).\n5. Reopen Add Food (+ Log Food).\nExpected: fresh modal on Quick Log with an empty ingredient form.\nActual: modal reopens on the Ingredients tab with the \"Add new\" form still showing Dark chocolate / 500 / 5 and an active \"Add to Today\" button — one tap logs a meal the user never meant to. Same leak for a previously selected search result plus its servings count.\n\nFix: extend the !isOpen reset effect (or the parent close handler) to also clear ingredient-tab state: setActiveTab(\"quick\"), setIngredientQuery(\"\"), setSelectedIngredient(null), setIngServings(1), setIngIsSaved(false), setIsAddingNew(false), setCustomMacros(empty), setPhotoMacros(null) — mirroring the d0ca quick-log reset.\n\nAside (not filed separately): updateIngredientMutation (CustomMealModal.tsx:159-164) is dead code — defined but never invoked.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260716-supr",
       "createdAt": "2026-07-16T12:00:00.000Z",
       "status": "fixed",
