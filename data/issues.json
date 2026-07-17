@@ -1290,9 +1290,32 @@
         "87b00ebb7716e94c522c7a502c0b029f358156fd"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the meal photo picker's Openverse fallback built one over-qualified query ('Hung curd food dish meal') that returned 0 results, with no broadening - so 'No photos found'. Fix (backend image_providers.py + image_prompts.py, deployed): add curd/raita to the food-noun list so 'Hung curd' resolves to the food-domain query 'curd food dish' (214 results), plus a bare-name broadening safety net; wrong-subject trailing-word fallback dropped. Proof: the 'Choose a photo' sheet for 'Hung curd' now fills with real food photos.",
+        "imagePath": "images/i-20260717-1272-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-1272-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fc95eb54b3a1431d7c12803f5684c1e5ab497ceb",
+        "imageCommits": [
+          "fc95eb54b3a1431d7c12803f5684c1e5ab497ceb"
+        ],
+        "fixedAt": "2026-07-17T15:45:31.831Z",
+        "by": "shakeebshaan",
+        "appCommit": "92d09127",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Verified against the LIVE providers (food_preview_options('Hung curd') = 12 photos, was 0) and captured the populated picker for 'Hung curd' via the same MealSlotCard component + endpoint RecipeDetail uses. Backend deployed + health 200."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260717-4736",
