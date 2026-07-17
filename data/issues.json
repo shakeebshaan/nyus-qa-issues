@@ -888,7 +888,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root-caused. The Activity 'Last:' line comes from backend.py ActivityOverview (~line 8253): last_session_log is queried with WorkoutSessionLog.session_id == session.id — i.e. it only looks for a PRIOR completed log of the SAME session row. Your screenshot shows a progressive plan ('CURRENT SESSION 3/10'), where yesterday's workout was a DIFFERENT session row, so the same exercises (Leg Extension, Squat...) done yesterday are never matched -> 'No previous data' even though the workout was done. Proposed fix: look up the most recent completed SetLog for each exercise_id across the user's history (not scoped to session.id), falling back to the current behavior. This is a backend change + it also feeds progressive-overload reference weights (planned_volume ref_weight), so I want to verify against a real workout-history account before deploying — this machine's admin QA acct has no SetLog history to reproduce/confirm. Flagging rather than blind-deploying an unverified query-semantics change to prod. Confirm and/or point me at a data account and I'll ship + verify.",
+      "reviewedAt": "2026-07-17T06:07:21.183Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260717-fdf3",
