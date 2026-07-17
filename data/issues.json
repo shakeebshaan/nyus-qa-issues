@@ -6,8 +6,30 @@
       "createdAt": "2026-07-17T17:23:22.203Z",
       "route": null,
       "description": "[bug-hunt] AI plan-wizard number_input does NOT clamp the typed value to the min/max it advertises — the wizard sends an out-of-range answer to the coach.\n\nWhere: src/components/ai/InteractiveElement.tsx, the number_input branch (lines ~222-269). Used by the AI Activity/Diet plan wizards (AIWizardShell) at /ai/create-activity-plan and /ai/create-diet-plan whenever the backend sends a ui_element of type number_input with min/max.\n\nRoot cause: the field renders element.min/element.max as the HTML input min/max attrs AND as visible \"Min: X  Max: Y\" hints (lines 250-255), presenting a hard range to the user. But the Confirm handler (lines 256-261) does `const val = numberValue || String(element.default ?? 0); onRespond(val);` with NO clamp. HTML min/max attributes do not prevent TYPING an out-of-range number (they only affect the spinner + :invalid styling), so a typed value outside [min,max] is sent verbatim.\n\nEXPECTED: confirming clamps the value into [element.min, element.max] (or blocks confirm) so the coach never receives an impossible answer for a question it framed as bounded.\nACTUAL: type e.g. 99 into a number_input whose hint says \"Min: 1  Max: 7\", tap Confirm -> onRespond(\"99\") fires; the AI then either builds a nonsensical plan around 99 or has to re-ask, wasting a wizard turn (and an LLM call / rate-limit budget).\n\nREPRO: 1) open an AI plan wizard (/ai/create-activity-plan). 2) reach any step where the coach sends a bounded number_input (renders the boxed input with \"Min/Max\" row). 3) type a value above the max (or below the min). 4) tap Confirm. 5) observe the out-of-range value is submitted unchanged.\n\nFIX: in the Confirm onClick, clamp before responding, e.g. `const n = Number(numberValue); const clamped = Number.isFinite(n) ? Math.min(element.max ?? n, Math.max(element.min ?? n, n)) : n; onRespond(String(clamped));` (guard when min/max are undefined). Related same-class edge (optional, not required): the slider branch seeds sliderValue from element.default which, if the backend ever sends a default outside [min,max], would also submit out-of-range until the user drags — clamp the initial value too.\n\nImpact: LOW — bounded-answer correctness gap in the AI wizards; no crash, but it defeats the range the UI promises and can burn a wizard turn / LLM call.",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: InteractiveElement number_input Confirm sent the raw typed value; HTML min/max attrs don't block typing out-of-range, so the coach received impossible answers (e.g. 99 for a Min:1/Max:7 step). Fix: clamp with Math.min(max, Math.max(min, n)) in the Confirm onClick before onRespond (guarded when min/max undefined), and clamp the initial sliderValue seed for the same class. Proof: dev harness types 99 into a Min:1/Max:7 input -> Confirm -> onRespond receives '7'. Verified by 3 new unit tests in test/InteractiveElement.test.tsx; 31/31 green.",
+        "imagePath": "images/i-20260717-b3d1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-b3d1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c35ffda0560a36c7f190c31013d013d9d9ab896e",
+        "imageCommits": [
+          "c35ffda0560a36c7f190c31013d013d9d9ab896e"
+        ],
+        "fixedAt": "2026-07-17T17:33:19.564Z",
+        "by": "shakeebshaan",
+        "appCommit": "0951aaaa",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Exact root cause fixed (no clamp in Confirm handler); minimal guarded clamp Math.min/Math.max; also fixed the optional slider default edge named in the report. Proven visually (99->7 in dev harness) AND by 3 new unit tests, 31/31 green. Low-impact bounded-answer correctness gap, no side effects."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260717-sf9k",
