@@ -676,9 +676,32 @@
         "12659683c3f2a5168ba1ab932a0cf5a2ebfcd0c0"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the add-ingredient sheet showed two coupled steppers (unit count + grams-per-unit), letting nonsensical combos like 1 egg x 4 g/egg = 4g. Fix: FoodDetailSheet (src/components/plan-builder/FoodDetailSheet.tsx) now shows ONE amount field with an Eggs/Grams toggle — pick a whole-egg count OR total grams, never both; quantity carries across the toggle.",
+        "imagePath": "images/i-20260717-abf5-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-abf5-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4a043cc1b671bcd4640d81a841eda0f8d52296ed",
+        "imageCommits": [
+          "4a043cc1b671bcd4640d81a841eda0f8d52296ed"
+        ],
+        "fixedAt": "2026-07-17T05:43:08.071Z",
+        "by": "shakeebshaan",
+        "appCommit": "30585c8a",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Verified on the real Build-your-meals sheet (Boiled Egg): one Eggs/Grams toggle + single field; dual-field mess gone. Own tests green, tsc clean."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260717-67ca",
