@@ -1527,7 +1527,7 @@
     {
       "id": "i-20260717-pf2a",
       "createdAt": "2026-07-17T21:10:00.000Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/profile",
       "description": "[bug-hunt] Profile: ProfilePreferencesCard.tsx (coach-language / app-language / notification-sounds switcher) has ZERO i18n coverage - no useTranslation/t() import at all (confirmed via grep). Every user-facing string is hardcoded English: section header \"PREFERENCES & DATA\" (line 101), \"Sounds\"/\"Voice cues\" toggles (130,169), coach-language option labels/descriptions (17-19), App-language section, and all 4 toasts (44,47,75-77,84-86). Given the owner i18n directive (translate entire app EN/Hindi/Hinglish + all future strings), this is the exact card that lets a user switch App language to Hindi while the card switching it stays English. Smaller companion gap: ProfileDeleteAccountDialog.tsx:33-45 title/body/destructive-confirm text also hardcoded (only Cancel uses t()). Fix: wire useTranslation into both files, add keys to en/hi/hinglish/xx-AE bundles, follow the i18n-missing-keys-audit pattern already used for other screens. Not a data-accuracy bug - pure localization gap found during page-guardian PROFILE static sweep.",
       "imagePath": null,
@@ -1537,14 +1537,36 @@
       "images": [],
       "reopenNote": null,
       "needsReview": false,
-      "reviewReason": null,
       "reviewReply": null,
       "reviewReplyImages": [],
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
         "auto"
-      ]
+      ],
+      "fix": {
+        "description": "Root cause: the Profile 'Preferences & Data' card and the delete-account dialog had zero translation wiring — every label, caption, toggle, toast, and the delete-confirm was hardcoded English, so switching the app language to Hindi left the very card that switches it (and the delete dialog) stuck in English. Fix: routed all of it through the app's translation system and added the matching Hindi, Hinglish, and QA-pseudo strings with full parity. The card and dialog now fully localize — verified live on /profile in Hindi (see shot).",
+        "imagePath": "images/i-20260717-pf2a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-pf2a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1a541b76a587f89a19063a73e5752fd4d5e5fb69",
+        "imageCommits": [
+          "1a541b76a587f89a19063a73e5752fd4d5e5fb69"
+        ],
+        "fixedAt": "2026-07-17T22:07:13.876Z",
+        "by": "shakeebshaan",
+        "appCommit": "ef430d90",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Full i18n coverage in both reported files; 4-bundle parity clean; recaptured Hindi /profile shows card+dialog localized, no raw keys"
+        }
+      }
     }
   ]
 }
