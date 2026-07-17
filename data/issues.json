@@ -960,8 +960,30 @@
         "873a5570bbe929f55648f568016ba1013d4ac7b0"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: progressive-plan progression is count-based (a session advances only when its log gets completed_at) and progressive plans deliberately never auto-finish, so a session fully logged YESTERDAY but never explicitly 'finished' stayed 'current' today — you saw yesterday's done workout as today's session. Fix (backend, deployed to prod 9608f5b): the activity overview now rolls forward stale progressive sessions before picking the current one — an incomplete log started before today with every exercise logged/skipped is auto-finished so the plan advances to the next session on a new day (empty orphan logs from the old finish bug are deleted). Server-side, so it takes effect on your ALREADY-INSTALLED app on the next Activity open — no reinstall needed. Verified: live /activity/overview returns HTTP 200 exercising the new path. Note: the exact yesterday->next-session transition can't be screenshotted without seeding a real account's prior-day data; attached capture shows the Activity screen rendering cleanly post-deploy.",
+        "imagePath": "images/i-20260717-65e9-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260717-65e9-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "912aba1a3853a41bc699ed9b6bfaf3b88cf67c0e",
+        "imageCommits": [
+          "912aba1a3853a41bc699ed9b6bfaf3b88cf67c0e"
+        ],
+        "fixedAt": "2026-07-17T08:06:56.948Z",
+        "by": "shakeebshaan",
+        "appCommit": "9608f5b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root-caused + backend fix deployed to prod (9608f5b), live /activity/overview verified HTTP 200. Directly addresses the reopened complaint server-side (takes effect on the installed app, no reinstall). Soft spot: exact prior-day transition not screenshottable without seeding real-account data (disclosed in desc)."
+        }
+      },
       "history": [
         {
           "at": "2026-07-17T07:46:44.425Z",
