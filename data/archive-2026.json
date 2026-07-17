@@ -22147,81 +22147,49 @@
       "archivedAt": "2026-07-17T00:52:10.250Z"
     },
     {
-      "id": "i-20260716-3af1",
-      "createdAt": "2026-07-16T21:08:47.816Z",
+      "id": "i-20260716-b7f3",
+      "createdAt": "2026-07-16T13:40:04.000Z",
       "status": "resolved",
-      "route": "/weekly-review",
-      "description": "[bug-hunt] Weekly Review page shows enabled \"Approve All Changes\" / \"Keep Current\" buttons on an ALREADY-REVIEWED week, and tapping either always fails with a red \"Couldn't save. Try again.\" toast — with no indication the week was already reviewed. Root cause: WeeklyReviewScreen (src/pages/WeeklyReviewScreen.tsx) renders the actionable <AcceptChangesFlow> whenever a review object exists and NEVER reads review.status. reviewService.getLatest()/getById() (src/services/review.service.ts:115-125) return the review regardless of status, and the backend GET /reviews/latest|current (nyu_backend/app/routes/reviews.py:185-239) returns the current-week (or previous-week) review even when status===\"reviewed\". But the POST handlers reject any non-pending review: approve_review/modify_review/reject_review (reviews.py:279-280, 320-321, 416-417) each guard with \"if review.status not in (pending_review, pending_data): return _err(Review is already {status})\" (HTTP 400). AcceptChangesFlow.handleSubmit (src/components/review/AcceptChangesFlow.tsx:43-64) catches that and only shows toast({title:\"Couldn't save\", description:\"Try again.\"}) — so every tap errors identically and the user is stuck. Repro: (1) open a weekly review and Approve (or Keep Current) once so status flips to \"reviewed\"; (2) re-enter /weekly-review — tap the weekly-review card in the Notifications inbox (src/pages/Notifications.tsx:438 navigate(\"/weekly-review\") -> getLatest) or re-tap the push (src/capacitor/push.ts:257 /weekly-review?id=); (3) swipe to the \"Plan Changes\" section — the Approve/Keep Current buttons are enabled with no \"already reviewed\" state; (4) tap \"Approve All Changes\" or \"Keep Current\" -> red \"Couldn't save. Try again.\" toast; retrying fails the same way. Expected: an already-reviewed week should render a read-only / \"You've already reviewed this week\" state (mirror the existing 'completed' success block) or disable the action buttons — not enabled CTAs that always 400. Fix: gate AcceptChangesFlow behind review.status — when status is not \"pending_review\"/\"pending_data\", show the reviewed summary instead of the actionable flow (and/or seed the 'completed'-style branch from review.status on mount).",
+      "route": "/recipe-detail",
+      "description": "[bug-hunt] Recipe steps: the FIRST cooking instruction is rendered as an unnumbered bullet '•' labeled (for screen readers) 'Recipe note:' — as if it were a preamble — and every remaining step is numbered off-by-one with the step count one short. A 6-step recipe shows an unnumbered first step, then 'Step 1 of 5' … 'Step 5 of 5'.\n\nRoute: /recipe-detail (open any recipe meal from Nutrition → the 'Instructions' section). Also affects the collapsible 'Recipe' block on the meal-detail screen.\n\nExpected: instructions render 'Step 1 of N' … 'Step N of N', the first real step numbered 1. Actual: the first instruction shows a '•' bullet + aria-label 'Recipe note: <first step>', numbering starts at '1' on the SECOND step, and the total is N-1.\n\nRoot cause (src/components/RecipeStepList.tsx): the renderer UNCONDITIONALLY treats finalSteps[0] as a preamble — isPreamble = (i === 0) (lines 100 & 132), stepNum = i (so the 2nd element becomes 'Step 1'), and totalSteps = finalSteps.length - 1 (line 90). That is only correct when a leading preamble was actually extracted. But (a) the `steps` prop — used by RecipeDetail as steps={recipe.instructions} — is documented at line 48 as 'Pre-split step strings' with NO preamble, so instructions[0] is a real step; and (b) splitRecipeSteps(notes) only prepends a preamble element when preamble TEXT precedes the first marker — for the common notes that start directly with '1) …' it returns pure steps (see the component's own test, lines 170-174), so notes[0] is also a real step.\n\nNode-verified render decision (replicating lines 90/100/101/108/116):\nCASE A steps=['Heat oil…','Add onions…','Add spices…','Serve hot'] -> '[•] Recipe note: Heat oil…' / 'Step 1 of 3: Add onions…' / 'Step 2 of 3' / 'Step 3 of 3' (4 instructions shown as 1 note + 3 numbered).\nCASE B notes='1) Boil pasta 2) Make sauce 3) Combine' -> splits to 3 real steps -> first shown as '[•] Recipe note: Boil pasta', then 'Step 1 of 2' / 'Step 2 of 2'.\nCASE C notes WITH a genuine preamble ('Prep + cook ~20 min. 1) …') renders correctly — confirming the code only works when a preamble is actually present.\n\nRepro: 1) Open /recipe-detail for any recipe whose instructions start with the first step (i.e. no 'Prep ~X min' preamble). 2) Scroll to Instructions. Expected step 1 is shown as an unnumbered bullet and the visible numbering / 'Step k of M' count is off by one.\n\nFix: only treat index 0 as a preamble when it genuinely is one (e.g. have splitRecipeSteps return a hasPreamble flag or prepend a sentinel, or detect that element 0 lacks a leading numeric marker). For the `steps` prop path, number from 1 with totalSteps = length. The existing RecipeStepList tests do NOT lock the buggy path — they only seed a preamble at [0] and never assert numbering for the no-preamble / raw-`steps` cases.",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
         "auto"
-      ],
-      "fix": {
-        "description": "Root cause ran deeper than the UI: after the Saturday 'review ready' push a weekly review sits in the 'notified' state for the whole action window, but the backend AND the screen only allowed Approve/Keep on a 'pending' review -- so tapping the push's Approve CTA always failed with 'Couldn't save', and re-opening any finished week showed the same dead-end buttons. Fix (full-stack): the backend now accepts approve/keep/modify on a notified review and the screen keeps those actions live through the review window (first image), while a genuinely finished week (already reviewed/applied) shows a clean read-only summary instead of buttons that always error (second image).",
-        "imagePath": "images/i-20260716-3af1-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260716-3af1-fix-r2.png",
-          "images/i-20260716-3af1-fix-r2-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "399e47189bc1bcf4535da8e9f7733ed2d7a73d08",
-        "imageCommits": [
-          "399e47189bc1bcf4535da8e9f7733ed2d7a73d08",
-          "eb729fe5aa3d65903f6e7afea6bd865282d6ce39"
-        ],
-        "fixedAt": "2026-07-16T21:43:12.098Z",
-        "by": "shakeebshaan",
-        "appCommit": "5063703c",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 90,
-          "note": "Full-stack root-cause fix: backend guard + FE gate + type union all widened to 'notified'; both notified->actionable and reviewed->read-only proven on /weekly-review; FE 23/23 + backend 35/35 green, tsc clean, backend deployed+healthy."
-        }
-      },
-      "history": [
-        {
-          "at": "2026-07-16T21:42:57.608Z",
-          "event": "reopened",
-          "note": "Re-resolving with the complete root-cause fix + real proof shots. The prior resolve was FE-only and mis-framed: the deeper cause is the backend flipping pending_review->notified on the Saturday review-ready push, and the approve/keep/modify guards rejected 'notified' -- so tapping the push CTA 400'd for the whole action window. Now fixed full-stack (backend guard + FE gate + type) and deployed.",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: WeeklyReviewScreen rendered the actionable AcceptChangesFlow whenever a review existed, never reading review.status — but the backend 400s approve/keep on any already-reviewed week, so re-entering it showed enabled Approve/Keep CTAs that always failed with 'Couldn't save.' Fix (src/pages/WeeklyReviewScreen.tsx): gate on review.status — non-pending weeks now render a read-only ReviewedSummary ('You've already reviewed this week' + read-only proposed changes + Discuss/Back-to-dashboard) instead of dead-end buttons. Added data-testid to AcceptChangesFlow + 5 regression tests (22/22 green, tsc clean).",
-            "imagePath": "images/i-20260716-3af1-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260716-3af1-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "e04f1809d5281829a18a339f2e4289574f4d0841",
-            "imageCommits": [
-              "e04f1809d5281829a18a339f2e4289574f4d0841"
-            ],
-            "fixedAt": "2026-07-16T21:32:26.713Z",
-            "by": "shakeebshaan",
-            "appCommit": "ab58dfb0",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 93,
-              "bar": 90,
-              "note": "Root cause correctly identified and fixed at the gate (review.status); mirrors backend 400 guard exactly. Read-only ReviewedSummary covers all 3 non-pending states. 5 regression tests + testid, 22/22 green, tsc clean. Full-screen 390x844 proof shows the exact reviewed state with no failing CTAs."
-            }
-          }
-        }
       ],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
+      "fix": {
+        "description": "Recipe instructions were showing the first cooking step as an unnumbered bullet and numbering the rest off by one (a 6-step recipe read 'Step 1 of 5' … 'Step 5 of 5'). Root cause: RecipeStepList always treated the first item as a 'prep note' preamble, which is only right when the notes actually start with a prep line. Fix: it now only shows a bullet when a real preamble exists; otherwise every step numbers from 1 with the correct total (Step 1 of 6 … Step 6 of 6).",
+        "imagePath": "images/i-20260716-b7f3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-b7f3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "268120e8fd60b2a5dbbd7a526d751e613806d66c",
+        "imageCommits": [
+          "268120e8fd60b2a5dbbd7a526d751e613806d66c"
+        ],
+        "fixedAt": "2026-07-16T13:57:09.190Z",
+        "by": "shakeebshaan",
+        "appCommit": "86bf38b9",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "First step now numbered 1, sequential 1..6 with correct N; verified in DOM aria-labels, circle text, and the recaptured screen; unit + page tests green."
+        }
+      },
+      "history": [],
       "needsReview": false,
-      "resolvedAt": "2026-07-17T01:00:58.334Z",
+      "resolvedAt": "2026-07-17T01:01:32.536Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-17T01:00:58.334Z"
+      "archivedAt": "2026-07-17T01:01:32.536Z"
     }
   ]
 }
