@@ -952,6 +952,26 @@
       "status": "open",
       "fix": null,
       "history": []
+    },
+    {
+      "id": "i-20260717-av42",
+      "createdAt": "2026-07-17T06:18:59.824Z",
+      "route": "/activity",
+      "description": "[bug-hunt] Activity: daily_volume_history mis-attributes an IN-PROGRESS session's volume to the wrong calendar day, making the week-dots row lie about which day had a workout.\n\nRoot cause: backend.py ~L8417 (ActivityOverview) buckets daily volume by func.date(WorkoutSessionLog.started_at) == day_date, with NO requirement that the session be completed. session_count (L8427) correctly filters on completed_at instead. Live cross-check today (2026-07-17, QA main acct):\n- GET /activity/overview?day=2026-07-17: todays_workout is an in-progress session (session_id 3808 'Push', session_number 3, is_complete:false) with total_volume_today_kg=7890 (7 exercises logged, 2 skipped).\n- Same response's daily_volume_history has a Jul 16 entry: {volume: 7890, session_count: 0} — the exact volume of TODAY's unfinished session, bled back one day, with session_count correctly at 0 (no completed session that day).\n- GET /activity/history?page=1&limit=10 (completed-sessions source of truth) shows Jul 16 as {sessions_count:0, total_volume_kg:0} and has no session at all for Jul 16 in its sessions[] list — confirming Jul 16 had zero real activity and the 7890 is purely a started_at artifact from today's still-open session.\n\nImpact: TodaysActivityCard's weekDots (FE, hasSession = point.volume>0) will show Jul 16 as a completed workout day when nothing happened that day, while today (Jul 17, where the user is actually mid-workout) shows nothing yet since the session isn't finished — a day-shifted, self-correcting-only-on-finish illusion. Any late-night session (start before midnight, most sets logged after) reproduces this for real users, not just this timing artifact.\n\nFix (backend): bucket daily_volume_history by the completed session's date (or by SetLog.logged_at if per-set timestamps exist) instead of WorkoutSessionLog.started_at, and only include volume from sessions with completed_at set (matching session_count's own filter) — or clearly document/accept in-progress volume under TODAY's bucket regardless of started_at. Needs backend deploy; flagging per loop policy (never touch backend prod from this loop).",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false
     }
   ]
 }
