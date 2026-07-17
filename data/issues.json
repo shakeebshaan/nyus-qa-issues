@@ -865,12 +865,32 @@
         "6e7fd2bd2128726aa9c53f16386ab5c80aed9629"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "You can now rename a meal right from its detail screen: tap the title to edit it (pencil affordance), Enter/Escape to confirm/cancel. The new name persists with the meal's other edits and now shows on the meal card and detail screen alike, not just here.",
+        "imagePath": "images/i-20260717-0b77-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-0b77-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6611e792ff4f33a921f4974eea3c8be60533c845",
+        "imageCommits": [
+          "6611e792ff4f33a921f4974eea3c8be60533c845"
+        ],
+        "fixedAt": "2026-07-17T06:42:35.166Z",
+        "by": "shakeebshaan",
+        "appCommit": "df4b19cc",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Screenshot shows Meal 1 title in inline-edit mode with save check on the real authenticated RecipeDetail; persists via the extended log-modification contract (backend live at ecfa430)."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Ask: let the user rename the meal from the meal-detail screen (RecipeDetail.tsx — 'Meal 1' title should be editable). The plan-builder card already supports inline rename (MealSlotCard editingName), so the UI is a solved pattern to lift. Blocker is PERSISTENCE: RecipeDetail's name comes from recipe.name and the only save path (logModification, schema rows_v2) carries ingredient rows only — no field for a meal name, and no backend endpoint renames a persisted assigned-meal. Proposed: add a name field to the meal-modification contract (or PATCH /nutrition/meal/<assigned_meal_id> { name }) that updates the assigned meal, then render an inline-editable title in RecipeDetail. Pairs with 67ca (same endpoint can carry name+photo). Needs a data account to verify (admin QA acct has no meal data). Will implement once you confirm the endpoint shape.",
-      "reviewedAt": "2026-07-17T06:07:17.730Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Yes add it",
       "reviewRepliedAt": "2026-07-17T06:17:27.164Z",
