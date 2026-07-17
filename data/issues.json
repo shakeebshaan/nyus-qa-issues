@@ -4,8 +4,30 @@
     {
       "id": "i-20260717-9c4d",
       "createdAt": "2026-07-17T23:27:01.973Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Period selector (Weekly/Monthly/All Time) rendered for all 4 leaderboard types, but the backend calculators for weight_loss_weekly/weight_loss_all_time hardcode their window from the type name and drop the request period (backend.py:5743-5750), so Period taps there were a dead no-op that still burned the 10/min /leaderboards rate-limit. Fix: LeaderboardView.tsx now gates the Period selector to the period-aware types only (wellness_streak, exercise_pr). Verified live on /social Leaderboard Global: selecting the Weekly (Weight Loss) board hides the Period chips; +1 regression test (LeaderboardView.period-gate.test.tsx, 3/3 green).",
+        "imagePath": "images/i-20260717-9c4d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-9c4d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7fc84f8105236d789bf3786b723f2310b7c0c001",
+        "imageCommits": [
+          "7fc84f8105236d789bf3786b723f2310b7c0c001"
+        ],
+        "fixedAt": "2026-07-17T23:32:56.731Z",
+        "by": "shakeebshaan",
+        "appCommit": "3f179845",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Root-caused in both repos, frontend-only surgical gate matching the reporter's recommended mitigation, verified live E2E via Playwright (period chips gone on weight-loss board), tsc clean, regression test locks the gating."
+        }
+      },
       "history": [],
       "route": "/social",
       "description": "[bug-hunt] Leaderboard \"Period\" selector (Weekly / Monthly / All Time) is a DEAD no-op for 2 of the 4 leaderboard types — the two Weight-Loss boards. The chip highlights as selected but the board never changes.\n\nFRONTEND: LeaderboardView.tsx renders a Period selector (periods weekly/monthly/all_time, lines 19-23 + 322-337) next to the Type selector (wellness_streak/weight_loss_weekly/weight_loss_all_time/exercise_pr, lines 12-17). selectedPeriod is passed to leaderboardService.getLeaderboard(type, period, ...) and is part of the react-query key (line 129), so every period change fires a new GET /leaderboards.\n\nBACKEND: LeaderboardsResource.get (nyu_backend/backend.py:5739-5754) routes weight_loss_weekly -> calculate_weight_loss_leaderboard(\"weekly\", ...) and weight_loss_all_time -> calculate_weight_loss_leaderboard(\"all_time\", ...), HARDCODING the window and DROPPING the request `period` entirely. calculate_weight_loss_leaderboard (backend.py:5027, 5037) derives its date window ONLY from get_time_window(period_arg). Only wellness_streak and exercise_pr forward the request period.\n\nRESULT: with Type = \"Weekly\" (weight_loss_weekly) or \"All Time\" (weight_loss_all_time) selected, tapping Period chips highlights the chosen chip but the ranked list + \"Your Rank\" card are identical — the backend returns the same fixed window. E.g. the weekly weight-loss board shows the \"Monthly\" period chip selected while the numbers stay weekly. Also confusing that \"Weekly\"/\"All Time\" appear as BOTH a Type and a Period.\n\nSECONDARY: each no-op period change mints a fresh react-query cache entry (key includes selectedPeriod) and fires a real GET /leaderboards, which is rate-limited to 10/min (backend.py:5673). Toggling period on a weight-loss board wastes the bucket for zero benefit and can trip the \"Slow down\" 429 toast (LeaderboardView:144).\n\nEXPECTED: for the two weight-loss types (which already encode their window in the type name) either hide the Period selector or make it actually re-scope the board. ACTUAL: Period is silently ignored for weight_loss_weekly / weight_loss_all_time.\n\nREPRO: /social -> Leaderboard -> Global sub-tab -> Type = \"Weekly\" (or \"All Time\") -> tap Period = \"Monthly\". The Monthly chip becomes active but the board + Your Rank are unchanged. Code-proven both repos (backend.py:5743-5750 hardcodes the window).\n\nFIX: gate the Period selector to only show for types that honor it (wellness_streak, exercise_pr); or collapse the two weight-loss types into one \"Weight Loss\" type whose window is driven by the Period selector (forward selectedPeriod to calculate_weight_loss_leaderboard). Frontend-only mitigation: hide/disable Period for weight_loss_* types.",
