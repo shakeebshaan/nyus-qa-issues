@@ -838,12 +838,32 @@
         "e7531e880d69104c139ee3d13e0eeff973338ad5"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Added a photo control on the meal-detail screen: tap 'Change/Add photo' to open a mini scrollable gallery of curated dish photos and pick the one that fits (or 'Use no photo'). The choice saves with the meal and shows on both the detail view and the meal card.",
+        "imagePath": "images/i-20260717-67ca-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-67ca-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fc12fc8e7957cbc55150fdf179ca8e9d99e72b96",
+        "imageCommits": [
+          "fc12fc8e7957cbc55150fdf179ca8e9d99e72b96"
+        ],
+        "fixedAt": "2026-07-17T06:42:47.083Z",
+        "by": "shakeebshaan",
+        "appCommit": "df4b19cc",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Screenshot shows the 'Choose a photo' scrollable curated grid open on the real RecipeDetail with a selected tile; 2 of 12 thumbnails failed to load in the headless capture (external CDN), not a code defect. Backend persistence live at ecfa430."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Ask: add an 'add/select photo' control on the meal-detail screen (RecipeDetail.tsx, the 'Save Meal Changes' screen — 'Bone brawth' has only the fork/knife placeholder, no way to set a photo). The plan-builder card (MealSlotCard) already has a curated stock-photo picker, so the UI pattern exists and is reusable. The blocker is PERSISTENCE: RecipeDetail edits a persisted assigned-meal and the only save path is logModification (rows_v2 = ingredient rows only) — there is no backend endpoint to store a chosen photo on an assigned meal. This is the same meal-photo persistence model as 938c/0b77. Proposed: extend the meal-modification contract (or a new PATCH /nutrition/meal/<assigned_meal_id>) to carry image_id/image_url, persist it, and reuse the MealSlotCard picker sheet in RecipeDetail. Needs the 938c id-vs-url decision + a data account to verify end-to-end (this machine's admin QA acct has no meal data). Will implement once the storage model is confirmed.",
-      "reviewedAt": "2026-07-17T06:06:58.343Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Yes add it show me mini scrollable gallary to choose the relevant image too",
       "reviewRepliedAt": "2026-07-17T06:15:52.406Z",
