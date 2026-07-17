@@ -708,31 +708,39 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Duplicate of i-20260716-4b4c (same ask, filed 16 min later). Fixed by the same change: supplement tracker is now server-persisted (new supplement_data table + GET/PUT /api/v1/supplements, backend d2b9b7a) so it survives logout/re-login and syncs across devices, moved from the Dashboard into the Nutrition (Diet) page, and today's adherence feeds the coach context. Screenshot: the Diet page showing the server-loaded supplement item.",
-        "imagePath": "images/i-20260716-dc05-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-dc05-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41",
-        "imageCommits": [
-          "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41"
-        ],
-        "fixedAt": "2026-07-16T19:47:05.333Z",
-        "by": "shakeebshaan",
-        "appCommit": "8a8592b9",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Duplicate of 4b4c; same verified full-stack fix. Server persistence proven E2E on prod, card renders in the Diet page, coach context wired, backend deployed."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-17T00:47:25.178Z",
+          "event": "reopened",
+          "note": null,
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Duplicate of i-20260716-4b4c (same ask, filed 16 min later). Fixed by the same change: supplement tracker is now server-persisted (new supplement_data table + GET/PUT /api/v1/supplements, backend d2b9b7a) so it survives logout/re-login and syncs across devices, moved from the Dashboard into the Nutrition (Diet) page, and today's adherence feeds the coach context. Screenshot: the Diet page showing the server-loaded supplement item.",
+            "imagePath": "images/i-20260716-dc05-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260716-dc05-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41",
+            "imageCommits": [
+              "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41"
+            ],
+            "fixedAt": "2026-07-16T19:47:05.333Z",
+            "by": "shakeebshaan",
+            "appCommit": "8a8592b9",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 92,
+              "bar": 90,
+              "note": "Duplicate of 4b4c; same verified full-stack fix. Server persistence proven E2E on prod, card renders in the Diet page, coach context wired, backend deployed."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "needsReview": false
     }
   ]
