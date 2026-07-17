@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260717-gbc1",
+      "createdAt": "2026-07-17T20:38:40.558Z",
+      "status": "open",
+      "route": "/shopping-list",
+      "description": "[suggestion] Weekly grocery-list cost estimate + running budget on the Shopping List screen. Problem: Indian users are price-sensitive week-to-week grocery spend, but ShoppingList.tsx / ShoppingListItem has no price field at all — the list shows qty+unit only, no cost signal, while Blinkit/Zepto deep-links already exist for the same items. Evidence: grep of ShoppingListItem + ShoppingList.tsx shows zero cost/budget fields; comparable apps (Cult.fit, HealthifyMe) surface an estimated weekly grocery spend to reinforce diet-plan adherence via cost awareness. Proposed v1: backend attaches a per-item avg-price estimate (static INR price table by ingredient, refreshed manually) to the /shopping-list response; FE sums to a \"~₹XXX this week\" pill at the top of ShoppingList.tsx, no per-store live pricing needed. Effort: ~1-2 days (small backend price table + one route field, small FE sum+pill).",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260717-6c78",
       "createdAt": "2026-07-17T20:23:53.808Z",
       "route": "/coach-chat",
