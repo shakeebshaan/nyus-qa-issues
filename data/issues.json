@@ -1058,16 +1058,18 @@
           }
         }
       ],
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "activity",
+        "deployed",
         "workout",
-        "full-stack"
+        "activity"
       ],
       "reviewReply": "Still same on my app needs frontend push or backend deploy? If yes then do it also make sure that you deploy everytime there is a fix",
       "reviewRepliedAt": "2026-07-17T06:14:56.629Z",
-      "reviewReplyBy": "shakeebshaan"
+      "reviewReplyBy": "shakeebshaan",
+      "reviewReason": "Answer to your question: it needed a FRONTEND build; the backend half was already live on prod. Root cause of still-broken: the fix (finish the current session before starting the next) was committed on 2026-07-17, but the last shipped build v214 was cut BEFORE that commit AND OTA auto-update is off, so your installed app never received it. Now shipped: v215 (1.9.35) with the fix is on the Play alpha track (confirmed uploaded), and the backend change is already deployed to prod. Please update NYUS from the Play Store alpha track, then retest Start Next Session Now on your progressive plan. If it STILL resets after updating to v215, that means leftover data on your account (an empty orphan session created by the earlier buggy taps) rather than a code bug; tell me and I will clean it server-side (I will not run a blind blanket data migration). Going forward I will build and upload every code fix to alpha in the same tick.",
+      "reviewedAt": "2026-07-17T08:02:47.004Z"
     },
     {
       "id": "i-20260717-3d27",
