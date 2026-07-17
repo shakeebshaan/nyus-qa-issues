@@ -4,8 +4,30 @@
     {
       "id": "i-20260717-1d76",
       "createdAt": "2026-07-17T22:49:47.724Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: UserSearch.tsx had a local const apiErrorMessage shadowing the imported @/lib/api-error one (TS2440 under tsc -b; added by 6fdf3c9e); the local version never returned null so the block-error toast's '?? Please try again.' fallback was dead and axios failures showed 'Request failed with status code 400'. Fix: deleted the local const so the null-returning imported helper is used, and added the same fallback to the send-request toast. Code-level fix (page renders identically) — proof shows /social/search clean post-fix (ShieldOff Blocked button renders, 0 console errors). Repaired test rot in UserSearch.page.test.tsx (missing ShieldOff mock + block-confirmation click). Verified: tsc -b clears the TS2440; scoped vitest 28/28 green (UserSearch.page + api-error).",
+        "imagePath": "images/i-20260717-1d76-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-1d76-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "12a6edfaf3bcfd10456d2978721358231730689c",
+        "imageCommits": [
+          "12a6edfaf3bcfd10456d2978721358231730689c"
+        ],
+        "fixedAt": "2026-07-17T23:08:30.002Z",
+        "by": "shakeebshaan",
+        "appCommit": "ffb79f00",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Exact root cause named in the bug report and fixed surgically (2 lines net); TS2440 confirmed cleared via tsc -b; 28/28 scoped tests green after also repairing pre-existing test rot; proof is the page rendering clean (this is a compile/error-path fix with no visual delta). testGate command (npm run test:unit) exits 0."
+        }
+      },
       "history": [],
       "route": "/social/search",
       "description": "[bug-hunt] UserSearch.tsx declares apiErrorMessage TWICE, in conflict: line 7 `import { apiErrorMessage } from \"@/lib/api-error\"` AND line 28 `const apiErrorMessage = ...`.\n\nCOMPILE: `tsc -b` (the real project typecheck) fails: `src/pages/UserSearch.tsx(7,10): error TS2440: Import declaration conflicts with local declaration of \"apiErrorMessage\"`. It shipped because root tsconfig.json is references-only (files:[]) so `tsc --noEmit` is a no-op, and `npm run build` = `vite build` (esbuild, no typecheck). It is the ONLY genuine duplicate-declaration error in the whole project (1 of 233 tsc errors, the other 232 are known framer/useQuery inference noise).\n\nRUNTIME: esbuild drops the import and keeps the weaker local const, so the intended robust extractor from @/lib/api-error is dead. The local version reads only error.response?.data?.error then falls back to error.message (for an axios failure that is the useless \"Request failed with status code 400\") and NEVER returns null -> the `apiErrorMessage(error) ?? \"Please try again.\"` fallback at line 126 (the Block-User error toast) is dead code. Blocking a user when the request 4xx/5xx/times-out shows \"Request failed with status code 400\" instead of the friendly copy - exactly the class @/lib/api-error was built to prevent (QA i-20260621-8625).\n\nIntroduced by commit 6fdf3c9e (block confirmation dialog, i-20260716-5ec9): the import was added for the new block onError handler but the stale local const was not removed.\n\nEXPECTED: one apiErrorMessage (the imported null-returning one). ACTUAL: two declarations -> tsc -b error + degraded block-error toast.\n\nREPRO (compile): `./node_modules/.bin/tsc -b --force` -> TS2440 at UserSearch.tsx:7. REPRO (runtime): /social/search, search a user, tap kebab -> Block while offline or backend-500 -> toast body reads \"Request failed with status code 400\".\n\nFIX: delete the local `const apiErrorMessage` (lines 28-32); the imported one returns null on the generic axios message so the `?? \"Please try again.\"` fallback then works. (FriendRequests.tsx has the same local helper but no conflicting import, so it is fine.)",
@@ -18,7 +40,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260717-ef2b",
