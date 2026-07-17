@@ -1,545 +1,564 @@
 {
-  "version": 1,
-  "issues": [
-    {
-      "id": "i-20260717-9d4b",
-      "createdAt": "2026-07-17T00:00:00.000Z",
-      "status": "open",
-      "description": "[discovery] Outlets added: 3. Pitch-ready: Little India (littleindia.com). Escalated: 1.",
-      "author": "shakeebshaan",
-      "tags": [
-        "discovery",
-        "auto"
-      ],
-      "route": null,
-      "fix": null,
-      "imagePaths": [],
-      "imagePrivate": false,
-      "history": []
+ "version": 1,
+ "issues": [
+  {
+   "id": "i-20260717-e5f1",
+   "createdAt": "2026-07-17T01:40:38.034Z",
+   "route": null,
+   "description": "[bug-hunt] The pseudo-locale xx-AE never actually renders — the documented \"manual QA via ?lng=xx-AE\" path silently shows English, defeating the pseudo-locale overflow / missing-key guard.\n\nRoot cause: src/i18n/config.ts initI18n() sets `supportedLngs: [\"en\", \"hi\", \"hinglish\"]` (line 76) which OMITS \"xx-AE\", even though SUPPORTED_LOCALES (line 35) and the resources map (line 56) both include it, and the code comment (lines 91-92) explicitly states xx-AE is \"for tests / manual QA via ?lng=xx-AE\". With `load: \"currentOnly\"` and xx-AE absent from supportedLngs, i18next filters the locale out and falls back to en.\n\nEXPECTED: requesting xx-AE (via ?lng=xx-AE, or nyus_locale=xx-AE in localStorage) renders the inflated/accented pseudo strings so text-overflow bugs and missing translation keys surface loudly.\nACTUAL: it renders plain English, so the pseudo-locale QA/overflow-detection path is a silent no-op.\n\nREPRO (node-verified against installed i18next): init with supportedLngs:[\"en\",\"hi\",\"hinglish\"] + load:\"currentOnly\" + an xx-AE resource, then changeLanguage(\"xx-AE\") -> i18n.language=\"xx-AE\" but resolvedLanguage=\"en\" and t(key) returns the ENGLISH value. Adding \"xx-AE\" to supportedLngs makes resolvedLanguage=\"xx-AE\" and t(key) return the pseudo value. In-app: append ?lng=xx-AE to any route (querystring detection is enabled) — UI stays English instead of showing pseudo glyphs.\n\nFIX: add \"xx-AE\" to the supportedLngs array in src/i18n/config.ts (safe — no real browser reports xx-AE as its navigator language, so it will never auto-detect; it only becomes reachable via the explicit ?lng / localStorage paths the comment already documents). Impact: LOW-MED — internal QA tooling, not an end-user crash, but it defeats the overflow/missing-key guard the team relies on.",
+   "status": "open",
+   "fix": null,
+   "history": [],
+   "author": "shakeebshaan",
+   "tags": [
+    "bug-hunt",
+    "auto"
+   ],
+   "imagePath": null,
+   "imageCommit": null,
+   "imagePaths": [],
+   "imageCommits": [],
+   "imagePrivate": false
+  },
+  {
+   "id": "i-20260717-9d4b",
+   "createdAt": "2026-07-17T00:00:00.000Z",
+   "status": "open",
+   "description": "[discovery] Outlets added: 3. Pitch-ready: Little India (littleindia.com). Escalated: 1.",
+   "author": "shakeebshaan",
+   "tags": [
+    "discovery",
+    "auto"
+   ],
+   "route": null,
+   "fix": null,
+   "imagePaths": [],
+   "imagePrivate": false,
+   "history": []
+  },
+  {
+   "id": "i-20260716-8b2e",
+   "createdAt": "2026-07-16T22:00:00.000Z",
+   "status": "open",
+   "description": "[content] Published: Millets vs Rice & Wheat for Weight Loss — Bajra, Jowar, Ragi Compared — https://nyus.in/blog/millets-vs-rice-wheat-for-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
+   "author": "shakeebshaan",
+   "tags": [
+    "content",
+    "auto"
+   ],
+   "route": null,
+   "fix": null,
+   "imagePaths": [],
+   "imagePrivate": false,
+   "history": []
+  },
+  {
+   "id": "i-20260716-9f2e",
+   "createdAt": "2026-07-16T16:45:00.000Z",
+   "status": "open",
+   "route": null,
+   "description": "[content] Published: How to Build a Balanced Indian Thali for Weight Loss — https://nyus.in/blog/how-to-build-a-balanced-indian-thali-for-weight-loss.html. Ideas added: 3. Escalated: 0.",
+   "author": "shakeebshaan",
+   "tags": [
+    "content",
+    "auto"
+   ],
+   "fix": null,
+   "imagePaths": [],
+   "imagePrivate": false,
+   "history": []
+  },
+  {
+   "id": "i-20260716-365d",
+   "createdAt": "2026-07-16T15:10:27.236Z",
+   "route": "/shopping-list",
+   "description": "[bug-hunt] The Shopping List page (/shopping-list, linked from Diet Plan Week) never sets a descriptive browser/tab title — it falls back to the generic \"NYUS\". The PATH_TITLES map in src/App.tsx (309-370) that powers the WCAG 2.4.2 \"set a descriptive page title on every route change\" effect lists ~60 routes but omits \"/shopping-list\". Resolution (App.tsx:373-375) does an exact lookup then a prefix scan (path.startsWith(k+\"/\")); no key matches \"/shopping-list\", so document.title=\"NYUS\" instead of \"Shopping List | NYUS\". Every sibling nutrition route (/nutrition, /meal-ingredients, /diet-plan-week, /barcode-scan …) is present, so this is an inconsistency + minor a11y gap. EXPECTED: title \"Shopping List | NYUS\". ACTUAL: \"NYUS\". REPRO: navigate to /shopping-list, inspect document.title. FIX: add \"/shopping-list\": \"Shopping List\" to PATH_TITLES.",
+   "status": "fixed",
+   "fix": {
+    "description": "Root cause: the Shopping List page was the one nutrition route missing from the browser-title map, so its tab/page title fell back to the generic 'NYUS' while every sibling page (Nutrition, Ingredients, Diet Plan, Scan Barcode) had a proper one. Fix: added the entry so the page now titles itself 'Shopping List | NYUS'. Verified live: navigating to /shopping-list now reports document.title 'Shopping List | NYUS' (was 'NYUS').",
+    "imagePath": "images/i-20260716-365d-fix-r1.png",
+    "imagePaths": [
+     "images/i-20260716-365d-fix-r1.png"
+    ],
+    "imagePrivate": true,
+    "imageCommit": "c5982820b3d50d3790d0cc9d24c556303463ab7a",
+    "imageCommits": [
+     "c5982820b3d50d3790d0cc9d24c556303463ab7a"
+    ],
+    "fixedAt": "2026-07-16T15:39:04.486Z",
+    "by": "shakeebshaan",
+    "appCommit": "edfcd825",
+    "tests": {
+     "passed": true
     },
-    {
-      "id": "i-20260716-8b2e",
-      "createdAt": "2026-07-16T22:00:00.000Z",
-      "status": "open",
-      "description": "[content] Published: Millets vs Rice & Wheat for Weight Loss — Bajra, Jowar, Ragi Compared — https://nyus.in/blog/millets-vs-rice-wheat-for-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "route": null,
-      "fix": null,
-      "imagePaths": [],
-      "imagePrivate": false,
-      "history": []
-    },
-    {
-      "id": "i-20260716-9f2e",
-      "createdAt": "2026-07-16T16:45:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: How to Build a Balanced Indian Thali for Weight Loss — https://nyus.in/blog/how-to-build-a-balanced-indian-thali-for-weight-loss.html. Ideas added: 3. Escalated: 0.",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "fix": null,
-      "imagePaths": [],
-      "imagePrivate": false,
-      "history": []
-    },
-    {
-      "id": "i-20260716-365d",
-      "createdAt": "2026-07-16T15:10:27.236Z",
-      "route": "/shopping-list",
-      "description": "[bug-hunt] The Shopping List page (/shopping-list, linked from Diet Plan Week) never sets a descriptive browser/tab title — it falls back to the generic \"NYUS\". The PATH_TITLES map in src/App.tsx (309-370) that powers the WCAG 2.4.2 \"set a descriptive page title on every route change\" effect lists ~60 routes but omits \"/shopping-list\". Resolution (App.tsx:373-375) does an exact lookup then a prefix scan (path.startsWith(k+\"/\")); no key matches \"/shopping-list\", so document.title=\"NYUS\" instead of \"Shopping List | NYUS\". Every sibling nutrition route (/nutrition, /meal-ingredients, /diet-plan-week, /barcode-scan …) is present, so this is an inconsistency + minor a11y gap. EXPECTED: title \"Shopping List | NYUS\". ACTUAL: \"NYUS\". REPRO: navigate to /shopping-list, inspect document.title. FIX: add \"/shopping-list\": \"Shopping List\" to PATH_TITLES.",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Shopping List page was the one nutrition route missing from the browser-title map, so its tab/page title fell back to the generic 'NYUS' while every sibling page (Nutrition, Ingredients, Diet Plan, Scan Barcode) had a proper one. Fix: added the entry so the page now titles itself 'Shopping List | NYUS'. Verified live: navigating to /shopping-list now reports document.title 'Shopping List | NYUS' (was 'NYUS').",
-        "imagePath": "images/i-20260716-365d-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-365d-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c5982820b3d50d3790d0cc9d24c556303463ab7a",
-        "imageCommits": [
-          "c5982820b3d50d3790d0cc9d24c556303463ab7a"
-        ],
-        "fixedAt": "2026-07-16T15:39:04.486Z",
-        "by": "shakeebshaan",
-        "appCommit": "edfcd825",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 96,
-          "bar": 90,
-          "note": "Trivial map entry; proven by execution (document.title = 'Shopping List | NYUS'); real /shopping-list screen renders; no prefix collision with /dev/shopping-list-preview."
-        }
-      },
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
-      "id": "i-20260716-4d54",
-      "createdAt": "2026-07-16T13:03:48.387Z",
-      "status": "fixed",
-      "route": "/measurements",
-      "description": "[bug-hunt] Body Measurements: typing a value into the measurement number field does nothing — the field silently reverts to the previously-logged value (or 0.00 if none) on the very next render, so a typed value can never be committed. Only the +/- stepper buttons work.\n\nRepro: 1) Open /measurements. 2) Tap the large number field under \"Record New Measurement\". 3) Type any number (e.g. 45). Expected: field shows 45. Actual: field immediately snaps back to the seeded value (last-logged value for that body part, or 0.00 for a first-ever measurement).\n\nVerified via Playwright on localhost:8080 with a mocked /measurements/ overview (seeded history=33 for Right Arm): typing \"45\" left the input at \"33\"; the + button by contrast updates correctly (33 -> steps).\n\nRoot cause: the re-seed effect in src/pages/Measurements.tsx (lines 310-321) re-runs on every render (its dep allTypeHistories is a fresh array each render from useQueries) and calls seedFromLatest() whenever userEdited.current is false, overwriting the input. The +/- buttons set userEdited.current=true (lines 580 & 589) so they are exempt, but the text <input> onChange (lines 560-567) never sets userEdited.current, so every keystroke is wiped. Same class as the prior QA i-20260704-22f4 fix (which guarded the steppers) — the text-input path was missed.\n\nFix: set userEdited.current=true inside the input onChange when a valid value is entered (mirror the stepper buttons). Impact: a first-ever measurement (0 seed) can otherwise only be reached by tapping + up to ~190 times to hit 95cm.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Typing a value into the Body Measurements field did nothing — it snapped back to the last-logged value (or 0) on the next render, because only the +/- buttons were treated as a user edit. The text field now records typed input as an edit too, so a typed value sticks. Proof: seeded to 33, typed 45, and it stayed 45.",
-        "imagePath": "images/i-20260716-4d54-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-4d54-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "69544ac9822344235cfb015cc29740962ca01cbc",
-        "imageCommits": [
-          "69544ac9822344235cfb015cc29740962ca01cbc"
-        ],
-        "fixedAt": "2026-07-16T13:26:49.778Z",
-        "by": "shakeebshaan",
-        "appCommit": "ac40d0cf",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 95,
-          "bar": 90,
-          "note": "Root-cause fix mirrors the stepper's userEdited guard; regression test fails-before/passes-after; live screenshot shows typed 45 persisting over the 33 seed."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260716-r8j2",
-      "createdAt": "2026-07-16T09:00:00Z",
-      "status": "open",
-      "description": "[content] Published: Rajma vs Chole for Weight Loss — Which Legume Wins? — https://nyus.in/blog/rajma-vs-chole-for-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
-      "imagePaths": [],
-      "imagePrivate": false,
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "author": "shakeebshaan",
-      "route": null,
-      "fix": null,
-      "history": []
-    },
-    {
-      "id": "i-20260715-2f91",
-      "createdAt": "2026-07-15T18:00:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[discovery] Outlets added: 1. Pitch-ready: Vantage Circle HR Blog. Escalated: 1.",
-      "author": "shakeebshaan",
-      "tags": [
-        "discovery",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": []
-    },
-    {
-      "id": "i-20260715-f2a9",
-      "createdAt": "2026-07-15T18:30:00Z",
-      "status": "open",
-      "description": "[content] Published: Is Curd Rice Good for Weight Loss? The Metabolism Claim, Checked — https://nyus.in/blog/is-curd-rice-good-for-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
-      "imagePaths": [],
-      "imagePrivate": false,
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "author": "shakeebshaan",
-      "route": null,
-      "fix": null,
-      "history": []
-    },
-    {
-      "id": "i-20260715-f6q1",
-      "createdAt": "2026-07-15T15:41:57.000Z",
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "route": null,
-      "description": "[discovery] Outlets added: 3. Pitch-ready: Digit.in. Escalated: 1. New this tick: Digit.in (major legacy Indian consumer-tech/gadgets title, first consumer-app/software-spotlight outlet in the kit, route own-site verified editor@digit.in — pitch-ready, escalated), Beebom (consumer-tech media with an existing best-workout-apps content vertical, route own-site verified contact@beebom.com + \"Editorial tips\" form category, kept researched, held behind Digit.in to avoid double-pitching the same lane), eHealth Magazine / Elets Technomedia (B2B healthcare-industry trade monthly, route own-site verified info@ehealthonline.org, kept researched, softer hospital-tech fit). Kit now 57 outlets. Full pitch text + route logged to ESCALATIONS.md, never auto-sent.",
-      "author": "shakeebshaan",
-      "tags": [
-        "discovery",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false
-    },
-    {
-      "id": "i-20260715-r3pt",
-      "createdAt": "2026-07-15T12:00:00.000Z",
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the food-diary logged rows were plain (pink circle icon + text + a tiny ghost repeat icon), not the rich plan meal cards. Fix (NutritionDiaryCard.tsx): each logged meal now renders as a full meal card — image thumbnail, meal name, prominent kcal, colored P/C/F macro chips, and a proper 'Repeat this meal' action row — matching the plan meal cards the app already ships. Proof: harness render of the diary with 3 logged meals.",
-        "imagePath": "images/i-20260715-r3pt-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260715-r3pt-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "4c8b299379d2396993a3b9aded5c21e15de5d5cc",
-        "imageCommits": [
-          "4c8b299379d2396993a3b9aded5c21e15de5d5cc"
-        ],
-        "fixedAt": "2026-07-16T04:38:41.761Z",
-        "by": "shakeebshaan",
-        "appCommit": "c4384b2d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Rebuilt to the exact rich meal-card visual language (thumbnail + kcal + P/C/F chips + action row); verified via component harness at 390x844."
-        }
-      },
-      "history": [
-        {
-          "at": "2026-07-16T01:00:53.710Z",
-          "event": "reopened",
-          "note": "not like this show it properly like the meals we have",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: no true re-log existed on /nutrition — diary rows (NutritionDiaryCard) were display-only, so repeating a meal meant reopening CustomMealModal and re-searching. Fix (FE-only): one-tap round Repeat (RotateCcw) button on each diary row re-logs that row's exact foods + macros to today via existing POST /logs/meal (new repeatMealMutation/handleRepeatMeal in useNutritionData, next free meal_number, cache invalidation + toast). Proof: tapping Repeat on Masala Oats fired 'Meal logged' and grew the diary 2->3 items (450->770 kcal).",
-            "imagePath": "images/i-20260715-r3pt-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260715-r3pt-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c",
-            "imageCommits": [
-              "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c"
-            ],
-            "fixedAt": "2026-07-15T16:35:18.522Z",
-            "by": "shakeebshaan",
-            "appCommit": "96c6ee24",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 90,
-              "bar": 90,
-              "note": "Delivers the card's exact v1 scope: one-tap re-log of a diary row's foods/macros to today via existing POST /logs/meal, no new backend route. Verified end-to-end (tap -> 'Meal logged' toast, diary 2->3 items 450->770 kcal), tsc + test:unit gate green, Section 30 updated. Honest scope note: lands on the food-diary rows (NutritionDiaryCard), the only true meal-diary surface; plan users tick meals via the plan list which already has per-meal actions."
-            }
-          }
-        }
-      ],
-      "route": "/nutrition",
-      "description": "[suggestion] One-tap \"Repeat meal\" on the Nutrition diary — long-press or a small repeat-icon on any past meal card re-logs the same food(s)/quantities to today with one confirm tap, instead of requiring the CustomMealModal. Problem: athletes eat the same breakfast/post-workout shake most days but must reopen the manual-entry modal, hunt the food again via search or the buried \"Recent meals\" chip row (CustomMealModal.tsx:514-533), and resubmit every time — friction that discourages consistent logging (the exact behavior daily-completion/streak scoring depends on). Evidence: repo scan confirmed barcode scan, water tracker, and streak-freeze already exist, but no true repeat-log exists anywhere in src/pages/Nutrition.tsx or src/pages/_components/nutrition/ — the closest is the modal's prefill-only \"Recent meals\" row, which still requires opening the modal and resubmitting. Comparable trackers (MyFitnessPal \"Copy meal\", Cronometer \"Copy from previous day\") ship this as a core retention feature. v1 scope: add a repeat icon/swipe action on each meal-diary row (today or yesterday) that calls the existing add-meal/log endpoint with the same food_items + quantities, no new backend route needed; skip cross-day \"copy whole day\" for v1. Effort: ~0.5-1 day FE-only (new button + reuse existing log-meal service call).",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
-      "id": "i-20260715-out1",
-      "createdAt": "2026-07-15T19:23:22.169Z",
-      "status": "open",
-      "route": "",
-      "description": "[discovery] Outreach day-summary: 2026-07-14 sends (4/10) - 1. NutriCrate (D2C chemical-free food, collab program) -> collab@nutricrate.in | 2. Roshni Sanghvi (Bangalore nutritionist, 15k+ clients) -> info@roshnisanghvi.com | 3. Pazcare (corporate wellness broker) -> support@pazcare.com | 4. Protein Pantry (Delhi D2C protein brand) -> support@proteinpantry.in. Running total: 50 all-time sends (per ledger.json). No replies/complaints flagged. 2026-07-15 tick 1: 2 more sent (NSRCEL Healthcare Incubation Program -> healthcare@nsrcel.iimb.ac.in; Foods & Nutrition Clinic/Silky Mahajan -> info@foodsandnutrition.in), day total 2/10.",
-      "tags": [
-        "discovery",
-        "auto"
-      ]
-    },
-    {
-      "id": "i-20260716-out1",
-      "createdAt": "2026-07-16T09:25:00.000Z",
-      "status": "open",
-      "route": "",
-      "description": "[discovery] Outreach day-summary: 2026-07-16 tick 1 sends (3/10) - 1. 10on10 Foods (D2C fresh stone-ground atta, Rs2cr pre-seed) -> feedback@10on10foods.com | 2. My Fitness Goal (online body-transformation coaching) -> enquiry@myfitnessgoal.in | 3. Cosmix (plant-protein/superfood D2C, Marico-backed) -> partnerships@cosmix.in. Running total: 55 all-time sends (per ledger.json). No replies/complaints flagged.",
-      "tags": [
-        "discovery",
-        "auto"
-      ]
-    },
-    {
-      "id": "i-20260716-718e",
-      "createdAt": "2026-07-16T05:30:24.076Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260716-718e-0.jpg",
-      "imageCommit": "8aec297a99e76c08cbab683787b5955b7c0e78ae",
-      "imagePaths": [
-        "images/i-20260716-718e-0.jpg",
-        "images/i-20260716-718e-1.jpg"
-      ],
-      "imageCommits": [
-        "8aec297a99e76c08cbab683787b5955b7c0e78ae",
-        "cc7376f40fd5f347ec6548421c1ac19c5481bf79"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: your existing plan row (id 616, saved 07-12 before the save-path fix) was still stored weekday-pinned, so the app served the Thursday session (Pull) instead of your next unfinished day. Fix: ran a targeted backfill (scripts/backfill_progressive_plan.py, backend 2788bc5) converting plan 616 in place to a PROGRESSIVE sequential program (session ids kept, so your 2 completed days are preserved). Verified server-side via get_current_unlocked_session -> now unlocks Session #3 'Push', Cycle 1. Screenshot shows the resulting header: 'Today's Workout - Progressive Plan - Session #3 - Push' (was 'Weekly Schedule / Thursday'). No app update needed; reopen Activity and Day 3 Push shows now.",
-        "imagePath": "images/i-20260716-718e-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-718e-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c2cf1c54f94855fc4d3fd1bffe0d316391b80112",
-        "imageCommits": [
-          "c2cf1c54f94855fc4d3fd1bffe0d316391b80112"
-        ],
-        "fixedAt": "2026-07-16T08:14:29.915Z",
-        "by": "shakeebshaan",
-        "appCommit": "4ce4a8e5",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Real root cause (owner plan 616 still weekday-pinned), fixed via targeted backfill and verified server-side that the engine now unlocks Session #3 Push; capture shows the corrected Progressive Plan header. Only gap: capture is the FE rendering the now-live payload (owner's own authenticated screen can't be driven headless), not a screenshot of his device."
-        }
-      },
-      "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "workout",
-        "backend",
-        "shipped"
-      ],
-      "reviewReply": "this is wrong I still see the weekly Thursdays workout which is wrong",
-      "reviewRepliedAt": "2026-07-16T07:34:36.520Z",
-      "reviewReplyBy": "shakeebshaan",
-      "reviewReplyImagePaths": [
-        "images/i-20260716-718e-reply.jpg"
-      ],
-      "reviewReplyImageCommits": [
-        "8944ee42841d991a2260b80f1e467f9d37184295"
-      ],
-      "reviewReplyImagePrivate": true
-    },
-    {
-      "id": "i-20260716-7b66",
-      "createdAt": "2026-07-16T07:47:16.926Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260716-7b66.jpg",
-      "imageCommit": "81ec1000db971292a9c34211885a8963ba396941",
-      "imagePaths": [
-        "images/i-20260716-7b66.jpg"
-      ],
-      "imageCommits": [
-        "81ec1000db971292a9c34211885a8963ba396941"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the board header toolbar (.chips: status/judge/connect chips + refresh/report icons) had no flex-wrap, so its ~429px of content overflowed a ~375px phone and the whole board scrolled sideways ('always don't fit'). Fix: index.html .bar + .chips now flex-wrap onto a second row on narrow screens. Verified docScrollW 502->375 at 375px width — no horizontal overflow.",
-        "imagePath": "images/i-20260716-7b66-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-7b66-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "952fd2054d3c439b03dfd650b8587e4fe3deae93",
-        "imageCommits": [
-          "952fd2054d3c439b03dfd650b8587e4fe3deae93"
-        ],
-        "fixedAt": "2026-07-16T09:40:25.908Z",
-        "by": "shakeebshaan",
-        "appCommit": "5281360",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 91,
-          "bar": 90,
-          "note": "Header overflow reproduced at 375px (docScrollW 502>375, offender=.chips 429px). Fix: .bar/.chips flex-wrap; re-measured docScrollW=375=vw, no horizontal scroll. Full-viewport 375px capture shows the wrapped 2-row header and board fitting."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260716-4b4c",
-      "createdAt": "2026-07-16T17:18:01.839Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260716-4b4c.jpg",
-      "imageCommit": "1e7a47d54ef26e9b5852f8406461648dbb509e83",
-      "imagePaths": [
-        "images/i-20260716-4b4c.jpg"
-      ],
-      "imageCommits": [
-        "1e7a47d54ef26e9b5852f8406461648dbb509e83"
-      ],
-      "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Yes — verified end-to-end on prod. Reopen was correct: the prior fix wired supplement adherence into gather_user_context/build_chat_system_prompt, but the LIVE Socket.IO coach chat builds its context via ContextAssembler.snapshot() (backend.py:15007), which had NO supplement block — so the coach never saw it. Fix: added a P2 _supplement_adherence block to app/services/context_assembler.py (backend 0d8798d, deployed to prod). PROOF: ran the live pipeline on prod for this account — the deployed coach replied: 'You're tracking 2 supplements today: Vitamin D3 and Whey Protein, and your adherence is 0/2 taken so far…'. Screenshot = that live prod coach reply + the injected [SUPPLEMENTS — TODAY] context block. Regression test added (51/51 green).",
-        "imagePath": "images/i-20260716-4b4c-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260716-4b4c-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "92cdb7e20f1064ce999c1a9aeb7e1583d8659782",
-        "imageCommits": [
-          "92cdb7e20f1064ce999c1a9aeb7e1583d8659782"
-        ],
-        "fixedAt": "2026-07-17T01:10:53.218Z",
-        "by": "shakeebshaan",
-        "appCommit": "0d8798d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Reopen answered definitively: root-caused to the live coach using ContextAssembler (not the deprecated gather_user_context the prior fix touched); added+deployed the P2 supplement block; live prod coach now names the user's real supplements & adherence (behavioral proof captured); regression test added, 51/51 green."
-        }
-      },
-      "history": [
-        {
-          "at": "2026-07-17T00:47:09.486Z",
-          "event": "reopened",
-          "note": "did coach know about it now ?",
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Root cause: the supplement tracker was localStorage-only (nyus_supplement_data), so it was lost on the native webview after logout, never synced across devices, lived on the Dashboard (not the Diet page), and the coach had no adherence data. Fix: added server persistence (new supplement_data table + GET/PUT /api/v1/supplements, backend d2b9b7a deployed) — the card now reconciles with the server on mount, migrates existing device-local items up once, and PUTs every change (localStorage kept as offline cache). Moved the card from Dashboard into the Nutrition (Diet) page below Fine-tune your plan. Today's adherence now feeds the coach context. Screenshot: the Diet page showing the server-loaded item (proven E2E: PUT then GET returns it across requests).",
-            "imagePath": "images/i-20260716-4b4c-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260716-4b4c-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "42e4157117c007b4e23ad57a46ed72c02da84974",
-            "imageCommits": [
-              "42e4157117c007b4e23ad57a46ed72c02da84974"
-            ],
-            "fixedAt": "2026-07-16T19:46:49.879Z",
-            "by": "shakeebshaan",
-            "appCommit": "8a8592b9",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 92,
-              "bar": 90,
-              "note": "All sub-asks addressed: tracked inside Diet page, server-persisted (survives logout/device switch), fed to coach context, mirrors the activity-tracking pattern. Verified E2E on prod (PUT then GET persists) + full-screen Diet capture; tsc clean, 20/20 supplement tests green, backend deployed."
-            }
-          }
-        }
-      ],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260716-dc05",
-      "createdAt": "2026-07-16T17:34:21.179Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Duplicate of i-20260716-4b4c — fixed by the same change. The live Socket.IO coach builds context via ContextAssembler (not gather_user_context, which the earlier fix touched), so a P2 _supplement_adherence block was added to app/services/context_assembler.py (backend 0d8798d, deployed). PROOF: the deployed prod coach now names the user's real tracked supplements ('Vitamin D3 and Whey Protein, adherence 0/2 taken') — screenshot shows that live reply + the injected [SUPPLEMENTS — TODAY] context block. Regression test added, 51/51 green.",
-        "imagePath": "images/i-20260716-dc05-fix-r2.png",
-        "imagePaths": [
-          "images/i-20260716-dc05-fix-r2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "6449ff7aa28e137e99152f5e95af867a2d9facfe",
-        "imageCommits": [
-          "6449ff7aa28e137e99152f5e95af867a2d9facfe"
-        ],
-        "fixedAt": "2026-07-17T01:11:07.186Z",
-        "by": "shakeebshaan",
-        "appCommit": "0d8798d",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Duplicate of 4b4c; same verified full-stack fix — live coach now receives supplement adherence via ContextAssembler on prod, behavioral proof captured, regression test green."
-        }
-      },
-      "history": [
-        {
-          "at": "2026-07-17T00:47:25.178Z",
-          "event": "reopened",
-          "note": null,
-          "by": "shakeebshaan",
-          "previousFix": {
-            "description": "Duplicate of i-20260716-4b4c (same ask, filed 16 min later). Fixed by the same change: supplement tracker is now server-persisted (new supplement_data table + GET/PUT /api/v1/supplements, backend d2b9b7a) so it survives logout/re-login and syncs across devices, moved from the Dashboard into the Nutrition (Diet) page, and today's adherence feeds the coach context. Screenshot: the Diet page showing the server-loaded supplement item.",
-            "imagePath": "images/i-20260716-dc05-fix-r1.png",
-            "imagePaths": [
-              "images/i-20260716-dc05-fix-r1.png"
-            ],
-            "imagePrivate": true,
-            "imageCommit": "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41",
-            "imageCommits": [
-              "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41"
-            ],
-            "fixedAt": "2026-07-16T19:47:05.333Z",
-            "by": "shakeebshaan",
-            "appCommit": "8a8592b9",
-            "tests": {
-              "passed": true
-            },
-            "judge": {
-              "score": 92,
-              "bar": 90,
-              "note": "Duplicate of 4b4c; same verified full-stack fix. Server persistence proven E2E on prod, card renders in the Diet page, coach context wired, backend deployed."
-            }
-          }
-        }
-      ],
-      "needsReview": false
+    "judge": {
+     "score": 96,
+     "bar": 90,
+     "note": "Trivial map entry; proven by execution (document.title = 'Shopping List | NYUS'); real /shopping-list screen renders; no prefix collision with /dev/shopping-list-preview."
     }
-  ]
+   },
+   "history": [],
+   "author": "shakeebshaan",
+   "tags": [
+    "bug-hunt",
+    "auto"
+   ],
+   "imagePath": null,
+   "imageCommit": null,
+   "imagePaths": [],
+   "imageCommits": [],
+   "imagePrivate": false,
+   "needsReview": false
+  },
+  {
+   "id": "i-20260716-4d54",
+   "createdAt": "2026-07-16T13:03:48.387Z",
+   "status": "fixed",
+   "route": "/measurements",
+   "description": "[bug-hunt] Body Measurements: typing a value into the measurement number field does nothing — the field silently reverts to the previously-logged value (or 0.00 if none) on the very next render, so a typed value can never be committed. Only the +/- stepper buttons work.\n\nRepro: 1) Open /measurements. 2) Tap the large number field under \"Record New Measurement\". 3) Type any number (e.g. 45). Expected: field shows 45. Actual: field immediately snaps back to the seeded value (last-logged value for that body part, or 0.00 for a first-ever measurement).\n\nVerified via Playwright on localhost:8080 with a mocked /measurements/ overview (seeded history=33 for Right Arm): typing \"45\" left the input at \"33\"; the + button by contrast updates correctly (33 -> steps).\n\nRoot cause: the re-seed effect in src/pages/Measurements.tsx (lines 310-321) re-runs on every render (its dep allTypeHistories is a fresh array each render from useQueries) and calls seedFromLatest() whenever userEdited.current is false, overwriting the input. The +/- buttons set userEdited.current=true (lines 580 & 589) so they are exempt, but the text <input> onChange (lines 560-567) never sets userEdited.current, so every keystroke is wiped. Same class as the prior QA i-20260704-22f4 fix (which guarded the steppers) — the text-input path was missed.\n\nFix: set userEdited.current=true inside the input onChange when a valid value is entered (mirror the stepper buttons). Impact: a first-ever measurement (0 seed) can otherwise only be reached by tapping + up to ~190 times to hit 95cm.",
+   "author": "shakeebshaan",
+   "tags": [
+    "bug-hunt",
+    "auto"
+   ],
+   "imagePath": null,
+   "imageCommit": null,
+   "imagePaths": [],
+   "imageCommits": [],
+   "imagePrivate": false,
+   "fix": {
+    "description": "Typing a value into the Body Measurements field did nothing — it snapped back to the last-logged value (or 0) on the next render, because only the +/- buttons were treated as a user edit. The text field now records typed input as an edit too, so a typed value sticks. Proof: seeded to 33, typed 45, and it stayed 45.",
+    "imagePath": "images/i-20260716-4d54-fix-r1.png",
+    "imagePaths": [
+     "images/i-20260716-4d54-fix-r1.png"
+    ],
+    "imagePrivate": true,
+    "imageCommit": "69544ac9822344235cfb015cc29740962ca01cbc",
+    "imageCommits": [
+     "69544ac9822344235cfb015cc29740962ca01cbc"
+    ],
+    "fixedAt": "2026-07-16T13:26:49.778Z",
+    "by": "shakeebshaan",
+    "appCommit": "ac40d0cf",
+    "tests": {
+     "passed": true
+    },
+    "judge": {
+     "score": 95,
+     "bar": 90,
+     "note": "Root-cause fix mirrors the stepper's userEdited guard; regression test fails-before/passes-after; live screenshot shows typed 45 persisting over the 33 seed."
+    }
+   },
+   "history": [],
+   "needsReview": false
+  },
+  {
+   "id": "i-20260716-r8j2",
+   "createdAt": "2026-07-16T09:00:00Z",
+   "status": "open",
+   "description": "[content] Published: Rajma vs Chole for Weight Loss — Which Legume Wins? — https://nyus.in/blog/rajma-vs-chole-for-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
+   "imagePaths": [],
+   "imagePrivate": false,
+   "tags": [
+    "content",
+    "auto"
+   ],
+   "author": "shakeebshaan",
+   "route": null,
+   "fix": null,
+   "history": []
+  },
+  {
+   "id": "i-20260715-2f91",
+   "createdAt": "2026-07-15T18:00:00.000Z",
+   "status": "open",
+   "route": null,
+   "description": "[discovery] Outlets added: 1. Pitch-ready: Vantage Circle HR Blog. Escalated: 1.",
+   "author": "shakeebshaan",
+   "tags": [
+    "discovery",
+    "auto"
+   ],
+   "imagePath": null,
+   "imageCommit": null,
+   "imagePaths": [],
+   "imageCommits": [],
+   "imagePrivate": false,
+   "fix": null,
+   "history": []
+  },
+  {
+   "id": "i-20260715-f2a9",
+   "createdAt": "2026-07-15T18:30:00Z",
+   "status": "open",
+   "description": "[content] Published: Is Curd Rice Good for Weight Loss? The Metabolism Claim, Checked — https://nyus.in/blog/is-curd-rice-good-for-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
+   "imagePaths": [],
+   "imagePrivate": false,
+   "tags": [
+    "content",
+    "auto"
+   ],
+   "author": "shakeebshaan",
+   "route": null,
+   "fix": null,
+   "history": []
+  },
+  {
+   "id": "i-20260715-f6q1",
+   "createdAt": "2026-07-15T15:41:57.000Z",
+   "status": "open",
+   "fix": null,
+   "history": [],
+   "route": null,
+   "description": "[discovery] Outlets added: 3. Pitch-ready: Digit.in. Escalated: 1. New this tick: Digit.in (major legacy Indian consumer-tech/gadgets title, first consumer-app/software-spotlight outlet in the kit, route own-site verified editor@digit.in — pitch-ready, escalated), Beebom (consumer-tech media with an existing best-workout-apps content vertical, route own-site verified contact@beebom.com + \"Editorial tips\" form category, kept researched, held behind Digit.in to avoid double-pitching the same lane), eHealth Magazine / Elets Technomedia (B2B healthcare-industry trade monthly, route own-site verified info@ehealthonline.org, kept researched, softer hospital-tech fit). Kit now 57 outlets. Full pitch text + route logged to ESCALATIONS.md, never auto-sent.",
+   "author": "shakeebshaan",
+   "tags": [
+    "discovery",
+    "auto"
+   ],
+   "imagePath": null,
+   "imagePaths": [],
+   "imageCommits": [],
+   "imagePrivate": false
+  },
+  {
+   "id": "i-20260715-r3pt",
+   "createdAt": "2026-07-15T12:00:00.000Z",
+   "status": "fixed",
+   "fix": {
+    "description": "Root cause: the food-diary logged rows were plain (pink circle icon + text + a tiny ghost repeat icon), not the rich plan meal cards. Fix (NutritionDiaryCard.tsx): each logged meal now renders as a full meal card — image thumbnail, meal name, prominent kcal, colored P/C/F macro chips, and a proper 'Repeat this meal' action row — matching the plan meal cards the app already ships. Proof: harness render of the diary with 3 logged meals.",
+    "imagePath": "images/i-20260715-r3pt-fix-r2.png",
+    "imagePaths": [
+     "images/i-20260715-r3pt-fix-r2.png"
+    ],
+    "imagePrivate": true,
+    "imageCommit": "4c8b299379d2396993a3b9aded5c21e15de5d5cc",
+    "imageCommits": [
+     "4c8b299379d2396993a3b9aded5c21e15de5d5cc"
+    ],
+    "fixedAt": "2026-07-16T04:38:41.761Z",
+    "by": "shakeebshaan",
+    "appCommit": "c4384b2d",
+    "tests": {
+     "passed": true
+    },
+    "judge": {
+     "score": 92,
+     "bar": 90,
+     "note": "Rebuilt to the exact rich meal-card visual language (thumbnail + kcal + P/C/F chips + action row); verified via component harness at 390x844."
+    }
+   },
+   "history": [
+    {
+     "at": "2026-07-16T01:00:53.710Z",
+     "event": "reopened",
+     "note": "not like this show it properly like the meals we have",
+     "by": "shakeebshaan",
+     "previousFix": {
+      "description": "Root cause: no true re-log existed on /nutrition — diary rows (NutritionDiaryCard) were display-only, so repeating a meal meant reopening CustomMealModal and re-searching. Fix (FE-only): one-tap round Repeat (RotateCcw) button on each diary row re-logs that row's exact foods + macros to today via existing POST /logs/meal (new repeatMealMutation/handleRepeatMeal in useNutritionData, next free meal_number, cache invalidation + toast). Proof: tapping Repeat on Masala Oats fired 'Meal logged' and grew the diary 2->3 items (450->770 kcal).",
+      "imagePath": "images/i-20260715-r3pt-fix-r1.png",
+      "imagePaths": [
+       "images/i-20260715-r3pt-fix-r1.png"
+      ],
+      "imagePrivate": true,
+      "imageCommit": "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c",
+      "imageCommits": [
+       "c5b776aaad6f33aa3cde6f7bfd06a8e5e190c73c"
+      ],
+      "fixedAt": "2026-07-15T16:35:18.522Z",
+      "by": "shakeebshaan",
+      "appCommit": "96c6ee24",
+      "tests": {
+       "passed": true
+      },
+      "judge": {
+       "score": 90,
+       "bar": 90,
+       "note": "Delivers the card's exact v1 scope: one-tap re-log of a diary row's foods/macros to today via existing POST /logs/meal, no new backend route. Verified end-to-end (tap -> 'Meal logged' toast, diary 2->3 items 450->770 kcal), tsc + test:unit gate green, Section 30 updated. Honest scope note: lands on the food-diary rows (NutritionDiaryCard), the only true meal-diary surface; plan users tick meals via the plan list which already has per-meal actions."
+      }
+     }
+    }
+   ],
+   "route": "/nutrition",
+   "description": "[suggestion] One-tap \"Repeat meal\" on the Nutrition diary — long-press or a small repeat-icon on any past meal card re-logs the same food(s)/quantities to today with one confirm tap, instead of requiring the CustomMealModal. Problem: athletes eat the same breakfast/post-workout shake most days but must reopen the manual-entry modal, hunt the food again via search or the buried \"Recent meals\" chip row (CustomMealModal.tsx:514-533), and resubmit every time — friction that discourages consistent logging (the exact behavior daily-completion/streak scoring depends on). Evidence: repo scan confirmed barcode scan, water tracker, and streak-freeze already exist, but no true repeat-log exists anywhere in src/pages/Nutrition.tsx or src/pages/_components/nutrition/ — the closest is the modal's prefill-only \"Recent meals\" row, which still requires opening the modal and resubmitting. Comparable trackers (MyFitnessPal \"Copy meal\", Cronometer \"Copy from previous day\") ship this as a core retention feature. v1 scope: add a repeat icon/swipe action on each meal-diary row (today or yesterday) that calls the existing add-meal/log endpoint with the same food_items + quantities, no new backend route needed; skip cross-day \"copy whole day\" for v1. Effort: ~0.5-1 day FE-only (new button + reuse existing log-meal service call).",
+   "author": "shakeebshaan",
+   "tags": [
+    "suggestion",
+    "auto"
+   ],
+   "imagePath": null,
+   "imagePaths": [],
+   "imageCommits": [],
+   "imagePrivate": false,
+   "needsReview": false
+  },
+  {
+   "id": "i-20260715-out1",
+   "createdAt": "2026-07-15T19:23:22.169Z",
+   "status": "open",
+   "route": "",
+   "description": "[discovery] Outreach day-summary: 2026-07-14 sends (4/10) - 1. NutriCrate (D2C chemical-free food, collab program) -> collab@nutricrate.in | 2. Roshni Sanghvi (Bangalore nutritionist, 15k+ clients) -> info@roshnisanghvi.com | 3. Pazcare (corporate wellness broker) -> support@pazcare.com | 4. Protein Pantry (Delhi D2C protein brand) -> support@proteinpantry.in. Running total: 50 all-time sends (per ledger.json). No replies/complaints flagged. 2026-07-15 tick 1: 2 more sent (NSRCEL Healthcare Incubation Program -> healthcare@nsrcel.iimb.ac.in; Foods & Nutrition Clinic/Silky Mahajan -> info@foodsandnutrition.in), day total 2/10.",
+   "tags": [
+    "discovery",
+    "auto"
+   ]
+  },
+  {
+   "id": "i-20260716-out1",
+   "createdAt": "2026-07-16T09:25:00.000Z",
+   "status": "open",
+   "route": "",
+   "description": "[discovery] Outreach day-summary: 2026-07-16 tick 1 sends (3/10) - 1. 10on10 Foods (D2C fresh stone-ground atta, Rs2cr pre-seed) -> feedback@10on10foods.com | 2. My Fitness Goal (online body-transformation coaching) -> enquiry@myfitnessgoal.in | 3. Cosmix (plant-protein/superfood D2C, Marico-backed) -> partnerships@cosmix.in. Running total: 55 all-time sends (per ledger.json). No replies/complaints flagged.",
+   "tags": [
+    "discovery",
+    "auto"
+   ]
+  },
+  {
+   "id": "i-20260716-718e",
+   "createdAt": "2026-07-16T05:30:24.076Z",
+   "route": null,
+   "description": "",
+   "descPrivate": true,
+   "author": "shakeebshaan",
+   "imagePath": "images/i-20260716-718e-0.jpg",
+   "imageCommit": "8aec297a99e76c08cbab683787b5955b7c0e78ae",
+   "imagePaths": [
+    "images/i-20260716-718e-0.jpg",
+    "images/i-20260716-718e-1.jpg"
+   ],
+   "imageCommits": [
+    "8aec297a99e76c08cbab683787b5955b7c0e78ae",
+    "cc7376f40fd5f347ec6548421c1ac19c5481bf79"
+   ],
+   "imagePrivate": true,
+   "status": "fixed",
+   "fix": {
+    "description": "Root cause: your existing plan row (id 616, saved 07-12 before the save-path fix) was still stored weekday-pinned, so the app served the Thursday session (Pull) instead of your next unfinished day. Fix: ran a targeted backfill (scripts/backfill_progressive_plan.py, backend 2788bc5) converting plan 616 in place to a PROGRESSIVE sequential program (session ids kept, so your 2 completed days are preserved). Verified server-side via get_current_unlocked_session -> now unlocks Session #3 'Push', Cycle 1. Screenshot shows the resulting header: 'Today's Workout - Progressive Plan - Session #3 - Push' (was 'Weekly Schedule / Thursday'). No app update needed; reopen Activity and Day 3 Push shows now.",
+    "imagePath": "images/i-20260716-718e-fix-r1.png",
+    "imagePaths": [
+     "images/i-20260716-718e-fix-r1.png"
+    ],
+    "imagePrivate": true,
+    "imageCommit": "c2cf1c54f94855fc4d3fd1bffe0d316391b80112",
+    "imageCommits": [
+     "c2cf1c54f94855fc4d3fd1bffe0d316391b80112"
+    ],
+    "fixedAt": "2026-07-16T08:14:29.915Z",
+    "by": "shakeebshaan",
+    "appCommit": "4ce4a8e5",
+    "tests": {
+     "passed": true
+    },
+    "judge": {
+     "score": 92,
+     "bar": 90,
+     "note": "Real root cause (owner plan 616 still weekday-pinned), fixed via targeted backfill and verified server-side that the engine now unlocks Session #3 Push; capture shows the corrected Progressive Plan header. Only gap: capture is the FE rendering the now-live payload (owner's own authenticated screen can't be driven headless), not a screenshot of his device."
+    }
+   },
+   "history": [],
+   "needsReview": false,
+   "reviewedBy": "shakeebshaan",
+   "tags": [
+    "workout",
+    "backend",
+    "shipped"
+   ],
+   "reviewReply": "this is wrong I still see the weekly Thursdays workout which is wrong",
+   "reviewRepliedAt": "2026-07-16T07:34:36.520Z",
+   "reviewReplyBy": "shakeebshaan",
+   "reviewReplyImagePaths": [
+    "images/i-20260716-718e-reply.jpg"
+   ],
+   "reviewReplyImageCommits": [
+    "8944ee42841d991a2260b80f1e467f9d37184295"
+   ],
+   "reviewReplyImagePrivate": true
+  },
+  {
+   "id": "i-20260716-7b66",
+   "createdAt": "2026-07-16T07:47:16.926Z",
+   "route": null,
+   "description": "",
+   "descPrivate": true,
+   "author": "shakeebshaan",
+   "imagePath": "images/i-20260716-7b66.jpg",
+   "imageCommit": "81ec1000db971292a9c34211885a8963ba396941",
+   "imagePaths": [
+    "images/i-20260716-7b66.jpg"
+   ],
+   "imageCommits": [
+    "81ec1000db971292a9c34211885a8963ba396941"
+   ],
+   "imagePrivate": true,
+   "status": "fixed",
+   "fix": {
+    "description": "Root cause: the board header toolbar (.chips: status/judge/connect chips + refresh/report icons) had no flex-wrap, so its ~429px of content overflowed a ~375px phone and the whole board scrolled sideways ('always don't fit'). Fix: index.html .bar + .chips now flex-wrap onto a second row on narrow screens. Verified docScrollW 502->375 at 375px width — no horizontal overflow.",
+    "imagePath": "images/i-20260716-7b66-fix-r1.png",
+    "imagePaths": [
+     "images/i-20260716-7b66-fix-r1.png"
+    ],
+    "imagePrivate": true,
+    "imageCommit": "952fd2054d3c439b03dfd650b8587e4fe3deae93",
+    "imageCommits": [
+     "952fd2054d3c439b03dfd650b8587e4fe3deae93"
+    ],
+    "fixedAt": "2026-07-16T09:40:25.908Z",
+    "by": "shakeebshaan",
+    "appCommit": "5281360",
+    "tests": {
+     "passed": true
+    },
+    "judge": {
+     "score": 91,
+     "bar": 90,
+     "note": "Header overflow reproduced at 375px (docScrollW 502>375, offender=.chips 429px). Fix: .bar/.chips flex-wrap; re-measured docScrollW=375=vw, no horizontal scroll. Full-viewport 375px capture shows the wrapped 2-row header and board fitting."
+    }
+   },
+   "history": [],
+   "needsReview": false
+  },
+  {
+   "id": "i-20260716-4b4c",
+   "createdAt": "2026-07-16T17:18:01.839Z",
+   "route": null,
+   "description": "",
+   "descPrivate": true,
+   "author": "shakeebshaan",
+   "imagePath": "images/i-20260716-4b4c.jpg",
+   "imageCommit": "1e7a47d54ef26e9b5852f8406461648dbb509e83",
+   "imagePaths": [
+    "images/i-20260716-4b4c.jpg"
+   ],
+   "imageCommits": [
+    "1e7a47d54ef26e9b5852f8406461648dbb509e83"
+   ],
+   "imagePrivate": true,
+   "status": "fixed",
+   "fix": {
+    "description": "Yes — verified end-to-end on prod. Reopen was correct: the prior fix wired supplement adherence into gather_user_context/build_chat_system_prompt, but the LIVE Socket.IO coach chat builds its context via ContextAssembler.snapshot() (backend.py:15007), which had NO supplement block — so the coach never saw it. Fix: added a P2 _supplement_adherence block to app/services/context_assembler.py (backend 0d8798d, deployed to prod). PROOF: ran the live pipeline on prod for this account — the deployed coach replied: 'You're tracking 2 supplements today: Vitamin D3 and Whey Protein, and your adherence is 0/2 taken so far…'. Screenshot = that live prod coach reply + the injected [SUPPLEMENTS — TODAY] context block. Regression test added (51/51 green).",
+    "imagePath": "images/i-20260716-4b4c-fix-r2.png",
+    "imagePaths": [
+     "images/i-20260716-4b4c-fix-r2.png"
+    ],
+    "imagePrivate": true,
+    "imageCommit": "92cdb7e20f1064ce999c1a9aeb7e1583d8659782",
+    "imageCommits": [
+     "92cdb7e20f1064ce999c1a9aeb7e1583d8659782"
+    ],
+    "fixedAt": "2026-07-17T01:10:53.218Z",
+    "by": "shakeebshaan",
+    "appCommit": "0d8798d",
+    "tests": {
+     "passed": true
+    },
+    "judge": {
+     "score": 93,
+     "bar": 90,
+     "note": "Reopen answered definitively: root-caused to the live coach using ContextAssembler (not the deprecated gather_user_context the prior fix touched); added+deployed the P2 supplement block; live prod coach now names the user's real supplements & adherence (behavioral proof captured); regression test added, 51/51 green."
+    }
+   },
+   "history": [
+    {
+     "at": "2026-07-17T00:47:09.486Z",
+     "event": "reopened",
+     "note": "did coach know about it now ?",
+     "by": "shakeebshaan",
+     "previousFix": {
+      "description": "Root cause: the supplement tracker was localStorage-only (nyus_supplement_data), so it was lost on the native webview after logout, never synced across devices, lived on the Dashboard (not the Diet page), and the coach had no adherence data. Fix: added server persistence (new supplement_data table + GET/PUT /api/v1/supplements, backend d2b9b7a deployed) — the card now reconciles with the server on mount, migrates existing device-local items up once, and PUTs every change (localStorage kept as offline cache). Moved the card from Dashboard into the Nutrition (Diet) page below Fine-tune your plan. Today's adherence now feeds the coach context. Screenshot: the Diet page showing the server-loaded item (proven E2E: PUT then GET returns it across requests).",
+      "imagePath": "images/i-20260716-4b4c-fix-r1.png",
+      "imagePaths": [
+       "images/i-20260716-4b4c-fix-r1.png"
+      ],
+      "imagePrivate": true,
+      "imageCommit": "42e4157117c007b4e23ad57a46ed72c02da84974",
+      "imageCommits": [
+       "42e4157117c007b4e23ad57a46ed72c02da84974"
+      ],
+      "fixedAt": "2026-07-16T19:46:49.879Z",
+      "by": "shakeebshaan",
+      "appCommit": "8a8592b9",
+      "tests": {
+       "passed": true
+      },
+      "judge": {
+       "score": 92,
+       "bar": 90,
+       "note": "All sub-asks addressed: tracked inside Diet page, server-persisted (survives logout/device switch), fed to coach context, mirrors the activity-tracking pattern. Verified E2E on prod (PUT then GET persists) + full-screen Diet capture; tsc clean, 20/20 supplement tests green, backend deployed."
+      }
+     }
+    }
+   ],
+   "needsReview": false
+  },
+  {
+   "id": "i-20260716-dc05",
+   "createdAt": "2026-07-16T17:34:21.179Z",
+   "route": null,
+   "description": "",
+   "descPrivate": true,
+   "author": "shakeebshaan",
+   "imagePath": null,
+   "imageCommit": null,
+   "imagePaths": [],
+   "imageCommits": [],
+   "imagePrivate": false,
+   "status": "fixed",
+   "fix": {
+    "description": "Duplicate of i-20260716-4b4c — fixed by the same change. The live Socket.IO coach builds context via ContextAssembler (not gather_user_context, which the earlier fix touched), so a P2 _supplement_adherence block was added to app/services/context_assembler.py (backend 0d8798d, deployed). PROOF: the deployed prod coach now names the user's real tracked supplements ('Vitamin D3 and Whey Protein, adherence 0/2 taken') — screenshot shows that live reply + the injected [SUPPLEMENTS — TODAY] context block. Regression test added, 51/51 green.",
+    "imagePath": "images/i-20260716-dc05-fix-r2.png",
+    "imagePaths": [
+     "images/i-20260716-dc05-fix-r2.png"
+    ],
+    "imagePrivate": true,
+    "imageCommit": "6449ff7aa28e137e99152f5e95af867a2d9facfe",
+    "imageCommits": [
+     "6449ff7aa28e137e99152f5e95af867a2d9facfe"
+    ],
+    "fixedAt": "2026-07-17T01:11:07.186Z",
+    "by": "shakeebshaan",
+    "appCommit": "0d8798d",
+    "tests": {
+     "passed": true
+    },
+    "judge": {
+     "score": 93,
+     "bar": 90,
+     "note": "Duplicate of 4b4c; same verified full-stack fix — live coach now receives supplement adherence via ContextAssembler on prod, behavioral proof captured, regression test green."
+    }
+   },
+   "history": [
+    {
+     "at": "2026-07-17T00:47:25.178Z",
+     "event": "reopened",
+     "note": null,
+     "by": "shakeebshaan",
+     "previousFix": {
+      "description": "Duplicate of i-20260716-4b4c (same ask, filed 16 min later). Fixed by the same change: supplement tracker is now server-persisted (new supplement_data table + GET/PUT /api/v1/supplements, backend d2b9b7a) so it survives logout/re-login and syncs across devices, moved from the Dashboard into the Nutrition (Diet) page, and today's adherence feeds the coach context. Screenshot: the Diet page showing the server-loaded supplement item.",
+      "imagePath": "images/i-20260716-dc05-fix-r1.png",
+      "imagePaths": [
+       "images/i-20260716-dc05-fix-r1.png"
+      ],
+      "imagePrivate": true,
+      "imageCommit": "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41",
+      "imageCommits": [
+       "dcf1db6ee527eee77bf0f6ad76c34f6f28297b41"
+      ],
+      "fixedAt": "2026-07-16T19:47:05.333Z",
+      "by": "shakeebshaan",
+      "appCommit": "8a8592b9",
+      "tests": {
+       "passed": true
+      },
+      "judge": {
+       "score": 92,
+       "bar": 90,
+       "note": "Duplicate of 4b4c; same verified full-stack fix. Server persistence proven E2E on prod, card renders in the Diet page, coach context wired, backend deployed."
+      }
+     }
+    }
+   ],
+   "needsReview": false
+  }
+ ]
 }
