@@ -6,8 +6,30 @@
       "createdAt": "2026-07-17T20:23:53.808Z",
       "route": "/coach-chat",
       "description": "[bug-hunt] Coach Wellness Check-in: every 1-10 scale question is pre-answered \"5\" and can be submitted without the user ever touching it, logging a fabricated 5/10.\n\nWhere: src/components/blocks/WellnessCheckinBlock.tsx (rendered inside coach chat as a wellness_checkin interactive block). Reproducible in the dev block gallery with the \"mood-only\" fixture (src/pages/dev/chatBlockFixtures.ts:758 - two scale_1_10 questions, nothing else).\n\nRoot cause: the answers state initializer seeds every scale_1_10 question to 5 (WellnessCheckinBlock.tsx:261, `if (q.type===\"scale_1_10\") init[q.id]=5`). Two consequences:\n1) `allAnswered` treats a scale question as answered whenever `typeof val===\"number\"` (line 275) - true from mount - so the \"Submit Check-in\" button is ENABLED before any interaction (line 420 gates on !allAnswered).\n2) ScaleQuestion renders the chip whose value===5 with aria-checked=true + a purple selection ring (lines 61-84, value defaults to 5) before the user picks anything.\nSo a user who taps Submit without touching a scale question logs answer:5 for it, and the chip visually claims 5 was chosen.\n\nThis is the SAME class as the fixed DailyCheckinBlock mood bug (QA i-20260710-9d3b): DailyCheckinBlock.tsx:35-38 explicitly starts mood UNSELECTED (null) with the rule \"a chip must never render selected (aria-checked=true) for a value that would not be submitted; displayed == submitted\". WellnessCheckin scale questions violate the spirit of that fix - the rating is auto-filled and auto-submittable, so the coach receives a 5/10 the athlete never actually gave.\n\nEXPECTED: scale_1_10 questions start unselected (no chip aria-checked), and Submit stays disabled until the user picks a value for each required scale/choice question - a rating the user never chose must not render selected or be submitted.\nACTUAL: scale chip \"5\" is pre-highlighted, allAnswered is true at mount, Submit is enabled immediately, and submitting logs answer:5 for untouched scales.\n\nREPRO: 1) open the dev chat-block gallery and select the wellness_checkin \"mood-only\" fixture (or trigger a coach wellness check-in whose questions are scale_1_10). 2) observe both \"5\" chips already highlighted and \"Submit Check-in\" already enabled. 3) tap Submit without touching any chip. 4) the block forwards responses with answer:5 for every scale question - a value the user never selected.\n\nFIX: initialize scale_1_10 answers to null (like mood in DailyCheckinBlock), make `allAnswered` require a real numeric pick for scale questions, and pass value ?? undefined to ScaleQuestion so no chip renders aria-checked until chosen. (Aside, not the bug: the mood/energy/food score extraction at lines 297-304 keys off q.id, but real payloads use generic ids like \"q1\"/\"m1\" while the keywords live in q.question, so mood_score/energy_score are effectively never populated - dead code, no data loss since the full responses array is always sent.)\n\nImpact: LOW - data-quality/consistency gap; wellness check-ins feed coach calibration, so a fabricated 5/10 for skipped scales pollutes that signal. No crash. Consistent with an already-fixed sibling bug (9d3b).",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: WellnessCheckinBlock seeded every scale_1_10 answer to 5 at mount, so the '5' chip rendered aria-checked and Submit was enabled with zero interaction — a fabricated 5/10 could be logged for untouched scales. Fix: scale answers init to null (like the mood chip in DailyCheckinBlock, i-20260710-9d3b), ScaleQuestion value is number|null so no chip renders selected until picked, and Submit stays disabled until every scale is rated. Verified in dev block gallery (mood-only fixture): both scale rows unselected + Submit disabled at mount; WellnessCheckinBlock.test.tsx 38/38 pass.",
+        "imagePath": "images/i-20260717-6c78-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-6c78-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0f102e9356f81f910c7d22970cfb0e95d87139c9",
+        "imageCommits": [
+          "0f102e9356f81f910c7d22970cfb0e95d87139c9"
+        ],
+        "fixedAt": "2026-07-17T20:34:39.690Z",
+        "by": "shakeebshaan",
+        "appCommit": "8d007d28",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Root cause found + fixed exactly (scale init null, value number|null, Submit stays disabled til picked); mirrors accepted sibling fix 9d3b. Verified end-to-end: dev block gallery a11y tree shows zero chips aria-checked + Submit [disabled] at mount, screenshot confirms, WellnessCheckinBlock.test.tsx 38/38 green. Surgical 1-file source change."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260717-rdy1",
