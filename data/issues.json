@@ -1247,9 +1247,32 @@
         "189396faa27ba39bcd87c2a779d576ea93ebd30e"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the remove-set control only rendered for LOGGED sets, so the transient 'Add Bonus Set' editor (unlogged) had no dismiss control - once you added a bonus set you could not remove it. Fix (ExerciseWheelPicker.tsx): show 'Remove set' on bonus sets regardless of logged state, give the transient editor an onRemove that dismisses it, and guard handleRemoveSet to dismiss unlogged sets. Proof: a just-added bonus Set 2 now shows a working 'Remove set' button.",
+        "imagePath": "images/i-20260717-08d4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-08d4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1e86548943ff92d287e3ebff074754b5902768d5",
+        "imageCommits": [
+          "1e86548943ff92d287e3ebff074754b5902768d5"
+        ],
+        "fixedAt": "2026-07-17T15:45:14.601Z",
+        "by": "shakeebshaan",
+        "appCommit": "92d09127",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Reproduced the exact gap in a component harness; screenshot shows the new Remove-set control on an added bonus set. Target sets intentionally keep Skip Exercise. tsc clean, unit gate green."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260717-1272",
