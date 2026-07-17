@@ -639,9 +639,32 @@
         "04bdad50a984e00674e426a199f7408da30e0572"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: same dual-stepper mess as abf5/a593 — the sheet showed 'CUPS' and 'GRAMS/CUP' side by side. Fix: FoodDetailSheet now uses ONE field with a Cups/Grams toggle (verified on Dahi/Curd). Same commit as abf5.",
+        "imagePath": "images/i-20260717-f734-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-f734-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "34e70a562b0ae9e0f85e2247a07fb00c82ec2cf5",
+        "imageCommits": [
+          "34e70a562b0ae9e0f85e2247a07fb00c82ec2cf5"
+        ],
+        "fixedAt": "2026-07-17T05:45:28.787Z",
+        "by": "shakeebshaan",
+        "appCommit": "7f81b37b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Same dual CUPS + GRAMS/CUP field from the screenshot is gone; curd now shows a Cups/Grams toggle over one field (1 cup = 200g)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260717-a593",
