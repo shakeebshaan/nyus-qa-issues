@@ -914,7 +914,16 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root-caused (full-stack; needs a backend payload change + live verification). 'Start Next Session Now' skips finishing the current session when its log was started on a prior day: NextSessionPreview.tsx:98 guards finishWorkout behind if(sessionLogId), but sessionLogId only gets set by a startWorkout run in the CURRENT page load. A session fully logged yesterday reloads with sessionLogId=null, so the button skips the finish, creates an orphan log for the next session, and progression stays on session #3 — the 'reset' the user sees. Recommended fix: expose the active session_log_id in the /activity overview (TodaysWorkout payload) so the FE finishes the current session before starting the next (or resume the current session to fetch its log id first). Not reproducible on a fresh account (needs an in-progress progressive plan). Sibling of 65e9 (progression is completed-count only, no date rollover).",
+      "reviewedAt": "2026-07-17T06:11:09.997Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "activity",
+        "workout",
+        "full-stack"
+      ]
     }
   ]
 }
