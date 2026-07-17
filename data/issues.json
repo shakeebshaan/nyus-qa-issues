@@ -892,12 +892,32 @@
         "873a5570bbe929f55648f568016ba1013d4ac7b0"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: ActivityOverview (backend.py ~L8253) looked up 'Last:' data only within the SAME WorkoutSession row; progressive plans use a different session row each cycle, so yesterday's identical exercise never matched and showed 'No previous data'. Fix: when the same-session lookup misses, fall back to the most recent COMPLETED SetLog of that exercise across the user's whole history (also feeds progressive-overload reference weight). Verified live on prod: fallback fires (Back extensions -> '2 sets x 10 reps @ 20.0kg'). Deployed backend (ecfa430).",
+        "imagePath": "images/i-20260717-65e9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-65e9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "85c1ee86dd6b0b1e0aa53549683c53472886d162",
+        "imageCommits": [
+          "85c1ee86dd6b0b1e0aa53549683c53472886d162"
+        ],
+        "fixedAt": "2026-07-17T06:34:30.791Z",
+        "by": "shakeebshaan",
+        "appCommit": "9d4a1684",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Backend deployed to prod; live payload proves the cross-history fallback fires (Back extensions now surfaces prior completed set 2x10@20kg), remaining 'No previous data' entries are exercises with genuinely zero completed history."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": "Root-caused. The Activity 'Last:' line comes from backend.py ActivityOverview (~line 8253): last_session_log is queried with WorkoutSessionLog.session_id == session.id — i.e. it only looks for a PRIOR completed log of the SAME session row. Your screenshot shows a progressive plan ('CURRENT SESSION 3/10'), where yesterday's workout was a DIFFERENT session row, so the same exercises (Leg Extension, Squat...) done yesterday are never matched -> 'No previous data' even though the workout was done. Proposed fix: look up the most recent completed SetLog for each exercise_id across the user's history (not scoped to session.id), falling back to the current behavior. This is a backend change + it also feeds progressive-overload reference weights (planned_volume ref_weight), so I want to verify against a real workout-history account before deploying — this machine's admin QA acct has no SetLog history to reproduce/confirm. Flagging rather than blind-deploying an unverified query-semantics change to prod. Confirm and/or point me at a data account and I'll ship + verify.",
-      "reviewedAt": "2026-07-17T06:07:21.183Z",
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Deploy backend and frontend",
       "reviewRepliedAt": "2026-07-17T06:15:26.447Z",
