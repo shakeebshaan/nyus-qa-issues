@@ -1333,9 +1333,32 @@
         "f6cf1d72d1ab972b080320f4010e1335389a1829"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Add Food sheet was cluttered — a 'Track with Images' marketing banner, a duplicate 'Snap meal' button, extra explainer paragraphs, and the floating coach button sitting on top of the 'Estimate with AI' action. Fix: the sheet was decluttered — two compact labeled tiles (Snap meal / Scan barcode), the banner and explainer text removed, and the sheet now sits above the coach button so nothing overlaps. Shipped in v1.9.38 (build 218); update the app to see it.",
+        "imagePath": "images/i-20260717-4736-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-4736-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "03310fd81a351611c8155eb4d69a329c8195f14f",
+        "imageCommits": [
+          "03310fd81a351611c8155eb4d69a329c8195f14f"
+        ],
+        "fixedAt": "2026-07-17T15:53:14.783Z",
+        "by": "shakeebshaan",
+        "appCommit": "15c6a58f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Live capture confirms the redesigned sheet is clean: no banner, no duplicate CTA, no FAB overlap; correct authenticated screen, matches NYUS design tokens."
+        }
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
