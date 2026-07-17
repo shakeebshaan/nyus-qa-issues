@@ -960,31 +960,47 @@
         "873a5570bbe929f55648f568016ba1013d4ac7b0"
       ],
       "imagePrivate": true,
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: ActivityOverview (backend.py ~L8253) looked up 'Last:' data only within the SAME WorkoutSession row; progressive plans use a different session row each cycle, so yesterday's identical exercise never matched and showed 'No previous data'. Fix: when the same-session lookup misses, fall back to the most recent COMPLETED SetLog of that exercise across the user's whole history (also feeds progressive-overload reference weight). Verified live on prod: fallback fires (Back extensions -> '2 sets x 10 reps @ 20.0kg'). Deployed backend (ecfa430).",
-        "imagePath": "images/i-20260717-65e9-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260717-65e9-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "85c1ee86dd6b0b1e0aa53549683c53472886d162",
-        "imageCommits": [
-          "85c1ee86dd6b0b1e0aa53549683c53472886d162"
-        ],
-        "fixedAt": "2026-07-17T06:34:30.791Z",
-        "by": "shakeebshaan",
-        "appCommit": "9d4a1684",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Backend deployed to prod; live payload proves the cross-history fallback fires (Back extensions now surfaces prior completed set 2x10@20kg), remaining 'No previous data' entries are exercises with genuinely zero completed history."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-07-17T07:46:44.425Z",
+          "event": "reopened",
+          "note": "Not fixed audit it and fix it plan it fix it it",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "Root cause: ActivityOverview (backend.py ~L8253) looked up 'Last:' data only within the SAME WorkoutSession row; progressive plans use a different session row each cycle, so yesterday's identical exercise never matched and showed 'No previous data'. Fix: when the same-session lookup misses, fall back to the most recent COMPLETED SetLog of that exercise across the user's whole history (also feeds progressive-overload reference weight). Verified live on prod: fallback fires (Back extensions -> '2 sets x 10 reps @ 20.0kg'). Deployed backend (ecfa430).",
+            "imagePath": "images/i-20260717-65e9-fix-r1.png",
+            "imagePaths": [
+              "images/i-20260717-65e9-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "85c1ee86dd6b0b1e0aa53549683c53472886d162",
+            "imageCommits": [
+              "85c1ee86dd6b0b1e0aa53549683c53472886d162"
+            ],
+            "fixedAt": "2026-07-17T06:34:30.791Z",
+            "by": "shakeebshaan",
+            "appCommit": "9d4a1684",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 92,
+              "bar": 90,
+              "note": "Backend deployed to prod; live payload proves the cross-history fallback fires (Back extensions now surfaces prior completed set 2x10@20kg), remaining 'No previous data' entries are exercises with genuinely zero completed history."
+            }
+          },
+          "images": [
+            "images/i-20260717-65e9-notfixed-0.jpg",
+            "images/i-20260717-65e9-notfixed-1.jpg"
+          ],
+          "imageCommits": [
+            "9393a3a37f60bfc058450780c1a5ec4d7c19eadd",
+            "75957a28cf819893a1ad9656bf474ae5dc290416"
+          ]
         }
-      },
-      "history": [],
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "reviewReply": "Deploy backend and frontend",
