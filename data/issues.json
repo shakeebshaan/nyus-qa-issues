@@ -92,48 +92,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260716-b7f3",
-      "createdAt": "2026-07-16T13:40:04.000Z",
-      "status": "fixed",
-      "route": "/recipe-detail",
-      "description": "[bug-hunt] Recipe steps: the FIRST cooking instruction is rendered as an unnumbered bullet '•' labeled (for screen readers) 'Recipe note:' — as if it were a preamble — and every remaining step is numbered off-by-one with the step count one short. A 6-step recipe shows an unnumbered first step, then 'Step 1 of 5' … 'Step 5 of 5'.\n\nRoute: /recipe-detail (open any recipe meal from Nutrition → the 'Instructions' section). Also affects the collapsible 'Recipe' block on the meal-detail screen.\n\nExpected: instructions render 'Step 1 of N' … 'Step N of N', the first real step numbered 1. Actual: the first instruction shows a '•' bullet + aria-label 'Recipe note: <first step>', numbering starts at '1' on the SECOND step, and the total is N-1.\n\nRoot cause (src/components/RecipeStepList.tsx): the renderer UNCONDITIONALLY treats finalSteps[0] as a preamble — isPreamble = (i === 0) (lines 100 & 132), stepNum = i (so the 2nd element becomes 'Step 1'), and totalSteps = finalSteps.length - 1 (line 90). That is only correct when a leading preamble was actually extracted. But (a) the `steps` prop — used by RecipeDetail as steps={recipe.instructions} — is documented at line 48 as 'Pre-split step strings' with NO preamble, so instructions[0] is a real step; and (b) splitRecipeSteps(notes) only prepends a preamble element when preamble TEXT precedes the first marker — for the common notes that start directly with '1) …' it returns pure steps (see the component's own test, lines 170-174), so notes[0] is also a real step.\n\nNode-verified render decision (replicating lines 90/100/101/108/116):\nCASE A steps=['Heat oil…','Add onions…','Add spices…','Serve hot'] -> '[•] Recipe note: Heat oil…' / 'Step 1 of 3: Add onions…' / 'Step 2 of 3' / 'Step 3 of 3' (4 instructions shown as 1 note + 3 numbered).\nCASE B notes='1) Boil pasta 2) Make sauce 3) Combine' -> splits to 3 real steps -> first shown as '[•] Recipe note: Boil pasta', then 'Step 1 of 2' / 'Step 2 of 2'.\nCASE C notes WITH a genuine preamble ('Prep + cook ~20 min. 1) …') renders correctly — confirming the code only works when a preamble is actually present.\n\nRepro: 1) Open /recipe-detail for any recipe whose instructions start with the first step (i.e. no 'Prep ~X min' preamble). 2) Scroll to Instructions. Expected step 1 is shown as an unnumbered bullet and the visible numbering / 'Step k of M' count is off by one.\n\nFix: only treat index 0 as a preamble when it genuinely is one (e.g. have splitRecipeSteps return a hasPreamble flag or prepend a sentinel, or detect that element 0 lacks a leading numeric marker). For the `steps` prop path, number from 1 with totalSteps = length. The existing RecipeStepList tests do NOT lock the buggy path — they only seed a preamble at [0] and never assert numbering for the no-preamble / raw-`steps` cases.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Recipe instructions were showing the first cooking step as an unnumbered bullet and numbering the rest off by one (a 6-step recipe read 'Step 1 of 5' … 'Step 5 of 5'). Root cause: RecipeStepList always treated the first item as a 'prep note' preamble, which is only right when the notes actually start with a prep line. Fix: it now only shows a bullet when a real preamble exists; otherwise every step numbers from 1 with the correct total (Step 1 of 6 … Step 6 of 6).",
-        "imagePath": "images/i-20260716-b7f3-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260716-b7f3-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "268120e8fd60b2a5dbbd7a526d751e613806d66c",
-        "imageCommits": [
-          "268120e8fd60b2a5dbbd7a526d751e613806d66c"
-        ],
-        "fixedAt": "2026-07-16T13:57:09.190Z",
-        "by": "shakeebshaan",
-        "appCommit": "86bf38b9",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "First step now numbered 1, sequential 1..6 with correct N; verified in DOM aria-labels, circle text, and the recaptured screen; unit + page tests green."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260716-4d54",
       "createdAt": "2026-07-16T13:03:48.387Z",
       "status": "fixed",
