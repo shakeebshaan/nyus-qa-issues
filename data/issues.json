@@ -1534,6 +1534,28 @@
         }
       },
       "needsReview": false
+    },
+    {
+      "id": "i-20260717-pf2a",
+      "createdAt": "2026-07-17T21:10:00.000Z",
+      "status": "open",
+      "route": "/profile",
+      "description": "[bug-hunt] Profile: ProfilePreferencesCard.tsx (coach-language / app-language / notification-sounds switcher) has ZERO i18n coverage - no useTranslation/t() import at all (confirmed via grep). Every user-facing string is hardcoded English: section header \"PREFERENCES & DATA\" (line 101), \"Sounds\"/\"Voice cues\" toggles (130,169), coach-language option labels/descriptions (17-19), App-language section, and all 4 toasts (44,47,75-77,84-86). Given the owner i18n directive (translate entire app EN/Hindi/Hinglish + all future strings), this is the exact card that lets a user switch App language to Hindi while the card switching it stays English. Smaller companion gap: ProfileDeleteAccountDialog.tsx:33-45 title/body/destructive-confirm text also hardcoded (only Cancel uses t()). Fix: wire useTranslation into both files, add keys to en/hi/hinglish/xx-AE bundles, follow the i18n-missing-keys-audit pattern already used for other screens. Not a data-accuracy bug - pure localization gap found during page-guardian PROFILE static sweep.",
+      "imagePath": null,
+      "imagePaths": [],
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ]
     }
   ]
 }
