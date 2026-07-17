@@ -22053,29 +22053,48 @@
       "archivedAt": "2026-07-16T17:35:15.731Z"
     },
     {
-      "id": "i-20260716-vrt1",
-      "createdAt": "2026-07-16T00:00:00.000Z",
+      "id": "i-20260716-c4e7",
+      "createdAt": "2026-07-16T22:36:11.295Z",
       "status": "resolved",
-      "route": "/fasting",
-      "description": "[suggestion] Add a \"Vrat / Festival Fast\" mode to the Fasting page for religious single-day fasts (Navratri, Ekadashi, Karva Chauth, Sawan Somwar) distinct from the existing 16:8/18:6/OMAD intermittent-fasting timer. Problem: NYUS is India-focused but src/lib/fasting.ts only models time-restricted IF windows -- it has no concept of a vrat day, so on a fast day the diet plan keeps pushing regular macro targets/meal reminders and a skipped non-vrat meal dents the diet streak, which is wrong for users observing a religious fast (a real, recurring pattern for a large slice of the Indian user base, unaddressed by MyFitnessPal/HealthifyMe-style global trackers too). Evidence: grep of src/lib/fasting.ts + Fasting.tsx shows only device-local time-window presets, no vrat/religious-fast concept; no vrat-friendly recipe tag found in the meal-suggestion/recipe code. V1 scope: a one-tap \"Mark today as Vrat day\" toggle on /fasting that (1) swaps that day into a vrat-friendly meal filter (sabudana, kuttu/singhare atta, fruits, dairy -- reuse existing recipe tagging), (2) exempts that day from the diet-streak miss penalty, (3) pauses the regular \"log your meal\" reminder push for the day. No new backend fasting types needed -- store as a flag on the existing daily log record. Rough effort: 2-3 days (recipe tag pass + 1 toggle UI + streak-exemption check + 1 notification suppression check).",
+      "fix": {
+        "description": "Root cause: the Accept/Decline buttons on the invites screen had no error handling, so if the request failed (e.g. the invite was already used or cancelled on another device) nothing happened on screen and people would just keep tapping. Fix: both actions now show a clear red error message with the reason and refresh the list, so a used-up invite disappears instead of lingering.",
+        "imagePath": "images/i-20260716-c4e7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-c4e7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "14511584c4180db9f83a50fc593ae9ff018fcab5",
+        "imageCommits": [
+          "14511584c4180db9f83a50fc593ae9ff018fcab5"
+        ],
+        "fixedAt": "2026-07-16T22:51:10.777Z",
+        "appCommit": "82eb62da",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Mirrors the already-fixed FriendRequests accept/decline pattern (onError toast + refetch + canceled-tap guard); live capture shows the destructive toast with the server message; 2 regression tests + full test:unit gate green + tsc clean."
+        }
+      },
+      "history": [],
+      "route": "/partners/invites",
+      "description": "[bug-hunt] Partner invites: Accept and Decline fail silently — zero feedback on any error.\n\nRoute: /partners/invites (src/pages/PartnerInvites.tsx).\n\nWhat is wrong: acceptMutation (lines 37-52) and declineMutation (lines 54-60) have ONLY onSuccess/onSettled — NO onError handler. The app QueryClient (src/App.tsx:163-173) sets defaultOptions.queries only; there is NO mutations MutationCache/global onError. So when either POST rejects, react-query swallows it: onSettled clears busyId (button re-enables), but there is no toast, no navigation, and the mutation does NOT refetch, so the invite row stays on screen unchanged.\n\nConcrete failure modes (backend app/routes/partner_groups.py accept_invite:595 / decline_invite:659):\n- Accept 400 INVITE_NOT_PENDING when the invite was already accepted/declined on another device — very reachable because the list is cached (staleTime not forced) and not refetched on failure.\n- Accept/Decline 404 GROUP_NOT_FOUND (leader deleted the group) or 404 NOT_INVITED (invite rescinded).\n- 500 ACCEPT_FAILED / DECLINE_FAILED on a DB error.\nIn every case the user taps Accept/Decline and NOTHING visibly happens — no error, no removal, no navigation — so they re-tap indefinitely.\n\nExpected: on failure show an error toast (and refetch [partner-invites] so a stale/consumed invite disappears), matching the exact pattern already fixed elsewhere for the same class — MessagesView (i-20260708-b2f9) and GroupChatView send (i-20260715-30f4) both added onError toasts. PartnerInvites was missed.\n\nRepro: open /partners/invites with an invite that has already been consumed (accept it on a second session first, or have the leader delete the group), tap Accept (or Decline) → observe no feedback and the row remaining.\n\nFix: add onError to both mutations — toast the error and invalidate/refetch [partner-invites].",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
       "imagePath": null,
+      "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "shipped",
-        "ux-call"
-      ],
-      "needsReview": true,
-      "reviewReason": "Already shipped — this suggestion is a stale dupe born from grepping only src/lib/fasting.ts. The vrat-day concept and ALL THREE requested behaviors already exist, just not in fasting.ts (which is intentionally the device-local IF-timer only):\n(1) Vrat toggle + type selector: src/pages/Nutrition.tsx FastingBanner (FASTING_TYPES = vrat/full/intermittent), persisted via nutrition.service.setFastingStatus -> backend PUT /daily-logs/fasting (backend.py:15824) into DailyLog.fasting_type (db_models.py:259, migration 20260702_001).\n(2) Vrat-friendly meal filter: llm_prompts.py:1988 swaps the diet prompt for vrat foods (sabudana/kuttu/singhare/rajgira/sendha namak/fruits/dahi/paneer) and STRICTLY AVOIDS atta/rice/dal/table-salt/onion/garlic — more complete than the card asks.\n(3) Streak-exemption: app/services/daily_report.py:343 makes full/vrat days streak-neutral (auto-maintains). (4) Reminder suppression: app/services/notification_jobs.py:133 skips fasting-day users from the log-a-meal push.\nThe ONLY real delta vs the card is entry-point placement: the toggle lives on the /nutrition banner, not /fasting. /fasting is deliberately the IF count-up timer; vrat/full are whole-day meal-plan concepts keyed to the daily log. OWNER UX CALL: do you want the existing vrat toggle ALSO surfaced on /fasting for discoverability (adds a getFastingStatus fetch + mutation + i18n to Fasting.tsx), or keep the surfaces separate as designed? No code shipped this tick to avoid duplicating a shipped feature.",
-      "reviewedAt": "2026-07-16T20:59:53.268Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-17T00:44:41.695Z",
+      "needsReview": false,
+      "resolvedAt": "2026-07-17T00:45:11.379Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-17T00:44:41.695Z"
+      "archivedAt": "2026-07-17T00:45:11.379Z"
     }
   ]
 }
