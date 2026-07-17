@@ -484,8 +484,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Duplicate of i-20260716-4b4c — fixed by the same change. The live Socket.IO coach builds context via ContextAssembler (not gather_user_context, which the earlier fix touched), so a P2 _supplement_adherence block was added to app/services/context_assembler.py (backend 0d8798d, deployed). PROOF: the deployed prod coach now names the user's real tracked supplements ('Vitamin D3 and Whey Protein, adherence 0/2 taken') — screenshot shows that live reply + the injected [SUPPLEMENTS — TODAY] context block. Regression test added, 51/51 green.",
+        "imagePath": "images/i-20260716-dc05-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260716-dc05-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6449ff7aa28e137e99152f5e95af867a2d9facfe",
+        "imageCommits": [
+          "6449ff7aa28e137e99152f5e95af867a2d9facfe"
+        ],
+        "fixedAt": "2026-07-17T01:11:07.186Z",
+        "by": "shakeebshaan",
+        "appCommit": "0d8798d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Duplicate of 4b4c; same verified full-stack fix — live coach now receives supplement adherence via ContextAssembler on prod, behavioral proof captured, regression test green."
+        }
+      },
       "history": [
         {
           "at": "2026-07-17T00:47:25.178Z",
