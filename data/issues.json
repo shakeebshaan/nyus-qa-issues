@@ -644,7 +644,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Two sub-asks. (1) SCROLLING — already implemented in the current build: the 'Choose a photo' sheet (MealSlotCard) now requests 12 photos and renders them in a flex-1 overflow-y-auto region. Verified live in the plan-builder just now: 12 photos load and the region scrolls (scrollHeight 866 > clientHeight 615). The 6-photo/no-scroll screenshot is a pre-fix build. (2) STORAGE MODEL — 'store on frontend, ids on backend' is a data-architecture decision I don't want to guess at. Today the picker stores the full image URL string in the builder draft (localStorage = frontend) and sends that URL to the backend on finalize. Moving to 'id-only on backend' means: define a stable id for each curated photo (catalog index / hash), persist only that id server-side, and resolve id->image client-side. That touches the meal schema + finalize contract + the same meal-photo persistence path 67ca needs. Owner call: confirm the id scheme + whether backend should keep the URL as a fallback, and I'll implement across the plan-builder + RecipeDetail together.",
+      "reviewedAt": "2026-07-17T06:06:54.814Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260717-f734",
