@@ -2,6 +2,27 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260717-7c1d",
+      "createdAt": "2026-07-17T18:55:32.866Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach Chat \"N new\" pill overcounts — it counts your OWN messages and messages that never render.\n\nRoute: /coach-chat\n\nWhat is wrong: the floating \"N new ↓\" pill (CoachChatNewMessagePill, aria-label \"N new messages, tap to scroll down\") should count INCOMING coach/AI messages that arrived while you scrolled up. Its count is driven by useChatScroll, which computes delta = messages.length - prevCount over the RAW messages array (CoachChat.tsx:225 passes the `messages` state, NOT `visibleMessages`). When !isAtBottom and delta>0 it does setUnreadNewCount(c => c + delta) (useChatScroll.ts lines 84-121) with no sender or visibility check.\n\nThe raw messages array contains items the thread never shows as new incoming bubbles: (a) the user's OWN outgoing messages (is_from_me), (b) block_response envelopes filtered out by isBlockResponseEnvelope, (c) dev test pings filtered by isTestSeedMessage, and (d) consecutive rate-limit bubbles / duplicate welcomes / identical AI echoes collapsed by useVisibleMessages. So the pill count can exceed the number of newly-rendered incoming bubbles, and it appears for the user's own actions.\n\nExpected: pill count = number of NEW INCOMING (coach/AI) bubbles actually rendered while scrolled up; it must not appear for the user's own sends or for hidden/collapsed messages.\n\nActual: the pill overcounts / appears spuriously.\n\nRepro (clearest): open /coach-chat with enough history to scroll; scroll up so you are not at the bottom (isAtBottom=false); then either (i) tap an interactive block the coach sent (e.g. a mood/rating check-in) which sends a block_response envelope, or (ii) send a normal message. The '1 new ↓' pill appears even though the added item is your own — and for the block_response case nothing new renders at all (the envelope is filtered by useVisibleMessages).\n\nRoot cause / fix: derive the unread delta from the rendered visibleMessages and count only incoming (!is_from_me) additions. useChatScroll currently keys off raw messages.length; feed it visibleMessages (or track a per-render count of incoming visible bubbles) so the pill count matches what tapping it actually reveals.\n\nFiles: src/pages/CoachChat.tsx:225 (passes raw messages to useChatScroll); src/pages/_components/coach-chat/hooks/useChatScroll.ts:84-121 (delta from raw length, no sender/visibility filter); src/pages/_components/coach-chat/hooks/useVisibleMessages.ts (filters/collapses that make raw != rendered); src/pages/_components/coach-chat/CoachChatNewMessagePill.tsx.",
+      "descPrivate": false,
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": false,
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ]
+    },
+    {
       "id": "i-20260717-r0t1",
       "createdAt": "2026-07-17T18:00:00.000Z",
       "route": null,
