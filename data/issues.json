@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260718-5c1a",
+      "createdAt": "2026-07-18T20:27:18.000Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard Sleep card + its embedded 7-day chart render the night’s DATE LABEL one day early for users in negative-UTC (Americas) timezones.\n\nRoot cause: date labels are built with new Date(\"YYYY-MM-DD\"), which parses a bare date string as UTC midnight; toLocaleDateString / the recency compare then shift it back a day in any timezone west of UTC.\n- DashboardSleepCard.recencyLabel  (src/pages/_components/dashboard/DashboardSleepCard.tsx:26)  ->  new Date(latestDate).toLocaleDateString(...)\n- SleepQualityChart.formatLabel    (src/components/charts/SleepQualityChart.tsx:32)             ->  new Date(dateStr).toLocaleDateString(...)  (every X-axis label)\n\nExpected: a night logged/synced on Jul 16 shows \"Jul 16\".\nActual (e.g. America/Los_Angeles, UTC-7): shows \"Jul 15\"; the Today/Last-night recency check can also mis-classify near midnight.\n\nThe codebase already fixed this exact class elsewhere: DashboardFastingCard uses new Date(`${date}T00:00:00`) (local) and lib/cycle.ts uses Date.UTC on split parts. The newer sleep code (i-20260716-sl33) reintroduced the naive parse.\n\nSame naive pattern (wrong WEEKDAY label) also in: src/components/charts/StepsActivityChart.tsx:26, MacroAdherenceChart.tsx:26, CalorieBalanceChart.tsx:26.\n\nFix: parse the YYYY-MM-DD as local before formatting (append T00:00:00, or split+Date.UTC then format) — ideally add a shared parseLocalDate() helper in src/lib/date.ts and use it in all label formatters. Correct for IST (UTC+5:30) today, so India users are unaffected; only surfaces west of UTC.\n\nRepro: set browser/device TZ to America/Los_Angeles, log or Health-Connect-sync sleep for 2+ days, open /dashboard — the Sleep card’s most-recent date reads one day earlier than logged.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260718-b7c2",
       "createdAt": "2026-07-18T15:55:00.000Z",
       "route": "/measurements",
