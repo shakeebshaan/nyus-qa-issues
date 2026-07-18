@@ -48,8 +48,30 @@
       "createdAt": "2026-07-18T10:41:30.000Z",
       "route": "/weekly-progress",
       "description": "[bug-hunt] Weekly Progress 'TRENDS' chart - the Weight row of the multi-metric bar chart renders near-identical full-height bars that convey no trend, because weight is normalized against a zero baseline.\n\nWhat's wrong: src/components/progress/MultiMetricBarChart.tsx BarRow (L88-95) sets maxValue = max value across the week, then each bar height = value / maxValue (L126-130). That zero-baseline normalization is right for count-like metrics (calories 0-2500, workouts 0/1) but wrong for weight, whose day-to-day variation is a tiny fraction of its absolute value. For a realistic week of e.g. 80.9-82.0 kg, bar heights come out 98.7%-100% - differences under 1px on the 48px-tall bar area, so every weight bar looks identical and the row shows no day-to-day movement.\n\nContext: MultiMetricBarChart is the only bar chart actually rendered (WeeklyProgress.tsx:820, 'Daily breakdown' / 'TRENDS' section; the standalone WeightTrendChart/CalorieBalanceChart/StepsActivityChart/MacroAdherenceChart are barrel-exported but not mounted anywhere). The repo already has the correct pattern for weight: WeightTrendChart.tsx uses a windowed YAxis domain [floor(min-padding), ceil(max+padding)] (L108) so small weight deltas stay visible; the multi-metric weight row does not.\n\nExpected vs actual: the Weight row should visibly reflect the week's ups/downs; actually it is a flat wall of ~full bars. (The per-day drilldown drawer shows the correct numeric value, so no data is lost - only the at-a-glance chart is uninformative.)\n\nFix: normalize the weight row against a windowed min-max domain (min-padding .. max+padding) like WeightTrendChart, instead of value/maxValue; or render weight as a line/sparkline rather than a zero-baseline bar.",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Weekly Progress TRENDS 'Daily breakdown' chart normalized every metric row against a zero baseline (height = value / weekMax). That's right for count-like metrics (calories, workouts) but wrong for weight, whose daily change is a tiny fraction of its absolute value — a realistic 80.9-82.0 kg week rendered near-identical ~98.7%-100% full-height bars, so the Weight row showed no trend. Fix: added a per-metric 'windowed' flag (weight only) that normalizes against a [min-pad, max+pad] domain like WeightTrendChart, so small weight deltas spread visibly; calories/workouts stay zero-baselined. The Weight row now visibly slopes down across the week. Regression test added.",
+        "imagePath": "images/i-20260718-64f0-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-64f0-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "96de0886b6e73a1537d1598b0369b24cf77666b4",
+        "imageCommits": [
+          "96de0886b6e73a1537d1598b0369b24cf77666b4"
+        ],
+        "fixedAt": "2026-07-18T11:18:50.712Z",
+        "by": "shakeebshaan",
+        "appCommit": "1a9f89c1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Recapture shows the Weight row now reflecting real day-to-day movement (tall Sun/Mon/Tue -> short Fri/Sat) instead of a flat wall; calories/workouts unchanged; regression test passes (3/3), test gate green."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -60,7 +82,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260718-p7f2",
