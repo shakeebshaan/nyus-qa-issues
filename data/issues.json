@@ -6,8 +6,30 @@
       "createdAt": "2026-07-18T10:41:30.000Z",
       "route": "/measurements",
       "description": "[bug-hunt] Body Measurements save-failure handler calls an undefined function -> ReferenceError instead of the intended error toast.\n\nWhat's wrong: src/pages/Measurements.tsx line 244 (logMeasurementMutation.onError) does  description: apiErrorMessage(error) ?? \"Please try again.\" , but apiErrorMessage is NOT imported in this file - line 8 imports only { apiErrorRaw } from '@/lib/api-error'. apiErrorMessage is a real export of that module (api-error.ts:38) but is never imported here and not defined locally.\n\nProof: npx tsc -b reports  src/pages/Measurements.tsx(244,22): error TS2304: Cannot find name 'apiErrorMessage'.  It still ships because npm run build is a vite/esbuild build with no typecheck (same class + gotcha as i-20260716-1d76 / i-20260621-8625).\n\nExpected vs actual: on a failed measurement save (network error / 5xx / offline / validation) the user should get the destructive toast 'Couldn't save measurement'. Instead, evaluating the toast() argument throws ReferenceError: apiErrorMessage is not defined before toast() is invoked, so NO error toast renders and the failure surfaces only as an uncaught console error. captureException (line 240, which uses the imported apiErrorRaw) still runs, so the crash is silent to the user.\n\nRepro: open /measurements, pick a body part, enter a value, force the POST /measurements to fail (offline or 500), tap 'Save measurement'. Console shows ReferenceError; no toast appears.\n\nFix: add apiErrorMessage to the line-8 import: import { apiErrorMessage, apiErrorRaw } from '@/lib/api-error';",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Measurements.tsx's save-failure handler called apiErrorMessage(error) for the toast description, but only apiErrorRaw was imported from @/lib/api-error — so a failed save threw ReferenceError before toast() ran and the user got NO error, only a silent console error. Fix: import apiErrorMessage (a real export of that module) alongside apiErrorRaw. Proof: forcing POST /measurements/log to 500 now renders the destructive 'Couldn't save measurement' toast with the server's message.",
+        "imagePath": "images/i-20260718-9a4b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-9a4b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "466762548e275c197482c23aef559e38dcda9ba1",
+        "imageCommits": [
+          "466762548e275c197482c23aef559e38dcda9ba1"
+        ],
+        "fixedAt": "2026-07-18T11:18:30.564Z",
+        "by": "shakeebshaan",
+        "appCommit": "0109408d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Behavioral proof: the previously-silent save failure now surfaces the intended destructive toast (would have thrown ReferenceError before the import); full-screen authenticated /measurements capture, test gate green."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260718-64f0",
