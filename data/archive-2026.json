@@ -22258,6 +22258,47 @@
       ],
       "archivedAt": "2026-07-17T21:59:40.819Z",
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
+    },
+    {
+      "id": "i-20260717-rda1",
+      "createdAt": "2026-07-17T19:34:32.793Z",
+      "status": "resolved",
+      "route": "/onboarding",
+      "description": "[bug-hunt] Onboarding: new Daily-activity recurring step (RecurringActivityStep.tsx + RecurringActivityForm.tsx, commit 1ecc10d6) ships English-only - zero t() calls, no i18n wiring at all (not a missing-bundle-key case, never hooked into i18next). Every other onboarding screen (Basics/Body/Goal/Why/Training/Food/intro carousel) was localized to en/hi/hinglish/xx-AE over the past week; this step landed after that pass and was missed. Hardcoded strings: back label, hero title+subtitle, activity-type labels (Cardio/Walk-Steps/Sport/Swim/Other), field labels (Name/Duration/Calories/How often), schedule labels (Every day/Every other day/Specific days), reminder copy, Save & continue / Skip for now CTA. Scope: 2 files, ~20 strings x 4 locales - add translation keys to src/i18n/locales/{en,hi,hinglish,xx-AE}.json + wire useTranslation() into both components.",
+      "tags": [
+        "bug-hunt",
+        "onboarding",
+        "i18n"
+      ],
+      "fix": {
+        "description": "Root cause: the new Daily-activity onboarding step (RecurringActivityStep + shared RecurringActivityForm) shipped after the onboarding translation pass and was never wired into i18next, so it was hardcoded English. Fix: routed every label through useTranslation() and added a full recurring_activity translation block to all four language bundles (English, Hindi, Hinglish, pseudo). The screen now renders in the selected language end to end (shown here in Hindi and English), and the same Activity-page add/edit sheet localizes too.",
+        "imagePath": "images/i-20260717-rda1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-rda1-fix-r1.png",
+          "images/i-20260717-rda1-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7840acf1cf1b3e00b2adc511b46427821ab64bc1",
+        "imageCommits": [
+          "7840acf1cf1b3e00b2adc511b46427821ab64bc1",
+          "bf8227ee65c382cf3b864d1c48db812c53f058e7"
+        ],
+        "fixedAt": "2026-07-17T20:05:51.191Z",
+        "by": "shakeebshaan",
+        "appCommit": "2956a8d0",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Real step rendered at 390x844 in hi (full Devanagari), en, hinglish — all 23 keys resolve, no raw keys; 4-bundle parity + pseudo tests green (only a pre-existing unrelated empty key fails); surgical 2-file + 4-bundle diff."
+        }
+      },
+      "needsReview": false,
+      "resolvedAt": "2026-07-18T03:23:18.631Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-18T03:23:18.631Z"
     }
   ]
 }
