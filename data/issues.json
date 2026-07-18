@@ -2074,12 +2074,32 @@
         "331b4f375cc5475b219357311d0757064c29365b"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "The Projected trajectory card now shows real dates on each week tile (Week 1 = Jul 12-18, etc.) and an honest on-track banner comparing your real logged weight against the plan. For this plan it reads 'Behind plan - you're up 0.7 kg so far, the plan expects about 0.6 kg down by now', computed from your actual start-vs-current weight and planned pace rather than a placeholder.",
+        "imagePath": "images/i-20260718-443b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-443b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3879fc5cff4c808489b3f89cf642d31743f0b0fd",
+        "imageCommits": [
+          "3879fc5cff4c808489b3f89cf642d31743f0b0fd"
+        ],
+        "fixedAt": "2026-07-18T04:32:07.369Z",
+        "by": "shakeebshaan",
+        "appCommit": "eb6938f9",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Dates + accurate cumulative on-track pill; live-verified on the real account, unit-tested (33/33), tsc clean, optional props so onboarding preview is unchanged."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "On the Projected trajectory card (same page as i-20260718-344f). Two asks: (1) SHOW DATES - today the weeks read W1..W17 with no calendar dates; I can label them with real ranges (the page already computes each week's start/end, e.g. 'W1 - Jul 12'). That part is bounded and I'll ship it. (2) 'how we are moving / are we on track / compare with our data accurately' - overlay your ACTUAL logged weight against the projected curve and show an on-track/ahead/behind verdict. That needs the weight-log history joined onto the projection - the same progress-vs-plan layer 344f and 8920 need. To avoid a half-build that gets reopened, I recommend shipping the dates now and doing the actual-vs-projected overlay as part of the Plan Timeline v2 in 344f (one data layer, one review). Confirm: OK to ship dates now + fold the on-track comparison into the 344f v2? Or say 'do it all here' and I'll build the overlay on this card directly.",
-      "reviewedAt": "2026-07-18T04:12:43.165Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
