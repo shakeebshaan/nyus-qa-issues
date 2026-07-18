@@ -2569,7 +2569,17 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "3 sub-asks, root-caused each: (1) 'Skipped meals not saving' — in CURRENT code the skip DOES persist: Nutrition skip -> POST /diet/log-meal {skip:true} -> UPDATE assigned_meals SET skipped_at=now, eaten_at=NULL (backend.py:7619), and reads map skipped_at->is_skipped (backend.py:7177,9487). So either your installed build predates the diet_skip_001 fix (a DEPLOY GAP) or the specific tab you used reads from a path that drops skipped_at. Need your app version (Profile -> bottom) or exact repro to pin which. (2) 'Progress bar should be full' — CONFIRMED gap: dashboard diet progress counts only eaten meals (diet_completed_today = AssignedMeal.eaten_at NOT NULL, backend.py:3636); a skipped meal has eaten_at=NULL so it never fills the bar. Fix = count a meal as done when eaten_at OR skipped_at is set (a deliberate skip is 'handled'). (3) 'Not informing the coach' — CONFIRMED gap: the skip branch (backend.py:7616-7632) commits + returns with NO discord_logger/coach signal (unlike the eat path). Fix = add log_diet_workout('meal_skipped') + surface skips in the coach context. I can implement (2)+(3) now (backend, deploy) — but I can't runtime-verify because the QA test account is 401/unloadable on prod. Reply 'do 2+3' to proceed, and your app version so I can confirm whether (1) is a deploy gap.",
+      "reviewedAt": "2026-07-18T19:49:42.239Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "nutrition",
+        "backend",
+        "multi-part",
+        "owner-info"
+      ]
     },
     {
       "id": "i-20260718-80a0",
