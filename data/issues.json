@@ -1915,9 +1915,32 @@
         "995dc2245560362e2f158cb91c2f462f639df69d"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Dashboard fasting card only rendered a live timer + Start CTA and never surfaced the rolling 7-day fasting history it already stores. Fix: added a FastingTrendChart (area+line, indigo domain color) mirroring the sleep card — when idle with history, the card now shows the latest fast (16.8h Today), the avg over fasted days, and a 7-day trend with the target reference line. Files: DashboardFastingCard.tsx, new FastingTrendChart.tsx, fastingHistoryStats().",
+        "imagePath": "images/i-20260718-033b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-033b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "287599a09eae0fe368b383ef8c1c5ac195caf670",
+        "imageCommits": [
+          "287599a09eae0fe368b383ef8c1c5ac195caf670"
+        ],
+        "fixedAt": "2026-07-18T03:05:21.596Z",
+        "by": "shakeebshaan",
+        "appCommit": "198bf2b8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Verified in a 390x844 capture: fasting card now shows latest 16.8h + avg + 7-day indigo area chart + 16h target line, matching the sleep card exactly. Unit-tested fastingHistoryStats; tsc clean."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260718-72c9",
