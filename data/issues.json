@@ -2513,9 +2513,32 @@
         "f03e42358566d2abb9d6065805216c73f2005547"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the 'Yesterday's rewards' + 'Free trial · N days left' chips were too wide to share one row at 390px, so they wrapped to two rows. Fix: shortened labels to 'Rewards' and 'Trial · Nd left', dropped the redundant chevron, and tightened chip padding (gap-1.5/px-3) in src/pages/Dashboard.tsx + src/components/TrialBanner.tsx so both sit on one minimal row (harness: distinctRows=1).",
+        "imagePath": "images/i-20260718-7ef2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-7ef2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bb6152370081583bf80f4ece147740c2ef5d2286",
+        "imageCommits": [
+          "bb6152370081583bf80f4ece147740c2ef5d2286"
+        ],
+        "fixedAt": "2026-07-18T20:01:26.059Z",
+        "by": "shakeebshaan",
+        "appCommit": "462eea99",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Matches owner ask exactly (one minimal row). Verified at 390px via component harness with exact production classNames: distinctRows=1, 2 chips. TrialBanner + Dashboard scoped tests green (17/17)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260718-68a9",
