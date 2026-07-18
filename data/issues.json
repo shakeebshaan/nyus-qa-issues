@@ -2096,7 +2096,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Scoped (code-checked): this is a Plan Timeline v2 - a big unify, not a bounded fix - so confirming direction before building. Ask has 5 parts: (1) ONE canonical /plan-timeline page (exists today at src/pages/PlanTimeline.tsx), (2) also reachable from Profile (today it's only linked off the dashboard plan card), (3) show every workout/exercise marked-done daily like the meals strip (today the week card DayStrip shows meal/session dots but not per-exercise completion), (4) Activity + Meals pages point INTO this page, (5) coach reads from + updates this page and all analytics/progress-vs-plan live here. Parts 2-3 are quick (add a Profile row + surface SetLog/session completion in the DayStrip). Parts 4-5 are the heavy half: a cross-domain progress-vs-plan engine + wiring the coach's ContextAssembler to it - that overlaps directly with i-20260718-443b (dates + on-track on the same page) and i-20260718-8920 (tap-card correlations). RECOMMEND: build these three as ONE Plan Timeline v2 so they share the progress-vs-plan data layer instead of three half-versions. v1 I can ship now: add the Profile entry point + per-exercise done-marks in the DayStrip + an 'on track / ahead / behind' badge comparing logged vs projected weight (data already on this page). Say 'build v1' and I'll implement that bounded slice + regression captures; the coach-integration + full analytics merge I'd do as v2.",
+      "reviewedAt": "2026-07-18T04:12:38.120Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260718-0fd2",
