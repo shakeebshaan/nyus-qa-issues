@@ -2112,9 +2112,32 @@
         "2964d4f5835d2a8d0ed0c4e6e40ef226b664c132"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Plan Timeline 'Projected trajectory' recomputed its own TDEE-based calorie figure (3059) that ignored your actual plan target, so it disagreed with the Nutrition page (2700). Fix: the projection now anchors week-1 to the SAME daily target Nutrition shows (derived from your plan macros, P*4+C*4+F*9) and tapers from there. Week 1 now reads 2700 kcal, matching both pages. Files: src/lib/weekly-projection.ts, src/pages/PlanTimeline.tsx.",
+        "imagePath": "images/i-20260718-0fd2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-0fd2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4ca46f183d885c60c48de78e92ac095f7f106bb5",
+        "imageCommits": [
+          "4ca46f183d885c60c48de78e92ac095f7f106bb5"
+        ],
+        "fixedAt": "2026-07-18T04:09:22.702Z",
+        "by": "shakeebshaan",
+        "appCommit": "c8205028",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Projection week-1 now equals the Nutrition target (2700) exactly, verified in a full-screen 390x844 recapture on the real plan; 26 projection unit tests green incl. 3 new anchor tests. Note: the week-by-week card's '~2,099 kcal/day' is a separate number (sum of actually-assigned meals, under target) — the projection-vs-Nutrition mismatch you flagged is resolved."
+        }
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
