@@ -1965,7 +1965,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "No screenshot/route was attached, and the app has several daily 'question' surfaces - to avoid fixing the wrong one (and breaking a genuinely-daily prompt), which one do you mean? Candidates I found: (1) COACH INTAKE drip - '[Coach] wants to know you' asks a get-to-know-you question on the dashboard, once per day, until its question pool is exhausted (by design it shows a NEW one each day, so if the SAME question repeats that's a real bug in answer-detection). (2) SLEEP LOG prompt - 'log your sleep hours/quality', re-appears daily by design (you log each day's sleep; hidden once logged/synced). (3) SUPPLEMENTS first-run opt-in - 'track your supplements?' re-prompts the next day after 'Not now' (date-keyed dismiss). (4) CYCLE card (female accounts only). Key question: do you want it to appear only ONCE EVER (never again after the first time/first dismissal), or is a specific question wrongly REPEATING because your answer isn't being saved? If you can attach a screenshot of the exact question, or name which of the above, I'll fix it surgically - e.g. for the coach-intake drip I can make it a one-time thing, or fix answer-persistence so an answered question never returns.",
+      "reviewedAt": "2026-07-18T03:11:11.677Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "needs-repro",
+        "dashboard"
+      ]
     }
   ]
 }
