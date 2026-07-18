@@ -48,8 +48,30 @@
       "route": "/plan-timeline",
       "description": "[bug-hunt] Plan Timeline lifecycle wrongly shows \"Resumed\" as the current state for plans that were only EDITED, never paused.\n\nComponent: src/pages/PlanTimeline.tsx → PlanStateMachine (the Draft → Active → Paused → Resumed → Completed pill row), route /plan-timeline.\n\nWHAT’S WRONG: isResumed is derived purely from the version number — `const isResumed = currentStatus === \"active\" && (plan.version ?? 0) > 1;` (PlanTimeline.tsx:479). But plan.version is bumped by MANY operations, not just resume: add/swap/remove a meal or exercise (nyu_backend/app/routes/plan_edits.py `_bump_version`), macro/goal change and revert (app/routes/plans.py:314/469/758), and weekly-review apply (app/routes/reviews.py:293/913). Pause and resume are only two of the version-bumping paths (plans.py:979 pause, :1077 resume).\n\nSo an ACTIVE plan that a user customized even ONCE (e.g. added a single meal → version 2) but NEVER paused is treated as resumed:\n• the \"Resumed\" chip is highlighted as the current state (isCurrent at :486, `state.key === \"resumed\" && isResumed`),\n• the \"Active\" chip is NOT highlighted (:487 requires `!isResumed`),\n• tapping \"Resumed\" reads \"Resumed (version 2).\" (timestampForState :538-539), implying a pause→resume cycle that never happened.\n\nEXPECTED: \"Active\" highlighted; \"Resumed\" shown only after a genuine pause→resume.\nACTUAL: any edited-but-never-paused active plan shows \"Resumed\".\n\nREPRO: create/finalize a plan (version 1, active) → add one meal or change a macro target (version → 2, still active, never paused) → open /plan-timeline → the lifecycle pill row highlights \"Resumed\" and its tooltip says \"Resumed (version 2).\".\n\nSEVERITY: LOW-MED (misleading plan-lifecycle display; not destructive). Triggers for essentially every user who customizes their plan or receives a weekly-review update.\n\nFIX: derive resumed state from a real pause/resume signal (e.g. a resumed_at timestamp / pause-history flag from the plan record) rather than `version > 1`. If no such field is exposed, /plans/active should surface one; do not infer resume from version.",
       "createdAt": "2026-07-18T00:55:07.730Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: isResumed was derived from plan.version>1, but version is bumped by ANY edit (meal/exercise add/swap, macro/goal change, weekly-review apply) — not just resume — so every customized-but-never-paused active plan wrongly highlighted 'Resumed'. Fix: backend /plans/active now surfaces resumed_at (from the latest genuine 'Plan resumed' PlanVersion snapshot) [plans.py _latest_resumed_at]; PlanTimeline derives isResumed = active && !!resumed_at, and the tooltip shows the real resume date. Proof: version-2 edited plan shows 'Active' (not Resumed); a genuinely resumed plan lights 'Resumed'.",
+        "imagePath": "images/i-20260718-c5e8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-c5e8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0c7b8b7542e3780a6866464e550fdadb3f4189be",
+        "imageCommits": [
+          "0c7b8b7542e3780a6866464e550fdadb3f4189be"
+        ],
+        "fixedAt": "2026-07-18T01:05:57.809Z",
+        "by": "shakeebshaan",
+        "appCommit": "65008d80",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Root cause fixed at the data source (real resume signal) not the symptom; verified both states via scenario capture; tsc clean; backend deployed to prod."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
