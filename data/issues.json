@@ -2,13 +2,56 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260718-6dfd",
+      "route": "/plan-timeline",
+      "description": "[bug-hunt] Plan Timeline shows the RAW goal_type enum (\"recomp\" / \"endurance\") instead of a human label in the plan header + hero.\n\nComponent: src/pages/PlanTimeline.tsx (route /plan-timeline, reached from Nutrition → \"View plan timeline\").\n\nWHAT’S WRONG: GOAL_LABEL (PlanTimeline.tsx:39-46) maps { fat_loss, weight_loss, muscle_gain, weight_gain, maintenance, recomposition }. But the app’s REAL GoalType set is { fat_loss | muscle_gain | recomp | maintenance | endurance } — see src/types/api.ts:1152 and GoalChangeWizard.tsx:35-39, and the backend allows all five (nyu_backend/app/routes/onboarding.py:1331). GOAL_LABEL has NEITHER \"recomp\" NOR \"endurance\": it carries the wrong key \"recomposition\" (never emitted) and legacy \"weight_loss\"/\"weight_gain\" (not in GoalType). /plans/active returns the raw stored enum (nyu_backend/app/routes/plans.py:47 `goal_type: plan.goal_type`).\n\nResult: for a Body-Recomp or Endurance plan, `goalLabel = GOAL_LABEL[plan.goal_type] || plan.goal_type` (PlanTimeline.tsx:301) falls through to the raw value, so the hero card header renders \"12-Week recomp Plan\" / \"12-Week endurance Plan\" (line 338) with a lowercase enum instead of a proper label.\n\nEXPECTED: \"Body Recomp\" / \"Endurance\" (matching GoalChangeWizard’s own labels).\nACTUAL: raw lowercase \"recomp\" / \"endurance\".\n\nREPRO: set your goal to Body Recomp or Endurance via /goal-change (or pick it in onboarding) → open /plan-timeline → the hero header shows \"N-Week recomp Plan\" / \"N-Week endurance Plan\".\n\nSEVERITY: LOW (cosmetic label, affects 2 of 5 goal types).\n\nFIX: in GOAL_LABEL, add `recomp: \"Body Recomp\"` and `endurance: \"Endurance\"` (rename the dead \"recomposition\" key to \"recomp\"). The legacy weight_loss/weight_gain keys can stay as defensive fallbacks.",
+      "createdAt": "2026-07-18T00:55:07.730Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false
+    },
+    {
+      "id": "i-20260718-c5e8",
+      "route": "/plan-timeline",
+      "description": "[bug-hunt] Plan Timeline lifecycle wrongly shows \"Resumed\" as the current state for plans that were only EDITED, never paused.\n\nComponent: src/pages/PlanTimeline.tsx → PlanStateMachine (the Draft → Active → Paused → Resumed → Completed pill row), route /plan-timeline.\n\nWHAT’S WRONG: isResumed is derived purely from the version number — `const isResumed = currentStatus === \"active\" && (plan.version ?? 0) > 1;` (PlanTimeline.tsx:479). But plan.version is bumped by MANY operations, not just resume: add/swap/remove a meal or exercise (nyu_backend/app/routes/plan_edits.py `_bump_version`), macro/goal change and revert (app/routes/plans.py:314/469/758), and weekly-review apply (app/routes/reviews.py:293/913). Pause and resume are only two of the version-bumping paths (plans.py:979 pause, :1077 resume).\n\nSo an ACTIVE plan that a user customized even ONCE (e.g. added a single meal → version 2) but NEVER paused is treated as resumed:\n• the \"Resumed\" chip is highlighted as the current state (isCurrent at :486, `state.key === \"resumed\" && isResumed`),\n• the \"Active\" chip is NOT highlighted (:487 requires `!isResumed`),\n• tapping \"Resumed\" reads \"Resumed (version 2).\" (timestampForState :538-539), implying a pause→resume cycle that never happened.\n\nEXPECTED: \"Active\" highlighted; \"Resumed\" shown only after a genuine pause→resume.\nACTUAL: any edited-but-never-paused active plan shows \"Resumed\".\n\nREPRO: create/finalize a plan (version 1, active) → add one meal or change a macro target (version → 2, still active, never paused) → open /plan-timeline → the lifecycle pill row highlights \"Resumed\" and its tooltip says \"Resumed (version 2).\".\n\nSEVERITY: LOW-MED (misleading plan-lifecycle display; not destructive). Triggers for essentially every user who customizes their plan or receives a weekly-review update.\n\nFIX: derive resumed state from a real pause/resume signal (e.g. a resumed_at timestamp / pause-history flag from the plan record) rather than `version > 1`. If no such field is exposed, /plans/active should surface one; do not infer resume from version.",
+      "createdAt": "2026-07-18T00:55:07.730Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false
+    },
+    {
       "id": "i-20260718-6a4d",
       "createdAt": "2026-07-18T00:40:00.000Z",
       "status": "open",
       "description": "[discovery] Outlets added: 2. Pitch-ready: Storyboard18. Escalated: 1.",
       "imagePaths": [],
       "imagePrivate": false,
-      "tags": ["discovery", "auto"],
+      "tags": [
+        "discovery",
+        "auto"
+      ],
       "author": "shakeebshaan",
       "route": null,
       "fix": null,
@@ -21,7 +64,10 @@
       "description": "[content] Published: Cheat Day vs Cheat Meal — Which One Actually Wrecks Weight Loss? — https://nyus.in/blog/cheat-day-vs-cheat-meal-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
       "imagePaths": [],
       "imagePrivate": false,
-      "tags": ["content", "auto"],
+      "tags": [
+        "content",
+        "auto"
+      ],
       "author": "shakeebshaan",
       "route": null,
       "fix": null,
