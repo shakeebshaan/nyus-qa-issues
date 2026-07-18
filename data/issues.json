@@ -2214,9 +2214,32 @@
         "03ff57f92840767560545338d350b6382e5c137c"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: editing a meal's ingredients saves the newer 'rows_v2' format, but the diet-plan day view only understood the old format, so it couldn't read the edited meal's calories and showed 0 kcal / 0g macros. Fix: the day view now reads the edited rows' own calories and macros directly, matching the recipe screen — your edited 'Meal 1' now correctly shows 424 kcal (P40 C55 F5). Backend fix deployed to production and verified live on your account.",
+        "imagePath": "images/i-20260718-f6b8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-f6b8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f723102662cccd4f90a4d3ca1404e3dfadf04eb8",
+        "imageCommits": [
+          "f723102662cccd4f90a4d3ca1404e3dfadf04eb8"
+        ],
+        "fixedAt": "2026-07-18T09:25:02.545Z",
+        "by": "shakeebshaan",
+        "appCommit": "2a14138",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 90,
+          "note": "Live prod re-probe + 390x844 nutrition capture: Meal 1 shows 424 kcal/P40/C55/F5 (was 0)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260718-7121",
