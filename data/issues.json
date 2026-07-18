@@ -4,8 +4,30 @@
     {
       "id": "i-20260718-2e9c",
       "createdAt": "2026-07-18T00:07:30.540Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the partner-group chat \"N new messages\" pill counted every new item in the merged thread — group events (a partner logging a meal, a plan change, someone joining) and even your own just-sent message — not just incoming partner messages, so it overcounted and could show a count when no message actually arrived. Fix: the unread badge now counts only newly-arrived incoming partner messages; events and your own sends no longer bump it. Verified on the real chat component: with your screen scrolled up, 2 events + your own message + 1 partner message correctly shows \"1 new message\".",
+        "imagePath": "images/i-20260718-2e9c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-2e9c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7174bc7b769ab0fff182a5866539ecf015536163",
+        "imageCommits": [
+          "7174bc7b769ab0fff182a5866539ecf015536163"
+        ],
+        "fixedAt": "2026-07-18T00:20:59.808Z",
+        "by": "shakeebshaan",
+        "appCommit": "a3ce6a98",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root cause fixed (incoming-only delta), mirrors owner-accepted 7c1d fix; 5 unit tests green, tsc clean, adversarial review clean, proof capture shows correct '1 new message'."
+        }
+      },
       "history": [],
       "route": "/partners/:groupId",
       "description": "[bug-hunt] Partner group chat \"N new messages\" pill overcounts — it counts group EVENTS and your OWN messages, not just incoming partner messages.\n\nComponent: src/components/partners/PartnerChatThread.tsx (used by PartnerGroupHub, /partners/:groupId → Chat tab)\n\nWHAT'S WRONG: The unread pill (\"↓ N new messages\", PartnerChatThread.tsx:501-521) should surface only NEW INCOMING partner messages that arrived while you were scrolled up. But the counter (useEffect at :333-353) computes `delta = items.length - prevItemsLengthRef` over the MERGED `items` array (events + messages, built at :287-304) with NO sender and NO kind filter. When `delta > 0` and you are not at the bottom it does `setUnreadCount((n) => n + delta)`.\n\nTwo over-counts result:\n1. GROUP EVENTS count as \"messages\". The events query ([\"partner-group\", groupId, \"events\"]) is refetched live whenever a partner logs a meal / starts or finishes a session / logs a set / the leader changes the plan (PartnerGroupHub.tsx:133-159 socket→invalidateQueries). Each new event grows `items`, so while you are scrolled up the pill can read \"2 new messages\" when ZERO messages arrived — those are meal-logged / member-joined / plan-change event cards, not messages.\n2. YOUR OWN messages count. Partner chat has NO optimistic local append — a message you send only renders when it echoes back on the `partner_group_message` socket event (PartnerGroupHub.tsx:191-198 → setLiveMessages). That echo grows `items`; sending does not auto-scroll (handleSend never scrolls), so if you were scrolled up reading history and send from the pinned composer, the pill increments \"1 new message\" for your own message.\n\nThe render layer already distinguishes both dimensions — isFromMe (`(msg.is_from_me) ?? senderId === currentUserId`, :458-460) and event-vs-message (`item.kind`) — but the unread counter ignores both and keys purely off `items.length`.\n\nEXPECTED: pill counts only newly-arrived items where `item.kind === \"message\"` AND the message is not from the current user; wording \"N new messages\" then matches reality.\nACTUAL: counts every new item including events and your own echoes; the \"N new messages\" label is wrong when the new items are events.\n\nSAME CLASS as fixed i-20260717-7c1d (coach-chat \"N new\" pill counted own/collapsed messages) but a DIFFERENT component: CoachChat used useChatScroll (fixed there); PartnerChatThread has its own unread logic that was never given the same guard. Not a duplicate of 7c1d — different file, different route.\n\nREPRO: open a partner group with ≥2 members → Chat tab → scroll UP away from the bottom, then either (a) have another member log a meal or the leader push a plan change (an event arrives), or (b) type in the pinned composer and send a message. The pill shows \"N new messages\" counting those events / your own message rather than only incoming partner messages.\n\nSEVERITY: LOW (misleading count/label on the partner-group chat surface; tapping the pill still scrolls to bottom correctly).\n\nFIX: in the :333-353 delta effect, track the previous count over the filtered incoming-message list (`items.filter(it => it.kind === \"message\" && !isFromMe(it.message))`), not raw `items.length`; increment unread only by newly-appended incoming partner messages. Mirrors 7c1d's visibleMessages + !is_from_me fix.",
