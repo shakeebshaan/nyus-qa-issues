@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260718-9a4b",
+      "createdAt": "2026-07-18T10:41:30.000Z",
+      "route": "/measurements",
+      "description": "[bug-hunt] Body Measurements save-failure handler calls an undefined function -> ReferenceError instead of the intended error toast.\n\nWhat's wrong: src/pages/Measurements.tsx line 244 (logMeasurementMutation.onError) does  description: apiErrorMessage(error) ?? \"Please try again.\" , but apiErrorMessage is NOT imported in this file - line 8 imports only { apiErrorRaw } from '@/lib/api-error'. apiErrorMessage is a real export of that module (api-error.ts:38) but is never imported here and not defined locally.\n\nProof: npx tsc -b reports  src/pages/Measurements.tsx(244,22): error TS2304: Cannot find name 'apiErrorMessage'.  It still ships because npm run build is a vite/esbuild build with no typecheck (same class + gotcha as i-20260716-1d76 / i-20260621-8625).\n\nExpected vs actual: on a failed measurement save (network error / 5xx / offline / validation) the user should get the destructive toast 'Couldn't save measurement'. Instead, evaluating the toast() argument throws ReferenceError: apiErrorMessage is not defined before toast() is invoked, so NO error toast renders and the failure surfaces only as an uncaught console error. captureException (line 240, which uses the imported apiErrorRaw) still runs, so the crash is silent to the user.\n\nRepro: open /measurements, pick a body part, enter a value, force the POST /measurements to fail (offline or 500), tap 'Save measurement'. Console shows ReferenceError; no toast appears.\n\nFix: add apiErrorMessage to the line-8 import: import { apiErrorMessage, apiErrorRaw } from '@/lib/api-error';",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
+      "id": "i-20260718-64f0",
+      "createdAt": "2026-07-18T10:41:30.000Z",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Weekly Progress 'TRENDS' chart - the Weight row of the multi-metric bar chart renders near-identical full-height bars that convey no trend, because weight is normalized against a zero baseline.\n\nWhat's wrong: src/components/progress/MultiMetricBarChart.tsx BarRow (L88-95) sets maxValue = max value across the week, then each bar height = value / maxValue (L126-130). That zero-baseline normalization is right for count-like metrics (calories 0-2500, workouts 0/1) but wrong for weight, whose day-to-day variation is a tiny fraction of its absolute value. For a realistic week of e.g. 80.9-82.0 kg, bar heights come out 98.7%-100% - differences under 1px on the 48px-tall bar area, so every weight bar looks identical and the row shows no day-to-day movement.\n\nContext: MultiMetricBarChart is the only bar chart actually rendered (WeeklyProgress.tsx:820, 'Daily breakdown' / 'TRENDS' section; the standalone WeightTrendChart/CalorieBalanceChart/StepsActivityChart/MacroAdherenceChart are barrel-exported but not mounted anywhere). The repo already has the correct pattern for weight: WeightTrendChart.tsx uses a windowed YAxis domain [floor(min-padding), ceil(max+padding)] (L108) so small weight deltas stay visible; the multi-metric weight row does not.\n\nExpected vs actual: the Weight row should visibly reflect the week's ups/downs; actually it is a flat wall of ~full bars. (The per-day drilldown drawer shows the correct numeric value, so no data is lost - only the at-a-glance chart is uninformative.)\n\nFix: normalize the weight row against a windowed min-max domain (min-padding .. max+padding) like WeightTrendChart, instead of value/maxValue; or render weight as a line/sparkline rather than a zero-baseline bar.",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260718-p7f2",
       "createdAt": "2026-07-18T09:09:40.086Z",
       "status": "open",
