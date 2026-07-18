@@ -2052,7 +2052,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Data-loss - investigated both repos, need one detail to fix the exact path safely (won't blind-edit a persistence-delete path on your live data). Targeted swaps are SAFE: PUT /plans/:id/swap-meal and /ai/meal-customize/apply only touch the one meal row, no wipe. The wipe comes from a FULL-WEEK REBUILD path that does DietPlan delete(plan_id, week_number=1) then re-inserts (plan_generator.py:1989, diet_builder_service, save-custom-plan, fast_plan_assembler:2524). If your 'change Wednesday to bone broth' went through a rebuild/regenerate/'build it myself' flow, that delete drops the whole week and the re-insert only writes the days present in the new payload - so earlier days you'd hand-customized vanish ('No meals planned'). QUESTION: how did you change Wednesday's meals - (a) tapped a single meal -> Customize/Swap sheet, (b) a 'regenerate week' / rebuild-my-plan action, or (c) the diet builder? Tell me which and I'll make that path a per-day merge (delete+reinsert ONLY the edited day, preserve the rest) and add a guard so a partial payload can never wipe untouched days. Recommend I ship the merge-not-replace guard on the rebuild path regardless - say 'fix the rebuild' and I'll implement + add a regression test.",
+      "reviewedAt": "2026-07-18T04:12:00.766Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260718-443b",
