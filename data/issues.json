@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: dashboard date labels were built with new Date(\"YYYY-MM-DD\"), which JavaScript parses as UTC midnight — so for users west of UTC (the Americas) a night logged Jul 16 showed 'Jul 15', and the Sleep card's recency line could mis-classify near midnight. Fix: added a parseLocalDate() helper that builds the date from local calendar parts, and used it in all eight chart/card label formatters (Sleep card + Sleep/Steps/Macro/Calorie/Weight/Measurement charts). Verified by rendering the real charts under a forced America/Los_Angeles timezone: the last day now correctly reads 'Jul 16' / 'Thu'.",
+        "imagePath": "images/i-20260718-5c1a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-5c1a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "85d4b3cf14e81d9f5962a7900b00757ec5008b9f",
+        "imageCommits": [
+          "85d4b3cf14e81d9f5962a7900b00757ec5008b9f"
+        ],
+        "fixedAt": "2026-07-18T21:00:18.543Z",
+        "by": "shakeebshaan",
+        "appCommit": "5dc277f8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root cause fixed at all 8 sites via one shared helper; deterministic TZ unit test encodes it; full test:unit green (5680); runtime proof under UTC-7."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260718-b7c2",
