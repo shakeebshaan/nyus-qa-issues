@@ -1991,9 +1991,32 @@
         "72fbe49df70fca0232c0f96c4dc95ac065c96040"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: meal rows in Your Week's Plan (DietPlanWeek.tsx) were display-only, so meals forgotten on a past day couldn't be logged. Fix: made each meal row's status icon a real toggle button that calls /diet/log-meal (keyed on the date-scoped assigned_meal_id, no server date guard) and refetches that day; added a hint 'Tap a meal to mark it eaten - you can log past days you forgot too.' Proof: expanded past day Mon 13, tapped Bone brawth -> logged (green check + strikethrough, day now 1/6 eaten, weekly progress recounted).",
+        "imagePath": "images/i-20260718-9f24-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-9f24-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "08d26006d050670f3c389e10db069b22fdfa015e",
+        "imageCommits": [
+          "08d26006d050670f3c389e10db069b22fdfa015e"
+        ],
+        "fixedAt": "2026-07-18T03:34:07.416Z",
+        "by": "shakeebshaan",
+        "appCommit": "24f94ede",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Answers the owner's exact ask (where to log forgotten past days) inline on the screen they were viewing, with a discoverability hint; verified end-to-end on a real past day. Backend already supports date-scoped backfill, so no data risk."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260718-326f",
