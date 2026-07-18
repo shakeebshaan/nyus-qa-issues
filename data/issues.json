@@ -2304,9 +2304,32 @@
         "01566a87bfc4860932a54fce25e8c81cad1f6f71"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the /diet/plan day-view card derived meal_name from _derive_meal_name(meal.name,...) using only the AssignedMeal slot label — the custom builder stamps that as 'Meal 1', and _GENERIC_MEAL_SLOTS did not cover numbered 'Meal N' labels, so the card showed 'Meal 1' verbatim while the detail screen titled the same meal with recipe.name ('Oats and whey'). (The 0 kcal was the separate rows_v2 fix already shipped.) Fix (backend 414ca65, deployed): added _is_generic_slot() covering the slot words + a 'Meal N' regex, and when the slot label is generic the card now prefers the linked recipe's real name before composing from ingredients — mirroring the detail screen; applied to both the day-view card and the plan-history endpoint. Verified live: the oats-bowl meal now renders its real name + 424 kcal instead of 'Meal 1 / 0 kcal'.",
+        "imagePath": "images/i-20260718-a7bb-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-a7bb-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c5d579477c8f87e794c3992b2f28c193b47a069d",
+        "imageCommits": [
+          "c5d579477c8f87e794c3992b2f28c193b47a069d"
+        ],
+        "fixedAt": "2026-07-18T09:36:51.345Z",
+        "by": "shakeebshaan",
+        "appCommit": "5504477c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Precise root cause (card ignored recipe.name + 'Meal N' not in generic-slot set); fixed both read paths; verified LIVE on owner acct via GET /diet/plan (07-17 now returns 'Oats and whey' 496 kcal matching the detail screenshot exactly) and captured the /nutrition card showing real name + 424 kcal, no more 'Meal 1 / 0 kcal'."
+        }
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
