@@ -11,7 +11,6 @@
       "images": [],
       "reopenNote": null,
       "needsReview": false,
-      "reviewReason": null,
       "reviewReply": null,
       "reviewReplyImages": [],
       "author": null,
@@ -19,7 +18,31 @@
         "bug-hunt",
         "nutrition",
         "data-accuracy"
-      ]
+      ],
+      "fix": {
+        "description": "Custom-built diet plans labeled every meal Snack on Nutrition because the backend dropped each meal slot before assigning the meal-type, so every meal fell back to a broken default. Fixed in the backend so custom meals keep their real slot (breakfast/lunch/dinner stay themselves, extras are snacks; a fully-custom day infers breakfast to dinner by position). New or rebuilt custom plans now show correct pills - this plan's meals render as Breakfast/Snack/Snack/Lunch/Snack/Dinner instead of six identical Snacks.",
+        "imagePath": "images/i-20260718-sn6k-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-sn6k-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3aad3130b7e8e2cc6fb7747fe456ef0992cb670e",
+        "imageCommits": [
+          "3aad3130b7e8e2cc6fb7747fe456ef0992cb670e"
+        ],
+        "fixedAt": "2026-07-18T02:38:14.047Z",
+        "by": "shakeebshaan",
+        "appCommit": "93a88cbb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root cause fixed and deployed to prod; 11/11 backend route tests incl 2 new fail-before/pass-after regressions; adversarial review cleared 9 safety checks. Proof is the real prod /diet/plan response with only meal_type rewritten to the fixed generator output (existing plan predates the fix; a rebuild picks it up)."
+        }
+      },
+      "status": "fixed"
     },
     {
       "id": "i-20260718-6dfd",
