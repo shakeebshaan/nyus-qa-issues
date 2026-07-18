@@ -2579,7 +2579,17 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root cause found (backend streak rule asymmetry). The Diet card DOES render a streak row (verified: DashboardDietCard -> StreakRow renders whenever a diet plan exists, component-harness confirmed). The reason it reads as 'missing' vs Weight/Activity: the three streaks use DIFFERENT day-complete rules in backend.py -> get dashboard overview: WEIGHT streak = any weight logged that day; ACTIVITY streak = any ONE set logged that day; but DIET streak = ALL assigned meals eaten that day (backend.py:3795 'eaten >= total'). So a normal day like yours (4 of 6 meals logged) never counts, and the diet streak stays 0 (shows the 'Start your streak' nudge) while Weight/Activity climb to 2. OWNER DECISION (gamification semantics — I don't want to change a calm-gamification rule blind): should a diet streak day require (a) hitting your full meal target [current], (b) logging ANY meal that day [parallel to Activity's 'any set'], or (c) a threshold like >=50 percent of meals? Tell me which and I'll ship + deploy the backend one-liner. Note: I can't capture your live dashboard to verify because the QA test account is 401/unloadable on prod right now.",
+      "reviewedAt": "2026-07-18T19:32:09.277Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "dashboard",
+        "gamification",
+        "backend",
+        "owner-decision"
+      ]
     },
     {
       "id": "i-20260718-4fad",
