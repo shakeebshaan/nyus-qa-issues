@@ -1897,7 +1897,16 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Scoped it (code-checked both repos) - this is a large new feature, not a bounded fix, so flagging for your call before building. Ask: tapping a dashboard card opens cross-domain correlation analytics (sleep vs meals vs supplements vs workout vs activity). Today the Weight/Diet/Activity/Fasting cards each just navigate to their own detail page; the only multi-domain views are /health-score (6 pillars) and /ai/overview (weekly wins/tips) - neither shows correlations. A real 'how did X affect Y' view needs a new backend endpoint that time-series-joins ~5-6 logging tables (sleep, meals, supplements, workout, activity), a new detail screen/sheet per card, and new overlay/correlation charts (~1-2 sprints). Before I build: (1) which cards should be tappable into this? (2) a full correlation engine, or a simpler 'overlay any two metrics on one timeline' v1? (3) reuse/extend /health-score, or a new /insights screen? Recommend a v1 = tap a card -> sheet overlaying that metric vs one you pick on a 30-day timeline, deriving from existing logs (no correlation math yet). Say 'build v1' and I'll implement.",
+      "reviewedAt": "2026-07-18T03:10:53.015Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "feature",
+        "dashboard",
+        "needs-scope"
+      ]
     },
     {
       "id": "i-20260718-033b",
