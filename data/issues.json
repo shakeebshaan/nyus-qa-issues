@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260718-b7c2",
+      "createdAt": "2026-07-18T15:55:00.000Z",
+      "route": "/measurements",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "description": "[bug-hunt] Body Measurements ignores an imperial user’s unit_preference when the profile cache is cold — the cm/inch default fix is incomplete.\n\nWhat’s wrong: src/pages/Measurements.tsx seeds the unit toggle ONCE at mount by reading the React-Query cache for key [profile-basic-info] (L78-81): cached?.unit_preference === imperial ? inch : cm. But this component never FETCHES [profile-basic-info] — it queries [user-profile] (L95-99, profileService.getProfile) and [measurements-overview]. There is NO effect that re-derives `unit` once the profile resolves. So when the [profile-basic-info] cache is empty at mount, an imperial user is shown centimetres and stays on cm until they manually toggle.\n\nExpected vs actual: An imperial (unit_preference=imperial) user opening Measurements should default to inch. Actual: defaults to cm whenever [profile-basic-info] wasn’t already cached by a prior screen.\n\nThe recent fix (commit 595b3015 “Measurements cm/inch default respects unit_preference”, +5/-1 lines) added only the cache read — it works when the cache is warm (e.g. after visiting Profile/LogWeight which DO fetch that key) but does nothing on a cold cache. The comment on L77 claims it ‘mirrors LogWeight.tsx’, but LogWeight actually (a) fetches [profile-basic-info] itself (LogWeight.tsx L158-162) AND (b) has a one-shot sync effect (L224-233, `unitInitDone` ref) that calls handleUnitChange(lb) once profileData loads imperial. Measurements copied the cache-init but not the fetch + sync, so it self-corrects only by luck of a warm cache.\n\nRepro: cold app start (or hard refresh) navigating directly to /measurements as an imperial user, with no prior screen having loaded [profile-basic-info] → toggle shows cm. Note: saved values are always canonical cm so no data corruption; this is a display-default bug.\n\nFix: mirror LogWeight fully — read unit_preference from the [user-profile] query this component already runs (or fetch [profile-basic-info]) and set `unit` in a one-shot effect when the profile resolves, guarded so it never overrides a manual toggle."
+    },
+    {
+      "id": "i-20260718-3e9f",
+      "createdAt": "2026-07-18T15:55:10.000Z",
+      "route": "/choose-plan",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "description": "[bug-hunt] Choose Plan shows “up to 0 kg” in the header and a “0 kg” badge for weight-GAIN / muscle-gain goals.\n\nWhat’s wrong: src/pages/ChoosePlan.tsx L403 computes kgsToLose = hasWeightProjection ? Math.max(0, currentWeightKg - goalWeightKg) : 0. For a gain goal (goalWeightKg > currentWeightKg) that subtraction is negative and Math.max clamps it to 0. That 0 is then rendered in two user-visible places:\n  • Header (L912-914): t(choose_plan.header.title_with_goal, { count: Math.round(kgsToLose) }) → en.json L1407 “Pick your plan · up to {{count}} kg” → “Pick your plan · up to 0 kg”.\n  • Recommended-card badge (L1046): {Math.round(kgsToLose)} kg → “0 kg”.\n\nExpected vs actual: A user whose goal is to gain (e.g. current 70 kg → goal 80 kg) should see their 10 kg journey (or neutral copy), not “up to 0 kg”. The projection chart just below is direction-correct (it plots current→goal as a rising curve and its aria uses a loss/change split, L1171), so the header contradicts the chart on the same screen.\n\nRepro: onboard/set a weight-gain or muscle-gain goal with current < goal weight, reach /choose-plan (paywall) → header reads “Pick your plan · up to 0 kg” and the recommended card badge reads “0 kg”. Loss goals are unaffected (positive delta).\n\nRoot cause: kgsToLose is loss-biased. Fix: use Math.abs(currentWeightKg - goalWeightKg) for the magnitude and make the header/badge copy direction-aware (lose vs gain), or hide the “up to X kg” framing for gain/maintain goals."
+    },
+    {
       "id": "i-20260718-mn4k",
       "createdAt": "2026-07-18T13:20:00.000Z",
       "description": "[press] Press kit: §4 Key facts (blog/content page count recounted, 1,800→1,801, top-level guides 83→84, traced to commit d9082f88). Article drafted: The Missing Layer in India's Digital Health Stack: Nobody Has Solved Food Data Yet (target: MediaNama, 860 words). Escalated: 1 (MediaNama story-tip pitch, form/email route not re-verified this tick, founder confirm needed).",
