@@ -2704,8 +2704,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Root cause found (code): the Activity 'Today's Workout' header shows the 'Weekly Schedule' badge + a per-weekday 'Rest Day' whenever the active plan is NOT progressive (src/components/activity/WorkoutSessionHeader.tsx:24, gated on isProgressiveWorkout). Your plan is a LEGACY weekday-pinned plan created before the progressive-save fix (ab0ff39 changed /workout/save-plan to save progressive/custom schedules); pre-fix plans are still stored weekday-pinned, which is why Saturday is a forced Rest Day and it reads 'Weekly Schedule' instead of your custom schedule. No safe blanket DB migration exists (would corrupt other users' genuinely weekly plans). Fastest fix on your end: Activity -> Customize -> Save to rebuild the plan as progressive/custom (no forced rest days). OWNER DECISION NEEDED: (a) I do a TARGETED migration of just your active plan to progressive (needs your account — the QA test account is currently 401/unloadable on prod so I can't inspect your plan headless), or (b) you rebuild via Customize->Save. Reply which you prefer and I'll proceed.",
-      "reviewedAt": "2026-07-18T19:27:40.989Z",
+      "reviewReason": "Root cause is data-specific (your active plan is a LEGACY weekday-pinned plan created before the progressive-save fix ab0ff39; it genuinely stores Saturday as a rest day, so the header correctly shows 'Weekly Schedule'). No safe shared-code fix exists — changing the header logic would mislabel real weekly-plan users, and a blanket DB migration would corrupt their plans. Two owner options: (a) fastest — open Activity -> Customize -> Save to rebuild your plan as progressive/custom (no forced rest days); or (b) tell me your account email and I'll do a TARGETED migration of just your plan. i-20260718-41d4 is a duplicate, tracked here.",
+      "reviewedAt": "2026-07-19T02:28:28.238Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "activity",
