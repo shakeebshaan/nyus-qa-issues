@@ -2762,14 +2762,14 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Root-caused (both repos). The wait you see is a SINGLE blocking whole-plan save: tapping Save plan fires POST /onboarding/save-custom-plan (customPlanService.saveCustomPlan, up to 90s), and the Saving your plan overlay (CustomizeDiet.tsx:286) stays up for that whole round-trip. There is NO per-meal save today: while you edit, meals persist only to a local draft (nyus_builder_draft, debounced, never hits the network), so ALL the write cost lands at the final tap. That is why it feels like a long wait here. Making it save-by-meal is a genuine backend-contract change, not a bounded fix, and it lands on the SAME shared write path as i-20260718-326f: save_custom_plan deletes the whole weeks DietPlan rows + the legacy bridge deactivates all active plans and rebuilds AssignedMeal, and that path is also driven by the Saturday pre-gen cron. Blind-shipping incremental partial writes into that path unattended risks corrupting live plans, and I cannot verify it E2E headless (QA test account is 401/unloadable on prod). Proposed SAFE v1 (isolates the risk): a new lightweight PATCH endpoint that upserts ONE edited day/meal into a server-side DRAFT plan only (never touching your live active plan, the bridge, or the cron); the builder calls it debounced as you add/edit each meal; the final Save plan then just flips the already-staged draft to active, which is fast (little to no wait). This keeps the local draft as the safety net and never runs the risky whole-week bridge write mid-edit. Confirm this draft-then-commit approach (vs an optimistic background save, which I do not recommend because a silent save failure on a core flow is worse than a short wait) and I will implement + deploy with a staging check.",
-      "reviewedAt": "2026-07-19T01:31:40.361Z",
+      "reviewReason": "Root-caused, but this is a product/architecture call on the plan-save contract, so flagging rather than guessing. Your ask — save each meal to the backend as you add it so the final Save is instant — needs an incremental-save path the builder does NOT have today: adding an ingredient only updates local state + a localStorage draft; the ONLY backend write is one terminal full-plan POST (/onboarding/save-custom-plan) when you tap Save plan. That single save is what you wait on. Its two biggest time sinks: (1) a synchronous OpenAI micronutrient-estimation call INSIDE the save (1-2 blocking LLM calls per plan), and (2) a per-ingredient DB flush loop; the save also fully wipes and rebuilds every day of the plan each time. Good news: single-meal endpoints ALREADY exist server-side (add-meal / swap-meal / adjust-portion on the durable plan) — the builder just does not use them yet. This is the SAME save/finalize contract as two items you already have open: 938c (store on frontend, ids on backend) and 326f (changing one day wiped the others — same full-replace root cause). Recommend deciding all three together. Two ways forward: PATH A (surgical interim, no contract change): move the micronutrient LLM call out of the request path (best-effort already — a failure just zeros micros) + batch the per-ingredient writes — cuts most of the Save-plan wait immediately. PATH B (your literal ask): wire the builder to persist each meal to the durable plan via the existing per-meal endpoints as you edit, so the final Save is near-instant AND day-edits stop wiping siblings (also closes 326f) — bigger, depends on the id decision in 938c. Recommendation: ship PATH A now for the immediate speed win, do PATH B alongside 938c/326f. Reply build A, build B, or both. (I did not ship a backend timing change unprompted because it cannot be verified end-to-end headless right now — the QA data account 401s — and it touches the same contract as 938c/326f.)",
+      "reviewedAt": "2026-07-19T01:36:06.366Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
-        "perf",
-        "plan-builder",
-        "diet",
-        "owner-confirm"
+        "builder",
+        "save",
+        "performance",
+        "architecture"
       ]
     },
     {
