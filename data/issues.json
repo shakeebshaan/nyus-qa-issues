@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: badge-unlock toasts were de-duplicated by the badge's display NAME, so if two different badges shared a display name in the same unlock check, the second real unlock was silently swallowed (no toast). Fix: de-dup now keys on each badge's stable key (falling back to the name for keyless callers), so every distinct badge unlock shows its own toast exactly once. This is a logic fix with no visible screen change, so the attached proof is a summary card (root cause + fix + regression test).",
+        "imagePath": "images/i-20260719-bd7c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-bd7c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2627da8270b76e7298303abdcd659142c4151c38",
+        "imageCommits": [
+          "2627da8270b76e7298303abdcd659142c4151c38"
+        ],
+        "fixedAt": "2026-07-19T23:04:00.763Z",
+        "by": "shakeebshaan",
+        "appCommit": "68c1b18f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Deduped on stable badgeKey with safe name fallback; test asserts two same-name/different-key badges both toast (fail-before on name-keyed code); single dedup choke point; adversarial review CONFIRMED_REAL."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260719-7f3a",
