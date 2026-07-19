@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-4b2e",
+      "createdAt": "2026-07-19T23:24:05.717Z",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Nutrition intermittent-fasting banner: on a backend-flagged \"intermittent\" fasting day, tapping \"End fast\" does NOT stick on the first tap — the shared fast restarts itself within ~1s so the ring/timer reappears and the button feels dead. A second tap is needed.\n\nROUTE: /nutrition (FastingBanner)\n\nROOT CAUSE: src/pages/Nutrition.tsx:101-114 — the reconcile useEffect re-creates the shared stopwatch whenever there is NO active fast on a backend intermittent fasting day:\n  if (!fastingDay || fastingType !== 'intermittent' || active) return;\n  ... startFast('16:8', 16, start);\nIts deps are [fastingDay, fastingType, active, startFast].\nhandleEndFast (Nutrition.tsx:127-131) does: endFast() (clears the shared active -> active=null) then onSetFasting(false,null).\nBut onSetFasting is NOT optimistic: useNutritionData.tsx:392-405 fires setFastingMutation and only flips fastingDay/fastingType via refetchFasting() in onSuccess (fastingDay derives from the server query cache, useNutritionData.tsx:512-513). So immediately after End: active=null but fastingDay is STILL true and fastingType STILL 'intermittent'.\nReact re-renders on active->null, the effect re-runs, the guard is false (fastingDay true, type intermittent, active null), computeBackdatedStart() resolves, loadActive() is null, and startFast() re-arms the fast the user just ended.\n\nWHY THE RACE RELIABLY LOSES: the resurrect path needs ONE round-trip (2 parallel getDailyLogs in computeBackdatedStart). The cancel path needs TWO sequential round-trips (POST setFastingStatus -> then GET getFastingStatus refetch) before fastingDay flips to false and the effect cleanup sets cancelled=true. One trip beats two, so the restart wins at normal latency.\n\nREPRO:\n1. On /nutrition tap the 'Intermittent' fasting-day chip (sets backend fasting_day=true, type=intermittent -> shared 16:8 stopwatch auto-starts, ring shows).\n2. Tap 'End fast'.\n3. EXPECTED: the fasting strip/ring disappears and stays gone.\n4. ACTUAL: the ring vanishes then re-appears within ~1s (fast restarted). Only a SECOND 'End fast' tap (after the backend flag has flipped) actually ends it.\n\nFIX: the reconcile effect must not resurrect a fast the user just ended. Options: (a) set a local 'endedToday' ref in handleEndFast and short-circuit the reconcile effect while set for today; (b) make onSetFasting optimistic (setQueryData ['fasting-status', today] to fasting_day:false immediately so fastingDay flips synchronously); (c) only auto-start in the reconcile effect on mount, not on every active-goes-null transition.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260719-bd7c",
       "createdAt": "2026-07-19T21:53:01.000Z",
       "route": "/profile",
