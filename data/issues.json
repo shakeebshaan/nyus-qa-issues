@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-7f3a",
+      "createdAt": "2026-07-19T21:09:50.000Z",
+      "route": "/notifications",
+      "description": "[bug-hunt] Notifications list — tapping several backend-persisted scheduled-reminder notifications does NOTHING (dead tap), because the in-app tap handler's type switch was never updated to cover them, even though the SAME types deep-link correctly when tapped from the OS push tray.\n\nWHERE: src/pages/Notifications.tsx handleNotificationClick (lines 386-467). When meta_data.link is absent it falls to a switch on notification.type; there is NO case for these persisted types, so they hit `default: break` and never navigate. getIconForType/getColorForType also lack them, so the rows render a generic gray Bell icon.\n\nThe backend persists an in-app Notification row for EVERY type via send_notification -> create_notification (nyu_backend/app/services/notification_service.py:366-377, called even when the push is suppressed), so these rows DO appear in the list:\n  * weight_reminder — weekly weigh-in job (app/services/notification_jobs.py:220), meta {action:'log_weight'} (NO link) -> should open /log-weight (push.ts:267 routes weight_reminder -> /log-weight).\n  * breakfast_reminder / dinner_reminder — meal jobs (notification_jobs.py:152-160), meta {meal_number, action:'log_meal'} (NO link) -> should open /nutrition (exactly like the generic meal_reminder case already does).\n  * health_score_quiz_reminder / health_score_retake_reminder — scheduler_jobs.py:1351, NO meta at all -> should open /health-quiz (push.ts:271-276 routes both).\n  (water_reminder is in the same untriaged class: TYPE_TO_CATEGORY has it, no switch case.)\n\nThe push-tap path (src/capacitor/push.ts pushNotificationActionPerformed, lines 229-279) DOES route every one of these types, which proves both the intended destinations and that the in-app list simply drifted out of sync with the push handler.\n\nEXPECTED: tapping a weekly-weigh-in / meal-reminder / health-score-quiz notification in the Notifications list opens the same screen the push tap opens.\nACTUAL: tap does nothing (default: break); the row also shows a generic Bell icon + muted color instead of a type-specific one.\n\nREPRO: have any of these rows in /notifications (e.g. the Monday weekly weigh-in, or a breakfast/dinner reminder) -> tap it -> no navigation. Compare with tapping the same notification from the OS push tray -> navigates correctly.\n\nFIX: add the missing cases to handleNotificationClick's switch (weight_reminder -> /log-weight; breakfast_reminder/dinner_reminder/water_reminder -> /nutrition; health_score_quiz_reminder/health_score_retake_reminder -> /health-quiz) and matching getIconForType/getColorForType entries, mirroring push.ts. Better: extract ONE shared type->route map used by both push.ts and Notifications.tsx so the two surfaces can never drift again.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260719-b9c4",
+      "createdAt": "2026-07-19T21:09:50.000Z",
+      "route": "/notifications",
+      "description": "[bug-hunt] Notifications -> Weekly Report modal shows the week date range one day early for negative-UTC (Americas) users — a missed site of the parseLocalDate TZ fix (i-20260718-5c1a).\n\nWHERE: src/pages/Notifications.tsx:974 formats the weekly-summary range with `new Date(weeklySummary.week_start).toLocaleDateString(...)` and `new Date(weeklySummary.week_end)...`. The backend returns week_start/week_end as bare YYYY-MM-DD (date.isoformat(), nyu_backend/backend.py:4557-4558), and `new Date('YYYY-MM-DD')` parses as UTC midnight, so toLocaleDateString shifts it back a day in any timezone west of UTC.\n\nThe SAME file already fixed this class in the sibling Daily Summary modal, which uses parseLocalDate(dailySummary.date) (Notifications.tsx:1086) — and parseLocalDate is already imported at line 7 — but the Weekly Report modal was left on the naive new Date() parse. The 5c1a fix converted 8 chart/card formatters but did not touch this modal.\n\nEXPECTED: a week of Jul 14–Jul 20 renders 'Jul 14 - Jul 20'.\nACTUAL (America/Los_Angeles, UTC-7): renders 'Jul 13 - Jul 19'. IST (UTC+5:30) users are unaffected, so India users don't see it.\n\nREPRO: set device/browser TZ to America/Los_Angeles -> open /notifications -> trigger the Weekly Report modal (tap a weekly_report notification) -> the date range reads one day earlier than the real week.\n\nFIX: wrap week_start/week_end in parseLocalDate() before toLocaleDateString, exactly like the Daily Summary modal already does on line 1086. Low severity: display-only, Americas-only.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260719-c3d8",
       "createdAt": "2026-07-19T19:38:52.379Z",
       "route": "/weekly-review",
