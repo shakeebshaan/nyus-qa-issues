@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-mp7q",
+      "createdAt": "2026-07-19T07:39:00.033Z",
+      "route": "/nutrition",
+      "description": "[suggestion] Add a \"Meal Prep View\" on the Nutrition page that consolidates the week's assigned diet-plan meals into a shopping+batch-cook checklist grouped by shared base ingredients (e.g. all dals/sabzis/proteins that repeat across days), so a user can cook once on Sunday for 3-4 days instead of per-meal. Problem: NYUS already generates day-by-day diet plans (custom builder) and a Shopping List with a proposed cost-estimate suggestion (i-20260717-gbc1), but nothing groups meals by prep batch or shows which meals share a base recipe -- Indian home cooks overwhelmingly batch-cook (dal/sabzi for 3-4 days) and comparable trackers (Mealime, Paprika, PlateJoy) ship a consolidated \"prep day\" view; grep of src/ confirms no meal-prep/batch-cook grouping exists today (only per-day MealSlotCard rendering). Evidence: current diet plan UI (CustomDietBuilder, MealSlotCard) is strictly per-day/per-meal with no cross-day ingredient grouping. V1 scope: read-only view under Nutrition -> \"This Week\" tab -> new \"Prep\" sub-tab; group the already-generated week's AssignedMeals by matching base ingredient/recipe name (simple string/id match, no new AI call), show a checklist (ingredient, total qty across matched meals, which days/meals it covers) and a \"mark prepped\" toggle per group (localStorage, no backend schema change needed for v1). Effort: ~2-3 days FE-only (grouping logic + new tab UI); a v2 could push batch-cook grouping into the diet-generation LLM prompt itself for smarter clustering.",
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260719-a3c7",
       "createdAt": "2026-07-19T05:30:33.658Z",
       "route": "/ai/overview",
