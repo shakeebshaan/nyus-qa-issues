@@ -1352,8 +1352,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "UPDATE (commit 8d262b86, pushed to main): shipped the frontend-catalog picker fill. (1) SEE-ALL-IMAGES + FRONTEND STORAGE — the 'Choose a photo' sheet now front-loads options from the bundled 9.5k-dish frontend meal catalog (peekMealMediaOptions: best match + same-family dishes sharing a distinctive token, self-hosted nyus.in/meal-media), then tops up with the backend stock-picker, merged/de-duped/capped at 12. Verified E2E on /dev/plan-builder?stage=card with the backend OFFLINE: 12 catalog photos render and the region scrolls — proving the picker is now populated purely from the frontend. tsc clean, 14/14 meal-catalog tests green. (2) REMAINING OWNER CALL — 'just ids on the backend': the catalog photo filename IS already a stable 12-hex id, so an id-only backend contract is now cheap. Decision needed: (a) persist only that media-id server-side on finalize (vs today's full URL) and resolve id->URL client-side, and (b) keep the URL as a backend fallback or not? This touches the meal-schema/finalize contract + the same persistence path as 67ca. Confirm the id scheme + fallback and I'll implement across plan-builder + RecipeDetail together.",
-      "reviewedAt": "2026-07-17T20:11:06.254Z",
+      "reviewReason": "ALREADY FIXED in the current build — update the app to see it. The 'Choose a photo' picker now: (1) scrolls (grid is overflow-y-auto in an 80dvh sheet), (2) offers up to 12 photos (was 6), front-loaded from the bundled frontend meal catalog (5,700 dish photos, self-hosted media) then topped up from the backend, deduped. Storage matches your ask: the backend stays NAME-KEYED with NO image blob storage — the FE catalog resolves photos and only the chosen image reference travels with the meal. Your screenshot is a pre-fix build (this shipped after 2026-07-17).",
+      "reviewedAt": "2026-07-19T04:35:03.473Z",
       "reviewedBy": "shakeebshaan"
     },
     {
