@@ -77,9 +77,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Weekly Report modal parsed the week's start/end dates as UTC midnight, so users in the Americas (negative-UTC) saw the range one day early - e.g. 'Jul 13 - Jul 19' instead of 'Jul 14 - Jul 20'. India users were unaffected. Fix: the modal now reads those dates as local dates (same helper the Daily Summary modal already used). Proof: recapture in a US timezone (America/Los_Angeles) shows the correct 'Jul 14 - Jul 20'; added a timezone-scoped regression test proven to fail on the old code and pass on the fix.",
+        "imagePath": "images/i-20260719-b9c4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-b9c4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c1afcac60b58c827e7917743ab13094d2f34d3bf",
+        "imageCommits": [
+          "c1afcac60b58c827e7917743ab13094d2f34d3bf"
+        ],
+        "fixedAt": "2026-07-19T23:03:20.790Z",
+        "by": "shakeebshaan",
+        "appCommit": "f4189f4d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "parseLocalDate applied to both week dates; new TZ regression test verified fail-before (Jul 13-19) / pass-after (Jul 14-20); LA recapture confirms correct range; adversarial review CONFIRMED_REAL."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260719-c3d8",
