@@ -2760,7 +2760,17 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Root-caused (both repos). The wait you see is a SINGLE blocking whole-plan save: tapping Save plan fires POST /onboarding/save-custom-plan (customPlanService.saveCustomPlan, up to 90s), and the Saving your plan overlay (CustomizeDiet.tsx:286) stays up for that whole round-trip. There is NO per-meal save today: while you edit, meals persist only to a local draft (nyus_builder_draft, debounced, never hits the network), so ALL the write cost lands at the final tap. That is why it feels like a long wait here. Making it save-by-meal is a genuine backend-contract change, not a bounded fix, and it lands on the SAME shared write path as i-20260718-326f: save_custom_plan deletes the whole weeks DietPlan rows + the legacy bridge deactivates all active plans and rebuilds AssignedMeal, and that path is also driven by the Saturday pre-gen cron. Blind-shipping incremental partial writes into that path unattended risks corrupting live plans, and I cannot verify it E2E headless (QA test account is 401/unloadable on prod). Proposed SAFE v1 (isolates the risk): a new lightweight PATCH endpoint that upserts ONE edited day/meal into a server-side DRAFT plan only (never touching your live active plan, the bridge, or the cron); the builder calls it debounced as you add/edit each meal; the final Save plan then just flips the already-staged draft to active, which is fast (little to no wait). This keeps the local draft as the safety net and never runs the risky whole-week bridge write mid-edit. Confirm this draft-then-commit approach (vs an optimistic background save, which I do not recommend because a silent save failure on a core flow is worse than a short wait) and I will implement + deploy with a staging check.",
+      "reviewedAt": "2026-07-19T01:31:40.361Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "perf",
+        "plan-builder",
+        "diet",
+        "owner-confirm"
+      ]
     },
     {
       "id": "i-20260719-4f1a",
