@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-w7q3",
+      "createdAt": "2026-07-19T16:36:54.310Z",
+      "route": "/weekly-review",
+      "description": "[bug-hunt] Weekly Review \"Approve N of M\" (deselect changes) is silently ignored — the Monday auto-apply job applies ALL originally-proposed changes regardless of what the user kept.\n\nExpected: deselecting a proposed change then tapping \"Approve N of M\" applies ONLY the kept changes to next week (the UI even promises \"N of M changes will take effect Monday\").\nActual: every AI-proposed change is applied to week N+1 anyway; the deselected ones take effect too.\n\nRoot cause (traced both repos):\n- FE AcceptChangesFlow.tsx: each ProposedChange.id is the index into proposed_changes (backend reviews.py _normalize_proposed_changes sets id=str(i)). Deselecting + tapping the primary button fires handleSubmit(\"approve_selected\") with approved_change_ids = Array.from(selectedIds) (the kept subset).\n- review.service.ts:144 maps approve_selected -> POST /reviews/:id/modify { modified_changes: approved_change_ids }.\n- Backend modify_review (app/routes/reviews.py:317) stores review.user_modified_changes = modified_changes and sets status=\"reviewed\"; it does NOT prune review.proposed_changes.\n- Monday job weekly_plan_apply (app/services/weekly_review.py:825) processes status in (reviewed, notified); it loads proposed = json.loads(review.proposed_changes) (the FULL original list, line 857) and applies EVERY item via _apply_macro_change / _apply_activity_changes (lines 895-908). It NEVER reads review.user_modified_changes.\n\nSo a user who explicitly rejects e.g. an aggressive calorie cut still gets it applied to next week WeeklyMacroTarget; the \"N of M changes will take effect Monday\" toast (AcceptChangesFlow.tsx:56) is false.\n\nRepro: active plan with a generated weekly review having 2+ proposed changes -> open /weekly-review -> deselect one change -> tap \"Approve N of M\" -> Monday weekly_plan_apply applies all proposed changes to week N+1.\n\nFix: in weekly_plan_apply, when review.user_modified_changes is set (modify path), filter proposed to only the indices listed in user_modified_changes before applying (change ids are str(index) into proposed_changes). reject_all is already handled (status stays / no apply), but partial-select currently behaves identically to approve_all.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "needsReview": false
+    },
+    {
       "id": "i-20260719-v9k2",
       "createdAt": "2026-07-19T16:35:00.000Z",
       "route": null,
