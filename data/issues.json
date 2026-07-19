@@ -2786,7 +2786,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "No screenshot or route was attached, so I cannot tell which \"My meals\" you mean or reproduce it. I checked the most likely one given the meals you were editing tonight — the \"My meals\" button inside the plan-builder meal card (personal saved meals). It renders correctly: it lists your saved meals newest-first, and when the list is empty it shows a clear message (\"No saved meals yet. Tap Save to my meals on a built meal to reuse it here later.\"), so that surface is not blank or broken. If you meant a DIFFERENT \"My meals\" (e.g. a Nutrition or dashboard section) OR your saved list vanished after it previously had entries, please attach a screenshot + name the screen. Important: saved meals are stored per-device only (localStorage, no backend), so clearing app data / reinstalling / switching devices empties the list. If that is what happened, the durable fix is to persist saved meals server-side (same class of bug as the coach-intake card that kept re-asking, i-20260719-83b5, which I just fixed by moving its dedup to the server). That is a small feature I can build on your go-ahead — reply \"build server-side my-meals\" and I will.",
+      "reviewedAt": "2026-07-19T02:06:52.443Z",
+      "reviewedBy": "shakeebshaan",
+      "tags": [
+        "my-meals",
+        "repro-needed"
+      ]
     },
     {
       "id": "i-20260719-83b5",
