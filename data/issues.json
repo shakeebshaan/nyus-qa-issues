@@ -12,13 +12,36 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Apply/Discard action bar was gated on macroDelta && updatedMeal; macroDelta is null when there's no original snapshot or the AI edit leaves macros unchanged, so the preview showed with no way to apply/discard (input also hidden) = dead-end. Fix (AIMealCustomization.tsx): gate the bar on updatedMeal alone; show delta numbers only when macroDelta exists, else 'Updated meal ready / Apply to save it, or discard to keep tweaking.' Capture proves the bar + Apply/Discard render in the zero-delta state.",
+        "imagePath": "images/i-20260719-e4c2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-e4c2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8f8a016fe0894569d36cd414a48bdd7ae6fc8273",
+        "imageCommits": [
+          "8f8a016fe0894569d36cd414a48bdd7ae6fc8273"
+        ],
+        "fixedAt": "2026-07-19T08:42:15.226Z",
+        "by": "shakeebshaan",
+        "appCommit": "b201a24e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused to the macroDelta&&updatedMeal gate; minimal conditional fix; capture proves Apply/Discard now render in the zero-delta dead-end state on the correct authenticated screen."
+        }
+      },
       "history": [],
       "tags": [
         "bug-hunt",
         "auto"
-      ]
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260719-mp7q",
