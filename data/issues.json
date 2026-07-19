@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-c3d8",
+      "createdAt": "2026-07-19T19:38:52.379Z",
+      "route": "/weekly-review",
+      "description": "[bug-hunt] Weekly-review runs TWO decision-tree engines back-to-back and MERGES their proposed changes, but they use DIFFERENT field-name vocabularies, so the dedup misses collisions -> duplicate/contradictory calorie cards (both applied, last-wins) + a steps card that never applies.\n\nWHERE: app/services/weekly_review.py:440-490 runs weekly_review_engine.analyze_week() (main) then adjustment_engine.generate_weekly_adjustment() (adjustment) each nightly review + on /reviews routes (routes/reviews.py:116,225). The merge de-dups adjustment changes against the main set by the `field` key:\n    existing_fields = {c.get(\"field\") for c in engine_changes}\n    for ac in adj_changes: if ac.get(\"field\") not in existing_fields: engine_changes.append(ac)   (weekly_review.py:487-490)\nBut the two engines name the SAME concept differently:\n  * Calories: main field=\"target_calories\" (weekly_review_engine.py:775) vs adjustment field=\"calories\" (adjustment_engine.py:186/306/388/447). BOTH carry category=\"calories\".\n  * Steps: main field=\"daily_steps_goal\" (weekly_review_engine.py:749) vs adjustment field=\"steps_goal\" (adjustment_engine.py:272). BOTH carry category=\"activity\".\n\nEXPECTED: one shared field vocabulary (or dedup by category/concept) so a single calorie/step change is proposed and applied.\nACTUAL:\n(1) DUPLICATE CALORIE CARDS, BOTH APPLIED: for a stalled fat-loss user w/ good adherence both engines fire (main decision_path=plateau_step1/2, adjustment change_type=stall_intervention). decision_path != on_track so the merge takes the `elif adj_changes` branch; adjustment field \"calories\" is NOT in {target_calories,carbs_g,fat_g} -> appended. proposed_changes now has TWO category=calories cards w/ different targets (e.g. 2000->1900 from main AND 2000->1850 from adjustment). The Monday applier _apply_macro_change (weekly_review.py:1169) dispatches on category==\"calories\" -> macros.calories_kcal=int(value), so BOTH apply and the LAST (adjustment, appended last) silently overrides. User sees two conflicting Calories X->Y cards; the \"N of M changes will take effect\" toast overcounts.\n(2) DEAD STEPS CARD: _apply_activity_changes (weekly_review.py:1091-1110) only handles field==\"daily_steps_goal\"; the adjustment engine's field==\"steps_goal\" hits the else -> logger.warning(\"Unknown activity field: steps_goal\") and is NEVER applied. So an adjustment step-goal proposal is shown to the user but silently discarded on apply.\n\nREPRO (code trace): fat_loss plan, 2+ weekly reviews with weight within noise, adherence>=80%, review.avg_daily_steps populated -> both engines emit calorie/step changes -> weekly_review.py:487 appends adjustment's \"calories\"+\"steps_goal\" alongside main's \"target_calories\"+\"daily_steps_goal\" -> apply doubles the calorie change (last wins) and drops the steps one.\n\nFIX: unify the field names across the two engines (adjustment -> target_calories / daily_steps_goal), OR dedup by category instead of field. NOT a dup of w7q3 (that was the applier ignoring per-change deselection); this is the engine-merge producing duplicate/dead changes upstream.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260719-b2e6",
+      "createdAt": "2026-07-19T19:38:52.379Z",
+      "route": "/weekly-review",
+      "description": "[bug-hunt] Weekly adjustment engine's stall protocol jumps straight to a CALORIE CUT (with a false \"steps not tracked\" message) for fat-loss users who ARE tracking steps at/above their goal but below the 12k ceiling.\n\nWHERE: app/services/adjustment_engine.py RULE 3 stall-intervention branch (lines ~259-374). The NEAT-first tiering is:\n    if avg_steps < current_steps_goal:            -> propose step increase (Step 1)   (:269)\n    elif avg_steps >= STEP_TARGET_CEILING(12000): -> reduce calories (Step 2)          (:290)\n    else:  # comment: \"Steps data not available, go straight to calorie reduction\"     (:349)\n           -> 100 kcal cut + insight \"Track step count so we can use NEAT increases in the future\"\n\nThe `else` fires not only when steps are genuinely absent, but ALSO when avg_steps IS present and either (a) current_steps_goal is None (no ActivityTarget row), or (b) avg_steps >= goal but < 12000 (e.g. goal 8000, user averaging 9000).\n\nEXPECTED: when steps are tracked and sit between the goal and the 12k ceiling, propose raising the step TARGET toward 12k first (the engine's own \"increase NEAT before touching calories\" tier), and never print \"Steps data not available\"/\"Track step count\" when review.avg_daily_steps exists.\nACTUAL: immediate calorie reduction + misleading \"not tracked\" copy, even though review.avg_daily_steps is populated (weekly_review.py:517). These feed real proposed_changes that auto-apply Monday.\n\nREPRO (code trace): fat_loss stalled user, adherence>=80%, review.avg_daily_steps=9000, ActivityTarget.daily_steps_goal=8000 -> RULE 3: first if false (9000>=8000), elif false (9000<12000) -> else branch -> 100 kcal cut + \"Track step count...\". Code-proven; adjustment_engine is live via weekly_review.py:458 nightly generation + routes/reviews.py.\n\nFIX: split the else into (i) genuinely-no-steps (avg_steps is None) -> keep current copy, and (ii) steps present but >= goal and < ceiling -> propose stepping the goal toward STEP_TARGET_CEILING before any calorie cut.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260719-d76m",
       "createdAt": "2026-07-19T19:00:00.000Z",
       "route": null,
