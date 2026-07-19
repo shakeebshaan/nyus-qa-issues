@@ -2704,8 +2704,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Root cause is data-specific (your active plan is a LEGACY weekday-pinned plan created before the progressive-save fix ab0ff39; it genuinely stores Saturday as a rest day, so the header correctly shows 'Weekly Schedule'). No safe shared-code fix exists — changing the header logic would mislabel real weekly-plan users, and a blanket DB migration would corrupt their plans. Two owner options: (a) fastest — open Activity -> Customize -> Save to rebuild your plan as progressive/custom (no forced rest days); or (b) tell me your account email and I'll do a TARGETED migration of just your plan. i-20260718-41d4 is a duplicate, tracked here.",
-      "reviewedAt": "2026-07-19T02:28:28.238Z",
+      "reviewReason": "CODE FIX DEPLOYED (prod HEAD 1dceaaf) — durable. Root cause (corrected): you are on a custom/progressive plan, but the Saturday weekly-regen job was re-bridging EVERY user to a weekday-pinned plan each week, forcing you back to 'Weekly Schedule' + a Saturday rest day (this undid the one-time backfill). The job now SKIPS the workout re-bridge for progressive users, so it won't revert you again. ONE THING NEEDED to fix your CURRENT plan right now: open Activity -> Customize -> Save (re-saves as progressive), OR reply with your account email and I'll run a targeted backfill. Without one of those, your existing plan stays weekday-pinned until you re-save.",
+      "reviewedAt": "2026-07-19T04:32:41.665Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "activity",
