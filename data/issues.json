@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "On an intermittent (16:8) fasting day, the first 'End fast' tap felt dead - the ring vanished then reappeared within ~1s because the page immediately re-started the fast you had just ended (the backend fasting-day flag had not cleared yet). Now ending a fast marks it ended for the day so it will not auto-restart, and the first tap sticks. Added a regression test.",
+        "imagePath": "images/i-20260719-4b2e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-4b2e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9fa5d6b3e2265de2376c57b69e590208273a0775",
+        "imageCommits": [
+          "9fa5d6b3e2265de2376c57b69e590208273a0775"
+        ],
+        "fixedAt": "2026-07-19T23:52:48.013Z",
+        "by": "shakeebshaan",
+        "appCommit": "f4832bb6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Root cause verified in source (reconcile effect re-armed on active->null while day-flag stale-true). Surgical banner-only fix mirroring the existing useFasting once-per-day guard; no mutation-contract change. Fail-before/pass-after regression test; full unit gate green (5703 passed). Proof is a real-component render of both states (defect is temporal - no static app screenshot can show the ~1s resurrection)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260719-bd7c",
