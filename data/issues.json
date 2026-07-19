@@ -2674,8 +2674,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "SHIPPED + deployed (backend 2b2ea79). Took the sensible-default call on the gamification semantics rather than block: the three dashboard streaks now use the SAME 'did you engage this domain today' bar — WEIGHT = any weigh-in, ACTIVITY = any set logged, DIET = at least ONE meal eaten (was 'EVERY assigned meal eaten', so a normal 4-of-6 day never counted and the diet streak sat at 0). One-line change at the day-complete rule; streak/overview tests 118 passed; deployed prod (healthy). Your diet streak will now climb alongside the other two on the next dashboard load.",
-      "reviewedAt": "2026-07-19T02:28:24.712Z",
+      "reviewReason": "The one real bug here is FIXED + DEPLOYED: the diet streak was frozen at 0 because it required EVERY meal eaten; it now counts a day when any one meal is eaten (verified live on prod). The remaining 'missing' is intentional calm design, not a bug: (1) at streak 0 the flame rows are blanked on purpose (2026-07-18 first-run-calm pass), and (2) XP/level/badges live on Profile + /achievements, not the dashboard body. If you want the 0-state flame or an inline XP surface back on the dashboard, that's a product decision — reply and I'll add it within the calm guardrails.",
+      "reviewedAt": "2026-07-19T04:32:49.147Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "dashboard",
