@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: weightChangeIndicator (AIOverview.tsx) hardcoded loss=good/gain=bad colour, ignoring goal_type, so a weight-gain user who gained saw a RED up-arrow. Fix: weightGoalDirection derives goal from weight_summary (target vs current) and weightChangeIndicator now colours toward-goal=green/away=red/flat=neutral; icon+label still track actual movement. Capture (GAIN goal +0.6kg) proves the arrow now renders GREEN. 12 unit tests + tsc green.",
+        "imagePath": "images/i-20260719-a3c7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-a3c7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f66f6b84ee4301b06b6a17095844948f8e25bca4",
+        "imageCommits": [
+          "f66f6b84ee4301b06b6a17095844948f8e25bca4"
+        ],
+        "fixedAt": "2026-07-19T06:06:20.385Z",
+        "by": "shakeebshaan",
+        "appCommit": "2f82acf6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused at exact line cited in the report; goal-aware colour via weight_summary target-vs-current (same signal PlanTimeline uses); icon+label still honest to actual movement; 12 unit tests cover gain/lose/maintain/near-zero/no-goal; tsc clean; scenario capture proves GREEN up-arrow for a gaining gain-goal user. Low-severity colour-only, fully verified."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260718-5c1a",
