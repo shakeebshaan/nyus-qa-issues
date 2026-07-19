@@ -58,9 +58,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the stall-protocol's final else cut ~100 kcal and printed 'Track step count / steps not tracked' whenever steps WERE present but sat between the daily goal and the 12k NEAT ceiling (e.g. goal 8000, averaging 9000), or when no ActivityTarget row existed — so a step-tracking fat-loss user got an immediate calorie cut with a false 'not tracked' message. Fix (adjustment_engine.py RULE 3): split the else — steps tracked & below ceiling now propose raising daily_steps_goal toward 12k (NEAT before calories) and never print the 'not tracked' copy; only avg_steps==None keeps the conservative calorie cut + track-steps prompt. Verified: TestStallNeatFirst fail-before (3 failed) / pass-after (4 passed); 221 related weekly-review tests green; deployed to prod (834cd7f), health OK.",
+        "imagePath": "images/i-20260719-b2e6-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-b2e6-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5d7dc67828d5c03ad77793313542965711f7b34e",
+        "imageCommits": [
+          "5d7dc67828d5c03ad77793313542965711f7b34e"
+        ],
+        "fixedAt": "2026-07-19T20:07:34.187Z",
+        "by": "shakeebshaan",
+        "appCommit": "834cd7f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused + code-traced; fail-before/pass-after pytest proof captured; deployed + prod health OK; no regressions."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260719-d76m",
