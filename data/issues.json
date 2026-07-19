@@ -2804,9 +2804,32 @@
         "1ce78bea9d9fbcacbc4d8c58f202215ef11ae305"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "The \"Jasmine wants to know you better\" card kept re-asking \"What do you most want from me as your coach?\" and \"Tried any of these before?\". Those two answers had no durable server record, so they came back after any reinstall / cleared app data / re-login. Now the answers are saved to and read back from the server, so once you answer them the card moves on to the next questions and never re-asks them. Proof: with the two answers present, the same card advances to the next questions instead of repeating.",
+        "imagePath": "images/i-20260719-83b5-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-83b5-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "50d50ccc4e56fbec3644dc4755cbfe6c1c51b216",
+        "imageCommits": [
+          "50d50ccc4e56fbec3644dc4755cbfe6c1c51b216"
+        ],
+        "fixedAt": "2026-07-19T02:05:40.484Z",
+        "by": "shakeebshaan",
+        "appCommit": "85e3f226",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root cause: two coach-intake keys (primary_intent, past_attempts) have no profile column, so isAnswered was hardcoded false and dedup was localStorage-only (dies on any app-data reset). Fix: GET /profile surfaces their saved OnboardingResponse value + isAnswered reads it. FE unit suite green (5681 passed), backend profile tests 30/30, before/after harness on the real card+hook proves the drip advances. Backend deployed + healthy. Only gap: authenticated live e2e (QA data account 401s)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     }
   ]
 }
