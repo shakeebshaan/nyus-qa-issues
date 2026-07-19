@@ -2644,8 +2644,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "CONFIRMED live on prod (backend b072d13 deployed; verified AssignedMeal.skipped_at is mapped on the ORM model in the running process). Recap of the fix: skipped_at existed as a DB column but was never mapped on the model, so every read (is_skipped) got None from getattr -> the skip vanished on reload and the toggle broke. Now: (a) skipped_at is a real mapped column so skip round-trips + undo works; (b) diet_completed_today counts eaten OR skipped so the progress bar fills; (c) the coach context marks '(skipped by user)'. Deployed + healthy. Please confirm on your device after the next OTA/build: skip a meal, reload -> it stays skipped, the bar advances, and the coach acknowledges it.",
-      "reviewedAt": "2026-07-19T02:28:44.302Z",
+      "reviewReason": "FIXED + DEPLOYED (prod HEAD 1dceaaf). Skipping a meal now informs the coach: it writes a 'meal_skip' event (feeds the proactive 3x/week skip nudge) and logs to the Discord meal_skipped channel. Persistence already worked (skip survives reload) and the DASHBOARD diet progress bar already fills when every meal is actioned (eaten OR skipped). The Nutrition-page calorie/macro bars stay intake-based by design — a skipped meal contributes 0 kcal, so those bars correctly stay partial (you didn't eat it).",
+      "reviewedAt": "2026-07-19T04:32:38.201Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "nutrition",
