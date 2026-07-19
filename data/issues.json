@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-a3c7",
+      "createdAt": "2026-07-19T05:30:33.658Z",
+      "route": "/ai/overview",
+      "description": "[bug-hunt] AI Overview (/ai/overview) — the Weight tile paints its weekly-change trend arrow with a LOSS-BIASED good/bad color that ignores the user’s goal direction, so for a muscle-gain / weight-gain goal it is semantically inverted.\n\nRoot cause: weightChangeIndicator() (src/pages/AIOverview.tsx:43-47) hardcodes, regardless of goal_type:\n  change < -0.1  -> text-success (green), ArrowDown   (weight DOWN treated as good)\n  change >  0.1  -> text-destructive (red), ArrowUp   (weight UP treated as bad)\nThe returned color is applied to the trend arrow icon at AIOverview.tsx:379 (<WInd className={... wInd.color} />).\n\nExpected: for a user whose goal is to GAIN (goal_type muscle_gain, or goal_weight above current), gaining should read as ON-TRACK (green) and losing as OFF-TRACK. The primary Dashboard weight card is already goal-progress-framed (start->now->goal milestone track, QA i-20260617-86ba) and is NOT loss-biased; this tile diverges.\n\nActual: a weight-gain user who successfully gains sees a RED (destructive) up-arrow implying the gain is bad; if they lose weight they get a GREEN “good” down-arrow. Color is the good/bad state signal here and it is wrong-signed for the entire gaining segment.\n\nRepro: use an account with goal_type = muscle_gain (or goal_weight > current). Have weight_summary.change_this_week_kg > 0.1 (a real weekly gain). Open /ai/overview -> the Weight tile’s trend arrow renders red/destructive even though the gain is the desired direction (and a loss would render green).\n\nFix: make weightChangeIndicator goal-aware — take the goal direction (from dashboard-overview / profile goal_type or goal vs current weight) and map toward-goal -> success, away-from-goal -> destructive, near-zero -> neutral. The text label (↑/↓ x kg this week) can stay; only the color semantics must follow the goal. Low severity: color-only, the number itself is correct; IST/loss-goal users unaffected.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260718-5c1a",
       "createdAt": "2026-07-18T20:27:18.000Z",
       "route": "/dashboard",
