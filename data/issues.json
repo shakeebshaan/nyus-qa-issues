@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the adjustment engine named calorie/step changes with a different field vocabulary (field 'calories'/'steps_goal') than the main engine ('target_calories'/'daily_steps_goal'), so weekly_review.py's field-based merge dedup missed the collision — two contradictory calorie cards both applied (last-wins) and the steps card hit 'Unknown activity field' and never applied. Fix: extracted RULE 3 into _stall_intervention() and renamed every calorie/step field to the main engine's vocabulary so the merge collapses to a single calorie/step change and the steps card is applied. Verified: TestStallVocabulary 5/5 green; 221 related weekly-review tests green; deployed to prod (834cd7f), health OK.",
+        "imagePath": "images/i-20260719-c3d8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-c3d8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "13afe9677877dee104ebbb62d871764154c2a102",
+        "imageCommits": [
+          "13afe9677877dee104ebbb62d871764154c2a102"
+        ],
+        "fixedAt": "2026-07-19T20:07:19.708Z",
+        "by": "shakeebshaan",
+        "appCommit": "834cd7f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-caused + code-traced; scoped pytest green with fail-before/pass-after; deployed + prod health OK; no regressions."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260719-b2e6",
