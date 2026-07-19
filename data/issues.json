@@ -16,8 +16,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Monday auto-apply job applied every AI-proposed weekly-review change to next week no matter what you chose, so deselecting a change in Approve N of M (or rejecting the review outright) still applied it. Fix: the job now honors your choice: approve-selected applies only the changes you kept, a full reject applies nothing (next week stays a clean copy of this week), and approve-all still applies everything. Backend fix deployed to prod with regression tests.",
+        "imagePath": "images/i-20260719-w7q3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-w7q3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a26df74e19f5f852be3992edeb113b242001c064",
+        "imageCommits": [
+          "a26df74e19f5f852be3992edeb113b242001c064"
+        ],
+        "fixedAt": "2026-07-19T17:14:25.575Z",
+        "by": "shakeebshaan",
+        "appCommit": "bcf53fc",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-cause fix confirmed across both repos + FE id contract; 12 regression tests fail-before/pass-after, full backend suite green (172 passed); two adversarial verifiers cleared index-alignment and regression; deployed and verified healthy on prod (HEAD bcf53fc). Proof is test-evidence (a Monday-cron bug has no UI surface); frontend testGate red is an unrelated flaky Partners waitFor timeout that passes 18/18 in isolation."
+        }
+      },
       "history": [],
       "needsReview": false
     },
