@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-bd7c",
+      "createdAt": "2026-07-19T21:53:01.000Z",
+      "route": "/profile",
+      "description": "[bug-hunt] Badge-unlock toast dedup is keyed on the badge's display NAME, not its id/key — a real second unlock in the same check can be silently swallowed (no toast, no error).\n\nWHERE: src/components/achievement-context.tsx:211-218 —\n```js\nconst shownBadgesRef = useRef<Set<string>>(new Set());\nconst showAchievement = useCallback((payload) => {\n  if (shownBadgesRef.current.has(payload.badgeName)) return;\n  shownBadgesRef.current.add(payload.badgeName);\n  ...\n```\nDedup uses `payload.badgeName` (display text). The caller (src/hooks/useGamification.ts:62-64) builds the payload from checkBadges() results using only `name`, `tier`, `xp`, `icon_url` — it never threads through a stable `badge_key`/id.\n\nThis is the same class of bug LevelCard.tsx already had and was fixed for (badgeCount now dedupes by badge_key to match the Achievements gallery's earnedByKey — commit 0ff6345a, 2026-07-15) but this second site was missed. If checkBadges() ever returns two distinct badges in one call whose display names collide (e.g. two tiers of the same badge family sharing a base name, or any backend name-string collision), the second real unlock never shows a toast — it's marked 'shown' the instant the first one's name is added to the Set, even though it's a different badge.\n\nEXPECTED: every distinct badge unlock (by id/key) gets its own toast, exactly once.\nACTUAL: unlocks colliding on display name after the first are dropped silently.\n\nFIX: thread badge_key (or badge id) through AchievementPayload from useGamification.ts's checkBadges() call, and key shownBadgesRef on that instead of badgeName.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260719-7f3a",
       "createdAt": "2026-07-19T21:09:50.000Z",
       "route": "/notifications",
