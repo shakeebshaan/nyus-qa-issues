@@ -2784,12 +2784,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: editing meals in the diet BUILDER re-runs the legacy bridge, which deactivates every meal assignment then re-materializes only a 7-day window anchored at the plan's ORIGINAL start date. On a plan older than a week today had no assignment -> the diet page (reads assignments) showed nothing while the builder (reads the saved draft) still showed the meals. Fix (backend 2b2ea79, deployed + prod-verified): the bridge now anchors the window on the CURRENT week so today is always re-created, and extends the plan end date to cover it. Proof: meals render on the diet page with correct macros + meal-type chips.",
+        "imagePath": "images/i-20260719-4f1a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-4f1a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2c4cfeca2fdc0265292afc870a50a894949b9ef5",
+        "imageCommits": [
+          "2c4cfeca2fdc0265292afc870a50a894949b9ef5"
+        ],
+        "fixedAt": "2026-07-19T02:28:04.546Z",
+        "by": "shakeebshaan",
+        "appCommit": "2b2ea79",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Diet page shows meals with macros + correct Breakfast/Lunch chips; bridge root cause fixed + E2E-verified on prod (backdated plan re-materialized 6 meals for today)"
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "No screenshot or route was attached, so I cannot tell which \"My meals\" you mean or reproduce it. I checked the most likely one given the meals you were editing tonight — the \"My meals\" button inside the plan-builder meal card (personal saved meals). It renders correctly: it lists your saved meals newest-first, and when the list is empty it shows a clear message (\"No saved meals yet. Tap Save to my meals on a built meal to reuse it here later.\"), so that surface is not blank or broken. If you meant a DIFFERENT \"My meals\" (e.g. a Nutrition or dashboard section) OR your saved list vanished after it previously had entries, please attach a screenshot + name the screen. Important: saved meals are stored per-device only (localStorage, no backend), so clearing app data / reinstalling / switching devices empties the list. If that is what happened, the durable fix is to persist saved meals server-side (same class of bug as the coach-intake card that kept re-asking, i-20260719-83b5, which I just fixed by moving its dedup to the server). That is a small feature I can build on your go-ahead — reply \"build server-side my-meals\" and I will.",
-      "reviewedAt": "2026-07-19T02:06:52.443Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "my-meals",
