@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260719-e4c2",
+      "createdAt": "2026-07-19T08:21:12.000Z",
+      "route": "/ai/customize-meal",
+      "description": "[bug-hunt] AI \"Customize Meal\" leaves the user with an un-appliable meal preview (dead-end).\n\nThe ONLY Apply/Discard controls live in the floating \"Macro change\" bar, which is gated on a non-null macro delta: `{macroDelta && updatedMeal && (...)}` (AIMealCustomization.tsx:531). The preview card itself carries NO buttons (comment at :517-520: \"Apply/Discard live ONLY in the floating macro-delta bar\"), and the text input is hidden whenever a preview exists via `{!updatedMeal && (...)}` (:582).\n\n`macroDelta` (useMemo :269-280) returns null in two reachable cases:\n1. No original snapshot: `originalMeal` stays null when the backend start payload omits `meal` AND the first `updated_meal` omits `original` (both optional in the UpdatedMeal type, ai.service.ts:410-427; the code even guards `if (!originalMeal && result.updated_meal.original)` :209, and the start comment :146-148 says only \"some sessions\" include the seed meal). With originalMeal null, macroDelta short-circuits to null (:270).\n2. Zero delta: an AI change that keeps macros identical (e.g. a like-for-like veg swap, or a rename/description-only edit) yields exact 0/0/0/0 deltas -> suppressed (:278).\n\nIn either case the flow shows the \"Updated Meal\" preview card but renders NO Apply, NO Discard, and NO text input -> the requested customization cannot be applied, dismissed, or followed up. The only escape is the header back button (handleCancel :282-287) which abandons the whole session.\n\nExpected: whenever an updated_meal preview exists the user must be able to Apply or Discard it; the macro delta is optional decoration.\nActual: preview with no actionable control -> stuck.\n\nRepro (code path): open /ai/customize-meal for a meal whose session returns updated_meal without an original snapshot (or with unchanged macros) -> preview appears, no Apply/Discard, input gone.\n\nFix: gate the Apply/Discard bar on `updatedMeal` alone and render the delta numbers only when macroDelta is present (or re-add Apply/Discard to the preview card).",
+      "author": "shakeebshaan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ]
+    },
+    {
       "id": "i-20260719-mp7q",
       "createdAt": "2026-07-19T07:39:00.033Z",
       "route": "/nutrition",
