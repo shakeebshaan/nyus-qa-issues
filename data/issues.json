@@ -35,9 +35,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the in-app Notifications list had drifted from the push-notification tap handler, so tapping backend-scheduled reminder rows (weekly weigh-in, meal reminders, water, health-score quiz) did nothing and they showed a generic gray bell icon. Fix: both the in-app list and the OS push handler now read one shared notification-type -> route map, so those rows navigate to the correct screen and render a type-specific icon. Proof: recapture shows each reminder row with its own colored icon; added 6 tap-through tests + a route-map test; full unit suite green.",
+        "imagePath": "images/i-20260719-7f3a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260719-7f3a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "04e813147c528dc0a0c67ae591a719cdc7353d83",
+        "imageCommits": [
+          "04e813147c528dc0a0c67ae591a719cdc7353d83"
+        ],
+        "fixedAt": "2026-07-19T23:02:16.184Z",
+        "by": "shakeebshaan",
+        "appCommit": "cc4b64db",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Shared route map removes drift by construction; 6 tap-through + route-map unit tests; per-type icons visible in recapture; independent adversarial review CONFIRMED_REAL."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260719-b9c4",
