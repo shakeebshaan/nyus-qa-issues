@@ -2943,7 +2943,11 @@
       "imagePrivate": true,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "SAME ROOT CAUSE as i-20260719-cb0b (filed 1 min apart). Your screenshot shows Session #1 / Cycle 1-12 / Session-in-cycle 1-15 / Completed 0-180 with Total Volume Today 13,070 kg AND Lat Pulldown already 2 sets logged - internally the header session is the count-based CURRENT unlocked session (0 completed => Session #1) while the volume/logged-sets/completed state are pulled from a stale INCOMPLETE orphan session log for a different session, because backend.py Activity overview does not constrain todays_log (~8322) to the session it renders (~8431). So the 13,070 kg volume and the pre-logged/completed exercises are the orphan session leaking onto the fresh one - hence This is completely wrong. Also note Lat Pulldown Current shows 1xhold which looks like a bad target on that orphan session. FIX + BLOCKER identical to cb0b: enforce todays_log.session_id == displayed session.id + clean the same-day non-current-session orphan; cannot verify headless (QA prod account 401) and the orphan is account-specific. Reply with your account email and I will inspect/clean the exact orphan log and ship+verify the guard against real data. Tracking the fix under cb0b.",
+      "reviewedAt": "2026-07-19T06:16:48.147Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
