@@ -22556,37 +22556,41 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260718-68a9",
-      "createdAt": "2026-07-18T18:08:35.202Z",
+      "id": "i-20260718-7a41",
+      "createdAt": "2026-07-18T18:10:50.909Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260718-68a9.jpg",
-      "imageCommit": "15c7110ab6703322761eaf4dcbd7e157dedf8d57",
+      "imagePath": "images/i-20260718-7a41-0.jpg",
+      "imageCommit": "e07c8ae8d69b702788ca10361d244a279a664833",
       "imagePaths": [
-        "images/i-20260718-68a9.jpg"
+        "images/i-20260718-7a41-0.jpg",
+        "images/i-20260718-7a41-1.jpg",
+        "images/i-20260718-7a41-2.jpg"
       ],
       "imageCommits": [
-        "15c7110ab6703322761eaf4dcbd7e157dedf8d57"
+        "e07c8ae8d69b702788ca10361d244a279a664833",
+        "01d46599135be4ae9716afc53b010cb4a326ed69",
+        "27b7b33a0a3c5d5f50e7a2f4948feed818e31835"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Confirmed the gap: in Add Food -> Ingredients, a no-results search only offers 'Add new ingredient with custom macros' (a MANUAL form where you type calories/protein/carbs/fat — CustomMealModal.tsx:770-846). You want an AI button that auto-fills those macros from the typed name (e.g. 'Nuggets'). This needs a NEW backend endpoint: today only /ai/analyze-meal-photo (vision) exists — there is no text-name -> macros estimator. Proposed build: (1) backend POST /foods/ai-estimate {name} -> {calories,protein_g,carbs_g,fat_g,serving_unit} via the LLM service (India-availability + macro-bounds guardrails, discord_logger log_ai_update), (2) FE: add a '✨ Estimate with AI' button in the new-ingredient form that calls it and pre-fills the fields (user can still edit before saving). CONFIRM to proceed — flagging rather than blind-shipping because it deploys a new prod AI endpoint and I can't verify the round-trip headless (QA test account is 401/unloadable on prod). Reply 'build it' and I'll implement + deploy.",
-      "reviewedAt": "2026-07-18T19:34:14.479Z",
+      "reviewReason": "FIXED + DEPLOYED (prod HEAD 1dceaaf). Skipping a meal now informs the coach: it writes a 'meal_skip' event (feeds the proactive 3x/week skip nudge) and logs to the Discord meal_skipped channel. Persistence already worked (skip survives reload) and the DASHBOARD diet progress bar already fills when every meal is actioned (eaten OR skipped). The Nutrition-page calorie/macro bars stay intake-based by design — a skipped meal contributes 0 kcal, so those bars correctly stay partial (you didn't eat it).",
+      "reviewedAt": "2026-07-19T04:32:38.201Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "nutrition",
-        "ai",
-        "feature",
-        "owner-confirm"
+        "backend",
+        "multi-part",
+        "owner-info"
       ],
-      "resolvedAt": "2026-07-20T14:45:31.612Z",
+      "resolvedAt": "2026-07-20T14:45:29.974Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-20T14:45:31.612Z"
+      "archivedAt": "2026-07-20T14:45:29.974Z"
     }
   ]
 }
