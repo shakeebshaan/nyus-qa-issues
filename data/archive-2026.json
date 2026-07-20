@@ -22556,6 +22556,33 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
+      "id": "i-20260719-13a1",
+      "createdAt": "2026-07-19T05:55:36.993Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
+      "author": "shakeebshaan",
+      "imagePath": "images/i-20260719-13a1.jpg",
+      "imageCommit": "c688a52e49b2d90287c4087307fd5ea0fcd65496",
+      "imagePaths": [
+        "images/i-20260719-13a1.jpg"
+      ],
+      "imageCommits": [
+        "c688a52e49b2d90287c4087307fd5ea0fcd65496"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + DEPLOYED under the same commit as i-20260719-cb0b (prod HEAD 40ec199) -- identical root cause (Activity overview painting a stray incomplete session log onto the count-based current session, so the header showed Session #1 / 0 completed while volume + logged sets came from a different session's stale log). The overview now scopes the painted volume/logged-sets/completed/skipped state to the session actually shown. Verify on the Activity page after updating the app; safe to resolve/archive alongside cb0b.",
+      "reviewedAt": "2026-07-19T06:47:17.375Z",
+      "reviewedBy": "shakeebshaan",
+      "resolvedAt": "2026-07-20T14:47:56.786Z",
+      "resolvedBy": "shakeebshaan",
+      "archivedAt": "2026-07-20T14:47:56.786Z"
+    },
+    {
       "id": "i-20260718-344f",
       "createdAt": "2026-07-18T03:34:34.776Z",
       "route": null,
@@ -22582,9 +22609,9 @@
         "feature",
         "plan-timeline"
       ],
-      "resolvedAt": "2026-07-20T14:48:05.229Z",
+      "resolvedAt": "2026-07-20T14:48:14.548Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-20T14:48:05.229Z"
+      "archivedAt": "2026-07-20T14:48:14.548Z"
     }
   ]
 }
