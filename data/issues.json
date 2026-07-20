@@ -47,7 +47,7 @@
     {
       "id": "i-20260720-38c4",
       "createdAt": "2026-07-20T22:41:28.600Z",
-      "status": "open",
+      "status": "fixed",
       "route": null,
       "description": "[bug-hunt] `npm run lint` (which runs `eslint .`) FAILS with exit code 1 due to a real error-level lint violation, so any lint gate is red.\n\nWHERE: src/components/PlateCalculatorSheet.tsx:137 — an empty `catch {}` block inside the Preferences.get(PREF_PLATES_KEY) JSON.parse guard:\n    try { const arr = JSON.parse(value); ... } catch {}\ntriggers eslint `no-empty` (error, not warning). Introduced 2026-07-03 in feat(plate-calc) 5d789595.\n\nEXPECTED: `npx eslint \"src/**/*.{ts,tsx}\" --quiet` (and `npm run lint`) exit 0.\nACTUAL: `x 1 problem (1 error, 0 warnings)` — `137:17 error Empty block statement no-empty`.\n\nREPRO: from the frontend repo run `npx eslint \"src/**/*.{ts,tsx}\" --quiet` (or `npm run lint`) -> exits 1 with the no-empty error.\n\nFIX: give the catch a body — e.g. `catch { /* ignore malformed stored plates */ }` (or logger.warn), matching how the sibling `.catch(() => {})` handlers in the same effect already no-op explicitly.",
       "author": "shakeebshaan",
@@ -60,11 +60,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Running the app's lint check (npm run lint) was failing, which turns any lint gate red. Two error-level issues caused it - an empty error-handler block in the plate calculator and a loose 'any' type in a test file - both are now fixed and npm run lint passes cleanly (0 errors). Full test suite stays green.",
+        "imagePath": "images/i-20260720-38c4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260720-38c4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c772b330f4b339fe8b05b4a2fc32570b4e2407d1",
+        "imageCommits": [
+          "c772b330f4b339fe8b05b4a2fc32570b4e2407d1"
+        ],
+        "fixedAt": "2026-07-20T23:39:17.738Z",
+        "by": "shakeebshaan",
+        "appCommit": "ed8bd47c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Both error-level violations cleared; eslint . exits 0 verified on HEAD. Empty catch fixed in 214d4cdd, remaining no-explicit-any fixed in ed8bd47c with the repo-canonical mock-prop type. Full test:unit green."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED + shipped to main (commit 214d4cdd, same fix as cd73). Root cause: empty catch {} at src/components/PlateCalculatorSheet.tsx:137 (Preferences.get JSON.parse guard) -> eslint no-empty ERROR -> 'npm run lint' (eslint .) exits 1. Fix: gave the catch an explanatory body ('catch { /* ignore malformed stored plates - fall back to defaults */ }'), matching the sibling .catch(()=>{}) no-ops in the same effect. VERIFIED: 'npm run lint' now exits 0 (0 errors, 82 pre-existing react-refresh warnings only, non-blocking); eslint on the file exit 0; proof card -> tmp/i-20260720-38c4-fix.png. Same board test-gate note as cd73: full test:unit is 5718 passed / 1 unrelated flaky red (Activity restTimerCarryover i-20260720-4b67, passes in isolation), so --tests pass can't be honestly set this tick. Recommend Resolve manually.",
-      "reviewedAt": "2026-07-20T23:37:34.791Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan"
     },
     {
