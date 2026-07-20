@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260720-7d1c",
+      "createdAt": "2026-07-20T00:00:00.000Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Un-skipping a meal that was skipped in a PRIOR session gives no immediate visual feedback — the card stays struck-through/grayscale with the SKIPPED badge until a network refetch returns, even though a \"Meal unskipped\" toast fires instantly. Root cause: NutritionMealList.tsx:41 computes isSkipped = skippedMealIds.has(meal.assigned_meal_id) || !!meal.is_skipped. handleUnskipMeal (useNutritionData.tsx:376-382) only removes the id from the local skippedMealIds Set; it does NOT optimistically clear the cached is_skipped. skipMealMutation.onSuccess (line 323-326) merely invalidates [diet-plan]/[dashboard-overview] — no optimistic setQueryData flip. So when a meal was skipped in an earlier session, skippedMealIds is empty on load but the server payload sets meal.is_skipped=true (backend.py:7190/9551 from AssignedMeal.skipped_at); the local removal is overridden by the still-true cached is_skipped, so the OR keeps the card skipped for the whole round-trip. The SKIP direction works (adds to Set -> OR short-circuits true instantly); only UNSKIP is broken. Expected: card visually un-skips on tap (like skip does). Actual: card stays skipped until refetch; toast contradicts card state; reads as a dead tap on slow connections. Repro: (1) open /nutrition with an active diet plan, (2) skip a meal, (3) cold-reload the app so is_skipped comes from the server and skippedMealIds is empty, (4) tap Unskip on that meal -> no immediate change, toast says unskipped, card flips only after the diet-plan refetch. Fix: mirror logMealMutation.onMutate — optimistically setQueryData([diet-plan, today]) to flip the target meal is_skipped=false (with snapshot rollback in onError), OR seed skippedMealIds from server is_skipped so the Set is the single source of truth.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260720-d4k9",
       "createdAt": "2026-07-20T05:10:00.000Z",
       "route": null,
