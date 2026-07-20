@@ -52,8 +52,9 @@
       "description": "[bug-hunt] `npm run lint` (which runs `eslint .`) FAILS with exit code 1 due to a real error-level lint violation, so any lint gate is red.\n\nWHERE: src/components/PlateCalculatorSheet.tsx:137 — an empty `catch {}` block inside the Preferences.get(PREF_PLATES_KEY) JSON.parse guard:\n    try { const arr = JSON.parse(value); ... } catch {}\ntriggers eslint `no-empty` (error, not warning). Introduced 2026-07-03 in feat(plate-calc) 5d789595.\n\nEXPECTED: `npx eslint \"src/**/*.{ts,tsx}\" --quiet` (and `npm run lint`) exit 0.\nACTUAL: `x 1 problem (1 error, 0 warnings)` — `137:17 error Empty block statement no-empty`.\n\nREPRO: from the frontend repo run `npx eslint \"src/**/*.{ts,tsx}\" --quiet` (or `npm run lint`) -> exits 1 with the no-empty error.\n\nFIX: give the catch a body — e.g. `catch { /* ignore malformed stored plates */ }` (or logger.warn), matching how the sibling `.catch(() => {})` handlers in the same effect already no-op explicitly.",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto"
+        "gate-blocked",
+        "lint",
+        "verified"
       ],
       "imagePath": null,
       "imageCommit": null,
@@ -84,8 +85,10 @@
         }
       },
       "history": [],
-      "needsReview": false,
-      "reviewedBy": "shakeebshaan"
+      "needsReview": true,
+      "reviewedBy": "shakeebshaan",
+      "reviewReason": "FIXED in app HEAD ed8bd47c (+214d4cdd). Root cause: empty catch{} at PlateCalculatorSheet.tsx:137 (no-empty) + a stray ': any' in Screen4_5_WhyNow.test.tsx:10 mock (no-explicit-any) — either made 'eslint .' exit 1. Fix: documented catch body + typed the mock props. VERIFIED: 'npm run lint' now exits 0 (0 errors, 82 pre-existing warnings). Only blocker to auto-resolve is the board testGate: 'loop.mjs verify' runs 'npm run test:unit' (full ~5700-test vitest) which cannot complete headless on this 8GB box — two 70-min runs today both crashed with worker-OOM (269/276 worker errors, only 19-25/250 files in), NOT test failures. Recommend: scope loop.json testCommand to a lint+changed-file subset, or resolve manually — the fix itself is green.",
+      "reviewedAt": "2026-07-20T23:47:45.990Z"
     },
     {
       "id": "i-20260720-r7q3",
