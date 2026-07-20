@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260720-99d9",
+      "createdAt": "2026-07-20T16:40:11.156Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Add Food modal (CustomMealModal, Quick Log tab): tapping a \"Recent\" meal chip that has calories mislabels the re-logged meal as \"AI estimated\".\n\nROOT CAUSE (src/components/nutrition/CustomMealModal.tsx): fillFromRecent() (line ~266) writes the recent meal into photoMacros ({description: meal.meal_name, total_calories, ...}) — the SAME state slot the AI photo/text-estimate paths use. The result card at line ~678 renders whenever [ photoMacros && photoMacros.description === customMealText.trim() && photoMacros.total_calories > 0 ], and its label is hard-coded \"AI estimated\" (with estimateConfidence null it shows just \"AI estimated\", no confidence suffix). Nothing distinguishes a user-history recent meal from an actual AI estimate, so a re-logged recent meal is presented as an AI guess.\n\nEXPECTED: re-logging a recent meal shows its exact historical macros with no \"AI estimated\" badge (those numbers are the user's own logged values, not an AI estimate).\nACTUAL: the purple \"AI estimated\" card appears over a recent meal's real macros, implying the numbers are an AI guess.\n\nREPRO: 1) /nutrition -> tap \"Log Meal\"/\"Add Food\" (open CustomMealModal). 2) In the Quick Log tab, tap a chip under \"Recent\" that shows a kcal value. 3) The description fills and a purple \"AI estimated\" card renders below the Estimate-with-AI button — even though the meal came from history, not AI.\n\nFIX: track the macro source (e.g. a separate estimateSource: \"ai\" | \"recent\" | null, or a boolean set only by the AI paths) and gate the \"AI estimated\" badge on the AI source; recent-meal prefill should show a neutral/no badge. NOTE: data is fine (re-logging the historical macros is correct) — this is a label-only mislabel.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260720-8639",
+      "createdAt": "2026-07-20T16:40:11.156Z",
+      "status": "open",
+      "route": "/diet-plan-week",
+      "description": "[bug-hunt] \"Your Week's Plan\" (DietPlanWeek) lets you mark a FUTURE day's meal as eaten, inflating weekly progress/streak with food not yet eaten. \n\nROOT CAUSE (src/pages/DietPlanWeek.tsx): the per-meal eaten toggle (DayCard onToggleMeal -> toggleMeal.mutate -> nutritionService.logMeal) has NO date guard — it fires for any day whose card shows meals, regardless of isPast/isToday. The feature's own comment (line ~57) scopes intent to \"today OR a past day the user forgot to mark\", but the code never enforces it. The backend materializes the WHOLE current week up front (plan_generator materialize loop: mat_start = this week's Monday, mat_days up to 7), so on any weekday except Sunday the future days of the current week already have real AssignedMeal rows with valid assigned_meal_id. Expanding a future day and tapping a meal toggles is_eaten server-side for a date that hasn't happened. weekly.mealsEaten and weekly.daysComplete (the \"Streak / full days\" stat) then count those future meals.\n\nEXPECTED: only today's and past days' meals are markable as eaten; future-day meal rows are non-interactive (disabled toggle / read-only).\nACTUAL: future-day meal toggles are active; tapping marks a not-yet-eaten future meal as eaten and inflates the week's progress + full-days count.\n\nREPRO: 1) On any weekday other than Sunday, open /diet-plan-week (Profile -> progress, or Plan Timeline -> \"Diet Plan\"). 2) Expand a day LATER in the week that shows meals. 3) Tap a meal's target/circle button -> it flips to a green \"eaten\" check with no restriction. 4) \"This Week's Progress\" Meals + Streak stats increase for a day that hasn't occurred.\n\nFIX: in DayCard, disable the eaten toggle (and drop the \"tap a meal\" hint) when the bucket is in the future (bucket dt > today); only allow toggling for isToday || isPast.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260720-4b67",
       "createdAt": "2026-07-20T14:26:25.103Z",
       "status": "fixed",
