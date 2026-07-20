@@ -46,7 +46,7 @@
     {
       "id": "i-20260720-8639",
       "createdAt": "2026-07-20T16:40:11.156Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/diet-plan-week",
       "description": "[bug-hunt] \"Your Week's Plan\" (DietPlanWeek) lets you mark a FUTURE day's meal as eaten, inflating weekly progress/streak with food not yet eaten. \n\nROOT CAUSE (src/pages/DietPlanWeek.tsx): the per-meal eaten toggle (DayCard onToggleMeal -> toggleMeal.mutate -> nutritionService.logMeal) has NO date guard — it fires for any day whose card shows meals, regardless of isPast/isToday. The feature's own comment (line ~57) scopes intent to \"today OR a past day the user forgot to mark\", but the code never enforces it. The backend materializes the WHOLE current week up front (plan_generator materialize loop: mat_start = this week's Monday, mat_days up to 7), so on any weekday except Sunday the future days of the current week already have real AssignedMeal rows with valid assigned_meal_id. Expanding a future day and tapping a meal toggles is_eaten server-side for a date that hasn't happened. weekly.mealsEaten and weekly.daysComplete (the \"Streak / full days\" stat) then count those future meals.\n\nEXPECTED: only today's and past days' meals are markable as eaten; future-day meal rows are non-interactive (disabled toggle / read-only).\nACTUAL: future-day meal toggles are active; tapping marks a not-yet-eaten future meal as eaten and inflates the week's progress + full-days count.\n\nREPRO: 1) On any weekday other than Sunday, open /diet-plan-week (Profile -> progress, or Plan Timeline -> \"Diet Plan\"). 2) Expand a day LATER in the week that shows meals. 3) Tap a meal's target/circle button -> it flips to a green \"eaten\" check with no restriction. 4) \"This Week's Progress\" Meals + Streak stats increase for a day that hasn't occurred.\n\nFIX: in DayCard, disable the eaten toggle (and drop the \"tap a meal\" hint) when the bucket is in the future (bucket dt > today); only allow toggling for isToday || isPast.",
       "author": "shakeebshaan",
@@ -59,8 +59,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: 'Your Week's Plan' let you tap a FUTURE day's meal as eaten. Because the backend fills in the whole current week ahead of time, those future meals were real and tappable, so marking one wrongly counted toward your weekly meals + full-days streak. Fix: future-day meals are now shown but not tappable, with an 'Upcoming — you can mark these off once the day arrives' note; only today's and past days' meals can be marked eaten (past-day backfill still works).",
+        "imagePath": "images/i-20260720-8639-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260720-8639-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "efa66b2b956b7c2397e505f90fb0190a704c4dd8",
+        "imageCommits": [
+          "efa66b2b956b7c2397e505f90fb0190a704c4dd8"
+        ],
+        "fixedAt": "2026-07-20T17:22:16.715Z",
+        "by": "shakeebshaan",
+        "appCommit": "ed10b3ae",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Date guard matches diagnosis; disabled toggle + hint for future days, past/today unaffected; adversarial review found no regression; proof PNG shows future day non-toggleable."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260720-4b67",
