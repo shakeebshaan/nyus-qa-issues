@@ -18,7 +18,11 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + pushed (f4912f81). Root cause: PlanReadyOverview (final onboarding 'Your plan overview' step) passed `heightMode=\"fill\"` to MobilePage, which has no such prop (only `fill?: boolean`); it was silently dropped, so the fixed variant fell back to h-[100dvh] instead of the intended flex-1 min-h-0 -> a TS2322 error at line 265 and wrong height mode. Fix: use the real boolean `fill` prop (src/pages/onboarding/custom/PlanReadyOverview.tsx), matching CustomWorkoutBuilder + MobilePage's documented onboarding-step mode. tsc --noEmit now clean (TS2322 cleared). NOT resolved on board only because the testGate requires a full `npm run test:unit` (~20min) that is flaky headless. Recommend owner Resolve, or scope data/loop.json testCommand to a unit subset.",
+      "reviewedAt": "2026-07-20T13:36:06.950Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260720-fd5a",
