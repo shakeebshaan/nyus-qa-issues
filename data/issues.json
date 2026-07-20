@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260720-fd5a",
+      "createdAt": "2026-07-20T12:13:39.663Z",
+      "status": "open",
+      "route": "/ai/customize-meal",
+      "description": "[bug-hunt] AI message bubble crashes (blank bubble / errored chat view) when an AI reply contains a fenced ```overview``` block whose JSON body is the literal `null` — InlineOverviewCard dereferences the parsed data with NO null guard, unlike its null-safe sibling InlinePlanCard.\n\nComponent: src/components/ai/AIMessageBubble.tsx. Mounted in production by src/pages/AIMealCustomization.tsx:405 — every non-user AI reply in the /ai/customize-meal chat is run through parseMessageBlocks().\n\nRoot cause:\n1. parseMessageBlocks (AIMessageBubble.tsx:28-45) matches ```(plan|overview)``` fences and stores `data = JSON.parse(match[2].trim())` (line 39). `JSON.parse(\"null\")` returns `null` (it is valid JSON), so an overview block whose body is `null` yields `{ type: \"overview\", data: null }`. The surrounding try/catch only guards a SyntaxError, and `null` parses fine.\n2. Render (line 175): `if (block.type === \"overview\") return <InlineOverviewCard data={block.data} />`.\n3. InlineOverviewCard (line 118-119) does `const overview = data as OverviewData;` then reads `overview.headline` (124), `overview.score` (125), `overview.wins` (131) with NO optional chaining. With `data === null` this throws `TypeError: Cannot read properties of null (reading 'headline')`, which propagates out of the blocks.map() render (no error boundary around it) and blanks the whole message bubble.\n\nThe sibling InlinePlanCard (line 61-62) handles exactly this case: `const plan = (data?.plan || data) as ParsedBlockData;` and every later access uses `plan?.x` — so a `null` ```plan``` block renders an empty card instead of crashing. InlineOverviewCard was written without the same guard. (This is also why `tsc -b` flags AIMessageBubble.tsx:174-175 'ParsedBlockData | undefined is not assignable to ParsedBlockData' — the block-data type is not narrowed and can be nullish.)\n\nExpected: a malformed / null overview block degrades gracefully (empty or skipped card), same as InlinePlanCard.\nActual: TypeError → the AI reply bubble renders blank / the chat surface errors.\n\nRepro (code path): in the /ai/customize-meal chat, have the assistant emit a message containing:\n```overview\nnull\n```\nparseMessageBlocks yields `data: null` → InlineOverviewCard crashes on `overview.headline`.\n\nSeverity: LOW / latent. Code-proven and concrete, but the trigger is narrow: it needs an ```overview``` fence whose JSON body is exactly `null` — any object/string/number/array is safe (property access on those returns undefined; only null/undefined throw, and JSON.parse never returns undefined). Overview blocks are not part of the normal meal-customize prompt, so real-world reachability is low. Filing as a genuine defensive-guard gap that the component's own sibling already handles, not a hot-path crash.\n\nFix: mirror InlinePlanCard — in InlineOverviewCard use `const overview = (data ?? {}) as OverviewData;` (or guard each access with `overview?.x`). One line, matches the existing pattern.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260720-8b4e",
       "createdAt": "2026-07-20T10:30:00.000Z",
       "status": "open",
