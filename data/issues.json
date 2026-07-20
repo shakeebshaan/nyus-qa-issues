@@ -4,7 +4,7 @@
     {
       "id": "i-20260720-99d9",
       "createdAt": "2026-07-20T16:40:11.156Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/nutrition",
       "description": "[bug-hunt] Add Food modal (CustomMealModal, Quick Log tab): tapping a \"Recent\" meal chip that has calories mislabels the re-logged meal as \"AI estimated\".\n\nROOT CAUSE (src/components/nutrition/CustomMealModal.tsx): fillFromRecent() (line ~266) writes the recent meal into photoMacros ({description: meal.meal_name, total_calories, ...}) — the SAME state slot the AI photo/text-estimate paths use. The result card at line ~678 renders whenever [ photoMacros && photoMacros.description === customMealText.trim() && photoMacros.total_calories > 0 ], and its label is hard-coded \"AI estimated\" (with estimateConfidence null it shows just \"AI estimated\", no confidence suffix). Nothing distinguishes a user-history recent meal from an actual AI estimate, so a re-logged recent meal is presented as an AI guess.\n\nEXPECTED: re-logging a recent meal shows its exact historical macros with no \"AI estimated\" badge (those numbers are the user's own logged values, not an AI estimate).\nACTUAL: the purple \"AI estimated\" card appears over a recent meal's real macros, implying the numbers are an AI guess.\n\nREPRO: 1) /nutrition -> tap \"Log Meal\"/\"Add Food\" (open CustomMealModal). 2) In the Quick Log tab, tap a chip under \"Recent\" that shows a kcal value. 3) The description fills and a purple \"AI estimated\" card renders below the Estimate-with-AI button — even though the meal came from history, not AI.\n\nFIX: track the macro source (e.g. a separate estimateSource: \"ai\" | \"recent\" | null, or a boolean set only by the AI paths) and gate the \"AI estimated\" badge on the AI source; recent-meal prefill should show a neutral/no badge. NOTE: data is fine (re-logging the historical macros is correct) — this is a label-only mislabel.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: re-logging a Recent meal chip reused the same on-screen slot the AI photo/text estimate uses, so your own previously-recorded macros were shown under an 'AI estimated' badge. Fix: the app now tracks where the numbers came from and shows a neutral 'From your history' badge for a re-logged recent meal (the purple 'AI estimated' badge only appears for real AI estimates). The logged numbers were always correct — this was a label-only fix.",
+        "imagePath": "images/i-20260720-99d9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260720-99d9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0874df731fa7aeb70027a7731b664bca0fc43e39",
+        "imageCommits": [
+          "0874df731fa7aeb70027a7731b664bca0fc43e39"
+        ],
+        "fixedAt": "2026-07-20T17:22:01.554Z",
+        "by": "shakeebshaan",
+        "appCommit": "7f2fb29c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Root cause fixed exactly as diagnosed; surgical source-tracking, tests fail-before/pass-after, proof PNG shows neutral badge on the correct authenticated screen."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260720-8639",
