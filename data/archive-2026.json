@@ -22556,37 +22556,27 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260719-1005",
-      "createdAt": "2026-07-19T01:25:51.188Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260719-1005.jpg",
-      "imageCommit": "9139c1ead97f1d0b6ae033f9e6fb7321fdfc9149",
-      "imagePaths": [
-        "images/i-20260719-1005.jpg"
-      ],
-      "imageCommits": [
-        "9139c1ead97f1d0b6ae033f9e6fb7321fdfc9149"
-      ],
-      "imagePrivate": true,
+      "id": "i-20260718-vrf3",
+      "createdAt": "2026-07-18T09:15:00.000Z",
+      "description": "[suggestion] Add a per-day \"Fasting/Vrat day\" toggle on the Nutrition page that switches meal suggestions to religious-fast-appropriate dishes. Problem: a huge share of Indian users observe recurring food-restriction fasting days (Navratri, Ekadashi, Karva Chauth, Mondays for some) where grains/onion/garlic/certain veg are off-limits, but NYUS meal suggestions/swap picker have no concept of this and keep recommending regular roti/rice/dal meals on those days, breaking the precision-tool trust for a recurring, predictable use case. Evidence: src/data/meal-catalog.json already has 45+ vrat-named dishes (Sabudana Khichdi, Kuttu Atta items, Navratan preparations, singhara-based dishes) sitting dormant as plain catalog entries with zero dietary-restriction tag or filter hook - the data exists, the filtering doesn't. Existing fasting UI (FastingTrendChart) is unrelated (16:8 time-restricted eating, not food-type fasting). v1 scope: single day-scoped toggle chip near the Nutrition date header (\"Fasting today\") that (a) filters the meal-suggestion/swap picker lists to catalog items already identifiable as vrat-appropriate by name/ingredient keyword match, (b) suppresses grain-heavy default suggestions for that day only, (c) persists as a simple per-date client flag - no calendar/recurrence settings, no plan regeneration, no backend schema change. Effort: small-medium, ~2-3 days (keyword-tag pass over catalog + filter logic in the meal suggestion component + one persisted per-day preference + i18n strings across en/hi/hinglish).",
       "status": "resolved",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "author": "shakeebshaan",
+      "route": "/nutrition",
       "fix": null,
       "history": [],
+      "imagePaths": [],
+      "imagePrivate": false,
       "needsReview": true,
-      "reviewReason": "Root-caused, but this is a product/architecture call on the plan-save contract, so flagging rather than guessing. Your ask — save each meal to the backend as you add it so the final Save is instant — needs an incremental-save path the builder does NOT have today: adding an ingredient only updates local state + a localStorage draft; the ONLY backend write is one terminal full-plan POST (/onboarding/save-custom-plan) when you tap Save plan. That single save is what you wait on. Its two biggest time sinks: (1) a synchronous OpenAI micronutrient-estimation call INSIDE the save (1-2 blocking LLM calls per plan), and (2) a per-ingredient DB flush loop; the save also fully wipes and rebuilds every day of the plan each time. Good news: single-meal endpoints ALREADY exist server-side (add-meal / swap-meal / adjust-portion on the durable plan) — the builder just does not use them yet. This is the SAME save/finalize contract as two items you already have open: 938c (store on frontend, ids on backend) and 326f (changing one day wiped the others — same full-replace root cause). Recommend deciding all three together. Two ways forward: PATH A (surgical interim, no contract change): move the micronutrient LLM call out of the request path (best-effort already — a failure just zeros micros) + batch the per-ingredient writes — cuts most of the Save-plan wait immediately. PATH B (your literal ask): wire the builder to persist each meal to the durable plan via the existing per-meal endpoints as you edit, so the final Save is near-instant AND day-edits stop wiping siblings (also closes 326f) — bigger, depends on the id decision in 938c. Recommendation: ship PATH A now for the immediate speed win, do PATH B alongside 938c/326f. Reply build A, build B, or both. (I did not ship a backend timing change unprompted because it cannot be verified end-to-end headless right now — the QA data account 401s — and it touches the same contract as 938c/326f.)",
-      "reviewedAt": "2026-07-19T01:36:06.366Z",
+      "reviewReason": "Assessment (code-checked): the TOGGLE half is ALREADY shipped, richer than the ask. Nutrition.tsx mounts a FastingBanner (Nutrition.tsx:54, :467) with a 3-type day selector - vrat / full / intermittent (FASTING_TYPES, Nutrition.tsx:46) - persisted per-date to the backend via nutritionService.setFastingStatus -> PUT /daily-logs/fasting (nutrition.service.ts:128), read back through useNutritionData (fastingDay/fastingType). Skipped meals on a fasting day already don't hurt the streak. So the suggestion's part (c) 'per-day persisted fasting flag + toggle chip near the date header' exists (and better: server-persisted, 3 fast types, IF stopwatch unified with the Dashboard/​/fasting card). The ONLY genuine gap vs the ask: selecting 'vrat' does NOT yet FILTER meal suggestions / the swap picker to vrat-appropriate dishes (parts a+b). meal-catalog.json has just 1 vrat token and no dietary-restriction tag or filter hook, and nothing keys meal-suggestion/swap lists off fastingType==='vrat'. Building that is a NEW behavior change to the meal-suggestion + swap picker (needs a vrat-appropriate tag pass over the catalog + a filter that suppresses grain/onion/garlic dishes only on vrat days) - a user-facing default I won't ship unattended headless (owner reopens when suggestion defaults are wrong). Confirm you want the vrat meal-FILTER built (keyword/tag match: sabudana/kuttu/singhara/samak-rice/aloo/paneer/curd/fruit in; roti/rice/dal/onion/garlic out, vrat day only) and I'll implement over the existing toggle. The toggle itself needs no work.",
+      "reviewedAt": "2026-07-18T14:29:08.017Z",
       "reviewedBy": "shakeebshaan",
-      "tags": [
-        "builder",
-        "save",
-        "performance",
-        "architecture"
-      ],
-      "resolvedAt": "2026-07-20T14:46:12.166Z",
+      "resolvedAt": "2026-07-20T14:46:15.748Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-20T14:46:12.166Z"
+      "archivedAt": "2026-07-20T14:46:15.748Z"
     }
   ]
 }
