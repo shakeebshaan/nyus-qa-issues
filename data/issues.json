@@ -950,22 +950,6 @@
       "reviewedBy": "shakeebshaan"
     },
     {
-      "id": "i-20260718-mn4k",
-      "createdAt": "2026-07-18T13:20:00.000Z",
-      "description": "[press] Press kit: §4 Key facts (blog/content page count recounted, 1,800→1,801, top-level guides 83→84, traced to commit d9082f88). Article drafted: The Missing Layer in India's Digital Health Stack: Nobody Has Solved Food Data Yet (target: MediaNama, 860 words). Escalated: 1 (MediaNama story-tip pitch, form/email route not re-verified this tick, founder confirm needed).",
-      "status": "open",
-      "tags": [
-        "press",
-        "auto"
-      ],
-      "author": "shakeebshaan",
-      "route": null,
-      "fix": null,
-      "history": [],
-      "imagePaths": [],
-      "imagePrivate": false
-    },
-    {
       "id": "i-20260718-out1",
       "createdAt": "2026-07-18T14:23:00.000Z",
       "status": "open",
@@ -995,22 +979,6 @@
       "reviewReason": "Assessment (code-checked): the TOGGLE half is ALREADY shipped, richer than the ask. Nutrition.tsx mounts a FastingBanner (Nutrition.tsx:54, :467) with a 3-type day selector - vrat / full / intermittent (FASTING_TYPES, Nutrition.tsx:46) - persisted per-date to the backend via nutritionService.setFastingStatus -> PUT /daily-logs/fasting (nutrition.service.ts:128), read back through useNutritionData (fastingDay/fastingType). Skipped meals on a fasting day already don't hurt the streak. So the suggestion's part (c) 'per-day persisted fasting flag + toggle chip near the date header' exists (and better: server-persisted, 3 fast types, IF stopwatch unified with the Dashboard/​/fasting card). The ONLY genuine gap vs the ask: selecting 'vrat' does NOT yet FILTER meal suggestions / the swap picker to vrat-appropriate dishes (parts a+b). meal-catalog.json has just 1 vrat token and no dietary-restriction tag or filter hook, and nothing keys meal-suggestion/swap lists off fastingType==='vrat'. Building that is a NEW behavior change to the meal-suggestion + swap picker (needs a vrat-appropriate tag pass over the catalog + a filter that suppresses grain/onion/garlic dishes only on vrat days) - a user-facing default I won't ship unattended headless (owner reopens when suggestion defaults are wrong). Confirm you want the vrat meal-FILTER built (keyword/tag match: sabudana/kuttu/singhara/samak-rice/aloo/paneer/curd/fruit in; roti/rice/dal/onion/garlic out, vrat day only) and I'll implement over the existing toggle. The toggle itself needs no work.",
       "reviewedAt": "2026-07-18T14:29:08.017Z",
       "reviewedBy": "shakeebshaan"
-    },
-    {
-      "id": "i-20260718-7f2e",
-      "createdAt": "2026-07-18T13:00:00.000Z",
-      "description": "[content] Published: How to Eat at an Indian Wedding Buffet Without Blowing the Week — https://nyus.in/blog/wedding-buffet-guide-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
-      "status": "open",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "author": "shakeebshaan",
-      "route": null,
-      "fix": null,
-      "history": [],
-      "imagePaths": [],
-      "imagePrivate": false
     },
     {
       "id": "i-20260718-9a4b",
