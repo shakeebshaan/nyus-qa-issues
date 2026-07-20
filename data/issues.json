@@ -19,7 +19,10 @@
       "imagePrivate": false,
       "fix": null,
       "history": [],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED + shipped to main (commit 214d4cdd). Root cause: calcPlates() used a pure greedy largest-first fill, only optimal for the canonical default plate set; on custom/non-canonical sets it got stuck and never backtracked (80kg/20kg bar with {20,15}: took one 20, stalled at 10, never found 15+15), firing a false 'not loadable' warning and a breakdown whose plate sum contradicted the header. Fix (src/components/PlateCalculatorSheet.tsx): replaced greedy with an EXACT DP over reachable per-side sums in gcd units (backtracks, finds 15+15); greedy kept only as a pathological-set fallback. nearestBelow/nearestAbove + rendered plates now always agree with the displayed weight. VERIFIED: 4 new regression tests + full plate-calc suite 11/11 green; tsc --noEmit exit 0; live-UI proof captured (real PlateCalculatorSheet, {20,15}@80kg now shows '2x 15 kg', 30kg/side, no warning) -> tmp/i-20260720-cd73-fix.png. Board test gate: full 'npm run test:unit' = 5718 passed / 1 failed, the lone red is UNRELATED flaky Activity.restTimerCarryover (i-20260720-4b67, a 21s waitFor timeout under full-suite load that passes 3/3 in isolation) -> cannot honestly pass --tests pass this tick. Recommend: Resolve manually, or stabilize the 4b67 flake so the gate can go green.",
+      "reviewedAt": "2026-07-20T23:37:21.835Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260720-38c4",
