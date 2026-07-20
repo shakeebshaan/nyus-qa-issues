@@ -2,6 +2,46 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260720-cd73",
+      "createdAt": "2026-07-20T22:41:28.600Z",
+      "status": "open",
+      "route": "/activity",
+      "description": "[bug-hunt] Plate Calculator gives a WRONG breakdown + a false \"not loadable\" warning when the user configures a non-canonical set of available plates (via the plate editor / custom plates). Root cause: calcPlates() (src/components/PlateCalculatorSheet.tsx:67-100) loads the bar with a pure GREEDY largest-first algorithm, which is only optimal for the canonical default set [25,20,15,10,5,2.5,1.25]. On any set where greedy can get stuck, it (a) fails to find an EXACT solution that exists and (b) emits a plate list whose real sum contradicts the weight shown in the header/diagram.\n\nEXPECTED: for target 80kg on a 20kg bar with available plates {20,15}, per side = 30kg = 15+15, so 80kg IS exactly loadable and the diagram should show two 15kg plates per side.\nACTUAL (code-proven via node, replicating calcPlates): calcPlates(80,20,[20,15]) => {plates:[20], isExact:false, nearestBelow:80, nearestAbove:110}. Greedy takes one 20 (largest), leaves 10 which nothing fills, and never backtracks to 15+15. So: (1) the amber \"80 kg isn't exactly loadable\" warning fires even though it IS loadable; (2) nearestBelow is reported as 80 while the breakdown it returns is a single 20kg plate/side = only 60kg total — the bar diagram + \"= bar 20kg + per side\" formula render ONE 20kg plate per side under an \"80 kg\" header (plates shown load 60, header says 80). The per-side footer shows 20.00 kg while nearestBelow implies 30/side.\n\nREPRO: live workout -> open a set editor -> tap the Plate Calculator -> Settings2 (configure available plates) -> deselect everything except 20 and 15 (or add a custom plate that makes the set non-canonical) -> target 80kg. Shows false \"not loadable\" + a 20kg-only breakdown that does not match 80kg. (Default plate set is greedy-safe, so this only bites edited/custom configs — the plate editor explicitly supports both, i-20260702-plc8.)\n\nFIX: replace greedy with an exhaustive/DP fill over the available plate multiset (or verify greedy reached perSide and fall back to a search when it did not), so the exact solution is found and nearestBelow/nearestAbove + the rendered plates always agree with the displayed weight.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "needsReview": false
+    },
+    {
+      "id": "i-20260720-38c4",
+      "createdAt": "2026-07-20T22:41:28.600Z",
+      "status": "open",
+      "route": null,
+      "description": "[bug-hunt] `npm run lint` (which runs `eslint .`) FAILS with exit code 1 due to a real error-level lint violation, so any lint gate is red.\n\nWHERE: src/components/PlateCalculatorSheet.tsx:137 — an empty `catch {}` block inside the Preferences.get(PREF_PLATES_KEY) JSON.parse guard:\n    try { const arr = JSON.parse(value); ... } catch {}\ntriggers eslint `no-empty` (error, not warning). Introduced 2026-07-03 in feat(plate-calc) 5d789595.\n\nEXPECTED: `npx eslint \"src/**/*.{ts,tsx}\" --quiet` (and `npm run lint`) exit 0.\nACTUAL: `x 1 problem (1 error, 0 warnings)` — `137:17 error Empty block statement no-empty`.\n\nREPRO: from the frontend repo run `npx eslint \"src/**/*.{ts,tsx}\" --quiet` (or `npm run lint`) -> exits 1 with the no-empty error.\n\nFIX: give the catch a body — e.g. `catch { /* ignore malformed stored plates */ }` (or logger.warn), matching how the sibling `.catch(() => {})` handlers in the same effect already no-op explicitly.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "needsReview": false
+    },
+    {
       "id": "i-20260720-r7q3",
       "createdAt": "2026-07-20T21:10:00.000Z",
       "status": "open",
