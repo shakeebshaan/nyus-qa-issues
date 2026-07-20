@@ -1,0 +1,493 @@
+{
+  "open": [
+    {
+      "id": "i-20260716-9f2e",
+      "createdAt": "2026-07-16T16:45:00.000Z",
+      "route": null,
+      "description": "[content] Published: How to Build a Balanced Indian Thali for Weight Loss — https://nyus.in/blog/how-to-build-a-balanced-indian-thali-for-weight-loss.html. Ideas added: 3. Escalated: 0.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260716-8b2e",
+      "createdAt": "2026-07-16T22:00:00.000Z",
+      "route": null,
+      "description": "[content] Published: Millets vs Rice & Wheat for Weight Loss — Bajra, Jowar, Ragi Compared — https://nyus.in/blog/millets-vs-rice-wheat-for-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260717-9d4b",
+      "createdAt": "2026-07-17T00:00:00.000Z",
+      "route": null,
+      "description": "[discovery] Outlets added: 3. Pitch-ready: Little India (littleindia.com). Escalated: 1.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "discovery",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260717-938c",
+      "createdAt": "2026-07-17T03:07:56.006Z",
+      "route": null,
+      "description": "Add scrolling to see all images and make sure we are storing this on the frontend and just ids on the backend",
+      "imagePrivate": true,
+      "image": "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260717-938c\\img-0.jpg",
+      "images": [
+        "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260717-938c\\img-0.jpg"
+      ],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "UPDATE (commit 8d262b86, pushed to main): shipped the frontend-catalog picker fill. (1) SEE-ALL-IMAGES + FRONTEND STORAGE — the 'Choose a photo' sheet now front-loads options from the bundled 9.5k-dish frontend meal catalog (peekMealMediaOptions: best match + same-family dishes sharing a distinctive token, self-hosted nyus.in/meal-media), then tops up with the backend stock-picker, merged/de-duped/capped at 12. Verified E2E on /dev/plan-builder?stage=card with the backend OFFLINE: 12 catalog photos render and the region scrolls — proving the picker is now populated purely from the frontend. tsc clean, 14/14 meal-catalog tests green. (2) REMAINING OWNER CALL — 'just ids on the backend': the catalog photo filename IS already a stable 12-hex id, so an id-only backend contract is now cheap. Decision needed: (a) persist only that media-id server-side on finalize (vs today's full URL) and resolve id->URL client-side, and (b) keep the URL as a backend fallback or not? This touches the meal-schema/finalize contract + the same persistence path as 67ca. Confirm the id scheme + fallback and I'll implement across plan-builder + RecipeDetail together.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": null
+    },
+    {
+      "id": "i-20260717-3d27",
+      "createdAt": "2026-07-17T06:18:19.961Z",
+      "route": null,
+      "description": "Audit how I submit the issue and dtou response and falg and how I response and how its all displayed in sequence and lable what's being worked on etc",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "Audit delivered — tap the '\\''Issue lifecycle audit'\\'' report button above: it walks the full sequence (submit -> agent pull/resolve/flag -> your reply -> reopen -> how each state is displayed/ordered/badged), with file:line citations. One concrete gap answers your '\\''label what'\\''s being worked on'\\'' ask: there is NO in-progress state today — an open issue reads 'Submitted / Awaiting fix' the whole time an agent is fixing it, and a concurrent tick can grab the same issue. The report proposes a low-risk, opt-in 'claim -> In progress pill (auto-expiring)' that also blocks duplicate ticks. That's a change to YOUR board workflow surface so I won'\\''t ship it unprompted — reply 'build it' and I will.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "audit",
+        "board"
+      ]
+    },
+    {
+      "id": "i-20260717-sf9k",
+      "createdAt": "2026-07-17T12:00:00.000Z",
+      "route": "/progress",
+      "description": "[suggestion] Add a \"Share progress report\" export on the Progress page — a shareable image/PDF summarizing weight trend, macro adherence, and workout consistency over a chosen date range (7/30/90 days). Problem: NYUS users are dedicated athletes in India who routinely see a doctor, dietitian, or trainer for periodic check-ins, but there is no way to hand off structured progress data today — codebase grep confirms zero PDF/report-export code and the only navigator.share() usages are ShoppingList and the referral card (no Progress/Achievements export exists). Competitors (MyFitnessPal, Cronometer) ship a printable/exportable report precisely for this reason. V1 scope: one \"Share report\" button on Progress → renders a single portrait canvas (weight chart + macro-adherence % + workout completion %, NYUS branding) client-side (no new backend endpoint) → native Web Share / save-to-gallery via existing Capacitor share plugin, same pattern as ShoppingList’s share flow. No new AI/LLM cost. Effort: ~1-2 days (canvas/chart-to-image render + share wiring + one QA pass on real device for the gallery/share-sheet).",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "Already shipped — no build needed. Progress already has a Share export: WeeklyProgress.tsx:357 and MonthlyProgress.tsx:380 mount ShareButton in the header. It renders the full report content (calorie/macro-adherence ring, 7-day/30-day rail, workout-session completion %, weight trend, streaks) to a portrait PNG via html2canvas -> @capacitor/share Share.share() (native share sheet, with save/download fallback) — exactly the V1 scope described. Achievements.tsx:169/460 has the same share too. The suggestion's grep missed it because the app shares via the Capacitor Share plugin (Share.share()), NOT navigator.share(), so a navigator.share grep returns nothing on Progress. Only true gaps vs the ask: no single 7/30/90 date-range picker inside one report (Weekly=7d, Monthly=30d cover 7/30; no 90d) and it's a PNG not a PDF. If you want the 90-day range + PDF variant, that's a real small follow-up; otherwise this can be resolved/archived as done.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260717-r0t1",
+      "createdAt": "2026-07-17T18:00:00.000Z",
+      "route": null,
+      "description": "[content] Published: The Roti-Size Trap: Why \"2 Rotis\" Isn't One Number — https://nyus.in/blog/roti-size-and-calories-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260717-out1",
+      "createdAt": "2026-07-17T18:06:18.460Z",
+      "route": "",
+      "description": "[discovery] Outreach day-summary: 2026-07-16 tick 2 sends (4/10, day total 7/10) - 1. UR.Life corporate wellness -> enquiries@urlife.co.in | 2. DY Nutrition (sports nutrition coaching) -> contact@dynutrition.in | 3. Fit Street/Ball Street (fitness content/coaching) -> ceo@ballstreet.club | 4. FITPASS (fitness marketplace/HR benefits) -> care@fitpass.co.in. 2026-07-17 tick 1 (3/10): Dietician Richa Doshi (Mumbai clinical dietitian) -> healthstudio2020@gmail.com | Loop Health (corporate wellness/insurance broker) -> info@loophealth.com | CIIE.CO (IIM Ahmedabad healthcare accelerator) -> write@ciie.co. Running total: 62 all-time sends (per ledger.json). No replies/complaints flagged.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": null,
+      "tags": [
+        "discovery",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260717-rdy1",
+      "createdAt": "2026-07-17T19:39:52.662Z",
+      "route": "/activity",
+      "description": "[suggestion] Daily Readiness nudge on Activity/Dashboard before a workout. Problem: NYUS logs sleep_hours nightly (Health Connect sync -> DailyLog.sleep_hours) and computes a recovery pillar in HealthScore, but nothing surfaces day-to-day - a user with 4hrs sleep gets the exact same workout prompt as one with 8hrs. Competitors (Whoop, Oura) lead with a daily readiness/strain-adjust signal; the brand direction here explicitly cites Whoop elite-data-confidence as a reference. Evidence: DashboardSleepCard already reads sleep_hours; Activity.tsx has no readiness-aware messaging; HealthScore recovery pillar recomputes on its own cadence, not tied to today. v1 scope: small readiness chip/banner on Activity (and optionally Dashboard) using last-night sleep_hours + yesterday completed-workout intensity (existing WorkoutSession/SetLog data, no new sensors) -> 3-tier label (Recharged / Steady / Run Down) with one-line copy (\"Shorter sleep last night - consider an easier session or a mobility day\"). No new backend model: derive client-side or a small backend endpoint reading DailyLog + last WorkoutSession. No blocking gates, purely informational, dismissible. Effort: ~1-2 days FE, +0.5 day BE if a dedicated endpoint is preferred over deriving from existing /activity/overview payload.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "Assessment (code-checked): this is a genuine gap, not already shipped -- Activity.tsx has zero readiness-aware messaging (grep for readiness/Recharged/Run Down = 0), while the data already exists (DailyLog.sleep_hours from Health Connect sync + WorkoutSession/SetLog for yesterday intensity, and HealthScore already computes a recovery pillar). It is a small, calm, on-brand v1 (Whoop-style readiness is explicitly a brand reference). It is a NEW user-facing surface so I want your sign-off on the product knobs before shipping (owner reopens repeatedly when defaults are wrong). Proposed defaults if you just say build",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260717-gbc1",
+      "createdAt": "2026-07-17T20:38:40.558Z",
+      "route": "/shopping-list",
+      "description": "[suggestion] Weekly grocery-list cost estimate + running budget on the Shopping List screen. Problem: Indian users are price-sensitive week-to-week grocery spend, but ShoppingList.tsx / ShoppingListItem has no price field at all — the list shows qty+unit only, no cost signal, while Blinkit/Zepto deep-links already exist for the same items. Evidence: grep of ShoppingListItem + ShoppingList.tsx shows zero cost/budget fields; comparable apps (Cult.fit, HealthifyMe) surface an estimated weekly grocery spend to reinforce diet-plan adherence via cost awareness. Proposed v1: backend attaches a per-item avg-price estimate (static INR price table by ingredient, refreshed manually) to the /shopping-list response; FE sums to a \"~₹XXX this week\" pill at the top of ShoppingList.tsx, no per-store live pricing needed. Effort: ~1-2 days (small backend price table + one route field, small FE sum+pill).",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "Assessment (code-checked both repos): a cost/budget feature ALREADY exists in ShoppingListModal.tsx (per-item est_price_inr + an estimated",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260717-ef2b",
+      "createdAt": "2026-07-17T22:28:43.764Z",
+      "route": null,
+      "description": "[content] Published: The Hand-Portion Method for Indian Plates (No Scale Needed) — https://nyus.in/blog/hand-portion-method-indian-plates-no-scale.html. Ideas added: 3. Escalated: 1.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-9f1b",
+      "createdAt": "2026-07-18T00:27:31.000Z",
+      "route": null,
+      "description": "[content] Published: Cheat Day vs Cheat Meal — Which One Actually Wrecks Weight Loss? — https://nyus.in/blog/cheat-day-vs-cheat-meal-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-6a4d",
+      "createdAt": "2026-07-18T00:40:00.000Z",
+      "route": null,
+      "description": "[discovery] Outlets added: 2. Pitch-ready: Storyboard18. Escalated: 1.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "discovery",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-8920",
+      "createdAt": "2026-07-18T02:44:52.844Z",
+      "route": null,
+      "description": "When click on the card show the sleep vs meals vs supplement vs workout vs activity analytics how it would have effected etc etc correlations etc",
+      "imagePrivate": true,
+      "image": "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260718-8920\\img-0.jpg",
+      "images": [
+        "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260718-8920\\img-0.jpg"
+      ],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "Scoped it (code-checked both repos) - this is a large new feature, not a bounded fix, so flagging for your call before building. Ask: tapping a dashboard card opens cross-domain correlation analytics (sleep vs meals vs supplements vs workout vs activity). Today the Weight/Diet/Activity/Fasting cards each just navigate to their own detail page; the only multi-domain views are /health-score (6 pillars) and /ai/overview (weekly wins/tips) - neither shows correlations. A real 'how did X affect Y' view needs a new backend endpoint that time-series-joins ~5-6 logging tables (sleep, meals, supplements, workout, activity), a new detail screen/sheet per card, and new overlay/correlation charts (~1-2 sprints). Before I build: (1) which cards should be tappable into this? (2) a full correlation engine, or a simpler 'overlay any two metrics on one timeline' v1? (3) reuse/extend /health-score, or a new /insights screen? Recommend a v1 = tap a card -> sheet overlaying that metric vs one you pick on a 30-day timeline, deriving from existing logs (no correlation math yet). Say 'build v1' and I'll implement.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "feature",
+        "dashboard",
+        "needs-scope"
+      ]
+    },
+    {
+      "id": "i-20260718-72c9",
+      "createdAt": "2026-07-18T02:49:12.394Z",
+      "route": null,
+      "description": "This question is coming daily should come only once",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "No screenshot/route was attached, and the app has several daily 'question' surfaces - to avoid fixing the wrong one (and breaking a genuinely-daily prompt), which one do you mean? Candidates I found: (1) COACH INTAKE drip - '[Coach] wants to know you' asks a get-to-know-you question on the dashboard, once per day, until its question pool is exhausted (by design it shows a NEW one each day, so if the SAME question repeats that's a real bug in answer-detection). (2) SLEEP LOG prompt - 'log your sleep hours/quality', re-appears daily by design (you log each day's sleep; hidden once logged/synced). (3) SUPPLEMENTS first-run opt-in - 'track your supplements?' re-prompts the next day after 'Not now' (date-keyed dismiss). (4) CYCLE card (female accounts only). Key question: do you want it to appear only ONCE EVER (never again after the first time/first dismissal), or is a specific question wrongly REPEATING because your answer isn't being saved? If you can attach a screenshot of the exact question, or name which of the above, I'll fix it surgically - e.g. for the coach-intake drip I can make it a one-time thing, or fix answer-persistence so an answered question never returns.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "needs-repro",
+        "dashboard"
+      ]
+    },
+    {
+      "id": "i-20260718-326f",
+      "createdAt": "2026-07-18T03:28:53.346Z",
+      "route": null,
+      "description": "I changed the meals on Wednesday to these bone brawth and follows, before Tuesday there was different meals after changing it wipped all the previous meals fix this",
+      "imagePrivate": true,
+      "image": "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260718-326f\\img-0.jpg",
+      "images": [
+        "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260718-326f\\img-0.jpg"
+      ],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "ROOT-CAUSED (backend, needs your go-ahead before deploy). Changing a day's meals goes through the custom-diet builder save (POST /onboarding/save-custom-plan -> save_custom_plan). Two layers wipe the other days: (a) plan_builder_routes.py:2802 deletes the WHOLE week's DietPlan rows before writing, and 'same' repeat-mode replicates day 1 across all 7 weekdays; (b) the legacy bridge _bridge_diet_to_legacy (plan_generator.py:2502 deactivates ALL your active diet plans, and :2576 rebuilds AssignedMeal only for weekdays present in the payload - any MISSING weekday falls back to day-1's meals). So when the builder loads your varied plan collapsed to a single 'same' day (or drops a day), saving flattens every day to day-1 ('Bone brawth...' everywhere = exactly what you saw). Recommended fix: in 'vary' mode delete/rewrite ONLY the edited weekdays and give the bridge a merge mode that leaves untouched days active; plus a frontend guard so editing an existing plan never collapses to a single day or a blank day on a fetch error. WHY I'M FLAGGING NOT SHIPPING: that bridge is shared by onboarding AND the Saturday pre-gen cron, so a wrong change risks corrupting live user plans, and it can't be safely verified headless (no way to exercise the cron/onboarding regression paths here) - I won't auto-deploy a risky shared write path unattended. Confirm the 'same'-vs-'vary'-on-edit behaviour you want and that a staged bridge change is OK, and I'll implement + deploy with a staging check.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "backend",
+        "data-loss",
+        "diet-builder"
+      ]
+    },
+    {
+      "id": "i-20260718-344f",
+      "createdAt": "2026-07-18T03:34:34.776Z",
+      "route": null,
+      "description": "This should be a single plan timeline page also accesavle from the profile page and should include all the workout and exercise marked daily like the meals and the activities page should also point here and coach should also know about this and update and take data from here and combine all analysis and analytics here how we are progressing against the plan",
+      "imagePrivate": true,
+      "image": "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260718-344f\\img-0.jpg",
+      "images": [
+        "C:\\Users\\Administrator\\Desktop\\NYUS CODE\\nyus-qa-issues\\tmp\\downloads\\i-20260718-344f\\img-0.jpg"
+      ],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "SHIPPED (commit 5504477c, on main): the unified Plan Timeline page (/plan-timeline) is now reachable from BOTH the Profile Progress section (new 'Plan timeline' row) and the Activity header (new chip beside History) - directly satisfying 'single plan timeline page accessible from the profile page' + 'activities page should point here'. That page already shows per-day PLANNED meals AND workouts and progress analytics (completion ring, streak, weight, projected trajectory), and the AI coach already reads the same plan data via ContextAssembler. THREE parts of your ask are larger product/backend scope and need your call before I build them: (1) per-day COMPLETED/marked adherence overlay on the timeline (workouts+meals ticked daily) - needs a new logged-status field on the week API + UI; (2) coach WRITING/updating the plan through the timeline (today it's a read-only view; edits flow through the AI builders / goal-change / weekly-adaptation) - a bidirectional backend change; (3) consolidating Weekly/Monthly Progress + Daily Focus + compliance analytics INTO this one page - an information-architecture decision overlapping 4 existing routes. Reply which of (1)/(2)/(3) to build and I'll scope each.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "feature",
+        "plan-timeline"
+      ]
+    },
+    {
+      "id": "i-20260718-nyk8",
+      "createdAt": "2026-07-18T03:42:48.000Z",
+      "route": null,
+      "description": "[discovery] Outlets added: 3. Pitch-ready: Homegrown. Escalated: 1. 2nd discovery tick today: added Homegrown (Mumbai youth-culture/digital-lifestyle media, first youth-culture outlet in kit, editor@homegrown.co.in verified) as pitch-ready and escalated; also added Fitt Insider (global fitness-tech-business newsletter, researched) and Youth Ki Awaaz (youth citizen-journalism self-publish platform, researched). Kit now at 70 total outlets.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "discovery",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-p7f2",
+      "createdAt": "2026-07-18T09:09:40.086Z",
+      "route": null,
+      "description": "[press] Press kit: refreshed §4 Key facts blog-page count (1,791→1,800, 73→83 top-level guides, flagged unexplained +9-vs-+10 delta rather than hiding it). Article drafted: The Next Billion Fitness-Tech Users Have a Problem Western Products Never Had to Solve (target: Fitt Insider, 812 words). Escalated: 1.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "press",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-vrf3",
+      "createdAt": "2026-07-18T09:15:00.000Z",
+      "route": "/nutrition",
+      "description": "[suggestion] Add a per-day \"Fasting/Vrat day\" toggle on the Nutrition page that switches meal suggestions to religious-fast-appropriate dishes. Problem: a huge share of Indian users observe recurring food-restriction fasting days (Navratri, Ekadashi, Karva Chauth, Mondays for some) where grains/onion/garlic/certain veg are off-limits, but NYUS meal suggestions/swap picker have no concept of this and keep recommending regular roti/rice/dal meals on those days, breaking the precision-tool trust for a recurring, predictable use case. Evidence: src/data/meal-catalog.json already has 45+ vrat-named dishes (Sabudana Khichdi, Kuttu Atta items, Navratan preparations, singhara-based dishes) sitting dormant as plain catalog entries with zero dietary-restriction tag or filter hook - the data exists, the filtering doesn't. Existing fasting UI (FastingTrendChart) is unrelated (16:8 time-restricted eating, not food-type fasting). v1 scope: single day-scoped toggle chip near the Nutrition date header (\"Fasting today\") that (a) filters the meal-suggestion/swap picker lists to catalog items already identifiable as vrat-appropriate by name/ingredient keyword match, (b) suppresses grain-heavy default suggestions for that day only, (c) persists as a simple per-date client flag - no calendar/recurrence settings, no plan regeneration, no backend schema change. Effort: small-medium, ~2-3 days (keyword-tag pass over catalog + filter logic in the meal suggestion component + one persisted per-day preference + i18n strings across en/hi/hinglish).",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "Assessment (code-checked): the TOGGLE half is ALREADY shipped, richer than the ask. Nutrition.tsx mounts a FastingBanner (Nutrition.tsx:54, :467) with a 3-type day selector - vrat / full / intermittent (FASTING_TYPES, Nutrition.tsx:46) - persisted per-date to the backend via nutritionService.setFastingStatus -> PUT /daily-logs/fasting (nutrition.service.ts:128), read back through useNutritionData (fastingDay/fastingType). Skipped meals on a fasting day already don't hurt the streak. So the suggestion's part (c) 'per-day persisted fasting flag + toggle chip near the date header' exists (and better: server-persisted, 3 fast types, IF stopwatch unified with the Dashboard/​/fasting card). The ONLY genuine gap vs the ask: selecting 'vrat' does NOT yet FILTER meal suggestions / the swap picker to vrat-appropriate dishes (parts a+b). meal-catalog.json has just 1 vrat token and no dietary-restriction tag or filter hook, and nothing keys meal-suggestion/swap lists off fastingType==='vrat'. Building that is a NEW behavior change to the meal-suggestion + swap picker (needs a vrat-appropriate tag pass over the catalog + a filter that suppresses grain/onion/garlic dishes only on vrat days) - a user-facing default I won't ship unattended headless (owner reopens when suggestion defaults are wrong). Confirm you want the vrat meal-FILTER built (keyword/tag match: sabudana/kuttu/singhara/samak-rice/aloo/paneer/curd/fruit in; roti/rice/dal/onion/garlic out, vrat day only) and I'll implement over the existing toggle. The toggle itself needs no work.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-7f2e",
+      "createdAt": "2026-07-18T13:00:00.000Z",
+      "route": null,
+      "description": "[content] Published: How to Eat at an Indian Wedding Buffet Without Blowing the Week — https://nyus.in/blog/wedding-buffet-guide-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-mn4k",
+      "createdAt": "2026-07-18T13:20:00.000Z",
+      "route": null,
+      "description": "[press] Press kit: §4 Key facts (blog/content page count recounted, 1,800→1,801, top-level guides 83→84, traced to commit d9082f88). Article drafted: The Missing Layer in India's Digital Health Stack: Nobody Has Solved Food Data Yet (target: MediaNama, 860 words). Escalated: 1 (MediaNama story-tip pitch, form/email route not re-verified this tick, founder confirm needed).",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "press",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-out1",
+      "createdAt": "2026-07-18T14:23:00.000Z",
+      "route": "",
+      "description": "[discovery] Outreach day-summary: 2026-07-17 tick 2 sends (3/10, day total 6/10) - 1. Miduty (PCOS/thyroid nutraceutical D2C) -> troublehunters@miduty.in | 2. FITTR (online fitness/nutrition coaching community) -> support@fittr.com | 3. iTIC IIT Hyderabad (deep-tech incubator, MedTech/Wellness) -> contact@itic.iith.ac.in. 2026-07-18 tick 1 (2/10 so far): iMuscles Nutrition (protein/supplement D2C) -> support@imuscles.in | Chain Fitness India (gym chain, corporate wellness) -> support@chainfitness.in. Running total: 67 all-time sends (per ledger.json). No replies/complaints flagged.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": null,
+      "tags": [
+        "discovery",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-b7c2",
+      "createdAt": "2026-07-18T15:55:00.000Z",
+      "route": "/measurements",
+      "description": "[bug-hunt] Body Measurements ignores an imperial user’s unit_preference when the profile cache is cold — the cm/inch default fix is incomplete.\n\nWhat’s wrong: src/pages/Measurements.tsx seeds the unit toggle ONCE at mount by reading the React-Query cache for key [profile-basic-info] (L78-81): cached?.unit_preference === imperial ? inch : cm. But this component never FETCHES [profile-basic-info] — it queries [user-profile] (L95-99, profileService.getProfile) and [measurements-overview]. There is NO effect that re-derives `unit` once the profile resolves. So when the [profile-basic-info] cache is empty at mount, an imperial user is shown centimetres and stays on cm until they manually toggle.\n\nExpected vs actual: An imperial (unit_preference=imperial) user opening Measurements should default to inch. Actual: defaults to cm whenever [profile-basic-info] wasn’t already cached by a prior screen.\n\nThe recent fix (commit 595b3015 “Measurements cm/inch default respects unit_preference”, +5/-1 lines) added only the cache read — it works when the cache is warm (e.g. after visiting Profile/LogWeight which DO fetch that key) but does nothing on a cold cache. The comment on L77 claims it ‘mirrors LogWeight.tsx’, but LogWeight actually (a) fetches [profile-basic-info] itself (LogWeight.tsx L158-162) AND (b) has a one-shot sync effect (L224-233, `unitInitDone` ref) that calls handleUnitChange(lb) once profileData loads imperial. Measurements copied the cache-init but not the fetch + sync, so it self-corrects only by luck of a warm cache.\n\nRepro: cold app start (or hard refresh) navigating directly to /measurements as an imperial user, with no prior screen having loaded [profile-basic-info] → toggle shows cm. Note: saved values are always canonical cm so no data corruption; this is a display-default bug.\n\nFix: mirror LogWeight fully — read unit_preference from the [user-profile] query this component already runs (or fetch [profile-basic-info]) and set `unit` in a one-shot effect when the profile resolves, guarded so it never overrides a manual toggle.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "FIXED + verified (commit a287803f, pushed to main) — awaiting resolve; same board test-gate infra block as 3e9f (full npm run test:unit >10min headless). Scoped tests GREEN: test/Measurements.page.test.tsx (part of the 40 passed). Root cause: Measurements.tsx seeded the cm/inch toggle ONLY from the [profile-basic-info] React-Query cache at mount; that cache is EMPTY on a cold, direct load of /measurements (nothing pre-fetched it) so imperial users were stuck on cm. Fix: added a one-shot effect that reads unit_preference from THIS screen's own [user-profile] query once it resolves and switches to inch, guarded by unitInitDone + unitTouched refs so a manual toggle always wins (mirrors LogWeight fully, not just its cache-init). Proof (mocked imperial user, cold cache, direct nav): inch toggle aria-pressed=true + 'Measurement (inch)' label on first paint. Recommend scoping loop.json testCommand to a fast unit subset.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ]
+    },
+    {
+      "id": "i-20260718-3e9f",
+      "createdAt": "2026-07-18T15:55:10.000Z",
+      "route": "/choose-plan",
+      "description": "[bug-hunt] Choose Plan shows “up to 0 kg” in the header and a “0 kg” badge for weight-GAIN / muscle-gain goals.\n\nWhat’s wrong: src/pages/ChoosePlan.tsx L403 computes kgsToLose = hasWeightProjection ? Math.max(0, currentWeightKg - goalWeightKg) : 0. For a gain goal (goalWeightKg > currentWeightKg) that subtraction is negative and Math.max clamps it to 0. That 0 is then rendered in two user-visible places:\n  • Header (L912-914): t(choose_plan.header.title_with_goal, { count: Math.round(kgsToLose) }) → en.json L1407 “Pick your plan · up to {{count}} kg” → “Pick your plan · up to 0 kg”.\n  • Recommended-card badge (L1046): {Math.round(kgsToLose)} kg → “0 kg”.\n\nExpected vs actual: A user whose goal is to gain (e.g. current 70 kg → goal 80 kg) should see their 10 kg journey (or neutral copy), not “up to 0 kg”. The projection chart just below is direction-correct (it plots current→goal as a rising curve and its aria uses a loss/change split, L1171), so the header contradicts the chart on the same screen.\n\nRepro: onboard/set a weight-gain or muscle-gain goal with current < goal weight, reach /choose-plan (paywall) → header reads “Pick your plan · up to 0 kg” and the recommended card badge reads “0 kg”. Loss goals are unaffected (positive delta).\n\nRoot cause: kgsToLose is loss-biased. Fix: use Math.abs(currentWeightKg - goalWeightKg) for the magnitude and make the header/badge copy direction-aware (lose vs gain), or hide the “up to X kg” framing for gain/maintain goals.",
+      "imagePrivate": false,
+      "image": null,
+      "images": [],
+      "reopenNote": null,
+      "needsReview": true,
+      "reviewReason": "FIXED + verified (commit a287803f, pushed to main) — awaiting resolve; the board test gate's full npm run test:unit is infra-blocked headless (>10min, ~5000 tests, never completes on this box) so I can't pass --tests pass honestly. Scoped tests GREEN: test/ChoosePlan.page.test.tsx + ChoosePlan.recommend.test.ts (40 passed). Root cause: ChoosePlan.tsx L403 kgsToLose=Math.max(0,current-goal) clamped every weight-GAIN goal to 0 -> header 'up to 0 kg' + badge '0 kg'. Fix: Math.abs magnitude + direction-aware copy (new title_with_gain key across en/hi/hinglish/xx-AE), badge/framing hidden at 0. Proof (mocked gain goal 70->80): header now reads 'Pick your plan - up to 10 kg to gain', badge '10 kg', chart rises. Recommend scoping loop.json testCommand to a fast unit subset so future clean fixes can auto-resolve.",
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ]
+    }
+  ],
+  "count": 25,
+  "loop": {
+    "satisfaction": 90,
+    "testGate": true,
+    "testCommand": "npm run test:unit",
+    "coverage": 0
+  }
+}

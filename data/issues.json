@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260720-tr9i",
+      "createdAt": "2026-07-20T00:00:00.000Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard: src/pages/Dashboard.tsx and src/components/TrialBanner.tsx have ZERO i18n hookup (no useTranslation import, no t() calls) — every string is hardcoded English, including all rendered by TrialBanner (\"Trial · {days}d left\", \"Your free trial ends in {days}\", \"Keep your coach, plans and progress. Choose a plan to continue.\", \"See plans\") and Dashboard.tsx's own literals. This contradicts the owner's 2026-07-07 i18n directive (translate the ENTIRE app across EN/Hindi/Hinglish) — a Hindi/Hinglish user hits raw English on the app's own home screen and on the trial-ending nudge (the exact moment you want them to convert). Contrast: most sibling cards in src/pages/_components/dashboard/*.tsx (CoachIntakeCard, CyclePhaseCard, DashboardActivityCard, DashboardDietCard, DashboardErrorBanner, DashboardHeader, DashboardMissingPlanBanner, DashboardWeightCard, SleepLogPrompt, SupplementsCard) DO use useTranslation already, so this is a genuine two-file gap, not a stale system-wide TODO. Scope: adding useTranslation + t() calls to Dashboard.tsx (large orchestrator file, many literals) and TrialBanner.tsx, plus new keys across the 4 locale bundles (en/hi/hinglish/xx-AE) per the missing-keys-audit parity guard — too large for a single bounded fix in this tick, filing for the i18n rollout track.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "i18n",
+        "dashboard"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260720-p8m2",
       "createdAt": "2026-07-20T00:00:00.000Z",
       "route": null,
