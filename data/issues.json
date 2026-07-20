@@ -731,28 +731,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260719-mp7q",
-      "createdAt": "2026-07-19T07:39:00.033Z",
-      "route": "/nutrition",
-      "description": "[suggestion] Add a \"Meal Prep View\" on the Nutrition page that consolidates the week's assigned diet-plan meals into a shopping+batch-cook checklist grouped by shared base ingredients (e.g. all dals/sabzis/proteins that repeat across days), so a user can cook once on Sunday for 3-4 days instead of per-meal. Problem: NYUS already generates day-by-day diet plans (custom builder) and a Shopping List with a proposed cost-estimate suggestion (i-20260717-gbc1), but nothing groups meals by prep batch or shows which meals share a base recipe -- Indian home cooks overwhelmingly batch-cook (dal/sabzi for 3-4 days) and comparable trackers (Mealime, Paprika, PlateJoy) ship a consolidated \"prep day\" view; grep of src/ confirms no meal-prep/batch-cook grouping exists today (only per-day MealSlotCard rendering). Evidence: current diet plan UI (CustomDietBuilder, MealSlotCard) is strictly per-day/per-meal with no cross-day ingredient grouping. V1 scope: read-only view under Nutrition -> \"This Week\" tab -> new \"Prep\" sub-tab; group the already-generated week's AssignedMeals by matching base ingredient/recipe name (simple string/id match, no new AI call), show a checklist (ingredient, total qty across matched meals, which days/meals it covers) and a \"mark prepped\" toggle per group (localStorage, no backend schema change needed for v1). Effort: ~2-3 days FE-only (grouping logic + new tab UI); a v2 could push batch-cook grouping into the diet-generation LLM prompt itself for smarter clustering.",
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "Assessment (code-checked src/): genuine gap, nothing to un-ship. No batch-cook/meal-prep consolidation view exists — the only 'prep' in code is RecipeDetail.tsx prep_time_min (per-recipe minutes), and the diet plan UI (CustomDietBuilder / MealRow / MealSlotCard) is strictly per-day/per-meal with zero cross-day ingredient grouping. So the suggestion is accurate. BUT this is a NEW user-facing surface (a new 'Prep' sub-tab under Nutrition -> This Week), not a bounded bug — and it overlaps two items you already have open: gbc1 (grocery cost estimate, which lives in ShoppingListModal per-item est_price_inr) and mp7q's own shopping-list angle. Product knobs that need your call before I build (owner reopens when suggestion defaults are wrong): (1) group by base-ingredient string/id match only (dal/paneer/sabzi/protein), or push batch-cook clustering into the diet-gen LLM prompt (smarter but a backend+cost change)? (2) surface it as a new Nutrition sub-tab, or fold into the existing Shopping List screen next to the cost pill from gbc1? (3) 'mark prepped' persistence: localStorage per-week (v1, no schema), or a real backend field so it survives device reset (matches the localStorage-volatility class we keep hitting)? Recommended v1 = read-only 'Prep' sub-tab under Nutrition -> This Week, group this week's already-generated AssignedMeals by base-ingredient name match (no new AI call), checklist with total qty + which days/meals each covers + a localStorage 'mark prepped' toggle. Say 'build v1' (or pick knobs) and I'll implement FE-only. Flagging rather than headless-shipping because it's a new IA surface and the QA data account 401s on prod so I can't verify the assigned-meal grouping end-to-end right now.",
-      "reviewedAt": "2026-07-19T08:58:59.538Z",
-      "reviewedBy": "shakeebshaan"
-    },
-    {
       "id": "i-20260719-a3c7",
       "createdAt": "2026-07-19T05:30:33.658Z",
       "route": "/ai/overview",
