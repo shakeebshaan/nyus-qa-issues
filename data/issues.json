@@ -4,7 +4,7 @@
     {
       "id": "i-20260720-4b67",
       "createdAt": "2026-07-20T14:26:25.103Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/activity",
       "description": "[bug-hunt] Live workout player: after tapping \"Continue\" on the auto-advance banner (or when the final set POST resolves), the NEXT exercise's set editor opens with a rest timer already counting down — carried over from the PREVIOUS exercise — and when it elapses it logs a rest duration against the WRONG (previous) exercise.\n\nROOT CAUSE (src/pages/Activity.tsx): handleContinueToNext() (the \"Continue -> next exercise\" banner tap) closes the current ExerciseWheelPicker and reopens it for the next exercise, but never resets showRestTimer. logSetMutation.onSuccess arms the rest timer (setShowRestTimer(true)) whenever isModalOpen.current is true; the picker's own onClose resets it (setShowRestTimer(false)) but handleContinueToNext bypasses onClose and directly flips showWheelPicker. So showRestTimer stays true across the exercise switch. The next picker (key=new exercise_id) remounts and renders restTimerElement (gated only on showRestTimer), starting a fresh 90s countdown before any set is logged for the new exercise. Because lastLoggedSetRef.current still points at the PREVIOUS exercise's final set, the timer's onComplete/onSkip fires activityService.logSet({exercise_id: last.exercise_id=PREVIOUS, ...rest_seconds}) — writing rest_seconds to the wrong exercise while the user is on the new one, and speakRestCue announces the wrong set. (Same outcome if the final-set POST resolves after the picker has already advanced: onSuccess sees isModalOpen.current true and arms the timer in the new exercise's picker.)\n\nEXPECTED: advancing to the next exercise starts it with NO active rest timer; the rest timer arms only after a set is logged for the exercise currently open, and any rest_seconds is attributed to that exercise.\nACTUAL: next exercise opens with a leftover running rest timer; on elapse it logs rest_seconds against the previous exercise and speaks a cue for the previous set.\n\nREPRO: 1) Open Activity with a workout plan that has >=2 exercises. 2) Tap an exercise, log all its target sets via the wheel picker (rest timer arms after each set). 3) On the final set the \"Set complete - next exercise\" banner appears; tap Continue. 4) The next exercise's editor opens with a rest countdown already running (before logging anything). 5) Leave it ~90s: a background log-set POST fires for the PREVIOUS exercise (visible in network).\n\nFIX: in handleContinueToNext (and ideally when adopting the next session in onSessionStarted), setShowRestTimer(false) + bump restTimerKey so the leftover timer is torn down; only re-arm on a set log for the newly-open exercise.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "During a live workout, advancing to another exercise — via the Continue banner, a mid-workout swap, or the next session — left the previous exercise's rest timer still running, and when it elapsed it logged rest time against the WRONG (previous) exercise. Now every exercise switch clears the leftover timer, and rest time is only ever recorded for the exercise you're actually on. Covered by a new regression test that fails before the fix and passes after (all three switch paths).",
+        "imagePath": "images/i-20260720-4b67-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260720-4b67-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c9abbb750d990289e422f8339ed92a2a7ae4f4d2",
+        "imageCommits": [
+          "c9abbb750d990289e422f8339ed92a2a7ae4f4d2"
+        ],
+        "fixedAt": "2026-07-20T16:04:44.574Z",
+        "by": "shakeebshaan",
+        "appCommit": "847c37c5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Root-cause fix across all 3 exercise-switch paths (Continue/swap/next-session) + late-POST id guard; regression test fails-before/passes-after; full suite green (5710 passed)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260720-8b4e",
