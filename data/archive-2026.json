@@ -22556,31 +22556,35 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260719-13a1",
-      "createdAt": "2026-07-19T05:55:36.993Z",
+      "id": "i-20260718-344f",
+      "createdAt": "2026-07-18T03:34:34.776Z",
       "route": null,
       "description": "",
       "descPrivate": true,
       "author": "shakeebshaan",
-      "imagePath": "images/i-20260719-13a1.jpg",
-      "imageCommit": "c688a52e49b2d90287c4087307fd5ea0fcd65496",
+      "imagePath": "images/i-20260718-344f.jpg",
+      "imageCommit": "9c89da1d5f052dafc2c79d22a082352640e04c48",
       "imagePaths": [
-        "images/i-20260719-13a1.jpg"
+        "images/i-20260718-344f.jpg"
       ],
       "imageCommits": [
-        "c688a52e49b2d90287c4087307fd5ea0fcd65496"
+        "9c89da1d5f052dafc2c79d22a082352640e04c48"
       ],
       "imagePrivate": true,
       "status": "resolved",
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED under the same commit as i-20260719-cb0b (prod HEAD 40ec199) -- identical root cause (Activity overview painting a stray incomplete session log onto the count-based current session, so the header showed Session #1 / 0 completed while volume + logged sets came from a different session's stale log). The overview now scopes the painted volume/logged-sets/completed/skipped state to the session actually shown. Verify on the Activity page after updating the app; safe to resolve/archive alongside cb0b.",
-      "reviewedAt": "2026-07-19T06:47:17.375Z",
+      "reviewReason": "SHIPPED (commit 5504477c, on main): the unified Plan Timeline page (/plan-timeline) is now reachable from BOTH the Profile Progress section (new 'Plan timeline' row) and the Activity header (new chip beside History) - directly satisfying 'single plan timeline page accessible from the profile page' + 'activities page should point here'. That page already shows per-day PLANNED meals AND workouts and progress analytics (completion ring, streak, weight, projected trajectory), and the AI coach already reads the same plan data via ContextAssembler. THREE parts of your ask are larger product/backend scope and need your call before I build them: (1) per-day COMPLETED/marked adherence overlay on the timeline (workouts+meals ticked daily) - needs a new logged-status field on the week API + UI; (2) coach WRITING/updating the plan through the timeline (today it's a read-only view; edits flow through the AI builders / goal-change / weekly-adaptation) - a bidirectional backend change; (3) consolidating Weekly/Monthly Progress + Daily Focus + compliance analytics INTO this one page - an information-architecture decision overlapping 4 existing routes. Reply which of (1)/(2)/(3) to build and I'll scope each.",
+      "reviewedAt": "2026-07-18T04:32:24.789Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-20T14:47:56.786Z",
+      "tags": [
+        "feature",
+        "plan-timeline"
+      ],
+      "resolvedAt": "2026-07-20T14:48:05.229Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-20T14:47:56.786Z"
+      "archivedAt": "2026-07-20T14:48:05.229Z"
     }
   ]
 }
