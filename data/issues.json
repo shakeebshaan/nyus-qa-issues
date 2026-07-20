@@ -17,9 +17,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Dashboard.tsx and TrialBanner.tsx shipped with zero i18n hookup - every string, including the trial-ending nudge, was hardcoded English, so Hindi/Hinglish users hit raw English on the app's home screen. Fix: routed all visible text and aria-labels through t(), added keys across all 4 locale bundles (en/hi/hinglish/xx-AE) with _one/_other plural forms for day counts, and localized the 4 remaining section-landmark aria-labels the first pass missed. Screenshot: the full dashboard AND the trial-ending banner now render in Hindi.",
+        "imagePath": "images/i-20260720-tr9i-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260720-tr9i-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9a05299e6d398a56bd26b8e153b5ef865b897aeb",
+        "imageCommits": [
+          "9a05299e6d398a56bd26b8e153b5ef865b897aeb"
+        ],
+        "fixedAt": "2026-07-20T01:30:22.074Z",
+        "by": "shakeebshaan",
+        "appCommit": "d14c90e0",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Dashboard + trial nudge render fully in Devanagari; 4-locale parity + Hindi pinned by 71 passing i18n tests; full unit suite green (5491 passed / 0 failed - verify exit-1 was worker-OOM, the 10 OOM'd files re-run green in isolation)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260720-p8m2",
