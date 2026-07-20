@@ -42,7 +42,10 @@
       "imagePrivate": false,
       "fix": null,
       "history": [],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED + shipped to main (commit 214d4cdd, same fix as cd73). Root cause: empty catch {} at src/components/PlateCalculatorSheet.tsx:137 (Preferences.get JSON.parse guard) -> eslint no-empty ERROR -> 'npm run lint' (eslint .) exits 1. Fix: gave the catch an explanatory body ('catch { /* ignore malformed stored plates - fall back to defaults */ }'), matching the sibling .catch(()=>{}) no-ops in the same effect. VERIFIED: 'npm run lint' now exits 0 (0 errors, 82 pre-existing react-refresh warnings only, non-blocking); eslint on the file exit 0; proof card -> tmp/i-20260720-38c4-fix.png. Same board test-gate note as cd73: full test:unit is 5718 passed / 1 unrelated flaky red (Activity restTimerCarryover i-20260720-4b67, passes in isolation), so --tests pass can't be honestly set this tick. Recommend Resolve manually.",
+      "reviewedAt": "2026-07-20T23:37:34.791Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260720-r7q3",
