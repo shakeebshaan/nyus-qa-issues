@@ -3205,35 +3205,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260718-4fad",
-      "createdAt": "2026-07-18T18:13:25.294Z",
-      "route": null,
-      "description": "",
-      "descPrivate": true,
-      "author": "shakeebshaan",
-      "imagePath": "images/i-20260718-4fad.jpg",
-      "imageCommit": "ad2f50746725a1ab4c05b12aaeb874e0fe7efbc0",
-      "imagePaths": [
-        "images/i-20260718-4fad.jpg"
-      ],
-      "imageCommits": [
-        "ad2f50746725a1ab4c05b12aaeb874e0fe7efbc0"
-      ],
-      "imagePrivate": true,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
-      "reviewReason": "CODE FIX DEPLOYED (prod HEAD 1dceaaf) — durable. Root cause (corrected): you are on a custom/progressive plan, but the Saturday weekly-regen job was re-bridging EVERY user to a weekday-pinned plan each week, forcing you back to 'Weekly Schedule' + a Saturday rest day (this undid the one-time backfill). The job now SKIPS the workout re-bridge for progressive users, so it won't revert you again. ONE THING NEEDED to fix your CURRENT plan right now: open Activity -> Customize -> Save (re-saves as progressive), OR reply with your account email and I'll run a targeted backfill. Without one of those, your existing plan stays weekday-pinned until you re-save.",
-      "reviewedAt": "2026-07-19T04:32:41.665Z",
-      "reviewedBy": "shakeebshaan",
-      "tags": [
-        "activity",
-        "workout-plan",
-        "owner-data"
-      ]
-    },
-    {
       "id": "i-20260718-41d4",
       "createdAt": "2026-07-18T18:13:48.641Z",
       "route": null,
