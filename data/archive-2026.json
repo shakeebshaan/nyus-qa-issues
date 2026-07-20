@@ -22556,27 +22556,31 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260718-vrf3",
-      "createdAt": "2026-07-18T09:15:00.000Z",
-      "description": "[suggestion] Add a per-day \"Fasting/Vrat day\" toggle on the Nutrition page that switches meal suggestions to religious-fast-appropriate dishes. Problem: a huge share of Indian users observe recurring food-restriction fasting days (Navratri, Ekadashi, Karva Chauth, Mondays for some) where grains/onion/garlic/certain veg are off-limits, but NYUS meal suggestions/swap picker have no concept of this and keep recommending regular roti/rice/dal meals on those days, breaking the precision-tool trust for a recurring, predictable use case. Evidence: src/data/meal-catalog.json already has 45+ vrat-named dishes (Sabudana Khichdi, Kuttu Atta items, Navratan preparations, singhara-based dishes) sitting dormant as plain catalog entries with zero dietary-restriction tag or filter hook - the data exists, the filtering doesn't. Existing fasting UI (FastingTrendChart) is unrelated (16:8 time-restricted eating, not food-type fasting). v1 scope: single day-scoped toggle chip near the Nutrition date header (\"Fasting today\") that (a) filters the meal-suggestion/swap picker lists to catalog items already identifiable as vrat-appropriate by name/ingredient keyword match, (b) suppresses grain-heavy default suggestions for that day only, (c) persists as a simple per-date client flag - no calendar/recurrence settings, no plan regeneration, no backend schema change. Effort: small-medium, ~2-3 days (keyword-tag pass over catalog + filter logic in the meal suggestion component + one persisted per-day preference + i18n strings across en/hi/hinglish).",
-      "status": "resolved",
-      "tags": [
-        "suggestion",
-        "auto"
-      ],
+      "id": "i-20260719-13a1",
+      "createdAt": "2026-07-19T05:55:36.993Z",
+      "route": null,
+      "description": "",
+      "descPrivate": true,
       "author": "shakeebshaan",
-      "route": "/nutrition",
+      "imagePath": "images/i-20260719-13a1.jpg",
+      "imageCommit": "c688a52e49b2d90287c4087307fd5ea0fcd65496",
+      "imagePaths": [
+        "images/i-20260719-13a1.jpg"
+      ],
+      "imageCommits": [
+        "c688a52e49b2d90287c4087307fd5ea0fcd65496"
+      ],
+      "imagePrivate": true,
+      "status": "resolved",
       "fix": null,
       "history": [],
-      "imagePaths": [],
-      "imagePrivate": false,
       "needsReview": true,
-      "reviewReason": "Assessment (code-checked): the TOGGLE half is ALREADY shipped, richer than the ask. Nutrition.tsx mounts a FastingBanner (Nutrition.tsx:54, :467) with a 3-type day selector - vrat / full / intermittent (FASTING_TYPES, Nutrition.tsx:46) - persisted per-date to the backend via nutritionService.setFastingStatus -> PUT /daily-logs/fasting (nutrition.service.ts:128), read back through useNutritionData (fastingDay/fastingType). Skipped meals on a fasting day already don't hurt the streak. So the suggestion's part (c) 'per-day persisted fasting flag + toggle chip near the date header' exists (and better: server-persisted, 3 fast types, IF stopwatch unified with the Dashboard/​/fasting card). The ONLY genuine gap vs the ask: selecting 'vrat' does NOT yet FILTER meal suggestions / the swap picker to vrat-appropriate dishes (parts a+b). meal-catalog.json has just 1 vrat token and no dietary-restriction tag or filter hook, and nothing keys meal-suggestion/swap lists off fastingType==='vrat'. Building that is a NEW behavior change to the meal-suggestion + swap picker (needs a vrat-appropriate tag pass over the catalog + a filter that suppresses grain/onion/garlic dishes only on vrat days) - a user-facing default I won't ship unattended headless (owner reopens when suggestion defaults are wrong). Confirm you want the vrat meal-FILTER built (keyword/tag match: sabudana/kuttu/singhara/samak-rice/aloo/paneer/curd/fruit in; roti/rice/dal/onion/garlic out, vrat day only) and I'll implement over the existing toggle. The toggle itself needs no work.",
-      "reviewedAt": "2026-07-18T14:29:08.017Z",
+      "reviewReason": "FIXED + DEPLOYED under the same commit as i-20260719-cb0b (prod HEAD 40ec199) -- identical root cause (Activity overview painting a stray incomplete session log onto the count-based current session, so the header showed Session #1 / 0 completed while volume + logged sets came from a different session's stale log). The overview now scopes the painted volume/logged-sets/completed/skipped state to the session actually shown. Verify on the Activity page after updating the app; safe to resolve/archive alongside cb0b.",
+      "reviewedAt": "2026-07-19T06:47:17.375Z",
       "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-20T14:46:15.748Z",
+      "resolvedAt": "2026-07-20T14:47:56.786Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-20T14:46:15.748Z"
+      "archivedAt": "2026-07-20T14:47:56.786Z"
     }
   ]
 }
