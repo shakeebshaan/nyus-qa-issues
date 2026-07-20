@@ -41,7 +41,10 @@
         }
       },
       "history": [],
-      "needsReview": false
+      "needsReview": true,
+      "reviewReason": "FIXED + shipped to main (commits 1ef1d64b + 847c37c5), awaiting your Resolve. Root cause (src/pages/Activity.tsx): advancing exercises (Continue banner / swap / new-session adopt) left the previous exercise's rest timer running; on elapse it logged rest_seconds against the WRONG (previous) exercise via a stale lastLoggedSetRef, and a late final-set POST re-armed it. Fix: logSetMutation.onSuccess arms the timer ONLY when the logged set's exercise_id matches the currently-open exercise (currentExerciseIdRef); handleContinueToNext + onSessionStarted + handleSwapExercise tear down the leftover timer (setShowRestTimer(false) + bump restTimerKey). Regression test test/Activity.restTimerCarryover.test.tsx = 3/3 GREEN (Continue-advance, late-POST guard, swap). Cannot auto-resolve: board testGate requires a fully-green 'npm run test:unit', but the full suite is 4 failed / 5706 passed — all 4 are PRE-EXISTING and UNRELATED to this fix: Activity.page 'Try Again button on error' + UserSearch 2 badge tests are i18n test-rot (query hardcoded English while the t() mock returns raw keys), and Partners 'Create a group empty state' is the known flaky waitFor (18/18 in isolation). No live-workout screenshot possible headless: the QA data account (395c47c7) returns 401 'Error loading the user' on prod, and this is a stateful live-workout interaction not capturable in a static frame. Recommend: Resolve this manually, and separately let me fix the i18n-rotted Activity.page/UserSearch tests so the gate stops blocking every resolve.",
+      "reviewedAt": "2026-07-20T16:08:59.248Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260720-8b4e",
