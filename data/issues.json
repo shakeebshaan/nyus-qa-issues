@@ -7,8 +7,30 @@
         "bug-hunt",
         "auto"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: importing a progress photo always stamped it with the upload moment, so an older gallery shot collapsed to today's date and jumped to the top of the newest-first timeline (and Compare paired the wrong before/after). Fix: the photo now keeps its own capture date (the picked file's modified date), so imported shots stay in chronological order. Proof capture shows a photo picked from 15 Jan 2026 correctly dated 15 Jan 2026 (not today).",
+        "imagePath": "images/i-20260721-412b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-412b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "260bcf8a48c1620833140fcc1760d17a719d57a1",
+        "imageCommits": [
+          "260bcf8a48c1620833140fcc1760d17a719d57a1"
+        ],
+        "fixedAt": "2026-07-21T22:32:18.639Z",
+        "by": "shakeebshaan",
+        "appCommit": "3127a842",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "One-line root-cause fix (file.lastModified), unit test fails-before/passes-after, full 5760-test suite green, adversarially reviewed SOLID; proof shows the real FE-computed date."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
