@@ -3758,6 +3758,44 @@
         "discovery",
         "auto"
       ]
+    },
+    {
+      "id": "i-20260721-48af",
+      "createdAt": "2026-07-21T13:47:59.062Z",
+      "route": "/achievements",
+      "description": "src/pages/Achievements.tsx: useBadgeCatalog/useEarnedBadges/useGamificationOverview have no isError handling. On a failed fetch (500/timeout), loadingCatalog resolves false and catalog stays undefined, so visibleBadges resolves to [] and the page renders \"No badges yet — keep logging to start earning them\" / \"0 of 0 unlocked\" (lines 371-374) exactly as it would for a genuine new user. Level card, lifetime totals, streaks, and milestones sections are all gated on truthy overview/lifetime and just vanish rather than showing an error/retry affordance. User has no way to tell \"achievements API is down\" from \"you have not earned anything yet\". Needs an isError branch with a retry CTA distinct from the empty state.",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "history": [],
+      "needsReview": false
+    },
+    {
+      "id": "i-20260721-de33",
+      "createdAt": "2026-07-21T13:47:59.062Z",
+      "route": "/profile",
+      "description": "src/pages/GoalChangeWizard.tsx MacroRow (lines 551-577): diffColor is teal (text-primary-text) for any increase and red (text-destructive-text) for any decrease, regardless of which goal the user is switching to. Example: switching to fat_loss produces a (desired) calorie decrease rendered in red/destructive styling as if it were a bad outcome; a muscle_gain switch shows the calorie increase in the \"good\" teal color even though other macros may trend the opposite direction of what the new goal wants. This is the same color-semantics bug class fixed in Measurements.tsx (commit 0ff6345a) for measurement deltas, but in the plan-change preview instead. Correct fix needs per-macro desired-direction logic keyed off selectedGoal (fat_loss/muscle_gain/maintain), not raw diff sign.",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "history": [],
+      "needsReview": false
     }
   ]
 }
