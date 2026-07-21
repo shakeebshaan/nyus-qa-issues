@@ -3806,7 +3806,7 @@
       "createdAt": "2026-07-21T13:47:59.062Z",
       "route": "/profile",
       "description": "src/pages/GoalChangeWizard.tsx MacroRow (lines 551-577): diffColor is teal (text-primary-text) for any increase and red (text-destructive-text) for any decrease, regardless of which goal the user is switching to. Example: switching to fat_loss produces a (desired) calorie decrease rendered in red/destructive styling as if it were a bad outcome; a muscle_gain switch shows the calorie increase in the \"good\" teal color even though other macros may trend the opposite direction of what the new goal wants. This is the same color-semantics bug class fixed in Measurements.tsx (commit 0ff6345a) for measurement deltas, but in the plan-change preview instead. Correct fix needs per-macro desired-direction logic keyed off selectedGoal (fat_loss/muscle_gain/maintain), not raw diff sign.",
-      "status": "open",
+      "status": "fixed",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -3818,7 +3818,30 @@
       "imageCommits": [],
       "imagePrivate": false,
       "history": [],
-      "needsReview": false
+      "needsReview": false,
+      "fix": {
+        "description": "Root cause: GoalChangeWizard MacroRow colored ANY increase teal and ANY decrease red by raw diff sign, so an intended fat-loss calorie cut rendered in alarming red/destructive as if it were a bad outcome. Fix (3f1358b9): added desiredMacroDir()/macroDiffColor() keyed off the selected goal + metric (calories down=good for fat_loss / up=good for muscle_gain; protein up=good for fat_loss/muscle_gain/recomp; carbs/fat & unset goal = neutral muted), mirroring the growth-aware pattern in Measurements.tsx (0ff6345a). Proof PNG (switch maintenance->fat_loss) shows '-400 kcal' and '+30 g' protein in green (goal-aligned success) and carbs '-70 g' / fat '-10 g' muted grey — pre-fix all four were red. Verify: GoalChangeWizard.test.tsx green (24 tests); full test:unit green except a pre-existing useBlockSubmit isolation flake now fixed at HEAD (2090f9bb).",
+        "imagePath": "images/i-20260721-de33-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-de33-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d001aa8be0cbff2ced2fbe489a4665ba0ba19c0c",
+        "imageCommits": [
+          "d001aa8be0cbff2ced2fbe489a4665ba0ba19c0c"
+        ],
+        "fixedAt": "2026-07-21T15:06:12.346Z",
+        "by": "shakeebshaan",
+        "appCommit": "2090f9bb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Per-macro desired-direction logic keyed off selectedGoal; aligned=success/counter=warning/undirected=muted; full-screen proof shows fat-loss cut now green not red; targeted tests green."
+        }
+      }
     }
   ]
 }
