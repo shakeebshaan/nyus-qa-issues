@@ -3764,7 +3764,7 @@
       "createdAt": "2026-07-21T13:47:59.062Z",
       "route": "/achievements",
       "description": "src/pages/Achievements.tsx: useBadgeCatalog/useEarnedBadges/useGamificationOverview have no isError handling. On a failed fetch (500/timeout), loadingCatalog resolves false and catalog stays undefined, so visibleBadges resolves to [] and the page renders \"No badges yet — keep logging to start earning them\" / \"0 of 0 unlocked\" (lines 371-374) exactly as it would for a genuine new user. Level card, lifetime totals, streaks, and milestones sections are all gated on truthy overview/lifetime and just vanish rather than showing an error/retry affordance. User has no way to tell \"achievements API is down\" from \"you have not earned anything yet\". Needs an isError branch with a retry CTA distinct from the empty state.",
-      "status": "open",
+      "status": "fixed",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -3776,7 +3776,30 @@
       "imageCommits": [],
       "imagePrivate": false,
       "history": [],
-      "needsReview": false
+      "needsReview": false,
+      "fix": {
+        "description": "Root cause: Achievements.tsx read only data/isLoading from useBadgeCatalog/useEarnedBadges/useGamificationOverview, so a failed fetch left catalog undefined and fell through to the 'No badges yet / 0 of 0 unlocked' empty state — indistinguishable from a genuine new user. Fix (1752cd67): added an isError branch (after loading, after all hooks) rendering a distinct 'Couldn't load achievements' state + a 'Try again' button that refetches all three queries; a truly-empty loaded catalog still shows the real empty state. Proof PNG (all 3 gamification endpoints 500) shows the new error+retry surface. Verify: Achievements.errorState.test.tsx green (9 tests); full test:unit green except a pre-existing useBlockSubmit isolation flake now fixed at HEAD (2090f9bb).",
+        "imagePath": "images/i-20260721-48af-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-48af-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "31954601bddc77c45b99aeac4047035cb9cb0ca1",
+        "imageCommits": [
+          "31954601bddc77c45b99aeac4047035cb9cb0ca1"
+        ],
+        "fixedAt": "2026-07-21T15:05:54.693Z",
+        "by": "shakeebshaan",
+        "appCommit": "2090f9bb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Distinct error state added at correct hook position; error != empty; retry refetches all 3 queries; full-screen 390x844 proof shows the exact fixed state; targeted tests green."
+        }
+      }
     },
     {
       "id": "i-20260721-de33",
