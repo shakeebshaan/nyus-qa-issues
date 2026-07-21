@@ -18,7 +18,11 @@
         "auto"
       ],
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Already shipped, not a gap. The Nutrition page already renders a Daily Micronutrient Summary: Nutrition.tsx:538 mounts NutritionMacrosSection, whose 'Micronutrient Summary' block (NutritionMacrosSection.tsx:75-87) sums the day's logged meals for iron/calcium/vitamin D/B12/vitamin C (+ zinc/magnesium/potassium/folate/sodium) and renders MicroTargetCard as bar-to-RDA with Good/Low/Deficient status (MicroTargetCard.tsx:9-25,52-54), gated on meals eaten. The suggestion's premise that these fields render only on RecipeDetail is stale. Recommend closing as already-implemented (v2 weekly aggregate could still be a genuine follow-up if desired).",
+      "reviewedAt": "2026-07-21T08:10:13.178Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260721-3f23",
