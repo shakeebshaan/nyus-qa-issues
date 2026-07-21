@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260721-9m2q",
+      "createdAt": "2026-07-21T07:38:43.409Z",
+      "status": "open",
+      "route": "/nutrition",
+      "description": "[suggestion] Add a Daily Micronutrient Summary card on the Nutrition page (iron, calcium, vitamin D, B12, vitamin C vs RDA). Problem: NYUS already computes total_iron_mg/total_calcium_mg/total_vitamin_d_mcg/total_vitamin_b12_mcg/total_vitamin_c_mg per meal (src/types/api.ts) but today these ONLY render on RecipeDetail for a single recipe -- there is no daily or weekly aggregate anywhere, so users get zero visibility into deficiency-relevant nutrients. Evidence: grep shows these fields used in exactly one screen (RecipeDetail.tsx); NYUS is India-focused with a heavy vegetarian user base where iron/B12/vitamin D deficiency is common and dietitian-relevant -- this is a real differentiator vs generic calorie-counter apps (Cronometer-style micronutrient tracking, MyFitnessPal does not do this well either). Proposed v1: a collapsible card below the existing macros section on Nutrition.tsx summing logged meals for the day (total_iron_mg/total_calcium_mg/total_vitamin_d_mcg/total_vitamin_b12_mcg/total_vitamin_c_mg), shown as simple bar-to-RDA (use standard ICMR RDA constants), no new backend endpoint needed since the per-meal fields already exist -- just sum client-side from already-fetched diary data. Effort: ~1-2 days FE-only for v1 (daily view); weekly aggregate as v2.",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommit": null,
+      "imageCommits": [],
+      "imagePrivate": false,
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260721-3f23",
       "createdAt": "2026-07-21T06:11:37.196Z",
       "status": "fixed",
