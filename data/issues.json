@@ -4,7 +4,7 @@
     {
       "id": "i-20260721-3f23",
       "createdAt": "2026-07-21T06:11:37.196Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/measurements",
       "description": "[bug-hunt] Body Measurements — the 'Estimated Body Fat (Navy Method)' caption lists the wrong measurements for users whose gender identity differs from their biological sex. The estimate itself is computed from biological_sex (Measurements.tsx:235: gender = biological_sex ?? gender ?? 'male'), so a female-bodied user gets the female Navy formula that USES the hip circumference. But the caption directly under the % (Measurements.tsx:660) keys off the IDENTITY field (userProfile.gender) instead. Onboarding stores these as two separate fields — biological_sex (male/female, Screen3_BodyStats) and gender (male/female/OTHER identity, Screen2_BasicInfo, commented 'Identity-only since v5'). Expected: the caption should reflect the same field the estimate used (biological_sex). Actual: they diverge. Repro: onboard with biological_sex=female + gender='other' (or gender=male), log waist/neck/hip → body-fat % is computed WITH hip (female formula) but caption reads 'Based on latest waist, neck measurements' (omits hip). Inverse: biological_sex=male + gender=female → caption wrongly adds ', hip' though the male formula never used it. Fix: switch line 660 to derive sex the same way the memo does (biological_sex first, gender fallback), or reuse the already-computed gender value.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: the 'Estimated Body Fat (Navy Method)' caption keyed off the IDENTITY gender field while the % itself derives from biological_sex, so a female-bodied user whose identity differs (e.g. gender='other') saw a caption that omitted the hip the female formula actually used (and the inverse for a male-bodied user with gender='female'). Fix: derive sex once as bodyFatSex (biological_sex first, identity gender only as legacy fallback) and use that single value for both the estimate and its caption, so they can never diverge. Verified: female-bodied + identity 'other' now shows '...waist, neck, hip measurements' matching the 26.8% estimate.",
+        "imagePath": "images/i-20260721-3f23-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-3f23-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "95640ec0ff07232ea31f6111943c6c11f443303e",
+        "imageCommits": [
+          "95640ec0ff07232ea31f6111943c6c11f443303e"
+        ],
+        "fixedAt": "2026-07-21T07:34:04.074Z",
+        "by": "shakeebshaan",
+        "appCommit": "90ffdde2",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Root cause single-sourced (bodyFatSex), surgical 2-line change + fail-before/pass-after test; full test:unit green (5726 passed); scenario render proves the exact fixed case."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260721-a3f1",
