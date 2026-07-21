@@ -3889,6 +3889,28 @@
           "note": "Per-macro desired-direction logic keyed off selectedGoal; aligned=success/counter=warning/undirected=muted; full-screen proof shows fat-loss cut now green not red; targeted tests green."
         }
       }
+    },
+    {
+      "id": "i-20260721-qacc",
+      "createdAt": "2026-07-21T23:33:14.802Z",
+      "status": "open",
+      "route": "/health-score",
+      "description": "[bug-hunt] Progress/Health-Score loop blocker: QA main test account (395c47c7-a2b3-4f72-8077-f87f793aaf02) has been dead on prod since ~2026-07-12/18 -- /health-score/ and /weight/log-data both 401 with \"Error loading the user 395c47c7\" despite a token valid to 2026-07-22 (per _qa_creds.json). This has blocked live-data accuracy verification (recompute displayed pillar/trend math against raw logs) for the page-progress bug-hunt loop across the 07-18, 07-20 and 07-21 ticks -- only static code review has been possible, so any live regression in health-score/weight-trend math would go undetected. Needs an owner-provisioned working QA account with real weight/meal/workout log history (or restore the existing user row) so headless verification can resume.",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommit": null,
+      "imageCommits": [],
+      "imagePrivate": false,
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "blocker",
+        "auto"
+      ],
+      "fix": null,
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Owner-only blocker: requires provisioning/restoring a real QA test account on prod DB (data/ops action), not a code fix. Flagging per loop directive rather than repeatedly re-filing."
     }
   ]
 }
