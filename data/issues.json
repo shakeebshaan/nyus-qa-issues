@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260721-3f23",
+      "createdAt": "2026-07-21T06:11:37.196Z",
+      "status": "open",
+      "route": "/measurements",
+      "description": "[bug-hunt] Body Measurements — the 'Estimated Body Fat (Navy Method)' caption lists the wrong measurements for users whose gender identity differs from their biological sex. The estimate itself is computed from biological_sex (Measurements.tsx:235: gender = biological_sex ?? gender ?? 'male'), so a female-bodied user gets the female Navy formula that USES the hip circumference. But the caption directly under the % (Measurements.tsx:660) keys off the IDENTITY field (userProfile.gender) instead. Onboarding stores these as two separate fields — biological_sex (male/female, Screen3_BodyStats) and gender (male/female/OTHER identity, Screen2_BasicInfo, commented 'Identity-only since v5'). Expected: the caption should reflect the same field the estimate used (biological_sex). Actual: they diverge. Repro: onboard with biological_sex=female + gender='other' (or gender=male), log waist/neck/hip → body-fat % is computed WITH hip (female formula) but caption reads 'Based on latest waist, neck measurements' (omits hip). Inverse: biological_sex=male + gender=female → caption wrongly adds ', hip' though the male formula never used it. Fix: switch line 660 to derive sex the same way the memo does (biological_sex first, gender fallback), or reuse the already-computed gender value.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260721-a3f1",
       "createdAt": "2026-07-21T02:23:04.933Z",
       "status": "fixed",
