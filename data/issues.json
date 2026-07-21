@@ -49,8 +49,30 @@
         "bug-hunt",
         "auto"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Compare view's Weight change figure was hard-coded to show a loss in teal and a gain in muted grey, so a muscle-gain / bulking user saw their intended progress de-emphasized (and a regression highlighted). Fix: the colour is now goal-aware — a gain reads teal for a muscle-gain goal, a loss reads teal for fat-loss and other goals — matching the rest of the app (isChangeGood / GoalChangeWizard). Proof capture: a muscle-gain user's +5.0 kg gain now renders in teal.",
+        "imagePath": "images/i-20260721-15f3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-15f3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "32096e1a46ccd48325da6d73ae85cdf91b4b9756",
+        "imageCommits": [
+          "32096e1a46ccd48325da6d73ae85cdf91b4b9756"
+        ],
+        "fixedAt": "2026-07-21T22:32:34.426Z",
+        "by": "shakeebshaan",
+        "appCommit": "759c21ee",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Mirrors the existing goal-aware delta pattern (de33), surgical, unit-tested across all goal types, full 5760-test suite green, adversarially reviewed SOLID; proof shows +5.0 kg teal for a muscle-gain goal."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
