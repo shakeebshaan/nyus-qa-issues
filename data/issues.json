@@ -4,7 +4,7 @@
     {
       "id": "i-20260721-47b7",
       "createdAt": "2026-07-21T16:36:51.304Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/coach (any logging block: meal/water/weight/workout/measurement/activity)",
       "description": "[bug-hunt] Offline log queue never flushes a log that TIMED OUT on a still-live connection, so it stalls indefinitely despite the \"will sync when you reconnect\" promise.\n\nWHERE: src/hooks/useBlockSubmit.ts (offline catch path) + src/lib/offline-queue.ts (flushQueue triggers).\n\nWHAT: useBlockSubmit catches a failed log submit and, when isNoResponseError(err) is true, enqueues it to the IndexedDB offline queue and shows \"Saved offline — Your log will sync when you reconnect.\" isNoResponseError (api-client.ts:105) is TRUE for client-side timeouts (ECONNABORTED / \"timeout of 45000ms exceeded\"), during which navigator.onLine stays TRUE — the code comment (useBlockSubmit.ts:187-196) explicitly says timeouts must be queued so \"a log on a slow but live connection\" isn't dropped. BUT the offline path only calls enqueue(); it never kicks a flush. flushQueue (offline-queue.ts:213) is only ever invoked by: (a) the one-time navigator.onLine check inside registerOnlineFlush at module load — runs once at app boot, BEFORE the entry exists; (b) the window 'online' event — requires an offline->online transition; (c) Capacitor Network networkStatusChange connected — requires a radio transition; (d) the internal exponential-backoff retry timer — armed ONLY when a flush PASS had a transient failure, and no pass ever runs for the just-enqueued entry. On a live-but-slow connection the device never fires any online/reconnect transition, so the queued entry sits in IndexedDB (nyus_offline_queue) until the app is fully restarted (re-import re-runs the at-boot flush) or a genuine connectivity blip occurs.\n\nEXPECTED: a timed-out log auto-syncs once the flaky request succeeds (exactly the case the timeout-queueing was added for).\nACTUAL: no flush is scheduled after enqueue; peekCount() stays >=1 and the log never reaches the server on the same live connection.\n\nREPRO:\n1. Log in; open coach chat and submit any logging block (e.g. water/meal/weight), OR trigger a block submit.\n2. Throttle the network so the POST times out (>45s) while staying online (DevTools throttle / tarpit) — navigator.onLine remains true.\n3. Submit -> toast \"Saved offline… will sync when you reconnect.\" Entry lands in IndexedDB DB nyus_offline_queue / store pending_logs.\n4. Restore normal speed WITHOUT toggling offline->online. Observe the entry is never re-sent (peekCount stays >=1, no server record) until an app restart or a real offline->online toggle.\n\nCONTRAST (proves it's a fixable gap, not inherent): the parallel coach-chat message-outbox (message-outbox.ts + useChatOutbox.ts) does NOT stall — it replays on socket reconnect AND on every chat mount, both recurring triggers.\n\nFIX: after enqueue() in useBlockSubmit's offline path, kick a flush (export a kickFlush()/reuse the registered sender, or call flushQueue(sender)); OR add an app-resume / visibilitychange / periodic flush. flushQueue already schedules exponential-backoff retries once a pass runs, so a single post-enqueue kick is enough.",
       "author": "shakeebshaan",
@@ -12,13 +12,36 @@
         "bug-hunt",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "Root cause: a log that timed out on a slow-but-live connection was saved to the offline queue but never re-sent — the app only retries the queue on an offline->online reconnect, which never happens while you stay online, so the log sat in local storage until an app restart. Fix: the app now immediately retries the queue right after saving such a log, and safely handles a second log saved during that retry, so a timed-out log syncs on the same connection (a duplicate send is blocked by the idempotency key). Verified with new fail-before/pass-after unit tests in both suites plus a full green test run.",
+        "imagePath": "images/i-20260721-47b7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-47b7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9d20eda6c387226836508ace04cc4babc8cefb70",
+        "imageCommits": [
+          "9d20eda6c387226836508ace04cc4babc8cefb70"
+        ],
+        "fixedAt": "2026-07-21T17:29:32.258Z",
+        "by": "shakeebshaan",
+        "appCommit": "757db122",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Exact root cause fixed surgically (kickFlush after enqueue + race-safe coalescing re-run); empirically confirmed fail-before (4 new tests RED without fix) / pass-after (55 green); full test:unit gate green; no regression (idempotency-keyed re-send)."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260721-b31f",
