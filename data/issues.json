@@ -4,7 +4,7 @@
     {
       "id": "i-20260721-a3f1",
       "createdAt": "2026-07-21T02:23:04.933Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/notifications",
       "description": "[bug-hunt] OS push-notification taps are DEAD (no deep-link) and foreground push toasts never fire, because the FE push handler reads the wrong FCM data-payload key. This is a DIFFERENT surface from i-20260719-7f3a (which fixed only the in-app /notifications list). 7f3a was filed on the FALSE premise that \"the push-tap path DOES route every type\" — it does not.\n\nROOT CAUSE (cross-repo key mismatch):\n- Backend builds the FCM data payload with ONLY two keys: data_payload['notification_type'] and data_payload['notification_id'] (nyu_backend/backend.py:1304-1308 — the ONLY messaging.Message() in the whole backend, sent via create_notification -> send_push_notification). It never sends 'type', 'link', or 'message_id'.\n- FE reads the WRONG keys: src/capacitor/push.ts pushNotificationActionPerformed line 233 does  notificationType = data.type || ''  , line 234  link = data.link  , line 235  messageId = data.message_id  . Backend sends key \"notification_type\", so data.type is ALWAYS undefined.\n\nCONSEQUENCE:\n1) Tap from OS tray: notificationType='' -> not weekly_review, not coach/admin, staticNotificationRoute('')=null, link='' -> NO branch matches -> requestNav() is never called -> the app opens but does NOT deep-link. EVERY push tap is a dead tap (workout/meal/water reminders, coach/admin/support messages, weekly_review, streak_risk, friend_request, health-score reminders, kudos, etc.).\n2) Foreground receive: pushNotificationReceived (push.ts:178) also reads notification.data?.type -> the weekly_review / streak_risk / meal_reminder / workout_reminder in-app TOASTS never fire either.\n\nSo the shared route map introduced by 7f3a is INERT on the real OS push surface — the type never arrives under the key push.ts reads.\n\nEXPECTED: tapping a push notification deep-links to the same screen the in-app list opens (e.g. weight_reminder -> /log-weight, meal_reminder -> /nutrition, coach_message -> /coach-chat).\nACTUAL: the tap opens the app on the default route only; no deep-link. Foreground reminder toasts are also absent.\n\nREPRO: send any push (or inspect the FCM payload) -> data = {notification_type, notification_id}; in push.ts data.type is undefined -> handler falls through with no navigation. Verifiable from code in BOTH repos without a device.\n\nFIX (minimal, FE): read the backend key -> notificationType = data.type || data.notification_type || ''  (at both push.ts:178 and :233). That restores all static-route + coach/admin(bare) + weekly_review deep-links immediately. FULL parity also needs the backend to forward link/message_id/date into data_payload (from the notification's meta_data) so message_id/link deep-links resolve too; e.g. add data_payload['type']=notification_type and copy meta_data link/message_id/date. Add a test asserting push.ts consumes the SAME key the backend emits so this can't drift again.",
       "author": "shakeebshaan",
@@ -17,8 +17,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Root cause: push notifications carried the type under the key 'notification_type', but the app read a different key ('type'), so the type was always empty -- every OS push tap opened the app with no deep-link and foreground reminder toasts never fired. Fix: the app now reads the correct key at both push handlers, and the backend also forwards routing hints (link/message_id/review_id), so tapping a push opens the SAME screen the in-app list does (meal reminder -> Nutrition, weight reminder -> Log Weight, coach message -> Coach Chat). Guarded by a new drift test so the key can't silently diverge again. Backend is live on production; the app-side fix ships in the next build.",
+        "imagePath": "images/i-20260721-a3f1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-a3f1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "71e1e6b9eab9b8292fe4c0b735228d46b8258a0a",
+        "imageCommits": [
+          "71e1e6b9eab9b8292fe4c0b735228d46b8258a0a"
+        ],
+        "fixedAt": "2026-07-21T03:05:19.513Z",
+        "by": "shakeebshaan",
+        "appCommit": "b6a3e160",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Cross-repo root-cause fix verified end-to-end: 9/9 targeted tests + full unit suite (5723 passed, 0 failed) green; independent adversarial review confirmed no regression; backend deployed+restarted on prod (d7455ff)."
+        }
+      },
+      "history": [],
+      "needsReview": false
     },
     {
       "id": "i-20260720-cd73",
