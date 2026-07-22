@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260722-c4f8",
+      "createdAt": "2026-07-22T10:39:11.114Z",
+      "status": "open",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Chart metric-icon tint backgrounds render with NO color — invalid CSS from appending a hex-alpha suffix onto an oklch() color string.\n\nRoot cause: chartColors.teal500()/pink500()/orange500() (src/components/charts/chart-utils.ts) resolve the --domain-* tokens, which are defined as oklch(...) in src/index.css. Several chart components build a tinted background by appending a 2-char hex-alpha suffix to that string, e.g. background: `${metric.color}1f`. That produces the literal string 'oklch(64% 0.140 175)1f', which is NOT a valid CSS color (hex-alpha suffixes only work on a 6-digit hex, e.g. #2ec4b6 -> #2ec4b61f). The CSSOM rejects the whole declaration, so the intended ~10-12% tint chip renders fully transparent.\n\nAffected (all confirmed by reading source):\n- src/components/progress/MultiMetricBarChart.tsx:128 uses `${metric.color}1f` for the rounded icon chip behind each metric label on /weekly-progress (TRENDS card), plus lines 345 / 367 / 412 (the Weight/Calories/Workouts icon chips in the day-detail drawer). The icons themselves stay colored (the separate color: prop is valid oklch) but sit on a transparent square instead of the tinted one.\n- src/components/plan-builder/WeeklyTrajectory.tsx:162 uses `${PINK}1a` (PINK = chartColors.pink500(), an oklch string) on the projected-weight badge pill at the top-right of the plan-builder / plan-overview trajectory card — the pink text + trend icon render, but the pink pill background is missing.\n\nThis is the exact `${color}22` hex-suffix class the comment at src/services/healthScore.service.ts:172 warns about (fixed there via a color/textColor split); it is still live in these two chart components.\n\nExpected: the metric-icon chips and the projected-weight badge show their subtle domain-color tint background.\nActual: transparent background (the CSS declaration is dropped as invalid).\n\nRepro: open /weekly-progress with any logged data so the TRENDS MultiMetricBarChart renders -> the small rounded squares behind the Weight/Calories/Workouts icons have no tint (DevTools shows computed background is empty). Tap any bar -> same for the three metric chips in the drawer. In the plan-builder overview, the WeeklyTrajectory card top-right '+N kg' badge has no pink pill background.\n\nFix: build the tint with CSS token alpha syntax instead of hex concat — e.g. hsl(var(--domain-teal) / 0.12) (as HealthScoreCard.tsx TEAL_BG_STYLE already does) or the PILLAR_TINT_COLORS pattern. Never append a hex suffix to an oklch()/hsl() color string.",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false
+    },
+    {
       "id": "i-20260722-e4f7",
       "createdAt": "2026-07-22T10:35:00.000Z",
       "status": "open",
