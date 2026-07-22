@@ -141,9 +141,25 @@
       "imageCommits": [],
       "imagePrivate": false,
       "needsReview": true,
-      "reviewReason": "Auto-suggestion premise is factually inaccurate on its key evidence, so this needs a product call before building. The card claims 'no plateau/stall keyword anywhere in src, no card surfaces this' — but plateau/stall detection already ships in THREE places: (1) WeeklyProgress.tsx:194-207 already emits a client-side weight insight tagged 'plateau' ('Weight moved X against your <goal> goal. Stay patient — trends compound.') whenever weight moves against the goal; (2) WeeklyInsightCard.tsx:9 has a dedicated Plateau pattern (Clock icon, warning color) rendering it; (3) goal-eta.ts:26-49 has explicit stall detection (MIN_RATE_KG_WK floor -> off_track), surfaced on LogWeight.tsx:470-494 as a 'keep logging when stalled' state. So a new /progress plateau card would OVERLAP the existing weekly-insight plateau line. The only genuinely-incremental slice is: a proactive always-on card computing a 14-day TRAILING plateau (vs the current single-week delta), with 2-3 next-step actions + a Coach Chat deep-link pre-seeded with plateau context. Recommend: do you want that second, more prominent plateau surface on Weekly Progress given the weekly-insight one already exists? If yes I'll build the 14-day trailing card + coach deep-link reusing the WeeklyInsightCard design; if the weekly-insight line is sufficient, close this. Not building on a false-premise auto-card without the product decision (idea-loop stale-dupe guard).",
-      "reviewedAt": "2026-07-22T10:30:57.531Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewReason": "BUILT — in v1.9.48 (228). Plateau detector on Progress (Weekly): fires only for weight-LOSS goals with >=8 weigh-ins across the trailing 14 days spanning >=10 days and net change within ±0.2kg → one calm 'Steady for 2 weeks' card with 'Ask coach to review my plan' prefill CTA. 35 tests incl. boundary cases. Honest limitation: the weight API exposes 7 daily points + weekly anchors, so detection is conservative near month starts — a 30-day daily-history endpoint is the follow-up if you want it sharper.",
+      "reviewedAt": "2026-07-22T15:55:08.597Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-22T10:30:57.531Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Auto-suggestion premise is factually inaccurate on its key evidence, so this needs a product call before building. The card claims 'no plateau/stall keyword anywhere in src, no card surfaces this' — but plateau/stall detection already ships in THREE places: (1) WeeklyProgress.tsx:194-207 already emits a client-side weight insight tagged 'plateau' ('Weight moved X against your <goal> goal. Stay patient — trends compound.') whenever weight moves against the goal; (2) WeeklyInsightCard.tsx:9 has a dedicated Plateau pattern (Clock icon, warning color) rendering it; (3) goal-eta.ts:26-49 has explicit stall detection (MIN_RATE_KG_WK floor -> off_track), surfaced on LogWeight.tsx:470-494 as a 'keep logging when stalled' state. So a new /progress plateau card would OVERLAP the existing weekly-insight plateau line. The only genuinely-incremental slice is: a proactive always-on card computing a 14-day TRAILING plateau (vs the current single-week delta), with 2-3 next-step actions + a Coach Chat deep-link pre-seeded with plateau context. Recommend: do you want that second, more prominent plateau surface on Weekly Progress given the weekly-insight one already exists? If yes I'll build the 14-day trailing card + coach deep-link reusing the WeeklyInsightCard design; if the weekly-insight line is sufficient, close this. Not building on a false-premise auto-card without the product decision (idea-loop stale-dupe guard).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-22T15:55:08.597Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "BUILT — in v1.9.48 (228). Plateau detector on Progress (Weekly): fires only for weight-LOSS goals with >=8 weigh-ins across the trailing 14 days spanning >=10 days and net change within ±0.2kg → one calm 'Steady for 2 weeks' card with 'Ask coach to review my plan' prefill CTA. 35 tests incl. boundary cases. Honest limitation: the weight API exposes 7 daily points + weekly anchors, so detection is conservative near month starts — a 30-day daily-history endpoint is the follow-up if you want it sharper.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260722-a4d2",
