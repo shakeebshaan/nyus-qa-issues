@@ -1293,7 +1293,33 @@ function threadMessages(it) {
       text: it.fix.description, paths: fp, commits: it.fix.imageCommits || fp.map(() => it.fix.imageCommit), priv: it.fix.imagePrivate, fix: it.fix,
     });
   }
-  return msgs;
+  // 6. Merge the append-only thread log (written by qa.mjs review/resolve/reopen
+  //    and the Respond dialog since i-20260717-3d27). The single-value legacy
+  //    fields get clobbered on every successive review/reply and deleted on
+  //    resolve — the thread keeps each one. Entries whose text already appears
+  //    in a legacy-reconstructed message above are skipped (the legacy bubble is
+  //    richer: images, goal badges); what survives ONLY here are the earlier,
+  //    otherwise-lost notes.
+  const TKIND = { review: "Flagged for direction", reply: "Your response", reopen: "Not fixed", resolve: "Proposed fix" };
+  const seen = new Set(msgs.map((m) => (m.text || "").trim()).filter(Boolean));
+  for (const t of (Array.isArray(it.thread) ? it.thread : [])) {
+    const text = (t.text || "").trim();
+    if (!text || seen.has(text)) continue;
+    seen.add(text);
+    msgs.push({ role: t.who === "owner" ? "owner" : "claude", who: t.by, at: t.at, title: TKIND[t.kind] || t.kind || "Note", text });
+  }
+  // Chronological order: the legacy construction is already ordered, so a
+  // STABLE sort on timestamp only interleaves the recovered thread entries at
+  // the right point. A message without a timestamp inherits the previous
+  // message's, so it never jumps out of place.
+  let lastTs = 0;
+  const keyed = msgs.map((m, i) => {
+    const ts = Date.parse(m.at || "") || lastTs;
+    lastTs = ts;
+    return { m, ts, i };
+  });
+  keyed.sort((a, b) => a.ts - b.ts || a.i - b.i);
+  return keyed.map((k) => k.m);
 }
 function threadBubble(m) {
   const side = m.role === "owner" ? "owner" : "claude";
@@ -2366,8 +2392,18 @@ $("respond-save").addEventListener("click", async (ev) => {
     await mutateIssues(`issue ${id}: owner responded to review`, (d) => {
       const x = d.issues.find((i) => i.id === id);
       if (!x) return;
+      const now = new Date().toISOString();
+      // Append-only thread log (i-20260717-3d27): an edited reply used to
+      // CLOBBER the previous one — preserve the old reply, then log the new.
+      x.thread = Array.isArray(x.thread) ? x.thread : [];
+      if (x.reviewReply && x.reviewReply !== reply && !x.thread.some((t) => (t.text || "") === x.reviewReply)) {
+        x.thread.push({ at: x.reviewRepliedAt || now, who: "owner", kind: "reply", text: x.reviewReply, ...(x.reviewReplyBy ? { by: x.reviewReplyBy } : {}) });
+      }
+      if (!x.thread.some((t) => (t.text || "") === reply)) {
+        x.thread.push({ at: now, who: "owner", kind: "reply", text: reply, ...(myLogin ? { by: myLogin } : {}) });
+      }
       x.reviewReply = reply;
-      x.reviewRepliedAt = new Date().toISOString();
+      x.reviewRepliedAt = now;
       x.reviewReplyBy = myLogin || undefined;   // multi-user: who answered
       if (replyPaths.length) {
         x.reviewReplyImagePaths = replyPaths;

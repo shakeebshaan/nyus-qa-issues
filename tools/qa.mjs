@@ -173,6 +173,57 @@ function uploadToPrivRepo(localPath, privPath, message) {
 
 const loadDb = () => JSON.parse(readFileSync(DB, "utf8"));
 const saveDb = (db) => writeFileSync(DB, JSON.stringify(db, null, 2) + "\n");
+
+// ---------------------------------------------------------------------------
+// Append-only conversation log (i-20260717-3d27). Every review / resolve /
+// reopen appends a {at, who, kind, text, by?} entry to issue.thread IN ADDITION
+// to the legacy single-value fields (reviewReason, fix.description,
+// history[].note), which stay untouched for back-compat with older boards and
+// consumers. Rationale: successive `review` calls used to CLOBBER reviewReason
+// (i-20260714-b07f was flagged 31 times — 30 notes lost), and `resolve` /
+// `unreview` deleted it outright. The thread preserves the whole sequence; the
+// board renders it chronologically in the thread viewer.
+//   who:  'owner' | 'claude'      kind: 'review' | 'resolve' | 'reopen' | 'reply'
+// Pure + exported for unit testing (like buildPullEntry).
+// ---------------------------------------------------------------------------
+function appendThread(issue, entry) {
+  issue.thread = Array.isArray(issue.thread) ? issue.thread : [];
+  issue.thread.push(entry);
+}
+const threadHas = (issue, text) =>
+  Array.isArray(issue.thread) && issue.thread.some((t) => (t.text || "") === text);
+// Rescue a reviewReason written before the thread log existed (or by an older
+// CLI) so the overwrite/delete about to happen doesn't lose it.
+function backfillReviewThread(issue, now) {
+  if (issue.reviewReason && !threadHas(issue, issue.reviewReason)) {
+    appendThread(issue, {
+      at: issue.reviewedAt || now, who: "claude", kind: "review", text: issue.reviewReason,
+      ...(issue.reviewedBy ? { by: issue.reviewedBy } : {}),
+    });
+  }
+}
+// The full `review` mutation, pure (no git/gh) so it's unit-testable.
+function applyReview(issue, reason, tagsRaw, now, by) {
+  backfillReviewThread(issue, now);
+  issue.needsReview = true;
+  issue.reviewReason = reason;
+  issue.reviewedAt = now;
+  issue.reviewedBy = by;
+  if (tagsRaw) {
+    issue.tags = tagsRaw.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
+  }
+  if (!threadHas(issue, reason)) {
+    appendThread(issue, { at: now, who: "claude", kind: "review", text: reason, ...(by ? { by } : {}) });
+  }
+}
+// The full `reopen` mutation, pure for the same reason.
+function applyReopen(issue, note, now, by) {
+  issue.history = issue.history || [];
+  issue.history.push({ at: now, event: "reopened", note, by, previousFix: issue.fix });
+  issue.fix = null;
+  issue.status = "open";
+  appendThread(issue, { at: now, who: "owner", kind: "reopen", text: note, ...(by ? { by } : {}) });
+}
 const flag = (name) => {
   const i = process.argv.indexOf("--" + name);
   return i > -1 ? process.argv[i + 1] : undefined;
@@ -230,6 +281,9 @@ function buildPullEntry(i, root, dl) {
     reviewReplyImages,                     // owner's attached response screenshots (local paths)
     author: i.author || null,              // who filed it (multi-user)
     tags: i.tags || null,
+    // Full append-only conversation log — lets the agent read EVERY prior
+    // review note / owner reply, not just the latest single-value fields.
+    thread: Array.isArray(i.thread) ? i.thread : [],
   };
 }
 
@@ -329,6 +383,8 @@ try {
       imageCommits.push(uploadResult?.commit?.sha || "");
     }
 
+    const now = new Date().toISOString();
+    const by = ghLogin() || undefined;
     issue.fix = {
       description: desc,
       imagePath: privPaths[0],   // backward-compat: first image
@@ -336,8 +392,8 @@ try {
       imagePrivate: true,
       imageCommit: imageCommits[0],
       imageCommits,
-      fixedAt: new Date().toISOString(),
-      by: ghLogin() || undefined,                 // multi-user attribution
+      fixedAt: now,
+      by,                                         // multi-user attribution
       ...(appCommit ? { appCommit } : {}),
       // Verifiable-goal proof (shown as a ✓ tests/coverage badge on the card).
       ...(tests ? { tests: { passed: tests === "pass", ...(coverageArg !== undefined ? { coverage: Number(coverageArg) } : {}) } } : {}),
@@ -345,7 +401,10 @@ try {
       ...(judgeArg !== undefined ? { judge: { score: Number(judgeArg), bar: settings.satisfaction, ...(judgeNote ? { note: judgeNote } : {}) } } : {}),
     };
     issue.status = "fixed";
-    // A fix clears any pending user-review flag.
+    // A fix clears any pending user-review flag. The delete below used to LOSE
+    // the review question from the record — backfill it into the thread first.
+    backfillReviewThread(issue, now);
+    appendThread(issue, { at: now, who: "claude", kind: "resolve", text: desc, ...(by ? { by } : {}) });
     issue.needsReview = false;
     delete issue.reviewReason;
     delete issue.reviewedAt;
@@ -363,10 +422,7 @@ try {
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
     if (issue.status !== "fixed") throw new Error(id + " is not fixed — nothing to reopen.");
-    issue.history = issue.history || [];
-    issue.history.push({ at: new Date().toISOString(), event: "reopened", note, by: ghLogin() || undefined, previousFix: issue.fix });
-    issue.fix = null;
-    issue.status = "open";
+    applyReopen(issue, note, new Date().toISOString(), ghLogin() || undefined);
     saveDb(db);
     git("add", "data/issues.json");
     git("commit", "-m", `issue ${id}: reopened`);
@@ -382,13 +438,7 @@ try {
     const db = loadDb();
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
-    issue.needsReview = true;
-    issue.reviewReason = reason;
-    issue.reviewedAt = new Date().toISOString();
-    issue.reviewedBy = ghLogin() || undefined;
-    if (tagsRaw) {
-      issue.tags = tagsRaw.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
-    }
+    applyReview(issue, reason, tagsRaw, new Date().toISOString(), ghLogin() || undefined);
     saveDb(db);
     git("add", "data/issues.json");
     git("commit", "-m", `issue ${id}: flagged for user review`);
@@ -402,6 +452,8 @@ try {
     const db = loadDb();
     const issue = db.issues.find((i) => i.id === id);
     if (!issue) throw new Error("No such issue: " + id);
+    // Preserve the reason in the thread before deleting it (append-only log).
+    backfillReviewThread(issue, new Date().toISOString());
     issue.needsReview = false;
     delete issue.reviewReason;
     delete issue.reviewedAt;
@@ -516,4 +568,4 @@ try {
 }
 }
 
-export { buildPullEntry };
+export { buildPullEntry, appendThread, threadHas, backfillReviewThread, applyReview, applyReopen };
