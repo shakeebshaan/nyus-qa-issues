@@ -4105,7 +4105,9 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Owner-only blocker: requires provisioning/restoring a real QA test account on prod DB (data/ops action), not a code fix. Flagging per loop directive rather than repeatedly re-filing."
+      "reviewReason": "NOT an owner blocker — account is ALIVE. Verified live on prod (2026-07-22): /health-score/ -> 200 (history + pillars flowing), /weight/log-data -> 200 (daily weights incl Jul 16-17), /auth/me -> 200 for user 395c47c7. Root cause of the loop's 401: access tokens are allowlisted per-jti via UserSession — a minted token WITHOUT a session row (or an expired one) gets exactly 401 'Token has been revoked', reproduced side-by-side in the same run. REMEDY for the bug-hunt loop: mint a fresh token AND stamp a UserSession row (user_id, jti from decode_token, expires_at), same recipe as .qa-report captures / reference_authed_qa_capture; refresh its _qa_creds.json copy (note: the frontend repo's .qa-report/_qa_creds.json 'main' is qa.flow.mira, exp 2026-08-01 — the loop appears to carry its own stale copy). No account restore or provisioning needed.",
+      "reviewedAt": "2026-07-22T10:34:59.449Z",
+      "reviewedBy": "shakeebshaan"
     }
   ]
 }
