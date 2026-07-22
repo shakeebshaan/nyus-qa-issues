@@ -286,6 +286,7 @@ function buildPullEntry(i, root, dl) {
     reviewReply: i.reviewReply || null,
     reviewReplyImages,                     // owner's attached response screenshots (local paths)
     author: i.author || null,              // who filed it (multi-user)
+    client: i.client || null,              // device meta captured at submit ({ua, viewport})
     tags: i.tags || null,
     // Full append-only conversation log — lets the agent read EVERY prior
     // review note / owner reply, not just the latest single-value fields.

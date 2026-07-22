@@ -851,6 +851,17 @@ function actorHtml(login, verb) {
   if (!login) return "";
   return `<span class="actor"><img src="https://github.com/${esc(login)}.png?size=32" alt="" loading="lazy" />${verb ? esc(verb) + " " : ""}<b>${esc(login)}</b></span>`;
 }
+/* Compact "which device filed this" label from the client meta captured at
+   submit (i-20260717-3d27 audit: issues carried no device context at all). */
+function deviceLabel(c) {
+  if (!c || !c.ua) return "";
+  const ua = c.ua;
+  const os = /Android/i.test(ua) ? "Android" : /iPhone|iPad|iPod/i.test(ua) ? "iOS"
+    : /Windows/i.test(ua) ? "Windows" : /Mac/i.test(ua) ? "macOS" : /Linux/i.test(ua) ? "Linux" : "";
+  const br = /Edg\//.test(ua) ? "Edge" : /OPR\//.test(ua) ? "Opera" : /Firefox\//.test(ua) ? "Firefox"
+    : /Chrome\//.test(ua) ? "Chrome" : /Safari\//.test(ua) ? "Safari" : "";
+  return [os, br, c.viewport].filter(Boolean).join(" · ");
+}
 /* Goal-proof badges on a proposed fix: verifiable (tests/coverage) + judge score. */
 function goalBadgesHtml(fix) {
   if (!fix) return "";
@@ -1244,7 +1255,7 @@ function cardHtml(it, archived) {
         ${it.reportPath
           ? `<button type="button" class="report-cta" data-report-path="${esc(it.reportPath)}" data-report-label="${esc(it.reportLabel || "Open report")}">📄 ${esc(it.reportLabel || "Open report")} <span class="arr">&rarr;</span></button>`
           : it.link ? `<a class="report-cta" href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.linkLabel || "View report")} <span class="arr">&rarr;</span></a>` : ""}
-        ${it.author ? `<div class="card-tags">${actorHtml(it.author, "filed by")}</div>` : ""}
+        ${it.author || deviceLabel(it.client) ? `<div class="card-tags">${actorHtml(it.author, "filed by")}${deviceLabel(it.client) ? `<span class="card-tag" title="${esc(it.client.ua)}">📱 ${esc(deviceLabel(it.client))}</span>` : ""}</div>` : ""}
         ${tagsHtml}
       </div>
       <div class="side">
@@ -1260,9 +1271,10 @@ function cardHtml(it, archived) {
    flag → owner reply → proposed fix — built entirely from existing fields. */
 function threadMessages(it) {
   const msgs = [];
-  // 1. Original report — the owner who filed it.
+  // 1. Original report — the owner who filed it (+ the device it came from).
   msgs.push({
     role: "owner", who: it.author, at: it.createdAt, title: "Reported",
+    device: deviceLabel(it.client),
     text: it.descPrivate ? null : it.description,
     privDescId: it.descPrivate ? it.id : null,
     paths: it.imagePaths || (it.imagePath ? [it.imagePath] : []),
@@ -1346,7 +1358,7 @@ function threadBubble(m) {
   return `<div class="tv-row tv-${side}">
     ${av}
     <div class="tv-bubble">
-      <div class="tv-meta"><b>${name}</b><span class="tv-title-chip">${esc(m.title)}</span>${m.at ? `<span class="tv-when">${fmtDate(m.at)}</span>` : ""}</div>
+      <div class="tv-meta"><b>${name}</b><span class="tv-title-chip">${esc(m.title)}</span>${m.device ? `<span>📱 ${esc(m.device)}</span>` : ""}${m.at ? `<span class="tv-when">${fmtDate(m.at)}</span>` : ""}</div>
       ${body}${badges}${shots}
     </div>
   </div>`;
@@ -1653,6 +1665,9 @@ $("form").addEventListener("submit", async (ev) => {
         id, createdAt: new Date().toISOString(), route: route || null,
         description: "", descPrivate: true,
         author: myLogin || undefined,   // multi-user: who filed it
+        // Which device it came from — rendered as a chip on the card and
+        // passed to the agent via pull (i-20260717-3d27 audit).
+        client: { ua: navigator.userAgent.slice(0, 256), viewport: `${window.innerWidth}x${window.innerHeight}` },
         imagePath: imagePaths[0] || null, imageCommit: imageCommits[0] || null,
         imagePaths, imageCommits, imagePrivate: imagePaths.length > 0,
         status: "open", fix: null, history: [],
