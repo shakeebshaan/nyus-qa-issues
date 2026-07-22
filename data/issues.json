@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260722-a4d2",
+      "createdAt": "2026-07-22T05:26:24.873Z",
+      "route": "/coach-chat",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "description": "[bug-hunt] Coach-chat Activity Targets card silently fails to save two of its three editable fields. In the activity_edit_panel interactive block (src/components/blocks/ActivityEditPanel.tsx), tapping the checkmark save on \"Weekly Cardio Sessions\" or \"Daily NEAT Calories\" fires a success haptic and closes the inline editor (so it LOOKS saved) but performs NO persistence API call. handleFieldSave (lines 85-101) only calls a mutation when field === \"daily_steps_goal\" (planService.updateStepGoal -> PUT /plans/:id/step-goal); for \"weekly_cardio_sessions\" and \"daily_neat_calories\" it just calls onResponse({action:\"update_target\",...}) which forwards a block_response message to the coach LLM, then closes. There is no planService setter or FE-used endpoint for these two scalar targets (plan.service.ts exposes only updateStepGoal + updateActivityTargets(activities list)), and handleCoachAction (src/components/coach/CoachChatMessageList.tsx:144-183) handles only \"open_tier_picker\" — update_target falls through to a plain chat message with no deterministic write. Expected: saving cardio-sessions / NEAT-calories persists to the plan the way the step goal does. Actual: the edit updates local component state only; on block remount/refetch it reverts to the server value — silent data loss behind false success feedback. Repro: Coach chat -> open an Activity Targets (activity_edit_panel) card -> edit Weekly Cardio Sessions -> tap the green checkmark (success haptic, editor closes) -> reload/reopen; the value is unchanged server-side. Only the Step Goal actually sticks. Fix: add a planService setter + backend endpoint for weekly_cardio_sessions/daily_neat_calories and call it from handleFieldSave, or remove/disable the save affordance for fields that have no persistence path."
+    },
+    {
+      "id": "i-20260722-f7b1",
+      "createdAt": "2026-07-22T05:26:24.873Z",
+      "route": "/coach-chat",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "description": "[bug-hunt] Coach-chat \"Log Activity\" card discards the user-selected workout Intensity. ActivityLoggerBlock (src/components/blocks/ActivityLoggerBlock.tsx) renders a prominent Intensity radiogroup (Low/Moderate/High) and emits it in onResponse as activity.intensity, but transformActivityLog (src/lib/block-transformers.ts:172-190) never maps intensity into the request, and LogActivityRequest (src/types/api.ts:974-986) has no intensity field at all. So the persisted activity log stores activity_type + activity_name + duration_min + steps but drops intensity entirely. (The coach LLM still sees it via the block_response chat message, but the stored activity record loses it.) This is inconsistent with the sibling ActivityEditPanel additional-activities list, which DOES persist intensity via planService.updateActivityTargets. Expected: the intensity chosen in the Log Activity card is stored on the activity log (or the selector should not be shown). Actual: intensity is silently dropped from the stored record on every coach-chat activity log. Repro (code path): ActivityLoggerBlock.handleSubmit -> onResponse({activity:{type,duration_min,intensity}, steps}); transformActivityLog reads only activity.type / activity.duration_min / steps.count -> loggingService.logActivity(LogActivityRequest) which has no intensity field. Fix: add an intensity field to LogActivityRequest + the backend POST /logs/activity handler and map activity.intensity in transformActivityLog."
+    },
+    {
       "id": "i-20260722-e1f7",
       "createdAt": "2026-07-22T02:29:54.860Z",
       "route": "/activity",
