@@ -2,6 +2,46 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260722-e1f7",
+      "createdAt": "2026-07-22T02:29:54.860Z",
+      "route": "/activity",
+      "description": "[bug-hunt] Strength progression chart understates estimated 1RM. The orange \"Est. 1RM\" line and the \"Peak 1RM\" stat tile in the exercise progression sheet are wrong whenever a session's highest-Epley set is not its heaviest-weight set. Backend GET /api/v1/strength/exercise-progression (nyu_backend/app/routes/logging.py:1468-1497) orders each session's sets by weight_kg DESC, reps DESC, keeps the first row per date as the \"top set\", and computes e1rm = weight*(1+reps/30) from THAT single set only. A lighter high-rep back-off set frequently has a higher Epley estimate, so it is silently discarded. Expected: e1RM per session = MAX Epley across all sets that session (standard estimated-1RM methodology). Actual: e1RM taken from the heaviest-weight set only. Repro: log one session with a top set 100kg x 3 (Epley e1RM = 110.0) and a back-off set 80kg x 15 (Epley e1RM = 120.0); open Activity -> Personal bests -> tap the exercise. The orange \"Est. 1RM\" point and the \"Peak 1RM\" tile read 110.0 kg instead of the true 120.0 kg. Frontend surfaces: src/components/activity/ExerciseProgressionSheet.tsx (dataKey \"e1rm\" line + \"Peak 1RM\" tile, line ~182). Fix in the backend query: compute e1rm as MAX(weight*(1+reps/30)) over all of the session's sets, independent of which set is heaviest.",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "needsReview": false
+    },
+    {
+      "id": "i-20260722-c3a9",
+      "createdAt": "2026-07-22T02:29:54.860Z",
+      "route": "/activity",
+      "description": "[bug-hunt] Exercise progression sheet can display two contradictory weights for the same lift. The header shows \"<weight> kg x <reps> reps (current PR)\" while the \"Peak weight\" stat tile below it can show a LOWER number in the same view. Cause: the two values come from different endpoints with different windows. Header current PR = exercise.best.weight_kg from GET /strength/summary, the ALL-TIME heaviest set (personal_records table, nyu_backend/app/routes/logging.py:1369-1381, never windowed). The chart and \"Peak weight\" tile come from GET /strength/exercise-progression, which truncates to the LAST 90 session-dates (logging.py:1500-1501, data = data[-90:]) then takes max(top_set_weight_kg) over that window (src/components/activity/ExerciseProgressionSheet.tsx:178). If a user has >90 completed sessions for one exercise and their heaviest set is older than the last 90 (a PR set early, then a deload or rep-range switch - normal for a dedicated athlete after ~1 year of a 2x/week lift), the header reads e.g. \"120 kg x 5 (current PR)\" while the tile reads \"Peak weight: 110 kg\". Expected: the two figures agree, or the windowed chart is labelled as such (e.g. \"last 90 sessions\"). Fix: compute Peak weight over the same all-time set the summary uses, or scope/label the sheet as a 90-session window. Low frequency (needs >90 sessions of one lift) but a clear in-view contradiction.",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "needsReview": false
+    },
+    {
       "id": "i-20260722-6d31",
       "createdAt": "2026-07-22T09:15:00.000Z",
       "status": "open",
