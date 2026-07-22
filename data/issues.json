@@ -2173,9 +2173,25 @@
       "imagePrivate": false,
       "description": "[suggestion] Add a \"Share progress report\" export on the Progress page — a shareable image/PDF summarizing weight trend, macro adherence, and workout consistency over a chosen date range (7/30/90 days). Problem: NYUS users are dedicated athletes in India who routinely see a doctor, dietitian, or trainer for periodic check-ins, but there is no way to hand off structured progress data today — codebase grep confirms zero PDF/report-export code and the only navigator.share() usages are ShoppingList and the referral card (no Progress/Achievements export exists). Competitors (MyFitnessPal, Cronometer) ship a printable/exportable report precisely for this reason. V1 scope: one \"Share report\" button on Progress → renders a single portrait canvas (weight chart + macro-adherence % + workout completion %, NYUS branding) client-side (no new backend endpoint) → native Web Share / save-to-gallery via existing Capacitor share plugin, same pattern as ShoppingList’s share flow. No new AI/LLM cost. Effort: ~1-2 days (canvas/chart-to-image render + share wiring + one QA pass on real device for the gallery/share-sheet).",
       "needsReview": true,
-      "reviewReason": "Already shipped — no build needed. Progress already has a Share export: WeeklyProgress.tsx:357 and MonthlyProgress.tsx:380 mount ShareButton in the header. It renders the full report content (calorie/macro-adherence ring, 7-day/30-day rail, workout-session completion %, weight trend, streaks) to a portrait PNG via html2canvas -> @capacitor/share Share.share() (native share sheet, with save/download fallback) — exactly the V1 scope described. Achievements.tsx:169/460 has the same share too. The suggestion's grep missed it because the app shares via the Capacitor Share plugin (Share.share()), NOT navigator.share(), so a navigator.share grep returns nothing on Progress. Only true gaps vs the ask: no single 7/30/90 date-range picker inside one report (Weekly=7d, Monthly=30d cover 7/30; no 90d) and it's a PNG not a PDF. If you want the 90-day range + PDF variant, that's a real small follow-up; otherwise this can be resolved/archived as done.",
-      "reviewedAt": "2026-07-17T08:29:23.563Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewReason": "BUILT — in v1.9.48 (228) on the test lane. Share button in the Progress header generates a 1080x1350 share image (current weight + change since start, 30-day teal trend line, tracking streak, workouts this month, NYUS wordmark) and opens the native share sheet; web falls back to download. Update the app and tap the share icon on Progress.",
+      "reviewedAt": "2026-07-22T15:54:15.715Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-17T08:29:23.563Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Already shipped — no build needed. Progress already has a Share export: WeeklyProgress.tsx:357 and MonthlyProgress.tsx:380 mount ShareButton in the header. It renders the full report content (calorie/macro-adherence ring, 7-day/30-day rail, workout-session completion %, weight trend, streaks) to a portrait PNG via html2canvas -> @capacitor/share Share.share() (native share sheet, with save/download fallback) — exactly the V1 scope described. Achievements.tsx:169/460 has the same share too. The suggestion's grep missed it because the app shares via the Capacitor Share plugin (Share.share()), NOT navigator.share(), so a navigator.share grep returns nothing on Progress. Only true gaps vs the ask: no single 7/30/90 date-range picker inside one report (Weekly=7d, Monthly=30d cover 7/30; no 90d) and it's a PNG not a PDF. If you want the 90-day range + PDF variant, that's a real small follow-up; otherwise this can be resolved/archived as done.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-22T15:54:15.715Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "BUILT — in v1.9.48 (228) on the test lane. Share button in the Progress header generates a 1080x1350 share image (current weight + change since start, 30-day teal trend line, tracking streak, workouts this month, NYUS wordmark) and opens the native share sheet; web falls back to download. Update the app and tap the share icon on Progress.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260717-gr7a",
