@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260722-b8d2",
+      "createdAt": "2026-07-22T09:08:10.145Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/partners/:groupId",
+      "description": "[bug-hunt] Partner-group LEADER is permanently trapped: there is no way to leave, transfer leadership, or disband a partner group anywhere in the app.\n\nExpected: the group creator (always the leader) can leave, hand off leadership, or disband the group. The backend exposes /partner-groups/<id>/transfer-leader, /partner-groups/<id>/leave, and DELETE /partner-groups/<id>/members/<userId>, and the FE service wraps all three (partnerGroupsService.transferLeader / kickMember / leave).\n\nActual: none of those actions are reachable for a leader.\n- PartnerGroupHub.tsx:608 gates the ONLY \"Leave group\" button behind {!isLeader && ...}, so a leader never sees it.\n- The Group-settings panel (PartnerGroupHub.tsx:591-619) offers ONLY \"Follow mode -> Change\" — no transfer-leadership, no kick-member, no disband.\n- PartnerFollowBanner.tsx:45 explicitly returns false for the leader (leaderId === currentUserId), so the banner’s unfollow X never shows for a leader either.\n- partnerGroupsService.transferLeader and .kickMember have ZERO callers in src (grep-confirmed dead code); leave() is only invoked from LeaveGroupSheet, which itself is only mounted at the two leader-excluded entry points above.\n\nImpact: every user who creates a partner group is stuck in it for the life of the account. isLeader (leader_user_id === currentUserId) is true for the creator, so this hits the group owner every time.\n\nRepro: create a partner group (you become leader) -> open /partners/<groupId> -> tap \"Group settings\". Only \"Follow mode\" appears; there is no Leave / Transfer / Disband, and no other screen offers it.\n\nFix: expose leader group-management in PartnerGroupHub settings — at minimum a \"Transfer leadership\" picker wired to partnerGroupsService.transferLeader (so a leader can hand off then leave), plus a leader Disband/Leave path. The service methods already exist; just wire the UI.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260722-c9f1",
       "createdAt": "2026-07-22T09:00:00.000Z",
       "status": "open",
