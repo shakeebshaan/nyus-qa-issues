@@ -5,7 +5,7 @@
       "id": "i-20260722-a4d2",
       "createdAt": "2026-07-22T05:26:24.873Z",
       "route": "/coach-chat",
-      "status": "open",
+      "status": "fixed",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -16,9 +16,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: in the coach-chat Activity Targets card, only the Step Goal actually saved - editing Weekly Cardio Sessions or Daily NEAT Calories showed a success tick and closed the editor but made no save call, so the value reverted on reload (silent loss). Fix: those two fields now persist to the plan exactly the way the Step Goal does (PUT the plan's activity targets); the production backend already stores both columns. Full frontend test suite is green.",
+        "imagePath": "images/i-20260722-a4d2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260722-a4d2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "21dd3775c42057dc338554d062500cf222e2db04",
+        "imageCommits": [
+          "21dd3775c42057dc338554d062500cf222e2db04"
+        ],
+        "fixedAt": "2026-07-22T06:13:09.897Z",
+        "by": "shakeebshaan",
+        "appCommit": "f2f41c8c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Fixed at root (wired save to the persistence endpoint, mirroring the shipped step-goal path); backend confirmed persisting + live; fail-before/pass-after component tests + full suite (5765) green. Proof is a no-UI proof-card since it's a silent-persistence bug and the live QA account is down (flagged as qacc)."
+        }
+      },
       "history": [],
-      "description": "[bug-hunt] Coach-chat Activity Targets card silently fails to save two of its three editable fields. In the activity_edit_panel interactive block (src/components/blocks/ActivityEditPanel.tsx), tapping the checkmark save on \"Weekly Cardio Sessions\" or \"Daily NEAT Calories\" fires a success haptic and closes the inline editor (so it LOOKS saved) but performs NO persistence API call. handleFieldSave (lines 85-101) only calls a mutation when field === \"daily_steps_goal\" (planService.updateStepGoal -> PUT /plans/:id/step-goal); for \"weekly_cardio_sessions\" and \"daily_neat_calories\" it just calls onResponse({action:\"update_target\",...}) which forwards a block_response message to the coach LLM, then closes. There is no planService setter or FE-used endpoint for these two scalar targets (plan.service.ts exposes only updateStepGoal + updateActivityTargets(activities list)), and handleCoachAction (src/components/coach/CoachChatMessageList.tsx:144-183) handles only \"open_tier_picker\" — update_target falls through to a plain chat message with no deterministic write. Expected: saving cardio-sessions / NEAT-calories persists to the plan the way the step goal does. Actual: the edit updates local component state only; on block remount/refetch it reverts to the server value — silent data loss behind false success feedback. Repro: Coach chat -> open an Activity Targets (activity_edit_panel) card -> edit Weekly Cardio Sessions -> tap the green checkmark (success haptic, editor closes) -> reload/reopen; the value is unchanged server-side. Only the Step Goal actually sticks. Fix: add a planService setter + backend endpoint for weekly_cardio_sessions/daily_neat_calories and call it from handleFieldSave, or remove/disable the save affordance for fields that have no persistence path."
+      "description": "[bug-hunt] Coach-chat Activity Targets card silently fails to save two of its three editable fields. In the activity_edit_panel interactive block (src/components/blocks/ActivityEditPanel.tsx), tapping the checkmark save on \"Weekly Cardio Sessions\" or \"Daily NEAT Calories\" fires a success haptic and closes the inline editor (so it LOOKS saved) but performs NO persistence API call. handleFieldSave (lines 85-101) only calls a mutation when field === \"daily_steps_goal\" (planService.updateStepGoal -> PUT /plans/:id/step-goal); for \"weekly_cardio_sessions\" and \"daily_neat_calories\" it just calls onResponse({action:\"update_target\",...}) which forwards a block_response message to the coach LLM, then closes. There is no planService setter or FE-used endpoint for these two scalar targets (plan.service.ts exposes only updateStepGoal + updateActivityTargets(activities list)), and handleCoachAction (src/components/coach/CoachChatMessageList.tsx:144-183) handles only \"open_tier_picker\" — update_target falls through to a plain chat message with no deterministic write. Expected: saving cardio-sessions / NEAT-calories persists to the plan the way the step goal does. Actual: the edit updates local component state only; on block remount/refetch it reverts to the server value — silent data loss behind false success feedback. Repro: Coach chat -> open an Activity Targets (activity_edit_panel) card -> edit Weekly Cardio Sessions -> tap the green checkmark (success haptic, editor closes) -> reload/reopen; the value is unchanged server-side. Only the Step Goal actually sticks. Fix: add a planService setter + backend endpoint for weekly_cardio_sessions/daily_neat_calories and call it from handleFieldSave, or remove/disable the save affordance for fields that have no persistence path.",
+      "needsReview": false
     },
     {
       "id": "i-20260722-f7b1",
