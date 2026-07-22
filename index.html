@@ -1218,6 +1218,7 @@ function cardHtml(it, archived) {
              </div>`}`
         )
       : `${lastReopen?.note ? `<p class="reopen-note">↻ ${esc(lastReopen.note)}</p>` : ""}
+       ${lastReopen?.images?.length ? shotsHtml(lastReopen.images, lastReopen.imageCommits, "what's still wrong", true) : ""}
        <div class="await"><span><span class="w">🔧</span>${reopened ? "Awaiting re-fix" : "Awaiting fix"}<br><span style="font-size:12px;opacity:.7">Claude will post the ${reopened ? "re-" : ""}fixed screenshot here</span></span></div>
        ${responseHtml}
        ${prevHtml}
@@ -1279,7 +1280,12 @@ function threadMessages(it) {
         text: pf.description, paths: pp, commits: pf.imageCommits || pp.map(() => pf.imageCommit), priv: pf.imagePrivate,
       });
     }
-    msgs.push({ role: "owner", who: it.author, at: h.at, title: "Not fixed", text: h.note });
+    // h.images = the owner's "what's still wrong" screenshots (uploaded private
+    // from the Not-fixed dialog) — they were stored but never rendered anywhere.
+    msgs.push({
+      role: "owner", who: h.by || it.author, at: h.at, title: "Not fixed", text: h.note,
+      paths: h.images || [], commits: h.imageCommits || [], priv: !!(h.images && h.images.length),
+    });
   }
   // 3. Flagged for direction (Claude asked a question).
   if (it.reviewReason)

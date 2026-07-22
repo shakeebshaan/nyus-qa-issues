@@ -257,6 +257,11 @@ function buildPullEntry(i, root, dl) {
   // The owner's response screenshots (uploaded private, like issue shots) so the
   // agent can SEE the attached direction, not just read the reviewReply text.
   const reviewReplyImages = toImages(i.reviewReplyImagePaths, i.reviewReplyImagePrivate, "reply");
+  // The owner's "not fixed" screenshots from the last reopen (uploaded private
+  // from the board's Not-fixed dialog). Without these the re-fix ran blind on
+  // what was still wrong — only the note text was surfaced.
+  const lastReopen = (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0] || null;
+  const reopenImages = toImages(lastReopen?.images, true, "notfixed");
   // Resolve private description (i-20260629-7a27: descriptions stored in private repo).
   let description = i.description || "";
   if (i.descPrivate) {
@@ -274,7 +279,8 @@ function buildPullEntry(i, root, dl) {
     imagePrivate: !!i.imagePrivate,
     image: images[0] || null,
     images,
-    reopenNote: (i.history || []).filter((h) => h.event === "reopened").slice(-1)[0]?.note || null,
+    reopenNote: lastReopen?.note || null,
+    reopenImages,                          // owner's "what's still wrong" screenshots (local paths)
     needsReview: !!i.needsReview,
     reviewReason: i.reviewReason || null,
     reviewReply: i.reviewReply || null,
@@ -312,11 +318,12 @@ try {
       .sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || ""))
       .map((i) => buildPullEntry(i, ROOT, (p, idx, kind = "issue") => {
         // Download private images locally so Claude can read them. `kind`
-        // separates issue shots (img-N) from response shots (reply-N).
+        // separates issue shots (img-N) from response shots (reply-N) and
+        // the owner's not-fixed shots (notfixed-N).
         const dlDir = join(ROOT, "tmp", "downloads", i.id);
         mkdirSync(dlDir, { recursive: true });
         const ext = extname(p) || ".jpg";
-        const name = (kind === "reply" ? "reply-" : "img-") + idx + ext;
+        const name = (kind === "issue" ? "img-" : kind + "-") + idx + ext;
         return downloadPrivImage(p, join(dlDir, name));
       }));
     // The loop's live goal — the agent reads the satisfaction bar + test gate
