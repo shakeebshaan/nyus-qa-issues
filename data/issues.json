@@ -3247,12 +3247,28 @@
       "reportPath": "reports/i-20260717-3d27-lifecycle-audit.html",
       "reportLabel": "Issue lifecycle audit",
       "needsReview": true,
-      "reviewReason": "Audit delivered — tap the '\\''Issue lifecycle audit'\\'' report button above: it walks the full sequence (submit -> agent pull/resolve/flag -> your reply -> reopen -> how each state is displayed/ordered/badged), with file:line citations. One concrete gap answers your '\\''label what'\\''s being worked on'\\'' ask: there is NO in-progress state today — an open issue reads 'Submitted / Awaiting fix' the whole time an agent is fixing it, and a concurrent tick can grab the same issue. The report proposes a low-risk, opt-in 'claim -> In progress pill (auto-expiring)' that also blocks duplicate ticks. That's a change to YOUR board workflow surface so I won'\\''t ship it unprompted — reply 'build it' and I will.",
-      "reviewedAt": "2026-07-17T06:49:16.503Z",
+      "reviewReason": "AUDITED + FIXED — live on the board now (5 commits). Findings: (1) review notes were being OVERWRITTEN — one issue lost 30 prior notes; now every review/resolve/reopen/reply appends to a permanent conversation thread shown chronologically in the card modal. (2) 'not fixed' screenshots you uploaded were stored but never shown to me or you — now they render on the card AND download into my fix loop. (3) 'In review' vs 'Needs direction' badges were identical purple — now visually distinct. (4) issues now capture device info (e.g. '📱 Android · Chrome · 412x915'). (5) fixed a CLI crash on two automation-filed cards missing status. Old issues render unchanged; nothing was migrated destructively.",
+      "reviewedAt": "2026-07-22T15:55:18.479Z",
       "reviewedBy": "shakeebshaan",
       "tags": [
         "audit",
         "board"
+      ],
+      "thread": [
+        {
+          "at": "2026-07-17T06:49:16.503Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Audit delivered — tap the '\\''Issue lifecycle audit'\\'' report button above: it walks the full sequence (submit -> agent pull/resolve/flag -> your reply -> reopen -> how each state is displayed/ordered/badged), with file:line citations. One concrete gap answers your '\\''label what'\\''s being worked on'\\'' ask: there is NO in-progress state today — an open issue reads 'Submitted / Awaiting fix' the whole time an agent is fixing it, and a concurrent tick can grab the same issue. The report proposes a low-risk, opt-in 'claim -> In progress pill (auto-expiring)' that also blocks duplicate ticks. That's a change to YOUR board workflow surface so I won'\\''t ship it unprompted — reply 'build it' and I will.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-22T15:55:18.479Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "AUDITED + FIXED — live on the board now (5 commits). Findings: (1) review notes were being OVERWRITTEN — one issue lost 30 prior notes; now every review/resolve/reopen/reply appends to a permanent conversation thread shown chronologically in the card modal. (2) 'not fixed' screenshots you uploaded were stored but never shown to me or you — now they render on the card AND download into my fix loop. (3) 'In review' vs 'Needs direction' badges were identical purple — now visually distinct. (4) issues now capture device info (e.g. '📱 Android · Chrome · 412x915'). (5) fixed a CLI crash on two automation-filed cards missing status. Old issues render unchanged; nothing was migrated destructively.",
+          "by": "shakeebshaan"
+        }
       ]
     },
     {
