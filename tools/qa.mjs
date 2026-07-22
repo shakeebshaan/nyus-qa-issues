@@ -307,8 +307,10 @@ try {
     if (!rows.length) { console.log("No " + (process.argv.includes("--all") ? "" : "open ") + "issues."); process.exit(0); }
     for (const i of rows) {
       const priv = i.imagePrivate ? " [PRIV]" : "";
+      // Guards: automation-filed cards exist with NO status/description
+      // (i-20260717-gr7a, i-20260720-out1) — `list --all` used to crash on them.
       console.log(
-        `${i.id}  ${i.status.toUpperCase().padEnd(5)}  ${(i.createdAt || "").slice(0, 10)}  ${(i.route || "-").padEnd(22)}${priv}  ${i.description.replace(/\s+/g, " ").slice(0, 60)}`
+        `${i.id}  ${(i.status || "?").toUpperCase().padEnd(5)}  ${(i.createdAt || "").slice(0, 10)}  ${(i.route || "-").padEnd(22)}${priv}  ${(i.description || "").replace(/\s+/g, " ").slice(0, 60)}`
       );
     }
   } else if (cmd === "pull") {

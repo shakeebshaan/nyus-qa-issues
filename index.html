@@ -1076,6 +1076,11 @@ async function loadJson(path) {
 async function loadDb() {
   const { data, sha, missing } = await loadJson("data/issues.json");
   if (missing) throw new Error("issues.json missing from the repo.");
+  // Display-side normalization: automation-filed cards exist with NO `status`
+  // (i-20260717-gr7a, i-20260720-out1). Without this they rank as fixed and
+  // silently inflate the "in review" chip while showing a "Submitted" badge.
+  // Local only — writes go through mutateJson, which re-fetches from GitHub.
+  (data.issues || []).forEach((i) => { if (!i.status) i.status = "open"; });
   return { db: data, sha };
 }
 async function loadLoop() {
