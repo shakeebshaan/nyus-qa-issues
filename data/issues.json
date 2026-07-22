@@ -4,8 +4,30 @@
     {
       "id": "i-20260722-b8d2",
       "createdAt": "2026-07-22T09:08:10.145Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the group leader was permanently trapped - the only Leave button was hidden for leaders and there was no transfer or disband path. Fix: Group settings now shows a Transfer leadership option plus a Leave group button for the leader; leaving auto-hands the group to your longest-standing partner (or disbands it if you are the last member).",
+        "imagePath": "images/i-20260722-b8d2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260722-b8d2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d2368ca79add1434440174775f5fc7eee28c921e",
+        "imageCommits": [
+          "d2368ca79add1434440174775f5fc7eee28c921e"
+        ],
+        "fixedAt": "2026-07-22T10:20:01.443Z",
+        "by": "shakeebshaan",
+        "appCommit": "117869527d48ab717c1b15a95bc94ea7eb62a0f0",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Proof shows leader Transfer + Leave controls + helper; backend transfer-leader/_do_leave verified; full unit suite green 5780/0; reviewer found no regressions."
+        }
+      },
       "history": [],
       "route": "/partners/:groupId",
       "description": "[bug-hunt] Partner-group LEADER is permanently trapped: there is no way to leave, transfer leadership, or disband a partner group anywhere in the app.\n\nExpected: the group creator (always the leader) can leave, hand off leadership, or disband the group. The backend exposes /partner-groups/<id>/transfer-leader, /partner-groups/<id>/leave, and DELETE /partner-groups/<id>/members/<userId>, and the FE service wraps all three (partnerGroupsService.transferLeader / kickMember / leave).\n\nActual: none of those actions are reachable for a leader.\n- PartnerGroupHub.tsx:608 gates the ONLY \"Leave group\" button behind {!isLeader && ...}, so a leader never sees it.\n- The Group-settings panel (PartnerGroupHub.tsx:591-619) offers ONLY \"Follow mode -> Change\" — no transfer-leadership, no kick-member, no disband.\n- PartnerFollowBanner.tsx:45 explicitly returns false for the leader (leaderId === currentUserId), so the banner’s unfollow X never shows for a leader either.\n- partnerGroupsService.transferLeader and .kickMember have ZERO callers in src (grep-confirmed dead code); leave() is only invoked from LeaveGroupSheet, which itself is only mounted at the two leader-excluded entry points above.\n\nImpact: every user who creates a partner group is stuck in it for the life of the account. isLeader (leader_user_id === currentUserId) is true for the creator, so this hits the group owner every time.\n\nRepro: create a partner group (you become leader) -> open /partners/<groupId> -> tap \"Group settings\". Only \"Follow mode\" appears; there is no Leave / Transfer / Disband, and no other screen offers it.\n\nFix: expose leader group-management in PartnerGroupHub settings — at minimum a \"Transfer leadership\" picker wired to partnerGroupsService.transferLeader (so a leader can hand off then leave), plus a leader Disband/Leave path. The service methods already exist; just wire the UI.",
@@ -18,7 +40,8 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "needsReview": false
     },
     {
       "id": "i-20260722-c9f1",
