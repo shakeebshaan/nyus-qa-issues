@@ -2066,9 +2066,25 @@
       "imageCommits": [],
       "imagePrivate": false,
       "needsReview": true,
-      "reviewReason": "Assessment (code-checked): this is a genuine gap, not already shipped -- Activity.tsx has zero readiness-aware messaging (grep for readiness/Recharged/Run Down = 0), while the data already exists (DailyLog.sleep_hours from Health Connect sync + WorkoutSession/SetLog for yesterday intensity, and HealthScore already computes a recovery pillar). It is a small, calm, on-brand v1 (Whoop-style readiness is explicitly a brand reference). It is a NEW user-facing surface so I want your sign-off on the product knobs before shipping (owner reopens repeatedly when defaults are wrong). Proposed defaults if you just say build",
-      "reviewedAt": "2026-07-17T23:36:17.723Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewReason": "BUILT — in v1.9.48 (228). When today has a workout and last night's sleep is >=0.5h under your 7-day average (needs >=3 logged nights), a calm dismissible note appears above the session on Activity: 'Slept 5.2h vs your 7.1h average — consider a lighter session today.' Dismiss holds for the day. Localized in all 4 languages. Reuses the dashboard's sleep query — zero extra network.",
+      "reviewedAt": "2026-07-22T15:54:21.747Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-17T23:36:17.723Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Assessment (code-checked): this is a genuine gap, not already shipped -- Activity.tsx has zero readiness-aware messaging (grep for readiness/Recharged/Run Down = 0), while the data already exists (DailyLog.sleep_hours from Health Connect sync + WorkoutSession/SetLog for yesterday intensity, and HealthScore already computes a recovery pillar). It is a small, calm, on-brand v1 (Whoop-style readiness is explicitly a brand reference). It is a NEW user-facing surface so I want your sign-off on the product knobs before shipping (owner reopens repeatedly when defaults are wrong). Proposed defaults if you just say build",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-22T15:54:21.747Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "BUILT — in v1.9.48 (228). When today has a workout and last night's sleep is >=0.5h under your 7-day average (needs >=3 logged nights), a calm dismissible note appears above the session on Activity: 'Slept 5.2h vs your 7.1h average — consider a lighter session today.' Dismiss holds for the day. Localized in all 4 languages. Reuses the dashboard's sleep query — zero extra network.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260717-7c1d",
