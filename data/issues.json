@@ -1643,9 +1643,25 @@
       "imagePaths": [],
       "imagePrivate": false,
       "needsReview": true,
-      "reviewReason": "Assessment (code-checked): the TOGGLE half is ALREADY shipped, richer than the ask. Nutrition.tsx mounts a FastingBanner (Nutrition.tsx:54, :467) with a 3-type day selector - vrat / full / intermittent (FASTING_TYPES, Nutrition.tsx:46) - persisted per-date to the backend via nutritionService.setFastingStatus -> PUT /daily-logs/fasting (nutrition.service.ts:128), read back through useNutritionData (fastingDay/fastingType). Skipped meals on a fasting day already don't hurt the streak. So the suggestion's part (c) 'per-day persisted fasting flag + toggle chip near the date header' exists (and better: server-persisted, 3 fast types, IF stopwatch unified with the Dashboard/​/fasting card). The ONLY genuine gap vs the ask: selecting 'vrat' does NOT yet FILTER meal suggestions / the swap picker to vrat-appropriate dishes (parts a+b). meal-catalog.json has just 1 vrat token and no dietary-restriction tag or filter hook, and nothing keys meal-suggestion/swap lists off fastingType==='vrat'. Building that is a NEW behavior change to the meal-suggestion + swap picker (needs a vrat-appropriate tag pass over the catalog + a filter that suppresses grain/onion/garlic dishes only on vrat days) - a user-facing default I won't ship unattended headless (owner reopens when suggestion defaults are wrong). Confirm you want the vrat meal-FILTER built (keyword/tag match: sabudana/kuttu/singhara/samak-rice/aloo/paneer/curd/fruit in; roti/rice/dal/onion/garlic out, vrat day only) and I'll implement over the existing toggle. The toggle itself needs no work.",
-      "reviewedAt": "2026-07-18T14:29:08.017Z",
-      "reviewedBy": "shakeebshaan"
+      "reviewReason": "BUILT — in v1.9.48 (228). The fasting picker already had 'Vrat / fruit-only'; now flagging a vrat day shows sattvik guidance (fruit, milk, sabudana, makhana) + a one-tap 'Get vrat-friendly meal swaps' that opens coach chat prefilled. Localized en/hi/hinglish. No plan-engine changes — coach handles the swaps.",
+      "reviewedAt": "2026-07-22T15:54:29.680Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-18T14:29:08.017Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Assessment (code-checked): the TOGGLE half is ALREADY shipped, richer than the ask. Nutrition.tsx mounts a FastingBanner (Nutrition.tsx:54, :467) with a 3-type day selector - vrat / full / intermittent (FASTING_TYPES, Nutrition.tsx:46) - persisted per-date to the backend via nutritionService.setFastingStatus -> PUT /daily-logs/fasting (nutrition.service.ts:128), read back through useNutritionData (fastingDay/fastingType). Skipped meals on a fasting day already don't hurt the streak. So the suggestion's part (c) 'per-day persisted fasting flag + toggle chip near the date header' exists (and better: server-persisted, 3 fast types, IF stopwatch unified with the Dashboard/​/fasting card). The ONLY genuine gap vs the ask: selecting 'vrat' does NOT yet FILTER meal suggestions / the swap picker to vrat-appropriate dishes (parts a+b). meal-catalog.json has just 1 vrat token and no dietary-restriction tag or filter hook, and nothing keys meal-suggestion/swap lists off fastingType==='vrat'. Building that is a NEW behavior change to the meal-suggestion + swap picker (needs a vrat-appropriate tag pass over the catalog + a filter that suppresses grain/onion/garlic dishes only on vrat days) - a user-facing default I won't ship unattended headless (owner reopens when suggestion defaults are wrong). Confirm you want the vrat meal-FILTER built (keyword/tag match: sabudana/kuttu/singhara/samak-rice/aloo/paneer/curd/fruit in; roti/rice/dal/onion/garlic out, vrat day only) and I'll implement over the existing toggle. The toggle itself needs no work.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-22T15:54:29.680Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "BUILT — in v1.9.48 (228). The fasting picker already had 'Vrat / fruit-only'; now flagging a vrat day shows sattvik guidance (fruit, milk, sabudana, makhana) + a one-tap 'Get vrat-friendly meal swaps' that opens coach chat prefilled. Localized en/hi/hinglish. No plan-engine changes — coach handles the swaps.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260718-9a4b",
