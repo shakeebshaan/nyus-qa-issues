@@ -6,7 +6,7 @@
       "createdAt": "2026-07-22T02:29:54.860Z",
       "route": "/activity",
       "description": "[bug-hunt] Strength progression chart understates estimated 1RM. The orange \"Est. 1RM\" line and the \"Peak 1RM\" stat tile in the exercise progression sheet are wrong whenever a session's highest-Epley set is not its heaviest-weight set. Backend GET /api/v1/strength/exercise-progression (nyu_backend/app/routes/logging.py:1468-1497) orders each session's sets by weight_kg DESC, reps DESC, keeps the first row per date as the \"top set\", and computes e1rm = weight*(1+reps/30) from THAT single set only. A lighter high-rep back-off set frequently has a higher Epley estimate, so it is silently discarded. Expected: e1RM per session = MAX Epley across all sets that session (standard estimated-1RM methodology). Actual: e1RM taken from the heaviest-weight set only. Repro: log one session with a top set 100kg x 3 (Epley e1RM = 110.0) and a back-off set 80kg x 15 (Epley e1RM = 120.0); open Activity -> Personal bests -> tap the exercise. The orange \"Est. 1RM\" point and the \"Peak 1RM\" tile read 110.0 kg instead of the true 120.0 kg. Frontend surfaces: src/components/activity/ExerciseProgressionSheet.tsx (dataKey \"e1rm\" line + \"Peak 1RM\" tile, line ~182). Fix in the backend query: compute e1rm as MAX(weight*(1+reps/30)) over all of the session's sets, independent of which set is heaviest.",
-      "status": "open",
+      "status": "fixed",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -17,7 +17,29 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the exercise progression chart's estimated 1RM used only your heaviest-weight set each session, so a lighter high-rep back-off set with a higher estimated max (e.g. 80kg x15 beats 100kg x3) was silently dropped. Fix: each session's Est. 1RM and the Peak 1RM tile now take the best estimate across ALL of that session's sets. Backend nyu_backend@0407c19 (deployed to prod), frontend @1bbf7f3e; regression test added (fails before, passes after).",
+        "imagePath": "images/i-20260722-e1f7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260722-e1f7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3872046d0b343407f25946263abf779626104a13",
+        "imageCommits": [
+          "3872046d0b343407f25946263abf779626104a13"
+        ],
+        "fixedAt": "2026-07-22T03:09:54.213Z",
+        "by": "shakeebshaan",
+        "appCommit": "1bbf7f3e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Root-caused + fixed at source; fail-before/pass-after pytest reproduces exact 110->120; FE suite green; proof shows Peak 1RM 140 all-time"
+        }
+      },
       "history": [],
       "needsReview": false
     },
