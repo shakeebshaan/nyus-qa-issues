@@ -121,6 +121,11 @@
   .badge.reopened { background: hsl(0 80% 95%); color: hsl(0 55% 40%); }
   .badge.archived { background: hsl(40 15% 92%); color: var(--muted); }
   .badge.review { background: hsl(263 60% 95%); color: hsl(263 50% 42%); }
+  /* Fix posted, awaiting the owner's verdict. Teal (matching the header's
+     "in review" chip) with an outline so it reads "done, pending your ✓" —
+     it was purple like "Needs direction", so a posted fix and an open
+     question were indistinguishable at a glance (i-20260717-3d27 audit). */
+  .badge.inreview { background: var(--card); color: var(--accent-ink); border: 1px solid var(--accent); }
   /* Owner replied with direction — Claude should act, not re-flag */
   .badge.replied { background: hsl(166 55% 92%); color: hsl(166 70% 28%); }
   /* "Needs your review" banner on a flagged card */
@@ -1158,7 +1163,7 @@ function cardHtml(it, archived) {
   const badge = archived
     ? `<span class="badge fixed">Resolved</span>`
     : it.status === "fixed"
-      ? `<span class="badge review">In review</span>`
+      ? `<span class="badge inreview">In review</span>`
       : needsReview && it.reviewReply ? `<span class="badge replied">Act on this</span>`
         : needsReview ? `<span class="badge review">Needs direction</span>`
           : reopened ? `<span class="badge reopened">Re-fix</span>` : `<span class="badge open">Submitted</span>`;
