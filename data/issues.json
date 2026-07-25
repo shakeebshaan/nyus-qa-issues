@@ -1663,20 +1663,40 @@
       "id": "i-20260718-vrf3",
       "createdAt": "2026-07-18T09:15:00.000Z",
       "description": "[suggestion] Add a per-day \"Fasting/Vrat day\" toggle on the Nutrition page that switches meal suggestions to religious-fast-appropriate dishes. Problem: a huge share of Indian users observe recurring food-restriction fasting days (Navratri, Ekadashi, Karva Chauth, Mondays for some) where grains/onion/garlic/certain veg are off-limits, but NYUS meal suggestions/swap picker have no concept of this and keep recommending regular roti/rice/dal meals on those days, breaking the precision-tool trust for a recurring, predictable use case. Evidence: src/data/meal-catalog.json already has 45+ vrat-named dishes (Sabudana Khichdi, Kuttu Atta items, Navratan preparations, singhara-based dishes) sitting dormant as plain catalog entries with zero dietary-restriction tag or filter hook - the data exists, the filtering doesn't. Existing fasting UI (FastingTrendChart) is unrelated (16:8 time-restricted eating, not food-type fasting). v1 scope: single day-scoped toggle chip near the Nutrition date header (\"Fasting today\") that (a) filters the meal-suggestion/swap picker lists to catalog items already identifiable as vrat-appropriate by name/ingredient keyword match, (b) suppresses grain-heavy default suggestions for that day only, (c) persists as a simple per-date client flag - no calendar/recurrence settings, no plan regeneration, no backend schema change. Effort: small-medium, ~2-3 days (keyword-tag pass over catalog + filter logic in the meal suggestion component + one persisted per-day preference + i18n strings across en/hi/hinglish).",
-      "status": "open",
+      "status": "fixed",
       "tags": [
         "suggestion",
         "auto"
       ],
       "author": "shakeebshaan",
       "route": "/nutrition",
-      "fix": null,
+      "fix": {
+        "description": "BUILT — the vrat MEAL FILTER (parts a+b of your ask) is real now, not just prompt wording. Root cause: the coach was only ASKED to respect a vrat day, and the deterministic catalog backfill that fills the swap list never knew about the fast at all, so a vrat day could still be offered roti/rice/dal — and the Nutrition close-the-gap card kept suggesting Roasted Chana, Boiled Eggs and Cheese Slice. Fix: a shared vrat classifier (backend + frontend mirror) with two deny tiers — hard deny for anything that breaks a fast (wheat, dal/chana/besan, onion/garlic, egg, meat, oats, soy, whey) and a form deny for wheat/rice-by-default dishes (roti/paratha/puri/dosa/rice) that is WAIVED when a vrat flour is present, so authentic Kuttu ki Puri, Rajgira Paratha and Samak Rice still pass while plain rice does not. Unknown food counts as non-compliant on purpose: on a fast, fewer options beats a wrong one. Meal-swap alternatives are hard-filtered on a vrat day (the LLM's picks AND the catalog backfill, pool widened 4 to 24), and if nothing compliant exists the swap block is dropped rather than degraded to a fast-breaking dish. Screenshot is a live vrat day on the app: the card reads 'Vrat-friendly options' with only Dahi, Paneer and Buttermilk. Also added banana / sweet potato / coconut water so a vrat day still has enough to close a real macro gap, and the per-meal 'Ask coach' prefill now asks for vrat-compliant swaps.",
+        "imagePath": "images/i-20260718-vrf3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-vrf3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "eb1cdbe8f2de6b681d70bea5b5b98a8047512ffb",
+        "imageCommits": [
+          "eb1cdbe8f2de6b681d70bea5b5b98a8047512ffb"
+        ],
+        "fixedAt": "2026-07-25T13:37:07.404Z",
+        "by": "shakeebshaan",
+        "appCommit": "29596ab8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "New behavior, live-captured on a real vrat day; 26 classifier + 5 wiring tests pin both directions (no roti in, no kuttu puri wrongly excluded); backend deployed to prod and healthy."
+        }
+      },
       "history": [],
       "imagePaths": [],
       "imagePrivate": false,
-      "needsReview": true,
-      "reviewReason": "BUILT — in v1.9.48 (228). The fasting picker already had 'Vrat / fruit-only'; now flagging a vrat day shows sattvik guidance (fruit, milk, sabudana, makhana) + a one-tap 'Get vrat-friendly meal swaps' that opens coach chat prefilled. Localized en/hi/hinglish. No plan-engine changes — coach handles the swaps.",
-      "reviewedAt": "2026-07-22T15:54:29.680Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -1691,6 +1711,13 @@
           "who": "claude",
           "kind": "review",
           "text": "BUILT — in v1.9.48 (228). The fasting picker already had 'Vrat / fruit-only'; now flagging a vrat day shows sattvik guidance (fruit, milk, sabudana, makhana) + a one-tap 'Get vrat-friendly meal swaps' that opens coach chat prefilled. Localized en/hi/hinglish. No plan-engine changes — coach handles the swaps.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:37:07.404Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "BUILT — the vrat MEAL FILTER (parts a+b of your ask) is real now, not just prompt wording. Root cause: the coach was only ASKED to respect a vrat day, and the deterministic catalog backfill that fills the swap list never knew about the fast at all, so a vrat day could still be offered roti/rice/dal — and the Nutrition close-the-gap card kept suggesting Roasted Chana, Boiled Eggs and Cheese Slice. Fix: a shared vrat classifier (backend + frontend mirror) with two deny tiers — hard deny for anything that breaks a fast (wheat, dal/chana/besan, onion/garlic, egg, meat, oats, soy, whey) and a form deny for wheat/rice-by-default dishes (roti/paratha/puri/dosa/rice) that is WAIVED when a vrat flour is present, so authentic Kuttu ki Puri, Rajgira Paratha and Samak Rice still pass while plain rice does not. Unknown food counts as non-compliant on purpose: on a fast, fewer options beats a wrong one. Meal-swap alternatives are hard-filtered on a vrat day (the LLM's picks AND the catalog backfill, pool widened 4 to 24), and if nothing compliant exists the swap block is dropped rather than degraded to a fast-breaking dish. Screenshot is a live vrat day on the app: the card reads 'Vrat-friendly options' with only Dahi, Paneer and Buttermilk. Also added banana / sweet potato / coconut water so a vrat day still has enough to close a real macro gap, and the per-meal 'Ask coach' prefill now asks for vrat-compliant swaps.",
           "by": "shakeebshaan"
         }
       ]
