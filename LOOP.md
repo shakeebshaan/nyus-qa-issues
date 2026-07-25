@@ -81,7 +81,7 @@ expresses it at the *repo* level, so the same loop can also run scheduled or una
 TRIGGER (manual | schedule | action)
    │
    ▼
-pull open issues ──► reproduce ──► root-cause fix ──► recapture proof
+pull open issues ──► claim ──► reproduce ──► root-cause fix ──► recapture proof
    │                                                        │
    │                          ┌─────────────────────────────┤
    │                          ▼                             ▼
@@ -101,6 +101,34 @@ pull open issues ──► reproduce ──► root-cause fix ──► recaptur
 The verifiable gate and the judge gate both sit **before** the fix is posted. A fix that
 can't clear them is never shown as a "proposed fix" — the agent either keeps looping or
 flags the issue for human review.
+
+### 2.1 The in-progress claim (duplicate-tick guard)
+
+Before touching code, a tick **claims** the issue:
+
+```bash
+node tools/qa.mjs claim <id> [--ttl <minutes>] [--note "<text>"] [--force]
+node tools/qa.mjs release <id>          # graceful abort — hand it back early
+```
+
+Why it exists (audit i-20260717-3d27): an open issue used to read *"Submitted /
+Awaiting fix"* for the entire time an agent was fixing it, so the board could not
+tell you what was being worked on — and nothing stopped a second concurrent tick
+from grabbing the same card and duplicating the work.
+
+How it behaves:
+
+| Behaviour | What happens |
+| --- | --- |
+| **Guard** | `claim` on a card someone else holds **fails with exit code 2** and names the holder. A loop can branch on that and pick a different issue. `--force` takes it over (recorded as `tookOverFrom`). |
+| **Board** | An actively-claimed card shows a blue **⏳ In progress** pill plus *"&lt;who&gt; is on it · Nm left"*, distinct from Submitted / Needs direction / In review. The countdown ticks down on an open page. |
+| **`pull`** | Cards held by **other** agents are withheld from `open` and listed separately as `claimedByOthers`. Your own claims still come through — resuming your own work is the normal case. `--include-claimed` disables the filter. |
+| **Auto-expiry** | A claim carries `expiresAt` and is judged at read time, so a tick that dies mid-fix (usage limits, crash) frees the card by itself. TTL = `data/loop.json.claimTtlMinutes`, default **60 min**. Nothing to clean up manually. |
+| **Release** | `resolve`, `review` and `reopen` all drop the lock — the card has left the agent's hands. `release` is for aborting early. |
+
+A malformed or missing `expiresAt` is treated as **no claim**: a lock can never be
+sticky, because parking an issue forever is worse than the duplicate work it guards
+against. Contracts live in `tools/claims.test.mjs` (`node tools/claims.test.mjs`).
 
 ---
 

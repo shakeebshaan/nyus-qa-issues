@@ -37,10 +37,14 @@ node tools/qa.mjs resolve <id> --image <absPath> [--image <p2> …] --desc "root
 node tools/qa.mjs review <id> --reason "<what it needs / why blocked>" [--tags a,b,c]
 node tools/qa.mjs unreview <id>
 node tools/qa.mjs reopen <id> --note "still broken because…"
+node tools/qa.mjs claim <id> [--ttl <min>] [--note "<text>"] [--force]   # take the in-progress lock
+node tools/qa.mjs release <id>                           # hand it back before the TTL lapses
 node tools/qa.mjs archive <id> | archive --all-fixed     # move fixed issue(s) to data/archive-<year>.json
 ```
 
 `resolve` enforces the live goal **before** uploading: with the satisfaction bar > 0 you must pass `--judge <n≥bar>`; with the test gate on you must pass `--tests pass`. The judge score + test result render as badges on the fix card. Every mutation does `git pull --rebase` first and `git push` last, and stamps the acting GitHub login for multi-user attribution.
+
+`claim` is the **duplicate-tick guard**: claiming a card another agent already holds exits **2** and names the holder, `pull` withholds their cards (reporting them as `claimedByOthers`), and the board shows a **⏳ In progress** pill with the holder and time remaining. Claims self-expire after `data/loop.json.claimTtlMinutes` (default 60) so an agent that dies mid-fix can't park an issue — see LOOP.md §2.1, contracts in `tools/claims.test.mjs`.
 
 ## Owner ↔ agent review loop
 
@@ -51,5 +55,6 @@ When the agent can't auto-fix (ambiguous, blocked on a decision/assets) it flags
 - **Never commit tokens.** The page keeps the PAT in localStorage only. Screenshots live in the **private** repo — never the public board.
 - **Public repo** — anything committed here is public; QA screenshots must come from the dedicated QA account only.
 - Keep the active board under ~200 issues: archive fixed ones. Archived issues live in `data/archive-<year>.json`, browsable via "View resolved".
-- `data/issues.json` schema: `{version, issues: [{id, createdAt, route?, description, author?, tags?, client?: {ua, viewport}, imagePaths[], imageCommits[], imagePrivate, status: open|fixed, needsReview?, reviewReason?, reviewReply?, reviewReplyImagePaths?[], fix: {description, imagePaths[], imagePrivate, fixedAt, by?, appCommit?, tests?, judge?} | null, history: [...], thread?: [{at, who: owner|claude, kind: review|resolve|reopen|reply, text, by?}]}]}`
+- `data/issues.json` schema: `{version, issues: [{id, createdAt, route?, description, author?, tags?, client?: {ua, viewport}, imagePaths[], imageCommits[], imagePrivate, status: open|fixed, needsReview?, reviewReason?, reviewReply?, reviewReplyImagePaths?[], claim?: {by, at, expiresAt, note?, tookOverFrom?}, fix: {description, imagePaths[], imagePrivate, fixedAt, by?, appCommit?, tests?, judge?} | null, history: [...], thread?: [{at, who: owner|claude, kind: review|resolve|reopen|reply, text, by?}]}]}`
+- `claim` is the transient in-progress lock (added i-20260717-3d27) and is the ONE field that expires on its own: it is only honoured while `expiresAt` is in the future, so a missing/unparseable `expiresAt` reads as unclaimed. `resolve`/`review`/`reopen` delete it. Never treat it as durable state — it says "an agent is on this right now", nothing more.
 - `thread` is the **append-only conversation log** (added i-20260717-3d27): `qa.mjs review/resolve/reopen` and the board's Respond dialog append an entry on every call, while the legacy single-value fields (`reviewReason`, `reviewReply`) keep their old overwrite semantics for back-compat. The board's thread viewer merges both sources (a thread entry whose text duplicates a legacy-rendered message is skipped), so successive review notes / edited replies are never lost.

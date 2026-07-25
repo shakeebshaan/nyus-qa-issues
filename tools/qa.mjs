@@ -6,6 +6,8 @@
 //   node tools/qa.mjs reopen <id> --note "<text>"
 //   node tools/qa.mjs review <id> --reason "<text>" [--tags a,b,c]
 //   node tools/qa.mjs unreview <id>
+//   node tools/qa.mjs claim <id> [--ttl <minutes>] [--note "<text>"] [--force]
+//   node tools/qa.mjs release <id>
 //   node tools/qa.mjs archive <id> | archive --all-fixed
 //   node tools/qa.mjs archive-auto [--older-than <days>]   (clear informational auto-log cards)
 //
@@ -87,6 +89,8 @@ function loopSettings() {
   let testGate = tests.required !== false;
   let testCommand = tests.command || "npm test";
   const coverage = Number(tests.coverage) || 0;
+  let claimTtlMinutes = Number.isFinite(Number(goal.claimTtlMinutes))
+    ? Number(goal.claimTtlMinutes) : DEFAULT_CLAIM_TTL_MIN;
   const loopPath = join(ROOT, "data", "loop.json");
   if (existsSync(loopPath)) {
     try {
@@ -94,10 +98,38 @@ function loopSettings() {
       if (Number.isFinite(Number(live.satisfaction))) satisfaction = Number(live.satisfaction);
       if (typeof live.testGate === "boolean") testGate = live.testGate;
       if (typeof live.testCommand === "string" && live.testCommand.trim()) testCommand = live.testCommand.trim();
+      if (Number.isFinite(Number(live.claimTtlMinutes))) claimTtlMinutes = Number(live.claimTtlMinutes);
     } catch { /* fall back to config defaults */ }
   }
-  return { satisfaction, testGate, testCommand, coverage };
+  return { satisfaction, testGate, testCommand, coverage, claimTtlMinutes };
 }
+
+// ---------------------------------------------------------------------------
+// Claims — the in-progress lock (i-20260717-3d27).
+//
+// An open issue reads "Submitted / Awaiting fix" for the whole time an agent is
+// working it, and nothing stopped a SECOND concurrent tick from grabbing the
+// same card. A claim is a soft, self-expiring lock: `claim` stamps
+// { by, at, expiresAt } and pushes it, `pull` hides actively-claimed issues from
+// other ticks, and the board shows an "In progress" pill.
+//
+// It must EXPIRE: an agent that dies mid-fix (usage limits, crash) would
+// otherwise park an issue forever. TTL is `data/loop.json.claimTtlMinutes`
+// (default below) — long enough for a real fix + capture, short enough that a
+// dead tick frees the card within the hour.
+// ---------------------------------------------------------------------------
+const DEFAULT_CLAIM_TTL_MIN = 60;
+
+/** An active claim (not expired), or null. Pure — exported for unit testing. */
+function activeClaim(issue, nowMs = Date.now()) {
+  const c = issue && issue.claim;
+  if (!c || !c.expiresAt) return null;
+  const exp = Date.parse(c.expiresAt);
+  if (!Number.isFinite(exp) || exp <= nowMs) return null;
+  return c;
+}
+const claimMinutesLeft = (claim, nowMs = Date.now()) =>
+  Math.max(0, Math.round((Date.parse(claim.expiresAt) - nowMs) / 60000));
 
 // The acting GitHub identity (multi-user attribution). Uses the same gh CLI
 // session every other CLI call rides on. Cached; null if it can't be read.
@@ -205,6 +237,9 @@ function backfillReviewThread(issue, now) {
 // The full `review` mutation, pure (no git/gh) so it's unit-testable.
 function applyReview(issue, reason, tagsRaw, now, by) {
   backfillReviewThread(issue, now);
+  // Handing the card to the owner ends the agent's turn on it, so the
+  // in-progress lock goes with it (i-20260717-3d27).
+  delete issue.claim;
   issue.needsReview = true;
   issue.reviewReason = reason;
   issue.reviewedAt = now;
@@ -218,6 +253,8 @@ function applyReview(issue, reason, tagsRaw, now, by) {
 }
 // The full `reopen` mutation, pure for the same reason.
 function applyReopen(issue, note, now, by) {
+  // Reopening makes the card fair game again — any stale lock must go.
+  delete issue.claim;
   issue.history = issue.history || [];
   issue.history.push({ at: now, event: "reopened", note, by, previousFix: issue.fix });
   issue.fix = null;
@@ -307,17 +344,82 @@ try {
     if (!rows.length) { console.log("No " + (process.argv.includes("--all") ? "" : "open ") + "issues."); process.exit(0); }
     for (const i of rows) {
       const priv = i.imagePrivate ? " [PRIV]" : "";
+      const held = activeClaim(i);
+      const claimed = held ? ` [WIP ${held.by || "?"} ${claimMinutesLeft(held)}m]` : "";
       // Guards: automation-filed cards exist with NO status/description
       // (i-20260717-gr7a, i-20260720-out1) — `list --all` used to crash on them.
       console.log(
-        `${i.id}  ${(i.status || "?").toUpperCase().padEnd(5)}  ${(i.createdAt || "").slice(0, 10)}  ${(i.route || "-").padEnd(22)}${priv}  ${(i.description || "").replace(/\s+/g, " ").slice(0, 60)}`
+        `${i.id}  ${(i.status || "?").toUpperCase().padEnd(5)}  ${(i.createdAt || "").slice(0, 10)}  ${(i.route || "-").padEnd(22)}${priv}${claimed}  ${(i.description || "").replace(/\s+/g, " ").slice(0, 60)}`
       );
     }
+  } else if (cmd === "claim") {
+    // Take the in-progress lock so a concurrent tick doesn't fix the same card.
+    const id = idArg, note = flag("note"), force = process.argv.includes("--force");
+    if (!id) throw new Error('Usage: claim <id> [--ttl <minutes>] [--note "<text>"] [--force]');
+    const ttlRaw = Number(flag("ttl"));
+    const ttl = Number.isFinite(ttlRaw) && ttlRaw > 0 ? ttlRaw : loopSettings().claimTtlMinutes;
+    git("pull", "--rebase", "origin", BRANCH);
+    const db = loadDb();
+    const issue = db.issues.find((i) => i.id === id);
+    if (!issue) throw new Error("No such issue: " + id);
+    if (issue.status !== "open") throw new Error(id + " is not open (status: " + (issue.status || "?") + ").");
+    const me = ghLogin() || "agent";
+    const held = activeClaim(issue);
+    if (held && held.by !== me && !force) {
+      // The duplicate-tick guard. Non-zero exit so a loop can branch on it.
+      console.error(
+        `ERROR: ${id} is already being worked on by ${held.by || "another agent"} ` +
+        `(${claimMinutesLeft(held)} min left).\n` +
+        "  Pick a different issue, or --force to take it over."
+      );
+      process.exit(2);
+    }
+    const now = new Date();
+    issue.claim = {
+      by: me,
+      at: now.toISOString(),
+      expiresAt: new Date(now.getTime() + ttl * 60000).toISOString(),
+      ...(note ? { note } : {}),
+      ...(held && held.by !== me ? { tookOverFrom: held.by } : {}),
+    };
+    saveDb(db);
+    git("add", "data/issues.json");
+    git("commit", "-m", `issue ${id}: claimed by ${me} (${ttl}m)`);
+    gitPush();
+    console.log(`Claimed ${id} for ${ttl} min (holder: ${me}).` + (held && held.by !== me ? ` Took over from ${held.by}.` : ""));
+  } else if (cmd === "release") {
+    // Graceful abort — hand the card back before the TTL runs out.
+    const id = idArg;
+    if (!id) throw new Error("Usage: release <id>");
+    git("pull", "--rebase", "origin", BRANCH);
+    const db = loadDb();
+    const issue = db.issues.find((i) => i.id === id);
+    if (!issue) throw new Error("No such issue: " + id);
+    if (!issue.claim) { console.log(id + " was not claimed — nothing to release."); process.exit(0); }
+    const was = issue.claim.by || "?";
+    delete issue.claim;
+    saveDb(db);
+    git("add", "data/issues.json");
+    git("commit", "-m", `issue ${id}: claim released (was ${was})`);
+    gitPush();
+    console.log(`Released ${id} (was held by ${was}).`);
   } else if (cmd === "pull") {
     git("pull", "--rebase", "origin", BRANCH);
     const db = loadDb();
-    const open = db.issues
-      .filter((i) => i.status === "open")
+    // Actively-claimed issues are HIDDEN from other ticks so two agents can't
+    // fix the same card (i-20260717-3d27). Your OWN claims still come through —
+    // resuming your work is the normal case. --include-claimed disables the
+    // filter entirely (useful when inspecting the board rather than working it).
+    const me = ghLogin() || "agent";
+    const includeClaimed = process.argv.includes("--include-claimed");
+    const openIssues = db.issues.filter((i) => i.status === "open");
+    const heldByOthers = openIssues
+      .map((i) => ({ i, c: activeClaim(i) }))
+      .filter(({ c }) => c && c.by !== me)
+      .map(({ i, c }) => ({ id: i.id, by: c.by || null, expiresAt: c.expiresAt, minutesLeft: claimMinutesLeft(c) }));
+    const skip = includeClaimed ? new Set() : new Set(heldByOthers.map((c) => c.id));
+    const open = openIssues
+      .filter((i) => !skip.has(i.id))
       .sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || ""))
       .map((i) => buildPullEntry(i, ROOT, (p, idx, kind = "issue") => {
         // Download private images locally so Claude can read them. `kind`
@@ -331,7 +433,14 @@ try {
       }));
     // The loop's live goal — the agent reads the satisfaction bar + test gate
     // from here so it knows the bar it must clear before resolving (LOOP.md).
-    console.log(JSON.stringify({ open, count: open.length, loop: loopSettings() }, null, 2));
+    // `claimedByOthers` is informational: those ids were withheld from `open`.
+    console.log(JSON.stringify({
+      open,
+      count: open.length,
+      claimedByOthers: heldByOthers,
+      claimedCount: heldByOthers.length,
+      loop: loopSettings(),
+    }, null, 2));
   } else if (cmd === "resolve") {
     // Multiple --image flags supported: a fix that spans two screens / scroll
     // positions can submit 2+ fix images (shown side-by-side on the board).
@@ -418,6 +527,7 @@ try {
     issue.needsReview = false;
     delete issue.reviewReason;
     delete issue.reviewedAt;
+    delete issue.claim; // work finished — drop the in-progress lock
     saveDb(db);
     git("add", "data/issues.json");
     git("commit", "-m", `issue ${id}: resolved`);
@@ -578,4 +688,4 @@ try {
 }
 }
 
-export { buildPullEntry, appendThread, threadHas, backfillReviewThread, applyReview, applyReopen };
+export { buildPullEntry, appendThread, threadHas, backfillReviewThread, applyReview, applyReopen, activeClaim, claimMinutesLeft };

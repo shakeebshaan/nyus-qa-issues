@@ -128,6 +128,22 @@
   .badge.inreview { background: var(--card); color: var(--accent-ink); border: 1px solid var(--accent); }
   /* Owner replied with direction — Claude should act, not re-flag */
   .badge.replied { background: hsl(166 55% 92%); color: hsl(166 70% 28%); }
+  /* An agent holds the in-progress lock RIGHT NOW (i-20260717-3d27: an open
+     issue used to read "Submitted" for the whole time it was being fixed).
+     Blue — the one hue no other lifecycle badge uses — with a soft pulse so a
+     live claim is distinguishable from a static state at a glance. */
+  .badge.progress { background: hsl(205 85% 94%); color: hsl(205 75% 32%); }
+  @media (prefers-reduced-motion: no-preference) {
+    .badge.progress { animation: wip-pulse 2.4s ease-in-out infinite; }
+  }
+  @keyframes wip-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .62; } }
+  /* Who holds it + how long the lock has left. */
+  .wip-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px;
+    background: hsl(205 85% 96%); color: hsl(205 70% 34%); border: 1px solid hsl(205 60% 88%);
+  }
+  .wip-chip .wip-left { font-weight: 500; opacity: .8; }
   /* "Needs your review" banner on a flagged card */
   .review-note {
     margin: 10px 0 0; padding: 10px 12px; border-radius: 10px;
@@ -879,6 +895,21 @@ function goalBadgesHtml(fix) {
 
 /* ── utils ─────────────────────────────────────────────── */
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* Claims — the in-progress lock an agent takes while fixing (i-20260717-3d27).
+   Mirrors activeClaim() in tools/qa.mjs. Expiry is judged HERE, at render time,
+   so a lapsed lock disappears by itself: a page that has been open across the
+   TTL just stops showing the pill on its next render/refresh. A claim whose
+   expiresAt is missing or unparseable is treated as no claim (never sticky). */
+function activeClaim(issue, nowMs = Date.now()) {
+  const c = issue && issue.claim;
+  if (!c || !c.expiresAt) return null;
+  const exp = Date.parse(c.expiresAt);
+  if (!Number.isFinite(exp) || exp <= nowMs) return null;
+  return c;
+}
+const claimMinutesLeft = (claim, nowMs = Date.now()) =>
+  Math.max(0, Math.round((Date.parse(claim.expiresAt) - nowMs) / 60000));
 // i-20260628-831e: render issue descriptions structured — numbered "(1)…(2)…"
 // runs become a bullet/step list; "(A)…(B)…" choices become selectable RADIOS
 // that pre-fill the Respond box with the picked letter. Falls back to a plain
@@ -1174,6 +1205,11 @@ function cardHtml(it, archived) {
   const reopened = it.status === "open" && (it.history || []).some((h) => h.event === "reopened");
   const lastReopen = reopened ? it.history.filter((h) => h.event === "reopened").slice(-1)[0] : null;
   const needsReview = it.status === "open" && it.needsReview;
+  // An agent is actively working this card (i-20260717-3d27). Evaluated against
+  // the CLIENT clock so a lock expires on its own the moment it lapses — no
+  // rebuild, no cron. Only meaningful while the issue is open and un-flagged;
+  // an owner-actionable state (direction wanted / direction given) outranks it.
+  const claim = !archived && it.status === "open" ? activeClaim(it) : null;
   // Lifecycle labels. Issues with a reviewReply show "Act on this" (teal) so
   // it's clear the owner has given direction and Claude should fix, not re-flag.
   const badge = archived
@@ -1182,7 +1218,12 @@ function cardHtml(it, archived) {
       ? `<span class="badge inreview">In review</span>`
       : needsReview && it.reviewReply ? `<span class="badge replied">Act on this</span>`
         : needsReview ? `<span class="badge review">Needs direction</span>`
-          : reopened ? `<span class="badge reopened">Re-fix</span>` : `<span class="badge open">Submitted</span>`;
+          : claim ? `<span class="badge progress" title="Claimed ${esc(fmtDate(claim.at))}${claim.note ? " — " + esc(claim.note) : ""}">⏳ In progress</span>`
+            : reopened ? `<span class="badge reopened">Re-fix</span>` : `<span class="badge open">Submitted</span>`;
+  const wipChip = claim
+    ? `<span class="wip-chip" title="Auto-expires so a stalled agent can't park an issue">${
+        claim.by ? esc(claim.by) : "an agent"} is on it <span class="wip-left">· ${claimMinutesLeft(claim)}m left</span></span>`
+    : "";
 
   // Previous fixes accumulate as the user rejects ("not fixed") and Claude
   // re-fixes — surfaced as a collapsed dropdown so the current fix stays primary.
@@ -1245,6 +1286,7 @@ function cardHtml(it, archived) {
   return `<article class="card" id="${esc(it.id)}">
     <div class="card-head">
       ${badge}
+      ${wipChip}
       ${it.route ? `<span class="route-pill">${esc(it.route)}</span>` : ""}
       <span class="meta">${archived ? "resolved " + fmtDate(it.archivedAt) : fmtDate(it.createdAt)}</span>
       <button type="button" class="thread-btn" data-thread="${esc(it.id)}" aria-label="View conversation thread">🧵 Thread</button>
@@ -1627,6 +1669,14 @@ $("clear-all").addEventListener("click", () => {
 });
 
 $("desc").addEventListener("input", updateSubmit);
+
+// Keep the in-progress countdown honest on a page left open: re-render once a
+// minute while any claim is live, so the "Nm left" ticks down and a lapsed lock
+// drops its pill without the owner refreshing. Local re-render only — no network
+// poll (the board's data fetch is heavy, and a NEW claim shows on next refresh).
+setInterval(() => {
+  if ((db?.issues || []).some((i) => i.status === "open" && activeClaim(i))) render();
+}, 60_000);
 
 $("search").addEventListener("input", () => {
   searchQuery = $("search").value.trim();
