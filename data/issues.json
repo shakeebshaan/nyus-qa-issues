@@ -2947,13 +2947,49 @@
         "f4d82bae25acf3755fd292e82e13fb62cea5ba5a"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "DONE — both halves, measured live. SCROLLING: the 'Choose a photo' sheet now offers 12 options in a 2-column grid inside a scrolling region. Measured on the real component in this pass: 12 thumbnails, content 901px tall in a 614px viewport, and the grid genuinely scrolls (driven to 287px mid-list, which is where the screenshot was taken). It was ~6 before because the external stock provider returns whatever it happens to have for a dish; the bundled frontend catalog is now front-loaded first and the backend picker only tops it up, de-duped, capped at 12. STORAGE, exactly as you asked: the backend stays NAME-KEYED and stores no image blobs — the frontend catalog resolves photos locally from the bundled dataset (self-hosted media on nyus.in) and only the chosen image reference travels with the meal. ONE THING I DID NOT FIX, so you know: photo RELEVANCE is weak. For 'Masala Oats Bowl' the options included carrot cake, a dosa and a sandwich, because matching keys on a single distinctive word ('oats') against a large set of user-submitted food photos. Tightening the match would give you FEWER but more relevant options — the opposite of the 'see all images' ask here — so I am not making that call unilaterally. Tell me which you prefer and I will implement it as its own change.",
+        "imagePath": "images/i-20260717-938c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-938c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d981d3700eabedcc927e8818c115dec72ec7ac39",
+        "imageCommits": [
+          "d981d3700eabedcc927e8818c115dec72ec7ac39"
+        ],
+        "fixedAt": "2026-07-25T14:34:46.196Z",
+        "by": "shakeebshaan",
+        "appCommit": "85b22e34",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Both asks verified by measurement on the real component (12 options, 901 vs 614px, scroll driven and captured) and by the storage path being name-keyed with no blobs; the separate relevance weakness is reported openly rather than quietly traded against the stated ask."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "ALREADY FIXED in the current build — update the app to see it. The 'Choose a photo' picker now: (1) scrolls (grid is overflow-y-auto in an 80dvh sheet), (2) offers up to 12 photos (was 6), front-loaded from the bundled frontend meal catalog (5,700 dish photos, self-hosted media) then topped up from the backend, deduped. Storage matches your ask: the backend stays NAME-KEYED with NO image blob storage — the FE catalog resolves photos and only the chosen image reference travels with the meal. Your screenshot is a pre-fix build (this shipped after 2026-07-17).",
-      "reviewedAt": "2026-07-19T04:35:03.473Z",
-      "reviewedBy": "shakeebshaan"
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-19T04:35:03.473Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "ALREADY FIXED in the current build — update the app to see it. The 'Choose a photo' picker now: (1) scrolls (grid is overflow-y-auto in an 80dvh sheet), (2) offers up to 12 photos (was 6), front-loaded from the bundled frontend meal catalog (5,700 dish photos, self-hosted media) then topped up from the backend, deduped. Storage matches your ask: the backend stays NAME-KEYED with NO image blob storage — the FE catalog resolves photos and only the chosen image reference travels with the meal. Your screenshot is a pre-fix build (this shipped after 2026-07-17).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T14:34:46.196Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "DONE — both halves, measured live. SCROLLING: the 'Choose a photo' sheet now offers 12 options in a 2-column grid inside a scrolling region. Measured on the real component in this pass: 12 thumbnails, content 901px tall in a 614px viewport, and the grid genuinely scrolls (driven to 287px mid-list, which is where the screenshot was taken). It was ~6 before because the external stock provider returns whatever it happens to have for a dish; the bundled frontend catalog is now front-loaded first and the backend picker only tops it up, de-duped, capped at 12. STORAGE, exactly as you asked: the backend stays NAME-KEYED and stores no image blobs — the frontend catalog resolves photos locally from the bundled dataset (self-hosted media on nyus.in) and only the chosen image reference travels with the meal. ONE THING I DID NOT FIX, so you know: photo RELEVANCE is weak. For 'Masala Oats Bowl' the options included carrot cake, a dosa and a sandwich, because matching keys on a single distinctive word ('oats') against a large set of user-submitted food photos. Tightening the match would give you FEWER but more relevant options — the opposite of the 'see all images' ask here — so I am not making that call unilaterally. Tell me which you prefer and I will implement it as its own change.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260717-f734",
