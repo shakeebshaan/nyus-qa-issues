@@ -679,7 +679,7 @@ try {
     console.log(`Archived ${targets.length} auto-log card(s) -> data/archive-${year}.json`);
     targets.forEach((t) => console.log(`  ${t.id}  ${(t.tags || []).join(",")}  ${t.description.replace(/\s+/g, " ").slice(0, 56)}`));
   } else {
-    console.log("Commands: list [--all] | pull | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note <t>] | review <id> --reason <t> [--tags a,b] | unreview <id> | report <id> --file <html> [--label <t>] | reopen <id> --note <t> | archive <id> | archive --all-fixed | archive-auto [--older-than <days>]");
+    console.log("Commands: list [--all] | pull [--include-claimed] | claim <id> [--ttl <min>] [--note <t>] [--force] | release <id> | resolve <id> --image <p> [--image <p2>] --desc <t> [--app-commit <sha>] [--tests pass|fail] [--coverage <n>] [--judge <0-100>] [--judge-note <t>] | review <id> --reason <t> [--tags a,b] | unreview <id> | report <id> --file <html> [--label <t>] | reopen <id> --note <t> | archive <id> | archive --all-fixed | archive-auto [--older-than <days>]");
     process.exit(cmd ? 1 : 0);
   }
 } catch (e) {
