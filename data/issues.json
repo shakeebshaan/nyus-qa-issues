@@ -2196,10 +2196,32 @@
     {
       "id": "i-20260717-rdy1",
       "createdAt": "2026-07-17T19:39:52.662Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/activity",
       "description": "[suggestion] Daily Readiness nudge on Activity/Dashboard before a workout. Problem: NYUS logs sleep_hours nightly (Health Connect sync -> DailyLog.sleep_hours) and computes a recovery pillar in HealthScore, but nothing surfaces day-to-day - a user with 4hrs sleep gets the exact same workout prompt as one with 8hrs. Competitors (Whoop, Oura) lead with a daily readiness/strain-adjust signal; the brand direction here explicitly cites Whoop elite-data-confidence as a reference. Evidence: DashboardSleepCard already reads sleep_hours; Activity.tsx has no readiness-aware messaging; HealthScore recovery pillar recomputes on its own cadence, not tied to today. v1 scope: small readiness chip/banner on Activity (and optionally Dashboard) using last-night sleep_hours + yesterday completed-workout intensity (existing WorkoutSession/SetLog data, no new sensors) -> 3-tier label (Recharged / Steady / Run Down) with one-line copy (\"Shorter sleep last night - consider an easier session or a mobility day\"). No new backend model: derive client-side or a small backend endpoint reading DailyLog + last WorkoutSession. No blocking gates, purely informational, dismissible. Effort: ~1-2 days FE, +0.5 day BE if a dedicated endpoint is preferred over deriving from existing /activity/overview payload.",
-      "fix": null,
+      "fix": {
+        "description": "DONE. When today has a workout and last night's sleep ran short of your own trailing 7-day average, Activity shows one calm line directly above the session: 'Slept 5.2h vs your 7.2h average - consider a lighter session today.' Deliberately advice, not an alarm - muted card, no red, dismissible for the day, and it hides once every exercise is handled. It self-gates on data quality: the baseline needs at least 3 logged nights and EXCLUDES last night, so one short night cannot drag down its own reference; under a 0.5h shortfall you see nothing. Data comes from the same sleep query the dashboard already runs over the same 7-day window, so it usually costs zero extra network. Localized in all four languages. HONEST NOTE: your QA test account has no Health-Connect sleep history at all, so the screenshot was driven with a fixture 7-night sleep series to make the nudge fire - the app, the threshold maths and the copy are the real shipped ones.",
+        "imagePath": "images/i-20260717-rdy1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-rdy1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "17892b753ace0138114b147712bad9629f5f6828",
+        "imageCommits": [
+          "17892b753ace0138114b147712bad9629f5f6828"
+        ],
+        "fixedAt": "2026-07-25T13:47:03.647Z",
+        "by": "shakeebshaan",
+        "appCommit": "64eb2c55",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Nudge verified rendering in the real Activity screen above the session with correct computed numbers (5.2h vs 7.2h avg) and the dismiss affordance; fixture sleep history disclosed since the QA account has none."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -2210,9 +2232,7 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "needsReview": true,
-      "reviewReason": "BUILT — in v1.9.48 (228). When today has a workout and last night's sleep is >=0.5h under your 7-day average (needs >=3 logged nights), a calm dismissible note appears above the session on Activity: 'Slept 5.2h vs your 7.1h average — consider a lighter session today.' Dismiss holds for the day. Localized in all 4 languages. Reuses the dashboard's sleep query — zero extra network.",
-      "reviewedAt": "2026-07-22T15:54:21.747Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -2227,6 +2247,13 @@
           "who": "claude",
           "kind": "review",
           "text": "BUILT — in v1.9.48 (228). When today has a workout and last night's sleep is >=0.5h under your 7-day average (needs >=3 logged nights), a calm dismissible note appears above the session on Activity: 'Slept 5.2h vs your 7.1h average — consider a lighter session today.' Dismiss holds for the day. Localized in all 4 languages. Reuses the dashboard's sleep query — zero extra network.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:47:03.647Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "DONE. When today has a workout and last night's sleep ran short of your own trailing 7-day average, Activity shows one calm line directly above the session: 'Slept 5.2h vs your 7.2h average - consider a lighter session today.' Deliberately advice, not an alarm - muted card, no red, dismissible for the day, and it hides once every exercise is handled. It self-gates on data quality: the baseline needs at least 3 logged nights and EXCLUDES last night, so one short night cannot drag down its own reference; under a 0.5h shortfall you see nothing. Data comes from the same sleep query the dashboard already runs over the same 7-day window, so it usually costs zero extra network. Localized in all four languages. HONEST NOTE: your QA test account has no Health-Connect sleep history at all, so the screenshot was driven with a fixture 7-night sleep series to make the nudge fire - the app, the threshold maths and the copy are the real shipped ones.",
           "by": "shakeebshaan"
         }
       ]
