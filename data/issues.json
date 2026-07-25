@@ -2270,8 +2270,30 @@
       ],
       "createdAt": "2026-07-17T12:00:00.000Z",
       "route": "/progress",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "DONE — the report now has the 7 / 30 / 90-day range your original ask named. Previously the share button generated one fixed 30-day card, and the underlying weight API only carried 7 daily points plus year-less weekly anchors, so a real 90-day trend was not even representable. Fix: /weight/log-data now returns 'recent_weigh_ins' — one row per day that has an actual weigh-in across a trailing window you can request (default 30, up to 180), ISO-dated with no carried-forward values — and both Progress tabs request 90 days on a single shared cache entry. Tapping share opens a small range sheet (Last 7 / 30 / 90 days); the generated card windows its trend to your choice and its caption follows it. Verified end-to-end in the app: choosing 90 days rendered a card headed 'LAST 90 DAYS' with the weight, change-since-start pill and trend line, and handed it to the share sheet (web falls back to a download, nyus-progress-90d.png). Still a PNG, not a PDF — say the word if you want a PDF variant too.",
+        "imagePath": "images/i-20260717-sf9k-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-sf9k-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a539f1c756e789835f4e4734010280432de41bda",
+        "imageCommits": [
+          "a539f1c756e789835f4e4734010280432de41bda"
+        ],
+        "fixedAt": "2026-07-25T13:37:28.972Z",
+        "by": "shakeebshaan",
+        "appCommit": "29596ab8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Range menu captured on the live authenticated Progress page; the 90-day report itself was driven end-to-end (rendered + downloaded) in the same run; range/window contracts covered by new unit tests."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "imagePath": null,
@@ -2279,9 +2301,7 @@
       "imageCommits": [],
       "imagePrivate": false,
       "description": "[suggestion] Add a \"Share progress report\" export on the Progress page — a shareable image/PDF summarizing weight trend, macro adherence, and workout consistency over a chosen date range (7/30/90 days). Problem: NYUS users are dedicated athletes in India who routinely see a doctor, dietitian, or trainer for periodic check-ins, but there is no way to hand off structured progress data today — codebase grep confirms zero PDF/report-export code and the only navigator.share() usages are ShoppingList and the referral card (no Progress/Achievements export exists). Competitors (MyFitnessPal, Cronometer) ship a printable/exportable report precisely for this reason. V1 scope: one \"Share report\" button on Progress → renders a single portrait canvas (weight chart + macro-adherence % + workout completion %, NYUS branding) client-side (no new backend endpoint) → native Web Share / save-to-gallery via existing Capacitor share plugin, same pattern as ShoppingList’s share flow. No new AI/LLM cost. Effort: ~1-2 days (canvas/chart-to-image render + share wiring + one QA pass on real device for the gallery/share-sheet).",
-      "needsReview": true,
-      "reviewReason": "BUILT — in v1.9.48 (228) on the test lane. Share button in the Progress header generates a 1080x1350 share image (current weight + change since start, 30-day teal trend line, tracking streak, workouts this month, NYUS wordmark) and opens the native share sheet; web falls back to download. Update the app and tap the share icon on Progress.",
-      "reviewedAt": "2026-07-22T15:54:15.715Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -2296,6 +2316,13 @@
           "who": "claude",
           "kind": "review",
           "text": "BUILT — in v1.9.48 (228) on the test lane. Share button in the Progress header generates a 1080x1350 share image (current weight + change since start, 30-day teal trend line, tracking streak, workouts this month, NYUS wordmark) and opens the native share sheet; web falls back to download. Update the app and tap the share icon on Progress.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:37:28.972Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "DONE — the report now has the 7 / 30 / 90-day range your original ask named. Previously the share button generated one fixed 30-day card, and the underlying weight API only carried 7 daily points plus year-less weekly anchors, so a real 90-day trend was not even representable. Fix: /weight/log-data now returns 'recent_weigh_ins' — one row per day that has an actual weigh-in across a trailing window you can request (default 30, up to 180), ISO-dated with no carried-forward values — and both Progress tabs request 90 days on a single shared cache entry. Tapping share opens a small range sheet (Last 7 / 30 / 90 days); the generated card windows its trend to your choice and its caption follows it. Verified end-to-end in the app: choosing 90 days rendered a card headed 'LAST 90 DAYS' with the weight, change-since-start pill and trend line, and handed it to the share sheet (web falls back to a download, nyus-progress-90d.png). Still a PNG, not a PDF — say the word if you want a PDF variant too.",
           "by": "shakeebshaan"
         }
       ]
