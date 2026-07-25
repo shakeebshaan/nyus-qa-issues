@@ -3439,14 +3439,34 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "BUILT — the one gap this audit found and left open. You asked to 'label what's being worked on', and the honest answer at the time was that there WAS no in-progress state: an open card read 'Submitted / Awaiting fix' for the entire time an agent was fixing it, and nothing stopped a second concurrent tick from grabbing the same card and duplicating the work. Both are now solved by a claim. (1) A tick claims an issue before touching code, and the board shows a blue '⏳ In progress' pill with who holds it and how long is left — screenshot shows it next to a normal 'Submitted' card for contrast. Blue is the one colour no other lifecycle badge uses, so it can't be confused with Needs direction or In review. (2) Claiming a card another agent already holds now FAILS and names the holder, so a second tick picks something else instead; 'pull' also withholds their cards and reports them separately. (3) The important part: claims EXPIRE. Expiry is judged whenever a claim is read, so an agent that dies mid-fix — usage limits, crash — frees the card by itself with nothing for you to clean up, and a malformed claim counts as no claim. A lock that could get stuck would park an issue forever, which is worse than the duplicate work it prevents. Timeout is 60 min, adjustable in data/loop.json (claimTtlMinutes). Verified live on this very card: claim stamped it, a second agent's attempt was rejected by name, pull dropped it from 15 open to 14 and listed it as claimed-by-others, --force took it over, and a lapsed claim rendered as plain 'Submitted' again with no pill. 12 contract tests in tools/claims.test.mjs. Docs: LOOP.md section 2.1 + README.",
+        "imagePath": "images/i-20260717-3d27-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-3d27-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0625cfaf8c7449bdf5136ced239fc7ef547f3056",
+        "imageCommits": [
+          "0625cfaf8c7449bdf5136ced239fc7ef547f3056"
+        ],
+        "fixedAt": "2026-07-25T15:16:02.946Z",
+        "by": "shakeebshaan",
+        "appCommit": "1afe4e41",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Every claimed behaviour executed and observed end-to-end on the real board (guard rejection with exit code, pull withholding, force takeover, expiry falling back to Submitted), plus 12 contract tests; the auto-expiry safety property is the design centre rather than an afterthought."
+        }
+      },
       "history": [],
       "reportPath": "reports/i-20260717-3d27-lifecycle-audit.html",
       "reportLabel": "Issue lifecycle audit",
-      "needsReview": true,
-      "reviewReason": "AUDITED + FIXED — live on the board now (5 commits). Findings: (1) review notes were being OVERWRITTEN — one issue lost 30 prior notes; now every review/resolve/reopen/reply appends to a permanent conversation thread shown chronologically in the card modal. (2) 'not fixed' screenshots you uploaded were stored but never shown to me or you — now they render on the card AND download into my fix loop. (3) 'In review' vs 'Needs direction' badges were identical purple — now visually distinct. (4) issues now capture device info (e.g. '📱 Android · Chrome · 412x915'). (5) fixed a CLI crash on two automation-filed cards missing status. Old issues render unchanged; nothing was migrated destructively.",
-      "reviewedAt": "2026-07-22T15:55:18.479Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "audit",
@@ -3466,14 +3486,15 @@
           "kind": "review",
           "text": "AUDITED + FIXED — live on the board now (5 commits). Findings: (1) review notes were being OVERWRITTEN — one issue lost 30 prior notes; now every review/resolve/reopen/reply appends to a permanent conversation thread shown chronologically in the card modal. (2) 'not fixed' screenshots you uploaded were stored but never shown to me or you — now they render on the card AND download into my fix loop. (3) 'In review' vs 'Needs direction' badges were identical purple — now visually distinct. (4) issues now capture device info (e.g. '📱 Android · Chrome · 412x915'). (5) fixed a CLI crash on two automation-filed cards missing status. Old issues render unchanged; nothing was migrated destructively.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T15:16:02.946Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "BUILT — the one gap this audit found and left open. You asked to 'label what's being worked on', and the honest answer at the time was that there WAS no in-progress state: an open card read 'Submitted / Awaiting fix' for the entire time an agent was fixing it, and nothing stopped a second concurrent tick from grabbing the same card and duplicating the work. Both are now solved by a claim. (1) A tick claims an issue before touching code, and the board shows a blue '⏳ In progress' pill with who holds it and how long is left — screenshot shows it next to a normal 'Submitted' card for contrast. Blue is the one colour no other lifecycle badge uses, so it can't be confused with Needs direction or In review. (2) Claiming a card another agent already holds now FAILS and names the holder, so a second tick picks something else instead; 'pull' also withholds their cards and reports them separately. (3) The important part: claims EXPIRE. Expiry is judged whenever a claim is read, so an agent that dies mid-fix — usage limits, crash — frees the card by itself with nothing for you to clean up, and a malformed claim counts as no claim. A lock that could get stuck would park an issue forever, which is worse than the duplicate work it prevents. Timeout is 60 min, adjustable in data/loop.json (claimTtlMinutes). Verified live on this very card: claim stamped it, a second agent's attempt was rejected by name, pull dropped it from 15 open to 14 and listed it as claimed-by-others, --force took it over, and a lapsed claim rendered as plain 'Submitted' again with no pill. 12 contract tests in tools/claims.test.mjs. Docs: LOOP.md section 2.1 + README.",
+          "by": "shakeebshaan"
         }
-      ],
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-07-25T15:10:57.615Z",
-        "expiresAt": "2026-07-25T15:30:57.615Z",
-        "tookOverFrom": "concurrent-tick-bot"
-      }
+      ]
     },
     {
       "id": "i-20260717-av42",
