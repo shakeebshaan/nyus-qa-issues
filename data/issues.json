@@ -2089,7 +2089,7 @@
     {
       "id": "i-20260717-gbc1",
       "createdAt": "2026-07-17T20:38:40.558Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/shopping-list",
       "description": "[suggestion] Weekly grocery-list cost estimate + running budget on the Shopping List screen. Problem: Indian users are price-sensitive week-to-week grocery spend, but ShoppingList.tsx / ShoppingListItem has no price field at all — the list shows qty+unit only, no cost signal, while Blinkit/Zepto deep-links already exist for the same items. Evidence: grep of ShoppingListItem + ShoppingList.tsx shows zero cost/budget fields; comparable apps (Cult.fit, HealthifyMe) surface an estimated weekly grocery spend to reinforce diet-plan adherence via cost awareness. Proposed v1: backend attaches a per-item avg-price estimate (static INR price table by ingredient, refreshed manually) to the /shopping-list response; FE sums to a \"~₹XXX this week\" pill at the top of ShoppingList.tsx, no per-store live pricing needed. Effort: ~1-2 days (small backend price table + one route field, small FE sum+pill).",
       "imagePath": null,
@@ -2101,11 +2101,31 @@
         "suggestion",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "DONE and live-verified today. The Shopping List now leads with 'Estimated weekly cost' as a rupee range plus a muted per-item estimate on every row, grouped by category. Pricing is a deterministic static Indian price table on the backend (POST /grocery/estimate-costs) — no AI cost, instant, and quantity-aware, so 500 g paneer and 2 kg rice price differently. Items the table does not recognise are excluded from the total rather than guessed at, and the copy says 'Rough market estimate' so it never reads as a real-time quote. Verified live on prod in this pass: an 8-item basket priced to about ₹1,005–₹1,440 with per-item ranges (Paneer 500 g ≈ ₹175–225, Chicken Breast 1 kg ≈ ₹300–400, Spinach 500 g ≈ ₹20–40). HONEST NOTE: your QA test account's plan produced an empty shopping list, so the ITEM LIST in the screenshot came from a fixture — every rupee figure shown was returned by the real production pricing endpoint.",
+        "imagePath": "images/i-20260717-gbc1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260717-gbc1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e151da8e6fee7c6bf127e559743c8913ae5f094e",
+        "imageCommits": [
+          "e151da8e6fee7c6bf127e559743c8913ae5f094e"
+        ],
+        "fixedAt": "2026-07-25T13:46:38.625Z",
+        "by": "shakeebshaan",
+        "appCommit": "64eb2c55",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Prices in the capture are genuinely from the live prod endpoint (item list fixtured only because the QA account's list is empty, and that is disclosed); the ask's total + per-item pill are both visible."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "BUILT — backend live (ebbeb7a), FE in v1.9.48 (228). Shopping List now shows 'Estimated weekly cost ≈ ₹X–₹Y' + muted per-item ≈₹ captions. Deterministic static Indian price table (123 staples + 188 aliases, 2026 retail ranges) — instant, no AI cost. Live smoke: typical list → ₹630–870, unknown items honestly excluded ('N of M items priced').",
-      "reviewedAt": "2026-07-22T15:54:25.924Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -2120,6 +2140,13 @@
           "who": "claude",
           "kind": "review",
           "text": "BUILT — backend live (ebbeb7a), FE in v1.9.48 (228). Shopping List now shows 'Estimated weekly cost ≈ ₹X–₹Y' + muted per-item ≈₹ captions. Deterministic static Indian price table (123 staples + 188 aliases, 2026 retail ranges) — instant, no AI cost. Live smoke: typical list → ₹630–870, unknown items honestly excluded ('N of M items priced').",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:46:38.625Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "DONE and live-verified today. The Shopping List now leads with 'Estimated weekly cost' as a rupee range plus a muted per-item estimate on every row, grouped by category. Pricing is a deterministic static Indian price table on the backend (POST /grocery/estimate-costs) — no AI cost, instant, and quantity-aware, so 500 g paneer and 2 kg rice price differently. Items the table does not recognise are excluded from the total rather than guessed at, and the copy says 'Rough market estimate' so it never reads as a real-time quote. Verified live on prod in this pass: an 8-item basket priced to about ₹1,005–₹1,440 with per-item ranges (Paneer 500 g ≈ ₹175–225, Chicken Breast 1 kg ≈ ₹300–400, Spinach 500 g ≈ ₹20–40). HONEST NOTE: your QA test account's plan produced an empty shopping list, so the ITEM LIST in the screenshot came from a fixture — every rupee figure shown was returned by the real production pricing endpoint.",
           "by": "shakeebshaan"
         }
       ]
