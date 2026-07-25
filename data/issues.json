@@ -3666,12 +3666,32 @@
         "1bf262bd477aad8f4203c7fffdce32a2f11f3992"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "DONE — including the supplements correlation I had left out. 'Your patterns' (/habit-insights, reachable via 'Patterns ->' on the dashboard's Weekly Insights) computes real correlations from your own logs: sleep vs workouts, sleep vs meals, workouts vs next-night sleep, meals vs next-day weight, steps vs sleep/water, and now supplements vs meals — each as a plain-English sentence with a strength chip and the sample size, gated honestly (needs ~2 weeks of overlapping data). Verified live on prod today: the correlation contract carries supplement adherence per day (only days with at least one scheduled dose count, so an unscheduled day is missing data rather than a zero). Also fixed a real bug found while capturing this: the supplements insight was being drawn with a moon-and-dumbbell icon pair because the frontend's pair list had never learned about supplements — it now shows pill -> meals. HONEST NOTE: your QA test account has only 7 tracked days and no supplement history, so the screenshot was driven with a fixture correlations payload to show the rendered result; the maths, gating and the live contract are all real and unfixtured.",
+        "imagePath": "images/i-20260718-8920-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-8920-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a51787036d52de59d2e76b5a66436cee33432512",
+        "imageCommits": [
+          "a51787036d52de59d2e76b5a66436cee33432512"
+        ],
+        "fixedAt": "2026-07-25T13:45:52.108Z",
+        "by": "shakeebshaan",
+        "appCommit": "64eb2c55",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Named gap (supplements) confirmed present in the LIVE prod contract; screen render verified and a real icon-mapping bug fixed in the same pass; fixture use disclosed rather than presented as real data."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "BUILT — backend live (ebbeb7a), FE in v1.9.48 (228). New 'Your patterns' screen (/habit-insights, linked via 'Patterns →' on the dashboard's Weekly Insights): real correlations from YOUR logs — sleep vs workouts, sleep vs meals, workouts vs next-night sleep, meals vs next-day weight, steps vs sleep/water. Gated honestly (needs ~2 weeks of overlapping data, |r|>=0.25) with plain-English sentences + strength chips. Live on your account right now: 3 patterns found. Supplements correlation not included yet (supplement logs need more history) — say the word to add it.",
-      "reviewedAt": "2026-07-22T15:55:14.337Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "feature",
@@ -3691,6 +3711,13 @@
           "who": "claude",
           "kind": "review",
           "text": "BUILT — backend live (ebbeb7a), FE in v1.9.48 (228). New 'Your patterns' screen (/habit-insights, linked via 'Patterns →' on the dashboard's Weekly Insights): real correlations from YOUR logs — sleep vs workouts, sleep vs meals, workouts vs next-night sleep, meals vs next-day weight, steps vs sleep/water. Gated honestly (needs ~2 weeks of overlapping data, |r|>=0.25) with plain-English sentences + strength chips. Live on your account right now: 3 patterns found. Supplements correlation not included yet (supplement logs need more history) — say the word to add it.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:45:52.108Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "DONE — including the supplements correlation I had left out. 'Your patterns' (/habit-insights, reachable via 'Patterns ->' on the dashboard's Weekly Insights) computes real correlations from your own logs: sleep vs workouts, sleep vs meals, workouts vs next-night sleep, meals vs next-day weight, steps vs sleep/water, and now supplements vs meals — each as a plain-English sentence with a strength chip and the sample size, gated honestly (needs ~2 weeks of overlapping data). Verified live on prod today: the correlation contract carries supplement adherence per day (only days with at least one scheduled dose count, so an unscheduled day is missing data rather than a zero). Also fixed a real bug found while capturing this: the supplements insight was being drawn with a moon-and-dumbbell icon pair because the frontend's pair list had never learned about supplements — it now shows pill -> meals. HONEST NOTE: your QA test account has only 7 tracked days and no supplement history, so the screenshot was driven with a fixture correlations payload to show the rendered result; the maths, gating and the live contract are all real and unfixtured.",
           "by": "shakeebshaan"
         }
       ]
