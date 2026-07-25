@@ -3858,16 +3858,52 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED and verified live today. The two questions that kept returning were 'What do you most want from me as your coach?' and 'Tried any of these before?'. Neither has its own profile column — they live in your onboarding responses — so the check for 'has this already been answered?' had nothing on the server to read and fell back to a local-only marker, which any app reinstall or data clear wiped. Result: asked again every day. Fix: GET /profile now surfaces both saved values, and the drip's already-answered check reads them, so an answer survives reinstalls. Verified end-to-end on production in this pass: your QA account has primary_intent='accountability' and past_attempts=['calorie_apps','gym'] stored, a re-POST round-trips cleanly, and the dashboard's coach card consequently asks about SLEEP instead — both previously-repeating questions correctly skipped (screenshot). ACTION for you: your phone build predates the fix, so update from the closed-testing link, then answer each question once and it will stick.",
+        "imagePath": "images/i-20260718-72c9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-72c9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "682541f490cc8955b05a5f404f9438a978e8aca7",
+        "imageCommits": [
+          "682541f490cc8955b05a5f404f9438a978e8aca7"
+        ],
+        "fixedAt": "2026-07-25T14:31:33.825Z",
+        "by": "shakeebshaan",
+        "appCommit": "85b22e34",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "De-dup verified on the real account end-to-end: both values present server-side, round-trip confirmed, and the live dashboard card demonstrably asks a different question instead of re-asking either one."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "IDENTIFIED + already fixed in build 224 (now on your test lane). The repeating questions are 'What do you most want from me as your coach?' (primary_intent) and 'Tried any of these before?' (past_attempts) — two coach-intake fields with NO profile column. The de-dup that reads them back (GET /profile surfaces them from OnboardingResponse; the drip's isAnswered checks p.primary_intent / p.past_attempts) is a RECENT change (commit 85e3f226 / i-20260719-83b5). Your current app build predates it, so its 'already answered?' check never saw the saved values and re-asked every day. Verified the backend round-trip live on prod: POST /profile/extended-intake {primary_intent} -> saved -> GET /profile returns it; past_attempts already surfaces correctly. Fix is in build 224. ACTION: update your app from the closed-testing link. After updating, answer each of the two questions once -> they'll stick and never return (primary_intent is drip-only, so it's asked once; past_attempts you already answered in onboarding, so it'll stop immediately).",
-      "reviewedAt": "2026-07-19T03:35:01.478Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "needs-repro",
         "dashboard"
+      ],
+      "thread": [
+        {
+          "at": "2026-07-19T03:35:01.478Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "IDENTIFIED + already fixed in build 224 (now on your test lane). The repeating questions are 'What do you most want from me as your coach?' (primary_intent) and 'Tried any of these before?' (past_attempts) — two coach-intake fields with NO profile column. The de-dup that reads them back (GET /profile surfaces them from OnboardingResponse; the drip's isAnswered checks p.primary_intent / p.past_attempts) is a RECENT change (commit 85e3f226 / i-20260719-83b5). Your current app build predates it, so its 'already answered?' check never saw the saved values and re-asked every day. Verified the backend round-trip live on prod: POST /profile/extended-intake {primary_intent} -> saved -> GET /profile returns it; past_attempts already surfaces correctly. Fix is in build 224. ACTION: update your app from the closed-testing link. After updating, answer each of the two questions once -> they'll stick and never return (primary_intent is drip-only, so it's asked once; past_attempts you already answered in onboarding, so it'll stop immediately).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T14:31:33.825Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED and verified live today. The two questions that kept returning were 'What do you most want from me as your coach?' and 'Tried any of these before?'. Neither has its own profile column — they live in your onboarding responses — so the check for 'has this already been answered?' had nothing on the server to read and fell back to a local-only marker, which any app reinstall or data clear wiped. Result: asked again every day. Fix: GET /profile now surfaces both saved values, and the drip's already-answered check reads them, so an answer survives reinstalls. Verified end-to-end on production in this pass: your QA account has primary_intent='accountability' and past_attempts=['calorie_apps','gym'] stored, a re-POST round-trips cleanly, and the dashboard's coach card consequently asks about SLEEP instead — both previously-repeating questions correctly skipped (screenshot). ACTION for you: your phone build predates the fix, so update from the closed-testing link, then answer each question once and it will stick.",
+          "by": "shakeebshaan"
+        }
       ]
     },
     {
