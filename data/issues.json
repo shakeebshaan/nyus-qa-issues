@@ -4447,7 +4447,7 @@
     {
       "id": "i-20260721-qacc",
       "createdAt": "2026-07-21T23:33:14.802Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/health-score",
       "description": "[bug-hunt] Progress/Health-Score loop blocker: QA main test account (395c47c7-a2b3-4f72-8077-f87f793aaf02) has been dead on prod since ~2026-07-12/18 -- /health-score/ and /weight/log-data both 401 with \"Error loading the user 395c47c7\" despite a token valid to 2026-07-22 (per _qa_creds.json). This has blocked live-data accuracy verification (recompute displayed pillar/trend math against raw logs) for the page-progress bug-hunt loop across the 07-18, 07-20 and 07-21 ticks -- only static code review has been possible, so any live regression in health-score/weight-trend math would go undetected. Needs an owner-provisioned working QA account with real weight/meal/workout log history (or restore the existing user row) so headless verification can resume.",
       "imagePath": null,
@@ -4461,12 +4461,48 @@
         "blocker",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "NOT an owner blocker — no account provisioning needed, and the blocked verification has now been performed. Root cause of the 401s: access tokens are allowlisted per-token-id via the UserSession table, so a MINTED token with no matching session row gets exactly 401 'Token has been revoked' — it looks like a dead user but the account is fine. The bug-hunt loop was carrying its own stale copy of the credentials. Proven today against production with the credentials already committed in the frontend repo (.qa-report/_qa_creds.json): /health-score/ 200, /weight/log-data 200, /auth/me 200 for user 395c47c7. Screenshot is that account's Health Score rendering live. I also ran the live-math check the card said had been blocked across three ticks: pillar weights sum to exactly 1.00 (Activity .20, Nutrition .25, Body/Consistency/Recovery .15, Lifestyle .10) and the weighted composite of the displayed pillars — 38, 55, 35, 32, 80, 55 — computes to 52.55, which is the 53 shown in the ring. No drift. REMEDY for the loop: read the credentials from the frontend repo rather than a local copy, and if you must mint a token, stamp a UserSession row for its jti at the same time.",
+        "imagePath": "images/i-20260721-qacc-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-qacc-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e43b6046c564742a769b141baf7f38a5a9bdb5df",
+        "imageCommits": [
+          "e43b6046c564742a769b141baf7f38a5a9bdb5df"
+        ],
+        "fixedAt": "2026-07-25T13:55:45.868Z",
+        "by": "shakeebshaan",
+        "appCommit": "64eb2c55",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Blocker disproved with live 200s on the two endpoints named in the card, plus the previously-blocked accuracy check actually executed (composite recomputed from pillars, matches the UI exactly)."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "NOT an owner blocker — account is ALIVE. Verified live on prod (2026-07-22): /health-score/ -> 200 (history + pillars flowing), /weight/log-data -> 200 (daily weights incl Jul 16-17), /auth/me -> 200 for user 395c47c7. Root cause of the loop's 401: access tokens are allowlisted per-jti via UserSession — a minted token WITHOUT a session row (or an expired one) gets exactly 401 'Token has been revoked', reproduced side-by-side in the same run. REMEDY for the bug-hunt loop: mint a fresh token AND stamp a UserSession row (user_id, jti from decode_token, expires_at), same recipe as .qa-report captures / reference_authed_qa_capture; refresh its _qa_creds.json copy (note: the frontend repo's .qa-report/_qa_creds.json 'main' is qa.flow.mira, exp 2026-08-01 — the loop appears to carry its own stale copy). No account restore or provisioning needed.",
-      "reviewedAt": "2026-07-22T10:34:59.449Z",
-      "reviewedBy": "shakeebshaan"
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-22T10:34:59.449Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "NOT an owner blocker — account is ALIVE. Verified live on prod (2026-07-22): /health-score/ -> 200 (history + pillars flowing), /weight/log-data -> 200 (daily weights incl Jul 16-17), /auth/me -> 200 for user 395c47c7. Root cause of the loop's 401: access tokens are allowlisted per-jti via UserSession — a minted token WITHOUT a session row (or an expired one) gets exactly 401 'Token has been revoked', reproduced side-by-side in the same run. REMEDY for the bug-hunt loop: mint a fresh token AND stamp a UserSession row (user_id, jti from decode_token, expires_at), same recipe as .qa-report captures / reference_authed_qa_capture; refresh its _qa_creds.json copy (note: the frontend repo's .qa-report/_qa_creds.json 'main' is qa.flow.mira, exp 2026-08-01 — the loop appears to carry its own stale copy). No account restore or provisioning needed.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:55:45.868Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "NOT an owner blocker — no account provisioning needed, and the blocked verification has now been performed. Root cause of the 401s: access tokens are allowlisted per-token-id via the UserSession table, so a MINTED token with no matching session row gets exactly 401 'Token has been revoked' — it looks like a dead user but the account is fine. The bug-hunt loop was carrying its own stale copy of the credentials. Proven today against production with the credentials already committed in the frontend repo (.qa-report/_qa_creds.json): /health-score/ 200, /weight/log-data 200, /auth/me 200 for user 395c47c7. Screenshot is that account's Health Score rendering live. I also ran the live-math check the card said had been blocked across three ticks: pillar weights sum to exactly 1.00 (Activity .20, Nutrition .25, Body/Consistency/Recovery .15, Lifestyle .10) and the weighted composite of the displayed pillars — 38, 55, 35, 32, 80, 55 — computes to 52.55, which is the 53 shown in the ring. No drift. REMEDY for the loop: read the credentials from the frontend repo rather than a local copy, and if you must mint a token, stamp a UserSession row for its jti at the same time.",
+          "by": "shakeebshaan"
+        }
+      ]
     }
   ]
 }
