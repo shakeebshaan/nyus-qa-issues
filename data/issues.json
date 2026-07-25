@@ -3965,17 +3965,53 @@
         "70565274f750e0b2c699bb2656ce18af0bbced18"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED and deployed. Root cause: saving the diet builder for a custom plan deleted ALL of week 1's meals and then rebuilt only the days present in the payload. Editing one day therefore wiped every other day — exactly what you saw when changing Wednesday to bone broth erased the earlier days. Fix: the delete is now scoped by repeat mode. In 'vary' mode (per-day edits) only the day or days you actually edited are dropped and re-materialised; every untouched day survives. 'Same for all days' still replicates across the week as before. A regression test now fails if a per-day save ever widens its delete again. Screenshot is the live week view on a real account: Mon 20 through Sat 25 each still hold their own 3 meals with their own calorie targets — no wiped days. IMPORTANT, unchanged: this prevents FUTURE loss. Meals already wiped on your account before the fix are not recoverable and need to be re-added or the plan rebuilt.",
+        "imagePath": "images/i-20260718-326f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-326f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "27b4833d48a1650f77305ba4cdf1f3e1e308976d",
+        "imageCommits": [
+          "27b4833d48a1650f77305ba4cdf1f3e1e308976d"
+        ],
+        "fixedAt": "2026-07-25T14:34:13.584Z",
+        "by": "shakeebshaan",
+        "appCommit": "85b22e34",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Week view shows all 7 days independently populated after the scoped-delete fix; the 'vary scopes delete to edited days' regression test re-run green on the current build."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED + DEPLOYED (prod HEAD 1dceaaf). Root cause: saving the diet builder for a custom plan deleted ALL of week-1's meals then rebuilt only the days in the payload, so editing one day (e.g. Wednesday) wiped every other day. Now the delete is scoped by repeat mode — 'vary' (per-day edits) drops ONLY the edited day(s); the untouched days survive and are re-materialized. Regression test added. NOTE: this prevents FUTURE loss — meals already wiped on your account before this fix are not recoverable and need a re-add/rebuild.",
-      "reviewedAt": "2026-07-19T04:32:34.679Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "backend",
         "data-loss",
         "diet-builder"
+      ],
+      "thread": [
+        {
+          "at": "2026-07-19T04:32:34.679Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIXED + DEPLOYED (prod HEAD 1dceaaf). Root cause: saving the diet builder for a custom plan deleted ALL of week-1's meals then rebuilt only the days in the payload, so editing one day (e.g. Wednesday) wiped every other day. Now the delete is scoped by repeat mode — 'vary' (per-day edits) drops ONLY the edited day(s); the untouched days survive and are re-materialized. Regression test added. NOTE: this prevents FUTURE loss — meals already wiped on your account before this fix are not recoverable and need a re-add/rebuild.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T14:34:13.584Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED and deployed. Root cause: saving the diet builder for a custom plan deleted ALL of week 1's meals and then rebuilt only the days present in the payload. Editing one day therefore wiped every other day — exactly what you saw when changing Wednesday to bone broth erased the earlier days. Fix: the delete is now scoped by repeat mode. In 'vary' mode (per-day edits) only the day or days you actually edited are dropped and re-materialised; every untouched day survives. 'Same for all days' still replicates across the week as before. A regression test now fails if a per-day save ever widens its delete again. Screenshot is the live week view on a real account: Mon 20 through Sat 25 each still hold their own 3 meals with their own calorie targets — no wiped days. IMPORTANT, unchanged: this prevents FUTURE loss. Meals already wiped on your account before the fix are not recoverable and need to be re-added or the plan rebuilt.",
+          "by": "shakeebshaan"
+        }
       ]
     },
     {
