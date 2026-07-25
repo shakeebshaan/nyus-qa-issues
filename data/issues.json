@@ -4225,17 +4225,53 @@
         "f0ba5c8731ef6531c9ec8b9246276a4126ed72df"
       ],
       "imagePrivate": true,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED — and it was NOT a duplicate. My earlier note called this a duplicate of i-20260718-4fad, but no card with that id exists on the board or in the archive, so I treated it on its own merits. Root cause: the Activity header picked its badge from a bare yes/no on whether the plan is session-based — session-based showed 'Progressive Plan', everything else showed 'Weekly Schedule'. A day-of-week plan that YOU built is still your own schedule, so that wording read as though the app had put you on a generic weekly template. It also contradicted the card right above it on the same screen, which already showed a CUSTOM badge from the plan's provenance field. The header now reads that same field: a plan you built shows 'Your Schedule' (screenshot: 'Today's Workout · Your Schedule · Saturday'). The weekday still shows, because it genuinely is day-of-week scheduling — just yours, not ours. Progressive plans are unchanged. No backend work needed; the field was already on the payload. 4 regression tests pin it in both directions. ON REST DAYS: a day your plan has no session on is still shown as a rest day — that is your schedule speaking. If you would rather a custom plan never show 'Rest Day' and instead offer your next session on demand, say so and I will build that. HONEST NOTE: the QA test account's custom plan is session-based, so to capture the day-based case I recast its overview payload as day-of-week/custom — the badge logic and the screen are real.",
+        "imagePath": "images/i-20260718-41d4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-41d4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2f7f3b59127ccb5a576f81573c6987739361cfda",
+        "imageCommits": [
+          "2f7f3b59127ccb5a576f81573c6987739361cfda"
+        ],
+        "fixedAt": "2026-07-25T14:30:58.984Z",
+        "by": "shakeebshaan",
+        "appCommit": "85b22e34",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Wrong label reproduced and fixed at the root (provenance now drives copy, consistent with the CUSTOM badge already on that screen); verified rendering 'Your Schedule Saturday'; open product question on Rest Day surfaced rather than assumed."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "DUPLICATE of i-20260718-4fad (identical screenshot + text, filed 23s apart). Fix tracked + deployed under 4fad. Safe to archive this one.",
-      "reviewedAt": "2026-07-19T04:32:45.657Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "tags": [
         "activity",
         "workout-plan",
         "duplicate"
+      ],
+      "thread": [
+        {
+          "at": "2026-07-19T04:32:45.657Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "DUPLICATE of i-20260718-4fad (identical screenshot + text, filed 23s apart). Fix tracked + deployed under 4fad. Safe to archive this one.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T14:30:58.984Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED — and it was NOT a duplicate. My earlier note called this a duplicate of i-20260718-4fad, but no card with that id exists on the board or in the archive, so I treated it on its own merits. Root cause: the Activity header picked its badge from a bare yes/no on whether the plan is session-based — session-based showed 'Progressive Plan', everything else showed 'Weekly Schedule'. A day-of-week plan that YOU built is still your own schedule, so that wording read as though the app had put you on a generic weekly template. It also contradicted the card right above it on the same screen, which already showed a CUSTOM badge from the plan's provenance field. The header now reads that same field: a plan you built shows 'Your Schedule' (screenshot: 'Today's Workout · Your Schedule · Saturday'). The weekday still shows, because it genuinely is day-of-week scheduling — just yours, not ours. Progressive plans are unchanged. No backend work needed; the field was already on the payload. 4 regression tests pin it in both directions. ON REST DAYS: a day your plan has no session on is still shown as a rest day — that is your schedule speaking. If you would rather a custom plan never show 'Rest Day' and instead offer your next session on demand, say so and I will build that. HONEST NOTE: the QA test account's custom plan is session-based, so to capture the day-based case I recast its overview payload as day-of-week/custom — the badge logic and the screen are real.",
+          "by": "shakeebshaan"
+        }
       ]
     },
     {
