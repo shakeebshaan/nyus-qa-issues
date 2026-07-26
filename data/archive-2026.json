@@ -22892,30 +22892,49 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260720-2ff2",
-      "createdAt": "2026-07-20T00:00:00.000Z",
-      "status": "resolved",
-      "route": null,
-      "description": "[seo] AI search presence 2026-07-20: visibility 0/10, NYUS absent all 5 head queries (fatloss/fitness/calorie). FitTrack AI dominates 3/5. 11 press articles not indexing for branded term either.",
       "author": "shakeebshaan",
       "tags": [
-        "seo",
-        "out-of-app-scope"
+        "bug-hunt",
+        "auto"
       ],
+      "status": "resolved",
+      "fix": {
+        "description": "Root cause: the Compare view's Weight change figure was hard-coded to show a loss in teal and a gain in muted grey, so a muscle-gain / bulking user saw their intended progress de-emphasized (and a regression highlighted). Fix: the colour is now goal-aware — a gain reads teal for a muscle-gain goal, a loss reads teal for fat-loss and other goals — matching the rest of the app (isChangeGood / GoalChangeWizard). Proof capture: a muscle-gain user's +5.0 kg gain now renders in teal.",
+        "imagePath": "images/i-20260721-15f3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260721-15f3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "32096e1a46ccd48325da6d73ae85cdf91b4b9756",
+        "imageCommits": [
+          "32096e1a46ccd48325da6d73ae85cdf91b4b9756"
+        ],
+        "fixedAt": "2026-07-21T22:32:34.426Z",
+        "by": "shakeebshaan",
+        "appCommit": "759c21ee",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Mirrors the existing goal-aware delta pattern (de33), surgical, unit-tested across all goal types, full 5760-test suite green, adversarially reviewed SOLID; proof shows +5.0 kg teal for a muscle-gain goal."
+        }
+      },
+      "history": [],
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "reportPath": "reports/ai-search-presence-20260720.html",
-      "reportLabel": "AI search presence 2026-07-20",
-      "needsReview": true,
-      "reviewReason": "Not an app-code defect — this is an SEO/AEO (AI-search) visibility report, and the NYUS app is an auth-gated Capacitor mobile app with zero public/indexable surface. All search + AI-answer visibility lives in the separate marketing site (nyus.in / NYUSLANDING repo) plus external indexing/backlinks, none of which is fixable in this app repo. Routing to you: this belongs on the content/marketing track (NYUSLANDING sitemap/schema/press-article indexing), not the app fix-loop. Recommend archiving from the app board or moving to the marketing backlog.",
-      "reviewedAt": "2026-07-20T12:46:33.639Z",
-      "reviewedBy": "shakeebshaan",
-      "resolvedAt": "2026-07-26T10:03:42.378Z",
+      "needsReview": false,
+      "id": "i-20260721-15f3",
+      "createdAt": "2026-07-21T21:54:46.892Z",
+      "route": "/measurements",
+      "description": "[bug-hunt] Progress Photos > Compare: the \"Weight change\" delta color is goal-blind — it highlights weight LOSS in teal (good) and shows weight GAIN in muted gray, so a muscle-gain / bulking user sees their intended progress de-emphasized and a regression celebrated. Inconsistent with the rest of the app, which makes these deltas goal-aware.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx CompareView, weight-change block lines 96-110: `Number(deltaKg) < 0 ? \"text-d-teal-500\" : \"text-muted-foreground\"` — teal only when the newer photo is LIGHTER; every gain (and 0) renders muted.\n\nWHAT: The direction that counts as \"good\" is hard-coded to weight loss, with no reference to the user's goal_type. The same screen family already flips this by goal elsewhere: Measurements.tsx `isChangeGood(slug, change)` (lines 29-32) flips growth parts, and QA i-20260721-de33 just made the GoalChangeWizard macro-diff color goal-aware for exactly this reason. CompareView never got the same treatment. (Cosmetic-only: the +/- sign is correct; just the emphasis/color is inverted for gain-goal users.)\n\nEXPECTED: for a weight-GAIN goal, a gain is the teal/positive highlight and a loss is muted (or a neutral scheme keyed off goal_type), matching de33 / isChangeGood.\nACTUAL: loss is always teal, gain is always muted, regardless of goal.\n\nREPRO:\n1. As a user whose goal is weight/muscle gain, add >=2 progress photos with an increasing logged weight between them.\n2. Open Compare → \"Weight change\" shows e.g. \"+2.0 kg\" in muted gray, while a hypothetical loss would show teal — the opposite of what this user is working toward.\n\nFIX: pass goal_type into CompareView (or read it via the profile/goal hook already used on nearby screens) and pick the highlight color with the same goal-aware helper pattern as isChangeGood / de33, instead of the fixed `< 0` test.",
+      "resolvedAt": "2026-07-26T10:03:57.329Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-26T10:03:42.378Z"
+      "archivedAt": "2026-07-26T10:03:57.329Z"
     }
   ]
 }
