@@ -22892,33 +22892,37 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
+      "id": "i-20260721-47b7",
+      "createdAt": "2026-07-21T16:36:51.304Z",
+      "status": "resolved",
+      "route": "/coach (any logging block: meal/water/weight/workout/measurement/activity)",
+      "description": "[bug-hunt] Offline log queue never flushes a log that TIMED OUT on a still-live connection, so it stalls indefinitely despite the \"will sync when you reconnect\" promise.\n\nWHERE: src/hooks/useBlockSubmit.ts (offline catch path) + src/lib/offline-queue.ts (flushQueue triggers).\n\nWHAT: useBlockSubmit catches a failed log submit and, when isNoResponseError(err) is true, enqueues it to the IndexedDB offline queue and shows \"Saved offline — Your log will sync when you reconnect.\" isNoResponseError (api-client.ts:105) is TRUE for client-side timeouts (ECONNABORTED / \"timeout of 45000ms exceeded\"), during which navigator.onLine stays TRUE — the code comment (useBlockSubmit.ts:187-196) explicitly says timeouts must be queued so \"a log on a slow but live connection\" isn't dropped. BUT the offline path only calls enqueue(); it never kicks a flush. flushQueue (offline-queue.ts:213) is only ever invoked by: (a) the one-time navigator.onLine check inside registerOnlineFlush at module load — runs once at app boot, BEFORE the entry exists; (b) the window 'online' event — requires an offline->online transition; (c) Capacitor Network networkStatusChange connected — requires a radio transition; (d) the internal exponential-backoff retry timer — armed ONLY when a flush PASS had a transient failure, and no pass ever runs for the just-enqueued entry. On a live-but-slow connection the device never fires any online/reconnect transition, so the queued entry sits in IndexedDB (nyus_offline_queue) until the app is fully restarted (re-import re-runs the at-boot flush) or a genuine connectivity blip occurs.\n\nEXPECTED: a timed-out log auto-syncs once the flaky request succeeds (exactly the case the timeout-queueing was added for).\nACTUAL: no flush is scheduled after enqueue; peekCount() stays >=1 and the log never reaches the server on the same live connection.\n\nREPRO:\n1. Log in; open coach chat and submit any logging block (e.g. water/meal/weight), OR trigger a block submit.\n2. Throttle the network so the POST times out (>45s) while staying online (DevTools throttle / tarpit) — navigator.onLine remains true.\n3. Submit -> toast \"Saved offline… will sync when you reconnect.\" Entry lands in IndexedDB DB nyus_offline_queue / store pending_logs.\n4. Restore normal speed WITHOUT toggling offline->online. Observe the entry is never re-sent (peekCount stays >=1, no server record) until an app restart or a real offline->online toggle.\n\nCONTRAST (proves it's a fixable gap, not inherent): the parallel coach-chat message-outbox (message-outbox.ts + useChatOutbox.ts) does NOT stall — it replays on socket reconnect AND on every chat mount, both recurring triggers.\n\nFIX: after enqueue() in useBlockSubmit's offline path, kick a flush (export a kickFlush()/reuse the registered sender, or call flushQueue(sender)); OR add an app-resume / visibilitychange / periodic flush. flushQueue already schedules exponential-backoff retries once a pass runs, so a single post-enqueue kick is enough.",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
         "auto"
       ],
-      "status": "resolved",
       "fix": {
-        "description": "Root cause: the Compare view's Weight change figure was hard-coded to show a loss in teal and a gain in muted grey, so a muscle-gain / bulking user saw their intended progress de-emphasized (and a regression highlighted). Fix: the colour is now goal-aware — a gain reads teal for a muscle-gain goal, a loss reads teal for fat-loss and other goals — matching the rest of the app (isChangeGood / GoalChangeWizard). Proof capture: a muscle-gain user's +5.0 kg gain now renders in teal.",
-        "imagePath": "images/i-20260721-15f3-fix-r1.png",
+        "description": "Root cause: a log that timed out on a slow-but-live connection was saved to the offline queue but never re-sent — the app only retries the queue on an offline->online reconnect, which never happens while you stay online, so the log sat in local storage until an app restart. Fix: the app now immediately retries the queue right after saving such a log, and safely handles a second log saved during that retry, so a timed-out log syncs on the same connection (a duplicate send is blocked by the idempotency key). Verified with new fail-before/pass-after unit tests in both suites plus a full green test run.",
+        "imagePath": "images/i-20260721-47b7-fix-r1.png",
         "imagePaths": [
-          "images/i-20260721-15f3-fix-r1.png"
+          "images/i-20260721-47b7-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "32096e1a46ccd48325da6d73ae85cdf91b4b9756",
+        "imageCommit": "9d20eda6c387226836508ace04cc4babc8cefb70",
         "imageCommits": [
-          "32096e1a46ccd48325da6d73ae85cdf91b4b9756"
+          "9d20eda6c387226836508ace04cc4babc8cefb70"
         ],
-        "fixedAt": "2026-07-21T22:32:34.426Z",
+        "fixedAt": "2026-07-21T17:29:32.258Z",
         "by": "shakeebshaan",
-        "appCommit": "759c21ee",
+        "appCommit": "757db122",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 93,
+          "score": 94,
           "bar": 90,
-          "note": "Mirrors the existing goal-aware delta pattern (de33), surgical, unit-tested across all goal types, full 5760-test suite green, adversarially reviewed SOLID; proof shows +5.0 kg teal for a muscle-gain goal."
+          "note": "Exact root cause fixed surgically (kickFlush after enqueue + race-safe coalescing re-run); empirically confirmed fail-before (4 new tests RED without fix) / pass-after (55 green); full test:unit gate green; no regression (idempotency-keyed re-send)."
         }
       },
       "history": [],
@@ -22928,13 +22932,9 @@
       "imageCommits": [],
       "imagePrivate": false,
       "needsReview": false,
-      "id": "i-20260721-15f3",
-      "createdAt": "2026-07-21T21:54:46.892Z",
-      "route": "/measurements",
-      "description": "[bug-hunt] Progress Photos > Compare: the \"Weight change\" delta color is goal-blind — it highlights weight LOSS in teal (good) and shows weight GAIN in muted gray, so a muscle-gain / bulking user sees their intended progress de-emphasized and a regression celebrated. Inconsistent with the rest of the app, which makes these deltas goal-aware.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx CompareView, weight-change block lines 96-110: `Number(deltaKg) < 0 ? \"text-d-teal-500\" : \"text-muted-foreground\"` — teal only when the newer photo is LIGHTER; every gain (and 0) renders muted.\n\nWHAT: The direction that counts as \"good\" is hard-coded to weight loss, with no reference to the user's goal_type. The same screen family already flips this by goal elsewhere: Measurements.tsx `isChangeGood(slug, change)` (lines 29-32) flips growth parts, and QA i-20260721-de33 just made the GoalChangeWizard macro-diff color goal-aware for exactly this reason. CompareView never got the same treatment. (Cosmetic-only: the +/- sign is correct; just the emphasis/color is inverted for gain-goal users.)\n\nEXPECTED: for a weight-GAIN goal, a gain is the teal/positive highlight and a loss is muted (or a neutral scheme keyed off goal_type), matching de33 / isChangeGood.\nACTUAL: loss is always teal, gain is always muted, regardless of goal.\n\nREPRO:\n1. As a user whose goal is weight/muscle gain, add >=2 progress photos with an increasing logged weight between them.\n2. Open Compare → \"Weight change\" shows e.g. \"+2.0 kg\" in muted gray, while a hypothetical loss would show teal — the opposite of what this user is working toward.\n\nFIX: pass goal_type into CompareView (or read it via the profile/goal hook already used on nearby screens) and pick the highlight color with the same goal-aware helper pattern as isChangeGood / de33, instead of the fixed `< 0` test.",
-      "resolvedAt": "2026-07-26T10:03:57.329Z",
+      "resolvedAt": "2026-07-26T10:04:07.242Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-26T10:03:57.329Z"
+      "archivedAt": "2026-07-26T10:04:07.242Z"
     }
   ]
 }
