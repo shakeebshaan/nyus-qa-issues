@@ -419,48 +419,6 @@
       "description": "[bug-hunt] Progress Photos always stamps the upload moment as the photo date (taken_at = new Date()), discarding the picked image's real date — so imported/gallery photos collapse to \"today\", corrupting the timeline order and the Compare Before/After pairing.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx:141-158 (handlePickPhoto), line 150 `await progressPhotosService.upload(compressed, new Date())`. The file input is `<input type=\"file\" accept=\"image/*\" capture=\"environment\">` (lines 210-218).\n\nWHAT: The upload service signature is `upload(file, takenAt?: Date)` and the backend (backend.py ProgressPhotoResource.post lines 10264-10272) honors a `taken_at` form field; the list endpoint orders strictly by `ProgressPhoto.taken_at.desc()` (line 10301) and the whole UI (grid date label, Compare left/right = oldest/newest, weight-change delta) is driven by taken_at. But handlePickPhoto passes `new Date()` unconditionally — it never reads `file.lastModified` (available on the picked File) nor lets the user set a date. On iOS/iPadOS (a shipping Capacitor target) the `capture` attribute is only a hint: the OS still offers \"Photo Library\", so a user can pick an EXISTING progress shot from weeks ago; on desktop/web the picker is always the file system. Every such import is dated NOW.\n\nEXPECTED: an imported photo is dated by its real capture/modified date (e.g. `new Date(file.lastModified)`), or the user can choose the date; the timeline stays chronological.\nACTUAL: all imported photos are stamped with the upload instant, so several old photos added in one session share \"today\", jump to the top of the newest-first list, and the Compare view pairs the wrong two shots (and the weight-change delta uses whatever weight is logged NOW, since the backend attaches the latest WeightLog at upload — lines 10250-10262).\n\nREPRO:\n1. Log in, open /measurements, scroll to Progress Photos.\n2. Tap \"Add Photo\" and (on iOS or web) choose an EXISTING photo from the library/disk taken on a prior date.\n3. Observe the new entry's date label = today (not the photo's date), and it sorts as the newest photo.\n4. Repeat with a second older photo → both show today's date and the Compare \"Before/After\" ordering no longer reflects real chronology.\n\nFIX: default taken_at to the file's own date — `progressPhotosService.upload(compressed, new Date(file.lastModified || Date.now()))` — capturing `file.lastModified` before `e.target.value = \"\"`; optionally expose a date picker for manual correction. (Backend already accepts the taken_at field, so this is a one-line FE change.)"
     },
     {
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "status": "fixed",
-      "fix": {
-        "description": "Root cause: the Compare view's Weight change figure was hard-coded to show a loss in teal and a gain in muted grey, so a muscle-gain / bulking user saw their intended progress de-emphasized (and a regression highlighted). Fix: the colour is now goal-aware — a gain reads teal for a muscle-gain goal, a loss reads teal for fat-loss and other goals — matching the rest of the app (isChangeGood / GoalChangeWizard). Proof capture: a muscle-gain user's +5.0 kg gain now renders in teal.",
-        "imagePath": "images/i-20260721-15f3-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260721-15f3-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "32096e1a46ccd48325da6d73ae85cdf91b4b9756",
-        "imageCommits": [
-          "32096e1a46ccd48325da6d73ae85cdf91b4b9756"
-        ],
-        "fixedAt": "2026-07-21T22:32:34.426Z",
-        "by": "shakeebshaan",
-        "appCommit": "759c21ee",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Mirrors the existing goal-aware delta pattern (de33), surgical, unit-tested across all goal types, full 5760-test suite green, adversarially reviewed SOLID; proof shows +5.0 kg teal for a muscle-gain goal."
-        }
-      },
-      "history": [],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false,
-      "id": "i-20260721-15f3",
-      "createdAt": "2026-07-21T21:54:46.892Z",
-      "route": "/measurements",
-      "description": "[bug-hunt] Progress Photos > Compare: the \"Weight change\" delta color is goal-blind — it highlights weight LOSS in teal (good) and shows weight GAIN in muted gray, so a muscle-gain / bulking user sees their intended progress de-emphasized and a regression celebrated. Inconsistent with the rest of the app, which makes these deltas goal-aware.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx CompareView, weight-change block lines 96-110: `Number(deltaKg) < 0 ? \"text-d-teal-500\" : \"text-muted-foreground\"` — teal only when the newer photo is LIGHTER; every gain (and 0) renders muted.\n\nWHAT: The direction that counts as \"good\" is hard-coded to weight loss, with no reference to the user's goal_type. The same screen family already flips this by goal elsewhere: Measurements.tsx `isChangeGood(slug, change)` (lines 29-32) flips growth parts, and QA i-20260721-de33 just made the GoalChangeWizard macro-diff color goal-aware for exactly this reason. CompareView never got the same treatment. (Cosmetic-only: the +/- sign is correct; just the emphasis/color is inverted for gain-goal users.)\n\nEXPECTED: for a weight-GAIN goal, a gain is the teal/positive highlight and a loss is muted (or a neutral scheme keyed off goal_type), matching de33 / isChangeGood.\nACTUAL: loss is always teal, gain is always muted, regardless of goal.\n\nREPRO:\n1. As a user whose goal is weight/muscle gain, add >=2 progress photos with an increasing logged weight between them.\n2. Open Compare → \"Weight change\" shows e.g. \"+2.0 kg\" in muted gray, while a hypothetical loss would show teal — the opposite of what this user is working toward.\n\nFIX: pass goal_type into CompareView (or read it via the profile/goal hook already used on nearby screens) and pick the highlight color with the same goal-aware helper pattern as isChangeGood / de33, instead of the fixed `< 0` test."
-    },
-    {
       "id": "i-20260721-8f2c",
       "createdAt": "2026-07-21T18:10:00.000Z",
       "status": "open",
