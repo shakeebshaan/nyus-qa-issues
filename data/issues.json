@@ -4,8 +4,30 @@
     {
       "id": "i-20260726-9f2a",
       "createdAt": "2026-07-26T21:10:03.179Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: GET /payments/subscription filtered status='active' only, so a soft-cancelled row still inside its prepaid window (status='canceled', current_period_end future) fell into the 'no subscription' branch on reload -> 'No active plan' + 'Choose a plan', hiding 'What's included' -- contradicting /auth/me which counts it active via entitlement. Fix (backend): endpoint is now a thin wrapper over entitlement.get_active_subscription + new build_subscription_view (single source of truth); a canceled-in-window row reports active:true + cancel_at_period_end, and its DB 'canceled' is wired out as FE-canonical 'cancelled'. FE planLabel returns 'Active plan' for cancelled. On reload the screen now shows the plan, 'Won't renew', and the orange 'keep access until <date>' banner. app/services/entitlement.py + backend.py (BE fa5c69a, deployed+healthy); FE SubscriptionSettings.tsx (b6f944cd). Tests: tests/api/test_payments_subscription_view.py 6 pass. Proof: 390x844 route-mock capture of the reloaded cancelled state, corroborated by live prod build_subscription_view output.",
+        "imagePath": "images/i-20260726-9f2a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260726-9f2a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f5f2d1435efc34209e9adfc25c06d7b1be6d789c",
+        "imageCommits": [
+          "f5f2d1435efc34209e9adfc25c06d7b1be6d789c"
+        ],
+        "fixedAt": "2026-07-26T22:29:48.914Z",
+        "by": "shakeebshaan",
+        "appCommit": "b6f944cd",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Backend root cause fixed via single-source entitlement view, deployed to prod + verified live; FE planLabel companion committed; 6 regression tests pass; 390x844 capture proves the reloaded cancelled state renders correctly."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,17 @@
       "imageCommits": [],
       "imagePrivate": false,
       "route": "/settings/subscription",
-      "description": "[bug-hunt] After you CANCEL your subscription, the Subscription screen (on reload / revisit) shows \"No active plan\" + a \"Choose a plan\" button and hides \"What's included\" — even though you still have full prepaid access until your period-end date. The screen contradicts the app itself: /auth/me still reports subscription_active=true and every premium route still works.\n\nWhere: /settings/subscription (src/pages/SubscriptionSettings.tsx), backed by GET /api/v1/payments/subscription (backend.py PaymentSubscriptionResource.get, ~line 2746).\n\nRoot cause (backend): PaymentSubscriptionResource.get() queries ONLY `Subscription.query.filter_by(status='active')` (backend.py:2752-2757). But soft-cancel (CancelSubscriptionResource, backend.py:3016) sets `status='canceled'` while LEAVING current_period_end untouched (the user keeps access until the prepaid window ends — documented contract). So the moment a sub is cancelled, this GET no longer finds it and falls into the \"no subscription\" branch (backend.py:2759-2770): returns `status:'none', active:false, cancel_at_period_end:false, next_charge_date:null`.\n\nMeanwhile the AUTHORITATIVE entitlement helper does the right thing: app/services/entitlement.py is_subscription_active / get_active_subscription count a row as active when `current_period_end > now AND status IN ('active','canceled')` (entitlement.py:50,64). /auth/me uses that, so subscription_active stays TRUE after cancel until period-end. The /payments/subscription endpoint diverges from that single source of truth.\n\nRepro:\n1. Be on a real paid subscription (or any Subscription row with current_period_end in the future).\n2. Open /settings/subscription -> tap \"Cancel subscription\" -> confirm. In-session the UI optimistically shows \"Cancelled — keep access until <date>\" (handleCancel setInfo, SubscriptionSettings.tsx:179) — looks correct.\n3. Reload the page (or navigate away and back) so load() re-fetches GET /payments/subscription.\nExpected: screen shows the plan as cancelled/pending-expiry with the orange \"You'll keep access until <date>\" banner and \"What's included\", matching /auth/me (subscription_active=true).\nActual: info={status:'none', active:false, cancel_at_period_end:false}; isSubscribed=false -> planLabel renders \"No active plan\", the \"Choose a plan\" button appears, \"What's included\" is hidden, and the \"access until <date>\" banner never renders — while the user in fact still has premium access.\n\nFix (backend): PaymentSubscriptionResource.get() must mirror entitlement.get_active_subscription — select the most-recent row with `current_period_end > now AND status IN ('active','canceled')`, and set `cancel_at_period_end = (canceled_at is not None)` with the real current_period_end. That restores agreement with /auth/me and honours the soft-cancel \"keep access until period end\" contract on reload.\n\nNote: not a static error (tsc/eslint clean) — a data-contract divergence between two endpoints."
+      "description": "[bug-hunt] After you CANCEL your subscription, the Subscription screen (on reload / revisit) shows \"No active plan\" + a \"Choose a plan\" button and hides \"What's included\" — even though you still have full prepaid access until your period-end date. The screen contradicts the app itself: /auth/me still reports subscription_active=true and every premium route still works.\n\nWhere: /settings/subscription (src/pages/SubscriptionSettings.tsx), backed by GET /api/v1/payments/subscription (backend.py PaymentSubscriptionResource.get, ~line 2746).\n\nRoot cause (backend): PaymentSubscriptionResource.get() queries ONLY `Subscription.query.filter_by(status='active')` (backend.py:2752-2757). But soft-cancel (CancelSubscriptionResource, backend.py:3016) sets `status='canceled'` while LEAVING current_period_end untouched (the user keeps access until the prepaid window ends — documented contract). So the moment a sub is cancelled, this GET no longer finds it and falls into the \"no subscription\" branch (backend.py:2759-2770): returns `status:'none', active:false, cancel_at_period_end:false, next_charge_date:null`.\n\nMeanwhile the AUTHORITATIVE entitlement helper does the right thing: app/services/entitlement.py is_subscription_active / get_active_subscription count a row as active when `current_period_end > now AND status IN ('active','canceled')` (entitlement.py:50,64). /auth/me uses that, so subscription_active stays TRUE after cancel until period-end. The /payments/subscription endpoint diverges from that single source of truth.\n\nRepro:\n1. Be on a real paid subscription (or any Subscription row with current_period_end in the future).\n2. Open /settings/subscription -> tap \"Cancel subscription\" -> confirm. In-session the UI optimistically shows \"Cancelled — keep access until <date>\" (handleCancel setInfo, SubscriptionSettings.tsx:179) — looks correct.\n3. Reload the page (or navigate away and back) so load() re-fetches GET /payments/subscription.\nExpected: screen shows the plan as cancelled/pending-expiry with the orange \"You'll keep access until <date>\" banner and \"What's included\", matching /auth/me (subscription_active=true).\nActual: info={status:'none', active:false, cancel_at_period_end:false}; isSubscribed=false -> planLabel renders \"No active plan\", the \"Choose a plan\" button appears, \"What's included\" is hidden, and the \"access until <date>\" banner never renders — while the user in fact still has premium access.\n\nFix (backend): PaymentSubscriptionResource.get() must mirror entitlement.get_active_subscription — select the most-recent row with `current_period_end > now AND status IN ('active','canceled')`, and set `cancel_at_period_end = (canceled_at is not None)` with the real current_period_end. That restores agreement with /auth/me and honours the soft-cancel \"keep access until period end\" contract on reload.\n\nNote: not a static error (tsc/eslint clean) — a data-contract divergence between two endpoints.",
+      "thread": [
+        {
+          "at": "2026-07-26T22:29:48.914Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: GET /payments/subscription filtered status='active' only, so a soft-cancelled row still inside its prepaid window (status='canceled', current_period_end future) fell into the 'no subscription' branch on reload -> 'No active plan' + 'Choose a plan', hiding 'What's included' -- contradicting /auth/me which counts it active via entitlement. Fix (backend): endpoint is now a thin wrapper over entitlement.get_active_subscription + new build_subscription_view (single source of truth); a canceled-in-window row reports active:true + cancel_at_period_end, and its DB 'canceled' is wired out as FE-canonical 'cancelled'. FE planLabel returns 'Active plan' for cancelled. On reload the screen now shows the plan, 'Won't renew', and the orange 'keep access until <date>' banner. app/services/entitlement.py + backend.py (BE fa5c69a, deployed+healthy); FE SubscriptionSettings.tsx (b6f944cd). Tests: tests/api/test_payments_subscription_view.py 6 pass. Proof: 390x844 route-mock capture of the reloaded cancelled state, corroborated by live prod build_subscription_view output.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260726-4c7e",
