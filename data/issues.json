@@ -908,48 +908,6 @@
       "history": []
     },
     {
-      "id": "i-20260720-7d1c",
-      "createdAt": "2026-07-20T00:00:00.000Z",
-      "status": "fixed",
-      "route": "/nutrition",
-      "description": "[bug-hunt] Un-skipping a meal that was skipped in a PRIOR session gives no immediate visual feedback — the card stays struck-through/grayscale with the SKIPPED badge until a network refetch returns, even though a \"Meal unskipped\" toast fires instantly. Root cause: NutritionMealList.tsx:41 computes isSkipped = skippedMealIds.has(meal.assigned_meal_id) || !!meal.is_skipped. handleUnskipMeal (useNutritionData.tsx:376-382) only removes the id from the local skippedMealIds Set; it does NOT optimistically clear the cached is_skipped. skipMealMutation.onSuccess (line 323-326) merely invalidates [diet-plan]/[dashboard-overview] — no optimistic setQueryData flip. So when a meal was skipped in an earlier session, skippedMealIds is empty on load but the server payload sets meal.is_skipped=true (backend.py:7190/9551 from AssignedMeal.skipped_at); the local removal is overridden by the still-true cached is_skipped, so the OR keeps the card skipped for the whole round-trip. The SKIP direction works (adds to Set -> OR short-circuits true instantly); only UNSKIP is broken. Expected: card visually un-skips on tap (like skip does). Actual: card stays skipped until refetch; toast contradicts card state; reads as a dead tap on slow connections. Repro: (1) open /nutrition with an active diet plan, (2) skip a meal, (3) cold-reload the app so is_skipped comes from the server and skippedMealIds is empty, (4) tap Unskip on that meal -> no immediate change, toast says unskipped, card flips only after the diet-plan refetch. Fix: mirror logMealMutation.onMutate — optimistically setQueryData([diet-plan, today]) to flip the target meal is_skipped=false (with snapshot rollback in onError), OR seed skippedMealIds from server is_skipped so the Set is the single source of truth.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "Root cause: un-skipping a meal that was skipped in an EARLIER session only cleared a local flag, but the card's skipped look also came from the server copy of the plan — so it stayed struck-through with the SKIPPED badge until a background refresh landed, even though the 'Meal unskipped' toast fired instantly. Fix: the meal now un-skips (and skips) instantly on tap by updating the cached plan directly, with automatic rollback if the save fails. Verified on /nutrition: the card returns to normal the moment you tap Unskip, before any network refetch.",
-        "imagePath": "images/i-20260720-7d1c-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260720-7d1c-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "277be2a8333de1fc0768c51d4a8b7b5ad69b1e05",
-        "imageCommits": [
-          "277be2a8333de1fc0768c51d4a8b7b5ad69b1e05"
-        ],
-        "fixedAt": "2026-07-20T07:27:50.749Z",
-        "by": "shakeebshaan",
-        "appCommit": "fb56d1c8",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root-cause fix mirrors the eaten-toggle optimistic cache flip; regression test fails-before/passes-after; full test:unit green; capture shows the card un-skipped while the refetch is still in flight."
-        }
-      },
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260720-tr9i",
       "createdAt": "2026-07-20T00:00:00.000Z",
       "route": "/dashboard",
