@@ -22892,73 +22892,49 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260721-9m2q",
-      "createdAt": "2026-07-21T07:38:43.409Z",
+      "id": "i-20260721-a3f1",
+      "createdAt": "2026-07-21T02:23:04.933Z",
       "status": "resolved",
-      "route": "/nutrition",
-      "description": "[suggestion] Add a Daily Micronutrient Summary card on the Nutrition page (iron, calcium, vitamin D, B12, vitamin C vs RDA). Problem: NYUS already computes total_iron_mg/total_calcium_mg/total_vitamin_d_mcg/total_vitamin_b12_mcg/total_vitamin_c_mg per meal (src/types/api.ts) but today these ONLY render on RecipeDetail for a single recipe -- there is no daily or weekly aggregate anywhere, so users get zero visibility into deficiency-relevant nutrients. Evidence: grep shows these fields used in exactly one screen (RecipeDetail.tsx); NYUS is India-focused with a heavy vegetarian user base where iron/B12/vitamin D deficiency is common and dietitian-relevant -- this is a real differentiator vs generic calorie-counter apps (Cronometer-style micronutrient tracking, MyFitnessPal does not do this well either). Proposed v1: a collapsible card below the existing macros section on Nutrition.tsx summing logged meals for the day (total_iron_mg/total_calcium_mg/total_vitamin_d_mcg/total_vitamin_b12_mcg/total_vitamin_c_mg), shown as simple bar-to-RDA (use standard ICMR RDA constants), no new backend endpoint needed since the per-meal fields already exist -- just sum client-side from already-fetched diary data. Effort: ~1-2 days FE-only for v1 (daily view); weekly aggregate as v2.",
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommit": null,
-      "imageCommits": [],
-      "imagePrivate": false,
+      "route": "/notifications",
+      "description": "[bug-hunt] OS push-notification taps are DEAD (no deep-link) and foreground push toasts never fire, because the FE push handler reads the wrong FCM data-payload key. This is a DIFFERENT surface from i-20260719-7f3a (which fixed only the in-app /notifications list). 7f3a was filed on the FALSE premise that \"the push-tap path DOES route every type\" — it does not.\n\nROOT CAUSE (cross-repo key mismatch):\n- Backend builds the FCM data payload with ONLY two keys: data_payload['notification_type'] and data_payload['notification_id'] (nyu_backend/backend.py:1304-1308 — the ONLY messaging.Message() in the whole backend, sent via create_notification -> send_push_notification). It never sends 'type', 'link', or 'message_id'.\n- FE reads the WRONG keys: src/capacitor/push.ts pushNotificationActionPerformed line 233 does  notificationType = data.type || ''  , line 234  link = data.link  , line 235  messageId = data.message_id  . Backend sends key \"notification_type\", so data.type is ALWAYS undefined.\n\nCONSEQUENCE:\n1) Tap from OS tray: notificationType='' -> not weekly_review, not coach/admin, staticNotificationRoute('')=null, link='' -> NO branch matches -> requestNav() is never called -> the app opens but does NOT deep-link. EVERY push tap is a dead tap (workout/meal/water reminders, coach/admin/support messages, weekly_review, streak_risk, friend_request, health-score reminders, kudos, etc.).\n2) Foreground receive: pushNotificationReceived (push.ts:178) also reads notification.data?.type -> the weekly_review / streak_risk / meal_reminder / workout_reminder in-app TOASTS never fire either.\n\nSo the shared route map introduced by 7f3a is INERT on the real OS push surface — the type never arrives under the key push.ts reads.\n\nEXPECTED: tapping a push notification deep-links to the same screen the in-app list opens (e.g. weight_reminder -> /log-weight, meal_reminder -> /nutrition, coach_message -> /coach-chat).\nACTUAL: the tap opens the app on the default route only; no deep-link. Foreground reminder toasts are also absent.\n\nREPRO: send any push (or inspect the FCM payload) -> data = {notification_type, notification_id}; in push.ts data.type is undefined -> handler falls through with no navigation. Verifiable from code in BOTH repos without a device.\n\nFIX (minimal, FE): read the backend key -> notificationType = data.type || data.notification_type || ''  (at both push.ts:178 and :233). That restores all static-route + coach/admin(bare) + weekly_review deep-links immediately. FULL parity also needs the backend to forward link/message_id/date into data_payload (from the notification's meta_data) so message_id/link deep-links resolve too; e.g. add data_payload['type']=notification_type and copy meta_data link/message_id/date. Add a test asserting push.ts consumes the SAME key the backend emits so this can't drift again.",
       "author": "shakeebshaan",
       "tags": [
-        "suggestion",
+        "bug-hunt",
         "auto"
       ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "fix": {
-        "description": "VERIFIED SHIPPED — captured live with real data, no fixtures. The Nutrition page carries the daily micronutrient summary you asked for: a 'MICRONUTRIENTS TODAY' section under the macros that sums the day's logged meals and shows each nutrient against its RDA with a progress bar and a percentage — iron 23%, calcium 9%, vitamin D 14%, B12 45%, vitamin C 10%, plus zinc, magnesium, potassium, folate and sodium (sodium is correctly treated as a ceiling to stay under, not a target to reach). It stays collapsed behind 'View vitamins & minerals' so the page keeps its calm default, and it only appears once you have eaten something — an all-zero micro panel would be noise. The suggestion's premise that these fields only rendered on a single recipe screen was stale; this pass also typed the API contract and added regression tests so it cannot silently break. If you want it more prominent — expanded by default, or lifted onto the dashboard — say which and I will move it.",
-        "imagePath": "images/i-20260721-9m2q-fix-r1.png",
+        "description": "Root cause: push notifications carried the type under the key 'notification_type', but the app read a different key ('type'), so the type was always empty -- every OS push tap opened the app with no deep-link and foreground reminder toasts never fired. Fix: the app now reads the correct key at both push handlers, and the backend also forwards routing hints (link/message_id/review_id), so tapping a push opens the SAME screen the in-app list does (meal reminder -> Nutrition, weight reminder -> Log Weight, coach message -> Coach Chat). Guarded by a new drift test so the key can't silently diverge again. Backend is live on production; the app-side fix ships in the next build.",
+        "imagePath": "images/i-20260721-a3f1-fix-r1.png",
         "imagePaths": [
-          "images/i-20260721-9m2q-fix-r1.png"
+          "images/i-20260721-a3f1-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "d7b51630acfb891a282c36e2a0840a33cbcf8c7f",
+        "imageCommit": "71e1e6b9eab9b8292fe4c0b735228d46b8258a0a",
         "imageCommits": [
-          "d7b51630acfb891a282c36e2a0840a33cbcf8c7f"
+          "71e1e6b9eab9b8292fe4c0b735228d46b8258a0a"
         ],
-        "fixedAt": "2026-07-25T13:49:06.816Z",
+        "fixedAt": "2026-07-21T03:05:19.513Z",
         "by": "shakeebshaan",
-        "appCommit": "64eb2c55",
+        "appCommit": "b6a3e160",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 92,
+          "score": 93,
           "bar": 90,
-          "note": "Fully live authenticated capture (one real meal logged on the QA account, section expanded) showing per-micro RDA bars and percentages — no fixture anywhere in this one."
+          "note": "Cross-repo root-cause fix verified end-to-end: 9/9 targeted tests + full unit suite (5723 passed, 0 failed) green; independent adversarial review confirmed no regression; backend deployed+restarted on prod (d7455ff)."
         }
       },
       "history": [],
       "needsReview": false,
-      "reviewedBy": "shakeebshaan",
-      "thread": [
-        {
-          "at": "2026-07-21T08:10:13.178Z",
-          "who": "claude",
-          "kind": "review",
-          "text": "Already shipped, not a gap. The Nutrition page already renders a Daily Micronutrient Summary: Nutrition.tsx:538 mounts NutritionMacrosSection, whose 'Micronutrient Summary' block (NutritionMacrosSection.tsx:75-87) sums the day's logged meals for iron/calcium/vitamin D/B12/vitamin C (+ zinc/magnesium/potassium/folate/sodium) and renders MicroTargetCard as bar-to-RDA with Good/Low/Deficient status (MicroTargetCard.tsx:9-25,52-54), gated on meals eaten. The suggestion's premise that these fields render only on RecipeDetail is stale. Recommend closing as already-implemented (v2 weekly aggregate could still be a genuine follow-up if desired).",
-          "by": "shakeebshaan"
-        },
-        {
-          "at": "2026-07-22T15:55:04.848Z",
-          "who": "claude",
-          "kind": "review",
-          "text": "VERIFIED ALREADY BUILT + hardened in v1.9.48 (228). The Nutrition page already had the daily micronutrient summary (collapsed 'View vitamins & minerals' under the macros once you've eaten something — per-micro RDA progress bars, sodium correctly treated as a ceiling not a deficiency). This pass typed the API contract and added 4 regression tests so it can't silently break. If you expected it somewhere more prominent, say where and I'll move it.",
-          "by": "shakeebshaan"
-        },
-        {
-          "at": "2026-07-25T13:49:06.816Z",
-          "who": "claude",
-          "kind": "resolve",
-          "text": "VERIFIED SHIPPED — captured live with real data, no fixtures. The Nutrition page carries the daily micronutrient summary you asked for: a 'MICRONUTRIENTS TODAY' section under the macros that sums the day's logged meals and shows each nutrient against its RDA with a progress bar and a percentage — iron 23%, calcium 9%, vitamin D 14%, B12 45%, vitamin C 10%, plus zinc, magnesium, potassium, folate and sodium (sodium is correctly treated as a ceiling to stay under, not a target to reach). It stays collapsed behind 'View vitamins & minerals' so the page keeps its calm default, and it only appears once you have eaten something — an all-zero micro panel would be noise. The suggestion's premise that these fields only rendered on a single recipe screen was stale; this pass also typed the API contract and added regression tests so it cannot silently break. If you want it more prominent — expanded by default, or lifted onto the dashboard — say which and I will move it.",
-          "by": "shakeebshaan"
-        }
-      ],
-      "resolvedAt": "2026-07-26T10:04:18.841Z",
+      "resolvedAt": "2026-07-26T10:04:28.819Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-26T10:04:18.841Z"
+      "archivedAt": "2026-07-26T10:04:28.819Z"
     }
   ]
 }
