@@ -55,8 +55,30 @@
     {
       "id": "i-20260726-4c7e",
       "createdAt": "2026-07-26T21:10:03.179Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: for an active plan the endpoint returned next_charge_date=current_period_end + next_charge_amount=amount_paid/100, implying an auto-renewal charge -- but NYUS bills via one-off Razorpay orders (no recurring subscription wired), so that date is the access-EXPIRY, not a charge. FE rendered a misleading 'Next charge <date>' / 'Amount Rs499' grid. Fix (backend): new build_subscription_view leaves next_charge_amount/date null unless the sub is genuinely recurring (subscription_is_recurring: stripe_subscription_id starts 'sub_'); for one-off plans the FE charge grid hides entirely. A real recurring sub still surfaces its charge (verified). app/services/entitlement.py + backend.py (BE fa5c69a, deployed+healthy). Tests: tests/api/test_payments_subscription_view.py (one-off hides charge, recurring shows charge) 6 pass. Proof: 390x844 capture of an active one-off plan -- no 'Next charge'/'Amount' grid, no phantom renewal -- corroborated by live prod build_subscription_view output (one-off: next_charge_* null; recurring: 499.0).",
+        "imagePath": "images/i-20260726-4c7e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260726-4c7e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6f33c025d94c0b62a7d306663d61bf7a70ea4042",
+        "imageCommits": [
+          "6f33c025d94c0b62a7d306663d61bf7a70ea4042"
+        ],
+        "fixedAt": "2026-07-26T22:30:05.452Z",
+        "by": "shakeebshaan",
+        "appCommit": "b6f944cd",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Backend now leaves next_charge_* null for one-off plans (only a genuine recurring Razorpay sub surfaces a charge); deployed + verified live; 390x844 capture proves the charge grid is gone for an active one-off plan; 6 regression tests pass."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -69,7 +91,17 @@
       "imageCommits": [],
       "imagePrivate": false,
       "route": "/settings/subscription",
-      "description": "[bug-hunt] The Subscription screen shows a phantom \"Next charge <date>\" + \"Amount ₹X\" for an ACTIVE plan, implying an auto-renewal charge that never happens — the current billing flow is one-off (non-recurring), and that date is actually the access-EXPIRY date, not a charge date.\n\nWhere: /settings/subscription (src/pages/SubscriptionSettings.tsx charge/amount grid, ~lines 286-320), backed by GET /api/v1/payments/subscription (backend.py PaymentSubscriptionResource.get).\n\nRoot cause: for an active sub the backend returns `next_charge_date = current_period_end` and `next_charge_amount = amount_paid/100` (backend.py:2777,2779). But NYUS currently charges via one-off Razorpay orders with no recurring subscription wired — confirmed by the cancel resource's own comment: \"current flow uses one-off orders, so this is a no-op until recurring is wired\" (backend.py:2971-2973), and create-order is a single order, not a Razorpay subscription. So nothing is charged on current_period_end; it is the day access ENDS.\n\nThe FE then renders those two fields verbatim under a Calendar \"Next charge\" cell and a CreditCard \"Amount\" cell. The FE grid's own comment even assumes the backend leaves these null for an active plan (\"An active plan with both fields null (the backend doesn't expose renewal details yet)…\", SubscriptionSettings.tsx:280-285) — i.e. the frontend was written expecting no next-charge data, but the backend supplies it, so the misleading grid renders.\n\nRepro:\n1. Be on an active one-off paid plan (e.g. Active ₹499, 1 month).\n2. Open /settings/subscription.\nExpected: no implication of an automatic future charge (there is none). The period-end date should read as \"Access until <date>\" / \"Expires\", and no \"Amount ₹X next charge\" should be shown for a non-recurring plan.\nActual: shows \"Next charge: <period_end date>\" and \"Amount: ₹499\", which a user reads as \"I'll be auto-charged ₹499 on that date\" — false for the one-off flow.\n\nFix: until recurring billing is actually wired, either (a) backend returns next_charge_amount/next_charge_date = null for non-recurring one-off subs (only populate them for a real recurring Razorpay subscription), or (b) relabel the FE cell to \"Access until\" / \"Expires\" and drop the amount when the plan is non-recurring. Option (a) is cleanest and matches what the FE already assumes.\n\nNote: correctness/UX-honesty defect; tsc/eslint clean."
+      "description": "[bug-hunt] The Subscription screen shows a phantom \"Next charge <date>\" + \"Amount ₹X\" for an ACTIVE plan, implying an auto-renewal charge that never happens — the current billing flow is one-off (non-recurring), and that date is actually the access-EXPIRY date, not a charge date.\n\nWhere: /settings/subscription (src/pages/SubscriptionSettings.tsx charge/amount grid, ~lines 286-320), backed by GET /api/v1/payments/subscription (backend.py PaymentSubscriptionResource.get).\n\nRoot cause: for an active sub the backend returns `next_charge_date = current_period_end` and `next_charge_amount = amount_paid/100` (backend.py:2777,2779). But NYUS currently charges via one-off Razorpay orders with no recurring subscription wired — confirmed by the cancel resource's own comment: \"current flow uses one-off orders, so this is a no-op until recurring is wired\" (backend.py:2971-2973), and create-order is a single order, not a Razorpay subscription. So nothing is charged on current_period_end; it is the day access ENDS.\n\nThe FE then renders those two fields verbatim under a Calendar \"Next charge\" cell and a CreditCard \"Amount\" cell. The FE grid's own comment even assumes the backend leaves these null for an active plan (\"An active plan with both fields null (the backend doesn't expose renewal details yet)…\", SubscriptionSettings.tsx:280-285) — i.e. the frontend was written expecting no next-charge data, but the backend supplies it, so the misleading grid renders.\n\nRepro:\n1. Be on an active one-off paid plan (e.g. Active ₹499, 1 month).\n2. Open /settings/subscription.\nExpected: no implication of an automatic future charge (there is none). The period-end date should read as \"Access until <date>\" / \"Expires\", and no \"Amount ₹X next charge\" should be shown for a non-recurring plan.\nActual: shows \"Next charge: <period_end date>\" and \"Amount: ₹499\", which a user reads as \"I'll be auto-charged ₹499 on that date\" — false for the one-off flow.\n\nFix: until recurring billing is actually wired, either (a) backend returns next_charge_amount/next_charge_date = null for non-recurring one-off subs (only populate them for a real recurring Razorpay subscription), or (b) relabel the FE cell to \"Access until\" / \"Expires\" and drop the amount when the plan is non-recurring. Option (a) is cleanest and matches what the FE already assumes.\n\nNote: correctness/UX-honesty defect; tsc/eslint clean.",
+      "thread": [
+        {
+          "at": "2026-07-26T22:30:05.452Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: for an active plan the endpoint returned next_charge_date=current_period_end + next_charge_amount=amount_paid/100, implying an auto-renewal charge -- but NYUS bills via one-off Razorpay orders (no recurring subscription wired), so that date is the access-EXPIRY, not a charge. FE rendered a misleading 'Next charge <date>' / 'Amount Rs499' grid. Fix (backend): new build_subscription_view leaves next_charge_amount/date null unless the sub is genuinely recurring (subscription_is_recurring: stripe_subscription_id starts 'sub_'); for one-off plans the FE charge grid hides entirely. A real recurring sub still surfaces its charge (verified). app/services/entitlement.py + backend.py (BE fa5c69a, deployed+healthy). Tests: tests/api/test_payments_subscription_view.py (one-off hides charge, recurring shows charge) 6 pass. Proof: 390x844 capture of an active one-off plan -- no 'Next charge'/'Amount' grid, no phantom renewal -- corroborated by live prod build_subscription_view output (one-off: next_charge_* null; recurring: 499.0).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260726-1b1d",
