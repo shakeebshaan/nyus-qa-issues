@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260726-9f2a",
+      "createdAt": "2026-07-26T21:10:03.179Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "route": "/settings/subscription",
+      "description": "[bug-hunt] After you CANCEL your subscription, the Subscription screen (on reload / revisit) shows \"No active plan\" + a \"Choose a plan\" button and hides \"What's included\" — even though you still have full prepaid access until your period-end date. The screen contradicts the app itself: /auth/me still reports subscription_active=true and every premium route still works.\n\nWhere: /settings/subscription (src/pages/SubscriptionSettings.tsx), backed by GET /api/v1/payments/subscription (backend.py PaymentSubscriptionResource.get, ~line 2746).\n\nRoot cause (backend): PaymentSubscriptionResource.get() queries ONLY `Subscription.query.filter_by(status='active')` (backend.py:2752-2757). But soft-cancel (CancelSubscriptionResource, backend.py:3016) sets `status='canceled'` while LEAVING current_period_end untouched (the user keeps access until the prepaid window ends — documented contract). So the moment a sub is cancelled, this GET no longer finds it and falls into the \"no subscription\" branch (backend.py:2759-2770): returns `status:'none', active:false, cancel_at_period_end:false, next_charge_date:null`.\n\nMeanwhile the AUTHORITATIVE entitlement helper does the right thing: app/services/entitlement.py is_subscription_active / get_active_subscription count a row as active when `current_period_end > now AND status IN ('active','canceled')` (entitlement.py:50,64). /auth/me uses that, so subscription_active stays TRUE after cancel until period-end. The /payments/subscription endpoint diverges from that single source of truth.\n\nRepro:\n1. Be on a real paid subscription (or any Subscription row with current_period_end in the future).\n2. Open /settings/subscription -> tap \"Cancel subscription\" -> confirm. In-session the UI optimistically shows \"Cancelled — keep access until <date>\" (handleCancel setInfo, SubscriptionSettings.tsx:179) — looks correct.\n3. Reload the page (or navigate away and back) so load() re-fetches GET /payments/subscription.\nExpected: screen shows the plan as cancelled/pending-expiry with the orange \"You'll keep access until <date>\" banner and \"What's included\", matching /auth/me (subscription_active=true).\nActual: info={status:'none', active:false, cancel_at_period_end:false}; isSubscribed=false -> planLabel renders \"No active plan\", the \"Choose a plan\" button appears, \"What's included\" is hidden, and the \"access until <date>\" banner never renders — while the user in fact still has premium access.\n\nFix (backend): PaymentSubscriptionResource.get() must mirror entitlement.get_active_subscription — select the most-recent row with `current_period_end > now AND status IN ('active','canceled')`, and set `cancel_at_period_end = (canceled_at is not None)` with the real current_period_end. That restores agreement with /auth/me and honours the soft-cancel \"keep access until period end\" contract on reload.\n\nNote: not a static error (tsc/eslint clean) — a data-contract divergence between two endpoints."
+    },
+    {
+      "id": "i-20260726-4c7e",
+      "createdAt": "2026-07-26T21:10:03.179Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "route": "/settings/subscription",
+      "description": "[bug-hunt] The Subscription screen shows a phantom \"Next charge <date>\" + \"Amount ₹X\" for an ACTIVE plan, implying an auto-renewal charge that never happens — the current billing flow is one-off (non-recurring), and that date is actually the access-EXPIRY date, not a charge date.\n\nWhere: /settings/subscription (src/pages/SubscriptionSettings.tsx charge/amount grid, ~lines 286-320), backed by GET /api/v1/payments/subscription (backend.py PaymentSubscriptionResource.get).\n\nRoot cause: for an active sub the backend returns `next_charge_date = current_period_end` and `next_charge_amount = amount_paid/100` (backend.py:2777,2779). But NYUS currently charges via one-off Razorpay orders with no recurring subscription wired — confirmed by the cancel resource's own comment: \"current flow uses one-off orders, so this is a no-op until recurring is wired\" (backend.py:2971-2973), and create-order is a single order, not a Razorpay subscription. So nothing is charged on current_period_end; it is the day access ENDS.\n\nThe FE then renders those two fields verbatim under a Calendar \"Next charge\" cell and a CreditCard \"Amount\" cell. The FE grid's own comment even assumes the backend leaves these null for an active plan (\"An active plan with both fields null (the backend doesn't expose renewal details yet)…\", SubscriptionSettings.tsx:280-285) — i.e. the frontend was written expecting no next-charge data, but the backend supplies it, so the misleading grid renders.\n\nRepro:\n1. Be on an active one-off paid plan (e.g. Active ₹499, 1 month).\n2. Open /settings/subscription.\nExpected: no implication of an automatic future charge (there is none). The period-end date should read as \"Access until <date>\" / \"Expires\", and no \"Amount ₹X next charge\" should be shown for a non-recurring plan.\nActual: shows \"Next charge: <period_end date>\" and \"Amount: ₹499\", which a user reads as \"I'll be auto-charged ₹499 on that date\" — false for the one-off flow.\n\nFix: until recurring billing is actually wired, either (a) backend returns next_charge_amount/next_charge_date = null for non-recurring one-off subs (only populate them for a real recurring Razorpay subscription), or (b) relabel the FE cell to \"Access until\" / \"Expires\" and drop the amount when the plan is non-recurring. Option (a) is cleanest and matches what the FE already assumes.\n\nNote: correctness/UX-honesty defect; tsc/eslint clean."
+    },
+    {
       "id": "i-20260726-1b1d",
       "createdAt": "2026-07-26T20:27:37.180Z",
       "status": "open",
