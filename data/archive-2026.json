@@ -22892,49 +22892,72 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260720-7d1c",
-      "createdAt": "2026-07-20T00:00:00.000Z",
+      "id": "i-20260722-p1at",
+      "createdAt": "2026-07-22T12:00:00.000Z",
       "status": "resolved",
-      "route": "/nutrition",
-      "description": "[bug-hunt] Un-skipping a meal that was skipped in a PRIOR session gives no immediate visual feedback — the card stays struck-through/grayscale with the SKIPPED badge until a network refetch returns, even though a \"Meal unskipped\" toast fires instantly. Root cause: NutritionMealList.tsx:41 computes isSkipped = skippedMealIds.has(meal.assigned_meal_id) || !!meal.is_skipped. handleUnskipMeal (useNutritionData.tsx:376-382) only removes the id from the local skippedMealIds Set; it does NOT optimistically clear the cached is_skipped. skipMealMutation.onSuccess (line 323-326) merely invalidates [diet-plan]/[dashboard-overview] — no optimistic setQueryData flip. So when a meal was skipped in an earlier session, skippedMealIds is empty on load but the server payload sets meal.is_skipped=true (backend.py:7190/9551 from AssignedMeal.skipped_at); the local removal is overridden by the still-true cached is_skipped, so the OR keeps the card skipped for the whole round-trip. The SKIP direction works (adds to Set -> OR short-circuits true instantly); only UNSKIP is broken. Expected: card visually un-skips on tap (like skip does). Actual: card stays skipped until refetch; toast contradicts card state; reads as a dead tap on slow connections. Repro: (1) open /nutrition with an active diet plan, (2) skip a meal, (3) cold-reload the app so is_skipped comes from the server and skippedMealIds is empty, (4) tap Unskip on that meal -> no immediate change, toast says unskipped, card flips only after the diet-plan refetch. Fix: mirror logMealMutation.onMutate — optimistically setQueryData([diet-plan, today]) to flip the target meal is_skipped=false (with snapshot rollback in onError), OR seed skippedMealIds from server is_skipped so the Set is the single source of truth.",
-      "author": "shakeebshaan",
-      "tags": [
-        "bug-hunt",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
+      "route": "/progress",
+      "description": "[suggestion] Add a Weight Plateau Alert on the Progress page: detect when weight change over the trailing 14 days is under ~0.2% of bodyweight (flat/stalled) despite an active cut/bulk goal, and surface a calm, non-alarming card (\"Your weight has held steady for 2 weeks\") with 2-3 coach-suggested next steps (recheck intake logging accuracy, small calorie adjust, or add a diet-break note) — tap opens Coach Chat pre-seeded with the plateau context. Problem: athletes on a goal (weight_target set) get discouraged or quietly quit when progress stalls and nothing in the app names it; grep confirms goal-eta.ts computes ETA/trend but has no stall/plateau detection, and no card in Progress/Dashboard/WeeklyInsightCard surfaces this — the app has readiness/insight cards for many other signals but silently omits the single most common reason for churn on a weight goal. Evidence: WeeklyInsightCard + goal-eta.ts + DashboardSleepCard style already exist as the card pattern to reuse; no plateau/stall keyword anywhere in src. v1 scope: FE-only — compute over last 14 days of already-logged weight_log entries client-side (reuse goal-eta.ts data), one static card variant (no backend/AI call needed for v1), gate on user having an active weight goal. Effort: small (~1 day, one card component + one calc util, no backend change).",
       "fix": {
-        "description": "Root cause: un-skipping a meal that was skipped in an EARLIER session only cleared a local flag, but the card's skipped look also came from the server copy of the plan — so it stayed struck-through with the SKIPPED badge until a background refresh landed, even though the 'Meal unskipped' toast fired instantly. Fix: the meal now un-skips (and skips) instantly on tap by updating the cached plan directly, with automatic rollback if the save fails. Verified on /nutrition: the card returns to normal the moment you tap Unskip, before any network refetch.",
-        "imagePath": "images/i-20260720-7d1c-fix-r1.png",
+        "description": "SHARPENED — the follow-up I flagged when this shipped is now done. The plateau card itself was live, but its data was thin: /weight/log-data only exposed 7 daily values, so the detector had to borrow its weigh-in COUNT from the monthly day-grid, which made detection conservative near the start of a month (few days of the month = few countable weigh-ins). Fix: /weight/log-data now returns 'recent_weigh_ins' — one row per day that has a REAL weigh-in across a trailing 90-day window, ISO-dated, with no carried-forward values — and the merged weight series treats it as its widest real-log source, so both the count and the two end values now come from actual logs regardless of where you are in the month. Gates are unchanged (weight-LOSS goal, at least 8 weigh-ins spanning at least 10 of the trailing 14 days, net change within 0.2 kg). Screenshot shows the card firing purely off the new field. HONEST NOTE: your QA test account has only 2 real weigh-ins, so that capture was driven with a fixture weight payload (9 flat weigh-ins over 13 days) to exercise the detector — everything else on the screen is the live app. On your own account it will fire from your real logs.",
+        "imagePath": "images/i-20260722-p1at-fix-r1.png",
         "imagePaths": [
-          "images/i-20260720-7d1c-fix-r1.png"
+          "images/i-20260722-p1at-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "277be2a8333de1fc0768c51d4a8b7b5ad69b1e05",
+        "imageCommit": "43e2d51600ea9ae021aac5a602e5d81989e69e41",
         "imageCommits": [
-          "277be2a8333de1fc0768c51d4a8b7b5ad69b1e05"
+          "43e2d51600ea9ae021aac5a602e5d81989e69e41"
         ],
-        "fixedAt": "2026-07-20T07:27:50.749Z",
+        "fixedAt": "2026-07-25T13:37:48.273Z",
         "by": "shakeebshaan",
-        "appCommit": "fb56d1c8",
+        "appCommit": "29596ab8",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 93,
+          "score": 91,
           "bar": 90,
-          "note": "Root-cause fix mirrors the eaten-toggle optimistic cache flip; regression test fails-before/passes-after; full test:unit green; capture shows the card un-skipped while the refetch is still in flight."
+          "note": "Card verified firing end-to-end from the new recent_weigh_ins field alone; live prod payload confirmed (field present, window clamps 999 to 180); 12 shaping + 35 detector/merge tests. Fixture use is disclosed in the description rather than passed off as real data."
         }
       },
       "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "overlap-review"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "needsReview": false,
-      "resolvedAt": "2026-07-26T10:04:44.759Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-22T10:30:57.531Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Auto-suggestion premise is factually inaccurate on its key evidence, so this needs a product call before building. The card claims 'no plateau/stall keyword anywhere in src, no card surfaces this' — but plateau/stall detection already ships in THREE places: (1) WeeklyProgress.tsx:194-207 already emits a client-side weight insight tagged 'plateau' ('Weight moved X against your <goal> goal. Stay patient — trends compound.') whenever weight moves against the goal; (2) WeeklyInsightCard.tsx:9 has a dedicated Plateau pattern (Clock icon, warning color) rendering it; (3) goal-eta.ts:26-49 has explicit stall detection (MIN_RATE_KG_WK floor -> off_track), surfaced on LogWeight.tsx:470-494 as a 'keep logging when stalled' state. So a new /progress plateau card would OVERLAP the existing weekly-insight plateau line. The only genuinely-incremental slice is: a proactive always-on card computing a 14-day TRAILING plateau (vs the current single-week delta), with 2-3 next-step actions + a Coach Chat deep-link pre-seeded with plateau context. Recommend: do you want that second, more prominent plateau surface on Weekly Progress given the weekly-insight one already exists? If yes I'll build the 14-day trailing card + coach deep-link reusing the WeeklyInsightCard design; if the weekly-insight line is sufficient, close this. Not building on a false-premise auto-card without the product decision (idea-loop stale-dupe guard).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-22T15:55:08.597Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "BUILT — in v1.9.48 (228). Plateau detector on Progress (Weekly): fires only for weight-LOSS goals with >=8 weigh-ins across the trailing 14 days spanning >=10 days and net change within ±0.2kg → one calm 'Steady for 2 weeks' card with 'Ask coach to review my plan' prefill CTA. 35 tests incl. boundary cases. Honest limitation: the weight API exposes 7 daily points + weekly anchors, so detection is conservative near month starts — a 30-day daily-history endpoint is the follow-up if you want it sharper.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:37:48.273Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "SHARPENED — the follow-up I flagged when this shipped is now done. The plateau card itself was live, but its data was thin: /weight/log-data only exposed 7 daily values, so the detector had to borrow its weigh-in COUNT from the monthly day-grid, which made detection conservative near the start of a month (few days of the month = few countable weigh-ins). Fix: /weight/log-data now returns 'recent_weigh_ins' — one row per day that has a REAL weigh-in across a trailing 90-day window, ISO-dated, with no carried-forward values — and the merged weight series treats it as its widest real-log source, so both the count and the two end values now come from actual logs regardless of where you are in the month. Gates are unchanged (weight-LOSS goal, at least 8 weigh-ins spanning at least 10 of the trailing 14 days, net change within 0.2 kg). Screenshot shows the card firing purely off the new field. HONEST NOTE: your QA test account has only 2 real weigh-ins, so that capture was driven with a fixture weight payload (9 flat weigh-ins over 13 days) to exercise the detector — everything else on the screen is the live app. On your own account it will fire from your real logs.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "resolvedAt": "2026-07-26T10:05:24.624Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-26T10:04:44.759Z"
+      "archivedAt": "2026-07-26T10:05:24.624Z"
     }
   ]
 }
