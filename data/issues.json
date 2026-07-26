@@ -503,52 +503,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260720-cd73",
-      "createdAt": "2026-07-20T22:41:28.600Z",
-      "status": "fixed",
-      "route": "/activity",
-      "description": "[bug-hunt] Plate Calculator gives a WRONG breakdown + a false \"not loadable\" warning when the user configures a non-canonical set of available plates (via the plate editor / custom plates). Root cause: calcPlates() (src/components/PlateCalculatorSheet.tsx:67-100) loads the bar with a pure GREEDY largest-first algorithm, which is only optimal for the canonical default set [25,20,15,10,5,2.5,1.25]. On any set where greedy can get stuck, it (a) fails to find an EXACT solution that exists and (b) emits a plate list whose real sum contradicts the weight shown in the header/diagram.\n\nEXPECTED: for target 80kg on a 20kg bar with available plates {20,15}, per side = 30kg = 15+15, so 80kg IS exactly loadable and the diagram should show two 15kg plates per side.\nACTUAL (code-proven via node, replicating calcPlates): calcPlates(80,20,[20,15]) => {plates:[20], isExact:false, nearestBelow:80, nearestAbove:110}. Greedy takes one 20 (largest), leaves 10 which nothing fills, and never backtracks to 15+15. So: (1) the amber \"80 kg isn't exactly loadable\" warning fires even though it IS loadable; (2) nearestBelow is reported as 80 while the breakdown it returns is a single 20kg plate/side = only 60kg total — the bar diagram + \"= bar 20kg + per side\" formula render ONE 20kg plate per side under an \"80 kg\" header (plates shown load 60, header says 80). The per-side footer shows 20.00 kg while nearestBelow implies 30/side.\n\nREPRO: live workout -> open a set editor -> tap the Plate Calculator -> Settings2 (configure available plates) -> deselect everything except 20 and 15 (or add a custom plate that makes the set non-canonical) -> target 80kg. Shows false \"not loadable\" + a 20kg-only breakdown that does not match 80kg. (Default plate set is greedy-safe, so this only bites edited/custom configs — the plate editor explicitly supports both, i-20260702-plc8.)\n\nFIX: replace greedy with an exhaustive/DP fill over the available plate multiset (or verify greedy reached perSide and fall back to a search when it did not), so the exact solution is found and nearestBelow/nearestAbove + the rendered plates always agree with the displayed weight.",
-      "author": "shakeebshaan",
-      "tags": [
-        "gate-blocked",
-        "plate-calc",
-        "verified"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": {
-        "description": "The plate calculator used a shortcut that only works for the standard plate set, so when you customised your available plates (e.g. only 20kg and 15kg) it showed a wrong breakdown plus a false 'not exactly loadable' warning - for 80kg it drew a single 20kg plate under an '80kg' header. It now finds the real solution, so 80kg correctly shows two 15kg plates per side and every number agrees. Proven by re-rendering the calculator with the exact repro config.",
-        "imagePath": "images/i-20260720-cd73-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260720-cd73-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "c69bab769a78707e1114bc04fda5934f9695179c",
-        "imageCommits": [
-          "c69bab769a78707e1114bc04fda5934f9695179c"
-        ],
-        "fixedAt": "2026-07-20T23:39:01.584Z",
-        "by": "shakeebshaan",
-        "appCommit": "214d4cdd",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Root-cause DP fill replaces broken greedy; 7 existing + 4 new regression tests pass, full suite green, adversarial review clean, real-component screenshot confirms exact 15+15 and no false warning."
-        }
-      },
-      "history": [],
-      "needsReview": true,
-      "reviewedBy": "shakeebshaan",
-      "reviewReason": "FIXED in app HEAD 214d4cdd. Root cause: calcPlates() (PlateCalculatorSheet.tsx) used a pure greedy largest-first fill; on non-canonical/custom plate sets it stalls and returns a wrong breakdown + a false 'not loadable' warning (e.g. 80kg on a 20kg bar with only {20,15} plates: greedy grabs one 20 and stops at 10/side, missing the exact 15+15). Fix: replaced greedy with an exact DP over reachable per-side sums in gcd units (backtracks; greedy kept only as a pathological-set fallback). VERIFIED: test/plate-calculator.test.ts 11/11 green, incl the exact regression 'finds the exact 15+15 fill that greedy misses on {20,15}' and 'reports reachable nearest below/above when genuinely unloadable'. Canonical default output unchanged. Only blocker to auto-resolve is the board testGate ('npm run test:unit' full suite) which OOMs headless on this 8GB box (see 38c4 note) — the fix itself is green.",
-      "reviewedAt": "2026-07-20T23:47:58.736Z"
-    },
-    {
       "id": "i-20260720-38c4",
       "createdAt": "2026-07-20T22:41:28.600Z",
       "status": "fixed",
