@@ -22892,49 +22892,73 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260721-47b7",
-      "createdAt": "2026-07-21T16:36:51.304Z",
+      "id": "i-20260721-9m2q",
+      "createdAt": "2026-07-21T07:38:43.409Z",
       "status": "resolved",
-      "route": "/coach (any logging block: meal/water/weight/workout/measurement/activity)",
-      "description": "[bug-hunt] Offline log queue never flushes a log that TIMED OUT on a still-live connection, so it stalls indefinitely despite the \"will sync when you reconnect\" promise.\n\nWHERE: src/hooks/useBlockSubmit.ts (offline catch path) + src/lib/offline-queue.ts (flushQueue triggers).\n\nWHAT: useBlockSubmit catches a failed log submit and, when isNoResponseError(err) is true, enqueues it to the IndexedDB offline queue and shows \"Saved offline — Your log will sync when you reconnect.\" isNoResponseError (api-client.ts:105) is TRUE for client-side timeouts (ECONNABORTED / \"timeout of 45000ms exceeded\"), during which navigator.onLine stays TRUE — the code comment (useBlockSubmit.ts:187-196) explicitly says timeouts must be queued so \"a log on a slow but live connection\" isn't dropped. BUT the offline path only calls enqueue(); it never kicks a flush. flushQueue (offline-queue.ts:213) is only ever invoked by: (a) the one-time navigator.onLine check inside registerOnlineFlush at module load — runs once at app boot, BEFORE the entry exists; (b) the window 'online' event — requires an offline->online transition; (c) Capacitor Network networkStatusChange connected — requires a radio transition; (d) the internal exponential-backoff retry timer — armed ONLY when a flush PASS had a transient failure, and no pass ever runs for the just-enqueued entry. On a live-but-slow connection the device never fires any online/reconnect transition, so the queued entry sits in IndexedDB (nyus_offline_queue) until the app is fully restarted (re-import re-runs the at-boot flush) or a genuine connectivity blip occurs.\n\nEXPECTED: a timed-out log auto-syncs once the flaky request succeeds (exactly the case the timeout-queueing was added for).\nACTUAL: no flush is scheduled after enqueue; peekCount() stays >=1 and the log never reaches the server on the same live connection.\n\nREPRO:\n1. Log in; open coach chat and submit any logging block (e.g. water/meal/weight), OR trigger a block submit.\n2. Throttle the network so the POST times out (>45s) while staying online (DevTools throttle / tarpit) — navigator.onLine remains true.\n3. Submit -> toast \"Saved offline… will sync when you reconnect.\" Entry lands in IndexedDB DB nyus_offline_queue / store pending_logs.\n4. Restore normal speed WITHOUT toggling offline->online. Observe the entry is never re-sent (peekCount stays >=1, no server record) until an app restart or a real offline->online toggle.\n\nCONTRAST (proves it's a fixable gap, not inherent): the parallel coach-chat message-outbox (message-outbox.ts + useChatOutbox.ts) does NOT stall — it replays on socket reconnect AND on every chat mount, both recurring triggers.\n\nFIX: after enqueue() in useBlockSubmit's offline path, kick a flush (export a kickFlush()/reuse the registered sender, or call flushQueue(sender)); OR add an app-resume / visibilitychange / periodic flush. flushQueue already schedules exponential-backoff retries once a pass runs, so a single post-enqueue kick is enough.",
+      "route": "/nutrition",
+      "description": "[suggestion] Add a Daily Micronutrient Summary card on the Nutrition page (iron, calcium, vitamin D, B12, vitamin C vs RDA). Problem: NYUS already computes total_iron_mg/total_calcium_mg/total_vitamin_d_mcg/total_vitamin_b12_mcg/total_vitamin_c_mg per meal (src/types/api.ts) but today these ONLY render on RecipeDetail for a single recipe -- there is no daily or weekly aggregate anywhere, so users get zero visibility into deficiency-relevant nutrients. Evidence: grep shows these fields used in exactly one screen (RecipeDetail.tsx); NYUS is India-focused with a heavy vegetarian user base where iron/B12/vitamin D deficiency is common and dietitian-relevant -- this is a real differentiator vs generic calorie-counter apps (Cronometer-style micronutrient tracking, MyFitnessPal does not do this well either). Proposed v1: a collapsible card below the existing macros section on Nutrition.tsx summing logged meals for the day (total_iron_mg/total_calcium_mg/total_vitamin_d_mcg/total_vitamin_b12_mcg/total_vitamin_c_mg), shown as simple bar-to-RDA (use standard ICMR RDA constants), no new backend endpoint needed since the per-meal fields already exist -- just sum client-side from already-fetched diary data. Effort: ~1-2 days FE-only for v1 (daily view); weekly aggregate as v2.",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommit": null,
+      "imageCommits": [],
+      "imagePrivate": false,
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
+        "suggestion",
         "auto"
       ],
       "fix": {
-        "description": "Root cause: a log that timed out on a slow-but-live connection was saved to the offline queue but never re-sent — the app only retries the queue on an offline->online reconnect, which never happens while you stay online, so the log sat in local storage until an app restart. Fix: the app now immediately retries the queue right after saving such a log, and safely handles a second log saved during that retry, so a timed-out log syncs on the same connection (a duplicate send is blocked by the idempotency key). Verified with new fail-before/pass-after unit tests in both suites plus a full green test run.",
-        "imagePath": "images/i-20260721-47b7-fix-r1.png",
+        "description": "VERIFIED SHIPPED — captured live with real data, no fixtures. The Nutrition page carries the daily micronutrient summary you asked for: a 'MICRONUTRIENTS TODAY' section under the macros that sums the day's logged meals and shows each nutrient against its RDA with a progress bar and a percentage — iron 23%, calcium 9%, vitamin D 14%, B12 45%, vitamin C 10%, plus zinc, magnesium, potassium, folate and sodium (sodium is correctly treated as a ceiling to stay under, not a target to reach). It stays collapsed behind 'View vitamins & minerals' so the page keeps its calm default, and it only appears once you have eaten something — an all-zero micro panel would be noise. The suggestion's premise that these fields only rendered on a single recipe screen was stale; this pass also typed the API contract and added regression tests so it cannot silently break. If you want it more prominent — expanded by default, or lifted onto the dashboard — say which and I will move it.",
+        "imagePath": "images/i-20260721-9m2q-fix-r1.png",
         "imagePaths": [
-          "images/i-20260721-47b7-fix-r1.png"
+          "images/i-20260721-9m2q-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "9d20eda6c387226836508ace04cc4babc8cefb70",
+        "imageCommit": "d7b51630acfb891a282c36e2a0840a33cbcf8c7f",
         "imageCommits": [
-          "9d20eda6c387226836508ace04cc4babc8cefb70"
+          "d7b51630acfb891a282c36e2a0840a33cbcf8c7f"
         ],
-        "fixedAt": "2026-07-21T17:29:32.258Z",
+        "fixedAt": "2026-07-25T13:49:06.816Z",
         "by": "shakeebshaan",
-        "appCommit": "757db122",
+        "appCommit": "64eb2c55",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 94,
+          "score": 92,
           "bar": 90,
-          "note": "Exact root cause fixed surgically (kickFlush after enqueue + race-safe coalescing re-run); empirically confirmed fail-before (4 new tests RED without fix) / pass-after (55 green); full test:unit gate green; no regression (idempotency-keyed re-send)."
+          "note": "Fully live authenticated capture (one real meal logged on the QA account, section expanded) showing per-micro RDA bars and percentages — no fixture anywhere in this one."
         }
       },
       "history": [],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
       "needsReview": false,
-      "resolvedAt": "2026-07-26T10:04:07.242Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-21T08:10:13.178Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Already shipped, not a gap. The Nutrition page already renders a Daily Micronutrient Summary: Nutrition.tsx:538 mounts NutritionMacrosSection, whose 'Micronutrient Summary' block (NutritionMacrosSection.tsx:75-87) sums the day's logged meals for iron/calcium/vitamin D/B12/vitamin C (+ zinc/magnesium/potassium/folate/sodium) and renders MicroTargetCard as bar-to-RDA with Good/Low/Deficient status (MicroTargetCard.tsx:9-25,52-54), gated on meals eaten. The suggestion's premise that these fields render only on RecipeDetail is stale. Recommend closing as already-implemented (v2 weekly aggregate could still be a genuine follow-up if desired).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-22T15:55:04.848Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "VERIFIED ALREADY BUILT + hardened in v1.9.48 (228). The Nutrition page already had the daily micronutrient summary (collapsed 'View vitamins & minerals' under the macros once you've eaten something — per-micro RDA progress bars, sodium correctly treated as a ceiling not a deficiency). This pass typed the API contract and added 4 regression tests so it can't silently break. If you expected it somewhere more prominent, say where and I'll move it.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-07-25T13:49:06.816Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "VERIFIED SHIPPED — captured live with real data, no fixtures. The Nutrition page carries the daily micronutrient summary you asked for: a 'MICRONUTRIENTS TODAY' section under the macros that sums the day's logged meals and shows each nutrient against its RDA with a progress bar and a percentage — iron 23%, calcium 9%, vitamin D 14%, B12 45%, vitamin C 10%, plus zinc, magnesium, potassium, folate and sodium (sodium is correctly treated as a ceiling to stay under, not a target to reach). It stays collapsed behind 'View vitamins & minerals' so the page keeps its calm default, and it only appears once you have eaten something — an all-zero micro panel would be noise. The suggestion's premise that these fields only rendered on a single recipe screen was stale; this pass also typed the API contract and added regression tests so it cannot silently break. If you want it more prominent — expanded by default, or lifted onto the dashboard — say which and I will move it.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "resolvedAt": "2026-07-26T10:04:18.841Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-26T10:04:07.242Z"
+      "archivedAt": "2026-07-26T10:04:18.841Z"
     }
   ]
 }
