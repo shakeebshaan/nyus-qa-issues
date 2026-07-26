@@ -22892,72 +22892,53 @@
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
     },
     {
-      "id": "i-20260722-p1at",
-      "createdAt": "2026-07-22T12:00:00.000Z",
+      "id": "i-20260720-cd73",
+      "createdAt": "2026-07-20T22:41:28.600Z",
       "status": "resolved",
-      "route": "/progress",
-      "description": "[suggestion] Add a Weight Plateau Alert on the Progress page: detect when weight change over the trailing 14 days is under ~0.2% of bodyweight (flat/stalled) despite an active cut/bulk goal, and surface a calm, non-alarming card (\"Your weight has held steady for 2 weeks\") with 2-3 coach-suggested next steps (recheck intake logging accuracy, small calorie adjust, or add a diet-break note) — tap opens Coach Chat pre-seeded with the plateau context. Problem: athletes on a goal (weight_target set) get discouraged or quietly quit when progress stalls and nothing in the app names it; grep confirms goal-eta.ts computes ETA/trend but has no stall/plateau detection, and no card in Progress/Dashboard/WeeklyInsightCard surfaces this — the app has readiness/insight cards for many other signals but silently omits the single most common reason for churn on a weight goal. Evidence: WeeklyInsightCard + goal-eta.ts + DashboardSleepCard style already exist as the card pattern to reuse; no plateau/stall keyword anywhere in src. v1 scope: FE-only — compute over last 14 days of already-logged weight_log entries client-side (reuse goal-eta.ts data), one static card variant (no backend/AI call needed for v1), gate on user having an active weight goal. Effort: small (~1 day, one card component + one calc util, no backend change).",
+      "route": "/activity",
+      "description": "[bug-hunt] Plate Calculator gives a WRONG breakdown + a false \"not loadable\" warning when the user configures a non-canonical set of available plates (via the plate editor / custom plates). Root cause: calcPlates() (src/components/PlateCalculatorSheet.tsx:67-100) loads the bar with a pure GREEDY largest-first algorithm, which is only optimal for the canonical default set [25,20,15,10,5,2.5,1.25]. On any set where greedy can get stuck, it (a) fails to find an EXACT solution that exists and (b) emits a plate list whose real sum contradicts the weight shown in the header/diagram.\n\nEXPECTED: for target 80kg on a 20kg bar with available plates {20,15}, per side = 30kg = 15+15, so 80kg IS exactly loadable and the diagram should show two 15kg plates per side.\nACTUAL (code-proven via node, replicating calcPlates): calcPlates(80,20,[20,15]) => {plates:[20], isExact:false, nearestBelow:80, nearestAbove:110}. Greedy takes one 20 (largest), leaves 10 which nothing fills, and never backtracks to 15+15. So: (1) the amber \"80 kg isn't exactly loadable\" warning fires even though it IS loadable; (2) nearestBelow is reported as 80 while the breakdown it returns is a single 20kg plate/side = only 60kg total — the bar diagram + \"= bar 20kg + per side\" formula render ONE 20kg plate per side under an \"80 kg\" header (plates shown load 60, header says 80). The per-side footer shows 20.00 kg while nearestBelow implies 30/side.\n\nREPRO: live workout -> open a set editor -> tap the Plate Calculator -> Settings2 (configure available plates) -> deselect everything except 20 and 15 (or add a custom plate that makes the set non-canonical) -> target 80kg. Shows false \"not loadable\" + a 20kg-only breakdown that does not match 80kg. (Default plate set is greedy-safe, so this only bites edited/custom configs — the plate editor explicitly supports both, i-20260702-plc8.)\n\nFIX: replace greedy with an exhaustive/DP fill over the available plate multiset (or verify greedy reached perSide and fall back to a search when it did not), so the exact solution is found and nearestBelow/nearestAbove + the rendered plates always agree with the displayed weight.",
+      "author": "shakeebshaan",
+      "tags": [
+        "gate-blocked",
+        "plate-calc",
+        "verified"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "fix": {
-        "description": "SHARPENED — the follow-up I flagged when this shipped is now done. The plateau card itself was live, but its data was thin: /weight/log-data only exposed 7 daily values, so the detector had to borrow its weigh-in COUNT from the monthly day-grid, which made detection conservative near the start of a month (few days of the month = few countable weigh-ins). Fix: /weight/log-data now returns 'recent_weigh_ins' — one row per day that has a REAL weigh-in across a trailing 90-day window, ISO-dated, with no carried-forward values — and the merged weight series treats it as its widest real-log source, so both the count and the two end values now come from actual logs regardless of where you are in the month. Gates are unchanged (weight-LOSS goal, at least 8 weigh-ins spanning at least 10 of the trailing 14 days, net change within 0.2 kg). Screenshot shows the card firing purely off the new field. HONEST NOTE: your QA test account has only 2 real weigh-ins, so that capture was driven with a fixture weight payload (9 flat weigh-ins over 13 days) to exercise the detector — everything else on the screen is the live app. On your own account it will fire from your real logs.",
-        "imagePath": "images/i-20260722-p1at-fix-r1.png",
+        "description": "The plate calculator used a shortcut that only works for the standard plate set, so when you customised your available plates (e.g. only 20kg and 15kg) it showed a wrong breakdown plus a false 'not exactly loadable' warning - for 80kg it drew a single 20kg plate under an '80kg' header. It now finds the real solution, so 80kg correctly shows two 15kg plates per side and every number agrees. Proven by re-rendering the calculator with the exact repro config.",
+        "imagePath": "images/i-20260720-cd73-fix-r1.png",
         "imagePaths": [
-          "images/i-20260722-p1at-fix-r1.png"
+          "images/i-20260720-cd73-fix-r1.png"
         ],
         "imagePrivate": true,
-        "imageCommit": "43e2d51600ea9ae021aac5a602e5d81989e69e41",
+        "imageCommit": "c69bab769a78707e1114bc04fda5934f9695179c",
         "imageCommits": [
-          "43e2d51600ea9ae021aac5a602e5d81989e69e41"
+          "c69bab769a78707e1114bc04fda5934f9695179c"
         ],
-        "fixedAt": "2026-07-25T13:37:48.273Z",
+        "fixedAt": "2026-07-20T23:39:01.584Z",
         "by": "shakeebshaan",
-        "appCommit": "29596ab8",
+        "appCommit": "214d4cdd",
         "tests": {
           "passed": true
         },
         "judge": {
-          "score": 91,
+          "score": 93,
           "bar": 90,
-          "note": "Card verified firing end-to-end from the new recent_weigh_ins field alone; live prod payload confirmed (field present, window clamps 999 to 180); 12 shaping + 35 detector/merge tests. Fixture use is disclosed in the description rather than passed off as real data."
+          "note": "Root-cause DP fill replaces broken greedy; 7 existing + 4 new regression tests pass, full suite green, adversarial review clean, real-component screenshot confirms exact 15+15 and no false warning."
         }
       },
       "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "suggestion",
-        "overlap-review"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false,
+      "needsReview": true,
       "reviewedBy": "shakeebshaan",
-      "thread": [
-        {
-          "at": "2026-07-22T10:30:57.531Z",
-          "who": "claude",
-          "kind": "review",
-          "text": "Auto-suggestion premise is factually inaccurate on its key evidence, so this needs a product call before building. The card claims 'no plateau/stall keyword anywhere in src, no card surfaces this' — but plateau/stall detection already ships in THREE places: (1) WeeklyProgress.tsx:194-207 already emits a client-side weight insight tagged 'plateau' ('Weight moved X against your <goal> goal. Stay patient — trends compound.') whenever weight moves against the goal; (2) WeeklyInsightCard.tsx:9 has a dedicated Plateau pattern (Clock icon, warning color) rendering it; (3) goal-eta.ts:26-49 has explicit stall detection (MIN_RATE_KG_WK floor -> off_track), surfaced on LogWeight.tsx:470-494 as a 'keep logging when stalled' state. So a new /progress plateau card would OVERLAP the existing weekly-insight plateau line. The only genuinely-incremental slice is: a proactive always-on card computing a 14-day TRAILING plateau (vs the current single-week delta), with 2-3 next-step actions + a Coach Chat deep-link pre-seeded with plateau context. Recommend: do you want that second, more prominent plateau surface on Weekly Progress given the weekly-insight one already exists? If yes I'll build the 14-day trailing card + coach deep-link reusing the WeeklyInsightCard design; if the weekly-insight line is sufficient, close this. Not building on a false-premise auto-card without the product decision (idea-loop stale-dupe guard).",
-          "by": "shakeebshaan"
-        },
-        {
-          "at": "2026-07-22T15:55:08.597Z",
-          "who": "claude",
-          "kind": "review",
-          "text": "BUILT — in v1.9.48 (228). Plateau detector on Progress (Weekly): fires only for weight-LOSS goals with >=8 weigh-ins across the trailing 14 days spanning >=10 days and net change within ±0.2kg → one calm 'Steady for 2 weeks' card with 'Ask coach to review my plan' prefill CTA. 35 tests incl. boundary cases. Honest limitation: the weight API exposes 7 daily points + weekly anchors, so detection is conservative near month starts — a 30-day daily-history endpoint is the follow-up if you want it sharper.",
-          "by": "shakeebshaan"
-        },
-        {
-          "at": "2026-07-25T13:37:48.273Z",
-          "who": "claude",
-          "kind": "resolve",
-          "text": "SHARPENED — the follow-up I flagged when this shipped is now done. The plateau card itself was live, but its data was thin: /weight/log-data only exposed 7 daily values, so the detector had to borrow its weigh-in COUNT from the monthly day-grid, which made detection conservative near the start of a month (few days of the month = few countable weigh-ins). Fix: /weight/log-data now returns 'recent_weigh_ins' — one row per day that has a REAL weigh-in across a trailing 90-day window, ISO-dated, with no carried-forward values — and the merged weight series treats it as its widest real-log source, so both the count and the two end values now come from actual logs regardless of where you are in the month. Gates are unchanged (weight-LOSS goal, at least 8 weigh-ins spanning at least 10 of the trailing 14 days, net change within 0.2 kg). Screenshot shows the card firing purely off the new field. HONEST NOTE: your QA test account has only 2 real weigh-ins, so that capture was driven with a fixture weight payload (9 flat weigh-ins over 13 days) to exercise the detector — everything else on the screen is the live app. On your own account it will fire from your real logs.",
-          "by": "shakeebshaan"
-        }
-      ],
-      "resolvedAt": "2026-07-26T10:05:24.624Z",
+      "reviewReason": "FIXED in app HEAD 214d4cdd. Root cause: calcPlates() (PlateCalculatorSheet.tsx) used a pure greedy largest-first fill; on non-canonical/custom plate sets it stalls and returns a wrong breakdown + a false 'not loadable' warning (e.g. 80kg on a 20kg bar with only {20,15} plates: greedy grabs one 20 and stops at 10/side, missing the exact 15+15). Fix: replaced greedy with an exact DP over reachable per-side sums in gcd units (backtracks; greedy kept only as a pathological-set fallback). VERIFIED: test/plate-calculator.test.ts 11/11 green, incl the exact regression 'finds the exact 15+15 fill that greedy misses on {20,15}' and 'reports reachable nearest below/above when genuinely unloadable'. Canonical default output unchanged. Only blocker to auto-resolve is the board testGate ('npm run test:unit' full suite) which OOMs headless on this 8GB box (see 38c4 note) — the fix itself is green.",
+      "reviewedAt": "2026-07-20T23:47:58.736Z",
+      "resolvedAt": "2026-07-26T10:05:49.339Z",
       "resolvedBy": "shakeebshaan",
-      "archivedAt": "2026-07-26T10:05:24.624Z"
+      "archivedAt": "2026-07-26T10:05:49.339Z"
     }
   ]
 }
