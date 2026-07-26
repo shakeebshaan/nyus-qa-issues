@@ -2,12 +2,34 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260726-1b1d",
+      "createdAt": "2026-07-26T20:27:37.180Z",
+      "status": "open",
+      "route": null,
+      "description": "[bug-hunt] Workout plan builder — the per-day \"Toughness\" slider inflates SWAPPED-IN / manually-added exercises non-monotonically, ratcheting their set count up to the cap (6) even when you LOWER the toughness.\n\nWhere: onboarding custom workout builder (Screen9b_WorkoutCustomize) — the 5-segment Recovery/Easy/Moderate/Hard/Max radiogroup rendered by src/components/workout-builder/DayCard.tsx (visible only when DayCardPlanContext is provided, i.e. the onboarding \"always-custom\" flow workout step).\n\nRoot cause (src/lib/workout-toughness.ts applyToughness + DayCard.tsx handleNotchChange):\n- On the FIRST slider move, DayCard snapshots the day exercises into baselineRef (DayCard.tsx:134-135). All scaling is meant to derive from that fixed baseline so re-applying any notch is idempotent (never compounds).\n- applyToughness (workout-toughness.ts:99-110) looks up each row reference sets/rest in `baseline` by exercise_id+name, else by name, ELSE falls back to `ex` (the row CURRENT, already-scaled values).\n- A row SWAPPED in (DayCard.selectAlternative) or added via the library/custom paths AFTER the baseline was captured is NOT in baseline and is NOT appended to it (only the notch-5 auto-extras are appended, DayCard.tsx:152). So every later slider move scales that row from its own current (already-scaled) sets -> compounding.\n\nConcrete repro (numbers): day starts A(3 sets), B(3 sets), notch=Moderate(3).\n1. Tap Hard(4): baseline captured = [A:3,B:3]; A->4, B->4.\n2. Swap B -> X (X enters at its own default sets, say 3).\n3. Tap Max(5): X not in baseline -> ref = X current (3) -> isolation +2 -> X:5.\n4. Tap Hard(4): ref = X current (5) -> +1 -> X:6.  <- lowering toughness (5->4) INCREASED X from 5 to 6.\n5. Further toggles keep clamping X at the SET_CAP of 6 regardless of notch.\n(Exercise A, which IS in baseline, scales correctly/idempotently the whole time — only the swapped/added row misbehaves.)\n\nExpected: the toughness slider is monotonic — raising toughness never lowers sets and lowering it never raises sets, for every row including swapped/added ones; re-applying the same notch is idempotent.\nActual: swapped-in / manually-added rows scale from their own already-scaled values, so their set count compounds upward and pins to 6, and moving the slider DOWN can push their sets UP. The saved plan then carries inflated set volume for those exercises.\n\nFix: when a row is swapped in or manually added while a baseline is already captured, append it to baselineRef (at its entry sets/rest) — mirror what the notch-5 extras path already does at DayCard.tsx:152 — so applyToughness always has a stable reference and the `?? ex` fallback stops being hit for user-added rows. (selectAlternative, ExerciseLibraryDrawer onSelectItem, and onAddCustom are the three insertion points that must update baselineRef.)\n\ntsc --noEmit exit 0, eslint 0 errors — this is a runtime logic defect, not a static one.",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260726-8e2d",
       "createdAt": "2026-07-26T00:00:00.000Z",
       "status": "open",
       "route": null,
       "description": "[press] Press kit: §4 Key facts refreshed (blog 1,812→1,815; stale Google Play copy 59→61 files, 4th consecutive regression; deploy re-verified still billing-blocked, unchanged since 2026-07-19; noted zero new commits 2026-07-22→2026-07-26). Article drafted: The Thali Your Fitness App Can't See (target: The American Bazaar, 812 words). Escalated: 1 (American Bazaar pitch).",
-      "tags": ["press", "auto"],
+      "tags": [
+        "press",
+        "auto"
+      ],
       "author": "shakeebshaan",
       "fix": null,
       "history": [],
