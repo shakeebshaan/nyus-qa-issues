@@ -265,26 +265,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260722-e4f7",
-      "createdAt": "2026-07-22T10:35:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: Misal Pav Calories: Where the Fat Actually Hides — https://nyus.in/blog/misal-pav-calories-weight-loss-india.html. Ideas added: 2. Escalated: 0. NOTE: URL not yet live (WebFetch confirms 404) — GH Actions deploy CONFIRMED billing-blocked (gh run list: 5 consecutive failed runs since 2026-07-19, ~4s each, escalated 2026-07-22T10:30Z with root-cause detail); IndexNow submission deferred pending live sync.",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "needsReview": false
-    },
-    {
       "id": "i-20260722-b8d2",
       "createdAt": "2026-07-22T09:08:10.145Z",
       "status": "fixed",
@@ -325,24 +305,6 @@
       "imageCommits": [],
       "imagePrivate": false,
       "needsReview": false
-    },
-    {
-      "id": "i-20260722-c9f1",
-      "createdAt": "2026-07-22T09:00:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: Chai + Biscuit Calories: India's Invisible Daily Leak — https://nyus.in/blog/chai-biscuit-calories-invisible-leak-india.html. Ideas added: 2. Escalated: 0. NOTE: URL not yet live (WebFetch confirms 404) — GH Actions deploy to nyus.in still failing (billing-blocked since 2026-07-19, prior escalation stands), so IndexNow submission deferred pending live sync.",
-      "fix": null,
-      "history": [],
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "imagePath": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false
     },
     {
       "id": "i-20260722-a4d2",
@@ -513,26 +475,6 @@
       "needsReview": false
     },
     {
-      "id": "i-20260722-6d31",
-      "createdAt": "2026-07-22T09:15:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[press] Press kit: Key facts & numbers refreshed (blog count corrected 1808->1812 via full recursive recount, stale-Play-copy regression 55->59 files flagged, deploy failure root cause corrected from ENAMETOOLONG code fix to GitHub Actions billing/spending-limit lockout per gh run view annotation). Article drafted: The PR You Didn't Log Still Counts (target: Founding Fuel, 780 words). Escalated: 1 (route unverified, held).",
-      "author": "shakeebshaan",
-      "tags": [
-        "press",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": false
-    },
-    {
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -573,60 +515,6 @@
       "createdAt": "2026-07-21T21:54:46.892Z",
       "route": "/measurements",
       "description": "[bug-hunt] Progress Photos always stamps the upload moment as the photo date (taken_at = new Date()), discarding the picked image's real date — so imported/gallery photos collapse to \"today\", corrupting the timeline order and the Compare Before/After pairing.\n\nWHERE: src/components/measurements/ProgressPhotos.tsx:141-158 (handlePickPhoto), line 150 `await progressPhotosService.upload(compressed, new Date())`. The file input is `<input type=\"file\" accept=\"image/*\" capture=\"environment\">` (lines 210-218).\n\nWHAT: The upload service signature is `upload(file, takenAt?: Date)` and the backend (backend.py ProgressPhotoResource.post lines 10264-10272) honors a `taken_at` form field; the list endpoint orders strictly by `ProgressPhoto.taken_at.desc()` (line 10301) and the whole UI (grid date label, Compare left/right = oldest/newest, weight-change delta) is driven by taken_at. But handlePickPhoto passes `new Date()` unconditionally — it never reads `file.lastModified` (available on the picked File) nor lets the user set a date. On iOS/iPadOS (a shipping Capacitor target) the `capture` attribute is only a hint: the OS still offers \"Photo Library\", so a user can pick an EXISTING progress shot from weeks ago; on desktop/web the picker is always the file system. Every such import is dated NOW.\n\nEXPECTED: an imported photo is dated by its real capture/modified date (e.g. `new Date(file.lastModified)`), or the user can choose the date; the timeline stays chronological.\nACTUAL: all imported photos are stamped with the upload instant, so several old photos added in one session share \"today\", jump to the top of the newest-first list, and the Compare view pairs the wrong two shots (and the weight-change delta uses whatever weight is logged NOW, since the backend attaches the latest WeightLog at upload — lines 10250-10262).\n\nREPRO:\n1. Log in, open /measurements, scroll to Progress Photos.\n2. Tap \"Add Photo\" and (on iOS or web) choose an EXISTING photo from the library/disk taken on a prior date.\n3. Observe the new entry's date label = today (not the photo's date), and it sorts as the newest photo.\n4. Repeat with a second older photo → both show today's date and the Compare \"Before/After\" ordering no longer reflects real chronology.\n\nFIX: default taken_at to the file's own date — `progressPhotosService.upload(compressed, new Date(file.lastModified || Date.now()))` — capturing `file.lastModified` before `e.target.value = \"\"`; optionally expose a date picker for manual correction. (Backend already accepts the taken_at field, so this is a one-line FE change.)"
-    },
-    {
-      "id": "i-20260721-8f2c",
-      "createdAt": "2026-07-21T18:10:00.000Z",
-      "status": "open",
-      "description": "[content] Published: Litti Chokha vs Chole Bhature: The Better Protein Plate — https://nyus.in/blog/litti-chokha-vs-chole-bhature-weight-loss-india.html. Ideas added: 2. Escalated: 0.",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "route": null,
-      "fix": null,
-      "history": [],
-      "imagePath": null,
-      "imagePaths": [],
-      "imagePrivate": false,
-      "imageCommit": null
-    },
-    {
-      "id": "i-20260721-b31f",
-      "createdAt": "2026-07-21T12:30:00Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: Dhokla vs Khaman Calories: The Steamed Snack That's Actually Diet-Friendly — https://nyus.in/blog/dhokla-vs-khaman-calories-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "fix": null,
-      "history": [],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imagePrivate": false
-    },
-    {
-      "id": "i-20260721-9d4e",
-      "createdAt": "2026-07-21T11:00:00Z",
-      "status": "open",
-      "route": null,
-      "description": "[discovery] Outlets added: 3. Pitch-ready: New India Abroad (newindiaabroad.com Community Stories, newsroom@newindiaabroad.com). Escalated: 1. Also added Healthcare Radius (route unverified, stale editor contact) and Founding Fuel (route unverified, support@ not confirmed editorial) as [researched] only. Kit now 83 outlets.",
-      "author": "shakeebshaan",
-      "tags": [
-        "discovery",
-        "auto"
-      ],
-      "fix": null,
-      "history": [],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imagePrivate": false
     },
     {
       "id": "i-20260721-7278",
@@ -770,106 +658,6 @@
       "reviewedAt": "2026-07-20T23:47:45.990Z"
     },
     {
-      "id": "i-20260720-r7q3",
-      "createdAt": "2026-07-20T21:10:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: Rasgulla vs Gulab Jamun Calories — https://nyus.in/blog/rasgulla-vs-gulab-jamun-calories-india.html. Ideas added: 2. Escalated: 0. Note: live URL not yet verified — GH Actions deploy billing-blocked since 2026-07-19; git-only until deploy pipeline fixed, matches all recent blog posts.",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260720-f2a9",
-      "createdAt": "2026-07-20T20:40:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[press] Press kit: Key facts & numbers refreshed (blog count 1808/90 guides, stale-Play-copy regression 52->55 files flagged, deploy remediation attempt confirmed still failing). Article drafted: My Startup Journey: Why We Charge Rs499/Month Instead of Selling Your Data (target: Silicon India StartupCity, 796 words). Escalated: 1.",
-      "author": "shakeebshaan",
-      "tags": [
-        "press",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260720-b6e1",
-      "createdAt": "2026-07-20T20:26:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: Chole Bhature Calories: The Honest Two-Part Breakdown — https://nyus.in/blog/chole-bhature-calories-weight-loss-india.html. Ideas added: 2. Escalated: 0. Note: live URL returned 404 on verify (existing pattern — GH Actions deploy billing-blocked since 2026-07-19; git-only until deploy pipeline fixed, matches all recent blog posts).",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260720-7f2a",
-      "createdAt": "2026-07-20T18:50:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[discovery] Outlets added: 3. Pitch-ready: Feminism in India. Escalated: 1.",
-      "author": "shakeebshaan",
-      "tags": [
-        "discovery",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260720-3d45",
-      "createdAt": "2026-07-20T18:27:55.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: Kachori Calories: Moong Dal vs Pyaaz vs Aloo, Honestly Compared — https://nyus.in/blog/kachori-calories-moong-dal-pyaaz-aloo-india.html. Ideas added: 2. Escalated: 0. Note: live URL returned 404 on verify (existing pattern — static/blog files aren't in vite build output, GH Actions deploy also billing-blocked since 2026-07-19; git-only until deploy pipeline fixed, matches all recent blog posts).",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "needsReview": false
-    },
-    {
       "id": "i-20260720-99d9",
       "createdAt": "2026-07-20T16:40:11.156Z",
       "status": "fixed",
@@ -997,25 +785,6 @@
       "reviewReason": "FIXED + shipped to main (commits 1ef1d64b + 847c37c5), awaiting your Resolve. Root cause (src/pages/Activity.tsx): advancing exercises (Continue banner / swap / new-session adopt) left the previous exercise's rest timer running; on elapse it logged rest_seconds against the WRONG (previous) exercise via a stale lastLoggedSetRef, and a late final-set POST re-armed it. Fix: logSetMutation.onSuccess arms the timer ONLY when the logged set's exercise_id matches the currently-open exercise (currentExerciseIdRef); handleContinueToNext + onSessionStarted + handleSwapExercise tear down the leftover timer (setShowRestTimer(false) + bump restTimerKey). Regression test test/Activity.restTimerCarryover.test.tsx = 3/3 GREEN (Continue-advance, late-POST guard, swap). Cannot auto-resolve: board testGate requires a fully-green 'npm run test:unit', but the full suite is 4 failed / 5706 passed — all 4 are PRE-EXISTING and UNRELATED to this fix: Activity.page 'Try Again button on error' + UserSearch 2 badge tests are i18n test-rot (query hardcoded English while the t() mock returns raw keys), and Partners 'Create a group empty state' is the known flaky waitFor (18/18 in isolation). No live-workout screenshot possible headless: the QA data account (395c47c7) returns 401 'Error loading the user' on prod, and this is a stateful live-workout interaction not capturable in a static frame. Recommend: Resolve this manually, and separately let me fix the i18n-rotted Activity.page/UserSearch tests so the gate stops blocking every resolve.",
       "reviewedAt": "2026-07-20T16:08:59.248Z",
       "reviewedBy": "shakeebshaan"
-    },
-    {
-      "id": "i-20260720-8b4e",
-      "createdAt": "2026-07-20T10:30:00.000Z",
-      "status": "open",
-      "route": null,
-      "description": "[content] Published: Samosa Calories: Small vs Medium vs Large, and Does Baked Actually Help? — https://nyus.in/blog/samosa-calories-small-medium-large-india.html. Ideas added: 3. Escalated: 0.",
-      "author": "shakeebshaan",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "fix": null,
-      "history": []
     },
     {
       "id": "i-20260720-tr9i",
