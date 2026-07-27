@@ -4458,7 +4458,7 @@
     {
       "id": "i-20260727-hyd8",
       "createdAt": "2026-07-27T06:10:00.000Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/profile",
       "description": "[bug-hunt] Profile: two more profile-family files with ZERO i18n coverage (same class as fixed i-20260717-pf2a, different files not covered by that fix). (1) src/pages/Achievements.tsx has no useTranslation/t() import anywhere in the file -- every string including the new error-state UI added in 1752cd67 (\"Couldn't load achievements\", description, \"Try again\" button, ~lines 159-172) plus the pre-existing empty-state/filter labels are hardcoded English. (2) src/pages/_components/profile/ProfileHydrationSection.tsx is also 100% hardcoded English -- header \"HYDRATION\", \"Water\" label, goal/container labels, toast strings, aria-labels -- no i18n wiring at all. Both found during page-guardian PROFILE static sweep (QA test account still 401/dead this tick, blocking runtime verification). Fix: same pattern as pf2a -- wire useTranslation into both files, add keys to en/hi/hinglish/xx-AE bundles, follow i18n-missing-keys-audit pattern. Not a data-accuracy bug, pure localization gap, relevant to owner app-wide i18n directive (P1-P4 phases).",
       "imagePath": null,
@@ -4475,12 +4475,39 @@
       "reviewReply": null,
       "reviewReplyImages": [],
       "history": [],
-      "thread": [],
-      "claim": {
+      "thread": [
+        {
+          "at": "2026-07-27T07:02:00.944Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Achievements screen and the Profile > Hydration section had no translation wiring at all, so every label (title, badges, filters, empty/error states, the water goal + container picker) stayed hardcoded English regardless of the app language. Fix: routed all of their visible text through the app's translation system and added the matching English/Hindi/Hinglish (+QA pseudo) strings. Switching the app to Hindi now fully localizes both screens (see captures).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "fix": {
+        "description": "Root cause: the Achievements screen and the Profile > Hydration section had no translation wiring at all, so every label (title, badges, filters, empty/error states, the water goal + container picker) stayed hardcoded English regardless of the app language. Fix: routed all of their visible text through the app's translation system and added the matching English/Hindi/Hinglish (+QA pseudo) strings. Switching the app to Hindi now fully localizes both screens (see captures).",
+        "imagePath": "images/i-20260727-hyd8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-hyd8-fix-r1.png",
+          "images/i-20260727-hyd8-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3dc63f7023f0d692e960e2c5219f4806a23225bd",
+        "imageCommits": [
+          "3dc63f7023f0d692e960e2c5219f4806a23225bd",
+          "6aedd331480b7ff310e369f350d7e108b1ccb299"
+        ],
+        "fixedAt": "2026-07-27T07:02:00.944Z",
         "by": "shakeebshaan",
-        "at": "2026-07-27T06:48:08.269Z",
-        "expiresAt": "2026-07-27T07:48:08.269Z",
-        "note": "i18n wiring Achievements.tsx + ProfileHydrationSection.tsx; fix complete, gate running"
+        "appCommit": "0b3a2894",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root-cause i18n wiring both files; 71 keys x4 bundles at parity; locale-parity+pseudo+error-state green, full test:unit green (1 unrelated flake); Hindi render proves both surfaces localize."
+        }
       }
     }
   ]
