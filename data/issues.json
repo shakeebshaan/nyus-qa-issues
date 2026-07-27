@@ -58,8 +58,30 @@
         "bug-hunt",
         "auto"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: in the 'Everything' gallery, a day whose logged meals had no calorie numbers showed a false '0 kcal' day total and dragged down the 'avg kcal a day', contradicting its own per-item '— kcal' rows. Fix: such a day now shows '— kcal' (matching the rest of the app) and is excluded from the average; the aggregate line also shows '—' when nothing is tracked.",
+        "imagePath": "images/i-20260727-cf1d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-cf1d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4eeb09092970585a5a633d19df1dd933315024cb",
+        "imageCommits": [
+          "4eeb09092970585a5a633d19df1dd933315024cb"
+        ],
+        "fixedAt": "2026-07-27T05:35:34.787Z",
+        "by": "shakeebshaan",
+        "appCommit": "c375da2574817102e3d8e0a78dff91856f1fdfb1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Mirrors NutritionDiaryCard's honest not-tracked pattern; real gallery screenshot shows Today '— KCAL' + avg 820 over the tracked day only; new component test encodes fail-before/pass-after; full suite green."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
@@ -69,7 +91,17 @@
       "createdAt": "2026-07-27T04:39:59.687Z",
       "id": "i-20260727-cf1d",
       "route": "/nutrition",
-      "description": "[bug-hunt] The 'Everything' nutrition gallery (SHIPPED — .env.production sets VITE_FEATURE_NUTRITION_GALLERY=true) prints a day-header total of '0 kcal' for any day whose logged meals carry no macros, directly contradicting its own per-item rows (which correctly show '— kcal') and dragging down the header's 'avg kcal a day'.\n\nWHERE: src/pages/_components/nutrition/NutritionGalleryView.tsx\n  - per-day total: line 73  kcal = meals.reduce((a,m) => a + Math.round(m.total_calories ?? 0), 0)  -> NULL macros counted as 0.\n  - day-header render: line 149  {s.kcal.toLocaleString()} kcal  -> shows '0 kcal' unconditionally.\n  - per-ITEM render: lines 172-174 correctly show '— kcal' when m.total_calories == null.\n  - avg: line 83 divides the kcal sum by daysWithLogs, so a 0-kcal (macro-less) day sits in the denominator, under-reporting the average.\n\nWHY IT HAPPENS: free-text meals logged without numbers persist NULL total_calories (CustomMealModal.handleLogMeal omits totals when none are typed/estimated; the composer's estimate can also be 0). NutritionDiaryCard already guards this exact case (hasTrackedMacros -> renders '—' instead of a fabricated 0, per the calm-diary 'don't assert a false 0' rule at src/pages/_components/nutrition/NutritionDiaryCard.tsx:52-88), but the gallery day-total does not.\n\nEXPECTED: a day whose logs have no macros shows '— kcal' (or omits the total), matching its item rows and the DiaryCard; such days are excluded from the avg-kcal denominator.\nACTUAL: the day header asserts '0 kcal' next to items that each read '— kcal', and the 7-day average is diluted by those days.\n\nREPRO:\n1. On /nutrition, log a meal by description ONLY (no calories/macros) — via 'Log Meal' without adding macros — on a day that has no other logs.\n2. Open the 'Everything' gallery (grid icon in the nutrition header).\n3. That day's header shows '0 kcal' while its single item shows '— kcal'.\n\nNOTE: src/pages/_components/nutrition/NutritionHistoryFeed.tsx:98 & :153 has the identical latent bug but is behind FEATURE_NUTRITION_SCROLL (OFF in prod). FIX: compute a per-day hasTrackedMacros flag and render '—' (and skip the day in the avg) when false, mirroring NutritionDiaryCard."
+      "description": "[bug-hunt] The 'Everything' nutrition gallery (SHIPPED — .env.production sets VITE_FEATURE_NUTRITION_GALLERY=true) prints a day-header total of '0 kcal' for any day whose logged meals carry no macros, directly contradicting its own per-item rows (which correctly show '— kcal') and dragging down the header's 'avg kcal a day'.\n\nWHERE: src/pages/_components/nutrition/NutritionGalleryView.tsx\n  - per-day total: line 73  kcal = meals.reduce((a,m) => a + Math.round(m.total_calories ?? 0), 0)  -> NULL macros counted as 0.\n  - day-header render: line 149  {s.kcal.toLocaleString()} kcal  -> shows '0 kcal' unconditionally.\n  - per-ITEM render: lines 172-174 correctly show '— kcal' when m.total_calories == null.\n  - avg: line 83 divides the kcal sum by daysWithLogs, so a 0-kcal (macro-less) day sits in the denominator, under-reporting the average.\n\nWHY IT HAPPENS: free-text meals logged without numbers persist NULL total_calories (CustomMealModal.handleLogMeal omits totals when none are typed/estimated; the composer's estimate can also be 0). NutritionDiaryCard already guards this exact case (hasTrackedMacros -> renders '—' instead of a fabricated 0, per the calm-diary 'don't assert a false 0' rule at src/pages/_components/nutrition/NutritionDiaryCard.tsx:52-88), but the gallery day-total does not.\n\nEXPECTED: a day whose logs have no macros shows '— kcal' (or omits the total), matching its item rows and the DiaryCard; such days are excluded from the avg-kcal denominator.\nACTUAL: the day header asserts '0 kcal' next to items that each read '— kcal', and the 7-day average is diluted by those days.\n\nREPRO:\n1. On /nutrition, log a meal by description ONLY (no calories/macros) — via 'Log Meal' without adding macros — on a day that has no other logs.\n2. Open the 'Everything' gallery (grid icon in the nutrition header).\n3. That day's header shows '0 kcal' while its single item shows '— kcal'.\n\nNOTE: src/pages/_components/nutrition/NutritionHistoryFeed.tsx:98 & :153 has the identical latent bug but is behind FEATURE_NUTRITION_SCROLL (OFF in prod). FIX: compute a per-day hasTrackedMacros flag and render '—' (and skip the day in the avg) when false, mirroring NutritionDiaryCard.",
+      "thread": [
+        {
+          "at": "2026-07-27T05:35:34.787Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: in the 'Everything' gallery, a day whose logged meals had no calorie numbers showed a false '0 kcal' day total and dragged down the 'avg kcal a day', contradicting its own per-item '— kcal' rows. Fix: such a day now shows '— kcal' (matching the rest of the app) and is excluded from the average; the aggregate line also shows '—' when nothing is tracked.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260727-s8t2",
