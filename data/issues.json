@@ -18,7 +18,20 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfileIdentityCard subscription label branched only on subscription_active, ignoring is_trial; during the 30-day trial /auth/me returns is_trial:true AND subscription_active:true, so trial users read 'Active Member' and lapsed users read 'Free Trial' (inverted). Fix branches is_trial first -> 'Free Trial - N days left', then subscription_active -> 'Active Member', then lapsed -> 'Free Plan' (new i18n keys free_trial_days/free_plan x4 locales). Adapted to the concurrent Wave-5b ledger-register redesign already in main (plain-text Status row, no icon). Own tests green: test/Profile.page.test.tsx 24/24 (incl. new trial + lapsed cases). Proof PNGs captured on merged code: tmp/i-20260727-e7c3-fix.png (Status: Free Trial - 29 days left), tmp/i-20260727-e7c3-lapsed.png (Status: Free Plan). GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
+      "reviewedAt": "2026-07-27T18:40:25.061Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-27T18:40:25.061Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfileIdentityCard subscription label branched only on subscription_active, ignoring is_trial; during the 30-day trial /auth/me returns is_trial:true AND subscription_active:true, so trial users read 'Active Member' and lapsed users read 'Free Trial' (inverted). Fix branches is_trial first -> 'Free Trial - N days left', then subscription_active -> 'Active Member', then lapsed -> 'Free Plan' (new i18n keys free_trial_days/free_plan x4 locales). Adapted to the concurrent Wave-5b ledger-register redesign already in main (plain-text Status row, no icon). Own tests green: test/Profile.page.test.tsx 24/24 (incl. new trial + lapsed cases). Proof PNGs captured on merged code: tmp/i-20260727-e7c3-fix.png (Status: Free Trial - 29 days left), tmp/i-20260727-e7c3-lapsed.png (Status: Free Plan). GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260727-b1f6",
