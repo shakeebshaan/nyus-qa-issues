@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260727-cb47",
+      "createdAt": "2026-07-27T16:40:51.596Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Human-coach / admin replies to a user permanently disappear from the user’s Coach Chat after any fresh mount or reload — they are delivered live over the socket but never returned by the history endpoint the app actually loads.\n\nRoute: /coach-chat. Backend: app/routes/coach.py GET /api/coach/history (the endpoint the FE loads first) + app/admin_v2/user_conversations.py (admin reply writer). FE: src/services/chat.service.ts getHistory.\n\nWHAT IS WRONG:\n1. When an admin/human coach replies to a user from the admin “User Conversations” panel, the reply is stored as Message(sender_type=‘coach’, recipient_id=user_id) and pushed to the user’s socket room via socketio.emit(‘new_message’, {… sender_type:‘coach’}) (user_conversations.py:229-259). The user sees it in real time (chat.service handleNewMessage sets is_from_me=false, list renders it as a coach bubble).\n2. But GET /api/coach/history filters messages with Message.sender_type.in_([‘user’, ‘ai’]) (coach.py:513). A sender_type=‘coach’ (or ‘admin’) row matches the sender/recipient clause but is EXCLUDED by that sender_type filter, so it is never in the history payload.\n3. src/services/chat.service.ts getHistory (chat.service.ts:74-82) calls /coach/history FIRST and only falls back to /chat/history on ERROR. The /chat/history twin (backend.py ChatHistoryResource:4301) has NO sender_type filter and WOULD include coach replies — but /coach/history succeeds, so the fallback never runs.\n\nRESULT: On the very next fresh mount of /coach-chat (app restart, navigate away+back, or hard reload) the local messages state is rebuilt purely from /coach/history, which omits the coach reply → the human-coach message is gone forever. (It survives 60s in-memory poll refetches only because CoachChat.tsx:168-175 keeps non-server survivors; a full remount resets that state to empty.)\n\nEXPECTED: a reply a coach/admin sent to the user stays visible in the user’s Coach Chat history across reloads.\nACTUAL: it shows once (live via socket) then permanently vanishes on the next load.\n\nREPRO (code-provable): send a coach reply via admin_v2 POST /admin/v2/user-conversations/<user_id>/message (writes sender_type=‘coach’) → confirm the user sees it live → reload /coach-chat → the reply is absent. Equivalent: query GET /api/coach/history for that user and observe the coach row is filtered out by sender_type.in_([‘user’,‘ai’]).\n\nSEVERITY: MED — user-facing data loss in the chat transcript (only for the human-coach/admin reply path; AI replies unaffected).\n\nFIX: include ‘coach’ (and ‘admin’) in the /api/coach/history sender_type filter (coach.py:513 → Message.sender_type.in_([‘user’,‘ai’,‘coach’,‘admin’])) so it agrees with the /chat/history twin. The FE already handles rendering sender_type=‘coach’ (CoachChatMessageList senderType union ‘admin’|‘coach’|‘ai’|‘user’).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260727-9d3c",
       "createdAt": "2026-07-27T12:57:34.442Z",
       "status": "open",
