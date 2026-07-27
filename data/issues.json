@@ -20,7 +20,20 @@
       "fix": null,
       "history": [],
       "reportPath": "reports/proof-mdk7.html",
-      "reportLabel": "Fix proof — dismissed card (mdk7)"
+      "reportLabel": "Fix proof — dismissed card (mdk7)",
+      "needsReview": true,
+      "reviewReason": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, so I can't honestly pass --tests). Root cause: StackedMomentCards.dismissedIds was a useState initializer that ran once off the first-render moments; the weekly-challenge card (separate query, resolves after dashboard-overview) was absent at mount so its localStorage dismiss marker was never checked and it reappeared. Fix: re-sync dismissedIds from localStorage via a useLayoutEffect keyed on momentsKey (union-only, same-ref = no extra render). Committed ad7be2cb on main + pushed. Added regression test (test/StackedMomentCards.expand.test.tsx) — scoped run GREEN 3/3. See attached 'Fix proof' report. Gate note: node tools/loop.mjs verify (npm run test:unit, full test/ dir ~5700 tests) dies with JS-heap OOM exit 134 on this box even at --max-old-space-size=6144, and also hits an unrelated pre-existing jsdom flake (Activity.restTimerCarryover: 'HTMLMediaElement.play() not implemented'). Recommend: run the scoped file locally to confirm, then Resolve; or scope loop.json testCommand tighter / add NODE_OPTIONS heap in the test:unit script.",
+      "reviewedAt": "2026-07-27T11:55:30.322Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-27T11:55:30.322Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, so I can't honestly pass --tests). Root cause: StackedMomentCards.dismissedIds was a useState initializer that ran once off the first-render moments; the weekly-challenge card (separate query, resolves after dashboard-overview) was absent at mount so its localStorage dismiss marker was never checked and it reappeared. Fix: re-sync dismissedIds from localStorage via a useLayoutEffect keyed on momentsKey (union-only, same-ref = no extra render). Committed ad7be2cb on main + pushed. Added regression test (test/StackedMomentCards.expand.test.tsx) — scoped run GREEN 3/3. See attached 'Fix proof' report. Gate note: node tools/loop.mjs verify (npm run test:unit, full test/ dir ~5700 tests) dies with JS-heap OOM exit 134 on this box even at --max-old-space-size=6144, and also hits an unrelated pre-existing jsdom flake (Activity.restTimerCarryover: 'HTMLMediaElement.play() not implemented'). Recommend: run the scoped file locally to confirm, then Resolve; or scope loop.json testCommand tighter / add NODE_OPTIONS heap in the test:unit script.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260727-k4n9",
