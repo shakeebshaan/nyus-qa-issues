@@ -7,8 +7,30 @@
         "bug-hunt",
         "auto"
       ],
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: logging a meal for a PAST day slotted it by your phone's current clock, so backfilling yesterday's breakfast in the evening got filed as Snack/Dinner. Fix: a past-day log now defaults to a neutral midday slot (Lunch) instead of the current time; today's logs still slot by time of day, and any meal can be re-slotted from the diary chips. Applied to all three past-day write paths.",
+        "imagePath": "images/i-20260727-cf6e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-cf6e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "88e0dbd4a8157f9e890327e27dc2833db44a7393",
+        "imageCommits": [
+          "88e0dbd4a8157f9e890327e27dc2833db44a7393"
+        ],
+        "fixedAt": "2026-07-27T05:35:17.023Z",
+        "by": "shakeebshaan",
+        "appCommit": "6f6811225796383db89f6b96f21073411890c824",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root cause fixed in one shared date-aware helper across all 3 write paths; today path unchanged; proven by 3 real integration tests (composer/modal/unit) + a real-function proof card; full suite green."
+        }
+      },
       "history": [],
       "imagePath": null,
       "imageCommit": null,
@@ -18,7 +40,17 @@
       "createdAt": "2026-07-27T04:39:59.687Z",
       "id": "i-20260727-cf6e",
       "route": "/nutrition",
-      "description": "[bug-hunt] Past-day meal logging on /nutrition slots every BACKFILLED meal by the CURRENT device clock, so a meal you ate on an earlier day is filed under the wrong meal-type (e.g. yesterday's breakfast backfilled in the evening becomes Dinner/Snack).\n\nWHERE: the diary supports MFP-style past-day logging (DiaryDateStepper -> CustomMealModal + NutritionQuickComposer receive logDate=diaryDate; backend window today-30d..today). But EVERY past-day write path derives the slot from inferMealNumber() (src/lib/mealSlot.ts:7 — <11 breakfast, <16 lunch, <21 dinner, else snack) called with new Date() (NOW), never with the logged day:\n  - src/components/nutrition/CustomMealModal.tsx:606 handleLogMeal -> meal_number: inferMealNumber(), log_date: targetLogDate (may be past)\n  - src/components/nutrition/CustomMealModal.tsx:316 & :331 handleLogIngredient -> same pattern\n  - src/pages/_components/nutrition/NutritionQuickComposer.tsx:116 submit -> meal_number: inferMealNumber(), log_date: logDate (may be past)\nThe backend maps meal_number 1/2/3/4 -> breakfast/lunch/dinner/snack for custom-logged cards (fix a4ff7a7), so the slot is fully determined by that number.\n\nWHAT: inferMealNumber() is a sound heuristic for TODAY (you log a meal near when you eat it), but for a backfilled past day the current wall-clock has NO relationship to when the meal was actually eaten. Opening 'Log food for that day' at 9pm and typing 'poha' (a breakfast) files it as Snack (meal_number 4).\n\nEXPECTED: a backfilled past-day log defaults to a sensible/neutral slot for that day (or lets the user pick), not one derived from the current time.\nACTUAL: all three past-day write paths tag the meal with now's slot; the diary/plan fold shows it under the wrong meal-type until the user manually re-slots it via the slot chips.\n\nREPRO:\n1. /nutrition -> tap the left arrow on the DiaryDateStepper to a previous day.\n2. Use the 'What did you eat?' composer (or 'Log food for this day' -> Quick Log / Ingredients) to log a breakfast item, at a time of day whose slot differs (e.g. evening).\n3. The logged row's meal_type = Snack/Dinner (the CURRENT slot), not Breakfast.\n\nFIX: thread the target log date into the slot decision — when log_date !== todayLocal(), do not infer from NOW (use a neutral default or prompt for the slot before saving). inferMealNumber() already accepts an optional Date; the callers just never vary it for backfills."
+      "description": "[bug-hunt] Past-day meal logging on /nutrition slots every BACKFILLED meal by the CURRENT device clock, so a meal you ate on an earlier day is filed under the wrong meal-type (e.g. yesterday's breakfast backfilled in the evening becomes Dinner/Snack).\n\nWHERE: the diary supports MFP-style past-day logging (DiaryDateStepper -> CustomMealModal + NutritionQuickComposer receive logDate=diaryDate; backend window today-30d..today). But EVERY past-day write path derives the slot from inferMealNumber() (src/lib/mealSlot.ts:7 — <11 breakfast, <16 lunch, <21 dinner, else snack) called with new Date() (NOW), never with the logged day:\n  - src/components/nutrition/CustomMealModal.tsx:606 handleLogMeal -> meal_number: inferMealNumber(), log_date: targetLogDate (may be past)\n  - src/components/nutrition/CustomMealModal.tsx:316 & :331 handleLogIngredient -> same pattern\n  - src/pages/_components/nutrition/NutritionQuickComposer.tsx:116 submit -> meal_number: inferMealNumber(), log_date: logDate (may be past)\nThe backend maps meal_number 1/2/3/4 -> breakfast/lunch/dinner/snack for custom-logged cards (fix a4ff7a7), so the slot is fully determined by that number.\n\nWHAT: inferMealNumber() is a sound heuristic for TODAY (you log a meal near when you eat it), but for a backfilled past day the current wall-clock has NO relationship to when the meal was actually eaten. Opening 'Log food for that day' at 9pm and typing 'poha' (a breakfast) files it as Snack (meal_number 4).\n\nEXPECTED: a backfilled past-day log defaults to a sensible/neutral slot for that day (or lets the user pick), not one derived from the current time.\nACTUAL: all three past-day write paths tag the meal with now's slot; the diary/plan fold shows it under the wrong meal-type until the user manually re-slots it via the slot chips.\n\nREPRO:\n1. /nutrition -> tap the left arrow on the DiaryDateStepper to a previous day.\n2. Use the 'What did you eat?' composer (or 'Log food for this day' -> Quick Log / Ingredients) to log a breakfast item, at a time of day whose slot differs (e.g. evening).\n3. The logged row's meal_type = Snack/Dinner (the CURRENT slot), not Breakfast.\n\nFIX: thread the target log date into the slot decision — when log_date !== todayLocal(), do not infer from NOW (use a neutral default or prompt for the slot before saving). inferMealNumber() already accepts an optional Date; the callers just never vary it for backfills.",
+      "thread": [
+        {
+          "at": "2026-07-27T05:35:17.023Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: logging a meal for a PAST day slotted it by your phone's current clock, so backfilling yesterday's breakfast in the evening got filed as Snack/Dinner. Fix: a past-day log now defaults to a neutral midday slot (Lunch) instead of the current time; today's logs still slot by time of day, and any meal can be re-slotted from the diary chips. Applied to all three past-day write paths.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "author": "shakeebshaan",
