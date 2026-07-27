@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-07-27T04:39:59.687Z",
+      "id": "i-20260727-cf6e",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Past-day meal logging on /nutrition slots every BACKFILLED meal by the CURRENT device clock, so a meal you ate on an earlier day is filed under the wrong meal-type (e.g. yesterday's breakfast backfilled in the evening becomes Dinner/Snack).\n\nWHERE: the diary supports MFP-style past-day logging (DiaryDateStepper -> CustomMealModal + NutritionQuickComposer receive logDate=diaryDate; backend window today-30d..today). But EVERY past-day write path derives the slot from inferMealNumber() (src/lib/mealSlot.ts:7 — <11 breakfast, <16 lunch, <21 dinner, else snack) called with new Date() (NOW), never with the logged day:\n  - src/components/nutrition/CustomMealModal.tsx:606 handleLogMeal -> meal_number: inferMealNumber(), log_date: targetLogDate (may be past)\n  - src/components/nutrition/CustomMealModal.tsx:316 & :331 handleLogIngredient -> same pattern\n  - src/pages/_components/nutrition/NutritionQuickComposer.tsx:116 submit -> meal_number: inferMealNumber(), log_date: logDate (may be past)\nThe backend maps meal_number 1/2/3/4 -> breakfast/lunch/dinner/snack for custom-logged cards (fix a4ff7a7), so the slot is fully determined by that number.\n\nWHAT: inferMealNumber() is a sound heuristic for TODAY (you log a meal near when you eat it), but for a backfilled past day the current wall-clock has NO relationship to when the meal was actually eaten. Opening 'Log food for that day' at 9pm and typing 'poha' (a breakfast) files it as Snack (meal_number 4).\n\nEXPECTED: a backfilled past-day log defaults to a sensible/neutral slot for that day (or lets the user pick), not one derived from the current time.\nACTUAL: all three past-day write paths tag the meal with now's slot; the diary/plan fold shows it under the wrong meal-type until the user manually re-slots it via the slot chips.\n\nREPRO:\n1. /nutrition -> tap the left arrow on the DiaryDateStepper to a previous day.\n2. Use the 'What did you eat?' composer (or 'Log food for this day' -> Quick Log / Ingredients) to log a breakfast item, at a time of day whose slot differs (e.g. evening).\n3. The logged row's meal_type = Snack/Dinner (the CURRENT slot), not Breakfast.\n\nFIX: thread the target log date into the slot decision — when log_date !== todayLocal(), do not infer from NOW (use a neutral default or prompt for the slot before saving). inferMealNumber() already accepts an optional Date; the callers just never vary it for backfills."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-07-27T04:39:59.687Z",
+      "id": "i-20260727-cf1d",
+      "route": "/nutrition",
+      "description": "[bug-hunt] The 'Everything' nutrition gallery (SHIPPED — .env.production sets VITE_FEATURE_NUTRITION_GALLERY=true) prints a day-header total of '0 kcal' for any day whose logged meals carry no macros, directly contradicting its own per-item rows (which correctly show '— kcal') and dragging down the header's 'avg kcal a day'.\n\nWHERE: src/pages/_components/nutrition/NutritionGalleryView.tsx\n  - per-day total: line 73  kcal = meals.reduce((a,m) => a + Math.round(m.total_calories ?? 0), 0)  -> NULL macros counted as 0.\n  - day-header render: line 149  {s.kcal.toLocaleString()} kcal  -> shows '0 kcal' unconditionally.\n  - per-ITEM render: lines 172-174 correctly show '— kcal' when m.total_calories == null.\n  - avg: line 83 divides the kcal sum by daysWithLogs, so a 0-kcal (macro-less) day sits in the denominator, under-reporting the average.\n\nWHY IT HAPPENS: free-text meals logged without numbers persist NULL total_calories (CustomMealModal.handleLogMeal omits totals when none are typed/estimated; the composer's estimate can also be 0). NutritionDiaryCard already guards this exact case (hasTrackedMacros -> renders '—' instead of a fabricated 0, per the calm-diary 'don't assert a false 0' rule at src/pages/_components/nutrition/NutritionDiaryCard.tsx:52-88), but the gallery day-total does not.\n\nEXPECTED: a day whose logs have no macros shows '— kcal' (or omits the total), matching its item rows and the DiaryCard; such days are excluded from the avg-kcal denominator.\nACTUAL: the day header asserts '0 kcal' next to items that each read '— kcal', and the 7-day average is diluted by those days.\n\nREPRO:\n1. On /nutrition, log a meal by description ONLY (no calories/macros) — via 'Log Meal' without adding macros — on a day that has no other logs.\n2. Open the 'Everything' gallery (grid icon in the nutrition header).\n3. That day's header shows '0 kcal' while its single item shows '— kcal'.\n\nNOTE: src/pages/_components/nutrition/NutritionHistoryFeed.tsx:98 & :153 has the identical latent bug but is behind FEATURE_NUTRITION_SCROLL (OFF in prod). FIX: compute a per-day hasTrackedMacros flag and render '—' (and skip the day in the avg) when false, mirroring NutritionDiaryCard."
+    },
+    {
       "id": "i-20260727-s8t2",
       "createdAt": "2026-07-27T02:00:00.000Z",
       "status": "open",
