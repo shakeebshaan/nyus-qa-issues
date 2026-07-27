@@ -50,7 +50,20 @@
       "imageCommits": [],
       "imagePrivate": false,
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfilePlanManagement always rendered its <h2> + container even when the user had neither an active nor a paused plan (all 3 buttons individually gated off), leaving a bare 'Plan Management' heading over empty space. Fix: 'if (!hasActivePlan && !hasPausedPlan) return null;' — matches ProfileReferralCard returning null when it has nothing to show. Own tests green: test/Profile.page.test.tsx 24/24 (incl. new 'hides heading when no plan' + 'shows heading with active plan' cases). Proof PNG on merged code: tmp/i-20260727-b1f6-fix.png — scrolled through the profile (Quick Actions -> Challenge -> Level -> PROGRESS section), no orphan 'Plan Management' heading anywhere. GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
+      "reviewedAt": "2026-07-27T18:40:38.898Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-27T18:40:38.898Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfilePlanManagement always rendered its <h2> + container even when the user had neither an active nor a paused plan (all 3 buttons individually gated off), leaving a bare 'Plan Management' heading over empty space. Fix: 'if (!hasActivePlan && !hasPausedPlan) return null;' — matches ProfileReferralCard returning null when it has nothing to show. Own tests green: test/Profile.page.test.tsx 24/24 (incl. new 'hides heading when no plan' + 'shows heading with active plan' cases). Proof PNG on merged code: tmp/i-20260727-b1f6-fix.png — scrolled through the profile (Quick Actions -> Challenge -> Level -> PROGRESS section), no orphan 'Plan Management' heading anywhere. GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260727-cb47",
