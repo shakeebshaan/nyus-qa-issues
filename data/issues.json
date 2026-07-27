@@ -4711,6 +4711,30 @@
           "note": "Root-cause i18n wiring both files; 71 keys x4 bundles at parity; locale-parity+pseudo+error-state green, full test:unit green (1 unrelated flake); Hindi render proves both surfaces localize."
         }
       }
+    },
+    {
+      "id": "i-20260727-mac9",
+      "createdAt": "2026-07-27T21:48:21.185Z",
+      "status": "open",
+      "route": "/profile",
+      "description": "[bug-hunt] Three profile cards have zero i18n coverage while every sibling row in the same folder uses t() with defaultValue fallbacks - a Hindi/Hinglish/xx-AE user sees raw English on these specific cards. (1) src/pages/_components/profile/ProfileMacroTargetsCard.tsx:22-25 - \"Adjust macro targets\" + \"Set your daily calories & protein / carbs / fat\" are raw string literals; en.json has a similarly-named macro_title/macro_subtitle pair (line 1456-1457) but that belongs to NutritionPlanActions.tsx, not this card, so there is no key for it at all. (2) src/pages/_components/profile/ProfileChallengeCard.tsx:62-67 - the most prominent card on /profile (top of the list, per its own i-20260715-3206 comment): \"30-Day Challenge\", \"30-day challenge complete!\", \"You have logged consistently for 30 days. Outstanding.\", and the `${current} of ${GOAL} days . ${GOAL-current} days to go` template are all hardcoded English; no matching keys exist anywhere in en.json (confirmed via grep). (3) src/pages/_components/profile/ProfileTutorialPicker.tsx:78,142 - partial: the toast TITLE correctly uses t(\"profile.tutorials_reset_toast_title\") but the toast DESCRIPTION (`${keys.length} tutorial${keys.length>1?'s':''} will replay on next visit.`) and the row step-count (`{n} step(s)`) are raw English-only templates using English pluralization rules that do not generalize to other locales. Fix: add useTranslation/t() calls + matching keys across all 4 locale bundles (en/hi/hinglish/xx-AE) for all three, following the existing pattern in ProfileAppearance.tsx / ProfileCsvExportRow.tsx (t() with defaultValue fallback). Relates to the owner app-wide i18n directive and to i-20260717-pf2a (same class of gap, different components).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "needsReview": false,
+      "reviewReason": null,
+      "reviewedAt": null,
+      "reviewedBy": null,
+      "thread": []
     }
   ]
 }
