@@ -4454,6 +4454,28 @@
           "by": "shakeebshaan"
         }
       ]
+    },
+    {
+      "id": "i-20260727-hyd8",
+      "createdAt": "2026-07-27T06:10:00.000Z",
+      "status": "open",
+      "route": "/profile",
+      "description": "[bug-hunt] Profile: two more profile-family files with ZERO i18n coverage (same class as fixed i-20260717-pf2a, different files not covered by that fix). (1) src/pages/Achievements.tsx has no useTranslation/t() import anywhere in the file -- every string including the new error-state UI added in 1752cd67 (\"Couldn't load achievements\", description, \"Try again\" button, ~lines 159-172) plus the pre-existing empty-state/filter labels are hardcoded English. (2) src/pages/_components/profile/ProfileHydrationSection.tsx is also 100% hardcoded English -- header \"HYDRATION\", \"Water\" label, goal/container labels, toast strings, aria-labels -- no i18n wiring at all. Both found during page-guardian PROFILE static sweep (QA test account still 401/dead this tick, blocking runtime verification). Fix: same pattern as pf2a -- wire useTranslation into both files, add keys to en/hi/hinglish/xx-AE bundles, follow i18n-missing-keys-audit pattern. Not a data-accuracy bug, pure localization gap, relevant to owner app-wide i18n directive (P1-P4 phases).",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommit": null,
+      "imageCommits": [],
+      "imagePrivate": false,
+      "author": "claude",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "needsReview": false,
+      "reviewReply": null,
+      "reviewReplyImages": [],
+      "history": [],
+      "thread": []
     }
   ]
 }
