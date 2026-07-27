@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260727-mdk7",
+      "createdAt": "2026-07-27T11:24:14.221Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard coach-moment deck: a card you DISMISS (X) can silently reappear on the next dashboard load.\n\nWHERE: src/components/moments/StackedMomentCards.tsx:62-70 — dismissedIds is a useState INITIALIZER (runs exactly once, off the FIRST render moments array). Nothing ever re-syncs it. The momentsKey effect (L52-54) only resets the \"expanded\" flag, never dismissedIds. The \"visible\" filter (L72) then filters on that stale Set.\n\nMECHANISM: The deck is built in Dashboard.tsx:498-538. The \"weekly-challenge\" card is gated on a SEPARATE query (useQuery [\"weekly-challenge\"], Dashboard.tsx:156) that resolves independently of the \"dashboard-overview\" query which gates the whole page skeleton. The deck mounts the instant overview resolves; if the weekly-challenge fetch has not resolved yet, that card is ABSENT from the first render moments, so its sectionId is never checked against localStorage and never added to dismissedIds. When the weekly-challenge query then resolves, Dashboard re-renders with the card prepended — but dismissedIds still lacks it, so a card the user dismissed earlier today (localStorage nyus_moment_dismiss_weekly-challenge === today) is shown again.\n\nEXPECTED: A card dismissed today stays hidden for the rest of the day, regardless of which async query it arrived from.\nACTUAL: The localStorage dismiss marker is honored ONLY for cards present at first deck-mount; a late-arriving dismissed card (weekly-challenge is the common case — its fetch is a separate round-trip from overview) reappears.\n\nREPRO: 1) On /dashboard, dismiss the weekly-challenge coach-moment card (tap the X). 2) Hard-reload / cold-open the dashboard so both queries refetch. 3) When the weekly-challenge fetch settles AFTER the overview fetch, the dismissed card reappears in the deck.\n\nFIX: keep dismissedIds in sync with the moments set — e.g. a useEffect keyed on momentsKey that re-reads localStorage for every current sectionId (union into the Set), or compute \"visible\" by checking localStorage directly for ids not already in the Set. Same class as i-20260708-e7c9 (the momentsKey fix) but applied to the dismissed set, not the expanded flag.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260727-k4n9",
       "createdAt": "2026-07-27T04:00:00.000Z",
       "status": "open",
