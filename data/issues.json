@@ -11,8 +11,9 @@
       "description": "[bug-hunt] Human-coach / admin replies to a user permanently disappear from the user’s Coach Chat after any fresh mount or reload — they are delivered live over the socket but never returned by the history endpoint the app actually loads.\n\nRoute: /coach-chat. Backend: app/routes/coach.py GET /api/coach/history (the endpoint the FE loads first) + app/admin_v2/user_conversations.py (admin reply writer). FE: src/services/chat.service.ts getHistory.\n\nWHAT IS WRONG:\n1. When an admin/human coach replies to a user from the admin “User Conversations” panel, the reply is stored as Message(sender_type=‘coach’, recipient_id=user_id) and pushed to the user’s socket room via socketio.emit(‘new_message’, {… sender_type:‘coach’}) (user_conversations.py:229-259). The user sees it in real time (chat.service handleNewMessage sets is_from_me=false, list renders it as a coach bubble).\n2. But GET /api/coach/history filters messages with Message.sender_type.in_([‘user’, ‘ai’]) (coach.py:513). A sender_type=‘coach’ (or ‘admin’) row matches the sender/recipient clause but is EXCLUDED by that sender_type filter, so it is never in the history payload.\n3. src/services/chat.service.ts getHistory (chat.service.ts:74-82) calls /coach/history FIRST and only falls back to /chat/history on ERROR. The /chat/history twin (backend.py ChatHistoryResource:4301) has NO sender_type filter and WOULD include coach replies — but /coach/history succeeds, so the fallback never runs.\n\nRESULT: On the very next fresh mount of /coach-chat (app restart, navigate away+back, or hard reload) the local messages state is rebuilt purely from /coach/history, which omits the coach reply → the human-coach message is gone forever. (It survives 60s in-memory poll refetches only because CoachChat.tsx:168-175 keeps non-server survivors; a full remount resets that state to empty.)\n\nEXPECTED: a reply a coach/admin sent to the user stays visible in the user’s Coach Chat history across reloads.\nACTUAL: it shows once (live via socket) then permanently vanishes on the next load.\n\nREPRO (code-provable): send a coach reply via admin_v2 POST /admin/v2/user-conversations/<user_id>/message (writes sender_type=‘coach’) → confirm the user sees it live → reload /coach-chat → the reply is absent. Equivalent: query GET /api/coach/history for that user and observe the coach row is filtered out by sender_type.in_([‘user’,‘ai’]).\n\nSEVERITY: MED — user-facing data loss in the chat transcript (only for the human-coach/admin reply path; AI replies unaffected).\n\nFIX: include ‘coach’ (and ‘admin’) in the /api/coach/history sender_type filter (coach.py:513 → Message.sender_type.in_([‘user’,‘ai’,‘coach’,‘admin’])) so it agrees with the /chat/history twin. The FE already handles rendering sender_type=‘coach’ (CoachChatMessageList senderType union ‘admin’|‘coach’|‘ai’|‘user’).",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto"
+        "backend",
+        "deploy-verified",
+        "test-gate-infra"
       ],
       "imagePath": null,
       "imageCommit": null,
@@ -20,7 +21,20 @@
       "imageCommits": [],
       "imagePrivate": false,
       "reportPath": "reports/cb47-proof.html",
-      "reportLabel": "Fix proof (deployed)"
+      "reportLabel": "Fix proof (deployed)",
+      "needsReview": true,
+      "reviewReason": "FIX SHIPPED + DEPLOYED LIVE (prod HEAD 83082c9, /health healthy) + pytest-proven, awaiting your verify+resolve. Root cause: GET /api/coach/history filtered sender_type.in_(['user','ai']), so human-coach/admin replies (written sender_type='coach' by the admin User-Conversations panel) were delivered live over the socket but dropped from the history payload the FE loads first -> vanished on every reload. Fix (backend, coach.py:520): widened to ['user','ai','coach','admin'], matching admin_v2/user_conversations.py:189 and compatible with the /chat/history twin. New real-sqlite integration test drives the actual coach_bp route end-to-end: FAILS before (assert 'coach' in {'user','ai'}), PASSES after; existing coach-route suite 26/26 green. Adversarial review cleared: no data leakage (sender/recipient scoping intact), filter complete. See 'Fix proof (deployed)' report. Blocker to auto-resolve: this is a BACKEND fix but the board test gate runs the FRONTEND npm run test:unit, which (a) doesn't exercise the Python change and (b) OOMs headless (exit 134, unchanged by the cores-1 worker cap) -> can't honestly set --tests pass. Recommend: verify+resolve, and consider pointing loop.testCommand at the backend pytest for backend fixes (or add NODE_OPTIONS heap / scope the FE suite so it stops OOMing headless -- same wall blocks i-20260727-mdk7 and -9d3c).",
+      "reviewedAt": "2026-07-27T17:04:18.391Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-27T17:04:18.391Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIX SHIPPED + DEPLOYED LIVE (prod HEAD 83082c9, /health healthy) + pytest-proven, awaiting your verify+resolve. Root cause: GET /api/coach/history filtered sender_type.in_(['user','ai']), so human-coach/admin replies (written sender_type='coach' by the admin User-Conversations panel) were delivered live over the socket but dropped from the history payload the FE loads first -> vanished on every reload. Fix (backend, coach.py:520): widened to ['user','ai','coach','admin'], matching admin_v2/user_conversations.py:189 and compatible with the /chat/history twin. New real-sqlite integration test drives the actual coach_bp route end-to-end: FAILS before (assert 'coach' in {'user','ai'}), PASSES after; existing coach-route suite 26/26 green. Adversarial review cleared: no data leakage (sender/recipient scoping intact), filter complete. See 'Fix proof (deployed)' report. Blocker to auto-resolve: this is a BACKEND fix but the board test gate runs the FRONTEND npm run test:unit, which (a) doesn't exercise the Python change and (b) OOMs headless (exit 134, unchanged by the cores-1 worker cap) -> can't honestly set --tests pass. Recommend: verify+resolve, and consider pointing loop.testCommand at the backend pytest for backend fixes (or add NODE_OPTIONS heap / scope the FE suite so it stops OOMing headless -- same wall blocks i-20260727-mdk7 and -9d3c).",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260727-9d3c",
