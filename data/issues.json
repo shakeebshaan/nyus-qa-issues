@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260727-e7c3",
+      "createdAt": "2026-07-27T18:08:43.868Z",
+      "status": "open",
+      "route": "/profile",
+      "description": "[bug-hunt] Profile identity card shows the WRONG subscription status: an on-trial user is labelled \"Active member\" while a LAPSED user is labelled \"Free trial\" (inverted). src/pages/_components/profile/ProfileIdentityCard.tsx getSubscriptionStatus() (lines 98-103) branches ONLY on user.subscription_active and completely ignores user.is_trial + user.trial_days_remaining (both present on the User type, src/types/api.ts:20-26). Per CLAUDE.md the trial is a SOFT gate and a fresh onboarding auto-starts a 30-day trial where /auth/me returns is_trial:true AND subscription_active:true. Consequences: (1) a user ON the free trial renders \"Active member\" with a gold Crown - it NEVER shows \"Free trial\", so the trial state is invisible on Profile and trial_days_remaining is never surfaced; (2) the ONLY time the \"Free trial\" (UserIcon) branch renders is when subscription_active===false, i.e. a lapsed/expired/cancelled user whose premium routes already redirect to /choose-plan - they are told they are on a \"Free trial\" when they are not. Expected: derive the label from is_trial then subscription_active - is_trial -> \"Free trial\" (ideally + N days left), else subscription_active -> \"Active member\", else lapsed -> \"Free plan\"/\"Upgrade\". Repro: open /profile as (a) a trial account -> header reads \"Active member\" (should read Free trial); (b) an account with subscription_active=false -> header reads \"Free trial\" (should read Free/Upgrade). Fix: branch getSubscriptionStatus on is_trial first, then subscription_active, then the lapsed fallback.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260727-b1f6",
+      "createdAt": "2026-07-27T18:08:43.868Z",
+      "status": "open",
+      "route": "/profile",
+      "description": "[bug-hunt] Profile \"Plan Management\" section renders an orphan heading over empty space when the user has neither an active nor a paused plan. src/pages/_components/profile/ProfilePlanManagement.tsx ALWAYS renders the section <h2> (profile.section_plan_management) + its motion container (lines 38-51), but all three action buttons are individually gated: Change Goal + Pause Plan on hasActivePlan (activePlan?.id != null), Resume Plan on hasPausedPlan (pausedPlan?.id != null). When GET /plans/active AND GET /plans/paused BOTH resolve null (a user who cancelled or completed their plan, or before any plan exists), every button is suppressed and the section collapses to a bare \"Plan Management\" label sitting above empty margin. Expected: hide the entire section (heading included) when there is no plan action to show, matching how ProfileReferralCard returns null when it has nothing to render. Repro: on an account with no active and no paused plan, open /profile and scroll to Plan Management -> section heading with nothing beneath it. Fix: wrap the h2 + div in {(hasActivePlan || hasPausedPlan) && (...)}.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260727-cb47",
       "createdAt": "2026-07-27T16:40:51.596Z",
       "status": "open",
