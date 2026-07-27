@@ -20,7 +20,20 @@
       "imageCommits": [],
       "imagePrivate": false,
       "reportPath": "reports/proof-9d3c.html",
-      "reportLabel": "Fix proof"
+      "reportLabel": "Fix proof",
+      "needsReview": true,
+      "reviewReason": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, can't honestly pass --tests). Root cause: PlanStateMachine isCurrent catch-all 'state.key === currentStatus' re-fired the Active chip for a resumed plan (status back to 'active' with resumed_at set), so BOTH Active and Resumed lit — breaking the single-fill contract. Fix: guarded the catch-all to '(state.key === currentStatus && !(state.key === active && isResumed))' at PlanTimeline.tsx:562 — the Resumed sub-state owns the single highlight. Committed 203bfbd1 on main (prior tick). Added/verified regression test test/PlanTimeline.page.test.tsx ('a resumed plan marks ONLY Resumed as current') — scoped run GREEN 9/9. Visual proof attached ('Fix proof' report): 390x844 /plan-timeline for a resumed plan shows ONLY the Resumed chip filled, Active unfilled. Gate note: full 'npm run test:unit' (~5700 tests) OOMs headless (exit 134) even at heap 6144 — recommend scoping loop.json testCommand or adding NODE_OPTIONS heap.",
+      "reviewedAt": "2026-07-27T13:31:11.313Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-07-27T13:31:11.313Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, can't honestly pass --tests). Root cause: PlanStateMachine isCurrent catch-all 'state.key === currentStatus' re-fired the Active chip for a resumed plan (status back to 'active' with resumed_at set), so BOTH Active and Resumed lit — breaking the single-fill contract. Fix: guarded the catch-all to '(state.key === currentStatus && !(state.key === active && isResumed))' at PlanTimeline.tsx:562 — the Resumed sub-state owns the single highlight. Committed 203bfbd1 on main (prior tick). Added/verified regression test test/PlanTimeline.page.test.tsx ('a resumed plan marks ONLY Resumed as current') — scoped run GREEN 9/9. Visual proof attached ('Fix proof' report): 390x844 /plan-timeline for a resumed plan shows ONLY the Resumed chip filled, Active unfilled. Gate note: full 'npm run test:unit' (~5700 tests) OOMs headless (exit 134) even at heap 6144 — recommend scoping loop.json testCommand or adding NODE_OPTIONS heap.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260727-mdk7",
