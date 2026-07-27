@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260727-f263",
+      "createdAt": "2026-07-27T01:45:04.559Z",
+      "status": "open",
+      "route": "/nutrition",
+      "title": "Quick-composer fallback re-slots every meal as \"Snack\" (undoes time-of-day slotting)",
+      "description": "[bug-hunt] The new ambient \"What did you eat?\" quick composer (NutritionQuickComposer, calm-diary Phase 1 — LIVE, not flag-gated) infers the meal slot from the device clock via inferMealNumber() (its stated purpose: \"Replaces the old hardcoded everything is a snack for composer logs\"). But on ANY estimate failure it falls back to the full CustomMealModal (onOpenFull), and CustomMealModal.handleLogMeal() posts meal_number: 4 (SNACK) HARDCODED with no time inference and no pre-log slot picker. So the exact \"everything is a snack\" behavior the composer was built to remove reappears on the fallback path.\n\nExpected: a breakfast typed at 08:00 that falls back to the modal should log to the breakfast slot (or at least the same time-of-day slot inferMealNumber would have chosen).\nActual: it logs as Snack. The user has no chance to set the slot before logging (meal_number 4 is hardcoded in handleLogMeal, src/components/nutrition/CustomMealModal.tsx:598); they can only correct it AFTER via the card slot chips.\n\nWhy it matters / how often: the fallback fires on 429 (daily AI-estimate cap — a known, recurring prod condition), 422, 5xx, and network errors, i.e. a common path for the PRIMARY logging affordance. Meals then land under the wrong slot and skew the per-slot diary grouping.\n\nRepro: /nutrition (composer live in every build). Type e.g. \"2 eggs and toast\" at ~8am and submit. Force the estimate to fail (offline, or when the AI daily cap/quota is hit → 429). The composer opens the full modal prefilled; tap Log Meal. The entry is logged with meal_number=4 (Snack) regardless of the morning time, instead of breakfast (meal_number=1) that inferMealNumber() would return for h<11.\n\nFix: have CustomMealModal.handleLogMeal() default meal_number to inferMealNumber() (share the composer helper) instead of the hardcoded 4, or thread the composer-inferred slot through onOpenFull → the modal. Files: src/pages/_components/nutrition/NutritionQuickComposer.tsx (submit/onOpenFull + inferMealNumber), src/components/nutrition/CustomMealModal.tsx:598.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260726-9f2a",
       "createdAt": "2026-07-26T21:10:03.179Z",
       "status": "fixed",
