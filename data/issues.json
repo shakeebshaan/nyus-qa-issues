@@ -17,9 +17,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Social hub screen (Social.tsx) had zero i18n hookup, so every label, section row, hero line and aria-label rendered in English regardless of the app language. Fix: routed all of them through the translation system with Hindi/Hinglish/pseudo values added across all four locale bundles; the hub now renders fully in the selected language.",
+        "imagePath": "images/i-20260728-e5b8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260728-e5b8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a9bc48268bae6727aee1aff75dd2ba70de920259",
+        "imageCommits": [
+          "a9bc48268bae6727aee1aff75dd2ba70de920259"
+        ],
+        "fixedAt": "2026-07-28T15:41:13.634Z",
+        "by": "shakeebshaan",
+        "appCommit": "9933c974",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Hindi capture shows the whole hub (title, hero, all 7 rows + plural subtitles) in Devanagari; locale-parity + Social.page tests green."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-07-28T15:41:13.634Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Social hub screen (Social.tsx) had zero i18n hookup, so every label, section row, hero line and aria-label rendered in English regardless of the app language. Fix: routed all of them through the translation system with Hindi/Hinglish/pseudo values added across all four locale bundles; the hub now renders fully in the selected language.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260728-c17a",
