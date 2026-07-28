@@ -69,9 +69,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Global Leaderboard (LeaderboardView.tsx) was entirely hardcoded English - the privacy card, scope/type/period tabs, Your Rank, the loading/error/empty states, the rate-limit toast and the participants footer. Fix: localized every string (with count-aware and interpolated variants) and added the keys to all four locale bundles, so a Hindi/Hinglish user sees the whole board translated.",
+        "imagePath": "images/i-20260728-c17a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260728-c17a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f000491bea223afb357a5b5c4b22e561f5217030",
+        "imageCommits": [
+          "f000491bea223afb357a5b5c4b22e561f5217030"
+        ],
+        "fixedAt": "2026-07-28T15:41:38.338Z",
+        "by": "shakeebshaan",
+        "appCommit": "9933c974",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Global board renders fully in Hindi (privacy/tabs/rank/kicker); byte-exact English defaults, locale-parity + LeaderboardView tests green."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-07-28T15:41:38.338Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Global Leaderboard (LeaderboardView.tsx) was entirely hardcoded English - the privacy card, scope/type/period tabs, Your Rank, the loading/error/empty states, the rate-limit toast and the participants footer. Fix: localized every string (with count-aware and interpolated variants) and added the keys to all four locale bundles, so a Hindi/Hinglish user sees the whole board translated.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260728-d24e",
