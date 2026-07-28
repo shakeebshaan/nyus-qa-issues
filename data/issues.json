@@ -2,6 +2,66 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260728-e5b8",
+      "createdAt": "\"2026-07-28T14:27:30.000Z\"",
+      "route": "/social",
+      "description": "[bug-hunt] Social hub page: src/pages/Social.tsx has ZERO i18n hookup (no useTranslation import, no t() calls — verified: useTranslation=0, t()=0). EVERY visible string on the /social home screen is hardcoded English: the page title (\"Social\"), all 7 section rows (labels \"Friends\", \"Partners\", \"Messages\", \"Groups\", \"Challenges\", \"Leaderboard\", \"Activity feed\" + their subtitles \"Train together\", \"Direct chats with friends\", \"Train circles & crews\", \"Compete head-to-head\", \"See where you stand\", \"Latest from your circle\"), the hero (\"Your circle today\", \"Build your circle\", \"Add friends or start a partner group to train together.\", \"Open your partners hub and stay in sync.\"), quick actions (\"Find Friends\", \"Requests\"), \"My Friends\", \"You haven’t added any friends yet\", the Partners block (\"Partner groups\", \"Train together. Beat together.\", \"Create your first group\", \"Open Partners hub\", \"View all (N)\"), the Leaderboard scope tabs (\"Friends\"/\"Global\"), and aria-labels (\"Back to Social hub\", \"Go back\"). Expected: a Hindi/Hinglish user (startup language picker shipped) sees the Social hub in their language. Actual: the entire hub renders raw English. Same class as FIXED i-20260720-tr9i (Dashboard), i-20260717-rda1 (RecurringActivityStep), i-20260717-pf2a (ProfilePreferencesCard) per the owner 2026-07-07 translate-the-ENTIRE-app directive. Repro: switch app language to Hindi → open /social. Fix: route all literals through t() with defaultValue fallbacks + add keys across all 4 locale bundles (en/hi/hinglish/xx-AE) per the missing-keys parity guard. Related partial-coverage siblings on the same surface: FriendsLeaderboardView.tsx (3 t() calls, some hardcoded), Partners.tsx (4 t() calls).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "i18n",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260728-c17a",
+      "createdAt": "\"2026-07-28T14:27:30.000Z\"",
+      "route": "/social",
+      "description": "[bug-hunt] Global Leaderboard: src/components/LeaderboardView.tsx has ZERO i18n hookup (no useTranslation import, no t() calls — verified: useTranslation=0, t()=0). Every control + label on the /social → Leaderboard → Global board is hardcoded English: the privacy card (\"Leaderboard visibility\", \"Your name and score are visible to others.\", \"You are hidden from public leaderboards.\"), scope tabs (\"Global\"/\"My Group\"), the 4 type buttons (\"Streak\", \"Weekly\", \"All Time\", \"PR\" + full labels \"Wellness Streak\", \"Weight Loss (Week)\", \"Weight Loss (All)\", \"Exercise PR\"), period chips (\"Weekly\"/\"Monthly\"/\"All Time\"), \"Your Rank\", loading/error states (\"Loading leaderboard...\", \"Error loading leaderboard\", \"Too many requests\", \"Please try again later\"), the rate-limit toast (\"Slow down\" / \"You’re checking the leaderboard a lot — try again in a minute.\"), privacy toasts (\"Now visible on leaderboards\" / \"Hidden from leaderboards\" / \"Couldn’t update privacy\"), empty states (\"No leaderboard data yet\", \"No group members on this board yet\", \"Complete workouts to build your streak.\"), the provenance footer (\"Showing {n} of {total} participants\") and the \"Anonymous\" name fallback. Expected vs actual: a Hindi/Hinglish user sees this whole board in raw English. Same accepted class as FIXED i-20260720-tr9i / rda1 / pf2a under the owner 2026-07-07 whole-app i18n directive. Repro: set app language to Hindi → /social → Leaderboard → Global. Fix: add useTranslation + t() with defaultValue fallbacks across all visible strings + keys in en/hi/hinglish/xx-AE.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "i18n",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260728-d24e",
+      "createdAt": "\"2026-07-28T14:27:30.000Z\"",
+      "route": "/partners/:groupId",
+      "description": "[bug-hunt] Partner Group Hub: src/pages/PartnerGroupHub.tsx has ZERO i18n hookup (no useTranslation import, no t() calls — verified: useTranslation=0, t()=0). The entire partner-group screen is hardcoded English: the FOLLOW_MODE_LABEL map (\"Both\", \"Diet only\", \"Workout only\", \"Custom diet + leader workout\", \"Leader diet + custom workout\"), error/empty states (\"Group not found.\", \"Group unavailable\", \"We couldn’t load this partner group. It may have been disbanded...\", \"Back to Partners\"), the header (\"Leader: {name}\"), the 3 tabs (\"Chat\"/\"Plan\"/\"Activity\"), the Plan tab (\"You’re following {name}’s plan. Today’s meals show on Diet, scaled to your targets.\", \"Today’s meals\", \"N meals · open Diet to log\", \"Leader hasn’t published a diet plan yet.\", \"Today’s workout\", \"No workout scheduled today.\", \"Start workout, invite partners to follow live\", \"Starting...\", \"Partners get a popup to join in real time.\"), the Activity tab (\"Activity targets mirror your workout source...\", \"Daily steps target\", \"N steps · open Activity to log\"), group settings (\"Group settings\", \"Follow mode\", \"Not set\", \"Change\", \"Transfer leadership\", \"Leave group\", \"As leader, leaving hands the group to your longest-standing partner.\", \"You’re the only member — leaving disbands this group.\") and the session toasts (\"Session already active\", \"Couldn’t start session\"). Expected: renders in the user’s selected language; actual: raw English throughout. Same accepted class as FIXED i-20260720-tr9i / rda1 / pf2a (owner 2026-07-07 whole-app i18n directive). Repro: set app language to Hindi → open any /partners/:groupId. Fix: add useTranslation + t() with defaultValue fallbacks + keys in en/hi/hinglish/xx-AE.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "i18n",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
