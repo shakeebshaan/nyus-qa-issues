@@ -168,13 +168,47 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the coach-chat Log Activity card let you submit an activity with the Duration cleared to blank (which counts as 0), logging a 0-minute activity. Fix: submitting a selected activity now requires a positive duration (steps stay independently valid), and a zero/blank-duration activity is no longer included in the log - the Log Activity button stays disabled until the entry is valid.",
+        "imagePath": "images/i-20260728-a3f1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260728-a3f1-fix-r1.png",
+          "images/i-20260728-a3f1-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1bbea99d34f487abb68766ffb61f9c4c603043d4",
+        "imageCommits": [
+          "1bbea99d34f487abb68766ffb61f9c4c603043d4",
+          "904cdcd1427834869ee0e3cb1bf1d988ea60693e"
+        ],
+        "fixedAt": "2026-07-28T15:41:52.063Z",
+        "by": "shakeebshaan",
+        "appCommit": "5b46e346",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Proof: valid entry enabled, cleared-duration disabled; hasValidActivity guard mirrors MeasurementInputBlock; regression tests added, suite green."
+        }
+      },
       "history": [],
-      "status": "open",
+      "status": "fixed",
       "id": "i-20260728-a3f1",
       "createdAt": "2026-07-28T12:57:45.668Z",
       "route": "/coach-chat",
-      "description": "[bug-hunt] Coach-chat \"Log Activity\" card lets you submit a ZERO / empty Duration, logging a 0-minute activity. src/components/blocks/ActivityLoggerBlock.tsx: the Duration <Input type=\"number\"> onChange does setDuration(Number(e.target.value)) with NO clamp (line ~167), and the HTML min={1} is a spinner hint only — it does not block a typed/cleared value. handleSubmit sends activity.duration_min = duration verbatim (lines 56-62). Submit is gated on canSubmit = hasActivity || hasSteps (line 51), which never inspects duration, so a 0 (or empty→Number(\"\")===0) duration sails through. REPRO: open a Log Activity coach block → pick an activity chip (hasActivity=true) → clear the prefilled Duration field (or type 0) → tap \"Log Activity\". EXPECTED: submit disabled, or duration clamped to >=1, when duration<=0. ACTUAL: onResponse fires with {activity:{type, duration_min:0, intensity}} → transformActivityLog → POST /logs/activity persists a 0-minute activity record. Compare the sibling MeasurementInputBlock, which DOES guard this: hasValues = Object.values(values).some(v => v > 0) (MeasurementInputBlock.tsx:65) so a 0 can never be saved. FIX: gate submit on (!hasActivity || duration > 0) — i.e. require duration>0 whenever an activity chip is selected — and/or clamp duration to Math.max(1, ...) on change. Static-confirmed by reading the source; the block registry (InteractiveBlock.tsx) renders activity_logger in CoachChat."
+      "description": "[bug-hunt] Coach-chat \"Log Activity\" card lets you submit a ZERO / empty Duration, logging a 0-minute activity. src/components/blocks/ActivityLoggerBlock.tsx: the Duration <Input type=\"number\"> onChange does setDuration(Number(e.target.value)) with NO clamp (line ~167), and the HTML min={1} is a spinner hint only — it does not block a typed/cleared value. handleSubmit sends activity.duration_min = duration verbatim (lines 56-62). Submit is gated on canSubmit = hasActivity || hasSteps (line 51), which never inspects duration, so a 0 (or empty→Number(\"\")===0) duration sails through. REPRO: open a Log Activity coach block → pick an activity chip (hasActivity=true) → clear the prefilled Duration field (or type 0) → tap \"Log Activity\". EXPECTED: submit disabled, or duration clamped to >=1, when duration<=0. ACTUAL: onResponse fires with {activity:{type, duration_min:0, intensity}} → transformActivityLog → POST /logs/activity persists a 0-minute activity record. Compare the sibling MeasurementInputBlock, which DOES guard this: hasValues = Object.values(values).some(v => v > 0) (MeasurementInputBlock.tsx:65) so a 0 can never be saved. FIX: gate submit on (!hasActivity || duration > 0) — i.e. require duration>0 whenever an activity chip is selected — and/or clamp duration to Math.max(1, ...) on change. Static-confirmed by reading the source; the block registry (InteractiveBlock.tsx) renders activity_logger in CoachChat.",
+      "thread": [
+        {
+          "at": "2026-07-28T15:41:52.063Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the coach-chat Log Activity card let you submit an activity with the Duration cleared to blank (which counts as 0), logging a 0-minute activity. Fix: submitting a selected activity now requires a positive duration (steps stay independently valid), and a zero/blank-duration activity is no longer included in the log - the Log Activity button stays disabled until the entry is valid.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "author": "shakeebshaan",
