@@ -121,9 +121,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Partner Group Hub (PartnerGroupHub.tsx) rendered raw English throughout - follow-mode labels, the Chat/Plan/Activity tabs, the plan and activity content, group settings and the session toasts. Fix: localized all of it (including the meal/exercise count plurals and the interpolated leader name and step count) and added keys across all four locale bundles.",
+        "imagePath": "images/i-20260728-d24e-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260728-d24e-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4dcab1e5cafa648e91688fd85b3cfee46c7b9525",
+        "imageCommits": [
+          "4dcab1e5cafa648e91688fd85b3cfee46c7b9525"
+        ],
+        "fixedAt": "2026-07-28T15:41:44.361Z",
+        "by": "shakeebshaan",
+        "appCommit": "9933c974",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Plan tab renders in Hindi incl. meal/exercise count plurals + leader interpolation; locale-parity + PartnerGroupHub tests green."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-07-28T15:41:44.361Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Partner Group Hub (PartnerGroupHub.tsx) rendered raw English throughout - follow-mode labels, the Chat/Plan/Activity tabs, the plan and activity content, group settings and the session toasts. Fix: localized all of it (including the meal/exercise count plurals and the interpolated leader name and step count) and added keys across all four locale bundles.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "author": "shakeebshaan",
