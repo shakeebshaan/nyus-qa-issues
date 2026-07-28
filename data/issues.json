@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "status": "open",
+      "id": "i-20260728-a3f1",
+      "createdAt": "2026-07-28T12:57:45.668Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat \"Log Activity\" card lets you submit a ZERO / empty Duration, logging a 0-minute activity. src/components/blocks/ActivityLoggerBlock.tsx: the Duration <Input type=\"number\"> onChange does setDuration(Number(e.target.value)) with NO clamp (line ~167), and the HTML min={1} is a spinner hint only — it does not block a typed/cleared value. handleSubmit sends activity.duration_min = duration verbatim (lines 56-62). Submit is gated on canSubmit = hasActivity || hasSteps (line 51), which never inspects duration, so a 0 (or empty→Number(\"\")===0) duration sails through. REPRO: open a Log Activity coach block → pick an activity chip (hasActivity=true) → clear the prefilled Duration field (or type 0) → tap \"Log Activity\". EXPECTED: submit disabled, or duration clamped to >=1, when duration<=0. ACTUAL: onResponse fires with {activity:{type, duration_min:0, intensity}} → transformActivityLog → POST /logs/activity persists a 0-minute activity record. Compare the sibling MeasurementInputBlock, which DOES guard this: hasValues = Object.values(values).some(v => v > 0) (MeasurementInputBlock.tsx:65) so a 0 can never be saved. FIX: gate submit on (!hasActivity || duration > 0) — i.e. require duration>0 whenever an activity chip is selected — and/or clamp duration to Math.max(1, ...) on change. Static-confirmed by reading the source; the block registry (InteractiveBlock.tsx) renders activity_logger in CoachChat."
+    },
+    {
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "status": "open",
+      "id": "i-20260728-b7c4",
+      "createdAt": "2026-07-28T12:57:45.668Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat Water Intake card renders a broken/nonsensical goal when target_ml is 0 or missing — the component GUARDS the math for this exact case but leaves the visible labels raw. src/components/blocks/WaterLoggerBlock.tsx: its own comment (lines 27-28) states \"target_ml is untrusted LLM-block output and can arrive as 0 or missing\", and it guards pct = target>0 ? ... : 0 (line 29) and isComplete = target>0 && ... (line 30), and it defensively coerces current_ml (line 21). But the three display sites use raw {target}: the aria-label `${current} of ${target} milliliters` (line 103), the caption \"of {target} ml goal\" (line 109), and the axis label \"{target} ml\" (line 130). RESULT when target_ml===0 (documented as reachable): the caption reads \"of 0 ml goal\", the right axis reads \"0 ml\", and the Progress bar is STUCK at 0% and \"Goal Reached\" NEVER fires no matter how much water the user adds (because pct/isComplete are hard-gated on target>0) — a confusing, non-functional card. When target_ml is truly absent the same labels render the literal string \"undefined\" (\"of undefined ml goal\", aria \"0 of undefined milliliters\"). EXPECTED: when target_ml<=0/missing, show current intake with NO goal/target label and NO progress bar (mirror ActivityLoggerBlock, which drops the steps target + bar entirely when step_goal is absent — ActivityLoggerBlock.tsx:46,113). ACTUAL: raw 0/undefined leaks into the goal copy and a permanently-empty bar. FIX: compute hasGoal = typeof target===\"number\" && target>0 and conditionally render the \"goal\" caption / axis label / progress bar, same pattern already used for steps in the sibling activity block. Static-confirmed by reading the source."
+    },
+    {
       "id": "i-20260728-e9d1",
       "createdAt": "2026-07-28T12:38:18.000Z",
       "status": "open",
