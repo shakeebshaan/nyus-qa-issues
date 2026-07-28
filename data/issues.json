@@ -4761,7 +4761,7 @@
     {
       "id": "i-20260727-mac9",
       "createdAt": "2026-07-27T21:48:21.185Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/profile",
       "description": "[bug-hunt] Three profile cards have zero i18n coverage while every sibling row in the same folder uses t() with defaultValue fallbacks - a Hindi/Hinglish/xx-AE user sees raw English on these specific cards. (1) src/pages/_components/profile/ProfileMacroTargetsCard.tsx:22-25 - \"Adjust macro targets\" + \"Set your daily calories & protein / carbs / fat\" are raw string literals; en.json has a similarly-named macro_title/macro_subtitle pair (line 1456-1457) but that belongs to NutritionPlanActions.tsx, not this card, so there is no key for it at all. (2) src/pages/_components/profile/ProfileChallengeCard.tsx:62-67 - the most prominent card on /profile (top of the list, per its own i-20260715-3206 comment): \"30-Day Challenge\", \"30-day challenge complete!\", \"You have logged consistently for 30 days. Outstanding.\", and the `${current} of ${GOAL} days . ${GOAL-current} days to go` template are all hardcoded English; no matching keys exist anywhere in en.json (confirmed via grep). (3) src/pages/_components/profile/ProfileTutorialPicker.tsx:78,142 - partial: the toast TITLE correctly uses t(\"profile.tutorials_reset_toast_title\") but the toast DESCRIPTION (`${keys.length} tutorial${keys.length>1?'s':''} will replay on next visit.`) and the row step-count (`{n} step(s)`) are raw English-only templates using English pluralization rules that do not generalize to other locales. Fix: add useTranslation/t() calls + matching keys across all 4 locale bundles (en/hi/hinglish/xx-AE) for all three, following the existing pattern in ProfileAppearance.tsx / ProfileCsvExportRow.tsx (t() with defaultValue fallback). Relates to the owner app-wide i18n directive and to i-20260717-pf2a (same class of gap, different components).",
       "author": "shakeebshaan",
@@ -4774,13 +4774,43 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: three /profile cards (ProfileMacroTargetsCard, ProfileChallengeCard, ProfileTutorialPicker) held raw English literals while every sibling row used t(). Fix: routed all copy through useTranslation()/t() and added matching keys to all 4 locale bundles (en/hi/hinglish/xx-AE) — macro_targets_title/subtitle, challenge_title/complete_title/complete_body/progress/days_logged, plus i18next plural forms tutorials_reset_toast_desc_one/_other and tutorial_step_count_one/_other. Proof: /profile in Hindi shows 'मैक्रो लक्ष्य समायोजित करें' macro card + Hinglish '30-Din Challenge / 30 me se 16 din · 16 din baaki'; xx-AE pseudo-locale wraps every string. Tutorial-picker desc/step-count are modal+toast surfaces verified via key presence + green test/i18n (68 tests). Full npm run test:unit gate green (10/10 shards).",
+        "imagePath": "images/i-20260727-mac9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-mac9-fix-r1.png",
+          "images/i-20260727-mac9-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4d531a596529a16cc0b49c53b4e5f43e043381bb",
+        "imageCommits": [
+          "4d531a596529a16cc0b49c53b4e5f43e043381bb",
+          "18f00dee02146fb05a32e33b6412593dcc4fe796"
+        ],
+        "fixedAt": "2026-07-28T09:27:38.915Z",
+        "by": "shakeebshaan",
+        "appCommit": "119dd1d5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "All 3 cards fully i18n'd across all 4 bundles with correct i18next plural forms; 2/3 proven visually in Hindi/Hinglish + xx-AE pseudo-locale, modal/toast card proven via key presence + green i18n parity tests; full unit gate 10/10 green. Minor: tutorial-picker modal not screenshot (opens on tap)."
+        }
+      },
       "history": [],
       "needsReview": false,
-      "reviewReason": null,
-      "reviewedAt": null,
       "reviewedBy": null,
-      "thread": []
+      "thread": [
+        {
+          "at": "2026-07-28T09:27:38.915Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: three /profile cards (ProfileMacroTargetsCard, ProfileChallengeCard, ProfileTutorialPicker) held raw English literals while every sibling row used t(). Fix: routed all copy through useTranslation()/t() and added matching keys to all 4 locale bundles (en/hi/hinglish/xx-AE) — macro_targets_title/subtitle, challenge_title/complete_title/complete_body/progress/days_logged, plus i18next plural forms tutorials_reset_toast_desc_one/_other and tutorial_step_count_one/_other. Proof: /profile in Hindi shows 'मैक्रो लक्ष्य समायोजित करें' macro card + Hinglish '30-Din Challenge / 30 me se 16 din · 16 din baaki'; xx-AE pseudo-locale wraps every string. Tutorial-picker desc/step-count are modal+toast surfaces verified via key presence + green test/i18n (68 tests). Full npm run test:unit gate green (10/10 shards).",
+          "by": "shakeebshaan"
+        }
+      ]
     }
   ]
 }
