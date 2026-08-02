@@ -331,7 +331,7 @@
     {
       "id": "i-20260727-e7c3",
       "createdAt": "2026-07-27T18:08:43.868Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/profile",
       "description": "[bug-hunt] Profile identity card shows the WRONG subscription status: an on-trial user is labelled \"Active member\" while a LAPSED user is labelled \"Free trial\" (inverted). src/pages/_components/profile/ProfileIdentityCard.tsx getSubscriptionStatus() (lines 98-103) branches ONLY on user.subscription_active and completely ignores user.is_trial + user.trial_days_remaining (both present on the User type, src/types/api.ts:20-26). Per CLAUDE.md the trial is a SOFT gate and a fresh onboarding auto-starts a 30-day trial where /auth/me returns is_trial:true AND subscription_active:true. Consequences: (1) a user ON the free trial renders \"Active member\" with a gold Crown - it NEVER shows \"Free trial\", so the trial state is invisible on Profile and trial_days_remaining is never surfaced; (2) the ONLY time the \"Free trial\" (UserIcon) branch renders is when subscription_active===false, i.e. a lapsed/expired/cancelled user whose premium routes already redirect to /choose-plan - they are told they are on a \"Free trial\" when they are not. Expected: derive the label from is_trial then subscription_active - is_trial -> \"Free trial\" (ideally + N days left), else subscription_active -> \"Active member\", else lapsed -> \"Free plan\"/\"Upgrade\". Repro: open /profile as (a) a trial account -> header reads \"Active member\" (should read Free trial); (b) an account with subscription_active=false -> header reads \"Free trial\" (should read Free/Upgrade). Fix: branch getSubscriptionStatus on is_trial first, then subscription_active, then the lapsed fallback.",
       "author": "shakeebshaan",
@@ -344,11 +344,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the Profile identity card chose the subscription label from 'subscription_active' alone, ignoring the trial flag — so during the 30-day trial (when both flags are true) trial users were mislabelled 'Active member' and lapsed users 'Free trial' (inverted). Fix: the label now checks the trial flag first ('Free Trial - N days left'), then active ('Active Member'), then lapsed ('Free Plan'), across all 4 locales.",
+        "imagePath": "images/i-20260727-e7c3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-e7c3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4da90af8d7ec62e3d64a8ed87bb0970c6f016dcd",
+        "imageCommits": [
+          "4da90af8d7ec62e3d64a8ed87bb0970c6f016dcd"
+        ],
+        "fixedAt": "2026-08-02T20:57:17.377Z",
+        "by": "shakeebshaan",
+        "appCommit": "bcec5ca7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Correct branch order (is_trial -> active -> lapsed) with i18n keys x4 locales; Profile tests 24/24; proof shows 'Free Trial - 29 days left' for a trial user. Full unit gate green."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfileIdentityCard subscription label branched only on subscription_active, ignoring is_trial; during the 30-day trial /auth/me returns is_trial:true AND subscription_active:true, so trial users read 'Active Member' and lapsed users read 'Free Trial' (inverted). Fix branches is_trial first -> 'Free Trial - N days left', then subscription_active -> 'Active Member', then lapsed -> 'Free Plan' (new i18n keys free_trial_days/free_plan x4 locales). Adapted to the concurrent Wave-5b ledger-register redesign already in main (plain-text Status row, no icon). Own tests green: test/Profile.page.test.tsx 24/24 (incl. new trial + lapsed cases). Proof PNGs captured on merged code: tmp/i-20260727-e7c3-fix.png (Status: Free Trial - 29 days left), tmp/i-20260727-e7c3-lapsed.png (Status: Free Plan). GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
-      "reviewedAt": "2026-07-27T18:40:25.061Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -356,6 +376,13 @@
           "who": "claude",
           "kind": "review",
           "text": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfileIdentityCard subscription label branched only on subscription_active, ignoring is_trial; during the 30-day trial /auth/me returns is_trial:true AND subscription_active:true, so trial users read 'Active Member' and lapsed users read 'Free Trial' (inverted). Fix branches is_trial first -> 'Free Trial - N days left', then subscription_active -> 'Active Member', then lapsed -> 'Free Plan' (new i18n keys free_trial_days/free_plan x4 locales). Adapted to the concurrent Wave-5b ledger-register redesign already in main (plain-text Status row, no icon). Own tests green: test/Profile.page.test.tsx 24/24 (incl. new trial + lapsed cases). Proof PNGs captured on merged code: tmp/i-20260727-e7c3-fix.png (Status: Free Trial - 29 days left), tmp/i-20260727-e7c3-lapsed.png (Status: Free Plan). GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-08-02T20:57:17.377Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Profile identity card chose the subscription label from 'subscription_active' alone, ignoring the trial flag — so during the 30-day trial (when both flags are true) trial users were mislabelled 'Active member' and lapsed users 'Free trial' (inverted). Fix: the label now checks the trial flag first ('Free Trial - N days left'), then active ('Active Member'), then lapsed ('Free Plan'), across all 4 locales.",
           "by": "shakeebshaan"
         }
       ]
