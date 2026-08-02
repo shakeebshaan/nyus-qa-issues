@@ -5040,9 +5040,9 @@
       "description": "[bug-hunt] Health-score body-comp trajectory has a dead zone for a mild weight GAIN against a loss goal - it scores identically to a plateau. nyu_backend/app/services/health_score.py:318-334 (_body_comp_pillar): for target<0 (loss goal), the -8 gaining-against-goal penalty only fires when weekly_pct > 0.005 (+0.5%/wk), and the stagnant/plateau branch only fires when abs(weekly_pct) < 0.0025 (+-0.25%/wk). A user trending +0.25%/wk to +0.5%/wk against their own loss goal falls through both branches and gets trajectory=0, same score as someone who is perfectly flat - even though they are moving the wrong direction. Likely an unintentional gap between the two threshold bands. Fix: either widen the stagnant band to meet the penalty band (e.g. stagnant covers up to 0.005) or add a small penalty for the gap zone so 'trending wrong way, not yet at -8 threshold' scores below true stagnation.",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto",
-        "backend"
+        "backend",
+        "deployed",
+        "gate-blocked"
       ],
       "imagePath": null,
       "imageCommit": null,
@@ -5051,11 +5051,19 @@
       "imagePrivate": false,
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": null,
-      "reviewedAt": null,
-      "reviewedBy": null,
-      "thread": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + DEPLOYED to prod (app commit d326917d, /api/v1/health 200). Root cause: health_score _body_comp_pillar trajectory had a dead zone for a loss goal (target>0) - a user gaining +0.25%..+0.5%/wk matched no band and scored trajectory=0, tying a plateau and beating a true plateau's -5. Fix: added a -7 penalty branch for that gap (below plateau -5, above the full >0.5%/wk penalty -8); gain side now monotonic -5 -> -7 -> -8; recomp target==0 branch untouched. Proven by pytest fail-before/pass-after (was 0, now -7) + a plateau-stays-(-5) contract pin; full health-score suite green (35). Cannot 'resolve --tests pass': board testGate runs the FRONTEND npm run test:unit (red on unrelated Wave-5 suites), irrelevant to this backend change - won't fake it. See attached 'Fix proof' report. Recommend scoping loop.json testCommand so backend fixes resolve clean.",
+      "reviewedAt": "2026-08-02T15:57:24.890Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-08-02T15:57:24.890Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIXED + DEPLOYED to prod (app commit d326917d, /api/v1/health 200). Root cause: health_score _body_comp_pillar trajectory had a dead zone for a loss goal (target>0) - a user gaining +0.25%..+0.5%/wk matched no band and scored trajectory=0, tying a plateau and beating a true plateau's -5. Fix: added a -7 penalty branch for that gap (below plateau -5, above the full >0.5%/wk penalty -8); gain side now monotonic -5 -> -7 -> -8; recomp target==0 branch untouched. Proven by pytest fail-before/pass-after (was 0, now -7) + a plateau-stays-(-5) contract pin; full health-score suite green (35). Cannot 'resolve --tests pass': board testGate runs the FRONTEND npm run test:unit (red on unrelated Wave-5 suites), irrelevant to this backend change - won't fake it. See attached 'Fix proof' report. Recommend scoping loop.json testCommand so backend fixes resolve clean.",
+          "by": "shakeebshaan"
+        }
+      ],
       "reportPath": "reports/health-score-9f2c-6a41-proof.html",
       "reportLabel": "Fix proof (deployed) →"
     }
