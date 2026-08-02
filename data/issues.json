@@ -5005,9 +5005,9 @@
       "description": "[bug-hunt] Health-score consistency pillar counts weight LOGS not distinct weigh-in DAYS, unlike the other 3 sub-metrics. nyu_backend/app/services/health_score.py:396-403 - daily_count/meal_count/workout_count all use func.count(func.distinct(...log_date)) (distinct calendar days), but weight_count uses func.count(WeightLog.id) (raw rows), then weight_cov = min(100, weight_count/8*100). A user who logs weight 8x in one sitting (re-weighs, corrects an entry) hits 100% weight coverage without weighing in on more than 1-2 actual days, while an honest once-every-4-days logger for the whole month can score lower despite better real-world coverage. Skews the 25%-weighted consistency pillar and the overall composite score. Fix: change weight_count query to func.count(func.distinct(func.date(WeightLog.logged_at))) to match the other 3 metrics' distinct-day semantics.",
       "author": "shakeebshaan",
       "tags": [
-        "bug-hunt",
-        "auto",
-        "backend"
+        "backend",
+        "deployed",
+        "gate-blocked"
       ],
       "imagePath": null,
       "imageCommit": null,
@@ -5016,11 +5016,19 @@
       "imagePrivate": false,
       "fix": null,
       "history": [],
-      "needsReview": false,
-      "reviewReason": null,
-      "reviewedAt": null,
-      "reviewedBy": null,
-      "thread": [],
+      "needsReview": true,
+      "reviewReason": "FIXED + DEPLOYED to prod (app commit d326917d, /api/v1/health 200). Root cause: health_score _consistency_pillar counted raw WeightLog rows (count(WeightLog.id)) while its daily/meal/workout siblings count distinct calendar days; re-weighing 8x in one sitting hit 100% weight coverage on 1 real day, skewing the 25%-weighted pillar. Fix: count(distinct(date(logged_at))) - distinct-day parity. Proven by pytest fail-before/pass-after (integration test: 10 rows/2 days -> 2, was 10); full health-score suite green (35). func.date() already used 80+ places on prod MySQL; no FE consumer of weights_30d. Cannot 'resolve --tests pass': the board testGate runs the FRONTEND npm run test:unit (red on unrelated Wave-5 ledger suites), irrelevant to a Python backend change - won't fake it. See attached 'Fix proof' report. Recommend scoping loop.json testCommand to a backend-aware subset so these resolve clean.",
+      "reviewedAt": "2026-08-02T15:57:17.723Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-08-02T15:57:17.723Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "FIXED + DEPLOYED to prod (app commit d326917d, /api/v1/health 200). Root cause: health_score _consistency_pillar counted raw WeightLog rows (count(WeightLog.id)) while its daily/meal/workout siblings count distinct calendar days; re-weighing 8x in one sitting hit 100% weight coverage on 1 real day, skewing the 25%-weighted pillar. Fix: count(distinct(date(logged_at))) - distinct-day parity. Proven by pytest fail-before/pass-after (integration test: 10 rows/2 days -> 2, was 10); full health-score suite green (35). func.date() already used 80+ places on prod MySQL; no FE consumer of weights_30d. Cannot 'resolve --tests pass': the board testGate runs the FRONTEND npm run test:unit (red on unrelated Wave-5 ledger suites), irrelevant to a Python backend change - won't fake it. See attached 'Fix proof' report. Recommend scoping loop.json testCommand to a backend-aware subset so these resolve clean.",
+          "by": "shakeebshaan"
+        }
+      ],
       "reportPath": "reports/health-score-9f2c-6a41-proof.html",
       "reportLabel": "Fix proof (deployed) →"
     },
