@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260802-14ae",
+      "createdAt": "2026-08-02T21:22:02.589Z",
+      "route": "/onboarding",
+      "description": "[bug-hunt] Onboarding “Plan ready” overview: the “Built from your {{count}} answers” provenance line (src/pages/onboarding/custom/PlanReadyOverview.tsx L392-398) renders an INFLATED count. answeredCount (same file L124-133) filters Object.values(data) for truthy fields, but `data` starts as INITIAL_DATA (src/pages/onboarding/OnboardingFlow.tsx L260-329) which pre-seeds ~20 non-empty DEFAULTS the user never touched: age 25, gender “male”, unit_preference “mixed”, height_cm 170, current_weight_kg 70, goal_weight_kg 65, stress_level 3, baseline_sleep_hours 7, sleep_target_hours 8, pregnancy_status “none”, meals_per_day 4, caffeine_type “none”, session_duration 45, baseline_water_liters 2, baseline_steps_per_day 5000, tracks_steps true, workout_frequency 3, daily_step_target 8000, plan_build_workout “ai”, plan_build_diet “ai”. Every one counts as “answered.” The code’s OWN comment claims it is “the number of onboarding fields the user actually answered … No inflation” — directly contradicted. Expected vs actual: a user who fills only the genuinely-required fields (name, biological_sex, goal_type, plan_start_date, target_completion_date, diet_type, motivation_type, past_attempts, intensity_tier ≈ 8-10 real answers) still sees “Built from your ~30 answers” because the ~20 untouched defaults are added in. Repro: run the release always-custom onboarding (VITE_FEATURE_DEFER_BUILDERS unset), touch only the required fields, reach the Plan-ready overview (OnboardingFlow.tsx:1549 — custom users see PlanReadyOverview) — the provenance line over-reports by ~20. Severity LOW (cosmetic provenance number; no data corruption, plan is correct). Fix: count only fields whose value differs from INITIAL_DATA (diff against the defaults) instead of every truthy field.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260802-tnm1",
       "createdAt": "2026-08-02T18:36:03.000Z",
       "route": null,
