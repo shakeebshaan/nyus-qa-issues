@@ -16,9 +16,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: answeredCount (PlanReadyOverview.tsx) counted every truthy field of `data`, but data seeds ~20 non-empty INITIAL_DATA defaults (age 25, gender, height 170, meals 4 …) the user never touched, so 'Built from your N answers' over-reported by ~20. Fix: count a field only when it is non-empty AND differs from its INITIAL_DATA default (exported INITIAL_DATA to diff). A minimal-answer user now reads ~9, not ~29. Added 2 vitest assertions.",
+        "imagePath": "images/i-20260802-14ae-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260802-14ae-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "177a015ca1aed9a0a81bc6829dc11c04dce1f3df",
+        "imageCommits": [
+          "177a015ca1aed9a0a81bc6829dc11c04dce1f3df"
+        ],
+        "fixedAt": "2026-08-02T21:37:25.711Z",
+        "by": "shakeebshaan",
+        "appCommit": "3e0db413",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Exact root cause matches the issue's own diagnosis; surgical diff-based fix (count only fields != INITIAL_DATA default); 2 new vitest assertions mount the real PlanReadyOverview and assert the de-inflated 6/5 counts; 9/9 green. LOW-severity cosmetic provenance number, fully addressed."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-08-02T21:37:25.711Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: answeredCount (PlanReadyOverview.tsx) counted every truthy field of `data`, but data seeds ~20 non-empty INITIAL_DATA defaults (age 25, gender, height 170, meals 4 …) the user never touched, so 'Built from your N answers' over-reported by ~20. Fix: count a field only when it is non-empty AND differs from its INITIAL_DATA default (exported INITIAL_DATA to diff). A minimal-answer user now reads ~9, not ~29. Added 2 vitest assertions.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260802-tnm1",
