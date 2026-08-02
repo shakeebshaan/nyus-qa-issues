@@ -457,8 +457,30 @@
     {
       "id": "i-20260727-9d3c",
       "createdAt": "2026-07-27T12:57:34.442Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: on the Plan Timeline, a paused-then-resumed plan lit up BOTH the 'Active' and 'Resumed' lifecycle pills because the 'current state' rule matched Active again once the plan's status returned to active — breaking the single-highlight contract. Fix: the Resumed sub-state now owns the single highlight, so a resumed plan fills ONLY the 'Resumed' pill.",
+        "imagePath": "images/i-20260727-9d3c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-9d3c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "23dcb5c2f0e49b52c2e8cf2d88165af8dd737c94",
+        "imageCommits": [
+          "23dcb5c2f0e49b52c2e8cf2d88165af8dd737c94"
+        ],
+        "fixedAt": "2026-08-02T20:57:03.731Z",
+        "by": "shakeebshaan",
+        "appCommit": "203bfbd1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Single-fill contract restored (Active catch-all guarded when resumed); regression test green; live /plan-timeline proof shows only Resumed filled. Full unit gate green."
+        }
+      },
       "history": [],
       "route": "/plan-timeline",
       "description": "[bug-hunt] Plan Timeline lifecycle pill row highlights TWO states as current for a genuinely paused-then-resumed plan: BOTH \"Active\" AND \"Resumed\" light up, breaking the stated \"ONE selected signal\" (single fill) contract.\n\nComponent: src/pages/PlanTimeline.tsx -> PlanStateMachine (the Draft -> Active -> Paused -> Resumed -> Completed QuietChip row), route /plan-timeline.\n\nWHAT IS WRONG: isCurrent for each chip (PlanTimeline.tsx:559-562) is:\n  const isCurrent =\n    (state.key === 'resumed' && isResumed) ||\n    (state.key === 'active' && currentStatus === 'active' && !isResumed) ||\n    (state.key === currentStatus);\nwith isResumed = currentStatus === 'active' && !!plan.resumed_at (L549). A resumed plan has status back to 'active' with resumed_at set. Trace for that plan (currentStatus='active', isResumed=true):\n  - chip 'resumed': clause1 (key==='resumed' && isResumed) = TRUE -> highlighted.\n  - chip 'active':  clause1 false; clause2 requires !isResumed = FALSE; BUT clause3 (state.key === currentStatus) = ('active'==='active') = TRUE -> ALSO highlighted.\nSo both Active and Resumed render with the selected fill (QuietChip selected=isCurrent, L570-577). The clause2 guard !isResumed was written specifically to stop Active lighting when resumed, but the catch-all clause3 (state.key === currentStatus) re-adds it because currentStatus IS 'active' for a resumed plan.\n\nThis is a NEW regression, NOT a duplicate of i-20260718-c5e8 (that was the old version>1 heuristic mislabeling EDITED-but-never-paused plans as Resumed; its fix correctly switched isResumed to key off resumed_at). c5e8 fixed a false-positive; this bug is the opposite direction: a TRUE resume now double-highlights.\n\nEXPECTED: for a paused->resumed active plan, only the 'Resumed' chip is current (Resumed is a sub-state of active, per the code comment L545-548). The 'Active' chip must NOT also be filled.\nACTUAL: both 'Active' and 'Resumed' chips show the selected fill simultaneously.\n\nREPRO: have an active plan -> pause it (/plan-pause) -> resume it (/plan-resume) so /plans/active returns status='active' with resumed_at set -> open /plan-timeline -> the lifecycle pill row lights BOTH Active and Resumed. Pure-logic bug; verifiable by evaluating the isCurrent expression with currentStatus='active' and plan.resumed_at set.\n\nSEVERITY: LOW-MED (misleading lifecycle display; not destructive). Triggers for every user who has paused then resumed a plan.\n\nFIX: make the catch-all clause not fire for 'active' when resumed, e.g. (state.key === currentStatus && !(state.key === 'active' && isResumed)), so the resumed sub-state owns the single highlight.",
@@ -474,9 +496,7 @@
       "imagePrivate": false,
       "reportPath": "reports/proof-9d3c.html",
       "reportLabel": "Fix proof",
-      "needsReview": true,
-      "reviewReason": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, can't honestly pass --tests). Root cause: PlanStateMachine isCurrent catch-all 'state.key === currentStatus' re-fired the Active chip for a resumed plan (status back to 'active' with resumed_at set), so BOTH Active and Resumed lit — breaking the single-fill contract. Fix: guarded the catch-all to '(state.key === currentStatus && !(state.key === active && isResumed))' at PlanTimeline.tsx:562 — the Resumed sub-state owns the single highlight. Committed 203bfbd1 on main (prior tick). Added/verified regression test test/PlanTimeline.page.test.tsx ('a resumed plan marks ONLY Resumed as current') — scoped run GREEN 9/9. Visual proof attached ('Fix proof' report): 390x844 /plan-timeline for a resumed plan shows ONLY the Resumed chip filled, Active unfilled. Gate note: full 'npm run test:unit' (~5700 tests) OOMs headless (exit 134) even at heap 6144 — recommend scoping loop.json testCommand or adding NODE_OPTIONS heap.",
-      "reviewedAt": "2026-07-27T13:31:11.313Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -484,6 +504,13 @@
           "who": "claude",
           "kind": "review",
           "text": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, can't honestly pass --tests). Root cause: PlanStateMachine isCurrent catch-all 'state.key === currentStatus' re-fired the Active chip for a resumed plan (status back to 'active' with resumed_at set), so BOTH Active and Resumed lit — breaking the single-fill contract. Fix: guarded the catch-all to '(state.key === currentStatus && !(state.key === active && isResumed))' at PlanTimeline.tsx:562 — the Resumed sub-state owns the single highlight. Committed 203bfbd1 on main (prior tick). Added/verified regression test test/PlanTimeline.page.test.tsx ('a resumed plan marks ONLY Resumed as current') — scoped run GREEN 9/9. Visual proof attached ('Fix proof' report): 390x844 /plan-timeline for a resumed plan shows ONLY the Resumed chip filled, Active unfilled. Gate note: full 'npm run test:unit' (~5700 tests) OOMs headless (exit 134) even at heap 6144 — recommend scoping loop.json testCommand or adding NODE_OPTIONS heap.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-08-02T20:57:03.731Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: on the Plan Timeline, a paused-then-resumed plan lit up BOTH the 'Active' and 'Resumed' lifecycle pills because the 'current state' rule matched Active again once the plan's status returned to active — breaking the single-highlight contract. Fix: the Resumed sub-state now owns the single highlight, so a resumed plan fills ONLY the 'Resumed' pill.",
           "by": "shakeebshaan"
         }
       ]
