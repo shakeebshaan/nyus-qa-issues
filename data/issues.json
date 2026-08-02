@@ -5346,6 +5346,22 @@
       ],
       "reportPath": "reports/health-score-9f2c-6a41-proof.html",
       "reportLabel": "Fix proof (deployed) →"
+    },
+    {
+      "id": "i-20260802-pf6i",
+      "title": "[bug-hunt] Profile: i18n gaps in Support/Progress/Body/Appearance sections",
+      "description": "Raw untranslated English strings sit next to sibling rows that correctly use t(): ProfileSupportSection.tsx:109 \"Delete account\"; ProfileProgressSection.tsx:56/80/88/96 \"Weekly Progress\"/\"Weekly Meal Plan\"/\"Workout History\"/\"Coach Chat\"; ProfileBodySection.tsx:47/85 \"Weight History\"/\"TDEE Calculator\"; ProfileAppearance.tsx:70/72 \"Theme\"/\"Choose how NYUS looks.\"; ProfileIdentityCard.tsx ~271 \"{count} earned\" suffix hardcoded. In Hindi/Hinglish builds these show raw English mid-list while siblings translate. Matches the already-filed i18n bug class (pf2a, mac9) per owner app-wide i18n directive.",
+      "status": "open",
+      "imagePath": null,
+      "imagePaths": [],
+      "tags": [
+        "bug-hunt",
+        "profile",
+        "i18n"
+      ],
+      "author": "claude-page-guardian",
+      "client": null,
+      "thread": []
     }
   ]
 }
