@@ -8,8 +8,8 @@
       "description": "[suggestion] Add a per-exercise \"this hurt / felt off\" flag during live workout logging (WorkoutTrackerBlock), feeding automatic substitution suggestions on future plans. Problem: RPE (rate-of-perceived-exertion) is already logged per set (src/components/blocks/WorkoutTrackerBlock.tsx), but there is no way to flag PAIN/discomfort distinct from normal exertion — \"injury\" today only exists as a whole-plan pause reason (src/types/api.ts PauseReason enum: vacation/illness/injury/work_busy/mental_break), not as a per-exercise signal captured during the set itself. Dedicated athletes routinely tweak a knee/shoulder mid-session and currently have no in-app way to record which specific exercise caused it — that context is lost unless they remember to mention it to the coach chat later. Comparable trackers (Hevy, Strong) let you attach a note per exercise but don't close the loop into plan generation; NYUS already has a coach ContextAssembler that reads user-data blocks into the LLM (see backend context builder), so this can plug in directly. Proposed v1: small \"hurt?\" toggle chip next to the RPE slider on each exercise card in WorkoutTrackerBlock — tapping it opens a 1-tap body-area picker (knee/shoulder/back/wrist/other) which saves a pain_flag field on that exercise's SetLog entry; next time the same exercise is scheduled, the workout plan generator (or a nightly job) surfaces a coach nudge (\"Last time Bench Press flagged shoulder pain — want a substitute?\") and the context builder includes recent pain flags so live coach chat is aware. Effort: FE ~1 day (chip + picker + payload field), BE ~1-2 days (SetLog schema field, plan-gen substitution check, ContextAssembler block).",
       "author": "shakeebshaan",
       "tags": [
-        "suggestion",
-        "auto"
+        "feature",
+        "scoping"
       ],
       "imagePath": null,
       "imagePaths": [],
@@ -17,7 +17,20 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Scoping + surface decision before build (genuine 2-3 day cross-surface feature; the card names a surface that cannot hold the flag as described). SURFACE REALITY: the live /activity workout writes SetLogs via Activity.tsx -> POST /activity/workout/log-set (backend WorkoutLogSet, backend.py:9501). WorkoutTrackerBlock — the AI-chat block the card points at — does NOT write SetLogs; it emits a summary via onResponse. So a pain_flag \"on the SetLog\" must attach in the live Activity per-set flow, not on the chat block. I would put the Hurt? chip there. PROPOSED v1: (1) FE Hurt? chip beside each exercise in the live Activity workout -> 1-tap body-area picker (knee/shoulder/back/wrist/other) -> pain_area added to the log-set payload; (2) BE nullable pain_area VARCHAR(20) on set_logs + migration, persisted in WorkoutLogSet; (3) ContextAssembler surfaces the last ~14 days of pain flags into coach context so live coach chat is aware (lowest-effort loop closure). DEFERRED v2 (heavier, +1-2 BE days): automatic plan-gen substitution + proactive \"Last time Bench flagged shoulder — want a substitute?\" nudge on next scheduling (needs plan-gen change + nightly job). OPTIONS: A=build v1+v2 now; B=build v1 capture+coach-context now, defer substitution/nudge to a follow-up card; C=hold. RECOMMENDATION: B — ships useful capture + coach awareness immediately at low risk, and lets the substitution UX be designed once real pain data exists. I will proceed with B on the next tick unless you redirect to A or C. (Flagging rather than auto-building because a prod schema migration for a brand-new feature on the high-stakes live-workout screen, with the card internally inconsistent about the surface, is a product call — not a defect with a provable fix.)",
+      "reviewedAt": "2026-08-02T17:02:38.271Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-08-02T17:02:38.271Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Scoping + surface decision before build (genuine 2-3 day cross-surface feature; the card names a surface that cannot hold the flag as described). SURFACE REALITY: the live /activity workout writes SetLogs via Activity.tsx -> POST /activity/workout/log-set (backend WorkoutLogSet, backend.py:9501). WorkoutTrackerBlock — the AI-chat block the card points at — does NOT write SetLogs; it emits a summary via onResponse. So a pain_flag \"on the SetLog\" must attach in the live Activity per-set flow, not on the chat block. I would put the Hurt? chip there. PROPOSED v1: (1) FE Hurt? chip beside each exercise in the live Activity workout -> 1-tap body-area picker (knee/shoulder/back/wrist/other) -> pain_area added to the log-set payload; (2) BE nullable pain_area VARCHAR(20) on set_logs + migration, persisted in WorkoutLogSet; (3) ContextAssembler surfaces the last ~14 days of pain flags into coach context so live coach chat is aware (lowest-effort loop closure). DEFERRED v2 (heavier, +1-2 BE days): automatic plan-gen substitution + proactive \"Last time Bench flagged shoulder — want a substitute?\" nudge on next scheduling (needs plan-gen change + nightly job). OPTIONS: A=build v1+v2 now; B=build v1 capture+coach-context now, defer substitution/nudge to a follow-up card; C=hold. RECOMMENDATION: B — ships useful capture + coach awareness immediately at low risk, and lets the substitution UX be designed once real pain data exists. I will proceed with B on the next tick unless you redirect to A or C. (Flagging rather than auto-building because a prod schema migration for a brand-new feature on the high-stakes live-workout screen, with the card internally inconsistent about the surface, is a product call — not a defect with a provable fix.)",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260728-e5b8",
