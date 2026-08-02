@@ -390,7 +390,7 @@
     {
       "id": "i-20260727-b1f6",
       "createdAt": "2026-07-27T18:08:43.868Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/profile",
       "description": "[bug-hunt] Profile \"Plan Management\" section renders an orphan heading over empty space when the user has neither an active nor a paused plan. src/pages/_components/profile/ProfilePlanManagement.tsx ALWAYS renders the section <h2> (profile.section_plan_management) + its motion container (lines 38-51), but all three action buttons are individually gated: Change Goal + Pause Plan on hasActivePlan (activePlan?.id != null), Resume Plan on hasPausedPlan (pausedPlan?.id != null). When GET /plans/active AND GET /plans/paused BOTH resolve null (a user who cancelled or completed their plan, or before any plan exists), every button is suppressed and the section collapses to a bare \"Plan Management\" label sitting above empty margin. Expected: hide the entire section (heading included) when there is no plan action to show, matching how ProfileReferralCard returns null when it has nothing to render. Repro: on an account with no active and no paused plan, open /profile and scroll to Plan Management -> section heading with nothing beneath it. Fix: wrap the h2 + div in {(hasActivePlan || hasPausedPlan) && (...)}.",
       "author": "shakeebshaan",
@@ -403,11 +403,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: the Profile 'Plan Management' section always rendered its heading even when the user had no active or paused plan (all three action buttons individually hidden), leaving a bare 'Plan Management' heading floating over empty space. Fix: the section now renders nothing when there's no plan to manage, matching how the referral card hides itself when empty.",
+        "imagePath": "images/i-20260727-b1f6-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-b1f6-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b45fa42320aa111cb1c79d051177d1e39a604dad",
+        "imageCommits": [
+          "b45fa42320aa111cb1c79d051177d1e39a604dad"
+        ],
+        "fixedAt": "2026-08-02T20:57:28.937Z",
+        "by": "shakeebshaan",
+        "appCommit": "bcec5ca7",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Surgical early-return when no active/paused plan (same pattern as ProfileReferralCard); Profile tests 24/24; proof scroll shows no orphan heading anywhere. Full unit gate green."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfilePlanManagement always rendered its <h2> + container even when the user had neither an active nor a paused plan (all 3 buttons individually gated off), leaving a bare 'Plan Management' heading over empty space. Fix: 'if (!hasActivePlan && !hasPausedPlan) return null;' — matches ProfileReferralCard returning null when it has nothing to show. Own tests green: test/Profile.page.test.tsx 24/24 (incl. new 'hides heading when no plan' + 'shows heading with active plan' cases). Proof PNG on merged code: tmp/i-20260727-b1f6-fix.png — scrolled through the profile (Quick Actions -> Challenge -> Level -> PROGRESS section), no orphan 'Plan Management' heading anywhere. GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
-      "reviewedAt": "2026-07-27T18:40:38.898Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -415,6 +435,13 @@
           "who": "claude",
           "kind": "review",
           "text": "FIXED + SHIPPED to main (app commit bcec5ca7), verified — but cannot 'resolve --tests pass' because the board's npm run test:unit gate is RED on UNRELATED suites, not this fix. Root cause: ProfilePlanManagement always rendered its <h2> + container even when the user had neither an active nor a paused plan (all 3 buttons individually gated off), leaving a bare 'Plan Management' heading over empty space. Fix: 'if (!hasActivePlan && !hasPausedPlan) return null;' — matches ProfileReferralCard returning null when it has nothing to show. Own tests green: test/Profile.page.test.tsx 24/24 (incl. new 'hides heading when no plan' + 'shows heading with active plan' cases). Proof PNG on merged code: tmp/i-20260727-b1f6-fix.png — scrolled through the profile (Quick Actions -> Challenge -> Level -> PROGRESS section), no orphan 'Plan Management' heading anywhere. GATE BLOCKER (not mine): test/AIWizardShell.test.tsx (41 fails) + test/ledger/kit-drift.test.ts fail on main from the Wave-5 Ink&Ledger redesign (commits 8e6783c2/a1aa0c4e). Recommend: fix those ledger tests or scope loop.json testCommand to a unit subset, then this resolves clean. Will not fake --tests pass or flip testGate.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-08-02T20:57:28.937Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Profile 'Plan Management' section always rendered its heading even when the user had no active or paused plan (all three action buttons individually hidden), leaving a bare 'Plan Management' heading floating over empty space. Fix: the section now renders nothing when there's no plan to manage, matching how the referral card hides itself when empty.",
           "by": "shakeebshaan"
         }
       ]
