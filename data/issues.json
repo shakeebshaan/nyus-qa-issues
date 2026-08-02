@@ -7,7 +7,10 @@
       "route": null,
       "description": "[discovery] Outlets added: 1. Pitch-ready: The News Minute (thenewsminute.com, Bengaluru-HQ South India regional news; route email@thenewsminute.com verified on own /about-us page). Escalated: 1. Re-confirmed 2 prior dead-ends (ParentCircle, FoodNavigator-Asia) — not re-added.",
       "author": "shakeebshaan",
-      "tags": ["discovery", "auto"],
+      "tags": [
+        "discovery",
+        "auto"
+      ],
       "imagePath": null,
       "imagePaths": [],
       "imageCommits": [],
@@ -22,7 +25,10 @@
       "route": null,
       "description": "[press] Press kit: Key facts (deploy-pipeline status corrected — confirmed FIXED as of 2026-08-02, superseding every prior tick's \"fully broken\" diagnosis; gh run list shows last 2 pushes success, direct-fetch confirmed a same-day-added blog post is live HTTP 200; blog count 1817->1818, stale Google-Play copy count held at 63). Article drafted: The Hostel Mess Plate No App Can Count (target: Delhi Post, ~780 words). Escalated: 1 (Delhi Post pitch, editor [at] delhipostnews.com, awaiting human send).",
       "author": "shakeebshaan",
-      "tags": ["press", "auto"],
+      "tags": [
+        "press",
+        "auto"
+      ],
       "imagePath": null,
       "imagePaths": [],
       "imageCommits": [],
@@ -497,14 +503,34 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: a dismissed coach-moment card could reappear because the dismissed-IDs set was seeded only from the cards present at first render, so a card that loaded a moment later (the weekly-challenge card, a separate query) never had its saved 'dismissed' marker checked. Fix: the component now re-syncs the dismissed set from storage whenever the card list changes, so a card you close stays closed even when it arrives from a later load.",
+        "imagePath": "images/i-20260727-mdk7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260727-mdk7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ada373ff8ec4f6972d2fa6b5046de8feb84331fc",
+        "imageCommits": [
+          "ada373ff8ec4f6972d2fa6b5046de8feb84331fc"
+        ],
+        "fixedAt": "2026-08-02T20:56:49.202Z",
+        "by": "shakeebshaan",
+        "appCommit": "ad7be2cb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root cause fixed at source (dismissed-set re-sync via useLayoutEffect keyed on momentsKey); regression test added; proof shows the dismissed card stays hidden after a late query. Full unit gate green."
+        }
+      },
       "history": [],
       "reportPath": "reports/proof-mdk7.html",
       "reportLabel": "Fix proof — dismissed card (mdk7)",
-      "needsReview": true,
-      "reviewReason": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, so I can't honestly pass --tests). Root cause: StackedMomentCards.dismissedIds was a useState initializer that ran once off the first-render moments; the weekly-challenge card (separate query, resolves after dashboard-overview) was absent at mount so its localStorage dismiss marker was never checked and it reappeared. Fix: re-sync dismissedIds from localStorage via a useLayoutEffect keyed on momentsKey (union-only, same-ref = no extra render). Committed ad7be2cb on main + pushed. Added regression test (test/StackedMomentCards.expand.test.tsx) — scoped run GREEN 3/3. See attached 'Fix proof' report. Gate note: node tools/loop.mjs verify (npm run test:unit, full test/ dir ~5700 tests) dies with JS-heap OOM exit 134 on this box even at --max-old-space-size=6144, and also hits an unrelated pre-existing jsdom flake (Activity.restTimerCarryover: 'HTMLMediaElement.play() not implemented'). Recommend: run the scoped file locally to confirm, then Resolve; or scope loop.json testCommand tighter / add NODE_OPTIONS heap in the test:unit script.",
-      "reviewedAt": "2026-07-27T11:55:30.322Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -512,6 +538,13 @@
           "who": "claude",
           "kind": "review",
           "text": "FIX SHIPPED, awaiting your verify+resolve (board test gate is infra-blocked headless, so I can't honestly pass --tests). Root cause: StackedMomentCards.dismissedIds was a useState initializer that ran once off the first-render moments; the weekly-challenge card (separate query, resolves after dashboard-overview) was absent at mount so its localStorage dismiss marker was never checked and it reappeared. Fix: re-sync dismissedIds from localStorage via a useLayoutEffect keyed on momentsKey (union-only, same-ref = no extra render). Committed ad7be2cb on main + pushed. Added regression test (test/StackedMomentCards.expand.test.tsx) — scoped run GREEN 3/3. See attached 'Fix proof' report. Gate note: node tools/loop.mjs verify (npm run test:unit, full test/ dir ~5700 tests) dies with JS-heap OOM exit 134 on this box even at --max-old-space-size=6144, and also hits an unrelated pre-existing jsdom flake (Activity.restTimerCarryover: 'HTMLMediaElement.play() not implemented'). Recommend: run the scoped file locally to confirm, then Resolve; or scope loop.json testCommand tighter / add NODE_OPTIONS heap in the test:unit script.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-08-02T20:56:49.202Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: a dismissed coach-moment card could reappear because the dismissed-IDs set was seeded only from the cards present at first render, so a card that loaded a moment later (the weekly-challenge card, a separate query) never had its saved 'dismissed' marker checked. Fix: the component now re-syncs the dismissed set from storage whenever the card list changes, so a card you close stays closed even when it arrives from a later load.",
           "by": "shakeebshaan"
         }
       ]
