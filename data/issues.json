@@ -5483,7 +5483,7 @@
       "id": "i-20260802-pf6i",
       "title": "[bug-hunt] Profile: i18n gaps in Support/Progress/Body/Appearance sections",
       "description": "Raw untranslated English strings sit next to sibling rows that correctly use t(): ProfileSupportSection.tsx:109 \"Delete account\"; ProfileProgressSection.tsx:56/80/88/96 \"Weekly Progress\"/\"Weekly Meal Plan\"/\"Workout History\"/\"Coach Chat\"; ProfileBodySection.tsx:47/85 \"Weight History\"/\"TDEE Calculator\"; ProfileAppearance.tsx:70/72 \"Theme\"/\"Choose how NYUS looks.\"; ProfileIdentityCard.tsx ~271 \"{count} earned\" suffix hardcoded. In Hindi/Hinglish builds these show raw English mid-list while siblings translate. Matches the already-filed i18n bug class (pf2a, mac9) per owner app-wide i18n directive.",
-      "status": "open",
+      "status": "fixed",
       "imagePath": null,
       "imagePaths": [],
       "tags": [
@@ -5493,13 +5493,41 @@
       ],
       "author": "claude-page-guardian",
       "client": null,
-      "thread": [],
-      "claim": {
+      "thread": [
+        {
+          "at": "2026-08-03T08:06:28.452Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: profile rows in ProfileProgressSection/BodySection/SupportSection/Appearance + IdentityCard rendered hardcoded English (and English aria-labels) beside sibling rows that use t(). Fix: added weekly_progress/weekly_meal_plan/workout_history/coach_chat/weight_history/tdee_calculator/theme/trophy_case/badges_earned + delete-account keys to all 4 locale bundles (en/hi/hinglish/xx-AE) and switched those rows to t(). Proof: /profile in Hindi now shows Trophy Case='ट्रॉफी केस', 14 earned='14 अर्जित', Delete account='खाता हटाएँ', Support/FAQ/Log out all translated. i18n locale-parity + hardcoded-strings tests green.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "fix": {
+        "description": "Root cause: profile rows in ProfileProgressSection/BodySection/SupportSection/Appearance + IdentityCard rendered hardcoded English (and English aria-labels) beside sibling rows that use t(). Fix: added weekly_progress/weekly_meal_plan/workout_history/coach_chat/weight_history/tdee_calculator/theme/trophy_case/badges_earned + delete-account keys to all 4 locale bundles (en/hi/hinglish/xx-AE) and switched those rows to t(). Proof: /profile in Hindi now shows Trophy Case='ट्रॉफी केस', 14 earned='14 अर्जित', Delete account='खाता हटाएँ', Support/FAQ/Log out all translated. i18n locale-parity + hardcoded-strings tests green.",
+        "imagePath": "images/i-20260802-pf6i-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260802-pf6i-fix-r1.png",
+          "images/i-20260802-pf6i-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "df4242bf5b23cad7ddb1198864c20c6f31065706",
+        "imageCommits": [
+          "df4242bf5b23cad7ddb1198864c20c6f31065706",
+          "9ee71dae3b7616740d7e6a837d90aca2ee393bb9"
+        ],
+        "fixedAt": "2026-08-03T08:06:28.452Z",
         "by": "shakeebshaan",
-        "at": "2026-08-03T05:04:16.810Z",
-        "expiresAt": "2026-08-03T05:44:16.810Z",
-        "note": "verify-and-resolve: fix already in main; running gate + capturing proof"
-      }
+        "appCommit": "bdc4542f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "All 4 bundles + aria translated, parity+hardcoded-strings tests green, live Hindi capture proves named rows translated."
+        }
+      },
+      "needsReview": false
     }
   ]
 }
