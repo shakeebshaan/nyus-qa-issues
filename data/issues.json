@@ -37,7 +37,13 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "description": "[bug-hunt] Change Goal wizard (/goal-change, src/pages/GoalChangeWizard.tsx) has ZERO i18n hookup — no useTranslation / t() anywhere (grep count = 0). Every user-facing string is hardcoded English: header Change Goal; step labels [New Goal, Body Stats, Preferences, Preview]; What is your new goal?; all 5 GOAL labels+descriptions (Fat Loss / Muscle Gain / Body Recomp / Maintenance / Endurance); Updated body stats, Current Weight, Goal Weight, Activity Level + 5 ACTIVITY_LEVELS labels/descriptions; Diet preferences + DIET_TYPES labels; the carry-over note; Here is your new plan; macro-row labels (Daily Calories/Protein/Carbs/Fat); Plan Details / BMR / TDEE / Weekly weight target / Plan duration; the Set your weights first, Preview failed and Goal updated toasts; and the empty/error screens. Under a Hindi/Hinglish locale the whole wizard renders in English. Expected: strings resolve via t() with keys in en/hi/hinglish/xx-AE bundles (per the translate-the-entire-app directive). Actual: hardcoded English. Same class as filed+fixed e5b8 (Social) / c17a (Leaderboard) / d24e (PartnerGroupHub) / 3b9d (NotificationPreferences) but a distinct, never-migrated route."
+      "description": "[bug-hunt] Change Goal wizard (/goal-change, src/pages/GoalChangeWizard.tsx) has ZERO i18n hookup — no useTranslation / t() anywhere (grep count = 0). Every user-facing string is hardcoded English: header Change Goal; step labels [New Goal, Body Stats, Preferences, Preview]; What is your new goal?; all 5 GOAL labels+descriptions (Fat Loss / Muscle Gain / Body Recomp / Maintenance / Endurance); Updated body stats, Current Weight, Goal Weight, Activity Level + 5 ACTIVITY_LEVELS labels/descriptions; Diet preferences + DIET_TYPES labels; the carry-over note; Here is your new plan; macro-row labels (Daily Calories/Protein/Carbs/Fat); Plan Details / BMR / TDEE / Weekly weight target / Plan duration; the Set your weights first, Preview failed and Goal updated toasts; and the empty/error screens. Under a Hindi/Hinglish locale the whole wizard renders in English. Expected: strings resolve via t() with keys in en/hi/hinglish/xx-AE bundles (per the translate-the-entire-app directive). Actual: hardcoded English. Same class as filed+fixed e5b8 (Social) / c17a (Leaderboard) / d24e (PartnerGroupHub) / 3b9d (NotificationPreferences) but a distinct, never-migrated route.",
+      "claim": {
+        "by": "shakeebshaan",
+        "at": "2026-08-03T21:44:05.852Z",
+        "expiresAt": "2026-08-03T22:44:05.852Z",
+        "note": "headless tick: fixes committed+pushed, resolving with verified proof"
+      }
     },
     {
       "id": "i-20260803-3b9d",
