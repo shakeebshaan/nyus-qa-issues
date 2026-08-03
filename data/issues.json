@@ -62,7 +62,7 @@
       "id": "i-20260803-9c1a",
       "createdAt": "2026-08-03T03:26:00.000Z",
       "route": "/coach-chat",
-      "status": "open",
+      "status": "fixed",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -73,15 +73,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: DailyCheckinBlock.handleSubmit spread every field ungated, so a coach card restricted to a subset (data.fields, e.g. ['mood']) still POSTed the seeded sleep_hours default (7) whose slider never rendered - a fabricated sleep log. Fix: src/components/blocks/DailyCheckinBlock.tsx gates each submitted field on showField() so hidden-but-defaulted fields are omitted (displayed==submitted). Regression test asserts sleep_hours undefined when fields=['mood']. Non-visual logic bug - proof card shows diff + green test.",
+        "imagePath": "images/i-20260803-9c1a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-9c1a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "58344a6b0b90fbd450e394a41d82448e94aa78f5",
+        "imageCommits": [
+          "58344a6b0b90fbd450e394a41d82448e94aa78f5"
+        ],
+        "fixedAt": "2026-08-03T08:07:43.961Z",
+        "by": "shakeebshaan",
+        "appCommit": "bdc4542f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Exact root cause, minimal gated fix, precise regression test; full unit gate green."
+        }
+      },
       "history": [],
       "description": "[bug-hunt] Coach-chat Daily Check-in block writes a FABRICATED sleep log (sleep_hours: 7) for a field the coach hid. src/components/blocks/DailyCheckinBlock.tsx gates only the RENDERING of each field via showField() (line 47-48: `!data.fields?.length || data.fields.includes(field)`), but handleSubmit (lines 56-62) submits every field UNGATED: `...(sleep > 0 && { sleep_hours: sleep })`. The `sleep` state defaults to `defaults.sleep_hours ?? 7` (line 34), so it is 7 even when the sleep slider is never shown. Repro: coach sends a check-in restricted to a subset, e.g. `data.fields = ['mood']` (or ['weight']) — the sleep slider does NOT render — user taps a mood and Submit. onResponse = {date, sleep_hours: 7, mood} -> transformDailyCheckin -> POST /logs/daily writes a 7h sleep the user never entered and the card never displayed. Silent because 7h is plausible. The same leak hits weight/water whenever defaults.weight_kg / defaults.water_ml are seeded AND that field is hidden. Expected (per blocks/types.ts contract 'when present, only listed fields are rendered AND submitted', and the in-file comment 'submit exactly what the card visibly shows'): hidden fields are omitted from the payload. Actual: hidden-but-defaulted fields are submitted. Fix: gate each spread on showField(...) too — e.g. `...(showField('sleep') && sleep > 0 && { sleep_hours: sleep })` for all four fields.",
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-08-03T05:03:45.669Z",
-        "expiresAt": "2026-08-03T05:43:45.669Z",
-        "note": "verify-and-resolve: fix already in main; running gate + capturing proof"
-      }
+      "thread": [
+        {
+          "at": "2026-08-03T08:07:43.961Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: DailyCheckinBlock.handleSubmit spread every field ungated, so a coach card restricted to a subset (data.fields, e.g. ['mood']) still POSTed the seeded sleep_hours default (7) whose slider never rendered - a fabricated sleep log. Fix: src/components/blocks/DailyCheckinBlock.tsx gates each submitted field on showField() so hidden-but-defaulted fields are omitted (displayed==submitted). Regression test asserts sleep_hours undefined when fields=['mood']. Non-visual logic bug - proof card shows diff + green test.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260803-4f7d",
