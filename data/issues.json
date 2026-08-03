@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260803-3c18",
+      "createdAt": "2026-08-03T21:52:41.924Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/dashboard",
+      "description": "[bug-hunt] Gamification celebration surfaces render HARDCODED English, ignoring the selected app language (same i18n class as fixed e5b8/c17a/d24e/3b9d/hyd8, distinct never-migrated surfaces).\n\nTwo live, user-visible surfaces have ZERO i18n hookup:\n\n1) Daily-rewards reveal sheet - src/components/gamification/RewardRevealSheet.tsx has NO useTranslation import; every string is an English literal: title \"Yesterday's rewards\" (L125), \"Checking yesterday...\" (L137), error \"Couldn't check yesterday's rewards. Try again later.\" (L143), empty \"Nothing earned yesterday - today's a fresh start.\" (L149), summary \"1 win from yesterday\"/\"N wins from yesterday\" (L190-192), plus aria labels (L133/L162). It is mounted LIVE on the Dashboard (src/pages/Dashboard.tsx:141) and opened by the (localized) rewards chip (Dashboard.tsx:128).\n\n2) Level-up celebration caption - src/components/gamification/LevelUpWatcher.tsx:121 passes milestoneLabel=\"Level up\" as a literal. CelebrationOverlay/MilestoneEffect renders that label as visible caption text (src/components/motion/CelebrationOverlay.tsx:243, and the reduced-motion path L103). LevelUpWatcher is mounted at the app shell, so the full-screen \"Level up\" caption fires on ANY screen at level-up, always in English.\n\nRepro: Profile -> App language -> Hindi (or pick Hindi at the startup language picker). (a) On Dashboard, on a day where yesterday minted rewards, tap the rewards chip -> the sheet opens entirely in English. (b) Earn enough XP to cross a level -> the full-screen milestone overlay shows \"Level up\" in English.\nExpected: both surfaces localized via t() across en/hi/hinglish/xx-AE. Actual: English string literals; RewardRevealSheet imports no i18n at all, LevelUpWatcher hardcodes the caption.\nFix: add useTranslation to RewardRevealSheet + move all literals to achievements.* keys; replace LevelUpWatcher milestoneLabel with a t() call. Note: WeeklyChallengeCard.tsx is ALSO hardcoded but is NOT rendered anywhere (only its singularizeChallengeText helper is imported), so it is dead code and out of scope.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260803-7a2c",
       "createdAt": "2026-08-03T19:36:51.809Z",
       "route": "/goal-change",
