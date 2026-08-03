@@ -118,7 +118,13 @@
       "imagePrivate": false,
       "fix": null,
       "history": [],
-      "description": "[bug-hunt] Coach-chat Weekly Report block renders body-weight change in HARDCODED kilograms, ignoring an imperial user's unit_preference. src/components/blocks/WeeklyReportBlock.tsx line 41 `const weightChange = data.weight_end - data.weight_start;` then line 94 renders `{weightSign}{weightChange.toFixed(1)} kg` with a literal ' kg' suffix and no conversion. weight_start/weight_end arrive from the backend in kg; the block has no unit awareness (BlockProps only passes data/status/onResponse/cacheKey). Repro: user with unit_preference = 'imperial' (lbs); coach emits a weekly_report block; a -0.5 kg change displays as '-0.5 kg' instead of '-1.1 lb'. Every OTHER weight surface converts for imperial (LogWeight, Measurements, WeightTrendChart). This is the SAME imperial-unit family as i-20260803-020c (Notifications Weekly Report/Daily Summary modals) and i-20260803-d7b3 (Weekly Progress page) but a DISTINCT, unfixed component -- neither of those fixes touched src/components/blocks/WeeklyReportBlock.tsx. Expected: convert to lb + label 'lb' when unit_preference is imperial. Actual: always kg. Fix: read the user's unit_preference (hook/context) and convert+relabel, or have the coach weekly_report tool send unit + pre-converted values."
+      "description": "[bug-hunt] Coach-chat Weekly Report block renders body-weight change in HARDCODED kilograms, ignoring an imperial user's unit_preference. src/components/blocks/WeeklyReportBlock.tsx line 41 `const weightChange = data.weight_end - data.weight_start;` then line 94 renders `{weightSign}{weightChange.toFixed(1)} kg` with a literal ' kg' suffix and no conversion. weight_start/weight_end arrive from the backend in kg; the block has no unit awareness (BlockProps only passes data/status/onResponse/cacheKey). Repro: user with unit_preference = 'imperial' (lbs); coach emits a weekly_report block; a -0.5 kg change displays as '-0.5 kg' instead of '-1.1 lb'. Every OTHER weight surface converts for imperial (LogWeight, Measurements, WeightTrendChart). This is the SAME imperial-unit family as i-20260803-020c (Notifications Weekly Report/Daily Summary modals) and i-20260803-d7b3 (Weekly Progress page) but a DISTINCT, unfixed component -- neither of those fixes touched src/components/blocks/WeeklyReportBlock.tsx. Expected: convert to lb + label 'lb' when unit_preference is imperial. Actual: always kg. Fix: read the user's unit_preference (hook/context) and convert+relabel, or have the coach weekly_report tool send unit + pre-converted values.",
+      "claim": {
+        "by": "shakeebshaan",
+        "at": "2026-08-03T21:44:36.818Z",
+        "expiresAt": "2026-08-03T22:44:36.818Z",
+        "note": "headless tick: fixes committed+pushed, resolving with verified proof"
+      }
     },
     {
       "id": "i-20260803-7e4f",
