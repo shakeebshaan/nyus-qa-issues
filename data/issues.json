@@ -138,7 +138,7 @@
       "id": "i-20260803-b2e8",
       "createdAt": "2026-08-03T03:26:00.000Z",
       "route": "/log-weight",
-      "status": "open",
+      "status": "fixed",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -149,15 +149,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: LogWeight.handleConfirmWeight (the >2%-change Confirm path) had no offline branch, so a no-response network error during Confirm discarded the weigh-in via a destructive save-failed toast (audit #14). Fix: src/pages/LogWeight.tsx mirrors handleSave - on isNoResponseError, enqueue the /logs/daily upsert for replay, show 'Saved - will sync when back online', and return. Regression test drives a no-response reject and asserts enqueue({blockType:'weight_log',endpoint:'/logs/daily',payload:{morning_weight_kg}}). Non-visual (offline) bug - proof card shows diff + green test.",
+        "imagePath": "images/i-20260803-b2e8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-b2e8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3be0c611f8258af94e5819ded45c34958d071897",
+        "imageCommits": [
+          "3be0c611f8258af94e5819ded45c34958d071897"
+        ],
+        "fixedAt": "2026-08-03T08:08:11.280Z",
+        "by": "shakeebshaan",
+        "appCommit": "bdc4542f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Mirrors the already-proven handleSave offline pattern; dedicated regression test green; full gate green."
+        }
+      },
       "history": [],
       "description": "[bug-hunt] Confirming a large (>2%) weigh-in while OFFLINE silently LOSES the log. In src/pages/LogWeight.tsx, handleSave treats a network failure as must-not-lose (lines 330-343: `if (isNoResponseError(err)) { enqueue({ blockType:'weight_log', endpoint:'/logs/daily', payload:{...} }); openMoment(weightKg); toast('Saved - will sync when back online'); return; }` — upholding the 'the morning weigh-in must never be lost (audit #14)' invariant). handleConfirmWeight (lines 355-381) — the path taken after the backend flags a daily change over its 2% threshold and the user taps Confirm — has NO isNoResponseError branch: its catch (371-380) goes straight to captureException + a destructive 'Save failed' toast. Repro: log a weight that differs >2% from your last log so the confirmation warning renders, disable the network, tap Confirm. confirmAndSubmit -> upsertDailyLog throws a no-response error -> generic catch -> 'Save failed' toast and the weigh-in is DISCARDED (never queued). Expected: the confirmed weigh-in is enqueued for replay exactly like handleSave. Actual: real data loss on the confirm path, violating the code's own stated invariant. Fix: add the same isNoResponseError -> enqueue/openMoment/saved-offline branch to handleConfirmWeight's catch.",
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-08-03T05:04:06.557Z",
-        "expiresAt": "2026-08-03T05:44:06.557Z",
-        "note": "verify-and-resolve: fix already in main; running gate + capturing proof"
-      }
+      "thread": [
+        {
+          "at": "2026-08-03T08:08:11.280Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: LogWeight.handleConfirmWeight (the >2%-change Confirm path) had no offline branch, so a no-response network error during Confirm discarded the weigh-in via a destructive save-failed toast (audit #14). Fix: src/pages/LogWeight.tsx mirrors handleSave - on isNoResponseError, enqueue the /logs/daily upsert for replay, show 'Saved - will sync when back online', and return. Regression test drives a no-response reject and asserts enqueue({blockType:'weight_log',endpoint:'/logs/daily',payload:{morning_weight_kg}}). Non-visual (offline) bug - proof card shows diff + green test.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260802-14ae",
