@@ -4,8 +4,30 @@
     {
       "id": "i-20260803-020c",
       "createdAt": "2026-08-03T12:52:55.226Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Weekly Report + Daily Summary modals in src/pages/Notifications.tsx hardcoded kg for body weight + workout volume, never reading unit_preference. Fix: read ['profile-basic-info'] (same query as LogWeight) and convert kg->lb (x2.20462) + relabel for imperial users across all 5 sites (weekly volume/change/start->end, daily volume/weight); metric unchanged. Added Notifications.page.test.tsx coverage. Proof PNG shows Weekly Report in lb (4409 lb Volume, -1.1 lb, 176.4->175.3 lb).",
+        "imagePath": "images/i-20260803-020c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-020c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fe50c4d619180b9b21de1fd818b58455f89fb994",
+        "imageCommits": [
+          "fe50c4d619180b9b21de1fd818b58455f89fb994"
+        ],
+        "fixedAt": "2026-08-03T14:23:16.947Z",
+        "by": "shakeebshaan",
+        "appCommit": "f0a31e68",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 90,
+          "note": "FE-only unit conversion, all 5 sites fixed, 69 fix-tests + full test:unit gate (10/10 shards, EXIT 0) green, imperial modal proven in full-screen capture."
+        }
+      },
       "history": [],
       "route": "/notifications",
       "description": "[bug-hunt] Notifications page — the Weekly Report and Daily Summary modals hardcode KILOGRAMS for body weight and workout volume, ignoring an imperial user's unit_preference. Every other weight surface (LogWeight src/pages/LogWeight.tsx:242, Measurements src/pages/Measurements.tsx:115) converts kg->lb when profile.unit_preference === \"imperial\", so an imperial user sees lbs everywhere EXCEPT these two modals, which show raw kg with a literal \"kg\" suffix.\n\nAffected file: src/pages/Notifications.tsx\n\nWeekly Report modal:\n- weight change: {change_kg}.toFixed(1) rendered with a literal \" kg\" suffix (line ~935)\n- start->end: {start_weight_kg}.toFixed(1) kg -> {end_weight_kg}.toFixed(1) kg (line ~938)\n- workout volume: Math.round(total_volume_kg) under the label \"kg Volume\" (line ~897)\n\nDaily Summary modal:\n- weight: Number(weight_kg).toFixed(1) with a literal \" kg\" (line ~1030)\n- workout volume: {total_volume_kg}kg inline (line ~1003)\n\nThe values come straight from summaryService (WeeklySummary.weight_summary.*_kg / total_volume_kg and DailySummary.weight.weight_kg / workout.total_volume_kg — backend stores kg) with no kg->lb conversion and a hardcoded \"kg\" string. Neither modal reads unit_preference at all.\n\nExpected: for an imperial user, weight + volume convert to lb (kg * 2.20462) and render a \"lb\" suffix, matching LogWeight/Measurements.\nActual: both modals always show kg regardless of unit_preference.\n\nRepro:\n1. Profile with unit_preference = \"imperial\" (LogWeight/Measurements correctly show lb/inch).\n2. Open /notifications.\n3. Tap a Weekly Report notification (type weekly_report) OR a Daily Summary notification (type daily_summary).\n4. The modal's weight change, start->end weights, and workout volume all render in kg with a \"kg\" label — not lb.\n\nSame CLASS as i-20260803-d7b3 (Weekly Progress page) but a DIFFERENT surface/file (Notifications.tsx modals) needing its own fix: thread unit_preference into both modals and convert weight + volume. Not a dupe of b9c4 (Weekly Report date-range off-by-one, fixed) or b7c2 (Measurements cold-cache, fixed).",
@@ -18,7 +40,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-03T14:23:16.947Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: Weekly Report + Daily Summary modals in src/pages/Notifications.tsx hardcoded kg for body weight + workout volume, never reading unit_preference. Fix: read ['profile-basic-info'] (same query as LogWeight) and convert kg->lb (x2.20462) + relabel for imperial users across all 5 sites (weekly volume/change/start->end, daily volume/weight); metric unchanged. Added Notifications.page.test.tsx coverage. Proof PNG shows Weekly Report in lb (4409 lb Volume, -1.1 lb, 176.4->175.3 lb).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260803-d7b3",
