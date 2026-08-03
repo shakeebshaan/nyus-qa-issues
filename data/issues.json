@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260803-d7b3",
+      "createdAt": "2026-08-03T12:09:13.168Z",
+      "route": "/weekly-progress",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "description": "[bug-hunt] Weekly Progress page (/weekly-progress) renders EVERY weight value in kilograms, ignoring an imperial (lbs) user’s unit_preference — while the rest of the app (LogWeight, Measurements, and even WeightTrendChart itself) correctly converts to lbs. The app has a real imperial path: LogWeight.tsx:64-65 + 216 reads unit_preference===\"imperial\" -> \"lb\"/\"lbs\", Measurements respects it, and WeightTrendChart.tsx accepts a `unit` prop and converts kg->lbs via convert() (KG_TO_LB, 2.20462). But on WeeklyProgress.tsx: (1) WeightTrendChart is mounted WITHOUT a unit prop (WeeklyProgress.tsx:941-944) so it falls back to the default unit=\"kg\" — Y-axis, tooltip \"X kg\", and the \"Goal: X kg\" reference label all render kg. (2) MultiMetricBarChart \"Daily breakdown\" hardcodes kg — the Weight row bar format is `${n.toFixed(1)} kg` (MultiMetricBarChart.tsx:247) and the drilldown-drawer weight is `${selectedDay.weight.toFixed(1)} kg` (MultiMetricBarChart.tsx:367), with no conversion and no unit prop passed (WeeklyProgress.tsx:960). (3) The weight ledger rows + weekly-change strings are literal \"kg\" against the raw kg number (WeeklyProgress.tsx:236-237, 678-680, 740). Expected: an imperial user sees weight/goal/change in lbs (converted), consistent with LogWeight & Measurements. Actual: /weekly-progress shows kg everywhere — a 180 lb user who logs \"81.6 kg\" in LogWeight sees \"81.6 kg\" on Progress instead of \"~180 lbs\", so units disagree across screens. Repro: Profile -> set Units to Imperial (unit_preference=imperial) -> log a weight -> open /weekly-progress: the Weight Trend chart axis/tooltip/goal label, the Daily-breakdown bars + tap-drawer, and the weight ledger rows all read \"kg\". Fix: read unit_preference (query [\"profile-basic-info\"], as LogWeight does) and (a) pass unit to WeightTrendChart, (b) convert + pass unit into MultiMetricBarChart’s weight format + drawer, (c) convert the ledger/change kg values and swap the \"kg\" suffix.",
+      "history": []
+    },
+    {
       "id": "i-20260803-cb3f",
       "createdAt": "2026-08-03T07:10:00.000Z",
       "route": null,
