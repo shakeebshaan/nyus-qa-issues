@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260803-9c1a",
+      "createdAt": "2026-08-03T03:26:00.000Z",
+      "route": "/coach-chat",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "description": "[bug-hunt] Coach-chat Daily Check-in block writes a FABRICATED sleep log (sleep_hours: 7) for a field the coach hid. src/components/blocks/DailyCheckinBlock.tsx gates only the RENDERING of each field via showField() (line 47-48: `!data.fields?.length || data.fields.includes(field)`), but handleSubmit (lines 56-62) submits every field UNGATED: `...(sleep > 0 && { sleep_hours: sleep })`. The `sleep` state defaults to `defaults.sleep_hours ?? 7` (line 34), so it is 7 even when the sleep slider is never shown. Repro: coach sends a check-in restricted to a subset, e.g. `data.fields = ['mood']` (or ['weight']) — the sleep slider does NOT render — user taps a mood and Submit. onResponse = {date, sleep_hours: 7, mood} -> transformDailyCheckin -> POST /logs/daily writes a 7h sleep the user never entered and the card never displayed. Silent because 7h is plausible. The same leak hits weight/water whenever defaults.weight_kg / defaults.water_ml are seeded AND that field is hidden. Expected (per blocks/types.ts contract 'when present, only listed fields are rendered AND submitted', and the in-file comment 'submit exactly what the card visibly shows'): hidden fields are omitted from the payload. Actual: hidden-but-defaulted fields are submitted. Fix: gate each spread on showField(...) too — e.g. `...(showField('sleep') && sleep > 0 && { sleep_hours: sleep })` for all four fields."
+    },
+    {
+      "id": "i-20260803-4f7d",
+      "createdAt": "2026-08-03T03:26:00.000Z",
+      "route": "/log-weight",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "description": "[bug-hunt] Log Weight EWMA weekly-rate + Goal ETA are diluted by carry-forward days for any user who doesn't weigh in every day (the common case). The backend weight-data endpoint builds daily_weight_history where a day with no real log CARRIES FORWARD the previous weight as a REPEATED numeric value with logged:false (nyu_backend/backend.py:6752-6764). The sibling loggingStreak correctly excludes these (src/pages/LogWeight.tsx:468 filters `p.logged !== false`), and recent_weigh_ins was added specifically to expose carry-forward-free data (types/api.ts:604-608). But weightTrend (LogWeight.tsx:485-499) filters ONLY `typeof p.weight === 'number' && Number.isFinite(p.weight)` — which is TRUE for carry-forward rows — so every non-weigh-in day feeds a repeated weight into the alpha=0.25 EWMA, and the rate is divided by a fixed `lookback` of up to 7 DAYS (line 497), not by the number of real weigh-ins. Repro: weigh in 80.0 kg on day 1, skip days 2-6, weigh in 78.0 kg on day 7. daily_weight_history = [80(logged),80,80,80,80,80(carry),78(logged)]; EWMA rate = ((79.5-80)/6)*7 ~= -0.58 kg/wk, versus a true ~-2.3 kg/wk. This diluted rate is shown in the chart caption AND fed into goalEta (LogWeight.tsx:520 -> computeGoalEta), roughly DOUBLING the projected Goal date — or dropping |rate| under MIN_RATE_KG_WK and flipping the Goal card to 'keep logging'. Expected: the smoothed weekly rate reflects real weigh-ins only. Actual: understated/diluted. Fix: filter `p.logged !== false` in weightTrend (or read recent_weigh_ins), matching loggingStreak."
+    },
+    {
+      "id": "i-20260803-b2e8",
+      "createdAt": "2026-08-03T03:26:00.000Z",
+      "route": "/log-weight",
+      "status": "open",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": [],
+      "description": "[bug-hunt] Confirming a large (>2%) weigh-in while OFFLINE silently LOSES the log. In src/pages/LogWeight.tsx, handleSave treats a network failure as must-not-lose (lines 330-343: `if (isNoResponseError(err)) { enqueue({ blockType:'weight_log', endpoint:'/logs/daily', payload:{...} }); openMoment(weightKg); toast('Saved - will sync when back online'); return; }` — upholding the 'the morning weigh-in must never be lost (audit #14)' invariant). handleConfirmWeight (lines 355-381) — the path taken after the backend flags a daily change over its 2% threshold and the user taps Confirm — has NO isNoResponseError branch: its catch (371-380) goes straight to captureException + a destructive 'Save failed' toast. Repro: log a weight that differs >2% from your last log so the confirmation warning renders, disable the network, tap Confirm. confirmAndSubmit -> upsertDailyLog throws a no-response error -> generic catch -> 'Save failed' toast and the weigh-in is DISCARDED (never queued). Expected: the confirmed weigh-in is enqueued for replay exactly like handleSave. Actual: real data loss on the confirm path, violating the code's own stated invariant. Fix: add the same isNoResponseError -> enqueue/openMoment/saved-offline branch to handleConfirmWeight's catch."
+    },
+    {
       "id": "i-20260802-14ae",
       "createdAt": "2026-08-02T21:22:02.589Z",
       "route": "/onboarding",
