@@ -25,8 +25,30 @@
       "createdAt": "2026-08-04T02:23:54.285Z",
       "route": "/body-composition",
       "description": "[bug-hunt] Body Composition TDEE / VO2max / Fitness Age use a WRONG activity-multiplier table that diverges from the canonical onboarding calculator, so the page shows numbers that contradict the plan they claim to describe — and the most-active users are hit worst.\n\nsrc/pages/BodyComposition.tsx defines its OWN ACTIVITY_MULTIPLIERS (L65-74) that disagrees with the single source of truth src/lib/onboarding-calc.ts (L5-11, used by calcOnboardingStats -> every plan target + the dashboard TDEE):\n1) very_active: BodyComposition = 1.9 vs onboarding-calc = 1.725 -> TDEE OVERSTATED ~10%.\n2) extremely_active: onboarding STORES exactly this string (Screen7_Activity.tsx:30-31, Screen3_IntensityActivity.tsx:37, GoalChangeWizard.tsx:58), but BodyComposition's map has NO \"extremely_active\" key — it has a typo'd \"extra_active\" instead. So tdeeMultiplier() (L76-79) evaluates ACTIVITY_MULTIPLIERS[\"extremely_active\"] ?? 1.375 = 1.375 — i.e. an ATHLETE is scored with the \"lightly active\" multiplier. The same fallback hits vo2MaxEstimate() (L92: ACTIVITY_MULTIPLIERS[level] ?? 1.375), so their VO2 max and Fitness Age are also computed as if lightly active (understated VO2 -> older fitness age).\n\nConcrete repro (male, 80 kg, 180 cm, 30 yo, activity_level \"extremely_active\"): BMR (Mifflin-St Jeor) = 10*80 + 6.25*180 - 5*30 + 5 = 1780. Canonical plan/onboarding TDEE = 1780 * 1.9 = 3382 kcal. Body Composition page shows TDEE = 1780 * 1.375 = 2448 kcal — ~934 kcal/day (28%) LOWER than the plan it describes, and the \"Discuss all metrics with Coach\" prompt sends the wrong 2448 figure to the coach. For a \"very_active\" user the page instead OVERstates (1780*1.9=3382 vs canonical 1780*1.725=3071).\n\nExpected: Body Composition TDEE + VO2max reuse the canonical ACTIVITY_MULTIPLIERS (very_active=1.725, extremely_active=1.9) so they agree with the plan the app actually built.\nActual: local divergent copy — very_active=1.9 (wrong) and NO extremely_active key (typo extra_active), so athletes silently fall back to the 1.375 light default.\nFix: import ACTIVITY_MULTIPLIERS from src/lib/onboarding-calc.ts and delete the local copy (or at minimum add the extremely_active key and set very_active=1.725); confirm tdeeMultiplier + vo2MaxEstimate no longer hit the 1.375 fallback for stored activity levels.",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: BodyComposition.tsx defined its own ACTIVITY_MULTIPLIERS that diverged from canonical src/lib/onboarding-calc.ts (very_active=1.9 vs canonical 1.725; NO extremely_active key — typo'd extra_active), so stored 'extremely_active' athletes fell back to the 1.375 light default and TDEE/VO2max/Fitness Age computed ~28% low. Fix: import the canonical ACTIVITY_MULTIPLIERS and delete the local copy; regression tests (extremely_active -> TDEE 3382 not 2448).",
+        "imagePath": "images/i-20260804-a9c7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-a9c7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c61fc05798c5513dc815cf52b8fcf8bd0df3a898",
+        "imageCommits": [
+          "c61fc05798c5513dc815cf52b8fcf8bd0df3a898"
+        ],
+        "fixedAt": "2026-08-04T04:07:14.946Z",
+        "by": "shakeebshaan",
+        "appCommit": "81a0c360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Divergent map removed, canonical imported (verified in code + onboarding-calc keys); regression test in cap script; unit gate green."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -37,7 +59,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-04T04:07:14.946Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: BodyComposition.tsx defined its own ACTIVITY_MULTIPLIERS that diverged from canonical src/lib/onboarding-calc.ts (very_active=1.9 vs canonical 1.725; NO extremely_active key — typo'd extra_active), so stored 'extremely_active' athletes fell back to the 1.375 light default and TDEE/VO2max/Fitness Age computed ~28% low. Fix: import the canonical ACTIVITY_MULTIPLIERS and delete the local copy; regression tests (extremely_active -> TDEE 3382 not 2448).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260803-9f4e",
