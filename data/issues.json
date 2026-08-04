@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260804-5e2c",
+      "createdAt": "2026-08-04T09:52:20.921Z",
+      "status": "open",
+      "route": "/health-score",
+      "description": "[bug-hunt] Health Score surface renders 100% HARDCODED English, ignoring the selected app language. No useTranslation() anywhere across the whole surface (grep of HealthScore*/healthScore*/HealthQuiz* returns zero i18n).\n\nAffected (all ProtectedRoute, reachable to every logged-in user):\n- /health-score page (src/pages/HealthScore.tsx): 'Health Score', 'Pillar breakdown', 'Recent trend', 'What changed', 'Last updated N min ago', 'since last check', 'Retake quiz' / 'Retake quiz (recommended)', 'Composite of 6 pillars ... Recomputes nightly ...', and the empty/error/computing states ('No score yet', 'Take the quiz', 'Calculating your score...', 'Check back shortly', \"Couldn't load your score\", 'Retry').\n- /health-quiz flow (src/pages/health-quiz/HealthQuizFlow.tsx): header 'Health Score' / 'Refresh Health Score', BACK/NEXT/FINISH/SAVING..., exit dialog 'Leave the health quiz?' / 'Your answers are saved as a draft.' / Stay / Leave, and ALL 23 question prompts + every option label in src/lib/healthScoreQuestions.ts, plus section labels Eat/Lifestyle/Mind/Exercise.\n- post-quiz reveal (src/pages/health-quiz/HealthScoreReveal.tsx): 'Your baseline', tier advice, 'See trend & history'.\n- shared TIER_META labels+advice and PILLAR_LABELS in src/services/healthScore.service.ts: tiers Critical/At Risk/Moderate/Good/Strong/Elite and pillars Nutrition/Activity/Body/Recovery/Consistency/Lifestyle.\n\nExpected: with app language = Hindi / Hinglish / xx-AE, this surface localizes like the already-fixed sibling surfaces. Actual: every string stays English regardless of language.\n\nRepro: set language to Hindi in the startup language picker -> Profile -> (Body section) 'Health Score' row (ProfileBodySection.tsx:71) -> /health-score -> tap 'Take the quiz'. All copy renders in English.\n\nSame i18n class as the fixed e5b8/c17a/b4f2/3b9d/c1e9/3c18 cards; distinct never-migrated surface. NOTE: src/components/dashboard/HealthScoreCard.tsx is DEAD code (imported nowhere) so the live entry point is the /health-score page, not the card.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "i18n"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260804-0473",
       "createdAt": "2026-08-04T08:23:32.554Z",
       "route": "/weekly-progress",
