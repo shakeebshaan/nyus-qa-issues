@@ -136,7 +136,7 @@
     {
       "id": "i-20260803-3b9d",
       "createdAt": "2026-08-03T18:08:14.585Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/notification-preferences",
       "description": "[bug-hunt] Notification Settings page (/notification-preferences) is almost entirely UN-TRANSLATED: only the \"Coach check-ins\" card calls t(); every other string is a hardcoded English literal, so a Hindi / Hinglish / xx-AE user sees a mixed-language screen.\n\nExpected: all user-facing strings localized via t(), like the sibling coach_checkins block and the rest of the app under the i18n directive.\n\nActual: src/pages/NotificationPreferences.tsx renders raw English for: header \"Notification Settings\" (L256, L281); global toggle \"Push Notifications\" / \"Enable all push notifications\" (L352-353); all 5 CATEGORIES labels+descs (defined L54-59, rendered raw at L442-443 -> Workout Reminders / Meal Reminders / Progress Updates / Social / Tips & Offers); \"Categories\" kicker (L435); \"Quiet Hours\" / \"No push during sleep\" (L463-464); \"From\" / \"To\" (L480, L492); \"Weekly Limit\" / \"Max scheduled notifications per week\" (L511-512); FREQUENCY_OPTIONS labels \"1/week\"..\"5/week\" (L62-65); auto-paused + device-permission banners (L304-338); every toast (L84-103, L135); and all aria-labels (L359, L449, L459, L471, ...).\n\nRoot cause: partial i18n migration. The notification_prefs i18n namespace exists in all 4 bundles (en/hi/hinglish/xx-AE) but contains ONLY coach_checkins.* keys -- verified Object.keys(en.notification_prefs) === [\"coach_checkins\"]. The categories/header/quiet-hours/frequency/banner/toast strings were never added and their call sites were never wired to t(). Same class as i-20260727-mac9 / i-20260727-hyd8 (profile), i-20260803-pf6i, i-20260717-e5f1.\n\nRepro: switch app language to Hindi (Profile -> language) -> open Profile -> Notification Settings (/notification-preferences). The \"Coach check-ins\" card renders in Hindi; the header, all 5 category rows, Quiet Hours, and Weekly Limit stay in English.\n\nFix: add notification_prefs.* keys (header, global toggle, categories, quiet_hours, frequency, banners, toasts, aria) to all 4 bundles and replace the hardcoded literals with t(); move the CATEGORIES / FREQUENCY_OPTIONS label+desc strings to key references resolved at render.",
       "author": "shakeebshaan",
@@ -149,14 +149,40 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
-      "history": [],
-      "claim": {
+      "fix": {
+        "description": "Root cause: Notification Settings page (/notification-preferences) was almost entirely un-translated; only the Coach check-ins card called t(). Fix: added useTranslation and moved every string (header, pause banner, push toggle, all category cards + descriptions) to i18n keys across en/hi/hinglish/xx-AE (NotificationPreferences.tsx, 51 t() calls). Proof shows full Hindi render.",
+        "imagePath": "images/i-20260803-3b9d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-3b9d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "acfec4135c50f55e5d7e3a9ab8a4b389387b7e98",
+        "imageCommits": [
+          "acfec4135c50f55e5d7e3a9ab8a4b389387b7e98"
+        ],
+        "fixedAt": "2026-08-04T04:06:08.380Z",
         "by": "shakeebshaan",
-        "at": "2026-08-03T21:44:21.404Z",
-        "expiresAt": "2026-08-03T22:44:21.404Z",
-        "note": "headless tick: fixes committed+pushed, resolving with verified proof"
-      }
+        "appCommit": "81a0c360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Full i18n hookup verified (51 t() calls); proof PNG renders entire page in Hindi; unit gate green."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-08-04T04:06:08.380Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: Notification Settings page (/notification-preferences) was almost entirely un-translated; only the Coach check-ins card called t(). Fix: added useTranslation and moved every string (header, pause banner, push toggle, all category cards + descriptions) to i18n keys across en/hi/hinglish/xx-AE (NotificationPreferences.tsx, 51 t() calls). Proof shows full Hindi render.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260803-f3ac",
