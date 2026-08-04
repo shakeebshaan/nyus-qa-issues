@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260804-b4f2",
+      "createdAt": "2026-08-04T02:23:54.285Z",
+      "route": "/body-composition",
+      "description": "[bug-hunt] Body Composition page (/body-composition, src/pages/BodyComposition.tsx) has ZERO i18n hookup — no useTranslation import, no t() call anywhere; every user-facing string is a hardcoded English literal. Same i18n class as fixed e5b8/c17a/d24e/3b9d and open 3c18/c1e9, but a DISTINCT never-migrated page. Reachable by ALL authenticated users (ProtectedRoute, App.tsx:804); linked from Log Weight (src/pages/LogWeight.tsx) and the Profile Body section (src/pages/_components/profile/ProfileBodySection.tsx).\n\nHardcoded strings (all English, no t()):\n- Header \"Body Composition\" + subtitle \"Estimated from your profile, weight, and plan\" (L587-588).\n- Empty state: \"Need profile data\" / \"Log your weight and complete your profile (height, age, gender)...\" / \"Log Weight\" button (L256-264).\n- Hero \"Fitness Age\" (L390) + all three sentence variants \"Your fitness age is N years below/above your real age...\" (L398-402) + \"Estimated from VO2max model. Nes et al. 2013.\" (L404).\n- Sub-group titles \"Mass\" / \"Composition\" / \"Metabolism\" (L409/414/419); \"Derived Insights\" + \"8 metrics\" + \"Show\"/\"Hide\" (L435-439).\n- Every metric label: Weight, BMI, Bone Mass, Body Fat, Subcutaneous Fat, Visceral Fat, Muscle Rate, BMR, Body Water, Metabolic Age, Lean Body Mass, Fat Mass, FFMI, VO2 Max, TDEE, Protein Need, Water Need, Goal (L276-513) + every tooltip string.\n- Category/badge helpers all return English: bmiCategory \"Underweight/Normal/Overweight/Obese\" (L99-102); bodyFatBadge \"Essential/Athletic/Fit/Average/High\" (L801-814); visceral \"Normal/High/Very High\" (L327); metabolic-age \"Younger/Older/On par\" (L365).\n- \"Discuss all metrics with Coach\" CTA + subtitle (L544-545); footnote \"Estimates use peer-reviewed equations...\" + \"Body Fat Estimator\" link (L556-565).\n\nRepro: Profile -> App language -> Hindi (or pick Hindi at the startup language picker). Navigate to /body-composition (from Log Weight, or Profile -> Body). Entire screen renders in English.\nExpected: all strings localized via t() across en/hi/hinglish/xx-AE; badge/category helper functions resolve their labels through t() too.\nActual: file imports no i18n (useTranslation/react-i18next absent); 0 t() calls.\nFix: add useTranslation, move literals to a bodyComposition.* key namespace in all 4 bundles, and route bmiCategory/bodyFatBadge/visceral/metabolic-age labels through t().",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
+      "id": "i-20260804-a9c7",
+      "createdAt": "2026-08-04T02:23:54.285Z",
+      "route": "/body-composition",
+      "description": "[bug-hunt] Body Composition TDEE / VO2max / Fitness Age use a WRONG activity-multiplier table that diverges from the canonical onboarding calculator, so the page shows numbers that contradict the plan they claim to describe — and the most-active users are hit worst.\n\nsrc/pages/BodyComposition.tsx defines its OWN ACTIVITY_MULTIPLIERS (L65-74) that disagrees with the single source of truth src/lib/onboarding-calc.ts (L5-11, used by calcOnboardingStats -> every plan target + the dashboard TDEE):\n1) very_active: BodyComposition = 1.9 vs onboarding-calc = 1.725 -> TDEE OVERSTATED ~10%.\n2) extremely_active: onboarding STORES exactly this string (Screen7_Activity.tsx:30-31, Screen3_IntensityActivity.tsx:37, GoalChangeWizard.tsx:58), but BodyComposition's map has NO \"extremely_active\" key — it has a typo'd \"extra_active\" instead. So tdeeMultiplier() (L76-79) evaluates ACTIVITY_MULTIPLIERS[\"extremely_active\"] ?? 1.375 = 1.375 — i.e. an ATHLETE is scored with the \"lightly active\" multiplier. The same fallback hits vo2MaxEstimate() (L92: ACTIVITY_MULTIPLIERS[level] ?? 1.375), so their VO2 max and Fitness Age are also computed as if lightly active (understated VO2 -> older fitness age).\n\nConcrete repro (male, 80 kg, 180 cm, 30 yo, activity_level \"extremely_active\"): BMR (Mifflin-St Jeor) = 10*80 + 6.25*180 - 5*30 + 5 = 1780. Canonical plan/onboarding TDEE = 1780 * 1.9 = 3382 kcal. Body Composition page shows TDEE = 1780 * 1.375 = 2448 kcal — ~934 kcal/day (28%) LOWER than the plan it describes, and the \"Discuss all metrics with Coach\" prompt sends the wrong 2448 figure to the coach. For a \"very_active\" user the page instead OVERstates (1780*1.9=3382 vs canonical 1780*1.725=3071).\n\nExpected: Body Composition TDEE + VO2max reuse the canonical ACTIVITY_MULTIPLIERS (very_active=1.725, extremely_active=1.9) so they agree with the plan the app actually built.\nActual: local divergent copy — very_active=1.9 (wrong) and NO extremely_active key (typo extra_active), so athletes silently fall back to the 1.375 light default.\nFix: import ACTIVITY_MULTIPLIERS from src/lib/onboarding-calc.ts and delete the local copy (or at minimum add the extremely_active key and set very_active=1.725); confirm tdeeMultiplier + vo2MaxEstimate no longer hit the 1.375 fallback for stored activity levels.",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "id": "i-20260803-9f4e",
       "createdAt": "2026-08-03T23:59:00.000Z",
       "status": "open",
