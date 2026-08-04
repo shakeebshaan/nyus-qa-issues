@@ -114,8 +114,30 @@
       "id": "i-20260804-0473",
       "createdAt": "2026-08-04T08:23:32.554Z",
       "route": "/weekly-progress",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: ShareProgressButton (share icon on /weekly + /monthly-progress) localized only its dietitian-export path; the social-share path + range/format popup menu rendered hardcoded English. Fix (763d5bf8): wired every remaining literal to t() under progress.share.* (17 keys, 4-bundle parity) — Format/Image/PDF toggle, Report range/Last {n} days/Default, aria labels, native share title+caption, web-download fallback + error toasts. Proof: Hindi share menu (फ़ॉर्मेट/इमेज/रिपोर्ट रेंज/पिछले N दिन/डिफ़ॉल्ट).",
+        "imagePath": "images/i-20260804-0473-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-0473-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f153069c388b4fe65c26df0f516cfd8dc41ee55f",
+        "imageCommits": [
+          "f153069c388b4fe65c26df0f516cfd8dc41ee55f"
+        ],
+        "fixedAt": "2026-08-04T17:42:16.946Z",
+        "by": "shakeebshaan",
+        "appCommit": "0aca6dcb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Committed+pushed, full unit gate EXIT=0, Hindi proof PNG shows menu chrome fully localized."
+        }
+      },
       "history": [],
       "description": "[bug-hunt] Share Progress Report menu + toasts render HARDCODED English, ignoring the app language.\n\nComponent: src/components/progress/ShareProgressButton.tsx — the share icon in the header of BOTH /weekly-progress and /monthly-progress (rendered at WeeklyProgress.tsx & MonthlyProgress.tsx:322). Reachable by every authenticated user (ProtectedRoute). Same i18n class as fixed e5b8/c17a/d24e/3b9d/3c18 and b4f2, but a DISTINCT never-migrated surface.\n\nThe component clearly INTENDS to localize — its sibling \"Export report (PDF)\" path already uses t() for every string (handleDietitianExport ~L184-194, section label L393, menu label L402, and its toasts). But the social-share path + the range/format menu are hardcoded English literals with no t():\n- Range chooser menu (opened by tapping the share icon): \"Format\" (L350), \"Image\"/\"PDF\" toggle (L368), \"Report range\" (L373), \"Last {n} days\" (L383), \"Default\" (L385).\n- ARIA labels: \"Share progress report\" (L314), \"Preparing your progress image\" (L321), \"Choose a report range\" (L347), \"Report format\" (L355).\n- Share payload title/text: title = \"My NYUS progress\" (L228), text = `My last {n} days with NYUS.` (L229).\n- Toasts: web-download fallback \"Sharing works on the app — {PDF|image} downloaded instead.\" (L293); error toast \"Couldn’t create your progress {PDF|image}. Please try again.\" (L299-301).\n\nExpected: a Hindi/Hinglish user sees the menu, aria labels, and toasts in their selected language (exactly as the adjacent dietitian-export path already does). Actual: all of the above render English regardless of app language.\n\nRepro: set app language to Hindi -> open /weekly-progress or /monthly-progress -> tap the share icon (top-right header) -> the popup menu (\"Format / Image / PDF / Report range / Last 30 days / Default\") is English; completing a web share/download shows an English toast.\n\nNote: the rasterized card image + dietitian PDF are hand-drawn English documents by design (see file headers) — this report is scoped to the interactive UI chrome (menu, aria labels, toasts, share caption), not the document pixels.",
       "author": "shakeebshaan",
@@ -127,7 +149,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-04T17:42:16.946Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: ShareProgressButton (share icon on /weekly + /monthly-progress) localized only its dietitian-export path; the social-share path + range/format popup menu rendered hardcoded English. Fix (763d5bf8): wired every remaining literal to t() under progress.share.* (17 keys, 4-bundle parity) — Format/Image/PDF toggle, Report range/Last {n} days/Default, aria labels, native share title+caption, web-download fallback + error toasts. Proof: Hindi share menu (फ़ॉर्मेट/इमेज/रिपोर्ट रेंज/पिछले N दिन/डिफ़ॉल्ट).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260804-nxq7",
