@@ -162,7 +162,7 @@
       "id": "i-20260803-f3ac",
       "createdAt": "2026-08-03T16:37:36.000Z",
       "route": "/coach-chat",
-      "status": "open",
+      "status": "fixed",
       "author": "shakeebshaan",
       "tags": [
         "bug-hunt",
@@ -173,15 +173,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "fix": null,
+      "fix": {
+        "description": "Root cause: MeasurementInputBlock.handleSubmit mapped EVERY field into the payload, so any field the user left blank was submitted as a literal value:0, corrupting measurement history + Navy body-fat math. Fix: filter to fields where values[f.key] > 0 before mapping (MeasurementInputBlock.tsx:60-67) so only user-filled fields submit. Regression tests added.",
+        "imagePath": "images/i-20260803-f3ac-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-f3ac-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "40b2df26bd25bc28e0a9f28403fdda453f8e6359",
+        "imageCommits": [
+          "40b2df26bd25bc28e0a9f28403fdda453f8e6359"
+        ],
+        "fixedAt": "2026-08-04T04:05:27.961Z",
+        "by": "shakeebshaan",
+        "appCommit": "81a0c360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Logic fix verified in code + HTML proof-card shows before/after diff and passing regression test; full FE unit gate green (10/10 shards)."
+        }
+      },
       "history": [],
       "description": "[bug-hunt] Coach-chat \"Body Measurements\" block submits FABRICATED zero-value measurements for every field the user leaves blank. src/components/blocks/MeasurementInputBlock.tsx initializes each field to 0 (lines 30-40: `initial[f.key] = 0`). The Save button is gated on hasValues (line 65: `Object.values(values).some(v => v > 0)`) which only requires ONE field > 0. But handleSubmit (lines 50-63) maps EVERY field into the payload ungated: `measurements: fields.map(f => ({ key: f.key, label: f.label, value: values[f.key], unit: f.unit }))` -> untouched fields go out as value 0. Repro: coach emits a measurement_input card with fields [Waist, Chest, Arms]; user types Waist = 80 only, taps Save. onResponse -> onBlockResponse sends measurements = [{Waist,80},{Chest,0},{Arms,0}] to the backend coach agent, which logs a 0 cm Chest and 0 cm Arm the user never entered and the card never showed as filled. Silent + corrupts the measurement history / body-fat (Navy) math that reads those circumferences. This is the exact sibling of the just-fixed i-20260803-9c1a (DailyCheckinBlock fabricated sleep log) and i-20260710-9d3b -- same 'displayed == submitted' invariant, DIFFERENT unfixed file. Expected: only fields the user actually filled (value > 0) are submitted. Actual: all rendered fields submitted, blanks as 0. Fix: gate the map like the DailyCheckin fix, e.g. `fields.filter(f => values[f.key] > 0).map(...)`.",
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-08-03T21:44:28.902Z",
-        "expiresAt": "2026-08-03T22:44:28.902Z",
-        "note": "headless tick: fixes committed+pushed, resolving with verified proof"
-      }
+      "thread": [
+        {
+          "at": "2026-08-04T04:05:27.961Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: MeasurementInputBlock.handleSubmit mapped EVERY field into the payload, so any field the user left blank was submitted as a literal value:0, corrupting measurement history + Navy body-fat math. Fix: filter to fields where values[f.key] > 0 before mapping (MeasurementInputBlock.tsx:60-67) so only user-filled fields submit. Regression tests added.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260803-b711",
