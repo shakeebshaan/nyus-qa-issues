@@ -2,6 +2,44 @@
   "version": 1,
   "issues": [
     {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-04T22:38:31.145Z",
+      "id": "i-20260804-d1f7",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Water tracker card renders 100% HARDCODED English, ignoring the selected app language. src/components/nutrition/WaterTrackerCard.tsx has NO useTranslation hook — every string is an English literal: the \"Water\" title (l181), the tank subline \"Goal reached — nicely done\" / \"{L} L to go\" (l85-87), the \"{value} / {goal} L\" readout (l183-186), the container-picker labels \"Glass\"/\"Bottle\"/\"Large\" (BASE_CONTAINERS l53-57) and the \"{ml} ml\" custom label, the \"Add {ml} ml\" button (l277), the footer \"Adjust container sizes & your daily goal in Profile · Hydration\" (l281), plus every aria-label (\"Water intake\" l196, \"Container size\" l233, \"Add {ml} ml of water\" l273, \"Remove the selected amount of water\" l265). Same i18n-gap class as fixed b4f2/5e2c/3b9d/c1e9/3c18 but a DISTINCT never-migrated component. Reachable live: NutritionTodayView.tsx:219 mounts <WaterTrackerCard> on /nutrition for any user with an active diet plan. Expected: all copy + aria localized via t(). Actual: stays English in Hindi/Hinglish/xx-AE. Repro: set app language to Hindi (startup picker or Profile → Language) → open /nutrition (plan account) → scroll to the water tracker below the meal list → every label above is still English."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-04T22:38:31.145Z",
+      "id": "i-20260804-e2a4",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Calorie Balance ring renders HARDCODED English, ignoring the selected app language. src/components/CalorieBalanceRing.tsx has NO useTranslation hook — the directional label \"surplus\"/\"deficit\" (l57), the ring-center caption \"kcal {label}\" (l106-108), the breakdown column headers \"Intake\"/\"Target\"/\"Burned\" (l115/121/127), and the aria-label \"Calorie balance: {n} kcal {label}\" (l67) are all English literals. Same i18n-gap class as fixed d7b3/0473/b4f2 on the same page but a DISTINCT never-migrated component. Reachable live: WeeklyProgress.tsx:926 mounts <CalorieBalanceRing> in the Week-Plate section on /weekly-progress. Expected: label/caption/headers/aria localized via t() (units still honor imperial per d7b3). Actual: stays English in Hindi/Hinglish/xx-AE. Repro: set app language to Hindi → open /weekly-progress → the calorie ring center reads \"surplus/deficit\" + \"kcal\" and the 3-column breakdown reads \"Intake / Target / Burned\" in English."
+    },
+    {
       "id": "i-20260804-out2",
       "status": "open",
       "title": "Outreach day-summary update: 2026-08-04 tick2",
