@@ -61,8 +61,30 @@
     {
       "id": "i-20260803-3c18",
       "createdAt": "2026-08-03T21:52:41.924Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Gamification celebration surfaces (RewardRevealSheet + LevelUpWatcher caption) rendered hardcoded English, ignoring app language. Fix: added useTranslation to RewardRevealSheet (title/checking/error/empty/summary/aria -> achievements.* keys) and replaced LevelUpWatcher milestoneLabel with t('achievements.level_up'), all 4 bundles. Proof shows सheet header 'कल के इनाम' + level-up caption 'लेवल अप'. (Per-reward labels are backend-provided data, out of scope.)",
+        "imagePath": "images/i-20260803-3c18-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-3c18-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "14f912168e5339bacf70d38be31a9658c264ca24",
+        "imageCommits": [
+          "14f912168e5339bacf70d38be31a9658c264ca24"
+        ],
+        "fixedAt": "2026-08-04T04:06:58.518Z",
+        "by": "shakeebshaan",
+        "appCommit": "81a0c360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Client chrome fully t()'d per issue's enumerated scope; proof shows Hindi; reward_label is backend data (noted); unit gate green."
+        }
+      },
       "history": [],
       "route": "/dashboard",
       "description": "[bug-hunt] Gamification celebration surfaces render HARDCODED English, ignoring the selected app language (same i18n class as fixed e5b8/c17a/d24e/3b9d/hyd8, distinct never-migrated surfaces).\n\nTwo live, user-visible surfaces have ZERO i18n hookup:\n\n1) Daily-rewards reveal sheet - src/components/gamification/RewardRevealSheet.tsx has NO useTranslation import; every string is an English literal: title \"Yesterday's rewards\" (L125), \"Checking yesterday...\" (L137), error \"Couldn't check yesterday's rewards. Try again later.\" (L143), empty \"Nothing earned yesterday - today's a fresh start.\" (L149), summary \"1 win from yesterday\"/\"N wins from yesterday\" (L190-192), plus aria labels (L133/L162). It is mounted LIVE on the Dashboard (src/pages/Dashboard.tsx:141) and opened by the (localized) rewards chip (Dashboard.tsx:128).\n\n2) Level-up celebration caption - src/components/gamification/LevelUpWatcher.tsx:121 passes milestoneLabel=\"Level up\" as a literal. CelebrationOverlay/MilestoneEffect renders that label as visible caption text (src/components/motion/CelebrationOverlay.tsx:243, and the reduced-motion path L103). LevelUpWatcher is mounted at the app shell, so the full-screen \"Level up\" caption fires on ANY screen at level-up, always in English.\n\nRepro: Profile -> App language -> Hindi (or pick Hindi at the startup language picker). (a) On Dashboard, on a day where yesterday minted rewards, tap the rewards chip -> the sheet opens entirely in English. (b) Earn enough XP to cross a level -> the full-screen milestone overlay shows \"Level up\" in English.\nExpected: both surfaces localized via t() across en/hi/hinglish/xx-AE. Actual: English string literals; RewardRevealSheet imports no i18n at all, LevelUpWatcher hardcodes the caption.\nFix: add useTranslation to RewardRevealSheet + move all literals to achievements.* keys; replace LevelUpWatcher milestoneLabel with a t() call. Note: WeeklyChallengeCard.tsx is ALSO hardcoded but is NOT rendered anywhere (only its singularizeChallengeText helper is imported), so it is dead code and out of scope.",
@@ -76,12 +98,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-08-03T22:00:17.481Z",
-        "expiresAt": "2026-08-03T23:30:17.481Z",
-        "note": "interactive fix-issues: i18n hookup for gamification celebration surfaces"
-      }
+      "thread": [
+        {
+          "at": "2026-08-04T04:06:58.518Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: Gamification celebration surfaces (RewardRevealSheet + LevelUpWatcher caption) rendered hardcoded English, ignoring app language. Fix: added useTranslation to RewardRevealSheet (title/checking/error/empty/summary/aria -> achievements.* keys) and replaced LevelUpWatcher milestoneLabel with t('achievements.level_up'), all 4 bundles. Proof shows सheet header 'कल के इनाम' + level-up caption 'लेवल अप'. (Per-reward labels are backend-provided data, out of scope.)",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260803-7a2c",
