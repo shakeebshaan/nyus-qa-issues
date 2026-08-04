@@ -6,8 +6,30 @@
       "createdAt": "2026-08-04T02:23:54.285Z",
       "route": "/body-composition",
       "description": "[bug-hunt] Body Composition page (/body-composition, src/pages/BodyComposition.tsx) has ZERO i18n hookup — no useTranslation import, no t() call anywhere; every user-facing string is a hardcoded English literal. Same i18n class as fixed e5b8/c17a/d24e/3b9d and open 3c18/c1e9, but a DISTINCT never-migrated page. Reachable by ALL authenticated users (ProtectedRoute, App.tsx:804); linked from Log Weight (src/pages/LogWeight.tsx) and the Profile Body section (src/pages/_components/profile/ProfileBodySection.tsx).\n\nHardcoded strings (all English, no t()):\n- Header \"Body Composition\" + subtitle \"Estimated from your profile, weight, and plan\" (L587-588).\n- Empty state: \"Need profile data\" / \"Log your weight and complete your profile (height, age, gender)...\" / \"Log Weight\" button (L256-264).\n- Hero \"Fitness Age\" (L390) + all three sentence variants \"Your fitness age is N years below/above your real age...\" (L398-402) + \"Estimated from VO2max model. Nes et al. 2013.\" (L404).\n- Sub-group titles \"Mass\" / \"Composition\" / \"Metabolism\" (L409/414/419); \"Derived Insights\" + \"8 metrics\" + \"Show\"/\"Hide\" (L435-439).\n- Every metric label: Weight, BMI, Bone Mass, Body Fat, Subcutaneous Fat, Visceral Fat, Muscle Rate, BMR, Body Water, Metabolic Age, Lean Body Mass, Fat Mass, FFMI, VO2 Max, TDEE, Protein Need, Water Need, Goal (L276-513) + every tooltip string.\n- Category/badge helpers all return English: bmiCategory \"Underweight/Normal/Overweight/Obese\" (L99-102); bodyFatBadge \"Essential/Athletic/Fit/Average/High\" (L801-814); visceral \"Normal/High/Very High\" (L327); metabolic-age \"Younger/Older/On par\" (L365).\n- \"Discuss all metrics with Coach\" CTA + subtitle (L544-545); footnote \"Estimates use peer-reviewed equations...\" + \"Body Fat Estimator\" link (L556-565).\n\nRepro: Profile -> App language -> Hindi (or pick Hindi at the startup language picker). Navigate to /body-composition (from Log Weight, or Profile -> Body). Entire screen renders in English.\nExpected: all strings localized via t() across en/hi/hinglish/xx-AE; badge/category helper functions resolve their labels through t() too.\nActual: file imports no i18n (useTranslation/react-i18next absent); 0 t() calls.\nFix: add useTranslation, move literals to a bodyComposition.* key namespace in all 4 bundles, and route bmiCategory/bodyFatBadge/visceral/metabolic-age labels through t().",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: src/pages/BodyComposition.tsx had zero i18n — no useTranslation, every user-facing string a hardcoded English literal, so /body-composition rendered English regardless of app language. Fix: added useTranslation and moved all chrome (header+subtitle, empty state, Fitness Age hero + 3 age-delta variants + VO2max source, Mass/Composition/Metabolism group titles, Derived Insights + count + Show/Hide, every metric label+tooltip, coach CTA, footnote+Body Fat Estimator link) to a bodyComposition.* key tree across en/hi/hinglish/xx-AE at parity; bmiCategory/bodyFatBadge/visceral/metabolic-age labels resolve through t() at the consumer with byte-exact English defaultValue fallbacks (coach-prompt strings stay English — backend LLM). Proof: full-screen /body-composition rendered in Hindi (शरीर संरचना, फ़िटनेस उम्र hero with interpolated age/delta, द्रव्यमान/संरचना groups, वज़न/BMI/हड्डी द्रव्यमान/शरीर वसा labels, मोटापा/सामान्य/उच्च badges). i18n parity+pseudo+hardcoded suites green; BodyComposition page/wave4/summary tests green; full test:unit gate all 10 shards passed.",
+        "imagePath": "images/i-20260804-b4f2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-b4f2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "792c961ee4b4280713e5e010d02bc42bf85d0db7",
+        "imageCommits": [
+          "792c961ee4b4280713e5e010d02bc42bf85d0db7"
+        ],
+        "fixedAt": "2026-08-04T05:56:52.248Z",
+        "by": "shakeebshaan",
+        "appCommit": "d8aee0aa",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Complete migration verified end-to-end: 4-bundle parity (0 missing/extra), placeholders preserved, helper labels routed through t(), rendered live in Hindi, full unit gate green (10/10 shards EXIT=0)."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-04T05:56:52.248Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: src/pages/BodyComposition.tsx had zero i18n — no useTranslation, every user-facing string a hardcoded English literal, so /body-composition rendered English regardless of app language. Fix: added useTranslation and moved all chrome (header+subtitle, empty state, Fitness Age hero + 3 age-delta variants + VO2max source, Mass/Composition/Metabolism group titles, Derived Insights + count + Show/Hide, every metric label+tooltip, coach CTA, footnote+Body Fat Estimator link) to a bodyComposition.* key tree across en/hi/hinglish/xx-AE at parity; bmiCategory/bodyFatBadge/visceral/metabolic-age labels resolve through t() at the consumer with byte-exact English defaultValue fallbacks (coach-prompt strings stay English — backend LLM). Proof: full-screen /body-composition rendered in Hindi (शरीर संरचना, फ़िटनेस उम्र hero with interpolated age/delta, द्रव्यमान/संरचना groups, वज़न/BMI/हड्डी द्रव्यमान/शरीर वसा labels, मोटापा/सामान्य/उच्च badges). i18n parity+pseudo+hardcoded suites green; BodyComposition page/wave4/summary tests green; full test:unit gate all 10 shards passed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260804-a9c7",
