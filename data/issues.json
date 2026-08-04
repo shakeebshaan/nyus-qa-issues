@@ -4,8 +4,30 @@
     {
       "id": "i-20260804-3b86",
       "createdAt": "2026-08-04T14:22:03.573Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: in ActivityTargetCard's Daily-activity sheet, perDayMinutes was derived as weekly_cardio_minutes/sessions, forced to 0 when sessions=0 — so the Cardio-minutes stepper was a dead control (+ never incremented, yet wrote a phantom weekly_cardio_minutes over a 'no cardio' summary), and toggling sessions off/on discarded the per-day length. Fix (17f90054): track per-day cardio length in local state independent of session count; disable the Cardio-minutes stepper at 0 sessions so no phantom value is written. Added regression test ActivityTargetCard.cardio.test.tsx. Proof: at 'Off' sessions the minutes stepper is disabled/greyed.",
+        "imagePath": "images/i-20260804-3b86-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-3b86-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0a59df459a7a5ecaa4975e659c6b34cfea4b2648",
+        "imageCommits": [
+          "0a59df459a7a5ecaa4975e659c6b34cfea4b2648"
+        ],
+        "fixedAt": "2026-08-04T17:42:31.205Z",
+        "by": "shakeebshaan",
+        "appCommit": "0aca6dcb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Committed+pushed with regression test, full unit gate EXIT=0, proof PNG shows disabled stepper at 0 sessions."
+        }
+      },
       "history": [],
       "route": "/ai/create-workout-plan",
       "description": "[bug-hunt] Daily-activity editor (ActivityTargetSheet, src/components/plan-builder/ActivityTargetCard.tsx) — the \"Cardio minutes\" stepper is a DEAD CONTROL, and it silently writes an incoherent activity target, once \"Cardio sessions\" is set to 0.\n\nRoot cause: the sheet derives the displayed per-day value as perDayMinutes = weekly_cardio_sessions > 0 ? Math.round(weekly_cardio_minutes / weekly_cardio_sessions) : 0 (lines 93-96). The \"Cardio minutes\" StepperRow renders value={perDayMinutes} (line 150) and its onChange writes weekly_cardio_minutes = Math.max(weekly_cardio_sessions, 1) * n (line 152).\n\nWhen weekly_cardio_sessions === 0: perDayMinutes is forced to 0, so the row shows \"Off\". Tapping + calls onChange(clamp(0+5)) = onChange(5), which patches weekly_cardio_minutes = Math.max(0,1)*5 = 5. On re-render perDayMinutes is STILL 0 (sessions is 0), so the display snaps back to \"Off\" and never increments no matter how many times + is tapped — a visibly dead button. Meanwhile the target now holds { weekly_cardio_sessions: 0, weekly_cardio_minutes: 5 } — an incoherent \"no cardio\" summary (ActivityTargetCard line 37-41 prints \"no cardio\") over a non-zero weekly-minutes value, which is persisted to the builder draft and shipped to the backend save_custom_plan payload on Continue.\n\nSecond symptom, same coupling: decrementing \"Cardio sessions\" to 0 sets weekly_cardio_minutes = 0*perDay = 0, and incrementing back to >=1 does NOT restore the prior minutes (weekly = n * perDayMinutes, but perDayMinutes is now 0) — the per-day length is permanently lost and the user must re-enter it.\n\nExpected: with 0 cardio sessions the minutes stepper should be disabled/hidden (no dead control), and no phantom weekly_cardio_minutes should be saved while sessions is 0; toggling sessions off then on should not silently discard the minutes-per-day value.\n\nRepro: onboarding workout builder (or Activity -> Build Activity Plan, /ai/create-workout-plan?focus=activity) -> tap the \"Daily activity\" card to open the editor -> tap - on \"Cardio sessions\" until it reads \"Off\" -> tap + on \"Cardio minutes\": nothing changes on screen (dead), yet the saved target becomes 0 sessions + non-zero weekly minutes.",
@@ -18,7 +40,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-04T17:42:31.205Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: in ActivityTargetCard's Daily-activity sheet, perDayMinutes was derived as weekly_cardio_minutes/sessions, forced to 0 when sessions=0 — so the Cardio-minutes stepper was a dead control (+ never incremented, yet wrote a phantom weekly_cardio_minutes over a 'no cardio' summary), and toggling sessions off/on discarded the per-day length. Fix (17f90054): track per-day cardio length in local state independent of session count; disable the Cardio-minutes stepper at 0 sessions so no phantom value is written. Added regression test ActivityTargetCard.cardio.test.tsx. Proof: at 'Off' sessions the minutes stepper is disabled/greyed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260804-pr11",
