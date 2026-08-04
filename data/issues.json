@@ -138,8 +138,30 @@
       "id": "i-20260803-c1e9",
       "createdAt": "2026-08-03T19:36:51.809Z",
       "route": "/goal-change",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Change Goal wizard (GoalChangeWizard.tsx) had ZERO i18n hookup — no useTranslation/t() anywhere. Fix: full i18n hookup — every user-facing string moved to goal_change.* keys across en/hi/hinglish/xx-AE, Devanagari-pinned in tests. Proof shows wizard fully in Hindi (लक्ष्य बदलें, नया लक्ष्य, मसल गेन...).",
+        "imagePath": "images/i-20260803-c1e9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-c1e9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ab5d8b94cd1bb906ada92c441089072167c8da2b",
+        "imageCommits": [
+          "ab5d8b94cd1bb906ada92c441089072167c8da2b"
+        ],
+        "fixedAt": "2026-08-04T04:06:42.828Z",
+        "by": "shakeebshaan",
+        "appCommit": "81a0c360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Full i18n verified in code + key parity tests (dcf8ad13); proof PNG renders wizard in Hindi; unit gate green."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -152,12 +174,16 @@
       "imageCommits": [],
       "imagePrivate": false,
       "description": "[bug-hunt] Change Goal wizard (/goal-change, src/pages/GoalChangeWizard.tsx) has ZERO i18n hookup — no useTranslation / t() anywhere (grep count = 0). Every user-facing string is hardcoded English: header Change Goal; step labels [New Goal, Body Stats, Preferences, Preview]; What is your new goal?; all 5 GOAL labels+descriptions (Fat Loss / Muscle Gain / Body Recomp / Maintenance / Endurance); Updated body stats, Current Weight, Goal Weight, Activity Level + 5 ACTIVITY_LEVELS labels/descriptions; Diet preferences + DIET_TYPES labels; the carry-over note; Here is your new plan; macro-row labels (Daily Calories/Protein/Carbs/Fat); Plan Details / BMR / TDEE / Weekly weight target / Plan duration; the Set your weights first, Preview failed and Goal updated toasts; and the empty/error screens. Under a Hindi/Hinglish locale the whole wizard renders in English. Expected: strings resolve via t() with keys in en/hi/hinglish/xx-AE bundles (per the translate-the-entire-app directive). Actual: hardcoded English. Same class as filed+fixed e5b8 (Social) / c17a (Leaderboard) / d24e (PartnerGroupHub) / 3b9d (NotificationPreferences) but a distinct, never-migrated route.",
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-08-03T21:44:05.852Z",
-        "expiresAt": "2026-08-03T22:44:05.852Z",
-        "note": "headless tick: fixes committed+pushed, resolving with verified proof"
-      }
+      "thread": [
+        {
+          "at": "2026-08-04T04:06:42.828Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: Change Goal wizard (GoalChangeWizard.tsx) had ZERO i18n hookup — no useTranslation/t() anywhere. Fix: full i18n hookup — every user-facing string moved to goal_change.* keys across en/hi/hinglish/xx-AE, Devanagari-pinned in tests. Proof shows wizard fully in Hindi (लक्ष्य बदलें, नया लक्ष्य, मसल गेन...).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260803-3b9d",
