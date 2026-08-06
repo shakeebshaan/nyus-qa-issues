@@ -3740,16 +3740,6 @@
       ]
     },
     {
-      "id": "i-20260717-gr7a",
-      "tags": [
-        "content",
-        "auto"
-      ],
-      "description": "[content] Growth insights 2026-07-17: overall 3.7/10 (down from 4.3) - AI-assistant referrals now 39% of GA4 sessions (biggest mover), but app funnel_live still 0->0->0->0 and root-xml deploy-sync bug found+partly fixed.",
-      "reportPath": "reports/growth-insights-20260717.html",
-      "reportLabel": "Growth insights 2026-07-17"
-    },
-    {
       "id": "i-20260717-e5f1",
       "createdAt": "2026-07-17T01:40:38.034Z",
       "route": null,
@@ -5858,17 +5848,6 @@
           "text": "FIXED and deployed. Root cause: the Activity overview picked WHICH session to show one way (by counting completed sessions) but pulled the sets/volume/completed state a DIFFERENT way (any incomplete workout log for the plan). So a stray in-progress log left behind by another session decorated your fresh Session #1 — hence 'already completed' and the ~13,070 kg Total Volume Today that could not have come from a workout you had not started. Fix: that state is now scoped to the session actually being shown. A genuinely fresh session paints blank; only its OWN in-progress log fills it in; and if both a stray log and its own log exist, its own wins. Screenshot is the live Activity screen on a real account: Session #1 reports COMPLETED 0/12 with 1/3 exercises and 3/9 sets — the numbers belong to that session alone, and the 600 kg is exactly the three sets logged against it, not a foreign total. Three backend regression tests pin all three cases (stray log must not decorate, own log must still paint, own log wins when both exist) and pass on the current build.",
           "by": "shakeebshaan"
         }
-      ]
-    },
-    {
-      "id": "i-20260720-out1",
-      "createdAt": "2026-07-20T06:10:00.000Z",
-      "route": null,
-      "description": "[discovery] Outreach day-summary: 2026-07-19 sends (9/10 across 3 ticks) - DERBI Foundation (info@derbifoundation.com, healthcare incubator), Stroom Protein Bar (care@stroom.in, D2C protein bar collab), Explosive Whey (contact@explosivewhey.com, supplement partnerships), Plum (connect@plumhq.com, employee benefits platform), Sprink (contact@sprink.online, tiffin/cafeteria collab), Fitmeals (info@fitmeals.co.in, meal subscription), 1to1Help (b2bmarketing@1to1help.net, EAP wellbeing), Pluxee India (consumer@care.pluxee.in, employee benefits), Real Whey (support@realwhey.in, D2C sports nutrition). All-time total 76 sends. No replies/complaints found in ESCALATIONS.md - nothing to suppress. Running total: 76 all-time as of 2026-07-20.",
-      "author": "shakeebshaan",
-      "tags": [
-        "discovery",
-        "auto"
       ]
     },
     {
