@@ -2,8 +2,30 @@
   "version": 1,
   "issues": [
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "WaterTrackerCard now reads every string through useTranslation() in all four locales: title, tank subline, the L readout, the Glass/Bottle/Large chips plus the custom '{ml} ml' size, the Add button, the Profile-Hydration footer and all four aria-labels. BASE_CONTAINERS is module-level so t() cannot run there; fixed sizes now carry a labelKey resolved at render. The readout bolds the current value in a nested span, so the visual pieces are aria-hidden and the whole localized phrase is exposed once via aria-label. Screenshot is /dev/i18n-surfaces?lng=hi (new dev harness) rather than /nutrition: the QA account has no diet plan, so the real page shows an empty state and the card never mounts - a Hindi capture there contains no English and proves nothing. The harness asserts the component is MOUNTED before judging language, and the en control still shows the English literals.",
+        "imagePath": "images/i-20260804-d1f7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-d1f7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d98d6afe49ab7728873eb874e002ce0ba4aca50f",
+        "imageCommits": [
+          "d98d6afe49ab7728873eb874e002ce0ba4aca50f"
+        ],
+        "fixedAt": "2026-08-06T12:23:35.540Z",
+        "by": "shakeebshaan",
+        "appCommit": "c2158a27",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Every literal named in the report is localized across all 4 locales and proven by three independent layers: locale-parity Devanagari pins, rendered-output component tests (mutation-verified - restoring one English literal fails the matching assertion), and a mounted-component screenshot in Hindi with an English control run. Not 100 because the capture is a dev harness rather than the live /nutrition page - the QA account has no diet plan so the card cannot mount there, which is a QA-data gap, not a fix gap."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -19,11 +41,16 @@
       "id": "i-20260804-d1f7",
       "route": "/nutrition",
       "description": "[bug-hunt] Water tracker card renders 100% HARDCODED English, ignoring the selected app language. src/components/nutrition/WaterTrackerCard.tsx has NO useTranslation hook — every string is an English literal: the \"Water\" title (l181), the tank subline \"Goal reached — nicely done\" / \"{L} L to go\" (l85-87), the \"{value} / {goal} L\" readout (l183-186), the container-picker labels \"Glass\"/\"Bottle\"/\"Large\" (BASE_CONTAINERS l53-57) and the \"{ml} ml\" custom label, the \"Add {ml} ml\" button (l277), the footer \"Adjust container sizes & your daily goal in Profile · Hydration\" (l281), plus every aria-label (\"Water intake\" l196, \"Container size\" l233, \"Add {ml} ml of water\" l273, \"Remove the selected amount of water\" l265). Same i18n-gap class as fixed b4f2/5e2c/3b9d/c1e9/3c18 but a DISTINCT never-migrated component. Reachable live: NutritionTodayView.tsx:219 mounts <WaterTrackerCard> on /nutrition for any user with an active diet plan. Expected: all copy + aria localized via t(). Actual: stays English in Hindi/Hinglish/xx-AE. Repro: set app language to Hindi (startup picker or Profile → Language) → open /nutrition (plan account) → scroll to the water tracker below the meal list → every label above is still English.",
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-08-06T11:53:49.426Z",
-        "expiresAt": "2026-08-06T12:53:49.426Z"
-      }
+      "thread": [
+        {
+          "at": "2026-08-06T12:23:35.540Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "WaterTrackerCard now reads every string through useTranslation() in all four locales: title, tank subline, the L readout, the Glass/Bottle/Large chips plus the custom '{ml} ml' size, the Add button, the Profile-Hydration footer and all four aria-labels. BASE_CONTAINERS is module-level so t() cannot run there; fixed sizes now carry a labelKey resolved at render. The readout bolds the current value in a nested span, so the visual pieces are aria-hidden and the whole localized phrase is exposed once via aria-label. Screenshot is /dev/i18n-surfaces?lng=hi (new dev harness) rather than /nutrition: the QA account has no diet plan, so the real page shows an empty state and the card never mounts - a Hindi capture there contains no English and proves nothing. The harness asserts the component is MOUNTED before judging language, and the en control still shows the English literals.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "open",
