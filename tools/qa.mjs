@@ -653,7 +653,12 @@ try {
     const db = loadDb();
     const cutoff = Date.now() - days * 86400000;
     const targets = db.issues.filter((i) =>
-      i.status === "open" &&
+      // Legacy cards were written without a `status` field. `pull` and the board
+      // UI both treat a missing status as open, but this filter demanded the
+      // literal string — so those cards could never be archived and sat on the
+      // open board indefinitely (i-20260717-gr7a and i-20260720-out1 had been
+      // stuck since July). Treat absent as open, like the rest of the tool.
+      (i.status ?? "open") === "open" &&
       Array.isArray(i.tags) && i.tags.includes("auto") &&
       i.tags.some((t) => AUTO_LOG_TAGS.has(t)) &&
       !i.needsReview && !i.reviewReply && !i.reopenNote &&
