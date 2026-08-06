@@ -53,8 +53,30 @@
       "needsReview": false
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "CalorieBalanceRing now reads its copy through useTranslation() in all four locales: the surplus/deficit directional label, the 'kcal {label}' ring caption, the Intake/Target/Burned breakdown headers and the aria-label. Units still honour imperial per d7b3. Screenshot is /dev/i18n-surfaces?lng=hi - on the live /weekly-progress the QA account has no meal plan so the Week-Plate section renders empty and the ring never mounts, which would make a Hindi capture there meaningless. Root-cause note beyond the string fix: this component lives at src/components/CalorieBalanceRing.tsx, outside the src/components/progress/** glob that body-progress watched, so impact-check reported 'no affected flows' whenever it changed - it is now listed explicitly in the impact map so future edits force a re-capture.",
+        "imagePath": "images/i-20260804-e2a4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-e2a4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bf3e5e91aab5ca37a0613d3b60f742babda7d02b",
+        "imageCommits": [
+          "bf3e5e91aab5ca37a0613d3b60f742babda7d02b"
+        ],
+        "fixedAt": "2026-08-06T12:24:05.480Z",
+        "by": "shakeebshaan",
+        "appCommit": "c2158a27",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "All four reported literals (surplus/deficit, the kcal caption, Intake/Target/Burned, and the aria-label) are localized across 4 locales, proven by locale-parity pins, mutation-verified rendered-output tests, and a mounted-component Hindi screenshot with an English control. Also closed the process gap that let this ship: CalorieBalanceRing.tsx sits at the components root and slipped the src/components/progress/** glob, so impact-check reported 'no affected flows' for edits to it. Not 100 for the same dev-harness-vs-live-page reason as its sibling d1f7."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -69,7 +91,17 @@
       "createdAt": "2026-08-04T22:38:31.145Z",
       "id": "i-20260804-e2a4",
       "route": "/weekly-progress",
-      "description": "[bug-hunt] Calorie Balance ring renders HARDCODED English, ignoring the selected app language. src/components/CalorieBalanceRing.tsx has NO useTranslation hook — the directional label \"surplus\"/\"deficit\" (l57), the ring-center caption \"kcal {label}\" (l106-108), the breakdown column headers \"Intake\"/\"Target\"/\"Burned\" (l115/121/127), and the aria-label \"Calorie balance: {n} kcal {label}\" (l67) are all English literals. Same i18n-gap class as fixed d7b3/0473/b4f2 on the same page but a DISTINCT never-migrated component. Reachable live: WeeklyProgress.tsx:926 mounts <CalorieBalanceRing> in the Week-Plate section on /weekly-progress. Expected: label/caption/headers/aria localized via t() (units still honor imperial per d7b3). Actual: stays English in Hindi/Hinglish/xx-AE. Repro: set app language to Hindi → open /weekly-progress → the calorie ring center reads \"surplus/deficit\" + \"kcal\" and the 3-column breakdown reads \"Intake / Target / Burned\" in English."
+      "description": "[bug-hunt] Calorie Balance ring renders HARDCODED English, ignoring the selected app language. src/components/CalorieBalanceRing.tsx has NO useTranslation hook — the directional label \"surplus\"/\"deficit\" (l57), the ring-center caption \"kcal {label}\" (l106-108), the breakdown column headers \"Intake\"/\"Target\"/\"Burned\" (l115/121/127), and the aria-label \"Calorie balance: {n} kcal {label}\" (l67) are all English literals. Same i18n-gap class as fixed d7b3/0473/b4f2 on the same page but a DISTINCT never-migrated component. Reachable live: WeeklyProgress.tsx:926 mounts <CalorieBalanceRing> in the Week-Plate section on /weekly-progress. Expected: label/caption/headers/aria localized via t() (units still honor imperial per d7b3). Actual: stays English in Hindi/Hinglish/xx-AE. Repro: set app language to Hindi → open /weekly-progress → the calorie ring center reads \"surplus/deficit\" + \"kcal\" and the 3-column breakdown reads \"Intake / Target / Burned\" in English.",
+      "thread": [
+        {
+          "at": "2026-08-06T12:24:05.480Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "CalorieBalanceRing now reads its copy through useTranslation() in all four locales: the surplus/deficit directional label, the 'kcal {label}' ring caption, the Intake/Target/Burned breakdown headers and the aria-label. Units still honour imperial per d7b3. Screenshot is /dev/i18n-surfaces?lng=hi - on the live /weekly-progress the QA account has no meal plan so the Week-Plate section renders empty and the ring never mounts, which would make a Hindi capture there meaningless. Root-cause note beyond the string fix: this component lives at src/components/CalorieBalanceRing.tsx, outside the src/components/progress/** glob that body-progress watched, so impact-check reported 'no affected flows' whenever it changed - it is now listed explicitly in the impact map so future edits force a re-capture.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260804-out2",
