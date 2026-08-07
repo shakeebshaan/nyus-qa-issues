@@ -645,7 +645,13 @@ try {
     // preserved (not deleted), just cleared off the open board. Skips anything an
     // owner has touched (needsReview / reviewReply) so a genuine ask is never lost.
     // (owner i-20260713-f852: "Fix those also when there is limit and make sure all are addressed")
-    const AUTO_LOG_TAGS = new Set(["content", "discovery", "press", "suggestion"]);
+    // "reviews" and "seo" are the same thing as the rest: periodic status posts
+    // from the growth loops, not bugs. They were missing from this set, so
+    // Play-Store-insight and AI-search-presence cards accumulated on the open
+    // board with no way to clear them short of hand-editing issues.json.
+    const AUTO_LOG_TAGS = new Set([
+      "content", "discovery", "press", "suggestion", "reviews", "seo",
+    ]);
     const daysArg = flag("older-than");
     const days = daysArg !== undefined ? Number(daysArg) : 2;
     if (!Number.isFinite(days) || days < 0) throw new Error("--older-than must be a non-negative number of days");
