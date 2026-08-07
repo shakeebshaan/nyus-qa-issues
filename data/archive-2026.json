@@ -23630,6 +23630,61 @@
       "status": "archived",
       "archivedAt": "2026-08-06T12:28:56.261Z",
       "archivedReason": "auto-log card (informational) — archived by archive-auto"
+    },
+    {
+      "id": "i-20260804-nxq7",
+      "createdAt": "2026-08-04T00:00:00.000Z",
+      "route": null,
+      "description": "[reviews] Play Store insights 2026-08-04: N/A sentiment (unchanged from 07-21) - still zero real reviews, app still has NO public production listing (alpha/closed-testing track only, v255/1.9.75).",
+      "status": "archived",
+      "tags": [
+        "reviews",
+        "auto"
+      ],
+      "author": "shakeebshaan",
+      "fix": null,
+      "history": [],
+      "imagePaths": [],
+      "imagePrivate": false,
+      "reportPath": "reports/playstore-insights-2026-08-04.html",
+      "reportLabel": "Play Store insights 2026-08-04",
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-08-06T12:30:49.925Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision, not a code task. Verified today: Play tracks read production=[] beta=[] alpha=[257]. Zero reviews is the expected consequence of there being no public production release - nobody outside closed testing can install the app, so nobody can leave a review. Nothing in the app can change this number. The single unblocking action is promoting a build to the production track (fastlane release), which is deliberately owner-gated and also needs the Play Console data-safety form completed. i-20260721-pk3v is the same finding from 07-21; both should close together once a production release exists. Note the fastlane 2.232+ track-read bug (#30029) can report an empty array for a populated track, so confirm in the Play Console UI before treating production=[] as certain.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "archivedAt": "2026-08-07T02:45:35.199Z",
+      "archivedReason": "auto-log card (informational) — archived by archive-auto"
+    },
+    {
+      "id": "i-20260721-pk3v",
+      "status": "archived",
+      "tags": [
+        "reviews",
+        "auto"
+      ],
+      "description": "[reviews] Play Store insights 2026-07-21: N/A sentiment - zero real reviews exist. App has NO public production listing (play.google.com detail URL 404s); Fastlane ships alpha/closed-testing track only. No user voice to mine until production promotion.",
+      "reportPath": "reports/playstore-insights-2026-07-21.html",
+      "reportLabel": "Play Store insights 2026-07-21",
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-08-06T12:30:54.465Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Duplicate of i-20260804-nxq7 (same finding, 07-21 vs 08-04). Same owner decision: zero Play reviews follows from having no public production release - production=[] and beta=[] as of today, alpha=[257]. Keeping one card (nxq7) is enough; this one can be archived once production ships.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "archivedAt": "2026-08-07T02:45:35.199Z",
+      "archivedReason": "auto-log card (informational) — archived by archive-auto"
     }
   ]
 }
