@@ -985,8 +985,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Per-exercise pain flag on live workout logging. FE: a quiet 'Did this hurt?' chip under the RPE slider opening a one-tap body-area picker (knee/shoulder/back/wrist/hip/ankle/elbow/neck/other), collapsed until tapped so a normal set stays one glance and the app does not read as expecting injury. One tap is already a complete signal - a flag with no area stores as 'other', because losing WHICH joint hurt is survivable and losing THAT something hurt is not. Localized en/hi/hinglish/xx-AE. BE: exercise_pain_flags table (migration pain_001, live on prod) written from the workout_tracker block response, surfaced as a P2 coach-context block - P2 not P3, so a reported injury cannot be dropped for token budget. Repeats collapse to one line with a count. Its own table rather than JSON on the message because the question is 'has THIS exercise hurt THIS user before', a lookup by (user, exercise) over time that JSON in chat history cannot answer. Pain is kept separate from RPE throughout: a hard set and a hurting joint are different facts and only one should change the plan rather than progress it. Capture only by design - the flags inform a human-authored coach reply and the prompt frames them as reported discomfort with a nudge toward professional advice for anything persistent. Shipped in v1.9.78 (258); backend 474f21e.",
+        "imagePath": "images/i-20260802-pn7x-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260802-pn7x-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "cdb09f5f058ed306f168b95501aa6ffa2975f14f",
+        "imageCommits": [
+          "cdb09f5f058ed306f168b95501aa6ffa2975f14f"
+        ],
+        "fixedAt": "2026-08-07T03:06:21.153Z",
+        "by": "shakeebshaan",
+        "appCommit": "29525c9d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Capture half shipped end to end and now covered on both sides of the DB boundary: 17 backend contracts (extraction, persistence, summarisation, coach-prompt framing), all mutation-verified, plus a driven browser check that the chip appears, the picker opens and the selection sticks. Raised from my first self-score of 88 after closing the gap that caused it - record_pain_flags and recent_pain_summary were the parts that actually touch the database and had no tests. Held below 95 deliberately: auto-substitution is NOT built (responding to reported pain by rewriting a plan is health advice and needs an owner call), and no real logged session on a device has produced a row yet."
+        }
+      },
       "history": [],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
@@ -1003,6 +1025,13 @@
           "who": "claude",
           "kind": "review",
           "text": "Well-specified and I agree with the design, but I am not starting it unprompted - two reasons, both about scope rather than difficulty. (1) Size: the card's own estimate is FE ~1d + BE ~1-2d, and it needs a prod schema migration (pain_flag on SetLog), plan-generator substitution logic, a ContextAssembler block and a nudge job. That is a feature, not a fix. (2) Framing: pain capture that drives automatic exercise substitution is health-adjacent. Whether NYUS should respond to a reported injury with an auto-substitute, a coach nudge, or a 'see a professional' disclaimer is a product/medical call that belongs to you, and it determines the whole design - so building first would likely mean building the wrong thing. Three options: (a) CAPTURE ONLY - ship the chip + body-area picker + persistence, surface flags to the coach context so chat is aware, no automatic substitution. Smallest, safest, immediately useful, and every later option builds on it. RECOMMENDED. (b) Capture + coach nudge - adds 'Last time Bench Press flagged shoulder pain - want a substitute?' as a suggestion the user accepts. (c) Full auto-substitution in plan generation - most work, and the one that most looks like medical advice. Reply on this card with a/b/c and I will build it end to end.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-08-07T03:06:21.153Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Per-exercise pain flag on live workout logging. FE: a quiet 'Did this hurt?' chip under the RPE slider opening a one-tap body-area picker (knee/shoulder/back/wrist/hip/ankle/elbow/neck/other), collapsed until tapped so a normal set stays one glance and the app does not read as expecting injury. One tap is already a complete signal - a flag with no area stores as 'other', because losing WHICH joint hurt is survivable and losing THAT something hurt is not. Localized en/hi/hinglish/xx-AE. BE: exercise_pain_flags table (migration pain_001, live on prod) written from the workout_tracker block response, surfaced as a P2 coach-context block - P2 not P3, so a reported injury cannot be dropped for token budget. Repeats collapse to one line with a count. Its own table rather than JSON on the message because the question is 'has THIS exercise hurt THIS user before', a lookup by (user, exercise) over time that JSON in chat history cannot answer. Pain is kept separate from RPE throughout: a hard set and a hurting joint are different facts and only one should change the plan rather than progress it. Capture only by design - the flags inform a human-authored coach reply and the prompt frames them as reported discomfort with a nudge toward professional advice for anything persistent. Shipped in v1.9.78 (258); backend 474f21e.",
           "by": "shakeebshaan"
         }
       ]
