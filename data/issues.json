@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "status": "open",
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-09T16:27:40.054Z",
+      "id": "i-20260809-d0sa",
+      "route": null,
+      "fix": null,
+      "description": "[content] Published: Plain Dosa vs Masala Dosa vs Rava Dosa Calories — https://nyus.in/blog/plain-dosa-vs-masala-dosa-vs-rava-dosa-calories-india.html. Ideas added: 1. Escalated: 0. Note: deploy ran (npm run deploy, 8341c52e) but URL returned 404 at check time — known box-sync-lag pattern, not a content defect."
+    },
+    {
       "status": "fixed",
       "fix": {
         "description": "WaterTrackerCard now reads every string through useTranslation() in all four locales: title, tank subline, the L readout, the Glass/Bottle/Large chips plus the custom '{ml} ml' size, the Add button, the Profile-Hydration footer and all four aria-labels. BASE_CONTAINERS is module-level so t() cannot run there; fixed sizes now carry a labelKey resolved at render. The readout bolds the current value in a nested span, so the visual pieces are aria-hidden and the whole localized phrase is exposed once via aria-label. Screenshot is /dev/i18n-surfaces?lng=hi (new dev harness) rather than /nutrition: the QA account has no diet plan, so the real page shows an empty state and the card never mounts - a Hindi capture there contains no English and proves nothing. The harness asserts the component is MOUNTED before judging language, and the en control still shows the English literals.",
