@@ -3,6 +3,44 @@
   "issues": [
     {
       "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-09T16:39:32.863Z",
+      "id": "i-20260809-f194",
+      "route": "/body-fat-estimator",
+      "description": "[bug-hunt] Body Fat Estimator (/body-fat-estimator, src/pages/BodyFatEstimator.tsx) ignores an imperial user's unit_preference entirely. The Navy-method calculator hard-labels every circumference input \"cm\" (Neck/Waist/Hip InputFields, lines ~600-626, unit=\"cm\") with NO cm/inch toggle, and the Katch-McArdle tab renders the profile weight in hardcoded kilograms: 'Using your profile weight of {profileWeight} kg' (line 670), plus the lean-mass readout '... kg' (line 729). EXPECTED: honor unit_preference like the SIBLING Measurements page, which has a working cm/inch toggle (src/pages/Measurements.tsx:551-576) and converts on the fly, and like LogWeight/dashboard which show weight in lbs for imperial users. ACTUAL: BodyFatEstimator is metric-only — an imperial user (unit_preference='imperial') who measures in inches must hand-convert to cm or the Navy BF% comes out wrong, and sees weight in kg while every other surface shows lbs. Same imperial-ignoring class as fixed i-20260803-b711 / d7b3 / 020c / 7a2c. REPRO: profile unit_preference=imperial -> open /body-fat-estimator -> expand Calculator -> inputs are labeled 'cm' with no inch option; Katch tab reads 'profile weight of NN kg'."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-09T16:39:32.863Z",
+      "id": "i-20260809-4ccd",
+      "route": "/body-fat-estimator",
+      "description": "[bug-hunt] Body Fat Estimator page (/body-fat-estimator, src/pages/BodyFatEstimator.tsx) has ZERO i18n hookup — no useTranslation / t() call anywhere in the file; every user-facing string is a hardcoded English literal, so it never localizes to Hindi/Hinglish. Affected strings: header ('Body Fat Estimator', 'Visual estimate or Navy method calculation'), 'Visual Reference', Male/Female toggle, all six BF-range names + descriptions (MALE_RANGES/FEMALE_RANGES: Very lean/Athletic/Fit/Average/Above average/Higher, lines 43-59), 'Calculator' / 'Navy method or Katch-McArdle BMR', the Navy/Katch tab labels, every InputField label+hint+placeholder+tooltip, 'Calculate Body Fat' / 'Calculate BMR', result card ('Your Estimate', 'estimated body fat', method labels, 'Save to Profile' / 'Saved to Profile' / 'Saving...'), all goalInsight sentences, all toasts (Missing measurements / Check measurements / Hip measurement needed / Add your height first / Invalid body fat % / Body fat saved / Save failed), the gender-switch AlertDialog (title/description/Cancel/Continue), and the evidence footnote. Reachable via ProtectedRoute (App.tsx:811), linked from BodyComposition.tsx:556 and the FloatingCoachButton allowlist. Same never-migrated i18n class as fixed i-20260804-b4f2 (BodyComposition), c1e9, 3b9d, 020c, d1f7, e2a4 — distinct untranslated page. REPRO: set app language to Hindi -> open /body-fat-estimator -> entire page stays English."
+    },
+    {
+      "status": "open",
       "history": [],
       "author": "shakeebshaan",
       "tags": [
