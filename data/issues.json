@@ -53,8 +53,30 @@
       "needsReview": false
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Body Fat Estimator page had zero i18n hookup, so every label stayed English even when the app language was Hindi or Hinglish. Fix: wired translation across the entire screen — header, the six body-fat range cards and descriptions, the calculator, all inputs/hints/tooltips, the result card, coaching insights, the gender-switch dialog, toasts, and the evidence note — and added those strings to all four language bundles (proper nouns like Katch-McArdle kept as-is). Switching the app to Hindi now renders the whole page in Hindi with no English left over.",
+        "imagePath": "images/i-20260809-4ccd-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260809-4ccd-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7e15f07868ca1e9ba2ca516de90c9c4d83af2d8e",
+        "imageCommits": [
+          "7e15f07868ca1e9ba2ca516de90c9c4d83af2d8e"
+        ],
+        "fixedAt": "2026-08-10T01:59:29.537Z",
+        "by": "shakeebshaan",
+        "appCommit": "5c108a56",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Live Hindi render shows full Devanagari with ENGLISH_LEAKS: NONE; 145 i18n guard + 56 BodyFatEstimator tests green; 4-bundle parity preserved (3186 keys each)."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -69,7 +91,17 @@
       "createdAt": "2026-08-09T16:39:32.863Z",
       "id": "i-20260809-4ccd",
       "route": "/body-fat-estimator",
-      "description": "[bug-hunt] Body Fat Estimator page (/body-fat-estimator, src/pages/BodyFatEstimator.tsx) has ZERO i18n hookup — no useTranslation / t() call anywhere in the file; every user-facing string is a hardcoded English literal, so it never localizes to Hindi/Hinglish. Affected strings: header ('Body Fat Estimator', 'Visual estimate or Navy method calculation'), 'Visual Reference', Male/Female toggle, all six BF-range names + descriptions (MALE_RANGES/FEMALE_RANGES: Very lean/Athletic/Fit/Average/Above average/Higher, lines 43-59), 'Calculator' / 'Navy method or Katch-McArdle BMR', the Navy/Katch tab labels, every InputField label+hint+placeholder+tooltip, 'Calculate Body Fat' / 'Calculate BMR', result card ('Your Estimate', 'estimated body fat', method labels, 'Save to Profile' / 'Saved to Profile' / 'Saving...'), all goalInsight sentences, all toasts (Missing measurements / Check measurements / Hip measurement needed / Add your height first / Invalid body fat % / Body fat saved / Save failed), the gender-switch AlertDialog (title/description/Cancel/Continue), and the evidence footnote. Reachable via ProtectedRoute (App.tsx:811), linked from BodyComposition.tsx:556 and the FloatingCoachButton allowlist. Same never-migrated i18n class as fixed i-20260804-b4f2 (BodyComposition), c1e9, 3b9d, 020c, d1f7, e2a4 — distinct untranslated page. REPRO: set app language to Hindi -> open /body-fat-estimator -> entire page stays English."
+      "description": "[bug-hunt] Body Fat Estimator page (/body-fat-estimator, src/pages/BodyFatEstimator.tsx) has ZERO i18n hookup — no useTranslation / t() call anywhere in the file; every user-facing string is a hardcoded English literal, so it never localizes to Hindi/Hinglish. Affected strings: header ('Body Fat Estimator', 'Visual estimate or Navy method calculation'), 'Visual Reference', Male/Female toggle, all six BF-range names + descriptions (MALE_RANGES/FEMALE_RANGES: Very lean/Athletic/Fit/Average/Above average/Higher, lines 43-59), 'Calculator' / 'Navy method or Katch-McArdle BMR', the Navy/Katch tab labels, every InputField label+hint+placeholder+tooltip, 'Calculate Body Fat' / 'Calculate BMR', result card ('Your Estimate', 'estimated body fat', method labels, 'Save to Profile' / 'Saved to Profile' / 'Saving...'), all goalInsight sentences, all toasts (Missing measurements / Check measurements / Hip measurement needed / Add your height first / Invalid body fat % / Body fat saved / Save failed), the gender-switch AlertDialog (title/description/Cancel/Continue), and the evidence footnote. Reachable via ProtectedRoute (App.tsx:811), linked from BodyComposition.tsx:556 and the FloatingCoachButton allowlist. Same never-migrated i18n class as fixed i-20260804-b4f2 (BodyComposition), c1e9, 3b9d, 020c, d1f7, e2a4 — distinct untranslated page. REPRO: set app language to Hindi -> open /body-fat-estimator -> entire page stays English.",
+      "thread": [
+        {
+          "at": "2026-08-10T01:59:29.537Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Body Fat Estimator page had zero i18n hookup, so every label stayed English even when the app language was Hindi or Hinglish. Fix: wired translation across the entire screen — header, the six body-fat range cards and descriptions, the calculator, all inputs/hints/tooltips, the result card, coaching insights, the gender-switch dialog, toasts, and the evidence note — and added those strings to all four language bundles (proper nouns like Katch-McArdle kept as-is). Switching the app to Hindi now renders the whole page in Hindi with no English left over.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "open",
