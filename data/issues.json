@@ -2,8 +2,30 @@
   "version": 1,
   "issues": [
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Body Fat Estimator was metric-only — it hard-labeled every circumference input 'cm' and showed the profile weight in kilograms, ignoring an imperial user's unit preference. Fix: added a cm/inch toggle (seeded from unit_preference like the Measurements page) that converts entered values on the fly, and the Katch-McArdle tab now shows weight and lean mass in lbs for imperial users. The Navy formula still computes in metric internally, so results stay correct.",
+        "imagePath": "images/i-20260809-f194-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260809-f194-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "15b7752df407f76244b8d2f5b4402f78a121deb5",
+        "imageCommits": [
+          "15b7752df407f76244b8d2f5b4402f78a121deb5"
+        ],
+        "fixedAt": "2026-08-10T01:59:16.249Z",
+        "by": "shakeebshaan",
+        "appCommit": "667bad6d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 90,
+          "note": "Imperial proof: profile height reads 70.1 inch, inch toggle pre-selected, neck/waist inputs labeled inch, Katch weight in lbs; no kg leak; Navy math unchanged."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -18,7 +40,17 @@
       "createdAt": "2026-08-09T16:39:32.863Z",
       "id": "i-20260809-f194",
       "route": "/body-fat-estimator",
-      "description": "[bug-hunt] Body Fat Estimator (/body-fat-estimator, src/pages/BodyFatEstimator.tsx) ignores an imperial user's unit_preference entirely. The Navy-method calculator hard-labels every circumference input \"cm\" (Neck/Waist/Hip InputFields, lines ~600-626, unit=\"cm\") with NO cm/inch toggle, and the Katch-McArdle tab renders the profile weight in hardcoded kilograms: 'Using your profile weight of {profileWeight} kg' (line 670), plus the lean-mass readout '... kg' (line 729). EXPECTED: honor unit_preference like the SIBLING Measurements page, which has a working cm/inch toggle (src/pages/Measurements.tsx:551-576) and converts on the fly, and like LogWeight/dashboard which show weight in lbs for imperial users. ACTUAL: BodyFatEstimator is metric-only — an imperial user (unit_preference='imperial') who measures in inches must hand-convert to cm or the Navy BF% comes out wrong, and sees weight in kg while every other surface shows lbs. Same imperial-ignoring class as fixed i-20260803-b711 / d7b3 / 020c / 7a2c. REPRO: profile unit_preference=imperial -> open /body-fat-estimator -> expand Calculator -> inputs are labeled 'cm' with no inch option; Katch tab reads 'profile weight of NN kg'."
+      "description": "[bug-hunt] Body Fat Estimator (/body-fat-estimator, src/pages/BodyFatEstimator.tsx) ignores an imperial user's unit_preference entirely. The Navy-method calculator hard-labels every circumference input \"cm\" (Neck/Waist/Hip InputFields, lines ~600-626, unit=\"cm\") with NO cm/inch toggle, and the Katch-McArdle tab renders the profile weight in hardcoded kilograms: 'Using your profile weight of {profileWeight} kg' (line 670), plus the lean-mass readout '... kg' (line 729). EXPECTED: honor unit_preference like the SIBLING Measurements page, which has a working cm/inch toggle (src/pages/Measurements.tsx:551-576) and converts on the fly, and like LogWeight/dashboard which show weight in lbs for imperial users. ACTUAL: BodyFatEstimator is metric-only — an imperial user (unit_preference='imperial') who measures in inches must hand-convert to cm or the Navy BF% comes out wrong, and sees weight in kg while every other surface shows lbs. Same imperial-ignoring class as fixed i-20260803-b711 / d7b3 / 020c / 7a2c. REPRO: profile unit_preference=imperial -> open /body-fat-estimator -> expand Calculator -> inputs are labeled 'cm' with no inch option; Katch tab reads 'profile weight of NN kg'.",
+      "thread": [
+        {
+          "at": "2026-08-10T01:59:16.249Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Body Fat Estimator was metric-only — it hard-labeled every circumference input 'cm' and showed the profile weight in kilograms, ignoring an imperial user's unit preference. Fix: added a cm/inch toggle (seeded from unit_preference like the Measurements page) that converts entered values on the fly, and the Katch-McArdle tab now shows weight and lean mass in lbs for imperial users. The Navy formula still computes in metric internally, so results stay correct.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "open",
