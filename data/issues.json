@@ -68,7 +68,13 @@
       "createdAt": "2026-08-10T03:54:23.057Z",
       "id": "i-20260810-f51e",
       "route": "/activity",
-      "description": "[bug-hunt] Strength progression sheet has ZERO i18n — it never imports useTranslation, so every string is hardcoded English regardless of app language. src/components/activity/ExerciseProgressionSheet.tsx (opened by tapping an exercise in the Activity page’s Strength strip) hardcodes: the “Exercise” title fallback (line 77), “× {reps} reps (current PR)” + “kg” (87-89), the empty state “Log at least 2 sessions to see progression” (102), the chart tooltip/legend labels “Est. 1RM” / “Top set” / “Top set weight” (136-144), and the stat tiles “Sessions” / “Peak weight” / “Peak 1RM” (173,177,183). EXPECTED: translated in Hindi/Hinglish like the parent Activity screen and StrengthStrip. ACTUAL: all English. REPRO: set app language to Hindi → Activity → tap an exercise in the Strength section → the progression sheet shows English labels + empty-state copy. Same whole-component zero-i18n class as i-20260804-b4f2 / 5e2c. Fix: add useTranslation + activity.progression.* keys across en/hi/hinglish/xx-AE and route every literal through t()."
+      "description": "[bug-hunt] Strength progression sheet has ZERO i18n — it never imports useTranslation, so every string is hardcoded English regardless of app language. src/components/activity/ExerciseProgressionSheet.tsx (opened by tapping an exercise in the Activity page’s Strength strip) hardcodes: the “Exercise” title fallback (line 77), “× {reps} reps (current PR)” + “kg” (87-89), the empty state “Log at least 2 sessions to see progression” (102), the chart tooltip/legend labels “Est. 1RM” / “Top set” / “Top set weight” (136-144), and the stat tiles “Sessions” / “Peak weight” / “Peak 1RM” (173,177,183). EXPECTED: translated in Hindi/Hinglish like the parent Activity screen and StrengthStrip. ACTUAL: all English. REPRO: set app language to Hindi → Activity → tap an exercise in the Strength section → the progression sheet shows English labels + empty-state copy. Same whole-component zero-i18n class as i-20260804-b4f2 / 5e2c. Fix: add useTranslation + activity.progression.* keys across en/hi/hinglish/xx-AE and route every literal through t().",
+      "claim": {
+        "by": "shakeebshaan",
+        "at": "2026-08-10T04:23:50.170Z",
+        "expiresAt": "2026-08-10T05:23:50.170Z",
+        "note": "fix-issues tick: i18n fix (tsx wired + 4-bundle keys), verifying+gating"
+      }
     },
     {
       "status": "open",
