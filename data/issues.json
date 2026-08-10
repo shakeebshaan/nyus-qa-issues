@@ -18,7 +18,13 @@
       "createdAt": "2026-08-10T03:54:23.057Z",
       "id": "i-20260810-bfbf",
       "route": "/activity",
-      "description": "[bug-hunt] Live-workout Rest Timer renders its VISIBLE controls in hardcoded English, ignoring the selected app language. In src/components/RestTimer.tsx the component imports useTranslation and DOES translate the background “Rest done” local notification (t('activity.rest.done_*')), but every on-screen string is a raw English literal: the default-variant caption “Rest between sets” / “Rest complete” (lines 244-245), the “Skip Rest” / “Pause” / “Resume” buttons (250-254), the compact + sticky-pill “Skip” button and its aria-label “Skip rest” (147-152, 197-201), and the timer aria-label “{m} minutes {s} seconds remaining” (189 and 237). EXPECTED: with app language set to Hindi/Hinglish these controls render translated like every other live-workout string (TodaysExerciseList + ExerciseWheelPicker all route through t()). ACTUAL: they stay English. REPRO: Profile → set app language to Hindi; Activity → start a workout → open an exercise → log a set to arm the rest timer → the “Rest between sets” caption + “Skip Rest”/“Pause”/“Resume” buttons show English. Same partial/zero-i18n class as i-20260804-0473 / 5e2c / b4f2. Fix: route the literals + arias through t() and add keys to en/hi/hinglish/xx-AE."
+      "description": "[bug-hunt] Live-workout Rest Timer renders its VISIBLE controls in hardcoded English, ignoring the selected app language. In src/components/RestTimer.tsx the component imports useTranslation and DOES translate the background “Rest done” local notification (t('activity.rest.done_*')), but every on-screen string is a raw English literal: the default-variant caption “Rest between sets” / “Rest complete” (lines 244-245), the “Skip Rest” / “Pause” / “Resume” buttons (250-254), the compact + sticky-pill “Skip” button and its aria-label “Skip rest” (147-152, 197-201), and the timer aria-label “{m} minutes {s} seconds remaining” (189 and 237). EXPECTED: with app language set to Hindi/Hinglish these controls render translated like every other live-workout string (TodaysExerciseList + ExerciseWheelPicker all route through t()). ACTUAL: they stay English. REPRO: Profile → set app language to Hindi; Activity → start a workout → open an exercise → log a set to arm the rest timer → the “Rest between sets” caption + “Skip Rest”/“Pause”/“Resume” buttons show English. Same partial/zero-i18n class as i-20260804-0473 / 5e2c / b4f2. Fix: route the literals + arias through t() and add keys to en/hi/hinglish/xx-AE.",
+      "claim": {
+        "by": "shakeebshaan",
+        "at": "2026-08-10T04:23:36.325Z",
+        "expiresAt": "2026-08-10T05:23:36.325Z",
+        "note": "fix-issues tick: i18n fix (tsx wired + 4-bundle keys), verifying+gating"
+      }
     },
     {
       "status": "open",
