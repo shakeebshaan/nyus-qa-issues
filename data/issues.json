@@ -2,6 +2,24 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260810-ck9m",
+      "createdAt": "2026-08-10T05:39:30.087Z",
+      "status": "open",
+      "route": "/recipe/:id",
+      "description": "[suggestion] Add a \"Cook mode\" to RecipeDetail: a full-screen, swipe-through step view that keeps the screen awake while cooking. Problem: recipe.instructions render today as a static scrollable list (src/pages/RecipeDetail.tsx:773-777, RecipeStepList) with no way to keep hands-free while stove-side — the screen locks mid-recipe and users lose their place scrolling back up on a small phone. Evidence: every comparable app (recipe/nutrition trackers, plus general recipe apps) ships a dedicated cook mode with wake-lock + large-type single-step display; NYUS already has all instruction data (recipe.instructions array) and RestTimer precedent for a full-screen timed-interaction pattern (src/components/*RestTimer*), so this reuses existing plumbing rather than inventing new backend surface. V1 scope: a \"Start cooking\" button on RecipeDetail opens a full-screen sheet showing one instruction step at a time (large text, tap/swipe next-prev, step counter), uses the Screen Wake Lock API (already used pattern-wise for native via Capacitor if available, else web Wake Lock API with graceful no-op fallback), no new backend calls — pure FE, reads existing recipe.instructions. Effort: ~0.5-1 day (one new component + wire-up on RecipeDetail, no API changes).",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "status": "open",
       "fix": null,
       "history": [],
