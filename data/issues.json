@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "content",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-10T12:00:00.000Z",
+      "id": "i-20260810-a3f1",
+      "route": null,
+      "description": "[content] Published: Appam Calories — Why the Side Dish, Not the Appam, Decides the Meal — https://nyus.in/blog/appam-calories-stew-vs-curry-india.html. Ideas added: 2. Escalated: 0."
+    },
+    {
       "status": "fixed",
       "fix": {
         "description": "Root cause: the Body Fat Estimator was metric-only — it hard-labeled every circumference input 'cm' and showed the profile weight in kilograms, ignoring an imperial user's unit preference. Fix: added a cm/inch toggle (seeded from unit_preference like the Measurements page) that converts entered values on the fly, and the Katch-McArdle tab now shows weight and lean mass in lbs for imperial users. The Navy formula still computes in metric internally, so results stay correct.",
