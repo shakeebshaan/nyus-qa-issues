@@ -6,6 +6,22 @@
       "fix": null,
       "history": [],
       "author": "shakeebshaan",
+      "tags": ["suggestion", "auto"],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-10T13:00:00.000Z",
+      "id": "i-20260810-swp2",
+      "route": "/nutrition",
+      "description": "[suggestion] Add a \"Lighter swap\" chip on the meal-log confirm sheet when the picked dish isn't the lowest-calorie variant of its own family (e.g. Masala Dosa vs Plain Dosa, Aloo Paratha vs Sada Paratha). Problem: NYUS's own catalog and blog content (nyus.in posts like \"Plain Dosa vs Masala Dosa vs Rava Dosa Calories\" and \"Appam Calories — Why the Side Dish Decides\") already prove the same dish name hides a 100-300kcal spread depending on prep/filling/side — but the app never surfaces this at the moment it matters: while logging. Evidence: meal-catalog.json has 9,497 dishes with per-item kcal but no way today to see cheaper siblings; the QA-suggestion \"vrat toggle\"/\"grocery cost\" ideas already shipped mine similar catalog-awareness territory, this is the log-time counterpart. Proposed v1: client-side only — group catalog items by shared dish noun + cuisine (e.g. all \"*Dosa\" in South Indian), at log-confirm time if the selected item isn't the group's min-kcal entry and the gap is >=15%, show a small dismissible chip \"Try {alt} instead — saves {N} kcal\" with a one-tap swap; no new backend/AI calls, no push. Effort: ~2-3 days (grouping heuristic + CustomMealModal/food-search confirm-sheet UI + a11y + i18n across 4 bundles)."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
       "tags": [
         "content",
         "auto"
