@@ -15,6 +15,44 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
+      "createdAt": "2026-08-10T22:37:00.000Z",
+      "id": "i-20260810-4e1a",
+      "route": "/verify",
+      "description": "[bug-hunt] OTP verification screen (/verify, src/pages/Verify.tsx) renders 100% HARDCODED English and never imports useTranslation. Every user-visible string is a literal: heading “Check your email”, subtitle “Enter the 6-digit code sent to {email}”, CTA “Confirm code” / “Verifying...”, “Resend code” / “Resend in {n}s” / “Sending...”, “Change email”, back-button aria “Go back”, per-box aria “Digit N of 6”, and all three toasts (“Wrong code” + “Check the code we sent and try again”, “New code sent” + “Check your email for the latest code.”, “Couldn’t resend code” + “Please try again in a moment”). EXPECTED: honor the language chosen at the startup LanguagePicker — App.tsx:303 gates the WHOLE app on nyus_locale BEFORE routing/auth, so pre-auth screens are translatable; its DIRECT sibling in the same auth flow, src/pages/Welcome.tsx, is fully t()-migrated and uses the same IntroCardShell. ACTUAL: a user who picks Hindi/Hinglish at first run sees a translated Welcome, then an all-English OTP screen on the very next step. REPRO: first run → LanguagePicker → choose हिन्दी → enter email (Welcome renders Hindi) → Continue → /verify shows English. Same i18n-gap class as fixed b4f2/5e2c/c1e9/3b9d/d7b3; distinct never-filed surface (no prior /verify or auth-flow i18n issue on the board)."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-10T22:37:00.000Z",
+      "id": "i-20260810-9c3f",
+      "route": "/choose-plan",
+      "description": "[bug-hunt] Web Razorpay checkout on Choose Plan (/choose-plan, src/pages/ChoosePlan.tsx → handleRazorpayPayment) passes prefill: { name: '', email: '', contact: '' } (~line 829) to new window.Razorpay(options), ignoring the signed-in user’s known details. TWO defects: (1) the user’s name + email ARE in scope — the NATIVE path ~40 lines up (~line 790) builds prefill from user?.name / user?.email — but the web path hardcodes empty strings, so a paying web user must re-type their email + phone in the Razorpay sheet; (2) empty strings are WORSE than omission: the SAME FILE’s native-path comment states ‘Empty strings are worse than omission — Razorpay treats them as supplied-but-blank’, which also suppresses Razorpay’s own autofill. EXPECTED: web prefill mirrors native — { ...(user?.name ? { name: user.name } : {}), ...(user?.email ? { email: user.email } : {}) } and OMIT contact rather than send ''. ACTUAL: name/email/contact all '' on web checkout. REPRO: open /choose-plan in a browser (non-native platform) as a logged-in user → tap ‘Subscribe — ₹X’ on a paid plan → Razorpay sheet opens with blank name/email/contact instead of the account email. NOTE: web is the secondary target (native mobile is primary), so severity is friction-level, but it is a real regression vs the deliberate native-path fix. No existing board issue covers Razorpay prefill."
+    },
+    {
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
       "createdAt": "2026-08-10T11:22:46.871Z",
       "id": "i-20260810-3d7a",
       "route": "/weekly-review",
