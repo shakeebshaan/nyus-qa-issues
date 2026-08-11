@@ -2,13 +2,35 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260811-dl4k",
+      "createdAt": "2026-08-11T08:40:50.986Z",
+      "status": "open",
+      "route": "/weekly-review",
+      "description": "[suggestion] Auto deload-week nudge on Weekly Review when strength progression stalls or regresses. Problem: the progressive workout engine (workout-session-utils.ts) only ever advances load on explicit finish and never detects overtraining — a lifter whose top-set weight/reps drops for 2+ consecutive sessions on the same lift, or whose post-set RPE (RatingScaleBlock responses) trends high, keeps getting the same or heavier prescription next week, risking a stall-into-injury spiral. Comparable trackers (Whoop, Trainerize) lean on recovery signals for exactly this. Evidence: grepped app for deload/overtraining/fatigue-flag logic — none exists; only an unrelated PR-calc comment uses the word \"deload\". v1 scope: backend job compares this week vs last week per main-lift exercise_name (max(reps*weight_kg) from SetLog) — if it drops on 2+ tracked lifts, or avg RPE from RatingScaleBlock responses is high, surface one calm card on WeeklyReviewScreen: \"Your body might need a lighter week\" with accept (auto-scales next week's assigned_sets by ~40%) or dismiss. No new screens, no push spam — one weekly card, opt-in. Effort: ~2-3 days (1 backend detection job + 1 FE card + progressive-plan write path for the scale-down).",
+      "imagePath": null,
+      "imagePaths": [],
+      "imageCommit": null,
+      "imageCommits": [],
+      "imagePrivate": false,
+      "author": "shakeebshaan",
+      "tags": [
+        "suggestion",
+        "auto"
+      ],
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260811-9d2f",
       "createdAt": "2026-08-11T00:00:00.000Z",
       "status": "open",
       "description": "[content] Published: Uttapam Calories vs Plain Dosa — The Real Numbers — https://nyus.in/blog/uttapam-calories-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
       "imagePaths": [],
       "imagePrivate": false,
-      "tags": ["content", "auto"],
+      "tags": [
+        "content",
+        "auto"
+      ],
       "author": "shakeebshaan",
       "route": null,
       "fix": null,
