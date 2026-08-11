@@ -110,8 +110,30 @@
       "needsReview": false
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the web Razorpay checkout passed prefill { name:'', email:'', contact:'' } — empty strings that Razorpay treats as supplied-but-blank, forcing paying web users to re-type their details and suppressing autofill. Fix: mirror the native path — include name/email only when known and omit contact entirely. Proof: a runtime capture shows the web prefill is now { name, email } from the signed-in account with no blank contact.",
+        "imagePath": "images/i-20260810-9c3f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260810-9c3f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b5aca466863f5a00dc1423733abe7d46f31b8985",
+        "imageCommits": [
+          "b5aca466863f5a00dc1423733abe7d46f31b8985"
+        ],
+        "fixedAt": "2026-08-11T08:01:59.760Z",
+        "by": "shakeebshaan",
+        "appCommit": "a0b3e629",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Runtime capture of new window.Razorpay(options): prefill={name,email}, contact omitted, no empty strings."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -126,7 +148,17 @@
       "createdAt": "2026-08-10T22:37:00.000Z",
       "id": "i-20260810-9c3f",
       "route": "/choose-plan",
-      "description": "[bug-hunt] Web Razorpay checkout on Choose Plan (/choose-plan, src/pages/ChoosePlan.tsx → handleRazorpayPayment) passes prefill: { name: '', email: '', contact: '' } (~line 829) to new window.Razorpay(options), ignoring the signed-in user’s known details. TWO defects: (1) the user’s name + email ARE in scope — the NATIVE path ~40 lines up (~line 790) builds prefill from user?.name / user?.email — but the web path hardcodes empty strings, so a paying web user must re-type their email + phone in the Razorpay sheet; (2) empty strings are WORSE than omission: the SAME FILE’s native-path comment states ‘Empty strings are worse than omission — Razorpay treats them as supplied-but-blank’, which also suppresses Razorpay’s own autofill. EXPECTED: web prefill mirrors native — { ...(user?.name ? { name: user.name } : {}), ...(user?.email ? { email: user.email } : {}) } and OMIT contact rather than send ''. ACTUAL: name/email/contact all '' on web checkout. REPRO: open /choose-plan in a browser (non-native platform) as a logged-in user → tap ‘Subscribe — ₹X’ on a paid plan → Razorpay sheet opens with blank name/email/contact instead of the account email. NOTE: web is the secondary target (native mobile is primary), so severity is friction-level, but it is a real regression vs the deliberate native-path fix. No existing board issue covers Razorpay prefill."
+      "description": "[bug-hunt] Web Razorpay checkout on Choose Plan (/choose-plan, src/pages/ChoosePlan.tsx → handleRazorpayPayment) passes prefill: { name: '', email: '', contact: '' } (~line 829) to new window.Razorpay(options), ignoring the signed-in user’s known details. TWO defects: (1) the user’s name + email ARE in scope — the NATIVE path ~40 lines up (~line 790) builds prefill from user?.name / user?.email — but the web path hardcodes empty strings, so a paying web user must re-type their email + phone in the Razorpay sheet; (2) empty strings are WORSE than omission: the SAME FILE’s native-path comment states ‘Empty strings are worse than omission — Razorpay treats them as supplied-but-blank’, which also suppresses Razorpay’s own autofill. EXPECTED: web prefill mirrors native — { ...(user?.name ? { name: user.name } : {}), ...(user?.email ? { email: user.email } : {}) } and OMIT contact rather than send ''. ACTUAL: name/email/contact all '' on web checkout. REPRO: open /choose-plan in a browser (non-native platform) as a logged-in user → tap ‘Subscribe — ₹X’ on a paid plan → Razorpay sheet opens with blank name/email/contact instead of the account email. NOTE: web is the secondary target (native mobile is primary), so severity is friction-level, but it is a real regression vs the deliberate native-path fix. No existing board issue covers Razorpay prefill.",
+      "thread": [
+        {
+          "at": "2026-08-11T08:01:59.760Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the web Razorpay checkout passed prefill { name:'', email:'', contact:'' } — empty strings that Razorpay treats as supplied-but-blank, forcing paying web users to re-type their details and suppressing autofill. Fix: mirror the native path — include name/email only when known and omit contact entirely. Proof: a runtime capture shows the web prefill is now { name, email } from the signed-in account with no blank contact.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "fixed",
