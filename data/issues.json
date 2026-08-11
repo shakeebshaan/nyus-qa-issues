@@ -97,8 +97,30 @@
       "description": "[bug-hunt] Web Razorpay checkout on Choose Plan (/choose-plan, src/pages/ChoosePlan.tsx → handleRazorpayPayment) passes prefill: { name: '', email: '', contact: '' } (~line 829) to new window.Razorpay(options), ignoring the signed-in user’s known details. TWO defects: (1) the user’s name + email ARE in scope — the NATIVE path ~40 lines up (~line 790) builds prefill from user?.name / user?.email — but the web path hardcodes empty strings, so a paying web user must re-type their email + phone in the Razorpay sheet; (2) empty strings are WORSE than omission: the SAME FILE’s native-path comment states ‘Empty strings are worse than omission — Razorpay treats them as supplied-but-blank’, which also suppresses Razorpay’s own autofill. EXPECTED: web prefill mirrors native — { ...(user?.name ? { name: user.name } : {}), ...(user?.email ? { email: user.email } : {}) } and OMIT contact rather than send ''. ACTUAL: name/email/contact all '' on web checkout. REPRO: open /choose-plan in a browser (non-native platform) as a logged-in user → tap ‘Subscribe — ₹X’ on a paid plan → Razorpay sheet opens with blank name/email/contact instead of the account email. NOTE: web is the secondary target (native mobile is primary), so severity is friction-level, but it is a real regression vs the deliberate native-path fix. No existing board issue covers Razorpay prefill."
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Weekly Review screen (and the coach-chat weekly-review card) always showed body-weight in kilograms, ignoring an imperial user's unit preference — unlike every other weight surface. Fix: read unit_preference and convert kg to lb for the weight-change delta and the start->end pair (and the artifact card). Proof: an imperial user now sees '-0.9 lbs' and '172.4 -> 171.5'.",
+        "imagePath": "images/i-20260810-3d7a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260810-3d7a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3838d467006e9df8c7b223112c95c4f854df5f0d",
+        "imageCommits": [
+          "3838d467006e9df8c7b223112c95c4f854df5f0d"
+        ],
+        "fixedAt": "2026-08-11T08:01:46.358Z",
+        "by": "shakeebshaan",
+        "appCommit": "e6ee6dbc",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Imperial capture shows delta + start/end all converted to lbs across both surfaces."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -113,7 +135,17 @@
       "createdAt": "2026-08-10T11:22:46.871Z",
       "id": "i-20260810-3d7a",
       "route": "/weekly-review",
-      "description": "[bug-hunt] Weekly Review screen renders ALL body-weight values in hardcoded KILOGRAMS, ignoring an imperial user unit_preference — while every OTHER weight surface (LogWeight, Weekly Progress, coach-chat Weekly Report block, Measurements) shows lbs. src/pages/WeeklyReviewScreen.tsx never reads unit_preference (no useProfile, no KG_TO_LB conversion): the Overview \"Weight change\" block prints `{(s.weight_delta).toFixed(1)} kg` (line ~874) and the start->end pair (lines ~878-880) print the raw backend weight_start_kg / weight_end_kg. Same root cause in the coach-chat weekly-review artifact card src/components/coach/WeeklyReviewArtifactCard.tsx (line ~42: `${weight.toFixed(1)} kg`). Contrast the FIXED siblings: src/pages/WeeklyProgress.tsx:103-112 and src/components/blocks/WeeklyReportBlock.tsx:47-57 both read profileData.unit_preference===\"imperial\" and convert kg->lb before display. Expected: an imperial user sees e.g. \"-0.9 lb\" and \"172.4 -> 171.5\". Actual: kg is shown regardless of preference, so the weekly review contradicts every other weight readout for imperial users. Repro: set profile unit_preference=imperial, open /weekly-review (deep-linked from the Saturday weekly-review push) -> Overview section -> Weight change renders in kg. Same units class as fixed d7b3 / b711 / 020c, but a distinct, never-migrated surface."
+      "description": "[bug-hunt] Weekly Review screen renders ALL body-weight values in hardcoded KILOGRAMS, ignoring an imperial user unit_preference — while every OTHER weight surface (LogWeight, Weekly Progress, coach-chat Weekly Report block, Measurements) shows lbs. src/pages/WeeklyReviewScreen.tsx never reads unit_preference (no useProfile, no KG_TO_LB conversion): the Overview \"Weight change\" block prints `{(s.weight_delta).toFixed(1)} kg` (line ~874) and the start->end pair (lines ~878-880) print the raw backend weight_start_kg / weight_end_kg. Same root cause in the coach-chat weekly-review artifact card src/components/coach/WeeklyReviewArtifactCard.tsx (line ~42: `${weight.toFixed(1)} kg`). Contrast the FIXED siblings: src/pages/WeeklyProgress.tsx:103-112 and src/components/blocks/WeeklyReportBlock.tsx:47-57 both read profileData.unit_preference===\"imperial\" and convert kg->lb before display. Expected: an imperial user sees e.g. \"-0.9 lb\" and \"172.4 -> 171.5\". Actual: kg is shown regardless of preference, so the weekly review contradicts every other weight readout for imperial users. Repro: set profile unit_preference=imperial, open /weekly-review (deep-linked from the Saturday weekly-review push) -> Overview section -> Weight change renders in kg. Same units class as fixed d7b3 / b711 / 020c, but a distinct, never-migrated surface.",
+      "thread": [
+        {
+          "at": "2026-08-11T08:01:46.358Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Weekly Review screen (and the coach-chat weekly-review card) always showed body-weight in kilograms, ignoring an imperial user's unit preference — unlike every other weight surface. Fix: read unit_preference and convert kg to lb for the weight-change delta and the start->end pair (and the artifact card). Proof: an imperial user now sees '-0.9 lbs' and '172.4 -> 171.5'.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "open",
