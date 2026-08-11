@@ -106,8 +106,30 @@
     {
       "id": "i-20260811-af2d",
       "createdAt": "2026-08-11T02:23:13.306Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Social hub Activity feed tab was hardcoded English — the activity-verb map and the empty/error states ignored app language. Fix: added useTranslation + social.feed.* keys (verb phrases + states) with four-bundle parity. Proof: the tab now renders 'गतिविधि फ़ीड' and the Hindi empty state 'अभी कोई गतिविधि नहीं'.",
+        "imagePath": "images/i-20260811-af2d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260811-af2d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bec1b75fa6b0ffa5f883ddb24736ab6a51beab53",
+        "imageCommits": [
+          "bec1b75fa6b0ffa5f883ddb24736ab6a51beab53"
+        ],
+        "fixedAt": "2026-08-11T08:02:13.552Z",
+        "by": "shakeebshaan",
+        "appCommit": "8e4355d5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Hindi capture of the live Activity feed tab shows header + empty state translated; verb keys in 4 bundles."
+        }
+      },
       "history": [],
       "route": "/social",
       "description": "[bug-hunt] Social hub → Activity feed tab body (ActivityFeedView, src/components/ActivityFeedView.tsx) renders HARDCODED English — no useTranslation. The ACTIVITY_VERBS map that labels every feed row is English-only (\"completed a workout\", \"completed a challenge\", \"reached a weight milestone\", plus the \"reached Level <N>\" fallback), and so are the error state (\"Error loading activity feed\"/\"Please try again later\") and empty state (\"No activity yet\"). EXPECTED: a Hindi/Hinglish user sees translated activity-verb phrases + states. ACTUAL: every feed row and state is English regardless of app language. Mounted live via Social.tsx switch case \"feed\" → <ActivityFeedView/> (tab id:\"feed\", fullWidth tile in the hub grid). Same i18n class as FIXED e5b8/c17a/d24e; distinct never-migrated component. Repro: app language Hindi → Social → Activity feed. Fix: useTranslation + t() keys for the verb map + states, 4-bundle parity (en/hi/hinglish/xx-AE).",
@@ -120,7 +142,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-11T08:02:13.552Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Social hub Activity feed tab was hardcoded English — the activity-verb map and the empty/error states ignored app language. Fix: added useTranslation + social.feed.* keys (verb phrases + states) with four-bundle parity. Proof: the tab now renders 'गतिविधि फ़ीड' and the Hindi empty state 'अभी कोई गतिविधि नहीं'.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "fixed",
