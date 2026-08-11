@@ -148,8 +148,30 @@
       "needsReview": false
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Weekly Review screen was almost entirely hardcoded English (section pills, stat labels, insights, proposed changes, reflection card, toasts) and ignored the app language. Fix: routed the whole screen and its child cards through t() with hi/hinglish/xx-AE bundles. Proof: the screen now renders in Hindi (सप्ताह 14 समीक्षा, ओवरव्यू/इनसाइट्स/प्लान बदलाव, औसत कैलोरी/प्रोटीन, वज़न में बदलाव).",
+        "imagePath": "images/i-20260810-c4e1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260810-c4e1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "542212f971f032e36bb80b6ef2ca2b3a6b557116",
+        "imageCommits": [
+          "542212f971f032e36bb80b6ef2ca2b3a6b557116"
+        ],
+        "fixedAt": "2026-08-11T08:01:50.581Z",
+        "by": "shakeebshaan",
+        "appCommit": "2b7fc27f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Full Hindi capture of the whole screen; 58 keys present across 4 bundles, no raw literals."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -164,7 +186,17 @@
       "createdAt": "2026-08-10T11:22:46.871Z",
       "id": "i-20260810-c4e1",
       "route": "/weekly-review",
-      "description": "[bug-hunt] Weekly Review screen (src/pages/WeeklyReviewScreen.tsx) is almost entirely UN-TRANSLATED: it imports useTranslation but calls t() ONLY inside ComplianceVerdict (tier word + \"Weekly compliance\" kicker). Every other string on this fully-shipped ProtectedRoute (App.tsx:800) is hardcoded English and ignores the selected app language (EN/Hindi/Hinglish/xx-AE): the section pills Overview/Insights/Plan Changes (SECTION_LABELS line ~145), \"THIS WEEK\", \"workouts\", Avg calories/Avg protein/Meals/Steps/Water/Sleep/Supplements labels, \"Weight change\", \"AI Insights\" + \"Patterns detected from your week data\", \"Proposed Changes\" + \"Select which changes to apply for next week\", \"At a glance\", the ExpandableInsight Read more/Show less toggle (line ~104), both swipe hints, the entire ReflectionPrompt card (\"What did you learn this week?\", the placeholder, \"Save reflection\", and all toasts), the ReviewedSummary read-only card (\"Changes applied\"/\"Plan kept as-is\"/\"Discuss\"/\"Back to dashboard\"), and the AcceptChangesFlow controls + toasts (\"Approve All Changes\"/\"Keep Current\"/\"Select all\"/\"Changes applied\"/\"Couldnt save\"). The child WeeklyInsightCard (src/components/review/WeeklyInsightCard.tsx) pattern labels (Progress/Consistency/Recovery/...) are also hardcoded. Expected: all render via t() with hi/hinglish/xx-AE bundles. Actual: English only. Repro: switch app language to Hindi, open /weekly-review -> whole screen stays English. Same i18n class as fixed b4f2 / 5e2c / c1e9 / 3b9d, but a distinct never-migrated screen."
+      "description": "[bug-hunt] Weekly Review screen (src/pages/WeeklyReviewScreen.tsx) is almost entirely UN-TRANSLATED: it imports useTranslation but calls t() ONLY inside ComplianceVerdict (tier word + \"Weekly compliance\" kicker). Every other string on this fully-shipped ProtectedRoute (App.tsx:800) is hardcoded English and ignores the selected app language (EN/Hindi/Hinglish/xx-AE): the section pills Overview/Insights/Plan Changes (SECTION_LABELS line ~145), \"THIS WEEK\", \"workouts\", Avg calories/Avg protein/Meals/Steps/Water/Sleep/Supplements labels, \"Weight change\", \"AI Insights\" + \"Patterns detected from your week data\", \"Proposed Changes\" + \"Select which changes to apply for next week\", \"At a glance\", the ExpandableInsight Read more/Show less toggle (line ~104), both swipe hints, the entire ReflectionPrompt card (\"What did you learn this week?\", the placeholder, \"Save reflection\", and all toasts), the ReviewedSummary read-only card (\"Changes applied\"/\"Plan kept as-is\"/\"Discuss\"/\"Back to dashboard\"), and the AcceptChangesFlow controls + toasts (\"Approve All Changes\"/\"Keep Current\"/\"Select all\"/\"Changes applied\"/\"Couldnt save\"). The child WeeklyInsightCard (src/components/review/WeeklyInsightCard.tsx) pattern labels (Progress/Consistency/Recovery/...) are also hardcoded. Expected: all render via t() with hi/hinglish/xx-AE bundles. Actual: English only. Repro: switch app language to Hindi, open /weekly-review -> whole screen stays English. Same i18n class as fixed b4f2 / 5e2c / c1e9 / 3b9d, but a distinct never-migrated screen.",
+      "thread": [
+        {
+          "at": "2026-08-11T08:01:50.581Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Weekly Review screen was almost entirely hardcoded English (section pills, stat labels, insights, proposed changes, reflection card, toasts) and ignored the app language. Fix: routed the whole screen and its child cards through t() with hi/hinglish/xx-AE bundles. Proof: the screen now renders in Hindi (सप्ताह 14 समीक्षा, ओवरव्यू/इनसाइट्स/प्लान बदलाव, औसत कैलोरी/प्रोटीन, वज़न में बदलाव).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260810-ck9m",
