@@ -4,8 +4,30 @@
     {
       "id": "i-20260811-8c7a",
       "createdAt": "2026-08-11T02:23:13.306Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Social hub Groups tab (group chat) was 100% hardcoded English and never used translations. Fix: added useTranslation + t() keys with four-bundle parity, mirroring the Leaderboard/Partners migrations. Proof: the tab now renders 'लीडरबोर्ड ग्रुप चैट', the join subline and 'अभी तक कोई संदेश नहीं।' in Hindi.",
+        "imagePath": "images/i-20260811-8c7a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260811-8c7a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e763f4a4c396741d07cbc09dfead24bca141c773",
+        "imageCommits": [
+          "e763f4a4c396741d07cbc09dfead24bca141c773"
+        ],
+        "fixedAt": "2026-08-11T08:02:04.565Z",
+        "by": "shakeebshaan",
+        "appCommit": "8e4355d5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Hindi capture of the live Groups tab shows heading, subline and per-row copy translated."
+        }
+      },
       "history": [],
       "route": "/social",
       "description": "[bug-hunt] Social hub → Groups tab body (GroupChatView, src/components/GroupChatView.tsx) renders 100% HARDCODED English — it never imports useTranslation, so EVERY user-facing string ignores the app language: the \"Leaderboard Group Chats\" heading + \"Join conversations with other leaderboard participants.\" subline, \"Loading groups...\", \"No messages yet.\", \"No group chats available\", the empty-thread \"No messages yet in <group>\" / \"Be the first to start the conversation.\", the \"<N> messages\" header count, the \"Type a message...\" composer placeholder + its aria-label, and the \"Message not sent\" send-failure toast. EXPECTED: a Hindi/Hinglish user who taps the (already-translated) \"Groups\" tile in the Social hub sees a translated group-chat screen. ACTUAL: the hub shell (Social.tsx) is fully t()-migrated but this tab body is pure English. Mounted live via Social.tsx switch case \"groups\" → <GroupChatView/> (tab exposed in the hub tile grid, id:\"groups\"). Same i18n class as the FIXED siblings i-20260728-e5b8 (Social.tsx), i-20260728-c17a (LeaderboardView), i-20260728-d24e (PartnerGroupHub) — distinct never-migrated component. Repro: set app language to Hindi → Social → Groups → all copy renders in English. Fix: add useTranslation + t() keys (mirror the LeaderboardView migration), 4-bundle parity (en/hi/hinglish/xx-AE).",
@@ -18,7 +40,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-11T08:02:04.565Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Social hub Groups tab (group chat) was 100% hardcoded English and never used translations. Fix: added useTranslation + t() keys with four-bundle parity, mirroring the Leaderboard/Partners migrations. Proof: the tab now renders 'लीडरबोर्ड ग्रुप चैट', the join subline and 'अभी तक कोई संदेश नहीं।' in Hindi.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260811-c4a1",
