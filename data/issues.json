@@ -55,8 +55,30 @@
     {
       "id": "i-20260811-c4a1",
       "createdAt": "2026-08-11T02:23:13.306Z",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Social hub Challenges tab was 100% hardcoded English (create form, tabs, cards, empty/error states, toasts). Fix: added useTranslation + t() keys with four-bundle parity (participant/day counts pluralized) and updated the one test that encoded the old non-pluralized copy. Proof: the tab now renders 'चैलेंज', 'नया चैलेंज बनाएँ', 'सक्रिय/पूर्ण' and the Hindi empty state.",
+        "imagePath": "images/i-20260811-c4a1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260811-c4a1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "df15fc6b20d5b34aaea4607ef8e680064f844a62",
+        "imageCommits": [
+          "df15fc6b20d5b34aaea4607ef8e680064f844a62"
+        ],
+        "fixedAt": "2026-08-11T08:02:09.128Z",
+        "by": "shakeebshaan",
+        "appCommit": "caf7a0403694bde44d8a6fcc0f3c17d5436b6330",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Hindi capture of the live Challenges tab; pluralized counts; ChallengesView test green."
+        }
+      },
       "history": [],
       "route": "/social",
       "description": "[bug-hunt] Social hub → Challenges tab body (ChallengesView, src/components/ChallengesView.tsx) renders 100% HARDCODED English — no useTranslation import anywhere, so the whole surface ignores app language: the \"Create New Challenge\"/\"Close\" button, the create form (\"New Challenge\", \"Challenge Name\", \"Type\", the three CHALLENGE_TYPES labels \"Workout Streak\"/\"Total Volume\"/\"Workout Count\", \"Target (<unit>)\", \"Duration\", the DURATIONS \"7 days\"/\"14 days\"/\"30 days\", \"Invite Friends\", \"No friends yet, add friends first.\"/\"Loading friends...\", \"Create Challenge\"/\"Creating...\"), the \"Active\"/\"Completed\" tabs, per-card \"<N> participants\", \"Until <date>\", \"+N more\", \"Your Progress\", the Join/Decline buttons, the empty states (\"No active challenges\"/\"No completed challenges\" + sublines), the error state (\"Error loading challenges\"/\"Please try again later\"), and every sonner toast (\"Challenge created\"/\"Failed to create challenge\"/\"Joined challenge\"/\"Failed to join challenge\"/\"Challenge declined\"/\"Failed to decline challenge\"). EXPECTED: translated challenges screen for Hindi/Hinglish users. ACTUAL: pure English. Mounted live via Social.tsx switch case \"challenges\" → <ChallengesView/> (tab id:\"challenges\" in the hub tile grid). Same i18n class as FIXED e5b8/c17a/d24e; distinct never-migrated component. Repro: app language Hindi → Social → Challenges. Fix: useTranslation + t() keys with 4-bundle parity.",
@@ -69,7 +91,17 @@
       "imageCommit": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-11T08:02:09.128Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Social hub Challenges tab was 100% hardcoded English (create form, tabs, cards, empty/error states, toasts). Fix: added useTranslation + t() keys with four-bundle parity (participant/day counts pluralized) and updated the one test that encoded the old non-pluralized copy. Proof: the tab now renders 'चैलेंज', 'नया चैलेंज बनाएँ', 'सक्रिय/पूर्ण' and the Hindi empty state.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260811-af2d",
