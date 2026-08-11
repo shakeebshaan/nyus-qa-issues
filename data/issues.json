@@ -2,6 +2,63 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260811-8c7a",
+      "createdAt": "2026-08-11T02:23:13.306Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/social",
+      "description": "[bug-hunt] Social hub → Groups tab body (GroupChatView, src/components/GroupChatView.tsx) renders 100% HARDCODED English — it never imports useTranslation, so EVERY user-facing string ignores the app language: the \"Leaderboard Group Chats\" heading + \"Join conversations with other leaderboard participants.\" subline, \"Loading groups...\", \"No messages yet.\", \"No group chats available\", the empty-thread \"No messages yet in <group>\" / \"Be the first to start the conversation.\", the \"<N> messages\" header count, the \"Type a message...\" composer placeholder + its aria-label, and the \"Message not sent\" send-failure toast. EXPECTED: a Hindi/Hinglish user who taps the (already-translated) \"Groups\" tile in the Social hub sees a translated group-chat screen. ACTUAL: the hub shell (Social.tsx) is fully t()-migrated but this tab body is pure English. Mounted live via Social.tsx switch case \"groups\" → <GroupChatView/> (tab exposed in the hub tile grid, id:\"groups\"). Same i18n class as the FIXED siblings i-20260728-e5b8 (Social.tsx), i-20260728-c17a (LeaderboardView), i-20260728-d24e (PartnerGroupHub) — distinct never-migrated component. Repro: set app language to Hindi → Social → Groups → all copy renders in English. Fix: add useTranslation + t() keys (mirror the LeaderboardView migration), 4-bundle parity (en/hi/hinglish/xx-AE).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
+      "id": "i-20260811-c4a1",
+      "createdAt": "2026-08-11T02:23:13.306Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/social",
+      "description": "[bug-hunt] Social hub → Challenges tab body (ChallengesView, src/components/ChallengesView.tsx) renders 100% HARDCODED English — no useTranslation import anywhere, so the whole surface ignores app language: the \"Create New Challenge\"/\"Close\" button, the create form (\"New Challenge\", \"Challenge Name\", \"Type\", the three CHALLENGE_TYPES labels \"Workout Streak\"/\"Total Volume\"/\"Workout Count\", \"Target (<unit>)\", \"Duration\", the DURATIONS \"7 days\"/\"14 days\"/\"30 days\", \"Invite Friends\", \"No friends yet, add friends first.\"/\"Loading friends...\", \"Create Challenge\"/\"Creating...\"), the \"Active\"/\"Completed\" tabs, per-card \"<N> participants\", \"Until <date>\", \"+N more\", \"Your Progress\", the Join/Decline buttons, the empty states (\"No active challenges\"/\"No completed challenges\" + sublines), the error state (\"Error loading challenges\"/\"Please try again later\"), and every sonner toast (\"Challenge created\"/\"Failed to create challenge\"/\"Joined challenge\"/\"Failed to join challenge\"/\"Challenge declined\"/\"Failed to decline challenge\"). EXPECTED: translated challenges screen for Hindi/Hinglish users. ACTUAL: pure English. Mounted live via Social.tsx switch case \"challenges\" → <ChallengesView/> (tab id:\"challenges\" in the hub tile grid). Same i18n class as FIXED e5b8/c17a/d24e; distinct never-migrated component. Repro: app language Hindi → Social → Challenges. Fix: useTranslation + t() keys with 4-bundle parity.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
+      "id": "i-20260811-af2d",
+      "createdAt": "2026-08-11T02:23:13.306Z",
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "route": "/social",
+      "description": "[bug-hunt] Social hub → Activity feed tab body (ActivityFeedView, src/components/ActivityFeedView.tsx) renders HARDCODED English — no useTranslation. The ACTIVITY_VERBS map that labels every feed row is English-only (\"completed a workout\", \"completed a challenge\", \"reached a weight milestone\", plus the \"reached Level <N>\" fallback), and so are the error state (\"Error loading activity feed\"/\"Please try again later\") and empty state (\"No activity yet\"). EXPECTED: a Hindi/Hinglish user sees translated activity-verb phrases + states. ACTUAL: every feed row and state is English regardless of app language. Mounted live via Social.tsx switch case \"feed\" → <ActivityFeedView/> (tab id:\"feed\", fullWidth tile in the hub grid). Same i18n class as FIXED e5b8/c17a/d24e; distinct never-migrated component. Repro: app language Hindi → Social → Activity feed. Fix: useTranslation + t() keys for the verb map + states, 4-bundle parity (en/hi/hinglish/xx-AE).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false
+    },
+    {
       "status": "open",
       "fix": null,
       "history": [],
