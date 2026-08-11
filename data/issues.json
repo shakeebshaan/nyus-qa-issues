@@ -59,8 +59,30 @@
       "imagePrivate": false
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the OTP verification screen (/verify) was 100% hardcoded English and never imported useTranslation, so a user who picked Hindi at first run saw an all-English screen right after the translated Welcome. Fix: added useTranslation + verify.* keys in all four bundles and routed every string, aria and toast through t(). Proof: /verify now shows 'अपना ईमेल देखें', 'कोड की पुष्टि करें' and 'कोड फिर से भेजें' in Hindi.",
+        "imagePath": "images/i-20260810-4e1a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260810-4e1a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3d62f4dcbe967f099e3dba76ce957d4b8c49dcd6",
+        "imageCommits": [
+          "3d62f4dcbe967f099e3dba76ce957d4b8c49dcd6"
+        ],
+        "fixedAt": "2026-08-11T08:01:54.973Z",
+        "by": "shakeebshaan",
+        "appCommit": "a2223492",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Hindi capture of the live /verify screen incl. translated toast; keys in 4 bundles."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -75,7 +97,17 @@
       "createdAt": "2026-08-10T22:37:00.000Z",
       "id": "i-20260810-4e1a",
       "route": "/verify",
-      "description": "[bug-hunt] OTP verification screen (/verify, src/pages/Verify.tsx) renders 100% HARDCODED English and never imports useTranslation. Every user-visible string is a literal: heading “Check your email”, subtitle “Enter the 6-digit code sent to {email}”, CTA “Confirm code” / “Verifying...”, “Resend code” / “Resend in {n}s” / “Sending...”, “Change email”, back-button aria “Go back”, per-box aria “Digit N of 6”, and all three toasts (“Wrong code” + “Check the code we sent and try again”, “New code sent” + “Check your email for the latest code.”, “Couldn’t resend code” + “Please try again in a moment”). EXPECTED: honor the language chosen at the startup LanguagePicker — App.tsx:303 gates the WHOLE app on nyus_locale BEFORE routing/auth, so pre-auth screens are translatable; its DIRECT sibling in the same auth flow, src/pages/Welcome.tsx, is fully t()-migrated and uses the same IntroCardShell. ACTUAL: a user who picks Hindi/Hinglish at first run sees a translated Welcome, then an all-English OTP screen on the very next step. REPRO: first run → LanguagePicker → choose हिन्दी → enter email (Welcome renders Hindi) → Continue → /verify shows English. Same i18n-gap class as fixed b4f2/5e2c/c1e9/3b9d/d7b3; distinct never-filed surface (no prior /verify or auth-flow i18n issue on the board)."
+      "description": "[bug-hunt] OTP verification screen (/verify, src/pages/Verify.tsx) renders 100% HARDCODED English and never imports useTranslation. Every user-visible string is a literal: heading “Check your email”, subtitle “Enter the 6-digit code sent to {email}”, CTA “Confirm code” / “Verifying...”, “Resend code” / “Resend in {n}s” / “Sending...”, “Change email”, back-button aria “Go back”, per-box aria “Digit N of 6”, and all three toasts (“Wrong code” + “Check the code we sent and try again”, “New code sent” + “Check your email for the latest code.”, “Couldn’t resend code” + “Please try again in a moment”). EXPECTED: honor the language chosen at the startup LanguagePicker — App.tsx:303 gates the WHOLE app on nyus_locale BEFORE routing/auth, so pre-auth screens are translatable; its DIRECT sibling in the same auth flow, src/pages/Welcome.tsx, is fully t()-migrated and uses the same IntroCardShell. ACTUAL: a user who picks Hindi/Hinglish at first run sees a translated Welcome, then an all-English OTP screen on the very next step. REPRO: first run → LanguagePicker → choose हिन्दी → enter email (Welcome renders Hindi) → Continue → /verify shows English. Same i18n-gap class as fixed b4f2/5e2c/c1e9/3b9d/d7b3; distinct never-filed surface (no prior /verify or auth-flow i18n issue on the board).",
+      "thread": [
+        {
+          "at": "2026-08-11T08:01:54.973Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the OTP verification screen (/verify) was 100% hardcoded English and never imported useTranslation, so a user who picked Hindi at first run saw an all-English screen right after the translated Welcome. Fix: added useTranslation + verify.* keys in all four bundles and routed every string, aria and toast through t(). Proof: /verify now shows 'अपना ईमेल देखें', 'कोड की पुष्टि करें' and 'कोड फिर से भेजें' in Hindi.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "open",
