@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260811-cb1f",
+      "createdAt": "2026-08-11T09:19:08.266Z",
+      "route": "/coach-chat",
+      "description": "[bug-hunt] Coach-chat Daily Brief block (CoachBriefCard, src/components/blocks/CoachBriefCard.tsx) — the coach's morning \"Daily brief\" rendered in AI Coach chat — is fully translated for its LABELS via t(), but hardcodes English UNITS and en-US number/date FORMATS for its VALUES, ignoring unit_preference and the app language.\n\nConcrete defects:\n- L195 renders yesterday's morning weight as `${d.morning_weight_kg.toFixed(1)} kg` — ALWAYS kg. An imperial (lb) user sees e.g. \"73.7 kg\" instead of \"~162.5 lb\". Sibling weight surfaces convert via unit_preference (WeeklyProgress / WeeklyReportBlock use KG_TO_LB); this block does not.\n- L50 `const fmtInt = (v) => Math.round(v).toLocaleString(\"en-US\")` formats the calories row (\"1,850 / 2,000 kcal\") with en-US grouping regardless of locale.\n- L116 the kicker date uses `briefDate.toLocaleDateString(\"en-US\", { weekday: \"short\", day: \"numeric\", month: \"short\" })`, so a Hindi-locale user sees \"Sat, Jul 26\" in English while the rest of the brief renders in Hindi.\n\nExpected: weight rendered in the user's unit_preference (kg vs lb) like the WeeklyProgress path; number + date formatting uses the active i18n locale (i18n.language) instead of hardcoded \"en-US\".\n\nRepro: set unit_preference = imperial and app language = Hindi, open AI Coach with a daily brief present (FF_DAILY_BRIEF path; the block renders via CoachChatMessageList -> InteractiveBlock type \"coach_brief\"). The yesterday \"Weight\" row shows kg and the kicker date shows an English date.\n\nSame units/i18n class as fixed i-20260810-3d7a / i-20260810-c4e1 (Weekly Review) and i-20260804-b4f2 (Body Composition), but a distinct, never-filed file.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260811-dl4k",
       "createdAt": "2026-08-11T08:40:50.986Z",
       "status": "open",
