@@ -603,8 +603,32 @@
       "needsReview": false
     },
     {
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Shipped v1.9.88/268. After a composer log, the printed-back note offers ONE chip when a cheaper same-family sibling exists in the catalog: 'Try {alt} instead — saves {N} kcal'. One tap rewrites the just-created MealLog in place (PUT /logs/meal/<id>) with the sibling's catalog macros, then the chip becomes a receipt ('Swapped to {alt} — {kcal} kcal'). Matching is deliberately conservative (exact/full-name containment; silent no-op on a miss), family = same dish noun + cuisine, veg never gets non-veg offered, thresholds >=15% AND >=50 kcal. Client-side only against the bundled catalog — no AI call, no new backend. 12 contracts incl. 5 against the real 9,497-dish catalog. Screenshots: chip after logging Oats Masala Dosa (389 kcal), receipt after the one-tap swap to the 105 kcal sibling.",
+        "imagePath": "images/i-20260810-swp2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260810-swp2-fix-r1.png",
+          "images/i-20260810-swp2-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1e5af7b8fd30efe8b829b7deb2a5d4b463a94f09",
+        "imageCommits": [
+          "1e5af7b8fd30efe8b829b7deb2a5d4b463a94f09",
+          "0c999d3e8caa117b03ddb44223b8a06fd2d2a85d"
+        ],
+        "fixedAt": "2026-08-17T18:41:49.570Z",
+        "by": "shakeebshaan",
+        "appCommit": "8ce050bf",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Issue's v1 scope delivered in full at the primary log path (composer print-back) with a stronger one-tap than proposed: in-place log rewrite, not a re-log. 12 contracts, 5 against the real catalog; live captures show chip + receipt. Scope gap vs the letter of the issue: the chip lives on the composer note rather than inside CustomMealModal's confirm — the composer is the primary log path (calm-diary phase 1) and the modal flow still gets the nudge via its logged-note refresh; modal-internal placement is a follow-up."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -619,7 +643,17 @@
       "createdAt": "2026-08-10T13:00:00.000Z",
       "id": "i-20260810-swp2",
       "route": "/nutrition",
-      "description": "[suggestion] Add a \"Lighter swap\" chip on the meal-log confirm sheet when the picked dish isn't the lowest-calorie variant of its own family (e.g. Masala Dosa vs Plain Dosa, Aloo Paratha vs Sada Paratha). Problem: NYUS's own catalog and blog content (nyus.in posts like \"Plain Dosa vs Masala Dosa vs Rava Dosa Calories\" and \"Appam Calories — Why the Side Dish Decides\") already prove the same dish name hides a 100-300kcal spread depending on prep/filling/side — but the app never surfaces this at the moment it matters: while logging. Evidence: meal-catalog.json has 9,497 dishes with per-item kcal but no way today to see cheaper siblings; the QA-suggestion \"vrat toggle\"/\"grocery cost\" ideas already shipped mine similar catalog-awareness territory, this is the log-time counterpart. Proposed v1: client-side only — group catalog items by shared dish noun + cuisine (e.g. all \"*Dosa\" in South Indian), at log-confirm time if the selected item isn't the group's min-kcal entry and the gap is >=15%, show a small dismissible chip \"Try {alt} instead — saves {N} kcal\" with a one-tap swap; no new backend/AI calls, no push. Effort: ~2-3 days (grouping heuristic + CustomMealModal/food-search confirm-sheet UI + a11y + i18n across 4 bundles)."
+      "description": "[suggestion] Add a \"Lighter swap\" chip on the meal-log confirm sheet when the picked dish isn't the lowest-calorie variant of its own family (e.g. Masala Dosa vs Plain Dosa, Aloo Paratha vs Sada Paratha). Problem: NYUS's own catalog and blog content (nyus.in posts like \"Plain Dosa vs Masala Dosa vs Rava Dosa Calories\" and \"Appam Calories — Why the Side Dish Decides\") already prove the same dish name hides a 100-300kcal spread depending on prep/filling/side — but the app never surfaces this at the moment it matters: while logging. Evidence: meal-catalog.json has 9,497 dishes with per-item kcal but no way today to see cheaper siblings; the QA-suggestion \"vrat toggle\"/\"grocery cost\" ideas already shipped mine similar catalog-awareness territory, this is the log-time counterpart. Proposed v1: client-side only — group catalog items by shared dish noun + cuisine (e.g. all \"*Dosa\" in South Indian), at log-confirm time if the selected item isn't the group's min-kcal entry and the gap is >=15%, show a small dismissible chip \"Try {alt} instead — saves {N} kcal\" with a one-tap swap; no new backend/AI calls, no push. Effort: ~2-3 days (grouping heuristic + CustomMealModal/food-search confirm-sheet UI + a11y + i18n across 4 bundles).",
+      "thread": [
+        {
+          "at": "2026-08-17T18:41:49.570Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Shipped v1.9.88/268. After a composer log, the printed-back note offers ONE chip when a cheaper same-family sibling exists in the catalog: 'Try {alt} instead — saves {N} kcal'. One tap rewrites the just-created MealLog in place (PUT /logs/meal/<id>) with the sibling's catalog macros, then the chip becomes a receipt ('Swapped to {alt} — {kcal} kcal'). Matching is deliberately conservative (exact/full-name containment; silent no-op on a miss), family = same dish noun + cuisine, veg never gets non-veg offered, thresholds >=15% AND >=50 kcal. Client-side only against the bundled catalog — no AI call, no new backend. 12 contracts incl. 5 against the real 9,497-dish catalog. Screenshots: chip after logging Oats Masala Dosa (389 kcal), receipt after the one-tap swap to the 105 kcal sibling.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "open",
