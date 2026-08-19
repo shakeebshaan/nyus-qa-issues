@@ -16,9 +16,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Shipped in nyu_backend 1625f1d + 1bfa617. (1) muscle_groups DERIVED from resolved exercises; (2) swap payloads must anchor to a catalog row (garbage 400s; contracts re-encoded + rejection case); (3) get_alternatives applies the full strength-hygiene filter set; (4) _detangle_adjacent_muscle_days breaks same-muscle back-to-back days on BOTH creation paths — the custom builder's sequential bridge AND (new in 1bfa617) the AI wizard's progressive creator, where content moves between the plan's fixed day slots so the AI's calendar spacing survives. rest_days_per_block stays written-not-read by DESIGN (flexible-timing philosophy) — documented in the commit; engine-level rest-date gating is an owner product call.",
+        "imagePath": "images/i-20260819-sf9c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-sf9c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "df020c428330e95b6a5cc4c0ff66dd0c2612ccb2",
+        "imageCommits": [
+          "df020c428330e95b6a5cc4c0ff66dd0c2612ccb2"
+        ],
+        "fixedAt": "2026-08-19T16:03:19.912Z",
+        "by": "shakeebshaan",
+        "appCommit": "b3cae220",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Initially 89 because the detangle covered one of two plan-creation paths; the AI-wizard path is now covered too (slot-preserving reorder, 8 contracts green). The remaining rest-date-gating question is a product decision, filed as such, not an unshipped code item."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-08-19T16:03:19.912Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Shipped in nyu_backend 1625f1d + 1bfa617. (1) muscle_groups DERIVED from resolved exercises; (2) swap payloads must anchor to a catalog row (garbage 400s; contracts re-encoded + rejection case); (3) get_alternatives applies the full strength-hygiene filter set; (4) _detangle_adjacent_muscle_days breaks same-muscle back-to-back days on BOTH creation paths — the custom builder's sequential bridge AND (new in 1bfa617) the AI wizard's progressive creator, where content moves between the plan's fixed day slots so the AI's calendar spacing survives. rest_days_per_block stays written-not-read by DESIGN (flexible-timing philosophy) — documented in the commit; engine-level rest-date gating is an owner product call.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260819-sf8i",
