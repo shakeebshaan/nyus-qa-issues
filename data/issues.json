@@ -2,6 +2,126 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260820-rs6w",
+      "createdAt": "2026-08-19T18:03:44.725Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "self-audit",
+        "residual",
+        "auto"
+      ],
+      "route": null,
+      "description": "[residual/data] plans rebuilt during the ~2-day window when detangle ran with the stale positional carry may have mis-pointed progress logs — unrecoverable without a manual audit; check any user complaint about progress jumps dated 2026-08-19/20 against this.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260820-rs5d",
+      "createdAt": "2026-08-19T18:03:44.725Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "self-audit",
+        "residual",
+        "auto"
+      ],
+      "route": null,
+      "description": "[residual] llm_service tool loop: generic idempotency/dedup for mutating coach tools (log_meal_from_text has a TTL guard; swap_meal/adjust_macros can still be re-called by the model within a turn).",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260820-rs4h",
+      "createdAt": "2026-08-19T18:03:44.725Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "self-audit",
+        "residual",
+        "auto"
+      ],
+      "route": null,
+      "description": "[residual] backend.py get_current_cycle_and_session still derives from raw completed count — align with the F2a live-log-outranks-count rule as get_current_unlocked_session now does.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260820-rs3c",
+      "createdAt": "2026-08-19T18:03:44.725Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "self-audit",
+        "residual",
+        "auto"
+      ],
+      "route": "/dashboard",
+      "description": "[residual] LevelUpWatcher/MilestoneWatcher: add the 2-line !useCelebrationActive() gate so a level-up DEFERS while the Morning Ledger takeover is up (v274 stops the z-fight; celebration still plays beneath).",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260820-rs2f",
+      "createdAt": "2026-08-19T18:03:44.725Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "self-audit",
+        "residual",
+        "auto"
+      ],
+      "route": null,
+      "description": "[residual] useBlockSubmit.ts offline-flush sender still invalidates meal surfaces only — mirror App.tsx sender: invalidate activity-overview + dashboard-overview for workout-set replays.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260820-rs1b",
+      "createdAt": "2026-08-19T18:03:44.725Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "self-audit",
+        "residual",
+        "auto"
+      ],
+      "route": "/nutrition",
+      "description": "[residual] BE half of the stale-composer-note fix: logging.py update_meal_log should 409 when entry.skipped is set (FE 409 handler shipped in v274; server currently still accepts the PUT).",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260819-sf9c",
       "createdAt": "2026-08-18T19:28:14.728Z",
       "author": "shakeebshaan",
