@@ -54,9 +54,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Shipped in nyu_backend 1625f1d. WorkoutLogSetResource now 400s (EXERCISE_NOT_IN_SESSION) when the exercise_id has no SessionExercise row on the log's session — cross-session writes can no longer decorate the wrong session's progress. Mid-session add-exercise inserts a row so legitimate adds pass. Offline replays of foreign writes now fail loudly instead of corrupting.",
+        "imagePath": "images/i-20260819-sf7v-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-sf7v-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9e70cc1f13dfafbb9514b29676ab12dc7882b009",
+        "imageCommits": [
+          "9e70cc1f13dfafbb9514b29676ab12dc7882b009"
+        ],
+        "fixedAt": "2026-08-19T15:53:35.216Z",
+        "by": "shakeebshaan",
+        "appCommit": "6576c29d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Exact fix per audit F7; add-exercise path verified to keep working."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-08-19T15:53:35.216Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Shipped in nyu_backend 1625f1d. WorkoutLogSetResource now 400s (EXERCISE_NOT_IN_SESSION) when the exercise_id has no SessionExercise row on the log's session — cross-session writes can no longer decorate the wrong session's progress. Mid-session add-exercise inserts a row so legitimate adds pass. Offline replays of foreign writes now fail loudly instead of corrupting.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260819-sf5h",
