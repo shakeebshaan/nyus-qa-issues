@@ -35,9 +35,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Shipped across app 6576c29d + b3cae220. ALL four F8 sub-items now done: (1) auto-finish invalidates activity/dashboard overviews AFTER the finish POST resolves; (2) NEW debounced overview refresh on set-log settle — 'Total Volume Today' froze for the whole session before; now ONE refetch 4s after the last set write settles (never one per set); (3) dead ['workout'] key replaced with ['strength-summary'] at both sites; (4) dead getSessionProgression client + its dead-code-pinning test removed. Gate green.",
+        "imagePath": "images/i-20260819-sf8i-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-sf8i-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "91b94e6b7ee73c73fcd08115f527b585103f330f",
+        "imageCommits": [
+          "91b94e6b7ee73c73fcd08115f527b585103f330f"
+        ],
+        "fixedAt": "2026-08-19T16:03:13.100Z",
+        "by": "shakeebshaan",
+        "appCommit": "b3cae220",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Initially self-scored 88 with the debounce honestly missing; implemented it rather than re-scoring the same work. All four sub-items now verified in code with the volume-freeze root cause addressed."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-08-19T16:03:13.100Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Shipped across app 6576c29d + b3cae220. ALL four F8 sub-items now done: (1) auto-finish invalidates activity/dashboard overviews AFTER the finish POST resolves; (2) NEW debounced overview refresh on set-log settle — 'Total Volume Today' froze for the whole session before; now ONE refetch 4s after the last set write settles (never one per set); (3) dead ['workout'] key replaced with ['strength-summary'] at both sites; (4) dead getSessionProgression client + its dead-code-pinning test removed. Gate green.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260819-sf7v",
