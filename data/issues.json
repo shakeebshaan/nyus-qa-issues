@@ -73,9 +73,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Shipped in nyu_backend 1625f1d. The stale-log roll-forward is extracted into heal_stale_session_logs and runs inside get_current_unlocked_session, so EVERY surface that resolves the current session (dashboard, activity overview, preview) heals — the dashboard previously never healed. The overview heals the plan resolve_active_workout_plan actually serves (was newest-by-start_date), and traditional plans heal too with their overview log fetch session-scoped + incomplete-first. Guards preserved: prior LOCAL day + >=6h idle. Verified: 938-test related sweep green; prod deployed + healthy.",
+        "imagePath": "images/i-20260819-sf5h-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-sf5h-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "370d17a1276d0b76c1f79b69799412e38f97c7a2",
+        "imageCommits": [
+          "370d17a1276d0b76c1f79b69799412e38f97c7a2"
+        ],
+        "fixedAt": "2026-08-19T15:53:27.903Z",
+        "by": "shakeebshaan",
+        "appCommit": "6576c29d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "All three F5 sub-items delivered (shown-plan scope, all-plans heal, dashboard surface via the shared helper); guards preserved verbatim; isolated-namespace safe for the standalone-function tests."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-08-19T15:53:27.903Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Shipped in nyu_backend 1625f1d. The stale-log roll-forward is extracted into heal_stale_session_logs and runs inside get_current_unlocked_session, so EVERY surface that resolves the current session (dashboard, activity overview, preview) heals — the dashboard previously never healed. The overview heals the plan resolve_active_workout_plan actually serves (was newest-by-start_date), and traditional plans heal too with their overview log fetch session-scoped + incomplete-first. Guards preserved: prior LOCAL day + >=6h idle. Verified: 938-test related sweep green; prod deployed + healthy.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260819-d7ph",
