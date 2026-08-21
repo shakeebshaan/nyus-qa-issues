@@ -33,7 +33,7 @@
         "auto"
       ],
       "route": null,
-      "description": "[owner-gate D8-feed] Specialist coaches v2 review — collect 2 weeks of visit stats (admin > coaching: per-specialty counts, duration, topics) + pattern-store rows once FEATURE_SPECIALIST_COACHES goes live, then decide: expand roster / adjust caps (1 coach-invite/day, 3/week) / retire weak specialties. Also gates FF_COACH_MEMORY + FF_COACH_WISDOM default-ON after their soak (cost p95 < $0.02/day + 50-row PII audit). DEFAULT if unanswered: flags stay dark; no roster change.",
+      "description": "[owner-gate D8-feed] Specialist coaches v2 review — collect 2 weeks of visit stats (admin > coaching: per-specialty counts, duration, topics) + pattern-store rows once FEATURE_SPECIALIST_COACHES goes live, then decide: expand roster / adjust caps (1 coach-invite/day, 3/week) / retire weak specialties. Also gates FF_COACH_MEMORY + FF_COACH_WISDOM default-ON after their soak (cost p95 < $0.02/day + 50-row PII audit). DEFAULT if unanswered: flags stay dark; no roster change. UPDATE 2026-08-21: live-LLM eval GATE CLEARED — 10/10 scenarios green on the prod VM (persona isolation, injury-invite trigger after prompt fix cd50d17, handoff quality, caps, verifier wrap, M16 fallback). Feature is ready to flip: BE .env FEATURE_SPECIALIST_COACHES=true + restart, FE VITE_ flag in the next Play build (277). Old clients are safe (no-speaker fallback tested). Say GO and both flip in one pass.",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
