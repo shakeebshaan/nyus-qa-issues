@@ -2,6 +2,50 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260821-mgrt",
+      "createdAt": "2026-08-21T09:35:51.617Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "debt",
+        "backend",
+        "auto"
+      ],
+      "route": null,
+      "description": "[debt] scripts/migration_roundtrip.py only discovers 6 legacy .sql migrations, never migrations/versions/*.py (83 live), and fails on legacy add_onboarding_fields.sql (duplicate injuries column vs create_all). The versioned migration set has NO roundtrip coverage; prod safety currently rests on the deploy watcher + run-twice unit fakes. Fix: point the roundtrip at migrations/versions with a docker MySQL, quarantine the 6 legacy .sql files.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "needsReview": true,
+      "reviewReason": "Standing infra debt found during PLAN-6 Wave F verification — engineering default: schedule into next maintenance batch.",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20260821-sp2r",
+      "createdAt": "2026-08-21T09:35:51.617Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "owner-gate",
+        "specialists",
+        "auto"
+      ],
+      "route": null,
+      "description": "[owner-gate D8-feed] Specialist coaches v2 review — collect 2 weeks of visit stats (admin > coaching: per-specialty counts, duration, topics) + pattern-store rows once FEATURE_SPECIALIST_COACHES goes live, then decide: expand roster / adjust caps (1 coach-invite/day, 3/week) / retire weak specialties. Also gates FF_COACH_MEMORY + FF_COACH_WISDOM default-ON after their soak (cost p95 < $0.02/day + 50-row PII audit). DEFAULT if unanswered: flags stay dark; no roster change.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "needsReview": true,
+      "reviewReason": "Owner decision on flag flips + roster after live data (PLAN-6 M38/M36 soak gates).",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260820-d6pl",
       "createdAt": "2026-08-20T07:50:30.190Z",
       "author": "shakeebshaan",
