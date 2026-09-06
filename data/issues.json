@@ -124,9 +124,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Generic turn-scoped idempotency for mutating coach tools, at the dispatcher every action funnels through. Guard-by-default: the registry declares the READ-ONLY exception list, so a tool added tomorrow is protected unless someone writes a reviewable one-liner saying it changes nothing. Turn-scoped rather than TTL, because a repeat in a LATER turn must always apply. Duplicates return the first call's result as errors-as-data so the turn is not derailed, and llm_service skips them when building receipts so invite cards do not double. Mutation-proved: is_mutating_action forced False -> 4 failed; restored -> 13 passed; full backend suite 7324 passed. Deployed to prod.",
+        "imagePath": "images/i-20260820-rs5d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260820-rs5d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "19ee9bd0fca7b48c22086cc0fd22375e7f67fd8f",
+        "imageCommits": [
+          "19ee9bd0fca7b48c22086cc0fd22375e7f67fd8f"
+        ],
+        "fixedAt": "2026-09-06T14:54:25.920Z",
+        "by": "shakeebshaan",
+        "appCommit": "fbe8e76",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Generic at the right seam, fails safe for future tools, and the turn-vs-TTL choice is argued from the actual blast radius. Not higher: proven against the dispatcher in tests, not against a live model double-firing."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T14:54:25.920Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Generic turn-scoped idempotency for mutating coach tools, at the dispatcher every action funnels through. Guard-by-default: the registry declares the READ-ONLY exception list, so a tool added tomorrow is protected unless someone writes a reviewable one-liner saying it changes nothing. Turn-scoped rather than TTL, because a repeat in a LATER turn must always apply. Duplicates return the first call's result as errors-as-data so the turn is not derailed, and llm_service skips them when building receipts so invite cards do not double. Mutation-proved: is_mutating_action forced False -> 4 failed; restored -> 13 passed; full backend suite 7324 passed. Deployed to prod.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260820-rs4h",
