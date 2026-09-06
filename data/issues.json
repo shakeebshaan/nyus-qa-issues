@@ -204,9 +204,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Server now 409s when a PUT targets a skipped meal log, so the FE conflict handler shipped in v274 stops being dead code. A skipped row is out of the diary and the PUT can never un-skip it, so editing one mutated an invisible row and reported success. Payload shape read from the FE handler rather than guessed. Mutation-proved: guard removed -> 1 failed (assert 200 == 409); restored -> 41 passed. Deployed to prod.",
+        "imagePath": "images/i-20260820-rs1b-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260820-rs1b-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ef3c3da3074a1ddf89f48f44c737b58a52eca1a4",
+        "imageCommits": [
+          "ef3c3da3074a1ddf89f48f44c737b58a52eca1a4"
+        ],
+        "fixedAt": "2026-09-06T14:54:14.532Z",
+        "by": "shakeebshaan",
+        "appCommit": "fbe8e76",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root cause, contract read from the consumer not guessed, mutation-proved, deployed and health-verified. Not 100: no live end-to-end tap on a real skipped row."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T14:54:14.532Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Server now 409s when a PUT targets a skipped meal log, so the FE conflict handler shipped in v274 stops being dead code. A skipped row is out of the diary and the PUT can never un-skip it, so editing one mutated an invisible row and reported success. Payload shape read from the FE handler rather than guessed. Mutation-proved: guard removed -> 1 failed (assert 200 == 409); restored -> 41 passed. Deployed to prod.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260819-sf9c",
