@@ -1244,10 +1244,32 @@
     {
       "id": "i-20260810-ck9m",
       "createdAt": "2026-08-10T05:39:30.087Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/recipe/:id",
       "description": "[suggestion] Add a \"Cook mode\" to RecipeDetail: a full-screen, swipe-through step view that keeps the screen awake while cooking. Problem: recipe.instructions render today as a static scrollable list (src/pages/RecipeDetail.tsx:773-777, RecipeStepList) with no way to keep hands-free while stove-side — the screen locks mid-recipe and users lose their place scrolling back up on a small phone. Evidence: every comparable app (recipe/nutrition trackers, plus general recipe apps) ships a dedicated cook mode with wake-lock + large-type single-step display; NYUS already has all instruction data (recipe.instructions array) and RestTimer precedent for a full-screen timed-interaction pattern (src/components/*RestTimer*), so this reuses existing plumbing rather than inventing new backend surface. V1 scope: a \"Start cooking\" button on RecipeDetail opens a full-screen sheet showing one instruction step at a time (large text, tap/swipe next-prev, step counter), uses the Screen Wake Lock API (already used pattern-wise for native via Capacitor if available, else web Wake Lock API with graceful no-op fallback), no new backend calls — pure FE, reads existing recipe.instructions. Effort: ~0.5-1 day (one new component + wire-up on RecipeDetail, no API changes).",
-      "fix": null,
+      "fix": {
+        "description": "Cook mode was ALREADY shipped, so the suggestion's V1 scope was met: full-screen swipe-through step view, one step at a time, step counter, tap/arrow nav, hardware-back close, 'Start cooking' on RecipeDetail:865.\n\nThe wake lock it specifically asked for was NOT working on native — that is the real finding. CookModeSheet hand-rolled navigator.wakeLock inline. That is the WEB API, and inside Capacitor's Android WebView its availability depends on the WebView build; where it is missing the call silently no-ops. No error, no log. So on the phones this feature exists for, the screen still slept stove-side — exactly the problem filed.\n\nFIX (5515ff3b): routed through useKeepAwake, which tries the native @capacitor-community/keep-awake plugin FIRST and keeps the same web call as its second layer — a strict superset of the previous behaviour (re-acquire-on-visibilitychange lives inside the hook, verbatim). Why it was missed: the hook was created BY extracting this component's wake lock during F1, but that half was lost when the working tree was stashed on 2026-08-23 and only the hook came back. The app has carried two wake-lock implementations since, with the weaker one on the cooking screen.\n\nTEST (bb7e9f9c): CookModeSheet had NO test at all — which is how this shipped unnoticed, since an inline wakeLock still 'works' in jsdom and in a desktop browser, so nothing would have gone red. Five new contract tests assert the SEAM rather than the browser API, including an explicit guard that fails if navigator.wakeLock is ever requested directly again, and one that the step content actually renders so a wake lock over a blank screen cannot satisfy the spy.\n\nVERIFIED BY EXECUTION: 0 type errors (tsc -p tsconfig.app.json); 12 tests pass across CookModeSheet + useKeepAwake; 105 pass across every consumer of both files; and mutation-verified — re-inlining the shipped bug fails 4 of the 5 new tests.\n\nTHE ATTACHED IMAGE IS A LIMITATION, NOT PROOF. It shows /nutrition on the QA account, which has no diet plan, so there is no recipe to open and cook mode cannot be reached; main and all three sim accounts were checked and none has a plan with recipe ids. Cook mode was therefore not photographed — and a wake-lock swap looks identical before and after regardless. Generating a plan purely to stage the shot would have burned an LLM-rate-limited path for no added certainty.\n\nREMAINING FOR A HUMAN: confirm on a physical Android build that the display holds through a real cook session. That is the one claim no test here can make.",
+        "imagePath": "images/i-20260810-ck9m-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260810-ck9m-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5d8d53e6d00babc35c80872fa1d378790fd6ede6",
+        "imageCommits": [
+          "5d8d53e6d00babc35c80872fa1d378790fd6ede6"
+        ],
+        "fixedAt": "2026-09-06T17:26:21.050Z",
+        "by": "shakeebshaan",
+        "appCommit": "bb7e9f9c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Raised from a self-scored 88 by closing the verification gap rather than restating the claim. The seam is now mutation-verified: re-inlining the exact shipped bug fails 4 of 5 new contract tests, so the guard demonstrably has teeth. Held back from higher because the thing the user actually feels — the display holding during a real cook session on an Android phone — is still INSPECTED, not EXECUTED. No device in this environment."
+        }
+      },
       "history": [],
       "author": "shakeebshaan",
       "tags": [
@@ -1257,7 +1279,17 @@
       "imagePath": null,
       "imagePaths": [],
       "imageCommits": [],
-      "imagePrivate": false
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-09-06T17:26:21.050Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Cook mode was ALREADY shipped, so the suggestion's V1 scope was met: full-screen swipe-through step view, one step at a time, step counter, tap/arrow nav, hardware-back close, 'Start cooking' on RecipeDetail:865.\n\nThe wake lock it specifically asked for was NOT working on native — that is the real finding. CookModeSheet hand-rolled navigator.wakeLock inline. That is the WEB API, and inside Capacitor's Android WebView its availability depends on the WebView build; where it is missing the call silently no-ops. No error, no log. So on the phones this feature exists for, the screen still slept stove-side — exactly the problem filed.\n\nFIX (5515ff3b): routed through useKeepAwake, which tries the native @capacitor-community/keep-awake plugin FIRST and keeps the same web call as its second layer — a strict superset of the previous behaviour (re-acquire-on-visibilitychange lives inside the hook, verbatim). Why it was missed: the hook was created BY extracting this component's wake lock during F1, but that half was lost when the working tree was stashed on 2026-08-23 and only the hook came back. The app has carried two wake-lock implementations since, with the weaker one on the cooking screen.\n\nTEST (bb7e9f9c): CookModeSheet had NO test at all — which is how this shipped unnoticed, since an inline wakeLock still 'works' in jsdom and in a desktop browser, so nothing would have gone red. Five new contract tests assert the SEAM rather than the browser API, including an explicit guard that fails if navigator.wakeLock is ever requested directly again, and one that the step content actually renders so a wake lock over a blank screen cannot satisfy the spy.\n\nVERIFIED BY EXECUTION: 0 type errors (tsc -p tsconfig.app.json); 12 tests pass across CookModeSheet + useKeepAwake; 105 pass across every consumer of both files; and mutation-verified — re-inlining the shipped bug fails 4 of the 5 new tests.\n\nTHE ATTACHED IMAGE IS A LIMITATION, NOT PROOF. It shows /nutrition on the QA account, which has no diet plan, so there is no recipe to open and cook mode cannot be reached; main and all three sim accounts were checked and none has a plan with recipe ids. Cook mode was therefore not photographed — and a wake-lock swap looks identical before and after regardless. Generating a plan purely to stage the shot would have burned an LLM-rate-limited path for no added certainty.\n\nREMAINING FOR A HUMAN: confirm on a physical Android build that the display holds through a real cook session. That is the one claim no test here can make.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "status": "fixed",
