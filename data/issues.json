@@ -702,8 +702,8 @@
       "author": "shakeebshaan",
       "tags": [
         "owner-gate",
-        "launch",
-        "auto"
+        "play",
+        "data-safety"
       ],
       "route": null,
       "description": "[owner-gate D3] DATA-SAFETY FORM + content rating (Play G5): engineering drafts every answer from APPLICATION_FLOW Part D (data collected: email, health metrics, photos; encryption in transit; deletion path at nyus.in/account-deletion) — owner must submit in Play Console. HARD GATE.",
@@ -714,9 +714,26 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register).",
+      "reviewReason": "ENGINEERING HALF DONE 2026-09-06 — the factual blocker is cleared; what remains is genuinely yours. Full inventory committed at docs/PLAY_DATA_SAFETY_INVENTORY.md (frontend repo, commit bb91cc2a): every Google data type mapped to collected/shared/required with a code citation, each claim tagged executed/inspected/unresolved. Findings that change the answers, three re-verified by hand: (1) the ENTIRE unredacted Razorpay webhook body is persisted, so the stored blob can contain card.last4/vpa/payer contact — 'user payment info' is probably yes-incidentally, not no; (2) Firebase Analytics receives weight_kg and calories, i.e. health data to a third-party SDK, not just our server; (3) meal photos are forwarded to OpenAI vision and coach context carries health data. Also: frontend crash reporting is NOT currently transmitting (no Sentry DSN in the built bundle, verified by grepping dist/), while backend 500s do go to Discord. Calendar/contacts/installed-apps/web-browsing are genuinely no, checked against the merged release manifest. It also disposes of a trap: androidScheme 'http' is the local WebView origin, NOT network transport — do not report the app as transmitting unencrypted. STILL YOURS (section 5): whether OpenAI/Discord/Resend count as service providers or third parties (legal call, not a code fact), retention periods, whether fasting_type='vrat' must be declared as religious belief, and confirming the Razorpay payload contents against a real prod row.",
       "fix": null,
-      "history": []
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T16:59:18.979Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register)."
+        },
+        {
+          "at": "2026-09-06T16:59:18.979Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "ENGINEERING HALF DONE 2026-09-06 — the factual blocker is cleared; what remains is genuinely yours. Full inventory committed at docs/PLAY_DATA_SAFETY_INVENTORY.md (frontend repo, commit bb91cc2a): every Google data type mapped to collected/shared/required with a code citation, each claim tagged executed/inspected/unresolved. Findings that change the answers, three re-verified by hand: (1) the ENTIRE unredacted Razorpay webhook body is persisted, so the stored blob can contain card.last4/vpa/payer contact — 'user payment info' is probably yes-incidentally, not no; (2) Firebase Analytics receives weight_kg and calories, i.e. health data to a third-party SDK, not just our server; (3) meal photos are forwarded to OpenAI vision and coach context carries health data. Also: frontend crash reporting is NOT currently transmitting (no Sentry DSN in the built bundle, verified by grepping dist/), while backend 500s do go to Discord. Calendar/contacts/installed-apps/web-browsing are genuinely no, checked against the merged release manifest. It also disposes of a trap: androidScheme 'http' is the local WebView origin, NOT network transport — do not report the app as transmitting unencrypted. STILL YOURS (section 5): whether OpenAI/Discord/Resend count as service providers or third parties (legal call, not a code fact), retention periods, whether fasting_type='vrat' must be declared as religious belief, and confirming the Razorpay payload contents against a real prod row.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "reviewedAt": "2026-09-06T16:59:18.979Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260819-d2as",
