@@ -760,9 +760,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Source was already fixed in 700f6ae3; this closes the coverage half, and the mutation run is why it mattered. Reverting each of the three fixes individually showed one shipped UNPROTECTED: fmtInt back to en-US stayed fully green, because hi and en-US group identically below 100,000 so the 1,910 kcal fixture could never observe the regression. Now probed at lakh-grouping magnitude where the contract is visible, and the date pin gained a positive twin (it previously only asserted /Jul/ absent, which a device-locale fallback would also satisfy). 28/28 green; no source changed.",
+        "imagePath": "images/i-20260811-cb1f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260811-cb1f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f848fc82635c16b23f23bce90c950e708edbca14",
+        "imageCommits": [
+          "f848fc82635c16b23f23bce90c950e708edbca14"
+        ],
+        "fixedAt": "2026-09-06T14:55:02.339Z",
+        "by": "shakeebshaan",
+        "appCommit": "ec545906",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Turned a false-green into a real guard and named exactly why it was false. Held at 91 because the user-facing fix predates this - the contribution is the proof, not the behaviour."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T14:55:02.339Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Source was already fixed in 700f6ae3; this closes the coverage half, and the mutation run is why it mattered. Reverting each of the three fixes individually showed one shipped UNPROTECTED: fmtInt back to en-US stayed fully green, because hi and en-US group identically below 100,000 so the 1,910 kcal fixture could never observe the regression. Now probed at lakh-grouping magnitude where the contract is visible, and the date pin gained a positive twin (it previously only asserted /Jul/ absent, which a device-locale fallback would also satisfy). 28/28 green; no source changed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260811-dl4k",
