@@ -248,9 +248,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Every coach-logged block now refreshes what it wrote. The board framed this as the offline-flush sender, and that clause is stale (useBlockSubmit registers no sender, and a test actively pins that) - but the substance was live one path over, in the ONLINE success handler, which carried a hand-written key list behind type === 'meal_logger'. Wider than reported: workout left activity-overview + dashboard-overview frozen, and measurement, activity and water invalidated NOTHING. Fix derives from the shared FLUSH_INVALIDATION_MAP via ENDPOINT_MAP, so the online and offline routes for one write cannot disagree. Mutation-proved: meal-only list restored -> 4 failed (meal stays green); restored -> 23 passed; full changed suite 85 files / 1399 tests.",
+        "imagePath": "images/i-20260820-rs2f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260820-rs2f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ac04a8a9b670d7527e065fd456bcb7d7ac78649f",
+        "imageCommits": [
+          "ac04a8a9b670d7527e065fd456bcb7d7ac78649f"
+        ],
+        "fixedAt": "2026-09-06T14:54:51.447Z",
+        "by": "shakeebshaan",
+        "appCommit": "ec545906",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Fixed the real defect rather than the stale description, found it was broader than reported, and removed the duplication that caused the class instead of patching one branch. Not higher: shipped to main, not yet in a store build users have."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T14:54:51.447Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Every coach-logged block now refreshes what it wrote. The board framed this as the offline-flush sender, and that clause is stale (useBlockSubmit registers no sender, and a test actively pins that) - but the substance was live one path over, in the ONLINE success handler, which carried a hand-written key list behind type === 'meal_logger'. Wider than reported: workout left activity-overview + dashboard-overview frozen, and measurement, activity and water invalidated NOTHING. Fix derives from the shared FLUSH_INVALIDATION_MAP via ENDPOINT_MAP, so the online and offline routes for one write cannot disagree. Mutation-proved: meal-only list restored -> 4 failed (meal stays green); restored -> 23 passed; full changed suite 85 files / 1399 tests.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260820-rs1b",
