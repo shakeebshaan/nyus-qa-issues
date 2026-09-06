@@ -144,9 +144,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Extracted _derive_session_slot as the single definition of the session-slot rule, now called by both readers (killed a third copy too). Correction to the issue text: it names the rule F2a, but the sibling actually implements F2b - aligning to F2a would have created a fresh divergence the other way. Honest scope: latent today, since the field that lied (current_session_in_cycle) has no current consumer. Mutation-proved: raw-count line restored -> 1 failed (assert 2 == 3); restored -> 12 passed. Deployed to prod.",
+        "imagePath": "images/i-20260820-rs4h-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260820-rs4h-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5a263258eb96e9d2fcb89793413ae525b7ee8423",
+        "imageCommits": [
+          "5a263258eb96e9d2fcb89793413ae525b7ee8423"
+        ],
+        "fixedAt": "2026-09-06T14:54:19.856Z",
+        "by": "shakeebshaan",
+        "appCommit": "fbe8e76",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Correct and proven, and it removes a real drift source by collapsing three copies of the rule to one. Held at 90 because no user-visible symptom was reproducible - the wrong field has no consumer today - so this is debt removal rather than a felt fix."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T14:54:19.856Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Extracted _derive_session_slot as the single definition of the session-slot rule, now called by both readers (killed a third copy too). Correction to the issue text: it names the rule F2a, but the sibling actually implements F2b - aligning to F2a would have created a fresh divergence the other way. Honest scope: latent today, since the field that lied (current_session_in_cycle) has no current consumer. Mutation-proved: raw-count line restored -> 1 failed (assert 2 == 3); restored -> 12 passed. Deployed to prod.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260820-rs3c",
