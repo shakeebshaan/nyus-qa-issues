@@ -852,7 +852,7 @@
     {
       "id": "i-20260811-dl4k",
       "createdAt": "2026-08-11T08:40:50.986Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/weekly-review",
       "description": "[suggestion] Auto deload-week nudge on Weekly Review when strength progression stalls or regresses. Problem: the progressive workout engine (workout-session-utils.ts) only ever advances load on explicit finish and never detects overtraining — a lifter whose top-set weight/reps drops for 2+ consecutive sessions on the same lift, or whose post-set RPE (RatingScaleBlock responses) trends high, keeps getting the same or heavier prescription next week, risking a stall-into-injury spiral. Comparable trackers (Whoop, Trainerize) lean on recovery signals for exactly this. Evidence: grepped app for deload/overtraining/fatigue-flag logic — none exists; only an unrelated PR-calc comment uses the word \"deload\". v1 scope: backend job compares this week vs last week per main-lift exercise_name (max(reps*weight_kg) from SetLog) — if it drops on 2+ tracked lifts, or avg RPE from RatingScaleBlock responses is high, surface one calm card on WeeklyReviewScreen: \"Your body might need a lighter week\" with accept (auto-scales next week's assigned_sets by ~40%) or dismiss. No new screens, no push spam — one weekly card, opt-in. Effort: ~2-3 days (1 backend detection job + 1 FE card + progressive-plan write path for the scale-down).",
       "imagePath": null,
@@ -865,8 +865,40 @@
         "suggestion",
         "auto"
       ],
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "SHIPPED, but the issue's premise needed correcting first — worth reading before the next suggestion is scoped.\n\nMEASURED BEFORE BUILDING. The issue proposed detecting on falling top sets OR high post-set RPE. On prod today: set_logs carrying an rpe = 0; exercise_progression_state rows = 0; plans with a non-coach progression rule = 0. Effort capture sits behind a device-local preference defaulting to 'off', and the progression rule defaults to coach-led — so BOTH proposed inputs are structurally empty. Built as filed, this card could never have fired for a single user. That is the kind of thing only a query finds; the grep in the original issue was accurate about the code and silent about the data.\n\nWHAT SHIPPED INSTEAD. Week-over-week volume is the trigger (13,365 real set rows). Effort and engine state are corroborating inputs that start contributing the day those features are switched on — read defensively, contributing nothing when absent, not dead code. Per exercise, BEST set by effective volume via set_math so bodyweight and per-side sets count honestly. Only lifts trained in BOTH weeks are compared: not training something is not the same as getting weaker, and conflating them is how a card like this starts crying wolf. 8% margin keeps day-to-day noise out; 2+ lifts must regress, because one is a bad day and two is a pattern.\n\nACCEPT reuses progression_engine rather than editing the plan — that engine already owns 'what should this lift be next time', and the activity overview already serves its output as suggested_weight_kg, so the lighter number appears exactly where the athlete next looks. Its 10% matches the engine's own failure deload so the two can never disagree. Note this diverges from the filed suggestion of scaling assigned_sets by 40%: two deload protocols in one app would eventually contradict each other.\n\nA BUG THE TESTS CAUGHT: upsert_state returns False WITHOUT writing when result['changed'] is falsy, and my first draft omitted the flag — the accept path was a silent no-op that still reported success. Pinned by a test.\n\nREGISTER: the card states the numbers and stops. No reassurance, no exclamation mark, no red — a deload is a training decision, not a failure. Dismiss writes nothing and is deliberately not persisted, since the signal is recomputed from the last two weeks and a stored dismissal would outlive the week it referred to.\n\nVERIFIED: backend 4acdc80 deployed to prod, health 200, 96 tests. Frontend ab3c14dd, 13 contract tests weighted toward silence (no signal, older backend with no field, flagged-but-no-evidence, dismissal) plus the two failure modes that would hurt most — a failed write keeps the choice available, and a double tap does not double-submit. 10 i18n keys across all four locales, real Devanagari for hi, 302 i18n tests at 3,957 keys. Repo-wide: 7,974 pass, 0 failures, 0 type errors.\n\nREMAINING: the card has never been seen rendered, only unit-tested. It will first appear for a real athlete with two weeks of regressing lifts — worth a look when it does.",
+        "imagePath": "images/i-20260811-dl4k-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260811-dl4k-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "10aeb2c8a4b967d6effc8a60dc6730125dd5f999",
+        "imageCommits": [
+          "10aeb2c8a4b967d6effc8a60dc6730125dd5f999"
+        ],
+        "fixedAt": "2026-09-06T18:01:21.945Z",
+        "by": "shakeebshaan",
+        "appCommit": "ab3c14dd",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Built, deployed to prod (backend 4acdc80, health verified) and covered by 96 backend + 13 frontend contract tests, with the repo green at 7,974 tests and 0 type errors. Held below higher because the card itself is not photographed: no account has two weeks of regressing lifts, and seeding fake set_logs into PRODUCTION purely to stage a screenshot is not a trade worth making. The attached shot proves the silence path — Weekly Review renders correctly with the new field wired and the card correctly absent."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T18:01:21.945Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "SHIPPED, but the issue's premise needed correcting first — worth reading before the next suggestion is scoped.\n\nMEASURED BEFORE BUILDING. The issue proposed detecting on falling top sets OR high post-set RPE. On prod today: set_logs carrying an rpe = 0; exercise_progression_state rows = 0; plans with a non-coach progression rule = 0. Effort capture sits behind a device-local preference defaulting to 'off', and the progression rule defaults to coach-led — so BOTH proposed inputs are structurally empty. Built as filed, this card could never have fired for a single user. That is the kind of thing only a query finds; the grep in the original issue was accurate about the code and silent about the data.\n\nWHAT SHIPPED INSTEAD. Week-over-week volume is the trigger (13,365 real set rows). Effort and engine state are corroborating inputs that start contributing the day those features are switched on — read defensively, contributing nothing when absent, not dead code. Per exercise, BEST set by effective volume via set_math so bodyweight and per-side sets count honestly. Only lifts trained in BOTH weeks are compared: not training something is not the same as getting weaker, and conflating them is how a card like this starts crying wolf. 8% margin keeps day-to-day noise out; 2+ lifts must regress, because one is a bad day and two is a pattern.\n\nACCEPT reuses progression_engine rather than editing the plan — that engine already owns 'what should this lift be next time', and the activity overview already serves its output as suggested_weight_kg, so the lighter number appears exactly where the athlete next looks. Its 10% matches the engine's own failure deload so the two can never disagree. Note this diverges from the filed suggestion of scaling assigned_sets by 40%: two deload protocols in one app would eventually contradict each other.\n\nA BUG THE TESTS CAUGHT: upsert_state returns False WITHOUT writing when result['changed'] is falsy, and my first draft omitted the flag — the accept path was a silent no-op that still reported success. Pinned by a test.\n\nREGISTER: the card states the numbers and stops. No reassurance, no exclamation mark, no red — a deload is a training decision, not a failure. Dismiss writes nothing and is deliberately not persisted, since the signal is recomputed from the last two weeks and a stored dismissal would outlive the week it referred to.\n\nVERIFIED: backend 4acdc80 deployed to prod, health 200, 96 tests. Frontend ab3c14dd, 13 contract tests weighted toward silence (no signal, older backend with no field, flagged-but-no-evidence, dismissal) plus the two failure modes that would hurt most — a failed write keeps the choice available, and a double tap does not double-submit. 10 i18n keys across all four locales, real Devanagari for hi, 302 i18n tests at 3,957 keys. Repo-wide: 7,974 pass, 0 failures, 0 type errors.\n\nREMAINING: the card has never been seen rendered, only unit-tested. It will first appear for a real athlete with two weeks of regressing lifts — worth a look when it does.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260811-9d2f",
