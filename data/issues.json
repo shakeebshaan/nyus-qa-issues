@@ -78,9 +78,9 @@
       "createdAt": "2026-08-19T18:03:44.725Z",
       "author": "shakeebshaan",
       "tags": [
-        "self-audit",
-        "residual",
-        "auto"
+        "audit",
+        "no-op",
+        "owner-gate"
       ],
       "route": null,
       "description": "[residual/data] plans rebuilt during the ~2-day window when detangle ran with the stale positional carry may have mis-pointed progress logs — unrecoverable without a manual audit; check any user complaint about progress jumps dated 2026-08-19/20 against this.",
@@ -93,7 +93,20 @@
       "fix": null,
       "history": [],
       "reportPath": "reports/rs6w-audit.html",
-      "reportLabel": "Audit: no affected rows"
+      "reportLabel": "Audit: no affected rows",
+      "needsReview": true,
+      "reviewReason": "Audited against prod (read-only), 2026-09-06: NO affected rows — nothing to remediate. plan_versions holds exactly one row in 2026-08-18..22 and it is an exercise SWAP (plan 199, 'Swapped exercise Decline Push-Up'), not a rebuild; no rebuild reason (Initial plan / New plan from goal change / Weekly review) appears in the window at all. Prod carries workout set logs for exactly 1 user, with 1 workout_log in the window, so the blast radius was one account even had a rebuild occurred. Owner call: close this. See the attached report. Separate finding, NOT fixed and not in scope: workout_logs carries impossible values (row 122, 2026-08-08: duration_min 28950 = 20 days, calories_burned 225167) which feed adherence and calorie surfaces — file it separately if you want it chased.",
+      "reviewedAt": "2026-09-06T13:42:42.056Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-09-06T13:42:42.056Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Audited against prod (read-only), 2026-09-06: NO affected rows — nothing to remediate. plan_versions holds exactly one row in 2026-08-18..22 and it is an exercise SWAP (plan 199, 'Swapped exercise Decline Push-Up'), not a rebuild; no rebuild reason (Initial plan / New plan from goal change / Weekly review) appears in the window at all. Prod carries workout set logs for exactly 1 user, with 1 workout_log in the window, so the blast radius was one account even had a rebuild occurred. Owner call: close this. See the attached report. Separate finding, NOT fixed and not in scope: workout_logs carries impossible values (row 122, 2026-08-08: duration_min 28950 = 20 days, calories_burned 225167) which feed adherence and calorie surfaces — file it separately if you want it chased.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260820-rs5d",
