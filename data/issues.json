@@ -17,11 +17,47 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "Standing infra debt found during PLAN-6 Wave F verification — engineering default: schedule into next maintenance batch.",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "The issue title was stale (discovery finds 89, not 6 — a799037 already repointed it), but auditing it found a real blind spot the title never named: NINE .py migrations sit at migrations/ top level, outside versions/, all with real DDL, and neither the roundtrip nor scripts/run_pending_migrations.py (the prod deploy path) has ever seen them. Root cause: a non-recursive iterdir() over versions/ only, with nothing asserting the discovery set covered the tree. Fixed as an AUDIT, not a re-scope — the nine were deliberately not moved, since that would make the next prod deploy execute nine never-run migrations, two of which boot Flask on import. Executed set stays byte-identical to prod; every file is now classified, with a recursive inventory and a hard failure (exit 4) on anything unclassified. Debt this exposed, recorded not fixed: 11 columns across 6 tables exist ONLY in those undiscovered migrations and are absent from db_models.py, so a fresh DB never gets them; and seed_badges.py is NOT superseded by the gamification-launch migration (disjoint badge sets), so 8 badge keys exist in prod only because someone ran it by hand. Live MySQL roundtrip was NOT run (no docker, no MYSQL_TEST_URL) — no roundtrip claim is made; verified by discovery assertions and a real --audit-only run. Mutation-proved both directions. Deployed.",
+        "imagePath": "images/i-20260821-mgrt-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260821-mgrt-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bfae1a0a15945cfa6e2410b4e122d57de2657d9f",
+        "imageCommits": [
+          "bfae1a0a15945cfa6e2410b4e122d57de2657d9f"
+        ],
+        "fixedAt": "2026-09-06T16:58:59.815Z",
+        "by": "shakeebshaan",
+        "appCommit": "ab9eaff",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Found and closed a bigger hole than the ticket described, and refused the tempting fix (moving the files) that would have run untested migrations on the next deploy. Held at 90: the live roundtrip still cannot run here, and the 11 missing model columns are left as debt rather than resolved."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-06T16:58:59.815Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Standing infra debt found during PLAN-6 Wave F verification — engineering default: schedule into next maintenance batch."
+        },
+        {
+          "at": "2026-09-06T16:58:59.815Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "The issue title was stale (discovery finds 89, not 6 — a799037 already repointed it), but auditing it found a real blind spot the title never named: NINE .py migrations sit at migrations/ top level, outside versions/, all with real DDL, and neither the roundtrip nor scripts/run_pending_migrations.py (the prod deploy path) has ever seen them. Root cause: a non-recursive iterdir() over versions/ only, with nothing asserting the discovery set covered the tree. Fixed as an AUDIT, not a re-scope — the nine were deliberately not moved, since that would make the next prod deploy execute nine never-run migrations, two of which boot Flask on import. Executed set stays byte-identical to prod; every file is now classified, with a recursive inventory and a hard failure (exit 4) on anything unclassified. Debt this exposed, recorded not fixed: 11 columns across 6 tables exist ONLY in those undiscovered migrations and are absent from db_models.py, so a fresh DB never gets them; and seed_badges.py is NOT superseded by the gamification-launch migration (disjoint badge sets), so 8 badge keys exist in prod only because someone ran it by hand. Live MySQL roundtrip was NOT run (no docker, no MYSQL_TEST_URL) — no roundtrip claim is made; verified by discovery assertions and a real --audit-only run. Mutation-proved both directions. Deployed.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260821-sp2r",
