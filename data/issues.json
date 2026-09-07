@@ -65,8 +65,8 @@
       "author": "shakeebshaan",
       "tags": [
         "owner-gate",
-        "specialists",
-        "auto"
+        "privacy",
+        "specialists"
       ],
       "route": null,
       "description": "[owner-gate D8-feed] Specialist coaches v2 review — collect 2 weeks of visit stats (admin > coaching: per-specialty counts, duration, topics) + pattern-store rows once FEATURE_SPECIALIST_COACHES goes live, then decide: expand roster / adjust caps (1 coach-invite/day, 3/week) / retire weak specialties. Also gates FF_COACH_MEMORY + FF_COACH_WISDOM default-ON after their soak (cost p95 < $0.02/day + 50-row PII audit). DEFAULT if unanswered: flags stay dark; no roster change. UPDATE 2026-08-21: live-LLM eval GATE CLEARED — 10/10 scenarios green on the prod VM (persona isolation, injury-invite trigger after prompt fix cd50d17, handoff quality, caps, verifier wrap, M16 fallback). Feature is ready to flip: BE .env FEATURE_SPECIALIST_COACHES=true + restart, FE VITE_ flag in the next Play build (277). Old clients are safe (no-speaker fallback tested). Say GO and both flip in one pass.",
@@ -76,7 +76,7 @@
       "imageCommits": [],
       "imagePrivate": false,
       "status": "fixed",
-      "needsReview": false,
+      "needsReview": true,
       "fix": {
         "description": "OWNER SAID GO 2026-09-07. Verified already live rather than flipped blind: prod .env carries FEATURE_SPECIALIST_COACHES=true and .env.production carries VITE_FEATURE_SPECIALIST_COACHES=true, so both halves are on and shipping from build 277 onward. The live-LLM eval gate had already cleared 10/10 on the prod VM. DELIBERATELY NOT INCLUDED in this GO: FF_COACH_MEMORY and FF_COACH_WISDOM stay allowlisted to shakeebshaan@gmail.com. Their gate is not this decision — the item names a cost p95 under 0.02 dollars/day AND a 50-row PII audit, and that audit has not been run. Flipping them default-ON would push user health context into a shared wisdom pool without the privacy check the gate exists for. Say the word and I will run the PII audit; that is engineering work, not an owner call.",
         "imagePath": "images/i-20260821-sp2r-fix-r1.png",
@@ -114,8 +114,18 @@
           "kind": "resolve",
           "text": "OWNER SAID GO 2026-09-07. Verified already live rather than flipped blind: prod .env carries FEATURE_SPECIALIST_COACHES=true and .env.production carries VITE_FEATURE_SPECIALIST_COACHES=true, so both halves are on and shipping from build 277 onward. The live-LLM eval gate had already cleared 10/10 on the prod VM. DELIBERATELY NOT INCLUDED in this GO: FF_COACH_MEMORY and FF_COACH_WISDOM stay allowlisted to shakeebshaan@gmail.com. Their gate is not this decision — the item names a cost p95 under 0.02 dollars/day AND a 50-row PII audit, and that audit has not been run. Flipping them default-ON would push user health context into a shared wisdom pool without the privacy check the gate exists for. Say the word and I will run the PII audit; that is engineering work, not an owner call.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-09-07T04:15:15.258Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "REOPENED-AS-NOTE 2026-09-07 (specialists themselves are GO and resolved above; this is the memory/wisdom half). I RAN THE PII AUDIT — the gate this item names — and the result is INCONCLUSIVE, not clean. Script committed and deployed: nyu_backend scripts/audit_coach_memory_pii.py (d6b3693), read-only, re-runnable, redacts every match so the audit cannot become a second copy of the data. Prod right now: coach_client_memory 1 row, coach_wisdom_patterns 0, specialist_patterns 0, coach_advice_ledger 0. Zero real findings — the single pattern hit was a uuid in coach_client_memory.user_id, i.e. the foreign key, now excluded as a false positive. But a 50-row gate cannot be cleared by ONE row and zero cross-user rows, so the script exits 2 (inconclusive) rather than 0, and I am not treating it as passed. THE ACTIONABLE FINDING: the soak is not producing data because both flags are allowlisted to a single account (shakeebshaan@gmail.com). Waiting longer will not move this. Widening the allowlist is the PREREQUISITE to the gate, not the reward for clearing it — so the next step is yours: add a handful of accounts to FF_COACH_MEMORY_USERS / FF_COACH_WISDOM_USERS, let it run, then re-run the audit. It is one command on prod.",
+          "by": "shakeebshaan"
         }
-      ]
+      ],
+      "reviewReason": "REOPENED-AS-NOTE 2026-09-07 (specialists themselves are GO and resolved above; this is the memory/wisdom half). I RAN THE PII AUDIT — the gate this item names — and the result is INCONCLUSIVE, not clean. Script committed and deployed: nyu_backend scripts/audit_coach_memory_pii.py (d6b3693), read-only, re-runnable, redacts every match so the audit cannot become a second copy of the data. Prod right now: coach_client_memory 1 row, coach_wisdom_patterns 0, specialist_patterns 0, coach_advice_ledger 0. Zero real findings — the single pattern hit was a uuid in coach_client_memory.user_id, i.e. the foreign key, now excluded as a false positive. But a 50-row gate cannot be cleared by ONE row and zero cross-user rows, so the script exits 2 (inconclusive) rather than 0, and I am not treating it as passed. THE ACTIONABLE FINDING: the soak is not producing data because both flags are allowlisted to a single account (shakeebshaan@gmail.com). Waiting longer will not move this. Widening the allowlist is the PREREQUISITE to the gate, not the reward for clearing it — so the next step is yours: add a handful of accounts to FF_COACH_MEMORY_USERS / FF_COACH_WISDOM_USERS, let it run, then re-run the audit. It is one command on prod.",
+      "reviewedAt": "2026-09-07T04:15:15.258Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260820-d6pl",
