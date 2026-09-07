@@ -741,8 +741,8 @@
       "author": "shakeebshaan",
       "tags": [
         "owner-gate",
-        "launch",
-        "auto"
+        "play",
+        "assets"
       ],
       "route": null,
       "description": "[owner-gate D2] STORE ASSETS (Play G4): 4-8 phone screenshots + 1024x500 feature graphic. Engineering will deliver a calm-brand capture list + draft shots for approval; only the owner can approve final art. HARD GATE for production listing.",
@@ -753,9 +753,26 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register).",
+      "reviewReason": "ENGINEERING HALF DONE 2026-09-07 — see docs/PLAY_LISTING_PREP.md (frontend, commit b3c0f49e). FEATURE GRAPHIC IS READY: exactly 1024x500, brand tokens, centre left clear because Play overlays a play button there when a listing has a video — at nyus-qa-issues/tmp/store-assets/feature-graphic-1024x500.png. Capture list + order settled (dashboard, nutrition, activity, coach-chat, achievements) and the harness renders 360x640 CSS at dsf 3 = exactly 1080x1920 device px (a 1080-wide CSS viewport renders the TABLET layout — first attempt did that and was unusable). BLOCKED ON YOU, and I did not work around it: the QA account cannot produce marketing art. Its subscription has lapsed so /dashboard shows 'Your plan is locked - Subscribe to unlock' as frame one; /nutrition and /progress are empty states; /coach-chat is three collapsed 'Superseded by today's brief' rows. Only /achievements is usable. Good shots need an account with an active plan and a few weeks of logs. Three routes, each with a real cost: (1) seed a demo account — best art, but writes invented meals/workouts/weigh-ins to PROD and the listing then depicts data no human logged; (2) use your own account — real, but puts your personal health data in a public listing; (3) local seeded backend — cleanest, most setup. RECOMMEND (1) with plausible data, since it keeps your data out of a public listing. Say which and I produce the final set.",
       "fix": null,
-      "history": []
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-07T03:22:30.703Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register)."
+        },
+        {
+          "at": "2026-09-07T03:22:30.703Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "ENGINEERING HALF DONE 2026-09-07 — see docs/PLAY_LISTING_PREP.md (frontend, commit b3c0f49e). FEATURE GRAPHIC IS READY: exactly 1024x500, brand tokens, centre left clear because Play overlays a play button there when a listing has a video — at nyus-qa-issues/tmp/store-assets/feature-graphic-1024x500.png. Capture list + order settled (dashboard, nutrition, activity, coach-chat, achievements) and the harness renders 360x640 CSS at dsf 3 = exactly 1080x1920 device px (a 1080-wide CSS viewport renders the TABLET layout — first attempt did that and was unusable). BLOCKED ON YOU, and I did not work around it: the QA account cannot produce marketing art. Its subscription has lapsed so /dashboard shows 'Your plan is locked - Subscribe to unlock' as frame one; /nutrition and /progress are empty states; /coach-chat is three collapsed 'Superseded by today's brief' rows. Only /achievements is usable. Good shots need an account with an active plan and a few weeks of logs. Three routes, each with a real cost: (1) seed a demo account — best art, but writes invented meals/workouts/weigh-ins to PROD and the listing then depicts data no human logged; (2) use your own account — real, but puts your personal health data in a public listing; (3) local seeded backend — cleanest, most setup. RECOMMEND (1) with plausible data, since it keeps your data out of a public listing. Say which and I produce the final set.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "reviewedAt": "2026-09-07T03:22:30.703Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260819-d1pr",
