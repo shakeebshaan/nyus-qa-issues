@@ -851,11 +851,47 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register).",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "OWNER DECISION 2026-09-07: one story at Rupees 499 everywhere. APPLIED: LAUNCH_OFFER_LIMIT=0 in prod .env (env backed up first, restart verified). GET /plans now returns Active Rupees 499 with launch_offer.active=false — verified live, it read active=true offer_price=49 before. Chose the env switch over code changes deliberately: the offer machinery stays intact so existing Rupees 49 subscribers keep renewing (resolve_paid_plan_meta still maps 4900 paise to the monthly tier) and you can revive the offer by restoring the limit. The Play listing copy carries no pricing, so nothing to change there. Note the backend catalog still serves a Free Rupees 0 tier, but ChoosePlan filters price > 0 so it never renders — dormant, not a second story.",
+        "imagePath": "images/i-20260819-d1pr-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-d1pr-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c2a52a79303a77bd2fb8d38797ecd7e3e943a5dc",
+        "imageCommits": [
+          "c2a52a79303a77bd2fb8d38797ecd7e3e943a5dc"
+        ],
+        "fixedAt": "2026-09-07T03:43:42.000Z",
+        "by": "shakeebshaan",
+        "appCommit": "fc83078",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "One reversible switch, verified live before and after, and it does not strand existing Rupees 49 subscribers. Not higher: the dormant Free tier in the backend catalog is left in place rather than removed."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-07T03:43:42.000Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register)."
+        },
+        {
+          "at": "2026-09-07T03:43:42.000Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "OWNER DECISION 2026-09-07: one story at Rupees 499 everywhere. APPLIED: LAUNCH_OFFER_LIMIT=0 in prod .env (env backed up first, restart verified). GET /plans now returns Active Rupees 499 with launch_offer.active=false — verified live, it read active=true offer_price=49 before. Chose the env switch over code changes deliberately: the offer machinery stays intact so existing Rupees 49 subscribers keep renewing (resolve_paid_plan_meta still maps 4900 paise to the monthly tier) and you can revive the offer by restoring the limit. The Play listing copy carries no pricing, so nothing to change there. Note the backend catalog still serves a Free Rupees 0 tier, but ChoosePlan filters price > 0 so it never renders — dormant, not a second story.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260811-out1",
