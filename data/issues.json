@@ -781,10 +781,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "ENGINEERING HALF ALREADY COMPLETE — verified 2026-09-07. All 62 medical/safety-adjacent keys (pace gate, pregnancy and deficit warnings) are fully translated in hi: ZERO still carry the English string. hinglish and xx-AE are at the same key parity (3,788 keys each). This landed in the M5 wave rather than being outstanding, so the item's DEFAULT ('ship drafted translations flagged for review') has in effect already executed — the translations are live in the shipped app. What remains is purely your review of the WORDING, which matters here because it is medical safety copy: a fluent-but-wrong Hindi pregnancy or deficit warning is worse than an awkward one. Read them in the app under a Hindi locale, or ask and I will export the 62 strings side by side with their English source for review.",
-      "fix": null,
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "OWNER DECISION 2026-09-07: keep the medical safety copy in English. APPLIED (commit cd69d2b8) to the eight strings that are actually medical warnings — the six message keys the pace gate emits (src/lib/onboarding-pace.ts: block_pregnant, block_postpartum, block_loss_rate, caution_loss_rate, block_gain_rate, caution_gain_rate) plus the pregnancy hint and the consult-your-doctor note. hi and hinglish now carry the English source for those. NOT applied to the other 31 strings matching pace/pregnancy/medical: 'Weekly pace', 'Target pace', 'Pregnant', 'Pregnancy status' and friends are ordinary UI labels, and reverting them would make the Hindi app look half-broken while doing nothing for safety. All four locales stay at exact key parity (3798); 8 i18n suites / 302 tests green. Trade-off stated once and left as your call: a Hindi speaker who cannot read English now gets no comprehensible warning before an unsafe deficit or a pregnancy-unsafe plan; the counter-argument that a mistranslated clinical claim is worse is also real. The Hindi wording is one git revert away — it is in the file history, not deleted.",
+        "imagePath": "images/i-20260819-d6hi-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-d6hi-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "3ec2b9ba58a0dd4e038b456a355197acb9fee225",
+        "imageCommits": [
+          "3ec2b9ba58a0dd4e038b456a355197acb9fee225"
+        ],
+        "fixedAt": "2026-09-07T03:44:43.529Z",
+        "by": "shakeebshaan",
+        "appCommit": "cd69d2b8",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Scoped to the strings that are genuinely safety copy instead of blanket-reverting everything matching the words, and kept the translations recoverable. Held at 91 because I think the safety trade-off is genuinely arguable and the owner may want to revisit it."
+        }
+      },
       "history": [],
       "thread": [
         {
@@ -799,9 +820,15 @@
           "kind": "review",
           "text": "ENGINEERING HALF ALREADY COMPLETE — verified 2026-09-07. All 62 medical/safety-adjacent keys (pace gate, pregnancy and deficit warnings) are fully translated in hi: ZERO still carry the English string. hinglish and xx-AE are at the same key parity (3,788 keys each). This landed in the M5 wave rather than being outstanding, so the item's DEFAULT ('ship drafted translations flagged for review') has in effect already executed — the translations are live in the shipped app. What remains is purely your review of the WORDING, which matters here because it is medical safety copy: a fluent-but-wrong Hindi pregnancy or deficit warning is worse than an awkward one. Read them in the app under a Hindi locale, or ask and I will export the 62 strings side by side with their English source for review.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-09-07T03:44:43.529Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "OWNER DECISION 2026-09-07: keep the medical safety copy in English. APPLIED (commit cd69d2b8) to the eight strings that are actually medical warnings — the six message keys the pace gate emits (src/lib/onboarding-pace.ts: block_pregnant, block_postpartum, block_loss_rate, caution_loss_rate, block_gain_rate, caution_gain_rate) plus the pregnancy hint and the consult-your-doctor note. hi and hinglish now carry the English source for those. NOT applied to the other 31 strings matching pace/pregnancy/medical: 'Weekly pace', 'Target pace', 'Pregnant', 'Pregnancy status' and friends are ordinary UI labels, and reverting them would make the Hindi app look half-broken while doing nothing for safety. All four locales stay at exact key parity (3798); 8 i18n suites / 302 tests green. Trade-off stated once and left as your call: a Hindi speaker who cannot read English now gets no comprehensible warning before an unsafe deficit or a pregnancy-unsafe plan; the counter-argument that a mistranslated clinical claim is worse is also real. The Hindi wording is one git revert away — it is in the file history, not deleted.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-09-07T03:22:38.525Z",
       "reviewedBy": "shakeebshaan"
     },
     {
