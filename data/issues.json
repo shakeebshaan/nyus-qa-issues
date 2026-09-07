@@ -916,7 +916,7 @@
       "tags": [
         "owner-gate",
         "play",
-        "data-safety"
+        "hard-gate"
       ],
       "route": null,
       "description": "[owner-gate D3] DATA-SAFETY FORM + content rating (Play G5): engineering drafts every answer from APPLICATION_FLOW Part D (data collected: email, health metrics, photos; encryption in transit; deletion path at nyus.in/account-deletion) — owner must submit in Play Console. HARD GATE.",
@@ -927,7 +927,7 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "ENGINEERING HALF DONE 2026-09-06 — the factual blocker is cleared; what remains is genuinely yours. Full inventory committed at docs/PLAY_DATA_SAFETY_INVENTORY.md (frontend repo, commit bb91cc2a): every Google data type mapped to collected/shared/required with a code citation, each claim tagged executed/inspected/unresolved. Findings that change the answers, three re-verified by hand: (1) the ENTIRE unredacted Razorpay webhook body is persisted, so the stored blob can contain card.last4/vpa/payer contact — 'user payment info' is probably yes-incidentally, not no; (2) Firebase Analytics receives weight_kg and calories, i.e. health data to a third-party SDK, not just our server; (3) meal photos are forwarded to OpenAI vision and coach context carries health data. Also: frontend crash reporting is NOT currently transmitting (no Sentry DSN in the built bundle, verified by grepping dist/), while backend 500s do go to Discord. Calendar/contacts/installed-apps/web-browsing are genuinely no, checked against the merged release manifest. It also disposes of a trap: androidScheme 'http' is the local WebView origin, NOT network transport — do not report the app as transmitting unencrypted. STILL YOURS (section 5): whether OpenAI/Discord/Resend count as service providers or third parties (legal call, not a code fact), retention periods, whether fasting_type='vrat' must be declared as religious belief, and confirming the Razorpay payload contents against a real prod row.",
+      "reviewReason": "STEPS DELIVERED 2026-09-07 — docs/PLAY_DATA_SAFETY_STEPS.md (commit bb44b3f2). Click-path plus the literal answers to type, every one backed by a code citation in docs/PLAY_DATA_SAFETY_INVENTORY.md. Only you can submit it in Play Console. The three answers most likely to be got wrong: (1) 'encrypted in transit' is YES — the app's androidScheme 'http' is the LOCAL WebView origin, not network transport, and it reads like a No; (2) 'user payment info' is YES — we never read card data, but the entire unredacted Razorpay webhook body is persisted and can contain card.last4/vpa/payer contact; (3) most 'shared' answers are YES because coach context, meal photos and event payloads reach OpenAI, Discord and Firebase — whether those count as service providers or third parties is a legal call, so the steps take the conservative answer and say so rather than deciding it for you. Also flagged as a CODE FIX you may prefer over a declaration: Firebase Analytics currently receives weight_kg and calories, i.e. health data to a third-party analytics SDK. Say the word and I will strip those two event params — the events keep working without the values. Meal photos are declared collected+shared (transmitted to OpenAI) but NOT stored, per your d7ph decision, verified in code.",
       "fix": null,
       "history": [],
       "thread": [
@@ -943,9 +943,16 @@
           "kind": "review",
           "text": "ENGINEERING HALF DONE 2026-09-06 — the factual blocker is cleared; what remains is genuinely yours. Full inventory committed at docs/PLAY_DATA_SAFETY_INVENTORY.md (frontend repo, commit bb91cc2a): every Google data type mapped to collected/shared/required with a code citation, each claim tagged executed/inspected/unresolved. Findings that change the answers, three re-verified by hand: (1) the ENTIRE unredacted Razorpay webhook body is persisted, so the stored blob can contain card.last4/vpa/payer contact — 'user payment info' is probably yes-incidentally, not no; (2) Firebase Analytics receives weight_kg and calories, i.e. health data to a third-party SDK, not just our server; (3) meal photos are forwarded to OpenAI vision and coach context carries health data. Also: frontend crash reporting is NOT currently transmitting (no Sentry DSN in the built bundle, verified by grepping dist/), while backend 500s do go to Discord. Calendar/contacts/installed-apps/web-browsing are genuinely no, checked against the merged release manifest. It also disposes of a trap: androidScheme 'http' is the local WebView origin, NOT network transport — do not report the app as transmitting unencrypted. STILL YOURS (section 5): whether OpenAI/Discord/Resend count as service providers or third parties (legal call, not a code fact), retention periods, whether fasting_type='vrat' must be declared as religious belief, and confirming the Razorpay payload contents against a real prod row.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-09-07T03:45:11.118Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "STEPS DELIVERED 2026-09-07 — docs/PLAY_DATA_SAFETY_STEPS.md (commit bb44b3f2). Click-path plus the literal answers to type, every one backed by a code citation in docs/PLAY_DATA_SAFETY_INVENTORY.md. Only you can submit it in Play Console. The three answers most likely to be got wrong: (1) 'encrypted in transit' is YES — the app's androidScheme 'http' is the LOCAL WebView origin, not network transport, and it reads like a No; (2) 'user payment info' is YES — we never read card data, but the entire unredacted Razorpay webhook body is persisted and can contain card.last4/vpa/payer contact; (3) most 'shared' answers are YES because coach context, meal photos and event payloads reach OpenAI, Discord and Firebase — whether those count as service providers or third parties is a legal call, so the steps take the conservative answer and say so rather than deciding it for you. Also flagged as a CODE FIX you may prefer over a declaration: Firebase Analytics currently receives weight_kg and calories, i.e. health data to a third-party analytics SDK. Say the word and I will strip those two event params — the events keep working without the values. Meal photos are declared collected+shared (transmitted to OpenAI) but NOT stored, per your d7ph decision, verified in code.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-09-06T16:59:18.979Z",
+      "reviewedAt": "2026-09-07T03:45:11.118Z",
       "reviewedBy": "shakeebshaan"
     },
     {
