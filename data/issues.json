@@ -125,14 +125,34 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "CLOSED — no affected rows, and the finding this audit filed is now remediated and verified.\n\n(1) The residual itself: zero affected plans. plan_versions holds exactly one row in 2026-08-18..22 and it is an exercise SWAP (plan 199, 'Swapped exercise Decline Push-Up'), not a rebuild; no rebuild reason appears in the window at all. Prod carries workout set logs for exactly one user with one workout_log in the window, so the blast radius was a single account even had a rebuild occurred. Nothing to remediate — no user complaint to chase.\n\n(2) The separate finding this issue filed as out-of-scope IS NOW FIXED. It reported impossible workout_logs values feeding adherence and calorie surfaces (row 122: duration_min 28950 = 20.1 days, calories_burned 225167). Re-verified today: the dry run now scans 0 rows > 480 min, 0 daily_reports copies, 0 contaminated weekly_reviews. Rows 121/122/123 read (None, None). Prod maxima are now MAX(duration_min)=97 and MAX(calories_burned)=679 — both plausible.\n\nValues were set to NULL, not clamped: clamping would fabricate an 8-hour workout nobody did and feed the coach a number nobody measured. All six original rows (3 workout_logs + 3 daily_reports) are held verbatim in workout_logs_backup_left_open_duration / daily_reports_backup_left_open_duration, so the change is reversible.\n\nRoot cause is closed on the write side, so this cannot recur: dc72cfc7 has the Floor send its MEASURED session length instead of inferring one, and app/services/session_duration.py owns the 480-min bound as the single definition habit_correlations.py already used on the read side. A WorkoutSessionLog is deliberately not session-scoped (start reuses an incomplete log), so its lifetime is the gap BETWEEN workouts — that is what produced the 20-day figure.\n\nThis issue was flagged owner-gate awaiting a close/no-close call. The audit answered it: zero impact. Closing rather than leaving a zero-impact audit sitting on your board as a decision.",
+        "imagePath": "images/i-20260820-rs6w-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260820-rs6w-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "60f19cee1ba10a06797c256d3d0de1d0471121e8",
+        "imageCommits": [
+          "60f19cee1ba10a06797c256d3d0de1d0471121e8"
+        ],
+        "fixedAt": "2026-09-07T03:43:28.210Z",
+        "by": "shakeebshaan",
+        "appCommit": "4acdc80e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Closed by execution, not judgement: both halves verified read-only against prod, evidence attached, and the data change is reversible via verbatim backup tables. Nothing owner-gated remains."
+        }
+      },
       "history": [],
       "reportPath": "reports/rs6w-audit.html",
       "reportLabel": "Audit: no affected rows",
-      "needsReview": true,
-      "reviewReason": "Audited against prod (read-only), 2026-09-06: NO affected rows — nothing to remediate. plan_versions holds exactly one row in 2026-08-18..22 and it is an exercise SWAP (plan 199, 'Swapped exercise Decline Push-Up'), not a rebuild; no rebuild reason (Initial plan / New plan from goal change / Weekly review) appears in the window at all. Prod carries workout set logs for exactly 1 user, with 1 workout_log in the window, so the blast radius was one account even had a rebuild occurred. Owner call: close this. See the attached report. Separate finding, NOT fixed and not in scope: workout_logs carries impossible values (row 122, 2026-08-08: duration_min 28950 = 20 days, calories_burned 225167) which feed adherence and calorie surfaces — file it separately if you want it chased.",
-      "reviewedAt": "2026-09-06T13:42:42.056Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -140,6 +160,13 @@
           "who": "claude",
           "kind": "review",
           "text": "Audited against prod (read-only), 2026-09-06: NO affected rows — nothing to remediate. plan_versions holds exactly one row in 2026-08-18..22 and it is an exercise SWAP (plan 199, 'Swapped exercise Decline Push-Up'), not a rebuild; no rebuild reason (Initial plan / New plan from goal change / Weekly review) appears in the window at all. Prod carries workout set logs for exactly 1 user, with 1 workout_log in the window, so the blast radius was one account even had a rebuild occurred. Owner call: close this. See the attached report. Separate finding, NOT fixed and not in scope: workout_logs carries impossible values (row 122, 2026-08-08: duration_min 28950 = 20 days, calories_burned 225167) which feed adherence and calorie surfaces — file it separately if you want it chased.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-09-07T03:43:28.210Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "CLOSED — no affected rows, and the finding this audit filed is now remediated and verified.\n\n(1) The residual itself: zero affected plans. plan_versions holds exactly one row in 2026-08-18..22 and it is an exercise SWAP (plan 199, 'Swapped exercise Decline Push-Up'), not a rebuild; no rebuild reason appears in the window at all. Prod carries workout set logs for exactly one user with one workout_log in the window, so the blast radius was a single account even had a rebuild occurred. Nothing to remediate — no user complaint to chase.\n\n(2) The separate finding this issue filed as out-of-scope IS NOW FIXED. It reported impossible workout_logs values feeding adherence and calorie surfaces (row 122: duration_min 28950 = 20.1 days, calories_burned 225167). Re-verified today: the dry run now scans 0 rows > 480 min, 0 daily_reports copies, 0 contaminated weekly_reviews. Rows 121/122/123 read (None, None). Prod maxima are now MAX(duration_min)=97 and MAX(calories_burned)=679 — both plausible.\n\nValues were set to NULL, not clamped: clamping would fabricate an 8-hour workout nobody did and feed the coach a number nobody measured. All six original rows (3 workout_logs + 3 daily_reports) are held verbatim in workout_logs_backup_left_open_duration / daily_reports_backup_left_open_duration, so the change is reversible.\n\nRoot cause is closed on the write side, so this cannot recur: dc72cfc7 has the Floor send its MEASURED session length instead of inferring one, and app/services/session_duration.py owns the 480-min bound as the single definition habit_correlations.py already used on the read side. A WorkoutSessionLog is deliberately not session-scoped (start reuses an incomplete log), so its lifetime is the gap BETWEEN workouts — that is what produced the 20-day figure.\n\nThis issue was flagged owner-gate awaiting a close/no-close call. The audit answered it: zero impact. Closing rather than leaving a zero-impact audit sitting on your board as a decision.",
           "by": "shakeebshaan"
         }
       ]
