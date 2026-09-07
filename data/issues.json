@@ -139,11 +139,47 @@
         "72d5e8bc3070759baddaa19b8571549a31b704f5"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "Owner decision required — recommended default executes if unanswered (PLAN-6 decision register, docs/plans/PLAN-6-MASTER-SIMPLIFICATION.md section 6).",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "OWNER DEFERRED TO RECOMMENDATION 2026-09-07: all eleven D10-D20 defaults proceed as designed. D13 was the only call requiring an owner flip and VITE_CHOOSEPLAN_V2=true is already set in .env.production, so ChoosePlan v2 ships in the current build — the flag-forced captures attached to this item showed it rendering to spec (projection chart, 3 tier rows with Core recommended, features plate, one Questions disclosure). The other ten were already executed across PLAN-6 waves A-F: D10 ledger plate, D11 composer to top, D12 tier table dropped, D14 personal-bests row, D15 builder inversion, D16 gallery/scroll-feed forks deleted, D17 k>=8 anonymised insights, D18 five personas premium-gated, D19 Google as filled primary CTA, D20 portrait first-of-cluster. Note D20 was later REVERSED by a subsequent owner report ('this doesn't look like the chat I approved') — portraits are now on every coach turn, which supersedes the D20 default recorded here.",
+        "imagePath": "images/i-20260820-d6pl-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260820-d6pl-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0d68046f9c19d8f548d5f28838010e929357224b",
+        "imageCommits": [
+          "0d68046f9c19d8f548d5f28838010e929357224b"
+        ],
+        "fixedAt": "2026-09-07T03:44:19.587Z",
+        "by": "shakeebshaan",
+        "appCommit": "fc83078",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Confirmed each default was actually executed rather than assuming the register was applied, and flagged that D20 has since been reversed by a later owner call. Held at 90: ChoosePlan v2 is flag-on but has not been watched with a real user on a device."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-07T03:44:19.587Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision required — recommended default executes if unanswered (PLAN-6 decision register, docs/plans/PLAN-6-MASTER-SIMPLIFICATION.md section 6)."
+        },
+        {
+          "at": "2026-09-07T03:44:19.587Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "OWNER DEFERRED TO RECOMMENDATION 2026-09-07: all eleven D10-D20 defaults proceed as designed. D13 was the only call requiring an owner flip and VITE_CHOOSEPLAN_V2=true is already set in .env.production, so ChoosePlan v2 ships in the current build — the flag-forced captures attached to this item showed it rendering to spec (projection chart, 3 tier rows with Core recommended, features plate, one Questions disclosure). The other ten were already executed across PLAN-6 waves A-F: D10 ledger plate, D11 composer to top, D12 tier table dropped, D14 personal-bests row, D15 builder inversion, D16 gallery/scroll-feed forks deleted, D17 k>=8 anonymised insights, D18 five personas premium-gated, D19 Google as filled primary CTA, D20 portrait first-of-cluster. Note D20 was later REVERSED by a subsequent owner report ('this doesn't look like the chat I approved') — portraits are now on every coach turn, which supersedes the D20 default recorded here.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260820-rs6w",
