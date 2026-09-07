@@ -837,8 +837,8 @@
       "author": "shakeebshaan",
       "tags": [
         "owner-gate",
-        "launch",
-        "auto"
+        "rollout",
+        "blocked"
       ],
       "route": null,
       "description": "[owner-gate D5] ROLLOUT STAGES: production rollout goes 10% -> 25% -> 50% -> 100%, each stage advanced ONLY by owner say-so after the crash-free + funnel read. DEFAULT: stay at current percentage, never auto-advance.",
@@ -849,9 +849,26 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register).",
+      "reviewReason": "DECISION RECORDED 2026-09-07: rollout goes straight to 100%, no staged 10/25/50 ramp. Deliberately NOT marked fixed, because it cannot execute yet and saying otherwise would be false: Google will not accept a production release until the Data safety form is SUBMITTED (d3ds) and the listing has screenshots + feature graphic (d2as) — both still open on this board. Current state: alpha is at build 285 (v1.9.96); production still serves the old v1.0.2 listing. Once d2as and d3ds clear, promotion is one command from android/ ('fastlane release') and per this decision it goes to 100% in one step. One thing to weigh before pulling it: 100% has no staged safety net, so the crash-free baseline in d4vt is the number to read FIRST — there will be no partial-exposure window in which to catch a regression. This item stays open as the reminder to promote once the two hard gates clear.",
       "fix": null,
-      "history": []
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-07T03:45:07.359Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register)."
+        },
+        {
+          "at": "2026-09-07T03:45:07.359Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "DECISION RECORDED 2026-09-07: rollout goes straight to 100%, no staged 10/25/50 ramp. Deliberately NOT marked fixed, because it cannot execute yet and saying otherwise would be false: Google will not accept a production release until the Data safety form is SUBMITTED (d3ds) and the listing has screenshots + feature graphic (d2as) — both still open on this board. Current state: alpha is at build 285 (v1.9.96); production still serves the old v1.0.2 listing. Once d2as and d3ds clear, promotion is one command from android/ ('fastlane release') and per this decision it goes to 100% in one step. One thing to weigh before pulling it: 100% has no staged safety net, so the crash-free baseline in d4vt is the number to read FIRST — there will be no partial-exposure window in which to catch a regression. This item stays open as the reminder to promote once the two hard gates clear.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "reviewedAt": "2026-09-07T03:45:07.359Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260819-d4vt",
