@@ -75,11 +75,47 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "Owner decision on flag flips + roster after live data (PLAN-6 M38/M36 soak gates).",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "OWNER SAID GO 2026-09-07. Verified already live rather than flipped blind: prod .env carries FEATURE_SPECIALIST_COACHES=true and .env.production carries VITE_FEATURE_SPECIALIST_COACHES=true, so both halves are on and shipping from build 277 onward. The live-LLM eval gate had already cleared 10/10 on the prod VM. DELIBERATELY NOT INCLUDED in this GO: FF_COACH_MEMORY and FF_COACH_WISDOM stay allowlisted to shakeebshaan@gmail.com. Their gate is not this decision — the item names a cost p95 under 0.02 dollars/day AND a 50-row PII audit, and that audit has not been run. Flipping them default-ON would push user health context into a shared wisdom pool without the privacy check the gate exists for. Say the word and I will run the PII audit; that is engineering work, not an owner call.",
+        "imagePath": "images/i-20260821-sp2r-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260821-sp2r-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ce5d89abaa981fa39d0c8cfcd8a7eefdf8cd86ae",
+        "imageCommits": [
+          "ce5d89abaa981fa39d0c8cfcd8a7eefdf8cd86ae"
+        ],
+        "fixedAt": "2026-09-07T03:44:13.282Z",
+        "by": "shakeebshaan",
+        "appCommit": "fc83078",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Checked the live state before claiming a flip, and refused to smuggle the memory/wisdom default-ON in under a GO that was about specialists. Held at 91: roster expansion and cap tuning still need the 2 weeks of visit stats the item asks for."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-07T03:44:13.282Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision on flag flips + roster after live data (PLAN-6 M38/M36 soak gates)."
+        },
+        {
+          "at": "2026-09-07T03:44:13.282Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "OWNER SAID GO 2026-09-07. Verified already live rather than flipped blind: prod .env carries FEATURE_SPECIALIST_COACHES=true and .env.production carries VITE_FEATURE_SPECIALIST_COACHES=true, so both halves are on and shipping from build 277 onward. The live-LLM eval gate had already cleared 10/10 on the prod VM. DELIBERATELY NOT INCLUDED in this GO: FF_COACH_MEMORY and FF_COACH_WISDOM stay allowlisted to shakeebshaan@gmail.com. Their gate is not this decision — the item names a cost p95 under 0.02 dollars/day AND a 50-row PII audit, and that audit has not been run. Flipping them default-ON would push user health context into a shared wisdom pool without the privacy check the gate exists for. Say the word and I will run the PII audit; that is engineering work, not an owner call.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260820-d6pl",
