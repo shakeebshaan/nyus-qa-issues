@@ -680,8 +680,8 @@
       "author": "shakeebshaan",
       "tags": [
         "owner-gate",
-        "launch",
-        "auto"
+        "play",
+        "hard-gate"
       ],
       "route": null,
       "description": "[owner-gate D4] VITALS + SIGN-IN + SUPPORT (Play G3/G7/G10): (a) crash-free baseline read from Play vitals after 269+ soak; (b) Google sign-in verified on a PLAY-SIGNED build (OAuth SHA for Play App Signing key — engineering preps the SHA check); (c) support email inbox someone actually reads. HARD GATES.",
@@ -692,9 +692,26 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register).",
+      "reviewReason": "ENGINEERING HALF OF (b) DONE 2026-09-07 — see docs/PLAY_LISTING_PREP.md (commit b3c0f49e). This is CONFIGURATION, not code: the app-side Google integration already works and degrades to email+OTP when unconfigured. The problem precisely: Play App Signing re-signs every upload, so the certificate users actually run is NOT our upload key, and Google Sign-In validates against the running one — until the Play App Signing SHA-1 is registered on the Android OAuth client, on-device sign-in fails with '[16] Account reauth failed' (i-20260623-16b7). Upload key SHA-1, read from the keystore: B9:5C:EA:C4:08:94:17:5B:7E:E1:E8:91:AA:D1:2E:22:18:4A:04:4C — that one is probably already registered and is NOT the one that matters. YOURS: Play Console > Setup > App signing > copy the App signing key SHA-1 (differs from the above); add it to the Android OAuth client for com.nyus.nyusand in GCP project nyus-and (keep the upload SHA too); confirm the OAuth consent screen is PUBLISHED not Testing (in Testing only listed users can sign in, which looks identical to a broken button). I cannot do this half — gcloud is not installed here and the Play App Signing cert is not exposed by the Play Developer API. TRAP: verify on a build installed FROM THE PLAY TRACK, not a local APK — a locally-signed install carries the upload key and passes even while production is broken. (a) crash-free baseline still needs alpha soak volume; (c) support inbox is not engineering work.",
       "fix": null,
-      "history": []
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-07T03:22:34.450Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register)."
+        },
+        {
+          "at": "2026-09-07T03:22:34.450Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "ENGINEERING HALF OF (b) DONE 2026-09-07 — see docs/PLAY_LISTING_PREP.md (commit b3c0f49e). This is CONFIGURATION, not code: the app-side Google integration already works and degrades to email+OTP when unconfigured. The problem precisely: Play App Signing re-signs every upload, so the certificate users actually run is NOT our upload key, and Google Sign-In validates against the running one — until the Play App Signing SHA-1 is registered on the Android OAuth client, on-device sign-in fails with '[16] Account reauth failed' (i-20260623-16b7). Upload key SHA-1, read from the keystore: B9:5C:EA:C4:08:94:17:5B:7E:E1:E8:91:AA:D1:2E:22:18:4A:04:4C — that one is probably already registered and is NOT the one that matters. YOURS: Play Console > Setup > App signing > copy the App signing key SHA-1 (differs from the above); add it to the Android OAuth client for com.nyus.nyusand in GCP project nyus-and (keep the upload SHA too); confirm the OAuth consent screen is PUBLISHED not Testing (in Testing only listed users can sign in, which looks identical to a broken button). I cannot do this half — gcloud is not installed here and the Play App Signing cert is not exposed by the Play Developer API. TRAP: verify on a build installed FROM THE PLAY TRACK, not a local APK — a locally-signed install carries the upload key and passes even while production is broken. (a) crash-free baseline still needs alpha soak volume; (c) support inbox is not engineering work.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "reviewedAt": "2026-09-07T03:22:34.450Z",
+      "reviewedBy": "shakeebshaan"
     },
     {
       "id": "i-20260819-d3ds",
