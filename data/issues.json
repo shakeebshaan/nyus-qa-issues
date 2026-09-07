@@ -651,11 +651,47 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register).",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "OWNER DECISION 2026-09-07: do not store meal photos. Already true in code — verified, no change needed. app/routes/plan_builder_routes.py ai_analyze_meal_photo passes the image inline to the OpenAI vision call and returns only parsed JSON (meal name + kcal/protein/carbs/fat). There is no filesystem write, no DB column, and no object storage anywhere on that path; the bytes exist only for the duration of the request. This matches the item's stated default, so the decision is now recorded rather than pending. Reflected in the Data safety guidance (docs/PLAY_DATA_SAFETY_STEPS.md): Photos are still declared as COLLECTED and SHARED, because the image is transmitted to OpenAI for estimation even though it is never retained — and progress photos and avatars ARE stored, which is a separate path.",
+        "imagePath": "images/i-20260819-d7ph-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-d7ph-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "087398e787b445bc4f80f3459a18e93e00a6f252",
+        "imageCommits": [
+          "087398e787b445bc4f80f3459a18e93e00a6f252"
+        ],
+        "fixedAt": "2026-09-07T03:43:48.053Z",
+        "by": "shakeebshaan",
+        "appCommit": "fc83078",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Verified against the code rather than assumed, and carried the consequence into the Data safety answers. Held at 90 because no code changed — the value here is the confirmation and the record."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-09-07T03:43:48.053Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner decision required — engineering default executes if unanswered (PLAN-0 owner-decision register)."
+        },
+        {
+          "at": "2026-09-07T03:43:48.053Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "OWNER DECISION 2026-09-07: do not store meal photos. Already true in code — verified, no change needed. app/routes/plan_builder_routes.py ai_analyze_meal_photo passes the image inline to the OpenAI vision call and returns only parsed JSON (meal name + kcal/protein/carbs/fat). There is no filesystem write, no DB column, and no object storage anywhere on that path; the bytes exist only for the duration of the request. This matches the item's stated default, so the decision is now recorded rather than pending. Reflected in the Data safety guidance (docs/PLAY_DATA_SAFETY_STEPS.md): Photos are still declared as COLLECTED and SHARED, because the image is transmitted to OpenAI for estimation even though it is never retained — and progress photos and avatars ARE stored, which is a separate path.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260819-d6hi",
