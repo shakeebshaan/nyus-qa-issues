@@ -2,6 +2,25 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20260912-sa1p",
+      "createdAt": "2026-09-12T04:32:54.372Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "self-audit",
+        "auto"
+      ],
+      "route": "/activity",
+      "description": "[found while shooting store assets] Finishing today's session advances the progressive plan straight away, so 'Today's Activity' re-renders the NEXT session at 0/6 exercises, 0/18 sets, 0 kg volume — on a day you demonstrably trained the screen reads as untouched. Only 'Workout sessions this week 1/7' shows the work happened. Repro: POST /activity/workout/start + log-set x18 + /finish, then GET /activity/overview — todays_workout is now the next session. Either keep the completed session visible for the rest of the day, or say explicitly that the next one is queued.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260821-mgrt",
       "createdAt": "2026-08-21T09:35:51.617Z",
       "author": "shakeebshaan",
