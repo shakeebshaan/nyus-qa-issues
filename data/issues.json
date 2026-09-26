@@ -28,8 +28,7 @@
       "tags": [
         "launch-blocker",
         "security",
-        "secrets",
-        "verified"
+        "secrets"
       ],
       "route": null,
       "description": "[P0 / OWNER ACTION — hand-verified] A LIVE FIREBASE ADMIN PRIVATE KEY IS COMMITTED TO THE BACKEND REPO. nyu_backend/nyus-and-28394d25990f.json — type service_account, project nyus-and, client_email firebase-adminsdk-fbsvc@nyus-and.iam.gserviceaccount.com, private_key_id 28394d25990f..., RSA private key present. Tracked since 2025-11-10 (commit 227e8a3, 'Add push notification debug guide and Firebase config') — ten months. .gitignore:41 contains `nyus-and-*.json`, which LOOKS like a guard and is not one: gitignore is ignored for already-tracked files, and `git check-ignore -v` confirms the key is NOT ignored. MITIGATING: the repo is PRIVATE, so this is not a public internet leak. NOT MITIGATING: the key grants Firebase Admin on the project — arbitrary push to every user and custom-token minting (impersonate any account) — it exists in every clone and at every point in history, and no amount of deleting it today removes it from the past. ROTATION IN THE GOOGLE CONSOLE IS THE ONLY REAL FIX, and that is yours. ORDER MATTERS, GET IT WRONG AND PROD BREAKS: (1) rotate/revoke the key in the Firebase console; (2) put the new key on the VM out of band and set FIREBASE_CREDENTIALS_PATH (or FIREBASE_CREDENTIALS_JSON) in ~/nyu_backend/.env; (3) restart and verify a real push arrives; (4) only THEN `git rm --cached nyus-and-28394d25990f.json`. Do NOT untrack first: prod deploys by `git pull`, so removing it from the index deletes it from the server on the next deploy, and initialize_firebase_admin only logs a warning and returns False — push notifications would die silently. Step (2) is now possible because the hardcoded path is gone: backend.py resolves env-first as of fe27c51. Optional afterwards: history rewrite (filter-repo) — secondary, and a rotated key makes it cosmetic.",
@@ -40,7 +39,20 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "OWNER ACTION, console-only, and it is the highest-severity thing the launch audit found. A live Firebase Admin service-account private key (firebase-adminsdk-fbsvc@nyus-and) has been committed in nyu_backend since 2025-11-10. The .gitignore rule nyus-and-*.json reads like protection and has never been any: gitignore does not apply to already-tracked files, and git check-ignore confirms the key is not ignored. The repo is private, so this is not a public leak and I am not treating it as an active incident — but the key is Firebase Admin on the project (push to every user, custom-token minting for any account), it is in every clone and every commit of the past, and rotation in the console is the only thing that actually revokes it. I removed the blocker that made rotation impossible: the credential path was hardcoded, so the file could not be untracked without prod deleting it on the next git-pull deploy and killing push silently. backend.py now resolves env-first (fe27c51), so the sequence is safe. Do it in this order: rotate in the Firebase console, put the new key on the VM and set FIREBASE_CREDENTIALS_PATH in .env, restart and confirm a real push lands, and only then git rm --cached the old file. Untracking first breaks production push notifications.",
+      "reviewedAt": "2026-09-26T16:56:57.607Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-09-26T16:56:57.607Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "OWNER ACTION, console-only, and it is the highest-severity thing the launch audit found. A live Firebase Admin service-account private key (firebase-adminsdk-fbsvc@nyus-and) has been committed in nyu_backend since 2025-11-10. The .gitignore rule nyus-and-*.json reads like protection and has never been any: gitignore does not apply to already-tracked files, and git check-ignore confirms the key is not ignored. The repo is private, so this is not a public leak and I am not treating it as an active incident — but the key is Firebase Admin on the project (push to every user, custom-token minting for any account), it is in every clone and every commit of the past, and rotation in the console is the only thing that actually revokes it. I removed the blocker that made rotation impossible: the credential path was hardcoded, so the file could not be untracked without prod deleting it on the next git-pull deploy and killing push silently. backend.py now resolves env-first (fe27c51), so the sequence is safe. Do it in this order: rotate in the Firebase console, put the new key on the VM and set FIREBASE_CREDENTIALS_PATH in .env, restart and confirm a real push lands, and only then git rm --cached the old file. Untracking first breaks production push notifications.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260926-req1",
