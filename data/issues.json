@@ -8,8 +8,7 @@
       "tags": [
         "launch-blocker",
         "play",
-        "payments",
-        "verified"
+        "payments"
       ],
       "route": "/choose-plan",
       "description": "[P0 / OWNER DECISION — hand-verified] The Rs 499/mo subscription is sold in-app through Razorpay with NO Google Play Billing anywhere. capacitor-razorpay is in package.json; there is no com.android.billingclient in android/app/build.gradle and no billing plugin in package.json. What is sold is digital and consumed in the app (AI coaching, generated plans), which is exactly what Play's Payments policy requires Play Billing for — this is a rejection or suspension trigger on the production submission, and it is structural, not a code bug. THREE REAL OPTIONS, each with a cost: (1) Integrate Play Billing — policy-safe everywhere, Google takes 15% on subscriptions, and the Razorpay path must be hidden inside the Android app. (2) User Choice Billing (India) — after the CCI ruling Google permits an alternative biller alongside Play Billing for Indian users at a reduced service fee; keeps Razorpay, but Play Billing must still be offered as a choice, so it is integration work plus enrolment. (3) The person-delivered-service exemption — only holds if a real human coach delivers the service; the app presents AI coaches (Freya etc.), so claiming it would be misrepresentation. My recommendation is (2) for an India-first app: it keeps UPI via Razorpay, which is what Indian users actually pay with, at the lowest compliant fee. This needs your call because it changes the unit economics.",
@@ -20,7 +19,20 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "LAUNCH BLOCKER that needs a business decision, not code. Rs 499/mo digital subscription sold in-app via Razorpay; zero Play Billing in the build. Play's Payments policy rejects this on production submission. Options with costs are in the description; I recommend User Choice Billing (India) because it keeps UPI via Razorpay at the lowest compliant fee — but it changes your margins, so it is your call.",
+      "reviewedAt": "2026-09-26T17:00:24.236Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-09-26T17:00:24.236Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "LAUNCH BLOCKER that needs a business decision, not code. Rs 499/mo digital subscription sold in-app via Razorpay; zero Play Billing in the build. Play's Payments policy rejects this on production submission. Options with costs are in the description; I recommend User Choice Billing (India) because it keeps UPI via Razorpay at the lowest compliant fee — but it changes your margins, so it is your call.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260926-pwd1",
