@@ -61,8 +61,8 @@
       "fix": null,
       "history": [],
       "needsReview": true,
-      "reviewReason": "Go/no-go on Phase C: Health Connect client bump for skin temperature + background alerts (needs a device test).",
-      "reviewedAt": "2026-10-09T05:31:42.008Z",
+      "reviewReason": "NOT BUILT, deliberately (2026-10-09), even though you listed it under 'fix all'. Pushing back once, for this reason: skin temperature needs the Health Connect client bumped from 1.1.0-alpha07 to 1.1.0. That release makes record Metadata mandatory, which changes the weight and workout WRITE-BACK every connected user runs today. A compile would pass, but only a run on a real phone proves the write-back still lands, and there is no Android device on this machine. A broken write-back would ship to every user, and the bump cannot be put behind a flag. Background alerts also need READ_HEALTH_DATA_IN_BACKGROUND, a second and stricter Play declaration. What is live now: vitals and alerts are checked on each app sync (open/resume), and v1.10.0 (289) carries the four new vitals. To go ahead: connect an Android phone with Health Connect (USB debugging on) and say 'build hcv2'. I'll do the bump, device-test the write-back, add skin temperature, and file the declaration through the same internal-track route used for hcv1.",
+      "reviewedAt": "2026-10-09T16:58:42.855Z",
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -70,6 +70,13 @@
           "who": "claude",
           "kind": "review",
           "text": "Go/no-go on Phase C: Health Connect client bump for skin temperature + background alerts (needs a device test).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T16:58:42.855Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "NOT BUILT, deliberately (2026-10-09), even though you listed it under 'fix all'. Pushing back once, for this reason: skin temperature needs the Health Connect client bumped from 1.1.0-alpha07 to 1.1.0. That release makes record Metadata mandatory, which changes the weight and workout WRITE-BACK every connected user runs today. A compile would pass, but only a run on a real phone proves the write-back still lands, and there is no Android device on this machine. A broken write-back would ship to every user, and the bump cannot be put behind a flag. Background alerts also need READ_HEALTH_DATA_IN_BACKGROUND, a second and stricter Play declaration. What is live now: vitals and alerts are checked on each app sync (open/resume), and v1.10.0 (289) carries the four new vitals. To go ahead: connect an Android phone with Health Connect (USB debugging on) and say 'build hcv2'. I'll do the bump, device-test the write-back, add skin temperature, and file the declaration through the same internal-track route used for hcv1.",
           "by": "shakeebshaan"
         }
       ]
