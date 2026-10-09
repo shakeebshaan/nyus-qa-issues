@@ -122,15 +122,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "claim": {
+      "status": "fixed",
+      "fix": {
+        "description": "The deploy watcher holds a rolled-back SHA instead of redeploying it every 2 minutes (a new commit clears it; --retry-bad forces it), and failure alerts are sent synchronously before the oneshot exits. Its own commit, with tests/test_deploy_watcher.py (7 contracts).",
+        "imagePath": "images/i-20261009-dw01-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261009-dw01-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "582fa66ce734d9167c3edde17ee4c54cea435382",
+        "imageCommits": [
+          "582fa66ce734d9167c3edde17ee4c54cea435382"
+        ],
+        "fixedAt": "2026-10-09T10:17:13.505Z",
         "by": "shakeebshaan",
-        "at": "2026-10-09T07:35:34.571Z",
-        "expiresAt": "2026-10-09T11:35:34.571Z",
-        "note": "session a5: fix-issues run 2026-10-09"
-      }
+        "appCommit": "41d7e25",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Tests pass; three clean deploys today. -10: a real rollback was not forced on prod (doing so would mean deliberately breaking prod)."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-10-09T10:17:13.505Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "The deploy watcher holds a rolled-back SHA instead of redeploying it every 2 minutes (a new commit clears it; --retry-bad forces it), and failure alerts are sent synchronously before the oneshot exits. Its own commit, with tests/test_deploy_watcher.py (7 contracts).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261009-obs1",
