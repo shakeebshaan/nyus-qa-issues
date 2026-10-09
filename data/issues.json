@@ -2,6 +2,110 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261009-pii1",
+      "createdAt": "2026-10-09T05:08:44.515Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "privacy",
+        "data-retention",
+        "owner-gate",
+        "verified"
+      ],
+      "route": null,
+      "description": "[P1 / OWNER] Coach-chat text, health logs and user emails are mirrored into Discord (discord_logger.py:256 and the auto-mirror to logs-all), where account deletion can never reach them and retention is unlimited. This is a data-protection exposure independent of del1. Options: stop mirroring message bodies and health values (log event + id only, as Firebase now does), or keep them and declare Discord as a processor in the privacy policy with a retention period. Engineering recommendation: the first — the channels are for ops, and ops does not need the user's words.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20261009-sec2",
+      "createdAt": "2026-10-09T05:08:44.515Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "security",
+        "secrets",
+        "owner-gate",
+        "verified"
+      ],
+      "route": null,
+      "description": "[P2 / OWNER] The production JWT and Flask signing keys are in git history (backend.py:1392 area), and a forged refresh token bypasses the session allow-list. Same mitigation as key1 (private repo) and the same real remedy: rotate both keys in ~/nyu_backend/.env. Consequence you should know before doing it: rotating the JWT key signs EVERY user out once. Pair it with the key1 rotation so users take one sign-out, not two.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20261009-dw01",
+      "createdAt": "2026-10-09T05:08:44.515Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "infra",
+        "deploy",
+        "verified"
+      ],
+      "route": null,
+      "description": "[P2] The self-hosted deploy watcher has two failure modes that make an incident worse. deploy_watcher.py:212 — after an auto-rollback, the next 2-minute tick sees origin/main ahead again and re-deploys the SAME bad commit, so the API flaps up and down indefinitely until someone pushes a fix. deploy_watcher.py:177 — the oneshot watcher exits before its Discord daemon thread posts, so deploy-failure alerts (including 'rollback ALSO FAILED') are never sent. Fix is small (remember the rolled-back SHA and skip it; join or synchronously send the alert) but it is the deploy pipeline itself, so it should go in on its own commit with a staged test, not bundled with feature work.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20261009-obs1",
+      "createdAt": "2026-10-09T05:08:44.515Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "launch-blocker",
+        "observability",
+        "verified"
+      ],
+      "route": null,
+      "description": "[P1] A launch-day crash would be invisible. Both client error sinks are empty in the release build: .env.production:39 VITE_SENTRY_DSN= is blank, and VITE_FE_ERROR_WEBHOOK is unset, so sentry.ts and error-reporter.ts silently no-op and RouteErrorBoundary reports to nothing. Backend: ~170 routes catch their own exception and return 500 without reaching the errors channel (backend.py:3290 is one, in payment verification), AI-coach/LLM failures are never pushed to anyone (backend.py:17553), and nothing outside the process checks liveness (health.py:29 is correct but only polled during deploys). NEED FROM YOU: either a Sentry DSN, or a go-ahead for a small backend endpoint that forwards client errors into the existing Discord errors channel (no secret in the app bundle). The uptime check needs an external pinger (UptimeRobot or similar) — 5 minutes of console work.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20261009-lgl1",
+      "createdAt": "2026-10-09T05:08:44.515Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "launch-blocker",
+        "legal",
+        "play",
+        "owner-gate",
+        "verified"
+      ],
+      "route": null,
+      "description": "[P0 / OWNER — legal text, nyus.in] The public legal pages state things that are false, and Play reviewers read them. (1) privacy.html:177 names payment and email processors the app does not use, omits the ones it does (Razorpay, Resend, OpenAI, Firebase, Oracle Cloud), and says Discord receives 'no PII' — it receives coach-chat text, health logs and emails (discord_logger.py:256). (2) index.html:84 Terms say NYUS is 'offered free of charge' while it charges Rs 499/month after the trial. (3) index.html:88 Refund policy tells users to refund or cancel through Google Play, which never processed their payment (Razorpay did). (4) account-deletion.html:228 says Health Connect data is not stored on NYUS servers; health-sync writes it to the database. Each is a Data-safety / deceptive-behaviour risk on its own. Engineering can draft corrected text from the code facts, but legal wording is yours to approve — say the word and I will draft all four from the actual data flows.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20260926-bil1",
       "createdAt": "2026-09-26T17:00:18.228Z",
       "author": "shakeebshaan",
@@ -118,7 +222,7 @@
         "verified"
       ],
       "route": null,
-      "description": "[P1 — hand-verified, and it is an OWNER DECISION, not a rogue implementation] The nightly backup emails the ENTIRE production database, unencrypted, to a personal inbox. backend.py:267 perform_daily_backup: mysqldump -> gzip -> base64 -> Resend email attachment to BACKUP_EMAIL (default shaan.s@chartraiders.com) -> delete the local file. The dump contains every user's PII, health and payment data. It is gzipped, not encrypted, so it sits in plaintext-at-rest in an inbox and in Resend's infrastructure and logs. This was directive i-20260624-bak1 (\"Only send me via email and delete it\") and it replaced something worse (committing the dump to GitHub), so the decision was deliberate and the improvement was real — flagging the residual risk once, per push-back duty, and then it is yours. TWO CONSEQUENCES THAT ARE NOT OBVIOUS: (1) erasure becomes unfulfillable — deleting a user from prod does not remove them from N nightly copies sitting in an inbox, which interacts directly with del1 above and with whatever the privacy policy claims about retention; (2) a single mailbox compromise is a full database breach. MINIMUM FIX IF THE EMAIL ROUTE STAYS: encrypt the dump (age/gpg to a key the mailbox does not hold) before attaching, and make the privacy policy's retention text match what actually happens.",
+      "description": "[P1 — hand-verified, and it is an OWNER DECISION, not a rogue implementation] The nightly backup emails the ENTIRE production database, unencrypted, to a personal inbox. backend.py:267 perform_daily_backup: mysqldump -> gzip -> base64 -> Resend email attachment to BACKUP_EMAIL (default shaan.s@chartraiders.com) -> delete the local file. The dump contains every user's PII, health and payment data. It is gzipped, not encrypted, so it sits in plaintext-at-rest in an inbox and in Resend's infrastructure and logs. This was directive i-20260624-bak1 (\"Only send me via email and delete it\") and it replaced something worse (committing the dump to GitHub), so the decision was deliberate and the improvement was real — flagging the residual risk once, per push-back duty, and then it is yours. TWO CONSEQUENCES THAT ARE NOT OBVIOUS: (1) erasure becomes unfulfillable — deleting a user from prod does not remove them from N nightly copies sitting in an inbox, which interacts directly with del1 above and with whatever the privacy policy claims about retention; (2) a single mailbox compromise is a full database breach. MINIMUM FIX IF THE EMAIL ROUTE STAYS: encrypt the dump (age/gpg to a key the mailbox does not hold) before attaching, and make the privacy policy's retention text match what actually happens.\n\n[2026-10-09 re-audit, verified] Add: the backup has 8 return-False paths and none of them alert (backend.py:267-360), so a failing backup is silent; and no restore has ever been tested. An untested backup is a hypothesis.",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -138,7 +242,7 @@
         "play"
       ],
       "route": null,
-      "description": "[P0 / LAUNCH BLOCKER — hand-verified] ACCOUNT DELETION DELETES NOTHING. End to end: the in-app screen and nyus.in/account-deletion both POST /api/v1/account-deletion-request, which INSERTs a row into `account_deletion_requests` (app/routes/account_deletion.py:154). Nothing in the codebase ever READS that table — grep for AccountDeletionRequest returns exactly one hit, the insert. The admin GDPR queue (app/admin_v2/audit.py:905 list_gdpr_requests / :937 process_gdpr_request) reads a DIFFERENT table, `admin_gdpr_requests`, which the user-facing flow never writes to. So the queue has a consumer with no producer, and the requests have a producer with no consumer. WORSE: even if an admin hand-creates an admin_gdpr_requests row, process_gdpr_request's delete branch only RENAMES the users row — email -> deleted-<id>@nyus.invalid, name -> 'Deleted User', clears password_hash/avatar_url/google_id, sets deleted_at, bumps token_version. Its own comment says \"We don't try to be exhaustive ... rely on FK cascades elsewhere\" — but it never issues a DELETE, so no cascade can fire, and the users-table FK was dropped for a collation reason (see learnings: MySQL FK collation gotcha). Every daily_log, meal_log, workout_log, measurement, progress photo, chat message, coach memory and payment row survives, still keyed to the same user_id. CONSEQUENCE: Play requires account deletion to actually delete, with a working web route; the D7/G6 gate was recorded PASS on evidence that only covers the REQUEST being recorded. This is a Play-review rejection and a DPDP/GDPR erasure failure. FIX: write a real purge (enumerate every user-scoped table, delete or anonymise, remove uploaded photos from storage, record an auditable receipt), point the user-facing request at the same queue the admin UI reads, and re-test G6 against actual row counts before and after.",
+      "description": "[P0 / LAUNCH BLOCKER — hand-verified] ACCOUNT DELETION DELETES NOTHING. End to end: the in-app screen and nyus.in/account-deletion both POST /api/v1/account-deletion-request, which INSERTs a row into `account_deletion_requests` (app/routes/account_deletion.py:154). Nothing in the codebase ever READS that table — grep for AccountDeletionRequest returns exactly one hit, the insert. The admin GDPR queue (app/admin_v2/audit.py:905 list_gdpr_requests / :937 process_gdpr_request) reads a DIFFERENT table, `admin_gdpr_requests`, which the user-facing flow never writes to. So the queue has a consumer with no producer, and the requests have a producer with no consumer. WORSE: even if an admin hand-creates an admin_gdpr_requests row, process_gdpr_request's delete branch only RENAMES the users row — email -> deleted-<id>@nyus.invalid, name -> 'Deleted User', clears password_hash/avatar_url/google_id, sets deleted_at, bumps token_version. Its own comment says \"We don't try to be exhaustive ... rely on FK cascades elsewhere\" — but it never issues a DELETE, so no cascade can fire, and the users-table FK was dropped for a collation reason (see learnings: MySQL FK collation gotcha). Every daily_log, meal_log, workout_log, measurement, progress photo, chat message, coach memory and payment row survives, still keyed to the same user_id. CONSEQUENCE: Play requires account deletion to actually delete, with a working web route; the D7/G6 gate was recorded PASS on evidence that only covers the REQUEST being recorded. This is a Play-review rejection and a DPDP/GDPR erasure failure. FIX: write a real purge (enumerate every user-scoped table, delete or anonymise, remove uploaded photos from storage, record an auditable receipt), point the user-facing request at the same queue the admin UI reads, and re-test G6 against actual row counts before and after.\n\n[2026-10-09 re-audit, verified] Still true after the partial work in 795204c: requests sit at 'pending' forever (account_deletion.py:7), no admin view lists them and the GDPR processor never updates status (audit.py:978), and the shipped copy promises two things no code implements — 'sign in again to cancel' and a confirmation email (AccountDeletion.tsx:116-120). Remove those promises from the copy until they exist.",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
