@@ -6,9 +6,7 @@
       "createdAt": "2026-10-09T05:31:25.200Z",
       "author": "shakeebshaan",
       "tags": [
-        "owner-decision",
-        "health-connect",
-        "plan-7"
+        "owner-decision"
       ],
       "route": "/health-alerts",
       "description": "[OWNER — go/no-go, not built] Skin temperature and alerts-without-opening-the-app are PLAN-7 Phase C. Skin temperature needs the Health Connect client bumped 1.1.0-alpha07 → 1.1.0: that release made record Metadata mandatory, which touches the live weight/workout write-back for every connected user, so it needs a device test, not just a compile. Background alerts additionally need READ_HEALTH_DATA_IN_BACKGROUND (a second, stricter Play declaration) plus a WorkManager job. Today alerts are checked whenever the app syncs (open/resume) — the screen says so. The backend already accepts skin temperature; only the native read is missing. Plan: docs/plans/PLAN-7-HEALTH-VITALS-ALERTS.md §5. Reply go/no-go.",
@@ -19,7 +17,20 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": []
+      "history": [],
+      "needsReview": true,
+      "reviewReason": "Go/no-go on Phase C: Health Connect client bump for skin temperature + background alerts (needs a device test).",
+      "reviewedAt": "2026-10-09T05:31:42.008Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-10-09T05:31:42.008Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Go/no-go on Phase C: Health Connect client bump for skin temperature + background alerts (needs a device test).",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20261009-hcv1",
