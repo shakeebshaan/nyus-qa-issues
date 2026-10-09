@@ -420,15 +420,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "claim": {
+      "status": "fixed",
+      "fix": {
+        "description": "A session finished today stays on /activity until the end of the user's local day, showing its real sets, volume and skips with every exercise done. The existing Next preview and Start-next sit under it; a partial finish still moves on. Follow-up d6d5521: the preview no longer disappears after finishing the second-to-last session. BE 3f17ad9 + d6d5521, no app release needed.",
+        "imagePath": "images/i-20260912-sa1p-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260912-sa1p-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bb94431a0c2e5af56c605b107aeaf6d3e7fa5b7d",
+        "imageCommits": [
+          "bb94431a0c2e5af56c605b107aeaf6d3e7fa5b7d"
+        ],
+        "fixedAt": "2026-10-09T10:17:07.270Z",
         "by": "shakeebshaan",
-        "at": "2026-10-09T07:36:00.771Z",
-        "expiresAt": "2026-10-09T11:36:00.771Z",
-        "note": "session a5: fix-issues run 2026-10-09"
-      }
+        "appCommit": "d6d5521",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Prod smoke via the live /activity/overview on a throwaway plan: shown Push A (done, 800 kg, completed_today), queued Pull B. The first run caught the preview bug, fixed and re-run to PASS. 9 tests. -8: verified at the API payload; no in-app screenshot."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-10-09T10:17:07.270Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "A session finished today stays on /activity until the end of the user's local day, showing its real sets, volume and skips with every exercise done. The existing Next preview and Start-next sit under it; a partial finish still moves on. Follow-up d6d5521: the preview no longer disappears after finishing the second-to-last session. BE 3f17ad9 + d6d5521, no app release needed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260821-mgrt",
