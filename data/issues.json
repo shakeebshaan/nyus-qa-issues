@@ -335,12 +335,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Real erasure. purge_user deletes everything that names the user in one transaction (found from the live FK graph), detaches others' rows, hands over shared groups/challenges, tombstones users, removes uploads, and writes a counts-only receipt. The daily 03:00 IST job purges verified requests after 7 days; admin GDPR delete uses the same purge. BE aabc844 + FE fecc4f02 (screen copy). G6 re-tested on prod MySQL: throwaway user 13 rows deleted, 0 left outside retained tables.",
+        "imagePath": "images/i-20260926-del1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260926-del1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "951ec536a31779f1053ef7eac52f731f42ddc50f",
+        "imageCommits": [
+          "951ec536a31779f1053ef7eac52f731f42ddc50f"
+        ],
+        "fixedAt": "2026-10-09T10:16:43.262Z",
+        "by": "shakeebshaan",
+        "appCommit": "aabc844",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Executed on prod: G6 PASS, dry run on the QA account (685 rows / 42 tables, 0 collateral), plus a second live purge. 33 BE tests. -7: privacy-policy wording on nyus.in is owner text."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "LAUNCH BLOCKER, and it invalidates a gate already recorded as passing. I hand-verified this rather than trusting the audit agent: AccountDeletionRequest is written in exactly one place and read in none; the admin GDPR queue reads a different table the user flow never writes; and the only delete implementation renames the users row without issuing a DELETE, so the FK cascades its own comment relies on cannot fire. A user who taps 'delete my account' has every log, measurement, photo, chat message and payment row retained indefinitely. Play requires deletion to delete, so this is a rejection risk on submission, not post-launch cleanup. I have NOT written the purge: enumerating every user-scoped table and destroying production rows is exactly the irreversible cross-schema change that needs your go-ahead and a staging rehearsal first, and I am not doing it unattended. Say go and I will write it with a dry-run mode that reports row counts per table before anything is destroyed.",
-      "reviewedAt": "2026-09-25T18:36:23.661Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -349,14 +369,15 @@
           "kind": "review",
           "text": "LAUNCH BLOCKER, and it invalidates a gate already recorded as passing. I hand-verified this rather than trusting the audit agent: AccountDeletionRequest is written in exactly one place and read in none; the admin GDPR queue reads a different table the user flow never writes; and the only delete implementation renames the users row without issuing a DELETE, so the FK cascades its own comment relies on cannot fire. A user who taps 'delete my account' has every log, measurement, photo, chat message and payment row retained indefinitely. Play requires deletion to delete, so this is a rejection risk on submission, not post-launch cleanup. I have NOT written the purge: enumerating every user-scoped table and destroying production rows is exactly the irreversible cross-schema change that needs your go-ahead and a staging rehearsal first, and I am not doing it unattended. Say go and I will write it with a dry-run mode that reports row counts per table before anything is destroyed.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T10:16:43.262Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Real erasure. purge_user deletes everything that names the user in one transaction (found from the live FK graph), detaches others' rows, hands over shared groups/challenges, tombstones users, removes uploads, and writes a counts-only receipt. The daily 03:00 IST job purges verified requests after 7 days; admin GDPR delete uses the same purge. BE aabc844 + FE fecc4f02 (screen copy). G6 re-tested on prod MySQL: throwaway user 13 rows deleted, 0 left outside retained tables.",
+          "by": "shakeebshaan"
         }
-      ],
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-10-09T07:35:50.331Z",
-        "expiresAt": "2026-10-09T11:35:50.331Z",
-        "note": "session a5: fix-issues run 2026-10-09"
-      }
+      ]
     },
     {
       "id": "i-20260912-sa1p",
