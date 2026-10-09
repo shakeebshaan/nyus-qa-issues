@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261009-ugc1",
+      "createdAt": "2026-10-09T16:58:22.334Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "play",
+        "policy",
+        "launch-blocker"
+      ],
+      "route": "/partners",
+      "description": "[P1, Play UGC policy] Users cannot REPORT another user or a message anywhere in the app. Found 2026-10-09 while redoing the IARC content rating, which now has to answer 'report users or content: No'. What exists: blocking (POST /coach-social/block/<user>, BlockedUsers page) and admin-side moderation (app/admin_v2/moderation.py reads admin_message_reports and can mute, delete and hide). Nothing WRITES admin_message_reports: no user-facing endpoint, no Report button. Play's User Generated Content policy expects an in-app way to report objectionable UGC and users in apps where users exchange content (DMs, partner/group chat, social feed). Production review may flag it (see d5ro). Fix: (1) BE POST /api/v1/reports {message_id?, source: dm|group|feed, reported_user_id, reason} → insert admin_message_reports, rate-limited, log_generic to Discord with ids only (pii1 rules); (2) FE 'Report' in the DM and group message long-press menus, the partner/user profile sheet and feed post menus, with a short reason picker and a calm confirmation; (3) after shipping, re-answer the IARC question (report = yes) in Play Console → Content ratings.",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": []
+    },
+    {
       "id": "i-20261009-pk01",
       "createdAt": "2026-10-09T10:55:17.207Z",
       "author": "shakeebshaan",
