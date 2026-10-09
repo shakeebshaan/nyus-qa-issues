@@ -1693,7 +1693,7 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "ENGINEERING HALF OF (b) DONE 2026-09-07 — see docs/PLAY_LISTING_PREP.md (commit b3c0f49e). This is CONFIGURATION, not code: the app-side Google integration already works and degrades to email+OTP when unconfigured. The problem precisely: Play App Signing re-signs every upload, so the certificate users actually run is NOT our upload key, and Google Sign-In validates against the running one — until the Play App Signing SHA-1 is registered on the Android OAuth client, on-device sign-in fails with '[16] Account reauth failed' (i-20260623-16b7). Upload key SHA-1, read from the keystore: B9:5C:EA:C4:08:94:17:5B:7E:E1:E8:91:AA:D1:2E:22:18:4A:04:4C — that one is probably already registered and is NOT the one that matters. YOURS: Play Console > Setup > App signing > copy the App signing key SHA-1 (differs from the above); add it to the Android OAuth client for com.nyus.nyusand in GCP project nyus-and (keep the upload SHA too); confirm the OAuth consent screen is PUBLISHED not Testing (in Testing only listed users can sign in, which looks identical to a broken button). I cannot do this half — gcloud is not installed here and the Play App Signing cert is not exposed by the Play Developer API. TRAP: verify on a build installed FROM THE PLAY TRACK, not a local APK — a locally-signed install carries the upload key and passes even while production is broken. (a) crash-free baseline still needs alpha soak volume; (c) support inbox is not engineering work.",
+      "reviewReason": "UPDATED 2026-10-09. (b) Google sign-in CONFIG VERIFIED. Play has two app-signing certs: latest A5:83:5C... and legacy 7C:0B:90:40... (GMS checks the legacy one after the Apr key upgrade). Both have Android OAuth clients on com.nyus.nyusand in GCP nyus-and, as do the upload and debug keys, and the OAuth consent screen is In production / External. Still to do: ONE sign-in on a phone with the app installed FROM the Play internal or alpha track (289 is on internal now). I have no device here. (a) Play Android vitals shows 'Data unavailable' for crash and ANR: alpha volume is under Play's reporting threshold, so a Play crash-free baseline cannot exist before production users do. Until then, app crashes reach #errors through /telemetry/client-error (obs1). (c) Support@nyus.in is the store contact email; its MX is Zoho Mail (mx.zoho.in). Only you can confirm someone reads it.",
       "fix": null,
       "history": [],
       "thread": [
@@ -1709,9 +1709,16 @@
           "kind": "review",
           "text": "ENGINEERING HALF OF (b) DONE 2026-09-07 — see docs/PLAY_LISTING_PREP.md (commit b3c0f49e). This is CONFIGURATION, not code: the app-side Google integration already works and degrades to email+OTP when unconfigured. The problem precisely: Play App Signing re-signs every upload, so the certificate users actually run is NOT our upload key, and Google Sign-In validates against the running one — until the Play App Signing SHA-1 is registered on the Android OAuth client, on-device sign-in fails with '[16] Account reauth failed' (i-20260623-16b7). Upload key SHA-1, read from the keystore: B9:5C:EA:C4:08:94:17:5B:7E:E1:E8:91:AA:D1:2E:22:18:4A:04:4C — that one is probably already registered and is NOT the one that matters. YOURS: Play Console > Setup > App signing > copy the App signing key SHA-1 (differs from the above); add it to the Android OAuth client for com.nyus.nyusand in GCP project nyus-and (keep the upload SHA too); confirm the OAuth consent screen is PUBLISHED not Testing (in Testing only listed users can sign in, which looks identical to a broken button). I cannot do this half — gcloud is not installed here and the Play App Signing cert is not exposed by the Play Developer API. TRAP: verify on a build installed FROM THE PLAY TRACK, not a local APK — a locally-signed install carries the upload key and passes even while production is broken. (a) crash-free baseline still needs alpha soak volume; (c) support inbox is not engineering work.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T16:58:01.060Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "UPDATED 2026-10-09. (b) Google sign-in CONFIG VERIFIED. Play has two app-signing certs: latest A5:83:5C... and legacy 7C:0B:90:40... (GMS checks the legacy one after the Apr key upgrade). Both have Android OAuth clients on com.nyus.nyusand in GCP nyus-and, as do the upload and debug keys, and the OAuth consent screen is In production / External. Still to do: ONE sign-in on a phone with the app installed FROM the Play internal or alpha track (289 is on internal now). I have no device here. (a) Play Android vitals shows 'Data unavailable' for crash and ANR: alpha volume is under Play's reporting threshold, so a Play crash-free baseline cannot exist before production users do. Until then, app crashes reach #errors through /telemetry/client-error (obs1). (c) Support@nyus.in is the store contact email; its MX is Zoho Mail (mx.zoho.in). Only you can confirm someone reads it.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-09-07T03:22:34.450Z",
+      "reviewedAt": "2026-10-09T16:58:01.060Z",
       "reviewedBy": "shakeebshaan"
     },
     {
