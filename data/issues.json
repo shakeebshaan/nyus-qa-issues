@@ -460,8 +460,29 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Rotated after all (owner asked to fix it in session ab, after the accepted-risk close). New key 599e40accedb is on the VM outside the repo via FIREBASE_CREDENTIALS_PATH. The backend loaded it and an FCM dry-run send succeeded. The leaked key 28394d25990f is DELETED in Google Cloud, so the copy in git history is dead.",
+        "imagePath": "images/i-20260926-key1-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260926-key1-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4f5516f50a49caba1ecb25ab502de924f5d636bf",
+        "imageCommits": [
+          "4f5516f50a49caba1ecb25ab502de924f5d636bf"
+        ],
+        "fixedAt": "2026-10-09T15:47:16.977Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Executed: console delete confirmed; prod verified on the new key."
+        }
+      },
       "history": [
         {
           "event": "owner-decision",
@@ -485,8 +506,6 @@
         }
       ],
       "needsReview": false,
-      "reviewReason": "OWNER ACTION, console-only, and it is the highest-severity thing the launch audit found. A live Firebase Admin service-account private key (firebase-adminsdk-fbsvc@nyus-and) has been committed in nyu_backend since 2025-11-10. The .gitignore rule nyus-and-*.json reads like protection and has never been any: gitignore does not apply to already-tracked files, and git check-ignore confirms the key is not ignored. The repo is private, so this is not a public leak and I am not treating it as an active incident — but the key is Firebase Admin on the project (push to every user, custom-token minting for any account), it is in every clone and every commit of the past, and rotation in the console is the only thing that actually revokes it. I removed the blocker that made rotation impossible: the credential path was hardcoded, so the file could not be untracked without prod deleting it on the next git-pull deploy and killing push silently. backend.py now resolves env-first (fe27c51), so the sequence is safe. Do it in this order: rotate in the Firebase console, put the new key on the VM and set FIREBASE_CREDENTIALS_PATH in .env, restart and confirm a real push lands, and only then git rm --cached the old file. Untracking first breaks production push notifications.",
-      "reviewedAt": "2026-09-26T16:56:57.607Z",
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -513,6 +532,13 @@
           "who": "owner",
           "kind": "reopen",
           "text": "Reopened only to correct the record: the key WAS rotated on 2026-10-09 after the accepted-risk close (owner asked to fix key1 in session ab).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T15:47:16.977Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Rotated after all (owner asked to fix it in session ab, after the accepted-risk close). New key 599e40accedb is on the VM outside the repo via FIREBASE_CREDENTIALS_PATH. The backend loaded it and an FCM dry-run send succeeded. The leaked key 28394d25990f is DELETED in Google Cloud, so the copy in git history is dead.",
           "by": "shakeebshaan"
         }
       ]
