@@ -288,15 +288,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "claim": {
+      "status": "fixed",
+      "fix": {
+        "description": "Ownership before fulfilment. Signed in as the account itself: scheduled, cancel link emailed. Anything else: emailed confirm link (72 h, hash stored), nothing deleted until confirmed. Links show a page; only the POST button acts. Responses are identical whether or not the account exists.",
+        "imagePath": "images/i-20260926-req1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260926-req1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ffd1c657aa3756b1619b58a340ecaca6ce2d6416",
+        "imageCommits": [
+          "ffd1c657aa3756b1619b58a340ecaca6ce2d6416"
+        ],
+        "fixedAt": "2026-10-09T10:16:49.710Z",
         "by": "shakeebshaan",
-        "at": "2026-10-09T07:35:55.513Z",
-        "expiresAt": "2026-10-09T11:35:55.513Z",
-        "note": "session a5: fix-issues run 2026-10-09"
-      }
+        "appCommit": "aabc844",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Live on prod: real vs nonexistent email gave byte-identical responses; DB rows correct (pending_verification vs no_account); bogus tokens 404. 11 flow tests."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-10-09T10:16:49.710Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Ownership before fulfilment. Signed in as the account itself: scheduled, cancel link emailed. Anything else: emailed confirm link (72 h, hash stored), nothing deleted until confirmed. Links show a page; only the POST button acts. Responses are identical whether or not the account exists.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260926-bak1",
