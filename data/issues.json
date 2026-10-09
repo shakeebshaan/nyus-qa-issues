@@ -460,21 +460,28 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED (accepted risk). The Firebase admin key stays as it is; no rotation.\n\nWhat the acceptance rests on: nyu_backend is a PRIVATE repo, so the key is exposed only to people and machines with repo access. What it would cost if that ever changes (repo made public, a clone leaks): full admin over Firebase project nyus-and — push notifications to every user, Firebase data read/write. Rotation, when wanted, is ~5 minutes: Firebase console → service accounts → new key → replace the file on prod → delete the old key. sec2 (JWT/Flask keys in history) is a separate item and is unaffected by this decision.",
-        "fixedAt": "2026-10-09T12:26:06.775Z",
-        "by": "shakeebshaan",
-        "imagePath": null,
-        "imagePaths": [],
-        "imageCommit": null,
-        "imageCommits": []
-      },
+      "status": "open",
+      "fix": null,
       "history": [
         {
           "event": "owner-decision",
           "at": "2026-10-09T12:26:06.775Z",
           "note": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED (accepted risk). The Firebase admin key stays as it is; no rotation."
+        },
+        {
+          "at": "2026-10-09T15:47:11.211Z",
+          "event": "reopened",
+          "note": "Reopened only to correct the record: the key WAS rotated on 2026-10-09 after the accepted-risk close (owner asked to fix key1 in session ab).",
+          "by": "shakeebshaan",
+          "previousFix": {
+            "description": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED (accepted risk). The Firebase admin key stays as it is; no rotation.\n\nWhat the acceptance rests on: nyu_backend is a PRIVATE repo, so the key is exposed only to people and machines with repo access. What it would cost if that ever changes (repo made public, a clone leaks): full admin over Firebase project nyus-and — push notifications to every user, Firebase data read/write. Rotation, when wanted, is ~5 minutes: Firebase console → service accounts → new key → replace the file on prod → delete the old key. sec2 (JWT/Flask keys in history) is a separate item and is unaffected by this decision.",
+            "fixedAt": "2026-10-09T12:26:06.775Z",
+            "by": "shakeebshaan",
+            "imagePath": null,
+            "imagePaths": [],
+            "imageCommit": null,
+            "imageCommits": []
+          }
         }
       ],
       "needsReview": false,
@@ -500,6 +507,13 @@
           "who": "claude",
           "kind": "resolve",
           "text": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED (accepted risk). The Firebase admin key stays as it is; no rotation.\n\nWhat the acceptance rests on: nyu_backend is a PRIVATE repo, so the key is exposed only to people and machines with repo access. What it would cost if that ever changes (repo made public, a clone leaks): full admin over Firebase project nyus-and — push notifications to every user, Firebase data read/write. Rotation, when wanted, is ~5 minutes: Firebase console → service accounts → new key → replace the file on prod → delete the old key. sec2 (JWT/Flask keys in history) is a separate item and is unaffected by this decision."
+        },
+        {
+          "at": "2026-10-09T15:47:11.211Z",
+          "who": "owner",
+          "kind": "reopen",
+          "text": "Reopened only to correct the record: the key WAS rotated on 2026-10-09 after the accepted-risk close (owner asked to fix key1 in session ab).",
+          "by": "shakeebshaan"
         }
       ]
     },
