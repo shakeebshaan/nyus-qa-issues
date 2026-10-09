@@ -1654,7 +1654,7 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "DECISION RECORDED 2026-09-07: rollout goes straight to 100%, no staged 10/25/50 ramp. Deliberately NOT marked fixed, because it cannot execute yet and saying otherwise would be false: Google will not accept a production release until the Data safety form is SUBMITTED (d3ds) and the listing has screenshots + feature graphic (d2as) — both still open on this board. Current state: alpha is at build 285 (v1.9.96); production still serves the old v1.0.2 listing. Once d2as and d3ds clear, promotion is one command from android/ ('fastlane release') and per this decision it goes to 100% in one step. One thing to weigh before pulling it: 100% has no staged safety net, so the crash-free baseline in d4vt is the number to read FIRST — there will be no partial-exposure window in which to catch a regression. This item stays open as the reminder to promote once the two hard gates clear.",
+      "reviewReason": "READY TO PULL, NOT PULLED (2026-10-09). Gates: data safety, content rating and privacy URL PUBLISHED (submission 247). Store listing (en-GB fixed) and alpha 1.10.0 (289) are in Google review (249). Sign-in config verified (d4vt). Production promotion stays your call. Your rule was to read the crash-free baseline first, and Play reports no crash data at alpha volume, so that read cannot happen before launch. When you say go: from android/ run 'fastlane release', which promotes alpha 289 to production at 100% per your 2026-09-07 decision; it works once 249 is approved. Promotion also clears Play's 'target API 36' warning, since 289 targets 36. Risk to weigh first: the app has no in-app REPORT for users or messages (new board issue), which Play's UGC policy expects; production review may flag it.",
       "fix": null,
       "history": [],
       "thread": [
@@ -1670,9 +1670,16 @@
           "kind": "review",
           "text": "DECISION RECORDED 2026-09-07: rollout goes straight to 100%, no staged 10/25/50 ramp. Deliberately NOT marked fixed, because it cannot execute yet and saying otherwise would be false: Google will not accept a production release until the Data safety form is SUBMITTED (d3ds) and the listing has screenshots + feature graphic (d2as) — both still open on this board. Current state: alpha is at build 285 (v1.9.96); production still serves the old v1.0.2 listing. Once d2as and d3ds clear, promotion is one command from android/ ('fastlane release') and per this decision it goes to 100% in one step. One thing to weigh before pulling it: 100% has no staged safety net, so the crash-free baseline in d4vt is the number to read FIRST — there will be no partial-exposure window in which to catch a regression. This item stays open as the reminder to promote once the two hard gates clear.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T16:58:04.750Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "READY TO PULL, NOT PULLED (2026-10-09). Gates: data safety, content rating and privacy URL PUBLISHED (submission 247). Store listing (en-GB fixed) and alpha 1.10.0 (289) are in Google review (249). Sign-in config verified (d4vt). Production promotion stays your call. Your rule was to read the crash-free baseline first, and Play reports no crash data at alpha volume, so that read cannot happen before launch. When you say go: from android/ run 'fastlane release', which promotes alpha 289 to production at 100% per your 2026-09-07 decision; it works once 249 is approved. Promotion also clears Play's 'target API 36' warning, since 289 targets 36. Risk to weigh first: the app has no in-app REPORT for users or messages (new board issue), which Play's UGC policy expects; production review may flag it.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-09-07T03:45:07.359Z",
+      "reviewedAt": "2026-10-09T16:58:04.750Z",
       "reviewedBy": "shakeebshaan"
     },
     {
