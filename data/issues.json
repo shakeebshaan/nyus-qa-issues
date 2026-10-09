@@ -174,15 +174,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "claim": {
+      "status": "fixed",
+      "fix": {
+        "description": "Took the recommended option: a backend sink rather than a secret in the APK. Swallowed 5xx (~170 routes) now reach #errors through an after_request hook, deduped. POST /telemetry/client-error forwards app crashes with the user id only. The FE error reporter (fd415c46) sends there in release builds, and RouteErrorBoundary reports each crash once. Still yours: an external uptime pinger on https://nyus.in/api/v1/health (UptimeRobot, about 5 min).",
+        "imagePath": "images/i-20261009-obs1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261009-obs1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "530eb7138e874a7ad60ac32250e0eec6d9f8fff2",
+        "imageCommits": [
+          "530eb7138e874a7ad60ac32250e0eec6d9f8fff2"
+        ],
+        "fixedAt": "2026-10-09T10:17:20.139Z",
         "by": "shakeebshaan",
-        "at": "2026-10-09T07:35:44.659Z",
-        "expiresAt": "2026-10-09T11:35:44.659Z",
-        "note": "session a5: fix-issues run 2026-10-09"
-      }
+        "appCommit": "97bc291",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "BE live; handler ordering proved against real Flask; FE suite 287 files green after the rebase. -10: the uptime pinger is owner console work, and the FE half reaches users with the next OTA/release."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-10-09T10:17:20.139Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Took the recommended option: a backend sink rather than a secret in the APK. Swallowed 5xx (~170 routes) now reach #errors through an after_request hook, deduped. POST /telemetry/client-error forwards app crashes with the user id only. The FE error reporter (fd415c46) sends there in release builds, and RouteErrorBoundary reports each crash once. Still yours: an external uptime pinger on https://nyus.in/api/v1/health (UptimeRobot, about 5 min).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261009-lgl1",
