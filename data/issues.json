@@ -103,9 +103,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Took the recommended option: stop mirroring bodies. Every Discord logger now redacts at the one chokepoint. Users appear by id, message bodies by length only, and payloads keep only operational keys (ids, counts, status, timestamps). Errors keep tracebacks with emails scrubbed and a hashed user ref. Telemetry sends prop names only. The privacy policy says the same. Old Discord history is yours to purge (recreate the channels).",
+        "imagePath": "images/i-20261009-pii1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261009-pii1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "59305451397cdae3968e57af5f13c575773f2ffb",
+        "imageCommits": [
+          "59305451397cdae3968e57af5f13c575773f2ffb"
+        ],
+        "fixedAt": "2026-10-09T15:46:38.724Z",
+        "by": "shakeebshaan",
+        "appCommit": "ca010d1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "201 logger tests incl. 6 privacy contracts; live. -8: pre-today Discord history still holds old content (needs a Discord-side purge)."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-10-09T15:46:38.724Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Took the recommended option: stop mirroring bodies. Every Discord logger now redacts at the one chokepoint. Users appear by id, message bodies by length only, and payloads keep only operational keys (ids, counts, status, timestamps). Errors keep tracebacks with emails scrubbed and a hashed user ref. Telemetry sends prop names only. The privacy policy says the same. Old Discord history is yours to purge (recreate the channels).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261009-sec2",
