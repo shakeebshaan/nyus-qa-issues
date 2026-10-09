@@ -1773,10 +1773,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "ENGINEERING HALF IS DONE — DRAFT ART IS WAITING FOR YOU (supersedes the earlier 'the QA account cannot produce marketing art' note; that was true of the lapsed QA account, not of the demo account I then created). All six files are at nyus-qa-issues/tmp/store-assets/ on the main machine: feature-graphic-1024x500.png (exactly 1024x500, brand tokens, centre-left kept clear because Play overlays a play button there when a listing has a video) plus five 1080x1920 phone screenshots — 1-dashboard (7-day streak, 63.4 kg, 9% to goal, 2 of 3 meals), 2-nutrition (1700/1847 kcal, 4/5 logged, macro bars), 3-activity (3/6 exercises, 9/18 sets, 330 kg volume, 1/7 sessions), 4-coach (Freya, real first message), 5-achievements (Level 7, 9 of 43 badges). They are real app screens, not mockups: a disposable demo account (qa.store.demo7@dosbee.com) completed the full 12-step onboarding for a real AI plan, then a day was logged THROUGH THE PUBLIC API — weigh-in, water, sleep, steps, two planned meals marked eaten, two extra meals, a completed session and a second one left part-way. No direct DB writes, no other account touched; every seed script refuses to run unless the credentials match /demo/i. Harness + the six traps that each cost a capture pass are committed at tools/store-assets/ (1fdba913). WHAT I NEED FROM YOU: (1) approve or reject the set — you are the only one who can sign off marketing art; (2) if approved, the captions in capture-list.json are drafts, tell me if you want different ones; (3) Play wants 2-8 phone shots, so if you want fewer than five, say which to drop. Uploading to the Console is yours (console + human), and d5ro (100% rollout) stays blocked behind this and d3ds. SEPARATE FINDING, not blocking: finishing a session advances the progressive plan immediately, so 'Today's Activity' re-renders the NEXT session at 0/6 and the screen reads as untouched on a day you actually trained — that is why the screenshot uses a part-way session. Worth its own issue.",
-      "fix": null,
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "en-US already had the final 6 screenshots plus feature graphic. The gap was en-GB, which is the DEFAULT listing: it still showed the January promo art as a screenshot, the old icon, the title 'NYUS', and copy promising 'certified' and 'real human' coaches. en-GB now mirrors en-US exactly (same image sha256s, same text). In Google review as part of submission 249.",
+        "imagePath": "images/i-20260819-d2as-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-d2as-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1166e886c85ea3171fde1e9f3a1bb4d4cdce32e7",
+        "imageCommits": [
+          "1166e886c85ea3171fde1e9f3a1bb4d4cdce32e7"
+        ],
+        "fixedAt": "2026-10-09T16:57:25.440Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "API read-back: en-GB images byte-identical to en-US; live after Google review 249"
+        }
+      },
       "history": [],
       "thread": [
         {
@@ -1798,9 +1818,15 @@
           "kind": "review",
           "text": "ENGINEERING HALF IS DONE — DRAFT ART IS WAITING FOR YOU (supersedes the earlier 'the QA account cannot produce marketing art' note; that was true of the lapsed QA account, not of the demo account I then created). All six files are at nyus-qa-issues/tmp/store-assets/ on the main machine: feature-graphic-1024x500.png (exactly 1024x500, brand tokens, centre-left kept clear because Play overlays a play button there when a listing has a video) plus five 1080x1920 phone screenshots — 1-dashboard (7-day streak, 63.4 kg, 9% to goal, 2 of 3 meals), 2-nutrition (1700/1847 kcal, 4/5 logged, macro bars), 3-activity (3/6 exercises, 9/18 sets, 330 kg volume, 1/7 sessions), 4-coach (Freya, real first message), 5-achievements (Level 7, 9 of 43 badges). They are real app screens, not mockups: a disposable demo account (qa.store.demo7@dosbee.com) completed the full 12-step onboarding for a real AI plan, then a day was logged THROUGH THE PUBLIC API — weigh-in, water, sleep, steps, two planned meals marked eaten, two extra meals, a completed session and a second one left part-way. No direct DB writes, no other account touched; every seed script refuses to run unless the credentials match /demo/i. Harness + the six traps that each cost a capture pass are committed at tools/store-assets/ (1fdba913). WHAT I NEED FROM YOU: (1) approve or reject the set — you are the only one who can sign off marketing art; (2) if approved, the captions in capture-list.json are drafts, tell me if you want different ones; (3) Play wants 2-8 phone shots, so if you want fewer than five, say which to drop. Uploading to the Console is yours (console + human), and d5ro (100% rollout) stays blocked behind this and d3ds. SEPARATE FINDING, not blocking: finishing a session advances the progressive plan immediately, so 'Today's Activity' re-renders the NEXT session at 0/6 and the screen reads as untouched on a day you actually trained — that is why the screenshot uses a part-way session. Worth its own issue.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T16:57:25.440Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "en-US already had the final 6 screenshots plus feature graphic. The gap was en-GB, which is the DEFAULT listing: it still showed the January promo art as a screenshot, the old icon, the title 'NYUS', and copy promising 'certified' and 'real human' coaches. en-GB now mirrors en-US exactly (same image sha256s, same text). In Google review as part of submission 249.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-09-12T04:32:27.128Z",
       "reviewedBy": "shakeebshaan"
     },
     {
