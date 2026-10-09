@@ -259,9 +259,10 @@
       "createdAt": "2026-09-26T17:00:18.228Z",
       "author": "shakeebshaan",
       "tags": [
-        "launch-blocker",
         "play",
-        "payments"
+        "payments",
+        "owner-decided",
+        "accepted-risk"
       ],
       "route": "/choose-plan",
       "description": "[P0 / OWNER DECISION — hand-verified] The Rs 499/mo subscription is sold in-app through Razorpay with NO Google Play Billing anywhere. capacitor-razorpay is in package.json; there is no com.android.billingclient in android/app/build.gradle and no billing plugin in package.json. What is sold is digital and consumed in the app (AI coaching, generated plans), which is exactly what Play's Payments policy requires Play Billing for — this is a rejection or suspension trigger on the production submission, and it is structural, not a code bug. THREE REAL OPTIONS, each with a cost: (1) Integrate Play Billing — policy-safe everywhere, Google takes 15% on subscriptions, and the Razorpay path must be hidden inside the Android app. (2) User Choice Billing (India) — after the CCI ruling Google permits an alternative biller alongside Play Billing for Indian users at a reduced service fee; keeps Razorpay, but Play Billing must still be offered as a choice, so it is integration work plus enrolment. (3) The person-delivered-service exemption — only holds if a real human coach delivers the service; the app presents AI coaches (Freya etc.), so claiming it would be misrepresentation. My recommendation is (2) for an India-first app: it keeps UPI via Razorpay, which is what Indian users actually pay with, at the lowest compliant fee. This needs your call because it changes the unit economics.",
@@ -270,10 +271,24 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
+      "status": "fixed",
+      "fix": {
+        "description": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED IN CODE (accepted risk). Billing stays Razorpay-only; Google Play Billing will not be integrated.\n\nDissent, recorded once: Play's Payments policy names fitness subscriptions among the digital goods that must use Play Billing. India's User Choice Billing still requires Play Billing to be OFFERED beside the alternative (Razorpay transactions then pay ~11% instead of 15%), and Google's help page lists \"alternative billing only\" (no Play option) for the EEA only, not India. As shipped, the risk is a rejection at production review, or removal later (Google began removing non-compliant apps in India in 2024). Closed-testing builds 287/288 were accepted, but that is not the production review.\n\nThe one compliant route that keeps Razorpay-only: CONSUMPTION-ONLY on Android — sell the subscription on nyus.in through Razorpay; the Android app shows no prices, buy buttons or purchase links, and unlocks for anyone who subscribed on the web. Zero Google fee. Not built: it changes the paywall and conversion, so it waits for your word.\n\nKnock-on: the public refund policy still says refunds go through Google Play, which never handles a payment here — that text is part of lgl1.",
+        "fixedAt": "2026-10-09T12:26:06.775Z",
+        "by": "shakeebshaan",
+        "imagePath": null,
+        "imagePaths": [],
+        "imageCommit": null,
+        "imageCommits": []
+      },
+      "history": [
+        {
+          "event": "owner-decision",
+          "at": "2026-10-09T12:26:06.775Z",
+          "note": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED IN CODE (accepted risk). Billing stays Razorpay-only; Google Play Billing will not be integrated."
+        }
+      ],
+      "needsReview": false,
       "reviewReason": "LAUNCH BLOCKER that needs a business decision, not code. Rs 499/mo digital subscription sold in-app via Razorpay; zero Play Billing in the build. Play's Payments policy rejects this on production submission. Options with costs are in the description; I recommend User Choice Billing (India) because it keeps UPI via Razorpay at the lowest compliant fee — but it changes your margins, so it is your call.",
       "reviewedAt": "2026-09-26T17:00:24.236Z",
       "reviewedBy": "shakeebshaan",
@@ -284,6 +299,18 @@
           "kind": "review",
           "text": "LAUNCH BLOCKER that needs a business decision, not code. Rs 499/mo digital subscription sold in-app via Razorpay; zero Play Billing in the build. Play's Payments policy rejects this on production submission. Options with costs are in the description; I recommend User Choice Billing (India) because it keeps UPI via Razorpay at the lowest compliant fee — but it changes your margins, so it is your call.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T12:26:06.775Z",
+          "who": "owner",
+          "kind": "reply",
+          "text": "we are using the razorpay only not google pay billing"
+        },
+        {
+          "at": "2026-10-09T12:26:06.775Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED IN CODE (accepted risk). Billing stays Razorpay-only; Google Play Billing will not be integrated.\n\nDissent, recorded once: Play's Payments policy names fitness subscriptions among the digital goods that must use Play Billing. India's User Choice Billing still requires Play Billing to be OFFERED beside the alternative (Razorpay transactions then pay ~11% instead of 15%), and Google's help page lists \"alternative billing only\" (no Play option) for the EEA only, not India. As shipped, the risk is a rejection at production review, or removal later (Google began removing non-compliant apps in India in 2024). Closed-testing builds 287/288 were accepted, but that is not the production review.\n\nThe one compliant route that keeps Razorpay-only: CONSUMPTION-ONLY on Android — sell the subscription on nyus.in through Razorpay; the Android app shows no prices, buy buttons or purchase links, and unlocks for anyone who subscribed on the web. Zero Google fee. Not built: it changes the paywall and conversion, so it waits for your word.\n\nKnock-on: the public refund policy still says refunds go through Google Play, which never handles a payment here — that text is part of lgl1."
         }
       ]
     },
@@ -325,9 +352,10 @@
       "createdAt": "2026-09-26T16:56:53.047Z",
       "author": "shakeebshaan",
       "tags": [
-        "launch-blocker",
         "security",
-        "secrets"
+        "secrets",
+        "owner-decided",
+        "accepted-risk"
       ],
       "route": null,
       "description": "[P0 / OWNER ACTION — hand-verified] A LIVE FIREBASE ADMIN PRIVATE KEY IS COMMITTED TO THE BACKEND REPO. nyu_backend/nyus-and-28394d25990f.json — type service_account, project nyus-and, client_email firebase-adminsdk-fbsvc@nyus-and.iam.gserviceaccount.com, private_key_id 28394d25990f..., RSA private key present. Tracked since 2025-11-10 (commit 227e8a3, 'Add push notification debug guide and Firebase config') — ten months. .gitignore:41 contains `nyus-and-*.json`, which LOOKS like a guard and is not one: gitignore is ignored for already-tracked files, and `git check-ignore -v` confirms the key is NOT ignored. MITIGATING: the repo is PRIVATE, so this is not a public internet leak. NOT MITIGATING: the key grants Firebase Admin on the project — arbitrary push to every user and custom-token minting (impersonate any account) — it exists in every clone and at every point in history, and no amount of deleting it today removes it from the past. ROTATION IN THE GOOGLE CONSOLE IS THE ONLY REAL FIX, and that is yours. ORDER MATTERS, GET IT WRONG AND PROD BREAKS: (1) rotate/revoke the key in the Firebase console; (2) put the new key on the VM out of band and set FIREBASE_CREDENTIALS_PATH (or FIREBASE_CREDENTIALS_JSON) in ~/nyu_backend/.env; (3) restart and verify a real push arrives; (4) only THEN `git rm --cached nyus-and-28394d25990f.json`. Do NOT untrack first: prod deploys by `git pull`, so removing it from the index deletes it from the server on the next deploy, and initialize_firebase_admin only logs a warning and returns False — push notifications would die silently. Step (2) is now possible because the hardcoded path is gone: backend.py resolves env-first as of fe27c51. Optional afterwards: history rewrite (filter-repo) — secondary, and a rotated key makes it cosmetic.",
@@ -336,10 +364,24 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
-      "needsReview": true,
+      "status": "fixed",
+      "fix": {
+        "description": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED (accepted risk). The Firebase admin key stays as it is; no rotation.\n\nWhat the acceptance rests on: nyu_backend is a PRIVATE repo, so the key is exposed only to people and machines with repo access. What it would cost if that ever changes (repo made public, a clone leaks): full admin over Firebase project nyus-and — push notifications to every user, Firebase data read/write. Rotation, when wanted, is ~5 minutes: Firebase console → service accounts → new key → replace the file on prod → delete the old key. sec2 (JWT/Flask keys in history) is a separate item and is unaffected by this decision.",
+        "fixedAt": "2026-10-09T12:26:06.775Z",
+        "by": "shakeebshaan",
+        "imagePath": null,
+        "imagePaths": [],
+        "imageCommit": null,
+        "imageCommits": []
+      },
+      "history": [
+        {
+          "event": "owner-decision",
+          "at": "2026-10-09T12:26:06.775Z",
+          "note": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED (accepted risk). The Firebase admin key stays as it is; no rotation."
+        }
+      ],
+      "needsReview": false,
       "reviewReason": "OWNER ACTION, console-only, and it is the highest-severity thing the launch audit found. A live Firebase Admin service-account private key (firebase-adminsdk-fbsvc@nyus-and) has been committed in nyu_backend since 2025-11-10. The .gitignore rule nyus-and-*.json reads like protection and has never been any: gitignore does not apply to already-tracked files, and git check-ignore confirms the key is not ignored. The repo is private, so this is not a public leak and I am not treating it as an active incident — but the key is Firebase Admin on the project (push to every user, custom-token minting for any account), it is in every clone and every commit of the past, and rotation in the console is the only thing that actually revokes it. I removed the blocker that made rotation impossible: the credential path was hardcoded, so the file could not be untracked without prod deleting it on the next git-pull deploy and killing push silently. backend.py now resolves env-first (fe27c51), so the sequence is safe. Do it in this order: rotate in the Firebase console, put the new key on the VM and set FIREBASE_CREDENTIALS_PATH in .env, restart and confirm a real push lands, and only then git rm --cached the old file. Untracking first breaks production push notifications.",
       "reviewedAt": "2026-09-26T16:56:57.607Z",
       "reviewedBy": "shakeebshaan",
@@ -350,6 +392,18 @@
           "kind": "review",
           "text": "OWNER ACTION, console-only, and it is the highest-severity thing the launch audit found. A live Firebase Admin service-account private key (firebase-adminsdk-fbsvc@nyus-and) has been committed in nyu_backend since 2025-11-10. The .gitignore rule nyus-and-*.json reads like protection and has never been any: gitignore does not apply to already-tracked files, and git check-ignore confirms the key is not ignored. The repo is private, so this is not a public leak and I am not treating it as an active incident — but the key is Firebase Admin on the project (push to every user, custom-token minting for any account), it is in every clone and every commit of the past, and rotation in the console is the only thing that actually revokes it. I removed the blocker that made rotation impossible: the credential path was hardcoded, so the file could not be untracked without prod deleting it on the next git-pull deploy and killing push silently. backend.py now resolves env-first (fe27c51), so the sequence is safe. Do it in this order: rotate in the Firebase console, put the new key on the VM and set FIREBASE_CREDENTIALS_PATH in .env, restart and confirm a real push lands, and only then git rm --cached the old file. Untracking first breaks production push notifications.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T12:26:06.775Z",
+          "who": "owner",
+          "kind": "reply",
+          "text": "ignore this \"A live Firebase admin private key is still committed in the backend repo. It needs rotating.\""
+        },
+        {
+          "at": "2026-10-09T12:26:06.775Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "CLOSED BY OWNER DECISION 2026-10-09 — NOT FIXED (accepted risk). The Firebase admin key stays as it is; no rotation.\n\nWhat the acceptance rests on: nyu_backend is a PRIVATE repo, so the key is exposed only to people and machines with repo access. What it would cost if that ever changes (repo made public, a clone leaks): full admin over Firebase project nyus-and — push notifications to every user, Firebase data read/write. Rotation, when wanted, is ~5 minutes: Firebase console → service accounts → new key → replace the file on prod → delete the old key. sec2 (JWT/Flask keys in history) is a separate item and is unaffected by this decision."
         }
       ]
     },
