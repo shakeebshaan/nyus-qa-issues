@@ -508,9 +508,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "Backups are gpg-encrypted to a dedicated key before emailing (private key offline), fail closed, and alert #errors on every failure. Restore tested for real: 191/191 tables, 464,513/464,513 rows. That test found that NO prior backup could have been restored (GTID_PURGED needs SUPER), fixed in 2b6e38b. Yours: move the key folder to a password manager, delete the old unencrypted backup emails, and set a 90-day auto-delete.",
+        "imagePath": "images/i-20260926-bak1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260926-bak1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "246a8f9b2b7a9529f9cbff897e435daeffec04a4",
+        "imageCommits": [
+          "246a8f9b2b7a9529f9cbff897e435daeffec04a4"
+        ],
+        "fixedAt": "2026-10-09T15:46:45.151Z",
+        "by": "shakeebshaan",
+        "appCommit": "2b6e38b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Executed: restore verified on prod and a real encrypted nightly emailed. 8 tests. -6: mailbox retention and key custody are owner-side."
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-10-09T15:46:45.151Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Backups are gpg-encrypted to a dedicated key before emailing (private key offline), fail closed, and alert #errors on every failure. Restore tested for real: 191/191 tables, 464,513/464,513 rows. That test found that NO prior backup could have been restored (GTID_PURGED needs SUPER), fixed in 2b6e38b. Yours: move the key folder to a password manager, delete the old unencrypted backup emails, and set a 90-day auto-delete.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20260926-del1",
