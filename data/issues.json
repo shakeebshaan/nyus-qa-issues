@@ -69,12 +69,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Declared: READ_RESTING_HEART_RATE, READ_HEART_RATE_VARIABILITY, READ_OXYGEN_SATURATION and READ_RESPIRATORY_RATE in Play Console → Health apps, with justifications. healthVitalsPlayDeclared = true is committed (08e74959). v1.10.0 (289) carries all four: internal testing is live, and alpha plus the declaration are in Google review (submission 249). The privacy policy already names them. Trap, now in learnings: the form lists only permissions from ACTIVE bundles, so the bundle had to go out on internal testing from the console first.",
+        "imagePath": "images/i-20261009-hcv1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261009-hcv1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "00c8a93f3287b8aa0f46b9a93046161913ca660c",
+        "imageCommits": [
+          "00c8a93f3287b8aa0f46b9a93046161913ca660c"
+        ],
+        "fixedAt": "2026-10-09T16:57:31.901Z",
+        "by": "shakeebshaan",
+        "appCommit": "08e74959",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Declaration saved and sent; AAB manifest verified; alpha live after Google review 249"
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "Needs you in Play Console: declare 4 Health Connect vitals permissions (justifications in frontend humanpending.md), then say 'vitals declared'.",
-      "reviewedAt": "2026-10-09T05:31:38.264Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -82,6 +102,13 @@
           "who": "claude",
           "kind": "review",
           "text": "Needs you in Play Console: declare 4 Health Connect vitals permissions (justifications in frontend humanpending.md), then say 'vitals declared'.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T16:57:31.901Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Declared: READ_RESTING_HEART_RATE, READ_HEART_RATE_VARIABILITY, READ_OXYGEN_SATURATION and READ_RESPIRATORY_RATE in Play Console → Health apps, with justifications. healthVitalsPlayDeclared = true is committed (08e74959). v1.10.0 (289) carries all four: internal testing is live, and alpha plus the declaration are in Google review (submission 249). The privacy policy already names them. Trap, now in learnings: the form lists only permissions from ACTIVE bundles, so the bundle had to go out on internal testing from the console first.",
           "by": "shakeebshaan"
         }
       ]
