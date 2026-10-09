@@ -1701,10 +1701,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "needsReview": true,
-      "reviewReason": "STEPS DELIVERED 2026-09-07 — docs/PLAY_DATA_SAFETY_STEPS.md (commit bb44b3f2). Click-path plus the literal answers to type, every one backed by a code citation in docs/PLAY_DATA_SAFETY_INVENTORY.md. Only you can submit it in Play Console. The three answers most likely to be got wrong: (1) 'encrypted in transit' is YES — the app's androidScheme 'http' is the LOCAL WebView origin, not network transport, and it reads like a No; (2) 'user payment info' is YES — we never read card data, but the entire unredacted Razorpay webhook body is persisted and can contain card.last4/vpa/payer contact; (3) most 'shared' answers are YES because coach context, meal photos and event payloads reach OpenAI, Discord and Firebase — whether those count as service providers or third parties is a legal call, so the steps take the conservative answer and say so rather than deciding it for you. Also flagged as a CODE FIX you may prefer over a declaration: Firebase Analytics currently receives weight_kg and calories, i.e. health data to a third-party analytics SDK. Say the word and I will strip those two event params — the events keep working without the values. Meal photos are declared collected+shared (transmitted to OpenAI) but NOT stored, per your d7ph decision, verified in code.",
-      "fix": null,
+      "status": "fixed",
+      "needsReview": false,
+      "fix": {
+        "description": "DONE and PUBLISHED on Play (submission 247, 9 Oct 21:47). Data safety rebuilt from code and submitted through the Play API (204); the live re-export matches the submission (782 rows, 0 differences). Deletion URL fixed (was a 404). Removed phone/address/location/SMS/emails/calendar/audio (not collected); added health, in-app messages, purchase history, device IDs. Content rating redone: 'Users interact' was missing because the January answers predate DMs and partner chat (Brazil ClassInd now 14+, others unchanged). The console's privacy-policy URL was also a 404 (www.nyus.in/privacy-policy.html) and blocked every submission; it is now https://nyus.in/privacy. New finding: the app has no in-app REPORT for users or messages; filed separately.",
+        "imagePath": "images/i-20260819-d3ds-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260819-d3ds-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ade092d9eaa589de7e2554f5be0739ab78ea8c2c",
+        "imageCommits": [
+          "ade092d9eaa589de7e2554f5be0739ab78ea8c2c"
+        ],
+        "fixedAt": "2026-10-09T16:57:19.377Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Published by Google (submission 247); live export equals submission, 0 diffs"
+        }
+      },
       "history": [],
       "thread": [
         {
@@ -1726,9 +1746,15 @@
           "kind": "review",
           "text": "STEPS DELIVERED 2026-09-07 — docs/PLAY_DATA_SAFETY_STEPS.md (commit bb44b3f2). Click-path plus the literal answers to type, every one backed by a code citation in docs/PLAY_DATA_SAFETY_INVENTORY.md. Only you can submit it in Play Console. The three answers most likely to be got wrong: (1) 'encrypted in transit' is YES — the app's androidScheme 'http' is the LOCAL WebView origin, not network transport, and it reads like a No; (2) 'user payment info' is YES — we never read card data, but the entire unredacted Razorpay webhook body is persisted and can contain card.last4/vpa/payer contact; (3) most 'shared' answers are YES because coach context, meal photos and event payloads reach OpenAI, Discord and Firebase — whether those count as service providers or third parties is a legal call, so the steps take the conservative answer and say so rather than deciding it for you. Also flagged as a CODE FIX you may prefer over a declaration: Firebase Analytics currently receives weight_kg and calories, i.e. health data to a third-party analytics SDK. Say the word and I will strip those two event params — the events keep working without the values. Meal photos are declared collected+shared (transmitted to OpenAI) but NOT stored, per your d7ph decision, verified in code.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-09T16:57:19.377Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "DONE and PUBLISHED on Play (submission 247, 9 Oct 21:47). Data safety rebuilt from code and submitted through the Play API (204); the live re-export matches the submission (782 rows, 0 differences). Deletion URL fixed (was a 404). Removed phone/address/location/SMS/emails/calendar/audio (not collected); added health, in-app messages, purchase history, device IDs. Content rating redone: 'Users interact' was missing because the January answers predate DMs and partner chat (Brazil ClassInd now 14+, others unchanged). The console's privacy-policy URL was also a 404 (www.nyus.in/privacy-policy.html) and blocked every submission; it is now https://nyus.in/privacy. New finding: the app has no in-app REPORT for users or messages; filed separately.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-09-07T03:45:11.118Z",
       "reviewedBy": "shakeebshaan"
     },
     {
