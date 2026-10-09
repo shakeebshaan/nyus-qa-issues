@@ -284,12 +284,19 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-10-09T07:35:39.488Z",
-        "expiresAt": "2026-10-09T11:35:39.488Z",
-        "note": "session a5: fix-issues run 2026-10-09"
-      }
+      "needsReview": true,
+      "reviewReason": "Code half SHIPPED (BE e0f8ba7). The password is out of all tracked files; prod detection keys on host+user (prod_env.py, verified True on live prod), so rotating no longer switches the scheduler off. YOURS: the password is still in git history, so rotate it: 1) change it in MySQL, 2) update DATABASE_URL in ~/nyu_backend/.env, 3) sudo systemctl restart nyu-backend. No code change needed. Proof card: tmp/proof-20261009/i-20260926-pwd1-fix.png",
+      "reviewedAt": "2026-10-09T10:17:24.143Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-10-09T10:17:24.143Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Code half SHIPPED (BE e0f8ba7). The password is out of all tracked files; prod detection keys on host+user (prod_env.py, verified True on live prod), so rotating no longer switches the scheduler off. YOURS: the password is still in git history, so rotate it: 1) change it in MySQL, 2) update DATABASE_URL in ~/nyu_backend/.env, 3) sudo systemctl restart nyu-backend. No code change needed. Proof card: tmp/proof-20261009/i-20260926-pwd1-fix.png",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20260926-key1",
