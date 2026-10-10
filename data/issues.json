@@ -1790,7 +1790,7 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "UPDATED 2026-10-09. (b) Google sign-in CONFIG VERIFIED. Play has two app-signing certs: latest A5:83:5C... and legacy 7C:0B:90:40... (GMS checks the legacy one after the Apr key upgrade). Both have Android OAuth clients on com.nyus.nyusand in GCP nyus-and, as do the upload and debug keys, and the OAuth consent screen is In production / External. Still to do: ONE sign-in on a phone with the app installed FROM the Play internal or alpha track (289 is on internal now). I have no device here. (a) Play Android vitals shows 'Data unavailable' for crash and ANR: alpha volume is under Play's reporting threshold, so a Play crash-free baseline cannot exist before production users do. Until then, app crashes reach #errors through /telemetry/client-error (obs1). (c) Support@nyus.in is the store contact email; its MX is Zoho Mail (mx.zoho.in). Only you can confirm someone reads it.",
+      "reviewReason": "UPDATED 2026-10-10. (b) Google sign-in config is complete: both Play app-signing certs (legacy 7C:0B…, latest A5:83…) plus the upload and debug keys have Android OAuth clients; the consent screen is In production. Left: one sign-in on a phone with the app installed FROM Play (internal/alpha, 291). No device on this machine. (a) Play shows no crash/ANR data at alpha volume; it will exist after the closed test grows (see d5ro). App crashes reach #errors meanwhile. (c) Support@nyus.in is hosted on Zoho Mail; only you can confirm someone reads it.",
       "fix": null,
       "history": [],
       "thread": [
@@ -1813,9 +1813,16 @@
           "kind": "review",
           "text": "UPDATED 2026-10-09. (b) Google sign-in CONFIG VERIFIED. Play has two app-signing certs: latest A5:83:5C... and legacy 7C:0B:90:40... (GMS checks the legacy one after the Apr key upgrade). Both have Android OAuth clients on com.nyus.nyusand in GCP nyus-and, as do the upload and debug keys, and the OAuth consent screen is In production / External. Still to do: ONE sign-in on a phone with the app installed FROM the Play internal or alpha track (289 is on internal now). I have no device here. (a) Play Android vitals shows 'Data unavailable' for crash and ANR: alpha volume is under Play's reporting threshold, so a Play crash-free baseline cannot exist before production users do. Until then, app crashes reach #errors through /telemetry/client-error (obs1). (c) Support@nyus.in is the store contact email; its MX is Zoho Mail (mx.zoho.in). Only you can confirm someone reads it.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-10T00:22:30.713Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "UPDATED 2026-10-10. (b) Google sign-in config is complete: both Play app-signing certs (legacy 7C:0B…, latest A5:83…) plus the upload and debug keys have Android OAuth clients; the consent screen is In production. Left: one sign-in on a phone with the app installed FROM Play (internal/alpha, 291). No device on this machine. (a) Play shows no crash/ANR data at alpha volume; it will exist after the closed test grows (see d5ro). App crashes reach #errors meanwhile. (c) Support@nyus.in is hosted on Zoho Mail; only you can confirm someone reads it.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-10-09T16:58:01.060Z",
+      "reviewedAt": "2026-10-10T00:22:30.713Z",
       "reviewedBy": "shakeebshaan"
     },
     {
