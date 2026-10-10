@@ -39,9 +39,43 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": []
+      "status": "fixed",
+      "fix": {
+        "description": "BUILT and LIVE. Backend bd6f263: POST /api/v1/user-reports writes admin_message_reports, which the admin moderation panel already reads. The server decides who is reported; anything the reporter couldn't see gets the same 404 as an unknown id; self-reports are refused; repeats are deduped; 20/day limit; Discord gets ids only. Prod smoke with two throwaway users: 201/200-dedupe/201/404/400, rows correct, all removed after. App: Report in partner chat, leaderboard group chat, Social DMs (long-press or right-click, flag on focus), coach chat AI replies (Reply/Report menu), and 'Report User' in user search, with an optional 'Also block' that applies only after the report is stored. The self-harm reason shows Tele-MANAS 14416. Ships in v1.10.2 (291, internal + alpha). The final P3 (Also block placement, 698e6eab) goes in the next build. Content rating re-answered: users can report = Yes.",
+        "imagePath": "images/i-20261009-ugc1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261009-ugc1-fix-r1.png",
+          "images/i-20261009-ugc1-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "85b34aef9fcc867d866c769ae539b701b234910b",
+        "imageCommits": [
+          "85b34aef9fcc867d866c769ae539b701b234910b",
+          "88c461cbe54c783f8bf67d5e67cf5ab8c0e988d5"
+        ],
+        "fixedAt": "2026-10-10T00:22:13.470Z",
+        "by": "shakeebshaan",
+        "appCommit": "698e6eab",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Prod smoke PASS; -0b browser re-verify PASS on 25a4aa33; last P3 fixed in 698e6eab"
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-10-10T00:22:13.470Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "BUILT and LIVE. Backend bd6f263: POST /api/v1/user-reports writes admin_message_reports, which the admin moderation panel already reads. The server decides who is reported; anything the reporter couldn't see gets the same 404 as an unknown id; self-reports are refused; repeats are deduped; 20/day limit; Discord gets ids only. Prod smoke with two throwaway users: 201/200-dedupe/201/404/400, rows correct, all removed after. App: Report in partner chat, leaderboard group chat, Social DMs (long-press or right-click, flag on focus), coach chat AI replies (Reply/Report menu), and 'Report User' in user search, with an optional 'Also block' that applies only after the report is stored. The self-harm reason shows Tele-MANAS 14416. Ships in v1.10.2 (291, internal + alpha). The final P3 (Also block placement, 698e6eab) goes in the next build. Content rating re-answered: users can report = Yes.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261009-pk01",
