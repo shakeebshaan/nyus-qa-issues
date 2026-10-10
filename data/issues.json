@@ -9306,6 +9306,45 @@
       ],
       "createdAt": "2026-08-10T06:10:00.000Z",
       "updatedAt": "2026-08-10T06:10:00.000Z"
+    },
+    {
+      "author": "shakeebshaan",
+      "route": null,
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "createdAt": "2026-10-10T10:26:09.265Z",
+      "updatedAt": "2026-10-10T10:26:09.265Z",
+      "id": "i-20261010-lnch",
+      "tags": [
+        "owner-gate",
+        "launch"
+      ],
+      "title": "Launch asset pack: the steps only you can do",
+      "description": "[OWNER] docs/marketing/LAUNCH_ASSETS.md was executed on 2026-10-10. Done: Play listing text + 8 screenshots (release 297, in review), creator promo codes (live), one-time review ask (297), launch email script (backend scripts/send_launch_email.py), reels / promo video / demo GIF / Product Hunt gallery (rendered in .qa-report/_launch/), two new SEO posts + one rewrite (NYUSLANDING 07ca8f89). Yours: (1) scp the blog posts live, then npm run indexnow; (2) upload promo-landscape.mp4 to YouTube and give me the URL for the listing; (3) create creator codes + 3650-day grants and do the outreach; after production access: (4) staged rollout, (5) send the launch email, (6) tell me to point the 69 old blog CTAs at the Play listing, (7) post the reels, founder post and Product Hunt. Exact commands are in the attached report."
+    },
+    {
+      "author": "shakeebshaan",
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "createdAt": "2026-10-10T10:26:09.265Z",
+      "updatedAt": "2026-10-10T10:26:09.265Z",
+      "id": "i-20261010-rdac",
+      "tags": [
+        "bug",
+        "activity",
+        "coach"
+      ],
+      "title": "Activity page ignores a coach-assigned rest day",
+      "description": "[bug, verified by reading the code] The coach tool assign_rest_day marks a date by setting DailyLog.is_activity_break + is_diet_break (app/services/coach_actions.py _exec_assign_rest_day). The dashboard honours it (shows Rest Day), but /api/v1/activity/overview (backend.py ActivityOverviewResource, todays_workout built around L9222-9667) never checks those flags, so the Activity tab still shows today's full workout on the rest day the coach just gave. Fix: when today's DailyLog has is_activity_break, return the rest-day state (no todays_workout, or todays_workout with is_rest_day) and render it on Activity like the dashboard card. Found while capturing the launch reels (2026-10-10)."
     }
   ]
 }
