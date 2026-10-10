@@ -94,10 +94,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Shipped on your 'fix all' (2026-10-10). DietPlan.image_url (nullable VARCHAR(512), idempotent migration, no backfill, no FK) is written by save-custom-plan with the picked catalog URL and read by the week rollover and single-day re-saves, so the dish photo a user picks no longer falls back to a generated one after week one. Backend 4bde6dc6 deployed by the watcher, healthy; migration runner 96/96 applied. 14 contract tests pass. Public catalog URL only, no personal data.",
+        "imagePath": "images/i-20261009-pk01-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261009-pk01-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d00da40de0b5be668cf29ebe39495b671bdf3cd2",
+        "imageCommits": [
+          "d00da40de0b5be668cf29ebe39495b671bdf3cd2"
+        ],
+        "fixedAt": "2026-10-10T02:43:19.847Z",
+        "by": "shakeebshaan",
+        "appCommit": "4bde6dc6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Exactly the recommended fix, tested and deployed; a real week-two rollover has not been observed live yet (needs a week or a forced rollover)."
+        }
+      },
       "history": [],
-      "description": "[P3 / OWNER — schema] The dish photo a user PICKS in the diet builder only survives week one. This is NOT the D7 meal-photo question (user-uploaded photos — you said don't store them, and nothing here stores one): it is the catalog image URL of the dish they chose, e.g. nyus.in/meal-media/…jpg.\n\nToday (backend e7030d9, live): save-custom-plan carries the picked photo through _bridge_diet_to_legacy into the 7 meal rows it writes at save time, so week one shows it. There is no column for it on DietPlan, so the following week's rollover and any single-day re-save regenerate the meal rows and the card falls back to a generated photo.\n\nFIX: add a nullable DietPlan.image_url VARCHAR(512) (one migration, no backfill, no FK), write it on save, read it in the rollover. ~1 hour with tests. Held only because it is a schema change made unattended. RECOMMENDATION: approve — it holds a public catalog URL, no personal data, and the column is droppable. Reply 'go' and it ships with the next backend push."
+      "description": "[P3 / OWNER — schema] The dish photo a user PICKS in the diet builder only survives week one. This is NOT the D7 meal-photo question (user-uploaded photos — you said don't store them, and nothing here stores one): it is the catalog image URL of the dish they chose, e.g. nyus.in/meal-media/…jpg.\n\nToday (backend e7030d9, live): save-custom-plan carries the picked photo through _bridge_diet_to_legacy into the 7 meal rows it writes at save time, so week one shows it. There is no column for it on DietPlan, so the following week's rollover and any single-day re-save regenerate the meal rows and the card falls back to a generated photo.\n\nFIX: add a nullable DietPlan.image_url VARCHAR(512) (one migration, no backfill, no FK), write it on save, read it in the rollover. ~1 hour with tests. Held only because it is a schema change made unattended. RECOMMENDATION: approve — it holds a public catalog URL, no personal data, and the column is droppable. Reply 'go' and it ships with the next backend push.",
+      "thread": [
+        {
+          "at": "2026-10-10T02:43:19.847Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Shipped on your 'fix all' (2026-10-10). DietPlan.image_url (nullable VARCHAR(512), idempotent migration, no backfill, no FK) is written by save-custom-plan with the picked catalog URL and read by the week rollover and single-day re-saves, so the dish photo a user picks no longer falls back to a generated one after week one. Backend 4bde6dc6 deployed by the watcher, healthy; migration runner 96/96 applied. 14 contract tests pass. Public catalog URL only, no personal data.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261009-hcv2",
