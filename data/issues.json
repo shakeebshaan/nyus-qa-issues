@@ -1737,7 +1737,7 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": true,
-      "reviewReason": "READY TO PULL, NOT PULLED (2026-10-09). Gates: data safety, content rating and privacy URL PUBLISHED (submission 247). Store listing (en-GB fixed) and alpha 1.10.0 (289) are in Google review (249). Sign-in config verified (d4vt). Production promotion stays your call. Your rule was to read the crash-free baseline first, and Play reports no crash data at alpha volume, so that read cannot happen before launch. When you say go: from android/ run 'fastlane release', which promotes alpha 289 to production at 100% per your 2026-09-07 decision; it works once 249 is approved. Promotion also clears Play's 'target API 36' warning, since 289 targets 36. Risk to weigh first: the app has no in-app REPORT for users or messages (new board issue), which Play's UGC policy expects; production review may flag it.",
+      "reviewReason": "BLOCKED BY GOOGLE, not by code (checked 2026-10-10). Play Console → Dashboard: production is 'Inactive' and 'Apply for production' is locked behind the closed-test rule: at least 12 testers opted in for at least 14 days. 5 testers are opted in now. Nobody can promote until that is met, so no 'fastlane release' can work yet. YOUR STEPS: (1) Play Console → Test and release → Closed testing (alpha) → Testers: add 7+ more Google accounts (friends/team) to the email list. (2) Send them the opt-in link https://play.google.com/apps/testing/com.nyus.nyusand; each must tap 'Become a tester'. (3) After 14 days with 12+ opted in, Dashboard → Apply for production (a short questionnaire about the test). (4) Once granted, 'fastlane release' from android/ promotes alpha to production at 100% per your 2026-09-07 decision. Everything else production needs is done: data safety, content rating, privacy URL, both listings, Health declaration (all PUBLISHED), plus in-app Report (Play UGC/AI policy). Alpha is v1.10.2 (291), in review.",
       "fix": null,
       "history": [],
       "thread": [
@@ -1760,9 +1760,16 @@
           "kind": "review",
           "text": "READY TO PULL, NOT PULLED (2026-10-09). Gates: data safety, content rating and privacy URL PUBLISHED (submission 247). Store listing (en-GB fixed) and alpha 1.10.0 (289) are in Google review (249). Sign-in config verified (d4vt). Production promotion stays your call. Your rule was to read the crash-free baseline first, and Play reports no crash data at alpha volume, so that read cannot happen before launch. When you say go: from android/ run 'fastlane release', which promotes alpha 289 to production at 100% per your 2026-09-07 decision; it works once 249 is approved. Promotion also clears Play's 'target API 36' warning, since 289 targets 36. Risk to weigh first: the app has no in-app REPORT for users or messages (new board issue), which Play's UGC policy expects; production review may flag it.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-10T00:22:26.490Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "BLOCKED BY GOOGLE, not by code (checked 2026-10-10). Play Console → Dashboard: production is 'Inactive' and 'Apply for production' is locked behind the closed-test rule: at least 12 testers opted in for at least 14 days. 5 testers are opted in now. Nobody can promote until that is met, so no 'fastlane release' can work yet. YOUR STEPS: (1) Play Console → Test and release → Closed testing (alpha) → Testers: add 7+ more Google accounts (friends/team) to the email list. (2) Send them the opt-in link https://play.google.com/apps/testing/com.nyus.nyusand; each must tap 'Become a tester'. (3) After 14 days with 12+ opted in, Dashboard → Apply for production (a short questionnaire about the test). (4) Once granted, 'fastlane release' from android/ promotes alpha to production at 100% per your 2026-09-07 decision. Everything else production needs is done: data safety, content rating, privacy URL, both listings, Health declaration (all PUBLISHED), plus in-app Report (Play UGC/AI policy). Alpha is v1.10.2 (291), in review.",
+          "by": "shakeebshaan"
         }
       ],
-      "reviewedAt": "2026-10-09T16:58:04.750Z",
+      "reviewedAt": "2026-10-10T00:22:26.490Z",
       "reviewedBy": "shakeebshaan"
     },
     {
