@@ -9349,7 +9349,7 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
+      "status": "fixed",
       "createdAt": "2026-10-10T10:26:09.265Z",
       "updatedAt": "2026-10-10T10:26:09.265Z",
       "id": "i-20261010-rdac",
@@ -9359,7 +9359,42 @@
         "coach"
       ],
       "title": "Activity page ignores a coach-assigned rest day",
-      "description": "[bug, verified by reading the code] The coach tool assign_rest_day marks a date by setting DailyLog.is_activity_break + is_diet_break (app/services/coach_actions.py _exec_assign_rest_day). The dashboard honours it (shows Rest Day), but /api/v1/activity/overview (backend.py ActivityOverviewResource, todays_workout built around L9222-9667) never checks those flags, so the Activity tab still shows today's full workout on the rest day the coach just gave. Fix: when today's DailyLog has is_activity_break, return the rest-day state (no todays_workout, or todays_workout with is_rest_day) and render it on Activity like the dashboard card. Found while capturing the launch reels (2026-10-10)."
+      "description": "[bug, verified by reading the code] The coach tool assign_rest_day marks a date by setting DailyLog.is_activity_break + is_diet_break (app/services/coach_actions.py _exec_assign_rest_day). The dashboard honours it (shows Rest Day), but /api/v1/activity/overview (backend.py ActivityOverviewResource, todays_workout built around L9222-9667) never checks those flags, so the Activity tab still shows today's full workout on the rest day the coach just gave. Fix: when today's DailyLog has is_activity_break, return the rest-day state (no todays_workout, or todays_workout with is_rest_day) and render it on Activity like the dashboard card. Found while capturing the launch reels (2026-10-10).",
+      "fix": {
+        "description": "Already fixed on 10 Oct and live since then, the board item was never closed. Backend nyu_backend 07bd6d58: /api/v1/activity/overview withholds the scheduled session on a DailyLog break day (coach-assigned or taken on the dashboard) unless it was already started or finished, and returns is_rest_day_today (app/services/activity_rest_day.py; in origin/main = prod fa007bd8). App c428f6f3: Activity renders the rest-day state ('Rest day. Recover well...' + 'Your coach set today aside') in en/hi/hinglish; in every release since build 301 (alpha = 302 today). Verified 2026-10-20: backend tests/services/test_activity_rest_day.py 6 passed, app test/RestDayPreview.test.tsx 3 passed; screenshots = production web bundle at 390 px with prod's real /activity/overview for the QA account, only the rest-day fields flipped as the backend does on a break day; 0 page errors in en and hi.",
+        "imagePath": "images/i-20261010-rdac-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261010-rdac-fix-r1.png",
+          "images/i-20261010-rdac-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "6ee773ecf7ac61126c0b4d89683dcf79c732b848",
+        "imageCommits": [
+          "6ee773ecf7ac61126c0b4d89683dcf79c732b848",
+          "6b685eece4e091c7b48dbb2323e6f126ae37c18f"
+        ],
+        "fixedAt": "2026-10-20T18:19:44.276Z",
+        "by": "shakeebshaan",
+        "appCommit": "c428f6f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Both sides fixed with tests and 3 languages; evidence uses prod's real overview with only the rest-day fields set, not a real coach-assigned day on a phone."
+        }
+      },
+      "thread": [
+        {
+          "at": "2026-10-20T18:19:44.276Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Already fixed on 10 Oct and live since then, the board item was never closed. Backend nyu_backend 07bd6d58: /api/v1/activity/overview withholds the scheduled session on a DailyLog break day (coach-assigned or taken on the dashboard) unless it was already started or finished, and returns is_rest_day_today (app/services/activity_rest_day.py; in origin/main = prod fa007bd8). App c428f6f3: Activity renders the rest-day state ('Rest day. Recover well...' + 'Your coach set today aside') in en/hi/hinglish; in every release since build 301 (alpha = 302 today). Verified 2026-10-20: backend tests/services/test_activity_rest_day.py 6 passed, app test/RestDayPreview.test.tsx 3 passed; screenshots = production web bundle at 390 px with prod's real /activity/overview for the QA account, only the rest-day fields flipped as the backend does on a break day; 0 page errors in en and hi.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     }
   ]
 }
