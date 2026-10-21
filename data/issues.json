@@ -316,10 +316,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app d7d7b780: the plan-ready goal line, target date and week count follow the app language (plan_goal.* keys, Intl date hi-IN, post_plan_tour.goal.weeks_short), also on PlanReadyOverview and the coach preview. Hindi tour now shows '7.0 kg घटाएँ', '1 जन॰ 2027 तक · 32 हफ़्ते'. Full vitest 9,396 passed / 0 failed. Remaining English on this screen: the 'kg/week' pace unit. Hindi wording machine-drafted, needs native review. Rides the next Play build.",
+        "imagePath": "images/i-20261021-hi-onboarding-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-onboarding-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8fba53b030a28b0fd51a91f590ccaf3b88b76cc3",
+        "imageCommits": [
+          "8fba53b030a28b0fd51a91f590ccaf3b88b76cc3"
+        ],
+        "fixedAt": "2026-10-21T16:46:48.988Z",
+        "by": "shakeebshaan",
+        "appCommit": "d7d7b780",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "All three named defects fixed and shown on screen in Hindi (goal label, wk, date), plus the same literals on two sibling screens; minus: 'kg/week' unit still English and Hindi copy not native-reviewed."
+        }
+      },
       "history": [],
-      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] The two strings seen in the B56 run are NOT mock-only; the mock only fed the values: PostPlanTour.tsx:371 appends a literal ${planStats.durationWeeks}wk ('32wk'), the goal label comes from onboarding-calc.ts:220-222 (Lose / Lose fat / Build muscle / Gain literals, English), and the date 'Jan 1, 2027' (stats.targetDateLabel) is English-formatted inside the Hindi 'तक' string. Every user sees these on the plan-ready screen. Onboarding intro slides (/onboarding/flow) are Hindi. The rest of OnboardingFlow could not be walked (account already onboarded). Repro: /dev/post-plan-tour in dev, or finish setup in Hindi. Screenshot: C:/tmp/qa-b56/hint-hi.png"
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] The two strings seen in the B56 run are NOT mock-only; the mock only fed the values: PostPlanTour.tsx:371 appends a literal ${planStats.durationWeeks}wk ('32wk'), the goal label comes from onboarding-calc.ts:220-222 (Lose / Lose fat / Build muscle / Gain literals, English), and the date 'Jan 1, 2027' (stats.targetDateLabel) is English-formatted inside the Hindi 'तक' string. Every user sees these on the plan-ready screen. Onboarding intro slides (/onboarding/flow) are Hindi. The rest of OnboardingFlow could not be walked (account already onboarded). Repro: /dev/post-plan-tour in dev, or finish setup in Hindi. Screenshot: C:/tmp/qa-b56/hint-hi.png",
+      "thread": [
+        {
+          "at": "2026-10-21T16:46:48.988Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app d7d7b780: the plan-ready goal line, target date and week count follow the app language (plan_goal.* keys, Intl date hi-IN, post_plan_tour.goal.weeks_short), also on PlanReadyOverview and the coach preview. Hindi tour now shows '7.0 kg घटाएँ', '1 जन॰ 2027 तक · 32 हफ़्ते'. Full vitest 9,396 passed / 0 failed. Remaining English on this screen: the 'kg/week' pace unit. Hindi wording machine-drafted, needs native review. Rides the next Play build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hi-profile",
