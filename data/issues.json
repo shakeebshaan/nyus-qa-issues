@@ -437,10 +437,42 @@
         "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app 3c1256c6: any 402 from /insights/correlations that is not tier_required (subscription_required / trial_expired / no reason) shows the lock 'Your free trial has ended' + 'Choose a plan' (/choose-plan), no Core-trial offer, and the query no longer retries a 402. tier_required keeps the Core upsell. Executed: dev web bundle with the expired QA account against prod renders the lock, no 'Couldn't load your patterns' card. Tests: HabitInsights.tier +3 (2 fail on the old code); full vitest 9,413 passed (1 timing flake in BarcodeScanner, passes alone). Rides the next Play build.",
+        "imagePath": "images/i-20261021-fd-patterns-402-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-fd-patterns-402-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "cfdc1cb7b99c9b8d1860c29569a44386e2fabc14",
+        "imageCommits": [
+          "cfdc1cb7b99c9b8d1860c29569a44386e2fabc14"
+        ],
+        "fixedAt": "2026-10-21T19:43:07.312Z",
+        "by": "shakeebshaan",
+        "appCommit": "3c1256c6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 94,
+          "bar": 90,
+          "note": "Executed against prod's real 402 trial_expired with the QA account: lock shown once, no retry card; tests cover the 402 paths and that it is not retried."
+        }
+      },
       "history": [],
-      "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] For an account whose trial has ended, Home > 'Your patterns' opens /habit-insights which shows 'Couldn't load your patterns. Try again'; Try again repeats the same failing call forever. The API answers GET /api/v1/insights/correlations -> 402 {\"error\":\"subscription_required\",\"reason\":\"trial_expired\"}, but src/pages/HabitInsights.tsx:192-194 only treats 402 with reason 'tier_required' as the calm upsell; the comment at :175-176 says expired users are handled by PremiumRoute, yet the route is a ProtectedRoute (App.tsx:891), so nobody shows the paywall. Repro: open /habit-insights as the QA account (sub_active false, reason trial_expired). Fix: treat any 402 (subscription_required, tier_required, trial_expired) as the upsell/paywall state, no retry button. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on prod with the QA account: GET /api/v1/insights/correlations still answers 402 subscription_required/trial_expired; HabitInsights.tsx:194 still only handles reason tier_required (inspected)."
+      "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] For an account whose trial has ended, Home > 'Your patterns' opens /habit-insights which shows 'Couldn't load your patterns. Try again'; Try again repeats the same failing call forever. The API answers GET /api/v1/insights/correlations -> 402 {\"error\":\"subscription_required\",\"reason\":\"trial_expired\"}, but src/pages/HabitInsights.tsx:192-194 only treats 402 with reason 'tier_required' as the calm upsell; the comment at :175-176 says expired users are handled by PremiumRoute, yet the route is a ProtectedRoute (App.tsx:891), so nobody shows the paywall. Repro: open /habit-insights as the QA account (sub_active false, reason trial_expired). Fix: treat any 402 (subscription_required, tier_required, trial_expired) as the upsell/paywall state, no retry button. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on prod with the QA account: GET /api/v1/insights/correlations still answers 402 subscription_required/trial_expired; HabitInsights.tsx:194 still only handles reason tier_required (inspected).",
+      "thread": [
+        {
+          "at": "2026-10-21T19:43:07.312Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app 3c1256c6: any 402 from /insights/correlations that is not tier_required (subscription_required / trial_expired / no reason) shows the lock 'Your free trial has ended' + 'Choose a plan' (/choose-plan), no Core-trial offer, and the query no longer retries a 402. tier_required keeps the Core upsell. Executed: dev web bundle with the expired QA account against prod renders the lock, no 'Couldn't load your patterns' card. Tests: HabitInsights.tier +3 (2 fail on the old code); full vitest 9,413 passed (1 timing flake in BarcodeScanner, passes alone). Rides the next Play build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-fd-check-badges",
