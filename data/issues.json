@@ -330,10 +330,42 @@
         "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app f9e68312: Profile > Support is Hindi (header, welcome, 6 topic chips + the Hindi templates they insert, sender labels, composer, attach/send, error state, toasts, quick-question card). Re-captured in Hindi: 167 Devanagari characters, 0 English strings (was 0 Devanagari). Tests: Support.page Hindi block; full vitest 9,411 passed. Hindi machine-drafted, needs native review. Rides the next Play build.",
+        "imagePath": "images/i-20261021-fd-support-hi-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-fd-support-hi-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5d1b02e1d0da5a7b9fbd84371cf30dc7936a9271",
+        "imageCommits": [
+          "5d1b02e1d0da5a7b9fbd84371cf30dc7936a9271"
+        ],
+        "fixedAt": "2026-10-21T19:25:06.644Z",
+        "by": "shakeebshaan",
+        "appCommit": "f9e68312",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Every string on the page now goes through i18n incl. the topic templates the chips insert and the toasts; Hindi capture shows 0 English strings. Hindi not native-reviewed."
+        }
+      },
       "history": [],
-      "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Profile > Support is fully English in Hindi: 0 Devanagari characters on the page. src/pages/Support.tsx has no useTranslation; hardcoded strings at :94 (category chips Account issue / Billing question / Report a bug / Feature request / Cancel subscription / Data export), :727 (input placeholder 'Type your support message'), :783 'Welcome to Support', :784 'Send us a message and we'll get back to you within a day.'. This is the screen a Hindi user opens when stuck on day 1. Repro: set language to Hindi, Profile > Support. (The 21 Oct i18n commit f24c2985 did not cover it; board issue i-20261021-hi-faq covers the FAQ page only.) || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /support in Hindi: 18 Devanagari characters; \"Welcome to Support\", the six category chips and the welcome line are English; Support.tsx still has 0 useTranslation hits."
+      "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Profile > Support is fully English in Hindi: 0 Devanagari characters on the page. src/pages/Support.tsx has no useTranslation; hardcoded strings at :94 (category chips Account issue / Billing question / Report a bug / Feature request / Cancel subscription / Data export), :727 (input placeholder 'Type your support message'), :783 'Welcome to Support', :784 'Send us a message and we'll get back to you within a day.'. This is the screen a Hindi user opens when stuck on day 1. Repro: set language to Hindi, Profile > Support. (The 21 Oct i18n commit f24c2985 did not cover it; board issue i-20261021-hi-faq covers the FAQ page only.) || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /support in Hindi: 18 Devanagari characters; \"Welcome to Support\", the six category chips and the welcome line are English; Support.tsx still has 0 useTranslation hits.",
+      "thread": [
+        {
+          "at": "2026-10-21T19:25:06.644Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app f9e68312: Profile > Support is Hindi (header, welcome, 6 topic chips + the Hindi templates they insert, sender labels, composer, attach/send, error state, toasts, quick-question card). Re-captured in Hindi: 167 Devanagari characters, 0 English strings (was 0 Devanagari). Tests: Support.page Hindi block; full vitest 9,411 passed. Hindi machine-drafted, needs native review. Rides the next Play build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-fd-patterns-402",
