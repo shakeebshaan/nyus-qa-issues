@@ -18,8 +18,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Verified 2026-10-21 on NYUSLANDING publish/batch3-dal-peanuts be8ab96c (growth fix): dal article line 113 now reads PDF पेज 42-43 (B010, B013, B001, B003 on IFCT PDF page 42, B021 on 43) and line 89 no longer contains the unsourced health claim (no \"सेहत\" left); the commit changes only those two lines, so all 85 number checks still stand. QA review comments added: English 3d57f987, Hindi 3e818ff3 (both on publish/batch3-dal-peanuts, merged into upload/landing-batch-3 as 5487c0de and 5866633e). Dry run (never --real) of the batch-3 manifest alone: READY. The live upload branch also carries the unreviewed potato pair (b4pair), which is the only blocker there.",
+        "fixedAt": "2026-10-21T18:56:20.937Z",
+        "by": "qa",
+        "appCommit": "be8ab96c",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] QA health-content review of blog batch 3, NYUSLANDING publish/batch3-dal-peanuts b9621fd8 (checked in upload/landing-batch-3 f5c3aa59), 2026-10-21. English peanuts article: PASS (all IFCT 2017 rows H012/H001/H005/H021/H018 and A019 re-read from the PDF; 85 number checks across both articles, 0 mismatches; per-20 g maths, DGI 2024 p.20 and p.34 claims, FAQ JSON-LD, links, sitemap 169 entries all pass). Hindi dal article: numbers PASS (rows B021/B010/B013/B001/B003, 25 g and 30 g maths, atta comparison), two fixes needed before the QA gate comment can be added, both in static/blog/dal-mein-kitni-calorie-protein-hindi-india.html: (1) line 113 (sources): 'कोड B021, B010, B013, B001, B003, PDF पेज 43-43' is wrong: in IFCT 2017 B010, B013, B001 and B003 are on PDF page 42 and only B021 (red gram dal) is on page 43; write 'PDF पेज 42-43'. (2) line 89: 'दाल सेहतमंद है, लेकिन तड़के की मात्रा नापे बिना हिसाब अधूरा रहता है' is a health claim with no source (batch rule: no claims beyond IFCT/DGI); drop 'दाल सेहतमंद है, लेकिन' and keep 'तड़के की मात्रा नापे बिना हिसाब अधूरा रहता है'. Optional style: line 89 and the intro could say 'हमारा अंदाज़ा' once instead of twice. After the fixes QA adds '<!-- reviewed 21 Oct by QA against IFCT 2017 + ICMR-NIN DGI 2024, no dietitian review -->' to both articles; the dry run's only blockers today are those two missing comments (the DRAFT comment is not a gate, but remove it when the review comment goes in)."
     },
