@@ -912,10 +912,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for progress_weekly.weight_row_none): weight trend chart, Weekly/Monthly tabs, MON-SUN circles (now the date's weekday in the app language), date range, '0 of 7 days' summary, section and day labels on weekly + monthly. Full vitest green. Hindi machine-drafted, needs native review.",
+        "imagePath": "images/i-20261021-hi-progress-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-progress-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8cd6c0ee7b08deb4de9fa5644b79ecc2be588245",
+        "imageCommits": [
+          "8cd6c0ee7b08deb4de9fa5644b79ecc2be588245"
+        ],
+        "fixedAt": "2026-10-21T17:42:33.317Z",
+        "by": "shakeebshaan",
+        "appCommit": "d3f2b294",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Weight chart, tabs, day circles (weekday from date), week range, summaries, aria and the monthly day labels all in Hindi; weight_row_none key added in f24c2985."
+        }
+      },
       "history": [],
-      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Weekly progress is mostly English in Hindi: WeightTrendChart.tsx:74 'Weight Trend', :86 '7 Days'/'30 Days', :129 'Goal: 72 kg', :160 'Moving Avg'; WeeklyProgress.tsx:565 'No weigh-in yet' (key progress_weekly.weight_row_none missing), :756 '0 of 7 days fully completed.', :322 date range 'Oct 19 - Oct 25' (English locale), MON-SUN labels, 'Weekly/Monthly' tabs (ProgressTabBar.tsx), aria WeeklyProgress.tsx:396,746. Monthly tab: only the 'Weekly/Monthly' tabs and day aria 'THU: 0/3 goals' are English. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /progress and /monthly-progress. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/progress.png, monthly-progress.png"
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Weekly progress is mostly English in Hindi: WeightTrendChart.tsx:74 'Weight Trend', :86 '7 Days'/'30 Days', :129 'Goal: 72 kg', :160 'Moving Avg'; WeeklyProgress.tsx:565 'No weigh-in yet' (key progress_weekly.weight_row_none missing), :756 '0 of 7 days fully completed.', :322 date range 'Oct 19 - Oct 25' (English locale), MON-SUN labels, 'Weekly/Monthly' tabs (ProgressTabBar.tsx), aria WeeklyProgress.tsx:396,746. Monthly tab: only the 'Weekly/Monthly' tabs and day aria 'THU: 0/3 goals' are English. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /progress and /monthly-progress. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/progress.png, monthly-progress.png",
+      "thread": [
+        {
+          "at": "2026-10-21T17:42:33.317Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app d3f2b294 (+ f24c2985 for progress_weekly.weight_row_none): weight trend chart, Weekly/Monthly tabs, MON-SUN circles (now the date's weekday in the app language), date range, '0 of 7 days' summary, section and day labels on weekly + monthly. Full vitest green. Hindi machine-drafted, needs native review.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hi-workout",
