@@ -932,10 +932,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for NextSessionPreview, ProgressiveOverload, WorkoutSessionHeader, StrengthStrip new_pb): exercise volume chart, '6d ago'-style times, 'reps ·', and 'No previous data' are Hindi. Not changed (data): exercise names and badge names from the catalog / gamification API. Full vitest green. Hindi machine-drafted.",
+        "imagePath": "images/i-20261021-hi-workout-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-workout-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ed43f28bd1312b0c3d058736b255544546377a78",
+        "imageCommits": [
+          "ed43f28bd1312b0c3d058736b255544546377a78"
+        ],
+        "fixedAt": "2026-10-21T17:42:27.515Z",
+        "by": "shakeebshaan",
+        "appCommit": "d3f2b294",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "All named code strings fixed (volume chart, ago times, reps line, No previous data; NextSession/Progression/Header keys in f24c2985). Exercise and badge names stay English: catalog/API data."
+        }
+      },
       "history": [],
-      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Workout screen mixes English into Hindi: ExerciseVolumeChart.tsx:21 'Exercise Volume', :32 'Daily'/'Weekly' toggle, :55 'No volume yet', :57 'Log your first set to start tracking daily volume.'; NextSessionPreview.tsx:106-111 'Cycle' (+13 defaultValue-only keys in that file); ProgressiveOverload.tsx:45 'Session in Cycle' (key activity.progression.session_in_cycle missing); WorkoutSessionHeader.tsx:41 'Progressive Plan' (key activity.session_header.progressive_plan missing); StrengthStrip.tsx:41,43 '6d ago'/'1mo ago', :141 'New personal best' (key activity.strength.new_pb missing), :150 'reps ·'; row text 'पिछली बार: No previous data' (English half, source not located); badge names (Strength Milestone, Record Setter, First Record) come from the gamification API; exercise names are English catalog data (src/data/exercise-catalog.json). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /activity. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/activity.png"
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Workout screen mixes English into Hindi: ExerciseVolumeChart.tsx:21 'Exercise Volume', :32 'Daily'/'Weekly' toggle, :55 'No volume yet', :57 'Log your first set to start tracking daily volume.'; NextSessionPreview.tsx:106-111 'Cycle' (+13 defaultValue-only keys in that file); ProgressiveOverload.tsx:45 'Session in Cycle' (key activity.progression.session_in_cycle missing); WorkoutSessionHeader.tsx:41 'Progressive Plan' (key activity.session_header.progressive_plan missing); StrengthStrip.tsx:41,43 '6d ago'/'1mo ago', :141 'New personal best' (key activity.strength.new_pb missing), :150 'reps ·'; row text 'पिछली बार: No previous data' (English half, source not located); badge names (Strength Milestone, Record Setter, First Record) come from the gamification API; exercise names are English catalog data (src/data/exercise-catalog.json). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /activity. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/activity.png",
+      "thread": [
+        {
+          "at": "2026-10-21T17:42:27.515Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app d3f2b294 (+ f24c2985 for NextSessionPreview, ProgressiveOverload, WorkoutSessionHeader, StrengthStrip new_pb): exercise volume chart, '6d ago'-style times, 'reps ·', and 'No previous data' are Hindi. Not changed (data): exercise names and badge names from the catalog / gamification API. Full vitest green. Hindi machine-drafted.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hi-meals",
