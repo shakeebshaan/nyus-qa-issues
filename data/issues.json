@@ -2,6 +2,46 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261021-aov1",
+      "createdAt": "2026-10-21T16:28:35.368Z",
+      "author": "qa",
+      "tags": [
+        "perf",
+        "backend",
+        "activity"
+      ],
+      "route": "/api/v1/activity/overview",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / perf — executed 2026-10-21] GET /api/v1/activity/overview (ActivityOverviewResource in backend.py, helpers under app/services/activity_rest_day.py) is the slowest key route: 1.2-1.5 s from this PC (baseline /health = 0.7 s, so ~0.5-0.8 s server time) and the prod log shows `SLOW_REQUEST GET /api/v1/activity/overview 200 639ms db=174ms queries=92` (nyus_app.log 2026-10-21 16:23:34). 92 SQL queries for one screen load looks like an N+1 pattern (not traced); the app calls it on every Workout tab open. Repro: grep SLOW_REQUEST in ~/nyu_backend/nyus_app.log, or curl the route with any account holding a progressive plan. Fix: batch the per-exercise lookups (strength/previous-cycle/PR queries) into a few IN() queries."
+    },
+    {
+      "id": "i-20261021-pwres",
+      "createdAt": "2026-10-21T16:28:35.368Z",
+      "author": "qa",
+      "tags": [
+        "security",
+        "ops",
+        "owner-gate"
+      ],
+      "route": "/home/ubuntu/nyu_backend (Oracle VM)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / security residue after pwd1 — executed read-only on the Oracle VM 2026-10-21 16:35 UTC, no values printed] The pwd1 rotation fixed the DB login, but the old password still lives on the box and in a live secret: (1) .env line 7 is a commented-out `# DATABASE_URL=...` holding the full OLD DSN (old password); (2) 11 backup copies .env.bak-* in ~/nyu_backend (bak1, pwd1, webhooks, logpartners, 1779541141, cors, offer, sec2, flags, keyswap, key1) all contain the old password and every other key; most are mode 664 (others can read), only .env.bak-pwd1-* is 600; .env itself is also mode 664; (3) RAZORPAY_WEBHOOK_SECRET (.env line 54, razorpay_webhook.py:224) has the shape '123@' + 23 letters and contains the leaked old-password prefix '123@Activated' (the old password sits in 14 commits of git history), so the secret's entropy is only the ~14 trailing letters: anyone with the repo history has a head start on forging payment webhooks. The pwd1 fix note says 'no active .env key holds the old password' - true for active keys, not for the comment, backups and webhook secret. Next owner: Shaan (webhook secret rotation touches Razorpay = money gate; file hygiene = prod VM change, per-change yes): delete the commented line + old .env.bak-* (keep one 600 backup), chmod 600 .env, generate a fresh random webhook secret in Razorpay and .env. Not re-verified: that the OLD DB password is refused (needs a prod DB login attempt; assumed from the fix note)."
+    },
+    {
       "id": "i-20261021-hi-not-found",
       "createdAt": "2026-10-21T15:41:01.059Z",
       "author": "qa",
