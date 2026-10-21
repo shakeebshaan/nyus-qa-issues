@@ -2,6 +2,26 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261021-fab1",
+      "createdAt": "2026-10-21T15:22:05.158Z",
+      "author": "qa",
+      "tags": [
+        "nutrition",
+        "b56",
+        "layout"
+      ],
+      "route": "/nutrition",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / layout — executed 2026-10-21, build 5da19550 (B56 79f24d4e), 390x844 @2x] The new first-meal cue 'Mark eaten' (src/pages/_components/nutrition/NutritionMealCard.tsx ~L421, eatenCue at L159) is partly covered by the floating coach-chat button on /nutrition: with the 'Missing meals compounds fast' banner above, the first meal card's label sits at the bottom-right where the green 'Chat with Nisha' FAB is drawn, so the last letters of 'Mark eaten' are hidden until the user scrolls. Repro: fresh install (clear localStorage), open /nutrition on a 390x844 phone viewport with an uneaten plan; screenshot C:/tmp/qa-b56/meals-cue-en.png. Fix: add bottom/right clearance for the cue label or let the FAB hide while the cue is the first card in view. Ring, one-card-only and ring-disappears-after-tap all PASS."
+    },
+    {
       "id": "i-20261021-hl01",
       "createdAt": "2026-10-21T15:17:39.252Z",
       "author": "qa",
