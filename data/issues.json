@@ -2,6 +2,47 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261021-tdee-en-example",
+      "createdAt": "2026-10-21T18:21:44.323Z",
+      "author": "qa",
+      "tags": [
+        "content",
+        "tdee",
+        "growth"
+      ],
+      "route": "/blog/how-many-calories-to-lose-weight-india-tdee.html (live)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] Live English twin, static/blog/how-many-calories-to-lose-weight-india-tdee.html: the FAQ answer (visible line 62, FAQPage JSON-LD line 26) says \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". By the page's own Step 2 multipliers (line 56) 1,600 BMR x 1.375 = ~2,200 is the LIGHTLY active case; moderately active (x1.55) is ~2,480 (about 2,500 with the exact BMR 1,617.5), whose 10-20% range is about 2,000-2,230. The range also disagrees with line 56 (~1,750-1,980; 10-20% of 2,200 is 1,760-1,980): \"1,700\" should be \"1,760\" (or ~1,750). Fix: say \"lightly active man (~2,200 TDEE) ... about 1,760 to 1,980 kcal/day\" in both the FAQ and its JSON-LD (they must stay identical). The new Hindi article labels the same example correctly as \"हल्का सक्रिय\"."
+    },
+    {
+      "id": "i-20261021-tdee-hi-wording",
+      "createdAt": "2026-10-21T18:21:44.323Z",
+      "author": "qa",
+      "tags": [
+        "content",
+        "hindi",
+        "tdee",
+        "growth"
+      ],
+      "route": "/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html (not live)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] All numbers pass (ICMR-NIN 2020 brief note Table 1a/1b PDF p.4: men 65 kg 2110/2710/3470, women 55 kg 1660/2130/2720 kcal; 10-12% BMR overestimate and 3-8 kcal/kg lower on PDF p.2; TEE = BMR x PAL on PDF p.1; every Mifflin-St Jeor example, TDEE row and 10-20% range recomputed by hand and equal; check-faq-jsonld: 0 mismatches; no-dietitian box once, after the intro, visible at 390 px). Wording fixes needed in static/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html: (1) line 95 (grammar, must fix): \"वजन टिका रहे तो वही आपका TDEE के आसपास है\" is not correct Hindi (आपका ... के आसपास); write \"वजन टिका रहे तो खाने की वही मात्रा आपके TDEE के आसपास है\"; (2) line 105 and the FAQ answer (JSON-LD line 25, visible line 128): \"10 से 20 प्रतिशत कम, यानी लगभग 500 कैलोरी रोज़ तक\" / \"लगभग 500 कैलोरी रोज़ का घाटा ≈ हफ़्ते में आधा किलो\" reads as if 500 kcal is the target, but for the page's own examples 10-20% is 222-445 kcal (70 kg man) and 173-346 kcal (58 kg woman), and 500 kcal would be 29% of the woman's TDEE, above the 10-20% cap stated in the same paragraph; rewrite as \"10 से 20 प्रतिशत कम (आपके TDEE के हिसाब से यह 500 कैलोरी से कम भी हो सकता है; 500 कैलोरी ≈ आधा किलो हफ़्ते का मोटा अंदाज़ा सिर्फ़ बड़े TDEE वालों के लिए)\" (same sentence in the English twin); (3) line 105: \"इस लेख के पास इसका कोई सत्यापित आँकड़ा नहीं है\" is a literal translation, use \"इस लेख में इसका कोई सत्यापित आँकड़ा नहीं है\"; (4) lines 25 and 128 spell \"वज़न\" (with nukta) while the rest of the page and the site use \"वजन\": make it \"वजन\". Also replace the growth comment at line 55 (\"awaits QA\") with the QA review comment (text in the QA reply) once 1-3 are fixed. Informational, no change needed: the 58 kg woman's 20% bound is 1,380 and her 10% bound 1,555 shown as ~1,560 (computed from the rounded 1,730), and the Hindi page uses the unrounded BMR 1,617.5 (TDEE ~2,220) while the English twin says ~1,600 and ~2,200."
+    },
+    {
       "id": "i-20261021-cc-hi-first-screen",
       "createdAt": "2026-10-21T18:13:19.346Z",
       "author": "qa",
