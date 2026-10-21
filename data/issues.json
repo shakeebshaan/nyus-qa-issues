@@ -1799,19 +1799,27 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App e7945ec6: the first-meal cue label now sits LEFT of the circle (flex-row-reverse), not above it. The idle coach button covers x 318-374 at 390px; the label ends at x=316 in both languages (measured: hi 'खा लिया' [273..316], en 'Mark eaten' [251..316]), so it cannot sit under the button at any scroll. 390x844 @2x, prod reads of the QA account, writes blocked, GETs rewritten to drop custom logs so the cue shows. Shot 1: Hindi default scroll, label fully visible beside the button. Shots 2-3: card in view, hi + en. (In English the two-line header puts the card under the bottom nav at default scroll, not under the coach button.) Caveat: while a real coach nudge is active the button widens into the 'Chat with …' pill (x 170-374), which covers any card text in its band until dismissed; that is the owner-restored nudge state (2026-08-23), left unchanged. Tests: firstLogCue 8/8 (asserts the row layout), nutrition suites 241/241, tsc 0.",
+        "description": "App e7945ec6: the first-meal cue label now sits LEFT of the circle (flex-row-reverse), not above it. The idle coach button covers x 318-374 at 390px; the label ends at x=316 in both languages (measured: hi 'खा लिया' [273..316], en 'Mark eaten' [251..316]), so it cannot sit under the button at any scroll. 390x844 @2x, prod reads of the QA account, writes blocked, GETs rewritten to drop custom logs so the cue shows. Shot 1: Hindi default scroll, label fully visible beside the button. Shots 2-3: card in view, hi + en. (In English the two-line header puts the card under the bottom nav at default scroll, not under the coach button.) Caveat: while a real coach nudge is active the button widens into the 'Chat with …' pill (x 170-374), which covers any card text in its band until dismissed; that is the owner-restored nudge state (2026-08-23), left unchanged. Tests: firstLogCue 8/8 (asserts the row layout), nutrition suites 241/241, tsc 0. || QA VERIFIED 2026-10-21 (re-check after e7945ec6): built app main e7945ec6 (prod-read build, QA account, every non-GET blocked, GETs rewritten so the cue shows, seeded Edge, 390x844 @2x), /nutrition in Hindi and English. Label geometry measured from the DOM: hi \"खा लिया\" x 273-316, en \"Mark eaten\" x 251-316, coach button x 318-374 (2px gap), label never clipped, no horizontal page overflow (scrollWidth 390). Checked at rest and at 5 scroll positions: the label never overlaps the button (label top from 270 to 785 px). The meal name wraps to two lines (\"Chicken Oats / Upma\", 119px wide, not clipped, no line-clamp, overflow visible); the Breakfast chip, 455 kcal and P/C/F row stay below it in order and nothing in the card extends past the card edge. NOT a regression, noted for owner: while the card is scrolled to y 676-732 the circle itself (x 326-350) passes under the coach button, as every meal circle does; and a real coach nudge widens the button into a pill (dev caveat above). Page-level fix of that is the separate FAB overlap work, not this issue. Tests not re-run by QA here (frontend unit suite 8249 passed on 8fb4a210 earlier today).",
         "imagePath": "images/i-20261021-fab1-fix-r2.png",
         "imagePaths": [
           "images/i-20261021-fab1-fix-r2.png",
           "images/i-20261021-fab1-fix-r2-2.png",
-          "images/i-20261021-fab1-fix-r2-3.png"
+          "images/i-20261021-fab1-fix-r2-3.png",
+          "images/2026-10-21-firstday-verify/fab1-verify-hi-card-in-view-e7945ec6.png",
+          "images/2026-10-21-firstday-verify/fab1-verify-en-card-in-view-e7945ec6.png",
+          "images/2026-10-21-firstday-verify/fab1-verify-hi-card-crop-e7945ec6.png",
+          "images/2026-10-21-firstday-verify/fab1-verify-en-card-crop-e7945ec6.png"
         ],
         "imagePrivate": true,
         "imageCommit": "5ccf90d208103cf65f3639bf487ca4432639ed85",
         "imageCommits": [
           "5ccf90d208103cf65f3639bf487ca4432639ed85",
           "e5617f832dfb3b29fa36a3601b12d325c33904bd",
-          "7c2166a720efbf955afbe9a24c44f8c35f71c87c"
+          "7c2166a720efbf955afbe9a24c44f8c35f71c87c",
+          "4cba21824987d26e014ec97c995b9b6dc06c1a89",
+          "4cba21824987d26e014ec97c995b9b6dc06c1a89",
+          "4cba21824987d26e014ec97c995b9b6dc06c1a89",
+          "4cba21824987d26e014ec97c995b9b6dc06c1a89"
         ],
         "fixedAt": "2026-10-21T22:44:34.976Z",
         "by": "shakeebshaan",
