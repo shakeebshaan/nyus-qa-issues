@@ -543,8 +543,34 @@
         "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Re-open fixed (app 2c848494). The dashboard deck now builds the weekly-challenge line with challengeLine(), not the server's English. Prod sends no criteria yet, so the app reads the server's English template (meals / protein days / workouts / steps / all meals on N of 7 days / N new recipes) and phrases it in the app language. Screenshots (Hindi, 390px, challenge endpoint stubbed): without criteria 'कम से कम 4 मील लॉग करें', with criteria same, English unchanged 'Log at least 4 meals'. Tests: firstday-hindi 9 cases incl. every template without criteria; dashboard + deck tests 25/25; tsc 0. Backend criteria commit replayed onto current main: nyu_backend 3b30aee4 (branch weekly-challenge-criteria-main), full suite 8361 passed / 1 failed (async-queue timeout under load, passes alone) - push to main + deploy by the NYUS employee.",
+        "imagePath": "images/i-20261021-fd-hi-strings-fix-r2.png",
+        "imagePaths": [
+          "images/i-20261021-fd-hi-strings-fix-r2.png",
+          "images/i-20261021-fd-hi-strings-fix-r2-2.png",
+          "images/i-20261021-fd-hi-strings-fix-r2-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4e23aaf91ae50e90187138f5cc792f2defe3b5c1",
+        "imageCommits": [
+          "4e23aaf91ae50e90187138f5cc792f2defe3b5c1",
+          "1f569ac77e46a8840b532a0685b876b94fc93a02",
+          "952a18a03fea5b73f6d40c32b6b0a59b782e67ff"
+        ],
+        "fixedAt": "2026-10-21T22:35:47.105Z",
+        "by": "shakeebshaan",
+        "appCommit": "2c848494",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "fixed on the mounted surface; works with today's prod backend (no criteria) and the new one"
+        }
+      },
       "history": [
         {
           "at": "2026-10-21T19:35:15.373Z",
@@ -591,6 +617,13 @@
           "kind": "reopen",
           "text": "QA 2026-10-21 on app f9e68312 + backend branch weekly-challenge-criteria 992c12e9 (local, trial account, Hindi, 390x844). PART 2 VERIFIED: the Nutrition micronutrient note is Hindi (\"आज के खाने के लिए माइक्रोन्यूट्रिएंट अनुमान अभी उपलब्ध नहीं हैं।\", screenshot in the fab1 reopen). PART 1 NOT FIXED: the Home weekly challenge still reads \"Log at least 4 meals\" in English in Hindi. Cause: the dashboard builds the card headline itself, src/pages/Dashboard.tsx:648-651 uses singularizeChallengeText(weeklyChallenge.challenge) = the server English text, while the new challengeLine()/WeeklyChallengeCard (WeeklyChallengeCard.tsx:36-48) is not mounted anywhere (grep: no <WeeklyChallengeCard>; Dashboard only imports singularizeChallengeText). Executed: with the criteria field present in the API response ({\"metric\":\"meals_logged\",\"target_value\":4}) and a non-fresh-start state, getByText(\"Log at least\") finds the English line in the Hindi dashboard. Fix: use challengeLine(weeklyChallenge, t, i18n.language) for the headline at Dashboard.tsx:651 (keep the \"this week\" strip), then re-run; also the backend branch is not on origin/main yet, so prod would still send no criteria.",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-21T22:35:47.105Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Re-open fixed (app 2c848494). The dashboard deck now builds the weekly-challenge line with challengeLine(), not the server's English. Prod sends no criteria yet, so the app reads the server's English template (meals / protein days / workouts / steps / all meals on N of 7 days / N new recipes) and phrases it in the app language. Screenshots (Hindi, 390px, challenge endpoint stubbed): without criteria 'कम से कम 4 मील लॉग करें', with criteria same, English unchanged 'Log at least 4 meals'. Tests: firstday-hindi 9 cases incl. every template without criteria; dashboard + deck tests 25/25; tsc 0. Backend criteria commit replayed onto current main: nyu_backend 3b30aee4 (branch weekly-challenge-criteria-main), full suite 8361 passed / 1 failed (async-queue timeout under load, passes alone) - push to main + deploy by the NYUS employee.",
+          "by": "shakeebshaan"
         }
       ],
       "needsReview": false
