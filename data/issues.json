@@ -2,6 +2,407 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261021-hi-not-found",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/*",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] 404 page English: NotFound.tsx:73 'Page not found', 'This page isn't available.', 'Back to Dashboard', 'Go Back'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /muscle-atlas (unknown route). Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/muscle-atlas.png"
+    },
+    {
+      "id": "i-20261021-hi-subscription-settings",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/settings/subscription",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] SubscriptionSettings.tsx:600 'Restore previous purchase', 'No active plan', 'Status: none', 'Choose a plan' English. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /settings/subscription. Screenshot not kept (shows referral code)."
+    },
+    {
+      "id": "i-20261021-hi-fasting",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "literal"
+      ],
+      "route": "/fasting",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Fasting screen: 'h fast', 'fasting window', 'OMAD', '/7 this week', 'Discipline, tracked · nyus.in' (FastingShareCard.tsx:100, src/lib/fasting.ts:29). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /fasting. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/fasting.png"
+    },
+    {
+      "id": "i-20261021-hi-plan-timeline",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/plan-timeline",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Plan timeline projection English: WeeklyTrajectory.tsx:68 'Behind plan', :226 'Goal: 72 kg', 'week projection · estimated', 'At a safe pace you will reach…'; date ranges 'Sep 12 – Sep 18' English-formatted; PlanTimeline.tsx has 6 defaultValue-only keys. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /plan-timeline. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/plan-timeline.png"
+    },
+    {
+      "id": "i-20261021-hi-notifications",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "data"
+      ],
+      "route": "/notifications",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Notification titles and bodies are English (backend-generated: 'Your Weekly Wellness Report', 'Coach is waiting', 'Subscription expiring soon', 'Day 4 since your last log…'); Notifications.tsx:22,375 'Mark all read' literal. Backend text needs locale-aware templates. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /notifications. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/notifications.png"
+    },
+    {
+      "id": "i-20261021-hi-achievements",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "data"
+      ],
+      "route": "/achievements",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] All 48 badge names are English (Comeback Kid … Century of Strength, from the gamification API); AchievementShareCard.tsx:100 'XP total', :112 'Progress, tracked · nyus.in'; aria 'Comeback Kid, अनलॉक' mixes languages. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /achievements. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/achievements.png"
+    },
+    {
+      "id": "i-20261021-hi-daily-focus",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "no-i18n"
+      ],
+      "route": "/daily-focus",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Daily Focus nearly all English (15 Hindi chars): DailyFocus.tsx:399 'Log your first meal', :491 'No logged days yet this month — tap below to start.', 'Daily Focus', 'Log lunch', 'Both / Diet only / Activity only', month grid aria 'October 1, missed' (only 2 useTranslation hits in the file). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /daily-focus. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/daily-focus.png"
+    },
+    {
+      "id": "i-20261021-hi-partners",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/partners",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars): Partners.tsx:194 'Train together. Stay precise.', :196,:204 'Create a group', 'Partner Groups'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /partners. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/partners.png"
+    },
+    {
+      "id": "i-20261021-hi-measurements",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/measurements",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars): Measurements.tsx:575-582 'Record New Measurement', body-part aria 'Select Neck/Shoulders…', ProgressPhotos.tsx:228 'Add Photo', 'Progress Photos', 'No measurements yet', 'Front-pose timeline — stored privately on our servers' (a privacy statement left untranslated). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /measurements. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/measurements.png"
+    },
+    {
+      "id": "i-20261021-hi-connected-devices",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/connected-devices",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars) although the file has ~30 t() calls (keys absent from hi.json): ConnectedDevices.tsx:418 'Health Connect runs on the Android app…', :546 'Sign out everywhere', :122 '12d ago'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /connected-devices. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/connected-devices.png"
+    },
+    {
+      "id": "i-20261021-hi-faq",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "content"
+      ],
+      "route": "/faq",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Help & FAQ fully English (0 Hindi chars): FAQ.tsx:189,195 'Search Help Articles'; category and article titles come from src/lib/faq-fallback.ts (:18 'Getting Started', :52 'Help & FAQ') and the backend FAQ API. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /faq. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/faq.png"
+    },
+    {
+      "id": "i-20261021-hi-health-alerts",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "no-i18n"
+      ],
+      "route": "/health-alerts",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Whole screen English, 0 Devanagari characters: HealthAlerts.tsx has no useTranslation; strings at :413 'Sleep & vitals', :428 'Nothing synced yet…', alert names and help text from src/lib/healthAlerts.ts:57 ('Steps goal reached', 'Short night', 'Blood oxygen low', 'HRV down' …) and the not-a-medical-device disclaimer. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /health-alerts. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/health-alerts.png"
+    },
+    {
+      "id": "i-20261021-hi-choose-plan",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "billing-copy"
+      ],
+      "route": "/choose-plan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Plan cards show English feature lists: ChoosePlan.tsx:341 only translates features that start with 'choose_plan.'; plans fetched from the backend carry raw English strings (see :601), e.g. 'Everything in Core', 'Priority AI — 2× daily limits', 'Unlimited AI coach chats', 'AI-generated diet & workout plans', 'Create partner groups', 'Maximum savings + priority AI'; 'Save ₹198 vs monthly' / 'Save ₹495 vs monthly' are English literals (ChoosePlan.tsx:131,151, kept literal on purpose for a startsWith('Save') check). hi.json HAS translations for the choose_plan.plans.* keys, the backend-fed path bypasses them. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /choose-plan with the QA account (no plan). Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/choose-plan.png"
+    },
+    {
+      "id": "i-20261021-hi-onboarding",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "onboarding"
+      ],
+      "route": "/onboarding",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] The two strings seen in the B56 run are NOT mock-only; the mock only fed the values: PostPlanTour.tsx:371 appends a literal ${planStats.durationWeeks}wk ('32wk'), the goal label comes from onboarding-calc.ts:220-222 (Lose / Lose fat / Build muscle / Gain literals, English), and the date 'Jan 1, 2027' (stats.targetDateLabel) is English-formatted inside the Hindi 'तक' string. Every user sees these on the plan-ready screen. Onboarding intro slides (/onboarding/flow) are Hindi. The rest of OnboardingFlow could not be walked (account already onboarded). Repro: /dev/post-plan-tour in dev, or finish setup in Hindi. Screenshot: C:/tmp/qa-b56/hint-hi.png"
+    },
+    {
+      "id": "i-20261021-hi-profile",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "data"
+      ],
+      "route": "/profile",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Profile mixed: ProfileReferralCard.tsx:71 'Invite a friend', :73 'Share your link — help a friend start their journey.', :100 'Share with a friend' (literals; Settings.tsx:697 uses the translated key settings.invite_friend, the card does not); LevelCard.tsx:109 'XP total'; 'level' label; level title 'Newcomer' and badge names 'Comeback Kid / Journey Begins / Early Bird' come from the gamification API (English). Language names 'English'/'Hinglish' are fine. Settings screen itself is clean. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /profile. Screenshot not kept (shows referral code)."
+    },
+    {
+      "id": "i-20261021-hi-coach-chat",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "test-gap"
+      ],
+      "route": "/coach-chat",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] COULD NOT TEST: the QA account has no active plan (Subscription: 'No active plan'), so /coach-chat redirects to /choose-plan (PremiumRoute, App.tsx). Coach chat Hindi strings are unverified. Needs an entitled QA account (trial grant by Shaan) to run the same sweep. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /coach-chat."
+    },
+    {
+      "id": "i-20261021-hi-progress",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "chart"
+      ],
+      "route": "/progress",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Weekly progress is mostly English in Hindi: WeightTrendChart.tsx:74 'Weight Trend', :86 '7 Days'/'30 Days', :129 'Goal: 72 kg', :160 'Moving Avg'; WeeklyProgress.tsx:565 'No weigh-in yet' (key progress_weekly.weight_row_none missing), :756 '0 of 7 days fully completed.', :322 date range 'Oct 19 - Oct 25' (English locale), MON-SUN labels, 'Weekly/Monthly' tabs (ProgressTabBar.tsx), aria WeeklyProgress.tsx:396,746. Monthly tab: only the 'Weekly/Monthly' tabs and day aria 'THU: 0/3 goals' are English. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /progress and /monthly-progress. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/progress.png, monthly-progress.png"
+    },
+    {
+      "id": "i-20261021-hi-workout",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Workout screen mixes English into Hindi: ExerciseVolumeChart.tsx:21 'Exercise Volume', :32 'Daily'/'Weekly' toggle, :55 'No volume yet', :57 'Log your first set to start tracking daily volume.'; NextSessionPreview.tsx:106-111 'Cycle' (+13 defaultValue-only keys in that file); ProgressiveOverload.tsx:45 'Session in Cycle' (key activity.progression.session_in_cycle missing); WorkoutSessionHeader.tsx:41 'Progressive Plan' (key activity.session_header.progressive_plan missing); StrengthStrip.tsx:41,43 '6d ago'/'1mo ago', :141 'New personal best' (key activity.strength.new_pb missing), :150 'reps ·'; row text 'पिछली बार: No previous data' (English half, source not located); badge names (Strength Milestone, Record Setter, First Record) come from the gamification API; exercise names are English catalog data (src/data/exercise-catalog.json). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /activity. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/activity.png"
+    },
+    {
+      "id": "i-20261021-hi-meals",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "aria",
+        "data"
+      ],
+      "route": "/nutrition",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Meals list is Hindi except: aria-labels PartnerChip.tsx:80 'Add a diet partner', DiaryDateStepper.tsx:114 'Choose a day to view'; /diet-plan-week weekday and date labels 'Mon/Tue… Oct 19' and macro line 'P:40.7g C:36.4g F:19.2g' (DietPlanWeek.tsx, 5 defaultValue-only keys); meal names (Chicken Oats Upma, Fish Roti Sabzi) are English catalog/API data (src/data/meal-catalog.json), decide whether names need Hindi. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /nutrition and /diet-plan-week. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/nutrition.png, diet-plan-week.png"
+    },
+    {
+      "id": "i-20261021-hi-home",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "aria"
+      ],
+      "route": "/dashboard",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Home is Hindi on screen; only screen-reader labels stay English: DashboardHeader.tsx:50 'Notifications (N unread)', DashboardDietCard.tsx:69,110 'Open diet tracking' / 'Diet progress: 0% complete', DashboardActivityCard.tsx:59, SleepQualityChart.tsx:68 'Sleep trend chart…', BottomNav.tsx:99 'Main navigation', FloatingCoachButton.tsx:336 'Chat with <coach>', App.tsx:710 'Skip to content'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /dashboard with TalkBack. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/dashboard.png"
+    },
+    {
       "id": "i-20261021-fab1",
       "createdAt": "2026-10-21T15:22:05.158Z",
       "author": "qa",
