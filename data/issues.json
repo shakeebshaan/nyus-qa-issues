@@ -973,10 +973,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for the dashboard card keys): all screen-reader labels named here go through i18n; re-captured in Hindi (C:/tmp/hi-fix3): no English labels left except the coach's name and the user's name. Full vitest green. Hindi machine-drafted, needs native review. Rides the next Play build.",
+        "imagePath": "images/i-20261021-hi-home-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-home-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9f0d473fb7c194a54866c60a55b7bf18956dac7b",
+        "imageCommits": [
+          "9f0d473fb7c194a54866c60a55b7bf18956dac7b"
+        ],
+        "fixedAt": "2026-10-21T17:42:17.916Z",
+        "by": "shakeebshaan",
+        "appCommit": "d3f2b294",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Every named label translated (notifications, nav, coach button, skip link, sleep chart, diet/activity card labels via step 2); the weight-card label too. Hindi not native-reviewed."
+        }
+      },
       "history": [],
-      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Home is Hindi on screen; only screen-reader labels stay English: DashboardHeader.tsx:50 'Notifications (N unread)', DashboardDietCard.tsx:69,110 'Open diet tracking' / 'Diet progress: 0% complete', DashboardActivityCard.tsx:59, SleepQualityChart.tsx:68 'Sleep trend chart…', BottomNav.tsx:99 'Main navigation', FloatingCoachButton.tsx:336 'Chat with <coach>', App.tsx:710 'Skip to content'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /dashboard with TalkBack. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/dashboard.png"
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Home is Hindi on screen; only screen-reader labels stay English: DashboardHeader.tsx:50 'Notifications (N unread)', DashboardDietCard.tsx:69,110 'Open diet tracking' / 'Diet progress: 0% complete', DashboardActivityCard.tsx:59, SleepQualityChart.tsx:68 'Sleep trend chart…', BottomNav.tsx:99 'Main navigation', FloatingCoachButton.tsx:336 'Chat with <coach>', App.tsx:710 'Skip to content'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /dashboard with TalkBack. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/dashboard.png",
+      "thread": [
+        {
+          "at": "2026-10-21T17:42:17.916Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app d3f2b294 (+ f24c2985 for the dashboard card keys): all screen-reader labels named here go through i18n; re-captured in Hindi (C:/tmp/hi-fix3): no English labels left except the coach's name and the user's name. Full vitest green. Hindi machine-drafted, needs native review. Rides the next Play build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-fab1",
