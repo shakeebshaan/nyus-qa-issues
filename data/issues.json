@@ -262,10 +262,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Coach name has one source of truth: the name the server sends with chat history (cached under the coach-name key). useCoachName() is now the only reader; the coach button, activity target card, progression picker, day card and both plan builders all use it, and on first load it asks the server once when no name is cached. Dashboard on first load: button reads 'Chat with Freya', same as chat. Tests: useCoachName.resolve 3 passed; full vitest 9,426 passed / 0 failed.",
+        "imagePath": "images/i-20261021-fd-coach-name-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-fd-coach-name-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9d79c73a729108bb07bd908b3bffacbbb19b4f64",
+        "imageCommits": [
+          "9d79c73a729108bb07bd908b3bffacbbb19b4f64"
+        ],
+        "fixedAt": "2026-10-21T21:39:19.041Z",
+        "by": "shakeebshaan",
+        "appCommit": "3585d736",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "every surface reads one hook; verified on first load"
+        }
+      },
       "history": [],
-      "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The coach is called 'Nisha' on Home and 'Freya' on every other tab for the same account: aria-label 'Chat with Nisha' on /dashboard but 'Chat with Freya' on /nutrition, /activity, /profile and /progress (the visible 'Ask <coach>' pill uses the same name, common.ask_coach). src/components/FloatingCoachButton.tsx:60 initialises coachName from getCoachName() || DEFAULT_COACH_NAME and Home never refreshes it, so the first screen shows the default persona. A new user meets two coach names in the first minute. Fix: resolve the coach name from the profile before first paint (or update it when the profile loads) so every screen agrees. || VERIFIED CAUSE (local run, 2026-10-21): the profile coach is Freya and chat.service.ts:109 caches it in localStorage once /coach/history loads, but the Home FAB keeps the default. src/components/FloatingCoachButton.tsx:60 keeps the name in useState(getCoachName() || DEFAULT_COACH_NAME) and its only refresh listeners (lines 134-145) are the cross-tab \"storage\" event and window \"focus\", NOT the in-tab COACH_NAME_EVENT that setCoachName() dispatches (coach-config.ts:53); the hook useCoachName (src/hooks/useCoachName.ts) already subscribes to that event but the FAB does not use it. Measured: first Home mount \"Chat with Nisha\" with localStorage already holding \"Freya\" 7 s later; Nutrition, Activity and the next Home visit say \"Freya\". Fix: replace the useState with useCoachName(). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: on every fresh load the Home, Activity and Progress coach button reads \"Nisha से बात करें\" while the profile coach is Freya (chat header says Freya); FloatingCoachButton.tsx changed only its aria keys in d3f2b294."
+      "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The coach is called 'Nisha' on Home and 'Freya' on every other tab for the same account: aria-label 'Chat with Nisha' on /dashboard but 'Chat with Freya' on /nutrition, /activity, /profile and /progress (the visible 'Ask <coach>' pill uses the same name, common.ask_coach). src/components/FloatingCoachButton.tsx:60 initialises coachName from getCoachName() || DEFAULT_COACH_NAME and Home never refreshes it, so the first screen shows the default persona. A new user meets two coach names in the first minute. Fix: resolve the coach name from the profile before first paint (or update it when the profile loads) so every screen agrees. || VERIFIED CAUSE (local run, 2026-10-21): the profile coach is Freya and chat.service.ts:109 caches it in localStorage once /coach/history loads, but the Home FAB keeps the default. src/components/FloatingCoachButton.tsx:60 keeps the name in useState(getCoachName() || DEFAULT_COACH_NAME) and its only refresh listeners (lines 134-145) are the cross-tab \"storage\" event and window \"focus\", NOT the in-tab COACH_NAME_EVENT that setCoachName() dispatches (coach-config.ts:53); the hook useCoachName (src/hooks/useCoachName.ts) already subscribes to that event but the FAB does not use it. Measured: first Home mount \"Chat with Nisha\" with localStorage already holding \"Freya\" 7 s later; Nutrition, Activity and the next Home visit say \"Freya\". Fix: replace the useState with useCoachName(). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: on every fresh load the Home, Activity and Progress coach button reads \"Nisha से बात करें\" while the profile coach is Freya (chat header says Freya); FloatingCoachButton.tsx changed only its aria keys in d3f2b294.",
+      "thread": [
+        {
+          "at": "2026-10-21T21:39:19.041Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Coach name has one source of truth: the name the server sends with chat history (cached under the coach-name key). useCoachName() is now the only reader; the coach button, activity target card, progression picker, day card and both plan builders all use it, and on first load it asks the server once when no name is cached. Dashboard on first load: button reads 'Chat with Freya', same as chat. Tests: useCoachName.resolve 3 passed; full vitest 9,426 passed / 0 failed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-fd-search-gaps",
