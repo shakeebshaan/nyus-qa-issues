@@ -2,6 +2,46 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261021-hl01",
+      "createdAt": "2026-10-21T15:17:39.252Z",
+      "author": "qa",
+      "tags": [
+        "seo",
+        "landing",
+        "pending-deploy"
+      ],
+      "route": "/blog",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / SEO + copy — executed 2026-10-21] Live nyus.in still has (a) no hreflang on weight-loss-diet-chart-hindi-india.html and ghar-par-workout-kaise-karen-hindi-india.html (0 hreflang tags; JSON-LD Article/Breadcrumb/FAQPage valid, canonical ok), and (b) static/index.html:896 and static/faq/index.html:88 'verified macros' (only 1,210 of 8,941 foods are verified=1). Dev already fixed both in NYUSLANDING 23a81f18 (committed locally, not deployed). Close this once the landing scp is done: repro = curl the two Hindi URLs and grep hreflang (expect hi/en/x-default), curl nyus.in/faq and grep 'verified macros' (expect none)."
+    },
+    {
+      "id": "i-20261021-md01",
+      "createdAt": "2026-10-21T15:17:39.252Z",
+      "author": "qa",
+      "tags": [
+        "seo",
+        "landing",
+        "blog"
+      ],
+      "route": "/blog",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / SEO — executed crawl 2026-10-21] 5 live blog pages have meta descriptions far below a useful length (title+desc present everywhere else, 164 blog URLs checked): paneer-vs-tofu-for-weight-loss-india.html = 28 chars, is-ghee-good-for-weight-loss-india.html = 38, pakora-calories-home-vs-street-fried-india.html = 41, jaggery-vs-sugar-for-weight-loss-india.html = 44, are-soya-chunks-good-for-weight-loss-india.html = 49 (all https://nyus.in/blog/<file>). Repro: curl the page, read <meta name=\"description\">. Fix: rewrite each to 110-160 chars in NYUSLANDING static/blog/<file>; ships with the next manual landing scp."
+    },
+    {
       "id": "i-20261009-pc01",
       "createdAt": "2026-10-09T17:00:50.391Z",
       "author": "shakeebshaan",
