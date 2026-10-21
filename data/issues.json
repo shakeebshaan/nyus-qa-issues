@@ -953,10 +953,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for PartnerChip / DiaryDateStepper / diet-week keys): diet-week weekday and date follow the app language, macro line reads 'P 41g · C 36g · F 19g' like the meal cards, meal type prefix translated. Not changed (data, decision needed): meal names from the catalog. Full vitest green. Hindi machine-drafted.",
+        "imagePath": "images/i-20261021-hi-meals-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-meals-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "68bfab5f1c1648a26c1b8009d89d3432f204dd87",
+        "imageCommits": [
+          "68bfab5f1c1648a26c1b8009d89d3432f204dd87"
+        ],
+        "fixedAt": "2026-10-21T17:42:21.878Z",
+        "by": "shakeebshaan",
+        "appCommit": "d3f2b294",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Named aria labels (f24c2985), diet-week weekday/date and macro line fixed, meal-type prefix translated. Meal names stay English: catalog data, a product decision."
+        }
+      },
       "history": [],
-      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Meals list is Hindi except: aria-labels PartnerChip.tsx:80 'Add a diet partner', DiaryDateStepper.tsx:114 'Choose a day to view'; /diet-plan-week weekday and date labels 'Mon/Tue… Oct 19' and macro line 'P:40.7g C:36.4g F:19.2g' (DietPlanWeek.tsx, 5 defaultValue-only keys); meal names (Chicken Oats Upma, Fish Roti Sabzi) are English catalog/API data (src/data/meal-catalog.json), decide whether names need Hindi. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /nutrition and /diet-plan-week. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/nutrition.png, diet-plan-week.png"
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Meals list is Hindi except: aria-labels PartnerChip.tsx:80 'Add a diet partner', DiaryDateStepper.tsx:114 'Choose a day to view'; /diet-plan-week weekday and date labels 'Mon/Tue… Oct 19' and macro line 'P:40.7g C:36.4g F:19.2g' (DietPlanWeek.tsx, 5 defaultValue-only keys); meal names (Chicken Oats Upma, Fish Roti Sabzi) are English catalog/API data (src/data/meal-catalog.json), decide whether names need Hindi. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /nutrition and /diet-plan-week. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/nutrition.png, diet-plan-week.png",
+      "thread": [
+        {
+          "at": "2026-10-21T17:42:21.878Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app d3f2b294 (+ f24c2985 for PartnerChip / DiaryDateStepper / diet-week keys): diet-week weekday and date follow the app language, macro line reads 'P 41g · C 36g · F 19g' like the meal cards, meal type prefix translated. Not changed (data, decision needed): meal names from the catalog. Full vitest green. Hindi machine-drafted.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hi-home",
