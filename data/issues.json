@@ -603,12 +603,31 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Rotated 2026-10-21 06:51-06:58 UTC on Shaan's yes (nyus-a6e92c), runbook nyu_backend docs/ops/DB_PASSWORD_ROTATION.md: rotate (old retained, both connect) -> restart nyu-backend, health 200 in ~15 s -> 6 min on the new password: 80 scheduled jobs OK, 0 Access denied, 0 errors -> discard: OLD PASSWORD REFUSED. No active .env key, box script or bash history holds the old password. Code side: e0f8ba7 (no password in tracked source; prod detected by host + user) + 9ac128f (rotation script + tests). The old literal stays in 14 commits of git history and is now dead.",
+        "imagePath": "images/i-20260926-pwd1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260926-pwd1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "dfbef36b090dc3bc086f6e5df8599a458d0ace78",
+        "imageCommits": [
+          "dfbef36b090dc3bc086f6e5df8599a458d0ace78"
+        ],
+        "fixedAt": "2026-10-21T07:09:20.105Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Executed end to end on prod with verification at each step; the only residue is the dead literal in git history, out of scope by decision."
+        }
+      },
       "history": [],
-      "needsReview": true,
-      "reviewReason": "OWNER-GATED (2026-10-20 update). Code part DONE and live: no password in any tracked file on nyu_backend origin/main (git grep for the literal finds nothing), prod detection by host + user via app/services/prod_env.py (e0f8ba7), rotation script with tests (9ac128f), both in prod fa007bd8. NOT done: the rotation itself (read-only check 20 Oct: the server .env and 2 box scripts still hold the old password). Runbook for the gunicorn era: nyu_backend docs/ops/DB_PASSWORD_ROTATION.md (branch openai-budget-guard 9294923d): consumers, restart requirement (scheduler reads the DSN at import), quiet windows, rollback; history scrub out of scope. Rotation = Shaan's decide item nyus-a6e92c; the NYUS employee runs it on yes (it has the VM key now).",
-      "reviewedAt": "2026-10-20T18:21:52.909Z",
+      "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
         {
@@ -630,6 +649,13 @@
           "who": "claude",
           "kind": "review",
           "text": "OWNER-GATED (2026-10-20 update). Code part DONE and live: no password in any tracked file on nyu_backend origin/main (git grep for the literal finds nothing), prod detection by host + user via app/services/prod_env.py (e0f8ba7), rotation script with tests (9ac128f), both in prod fa007bd8. NOT done: the rotation itself (read-only check 20 Oct: the server .env and 2 box scripts still hold the old password). Runbook for the gunicorn era: nyu_backend docs/ops/DB_PASSWORD_ROTATION.md (branch openai-budget-guard 9294923d): consumers, restart requirement (scheduler reads the DSN at import), quiet windows, rollback; history scrub out of scope. Rotation = Shaan's decide item nyus-a6e92c; the NYUS employee runs it on yes (it has the VM key now).",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-21T07:09:20.105Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Rotated 2026-10-21 06:51-06:58 UTC on Shaan's yes (nyus-a6e92c), runbook nyu_backend docs/ops/DB_PASSWORD_ROTATION.md: rotate (old retained, both connect) -> restart nyu-backend, health 200 in ~15 s -> 6 min on the new password: 80 scheduled jobs OK, 0 Access denied, 0 errors -> discard: OLD PASSWORD REFUSED. No active .env key, box script or bash history holds the old password. Code side: e0f8ba7 (no password in tracked source; prod detected by host + user) + 9ac128f (rotation script + tests). The old literal stays in 14 commits of git history and is now dead.",
           "by": "shakeebshaan"
         }
       ]
