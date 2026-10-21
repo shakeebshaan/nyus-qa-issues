@@ -2,6 +2,31 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261021-cc-hi-first-screen",
+      "createdAt": "2026-10-21T18:13:19.346Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "coach-chat",
+        "first-day"
+      ],
+      "route": "/coach-chat",
+      "imagePath": "images/2026-10-21-coachchat/12-open-coach-hi.png",
+      "imageCommit": "42adaa5969f933f2e4a1cbb4de89f500a03acc20",
+      "imagePaths": [
+        "images/2026-10-21-coachchat/12-open-coach-hi.png"
+      ],
+      "imageCommits": [
+        "42adaa5969f933f2e4a1cbb4de89f500a03acc20"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2] Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. The coach chat first screen is English in Hindi: only the header subtitle (\"पर्सनल कोच\") is translated. Hardcoded English: greeting \"Hi {name}\" and \"What's the focus today?\" (src/components/coach/CoachChatWelcomePanel.tsx:98), the three quick-start chips \"Review my training plan\" / \"Plan tomorrow's meals\" / \"How's my recovery?\" (CoachChatWelcomePanel.tsx:29-31), the input placeholder `Message ${coachName}…` and its variants \"Reply to …\", \"Listening…\", \"Send as coach...\" (src/components/coach/CoachChatComposer.tsx:221), and the labels \"Speak your message\" (:228), \"Send message\" (:249), \"Log or add something\" (:189; the Hindi row \"कुछ लॉग करें या जोड़ें\" exists elsewhere) and \"Message options\" (src/components/coach/CoachChatMessageList.tsx:466). None of these strings is in en.json or hi.json. This is the first screen a Hindi user sees after tapping the coach button. Repro: set the app language to Hindi (coach_language syncs to hindi), open /coach-chat. Fix: move them to t() keys with hi/hinglish values."
+    },
+    {
       "id": "i-20261021-fd-coach-blocked",
       "createdAt": "2026-10-21T17:40:36.195Z",
       "author": "qa",
@@ -20,8 +45,16 @@
         "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name.",
+        "fixedAt": "2026-10-21T18:13:19.346Z",
+        "by": "qa",
+        "appCommit": null,
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] COULD NOT TEST on prod: the QA account is out of trial (/auth/me sub_active false; insights and chat answer 402 trial_expired), so tapping the coach button opens /choose-plan and a coach chat message cannot be sent; the other QA tokens in the creds file expired in June. Verified instead: coach history GET works and holds 3 delivered morning briefs, support chat opens, add-food AI estimate works. To close the gap someone with admin access must grant the QA account a trial (a prod write: Shaan's call) or give a fresh QA login; then re-run steps 'open coach chat, send one message, morning brief card'."
     },
@@ -109,7 +142,7 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The coach is called 'Nisha' on Home and 'Freya' on every other tab for the same account: aria-label 'Chat with Nisha' on /dashboard but 'Chat with Freya' on /nutrition, /activity, /profile and /progress (the visible 'Ask <coach>' pill uses the same name, common.ask_coach). src/components/FloatingCoachButton.tsx:60 initialises coachName from getCoachName() || DEFAULT_COACH_NAME and Home never refreshes it, so the first screen shows the default persona. A new user meets two coach names in the first minute. Fix: resolve the coach name from the profile before first paint (or update it when the profile loads) so every screen agrees."
+      "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The coach is called 'Nisha' on Home and 'Freya' on every other tab for the same account: aria-label 'Chat with Nisha' on /dashboard but 'Chat with Freya' on /nutrition, /activity, /profile and /progress (the visible 'Ask <coach>' pill uses the same name, common.ask_coach). src/components/FloatingCoachButton.tsx:60 initialises coachName from getCoachName() || DEFAULT_COACH_NAME and Home never refreshes it, so the first screen shows the default persona. A new user meets two coach names in the first minute. Fix: resolve the coach name from the profile before first paint (or update it when the profile loads) so every screen agrees. || VERIFIED CAUSE (local run, 2026-10-21): the profile coach is Freya and chat.service.ts:109 caches it in localStorage once /coach/history loads, but the Home FAB keeps the default. src/components/FloatingCoachButton.tsx:60 keeps the name in useState(getCoachName() || DEFAULT_COACH_NAME) and its only refresh listeners (lines 134-145) are the cross-tab \"storage\" event and window \"focus\", NOT the in-tab COACH_NAME_EVENT that setCoachName() dispatches (coach-config.ts:53); the hook useCoachName (src/hooks/useCoachName.ts) already subscribes to that event but the FAB does not use it. Measured: first Home mount \"Chat with Nisha\" with localStorage already holding \"Freya\" 7 s later; Nutrition, Activity and the next Home visit say \"Freya\". Fix: replace the useState with useCoachName()."
     },
     {
       "id": "i-20261021-fd-search-gaps",
@@ -972,8 +1005,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name.",
+        "fixedAt": "2026-10-21T18:13:19.346Z",
+        "by": "qa",
+        "appCommit": null,
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] COULD NOT TEST: the QA account has no active plan (Subscription: 'No active plan'), so /coach-chat redirects to /choose-plan (PremiumRoute, App.tsx). Coach chat Hindi strings are unverified. Needs an entitled QA account (trial grant by Shaan) to run the same sweep. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /coach-chat."
     },
