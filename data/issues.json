@@ -509,10 +509,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in nyu_backend bf0769c0 (branch ai-overview-cache; push + deploy by the NYUS employee): per-user in-process cache for /ai/overview and /ai/weekly-insights, tied to a fingerprint of the user's data so a new meal log, ticked plan meal, weigh-in, workout or plan change regenerates on the next call; first-week accounts are now cached too. Local probe with a 5.5 s LLM: overview cold 5,634 ms -> warm 4.6 ms (0 LLM calls, 8 statements); weekly-insights 5,531 -> 8.4 ms. Prod before: 5,049-9,383 ms. Dashboard already renders without waiting on these (card skeleton + 12 s cap). Tests 11 + full backend suite 8,259 passed. Re-check SLOW_REQUEST on prod after the deploy.",
+        "imagePath": "images/i-20261021-fd-ai-slow-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-fd-ai-slow-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b1a90c1deb57247a1cad701ed565d5b9d9413f4c",
+        "imageCommits": [
+          "b1a90c1deb57247a1cad701ed565d5b9d9413f4c"
+        ],
+        "fixedAt": "2026-10-21T20:10:43.860Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Warm calls measured at 4.6/8.4 ms on the real routes with a prod-like LLM delay, invalidation proven per write type, full suite green; prod after-numbers still to be read once the NYUS employee pushes and deploys bf0769c0, and a cold call after new data still pays the LLM once (card-only, dashboard does not wait)."
+        }
+      },
       "history": [],
-      "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Dashboard and Nutrition open fire GET /api/v1/ai/overview?range=week&days=7 and GET /api/v1/ai/weekly-insights on every load and they are by far the slowest calls of the first session: client times 6.2-7.7 s (/health from the same PC is 0.7 s) and prod SLOW_REQUEST lines in ~/nyu_backend/nyus_app.log: 'GET /api/v1/ai/overview 200 6012ms db=271ms queries=126' (17:28:20 UTC), '6977ms db=120ms queries=126' (17:30:45), '5748ms db=109ms queries=123', '5426ms db=124ms queries=123', and 'GET /api/v1/ai/weekly-insights 200 5786ms db=205ms queries=128' (17:24:24). DB time is only 110-270 ms, so ~5.5 s is application time (not the DB), plus 123-128 queries per call. Code: AIOverviewResource backend.py:15788 (route :16919) and AIWeeklyInsightsResource backend.py:14320 (route :16928). Repro: open the web build at /dashboard with any account and watch the network tab, or curl the two routes with a bearer token three times. Fix direction: cache the weekly payload per user per day (weekly-insights is 0.8 s on its 2nd call, so a cache exists but ai/overview has none), move the LLM/aggregation off the request path, and make the dashboard not wait on it. Measure with the SLOW_REQUEST log after the change. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on PROD with the QA account: GET /api/v1/ai/overview?range=week&days=7 6.7 s, 6.3 s, 5.7 s; GET /api/v1/ai/weekly-insights 6.0 s then 0.67 s; GET /api/v1/activity/overview 0.69 s. Nothing shipped for this yet."
+      "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Dashboard and Nutrition open fire GET /api/v1/ai/overview?range=week&days=7 and GET /api/v1/ai/weekly-insights on every load and they are by far the slowest calls of the first session: client times 6.2-7.7 s (/health from the same PC is 0.7 s) and prod SLOW_REQUEST lines in ~/nyu_backend/nyus_app.log: 'GET /api/v1/ai/overview 200 6012ms db=271ms queries=126' (17:28:20 UTC), '6977ms db=120ms queries=126' (17:30:45), '5748ms db=109ms queries=123', '5426ms db=124ms queries=123', and 'GET /api/v1/ai/weekly-insights 200 5786ms db=205ms queries=128' (17:24:24). DB time is only 110-270 ms, so ~5.5 s is application time (not the DB), plus 123-128 queries per call. Code: AIOverviewResource backend.py:15788 (route :16919) and AIWeeklyInsightsResource backend.py:14320 (route :16928). Repro: open the web build at /dashboard with any account and watch the network tab, or curl the two routes with a bearer token three times. Fix direction: cache the weekly payload per user per day (weekly-insights is 0.8 s on its 2nd call, so a cache exists but ai/overview has none), move the LLM/aggregation off the request path, and make the dashboard not wait on it. Measure with the SLOW_REQUEST log after the change. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on PROD with the QA account: GET /api/v1/ai/overview?range=week&days=7 6.7 s, 6.3 s, 5.7 s; GET /api/v1/ai/weekly-insights 6.0 s then 0.67 s; GET /api/v1/activity/overview 0.69 s. Nothing shipped for this yet.",
+      "thread": [
+        {
+          "at": "2026-10-21T20:10:43.860Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in nyu_backend bf0769c0 (branch ai-overview-cache; push + deploy by the NYUS employee): per-user in-process cache for /ai/overview and /ai/weekly-insights, tied to a fingerprint of the user's data so a new meal log, ticked plan meal, weigh-in, workout or plan change regenerates on the next call; first-week accounts are now cached too. Local probe with a 5.5 s LLM: overview cold 5,634 ms -> warm 4.6 ms (0 LLM calls, 8 statements); weekly-insights 5,531 -> 8.4 ms. Prod before: 5,049-9,383 ms. Dashboard already renders without waiting on these (card skeleton + 12 s cap). Tests 11 + full backend suite 8,259 passed. Re-check SLOW_REQUEST on prod after the deploy.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-sc-oil-dash",
