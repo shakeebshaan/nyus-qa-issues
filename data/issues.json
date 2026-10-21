@@ -290,8 +290,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FAQ answer and FAQPage JSON-LD on best-cooking-oil-for-weight-loss-india now match exactly (FAQ equality check passes on all 4 items). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P4] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/best-cooking-oil-for-weight-loss-india.html: FAQ answer 2 differs from its FAQPage JSON-LD only in punctuation: JSON-LD (line 23) has \"20-50 g\" with a hyphen, the visible answer (line 121) has \"20–50 g\" with an en dash. Make them identical. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -311,8 +319,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "All five posts now end with a Sources list linking IFCT 2017, DGI 2024 (with the page numbers used: p.25, p.42, p.57, p.71) and the ICMR-NIN 2020 brief note where used; the calories post and the dal-chawal post also say plainly that cooked-dish values are NYUS estimates because IFCT lists raw foods; the oil post cites DGI 2024 p.71 for 20-50 g visible fat (verified in the PDF). The IFCT, DGI and brief-note links answer HTTP 200. NOT VERIFIED: the two FSSAI links on the oil post (press release of 8 February 2021, 3% by January 2021 and 2% by January 2022; Prohibition and Restrictions regulations compendium p.6, regulation 2.3.14(21)) cannot be opened from this machine (no HTTP response), so their wording is unchecked here. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] None of the five oldest food posts has an outbound link to a primary source (0 external links on each): /blog/calories-macros-common-indian-foods.html, /blog/indian-diet-plan-for-weight-loss.html, /blog/roti-vs-rice-for-weight-loss-india.html, /blog/dal-chawal-for-weight-loss-india.html, /blog/best-cooking-oil-for-weight-loss-india.html. /blog/best-cooking-oil-for-weight-loss-india.html line 98 attributes \"20-50 g a day\" visible fat to ICMR-NIN guidance (this is correct: DGI 2024 p.71 \"visible fat (cooking oil) must be limited to 20-50 g (4-10 teaspoon full) per person/day\", 20 g / 30 g for sedentary women / men, up to 40 g / 50 g for active men and 30 g / 40 g for active women) and line 95 states the FSSAI 2% industrial trans-fat cap in force since January 2022 [not verifiable from the IFCT/DGI PDFs], both with no link. The cooked-dish figures on /blog/calories-macros-common-indian-foods.html lines 64-74 (rice, dal, rajma, idli, dosa, poha, chicken curry, curd) have no IFCT row at all (IFCT is raw foods only); rice, dal and rajma recompute within 5-10% from IFCT raw rows (rice A015 356 kcal, 7.94 g protein per 100 g; toor/moong B021/B010; rajma B019), idli, dosa, poha and curd cannot be checked against the two PDFs. Fix: add a short Sources list to each post (IFCT 2017 / DGI 2024 / FSSAI order with the page numbers above) and a line saying cooked-dish values are NYUS estimates. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -331,8 +347,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "The plate total now reads ~350-400 kcal in the table, FAQ answer and JSON-LD, equal to the sum of the three rows above (190-205 + 120-150 + 40-45), and the tadka row names its fat (about 4.5-5 g, all of its 40-45 kcal; DGI 2024 p.25 900 kcal per 100 g). Correction to the original report: the table has Calories / Protein / Fibre columns, not a fat column, so the tadka row's 0 g cells (protein and fibre) were right and only the plate sum was wrong. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/dal-chawal-for-weight-loss-india.html line 71: \"Tadka (1 tsp ghee/oil) ~40-45 kcal | 0 g | 0 g\" - the 40-45 kcal is all fat (9 kcal per g, DGI 2024 p.25 cooking oil/fats 900 kcal per 100 g), so the fat column must read ~4.5-5 g, not 0 g (protein 0 g is right). Line 72: the plate row \"~320-380 kcal\" is below the sum of the three rows above it (190-205 + 120-150 + 40-45 = 350-400); it only works with a half-teaspoon tadka the table does not show. Fix: tadka fat ~4.5-5 g and plate ~350-400 kcal, or label the plate row \"light tadka = 1/2 tsp\". Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -351,8 +375,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fibre row now ~3.4-3.9 g for the roti (11.36 g per 100 g, IFCT A019, x 30-34 g) and ~1.5 g for 150 g cooked rice (A015, 2.81 g per 100 g, about 55 g raw); big-bowl line now ~325-390 kcal (1.3 kcal per g, as the page states); FAQ and JSON-LD agree; a Sources list explains the rice cooked-to-raw ratio. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/roti-vs-rice-for-weight-loss-india.html line 70 (Fibre row: roti ~2.5-3 g, cooked rice ~0.4-0.8 g) is low against IFCT 2017: atta A019 has 11.36 g total dietary fibre per 100 g (PDF p.42), so a roti of 30-34 g flour carries 3.4-3.9 g; rice, raw, milled A015 has 2.81 g per 100 g (PDF p.41), so 150 g cooked (about 55 g raw) carries about 1.5 g. Fix: roti ~3.4-3.9 g, rice ~1.5 g (still about 2.5x more in roti, so the conclusion at line 80 holds). Also line 72: \"250-300 g bowls (~350-400 kcal)\" is 325-390 kcal at the page's own 195 kcal per 150 g (1.3 kcal per g); write ~325-390. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -371,8 +403,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "The 1.2-1.6 g/kg line is replaced by the ICMR-NIN 2020 RDA of 0.83 g/kg/day (about 50 g for 60 kg) with a link to the brief note (HTTP 200); higher intakes are described as common in sports nutrition and explicitly not an ICMR-NIN recommendation, plus a not-medical-advice line for kidney disease, diabetes, pregnancy and medication, and a Sources list. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/indian-diet-plan-for-weight-loss.html line 61: \"A practical target is roughly 1.2-1.6 g of protein per kg of body weight per day\" has no source and no outbound link, while the page is a weight-loss health page. The Indian reference is ICMR-NIN 2020 RDA 0.83 g/kg/day (https://www.nin.res.in/rdabook/brief_note.pdf, already cited on the live Hindi diet-chart article), and DGI 2024 does not give 1.2-1.6. Fix: either cite a source for the higher range (and say who it is for, e.g. people training for strength or in a deficit) or quote the 0.83 g/kg RDA and say higher intakes are common in sports nutrition; add the not-medical-advice line. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -391,8 +431,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Vegetarian lunch row now uses paneer bhurji with 50 g paneer, which the page itself computes as 2 rotis (192 kcal) + dal katori (150) + 50 g paneer (153, IFCT L003) = about 495 kcal, matching the ~500 in the table; day sum 350+500+200+450+80 = 1,580 still fits the ~1,600 heading. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/indian-diet-plan-for-weight-loss.html line 73 (1-day plate table, Lunch, vegetarian): \"2 roti + 1 katori dal + paneer bhurji (100g) + salad\" is shown as ~500 kcal. By the site's own reference (roti 110 kcal each, dal katori 150, /blog/calories-macros-common-indian-foods.html lines 64, 66) and IFCT 2017 L003 paneer (1278 kJ = 305 kcal per 100 g, PDF p.57) that lunch is already 220 + 150 + 305 = 675 kcal before oil and salad, about 175 kcal above the table. The veg day then sums to about 1,750 kcal, not the ~1,600 in the heading (the arithmetic 350+500+200+450+80 = 1,580 only works with the low lunch). Fix: show ~680 kcal (or use paneer 50 g, ~150 kcal, giving ~520) and update the day total or the heading. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -411,8 +459,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "static/blog/indian-diet-plan-for-weight-loss.html now says 8,900+ Indian and global foods; no \"800+\" left in the file. The \"recalibrates weekly\" claim was also reworded to what the app does (weekly check-in, adjusts once enough is logged). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/indian-diet-plan-for-weight-loss.html line 97 says \"800+ Indian foods with macros\"; the site count is 8,900+ (prod food_database 8,941). Change to \"8,900+ Indian and global foods with macros\". Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -431,8 +487,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Roti row now states its basis (30 g atta, about 40 g dough) and shows ~96 kcal, 3.2 g protein, 19 g carbohydrate, 0.5 g fat = IFCT A019 (320 kcal, 10.57 g, 64.17 g, 1.53 g per 100 g, PDF p.42) x 30 g; the same 96 kcal is used in the body text, FAQ and JSON-LD, in roti-vs-rice (96-109 kcal for 30-34 g atta) and in indian-diet-plan; the paneer row was also corrected to IFCT L003 (50 g = ~153 kcal, 9.4 g protein, 12.4 g fat). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/calories-macros-common-indian-foods.html line 64 (and the 100-110 kcal roti on /blog/roti-vs-rice-for-weight-loss-india.html line 69, /blog/indian-diet-plan-for-weight-loss.html): \"1 medium roti, ~40 g, ~110 kcal, 3 g protein\" cannot be reproduced from IFCT 2017 A019 (Wheat flour, atta, PDF p.42: 1340 kJ = 320 kcal, 10.57 g protein, 64.17 g carbohydrate, 1.53 g fat per 100 g). 40 g of FLOUR gives 128 kcal / 4.2 g protein; 40 g of DOUGH (about 28 g flour) gives 90 kcal / 3.0 g protein; 110 kcal needs 34 g flour, which carries 3.6 g protein. The page never says whether 40 g is flour or dough. Fix: state the basis, e.g. \"1 roti = 30 g atta (about 40 g dough): ~96 kcal, 3.2 g protein, 19 g carbohydrate, 0.5 g fat, plus oil if brushed\", and align the roti kcal in the other two posts. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -451,8 +515,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Boiled egg row now ~74 kcal, 6.7 g protein, 5.3 g fat per 50 g, equal to IFCT 2017 M004 (618 kJ, 13.43 g protein, 10.54 g fat per 100 g, PDF p.58) halved. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/calories-macros-common-indian-foods.html line 73: Boiled egg, 1 large ~50 g shows ~78 kcal and 6 g protein. IFCT 2017 M004 (Egg, poultry, whole, boiled, PDF p.58) is 618 kJ (148 kcal) and 13.43 g protein per 100 g, i.e. 74 kcal and 6.7 g protein per 50 g. Protein is 0.7 g (10%) low and also disagrees with the site's own Hindi egg article (6.7 g). Fix: ~74 kcal, ~6.7 g protein, ~5.3 g fat (fat 10.54 g per 100 g). Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
@@ -471,8 +543,16 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "static/blog/calories-macros-common-indian-foods.html no longer contains \"800+\" anywhere (JSON-LD, body, FAQ); body now says 8,900+ Indian and global foods, almost all with macros from food-composition data. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet).",
+        "fixedAt": "2026-10-21T17:45:40.016Z",
+        "by": "qa",
+        "appCommit": "0d168440",
+        "tests": {
+          "passed": true
+        }
+      },
       "history": [],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/calories-macros-common-indian-foods.html lines 23 (FAQPage JSON-LD), 105 (body) and 115 (visible FAQ) still say \"800+ Indian foods\", while the same file's footer promo says 8,900+ and prod food_database has 8,941 rows. One count site-wide: change the three lines to \"8,900+ Indian and global foods\" (same wording as the batch pages). Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
