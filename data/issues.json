@@ -256,10 +256,42 @@
         "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Parts (a)+(b) fixed. (b) ranking: nyu_backend 4a1eec70 (branch food-search-ranking, push + deploy by the NYUS employee): exact, whole-word and prefix matches before substrings; tea -> Tea, brewed / Black Tea before Idli (Steamed); apple -> Apple before Pineapple; tests 5 (4 fail on old code), full backend suite 8,253 passed. (a) progress: app cb24436e, staged status + bar during the 4-8 s AI estimate; test walks all three stages; full vitest 9,415 passed.",
+        "imagePath": "images/i-20261021-fd-search-gaps-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-fd-search-gaps-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "029adc9b5d5e845944aa0aa368faa2d0855fd962",
+        "imageCommits": [
+          "029adc9b5d5e845944aa0aa368faa2d0855fd962"
+        ],
+        "fixedAt": "2026-10-21T20:35:48.458Z",
+        "by": "shakeebshaan",
+        "appCommit": "cb24436e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Only parts (a) progress and (b) ranking were in scope (Governor 21 Oct); both fixed with tests that reproduce QA on the old code. Coverage deliberately not done; issue reopened right after with that note."
+        }
+      },
       "history": [],
-      "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The first-day 'log a meal by search' path returns NOTHING for the most common Indian dishes the landing page advertises: q=biryani, samosa, chole, dal makhani, butter chicken, paneer butter masala, fish curry, chicken curry, vada, jalebi all return 0 rows, while roti, dal, paneer, banana, egg, rice, idli, poha, dosa, rajma return 20 or fewer. The sheet then says 'No matches - Log Meal and the coach will estimate it' and the AI fallback works (POST /api/v1/ai/estimate-meal-text, 4.7 s, 7.8 s until the sheet closes) but the user searched a dish we sell. Also relevance: q=tea lists 'Idli (Steamed)' first (substring match on 'Steamed') before Black Tea; q=apple lists Pineapple. Code: app/routes/logging.py:746 (custom-ingredients) and the caller src/components/nutrition/CustomMealModal.tsx:529-531. Fix: match whole words/prefixes first, add the missing dishes (the 40-food Indian seed branch food-seed-indian is a start), and show a spinner/progress text during the 4-8 s estimate. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on PROD with the QA account: custom-ingredients q=biryani, samosa, chole, dal makhani, butter chicken all return 0 rows; q=tea still lists \"Idli (Steamed)\" first; q=apple lists Pineapple third. The 40-food Indian seed (food-seed-indian, merged on e38ef80c) is NOT applied to prod, so nothing changed live."
+      "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The first-day 'log a meal by search' path returns NOTHING for the most common Indian dishes the landing page advertises: q=biryani, samosa, chole, dal makhani, butter chicken, paneer butter masala, fish curry, chicken curry, vada, jalebi all return 0 rows, while roti, dal, paneer, banana, egg, rice, idli, poha, dosa, rajma return 20 or fewer. The sheet then says 'No matches - Log Meal and the coach will estimate it' and the AI fallback works (POST /api/v1/ai/estimate-meal-text, 4.7 s, 7.8 s until the sheet closes) but the user searched a dish we sell. Also relevance: q=tea lists 'Idli (Steamed)' first (substring match on 'Steamed') before Black Tea; q=apple lists Pineapple. Code: app/routes/logging.py:746 (custom-ingredients) and the caller src/components/nutrition/CustomMealModal.tsx:529-531. Fix: match whole words/prefixes first, add the missing dishes (the 40-food Indian seed branch food-seed-indian is a start), and show a spinner/progress text during the 4-8 s estimate. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on PROD with the QA account: custom-ingredients q=biryani, samosa, chole, dal makhani, butter chicken all return 0 rows; q=tea still lists \"Idli (Steamed)\" first; q=apple lists Pineapple third. The 40-food Indian seed (food-seed-indian, merged on e38ef80c) is NOT applied to prod, so nothing changed live.",
+      "thread": [
+        {
+          "at": "2026-10-21T20:35:48.458Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Parts (a)+(b) fixed. (b) ranking: nyu_backend 4a1eec70 (branch food-search-ranking, push + deploy by the NYUS employee): exact, whole-word and prefix matches before substrings; tea -> Tea, brewed / Black Tea before Idli (Steamed); apple -> Apple before Pineapple; tests 5 (4 fail on old code), full backend suite 8,253 passed. (a) progress: app cb24436e, staged status + bar during the 4-8 s AI estimate; test walks all three stages; full vitest 9,415 passed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-fd-weekly-sessions",
