@@ -306,31 +306,39 @@
         "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
       ],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Fixed in app f9e68312 (+ nyu_backend branch weekly-challenge-criteria, awaiting the NYUS employee's push): (2) the micronutrient empty state, its recipe twin and the vitamins toggle are i18n (test/i18n/firstday-hindi.test.tsx renders it in Hindi). (1) the weekly challenge: the backend now returns the stored criteria {metric, target_value}; the app phrases the line from it in Hindi ('कम से कम 5 मील लॉग करें'), keeps the English server text in English and falls back to it when criteria is missing. Until the backend commit deploys, Hindi users still see the English line. Full vitest 9,411 passed.",
-        "imagePath": "images/i-20261021-fd-hi-strings-fix-r1.png",
-        "imagePaths": [
-          "images/i-20261021-fd-hi-strings-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "1b6a58229b937e3715a19893a5c9ed72ba35e64f",
-        "imageCommits": [
-          "1b6a58229b937e3715a19893a5c9ed72ba35e64f"
-        ],
-        "fixedAt": "2026-10-21T19:25:10.936Z",
-        "by": "shakeebshaan",
-        "appCommit": "f9e68312",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "Nutrition literal fixed and verified; challenge line localized in the app with fallback, but it needs the backend criteria field (committed on branch weekly-challenge-criteria) to be deployed before Hindi users see it."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-21T19:35:15.373Z",
+          "event": "reopened",
+          "note": "QA 2026-10-21 on app f9e68312 + backend branch weekly-challenge-criteria 992c12e9 (local, trial account, Hindi, 390x844). PART 2 VERIFIED: the Nutrition micronutrient note is Hindi (\"आज के खाने के लिए माइक्रोन्यूट्रिएंट अनुमान अभी उपलब्ध नहीं हैं।\", screenshot in the fab1 reopen). PART 1 NOT FIXED: the Home weekly challenge still reads \"Log at least 4 meals\" in English in Hindi. Cause: the dashboard builds the card headline itself, src/pages/Dashboard.tsx:648-651 uses singularizeChallengeText(weeklyChallenge.challenge) = the server English text, while the new challengeLine()/WeeklyChallengeCard (WeeklyChallengeCard.tsx:36-48) is not mounted anywhere (grep: no <WeeklyChallengeCard>; Dashboard only imports singularizeChallengeText). Executed: with the criteria field present in the API response ({\"metric\":\"meals_logged\",\"target_value\":4}) and a non-fresh-start state, getByText(\"Log at least\") finds the English line in the Hindi dashboard. Fix: use challengeLine(weeklyChallenge, t, i18n.language) for the headline at Dashboard.tsx:651 (keep the \"this week\" strip), then re-run; also the backend branch is not on origin/main yet, so prod would still send no criteria.",
+          "by": "qa",
+          "previousFix": {
+            "description": "Fixed in app f9e68312 (+ nyu_backend branch weekly-challenge-criteria, awaiting the NYUS employee's push): (2) the micronutrient empty state, its recipe twin and the vitamins toggle are i18n (test/i18n/firstday-hindi.test.tsx renders it in Hindi). (1) the weekly challenge: the backend now returns the stored criteria {metric, target_value}; the app phrases the line from it in Hindi ('कम से कम 5 मील लॉग करें'), keeps the English server text in English and falls back to it when criteria is missing. Until the backend commit deploys, Hindi users still see the English line. Full vitest 9,411 passed.",
+            "imagePath": "images/i-20261021-fd-hi-strings-fix-r1.png",
+            "imagePaths": [
+              "images/i-20261021-fd-hi-strings-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "1b6a58229b937e3715a19893a5c9ed72ba35e64f",
+            "imageCommits": [
+              "1b6a58229b937e3715a19893a5c9ed72ba35e64f"
+            ],
+            "fixedAt": "2026-10-21T19:25:10.936Z",
+            "by": "shakeebshaan",
+            "appCommit": "f9e68312",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "Nutrition literal fixed and verified; challenge line localized in the app with fallback, but it needs the backend criteria field (committed on branch weekly-challenge-criteria) to be deployed before Hindi users see it."
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Two more English strings in the Hindi first screens that the hi-* sweep did not list: (1) Dashboard weekly-challenge text 'Log at least 5 meals' is generated by the backend in English: app/services/gamification_service.py:798 f'Log at least {n} meal(s) this week' (no locale); (2) Nutrition 'Micronutrient estimates aren't available for today's meals yet.' is a hardcoded literal at src/components/nutrition/NutritionPanel.tsx:120 (not in en.json/hi.json). Repro: Hindi, open /dashboard and /nutrition. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: NutritionPanel.tsx:120 still a literal; gamification_service.py:798 still f\"Log at least {n} meal(s) this week\" on origin/main e38ef80c.",
       "thread": [
         {
@@ -339,6 +347,13 @@
           "kind": "resolve",
           "text": "Fixed in app f9e68312 (+ nyu_backend branch weekly-challenge-criteria, awaiting the NYUS employee's push): (2) the micronutrient empty state, its recipe twin and the vitamins toggle are i18n (test/i18n/firstday-hindi.test.tsx renders it in Hindi). (1) the weekly challenge: the backend now returns the stored criteria {metric, target_value}; the app phrases the line from it in Hindi ('कम से कम 5 मील लॉग करें'), keeps the English server text in English and falls back to it when criteria is missing. Until the backend commit deploys, Hindi users still see the English line. Full vitest 9,411 passed.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-21T19:35:15.373Z",
+          "who": "owner",
+          "kind": "reopen",
+          "text": "QA 2026-10-21 on app f9e68312 + backend branch weekly-challenge-criteria 992c12e9 (local, trial account, Hindi, 390x844). PART 2 VERIFIED: the Nutrition micronutrient note is Hindi (\"आज के खाने के लिए माइक्रोन्यूट्रिएंट अनुमान अभी उपलब्ध नहीं हैं।\", screenshot in the fab1 reopen). PART 1 NOT FIXED: the Home weekly challenge still reads \"Log at least 4 meals\" in English in Hindi. Cause: the dashboard builds the card headline itself, src/pages/Dashboard.tsx:648-651 uses singularizeChallengeText(weeklyChallenge.challenge) = the server English text, while the new challengeLine()/WeeklyChallengeCard (WeeklyChallengeCard.tsx:36-48) is not mounted anywhere (grep: no <WeeklyChallengeCard>; Dashboard only imports singularizeChallengeText). Executed: with the criteria field present in the API response ({\"metric\":\"meals_logged\",\"target_value\":4}) and a non-fresh-start state, getByText(\"Log at least\") finds the English line in the Hindi dashboard. Fix: use challengeLine(weeklyChallenge, t, i18n.language) for the headline at Dashboard.tsx:651 (keep the \"this week\" strip), then re-run; also the backend branch is not on origin/main yet, so prod would still send no criteria.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -364,15 +379,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app f9e68312: Profile > Support is Hindi (header, welcome, 6 topic chips + the Hindi templates they insert, sender labels, composer, attach/send, error state, toasts, quick-question card). Re-captured in Hindi: 167 Devanagari characters, 0 English strings (was 0 Devanagari). Tests: Support.page Hindi block; full vitest 9,411 passed. Hindi machine-drafted, needs native review. Rides the next Play build.",
+        "description": "Fixed in app f9e68312: Profile > Support is Hindi (header, welcome, 6 topic chips + the Hindi templates they insert, sender labels, composer, attach/send, error state, toasts, quick-question card). Re-captured in Hindi: 167 Devanagari characters, 0 English strings (was 0 Devanagari). Tests: Support.page Hindi block; full vitest 9,411 passed. Hindi machine-drafted, needs native review. Rides the next Play build. || QA VERIFIED 2026-10-21 on app f9e68312 (web bundle against local backend 992c12e9, 30-day trial account, 390x844, seeded Edge). BEFORE (70bab8dc): /support in Hindi had 0 Devanagari characters and the six topic chips, welcome and welcome line in English (images/2026-10-21-firstday/H-support.png). AFTER: Hindi page has 167 Devanagari characters and 0 English lines: header \"सहायता\", welcome, six chips, composer placeholder; English page unchanged (screenshots attached). Hindi wording is machine-drafted, still needs native review.",
         "imagePath": "images/i-20261021-fd-support-hi-fix-r1.png",
         "imagePaths": [
-          "images/i-20261021-fd-support-hi-fix-r1.png"
+          "images/i-20261021-fd-support-hi-fix-r1.png",
+          "images/2026-10-21-firstday-verify/fix2-support-hi-after-f9e68312.png",
+          "images/2026-10-21-firstday-verify/fix2-support-en-after-f9e68312.png"
         ],
         "imagePrivate": true,
         "imageCommit": "5d1b02e1d0da5a7b9fbd84371cf30dc7936a9271",
         "imageCommits": [
-          "5d1b02e1d0da5a7b9fbd84371cf30dc7936a9271"
+          "5d1b02e1d0da5a7b9fbd84371cf30dc7936a9271",
+          "13bc0845f43f453c7840e1bb1cdeddf115d4d7b0",
+          "13bc0845f43f453c7840e1bb1cdeddf115d4d7b0"
         ],
         "fixedAt": "2026-10-21T19:25:06.644Z",
         "by": "shakeebshaan",
@@ -1398,30 +1417,51 @@
       "route": "/nutrition",
       "imagePath": null,
       "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
+      "imagePaths": [
+        "images/2026-10-21-firstday-verify/fab1-hi-cue-under-fab-f9e68312.png"
+      ],
+      "imageCommits": [
+        "13bc0845f43f453c7840e1bb1cdeddf115d4d7b0"
+      ],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Verified 2026-10-21 on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) against prod reads of the QA account (writes blocked), /nutrition with the \"Missing meals compounds fast\" banner, first uneaten plan meal: the cue now renders \"Mark eaten\" ABOVE the circle (flex-col-reverse, NutritionMealCard.tsx:407, dev commit 02575e05) and sits fully visible below the coach button at the default scroll, no letters hidden. Today the QA account already has a custom log, which suppresses the cue, so the run rewrote the GET responses to drop the custom meal (executed, response rewrite only; nothing written to prod). Screenshot attached.",
-        "fixedAt": "2026-10-21T19:23:12.873Z",
-        "by": "qa",
-        "appCommit": "02575e05",
-        "tests": {
-          "passed": true
-        },
-        "imagePaths": [
-          "images/2026-10-21-board-recheck/fab1-meals-cue-70bab8dc.png"
-        ],
-        "imageCommits": [
-          "4e5f9a0cc51ad002f65a6243352b1eb5077c73fc"
-        ],
-        "imagePath": "images/2026-10-21-board-recheck/fab1-meals-cue-70bab8dc.png",
-        "imageCommit": "4e5f9a0cc51ad002f65a6243352b1eb5077c73fc",
-        "imagePrivate": false
-      },
-      "history": [],
-      "description": "[P3 / layout — executed 2026-10-21, build 5da19550 (B56 79f24d4e), 390x844 @2x] The new first-meal cue 'Mark eaten' (src/pages/_components/nutrition/NutritionMealCard.tsx ~L421, eatenCue at L159) is partly covered by the floating coach-chat button on /nutrition: with the 'Missing meals compounds fast' banner above, the first meal card's label sits at the bottom-right where the green 'Chat with Nisha' FAB is drawn, so the last letters of 'Mark eaten' are hidden until the user scrolls. Repro: fresh install (clear localStorage), open /nutrition on a 390x844 phone viewport with an uneaten plan; screenshot C:/tmp/qa-b56/meals-cue-en.png. Fix: add bottom/right clearance for the cue label or let the FAB hide while the cue is the first card in view. Ring, one-card-only and ring-disappears-after-tap all PASS."
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-21T19:35:15.373Z",
+          "event": "reopened",
+          "note": "QA 2026-10-21 re-check on app f9e68312 in HINDI (my earlier close checked English only): at default scroll on /nutrition with the banner, the first meal card shows the cue label \"खा लिया\" above the circle (flex-col-reverse, NutritionMealCard.tsx:407) and the green coach button (FAB) is drawn on top of it: only the first letter \"ख\" is visible, the rest is hidden until the user scrolls. English \"Mark eaten\" sits just below the FAB and is clear, so the English fix works but Hindi (a longer-above-the-circle label that lands in the FAB band) does not. Screenshot attached (390x844 @2x, prod reads of the QA account, GET responses rewritten to drop the custom meal so the cue shows, nothing written). Fix: do not rely on the label height: add bottom/right padding so the card clears the FAB, or put the cue label where the FAB cannot cover it (left of the circle), then check en and hi.",
+          "by": "qa",
+          "previousFix": {
+            "description": "Verified 2026-10-21 on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) against prod reads of the QA account (writes blocked), /nutrition with the \"Missing meals compounds fast\" banner, first uneaten plan meal: the cue now renders \"Mark eaten\" ABOVE the circle (flex-col-reverse, NutritionMealCard.tsx:407, dev commit 02575e05) and sits fully visible below the coach button at the default scroll, no letters hidden. Today the QA account already has a custom log, which suppresses the cue, so the run rewrote the GET responses to drop the custom meal (executed, response rewrite only; nothing written to prod). Screenshot attached.",
+            "fixedAt": "2026-10-21T19:23:12.873Z",
+            "by": "qa",
+            "appCommit": "02575e05",
+            "tests": {
+              "passed": true
+            },
+            "imagePaths": [
+              "images/2026-10-21-board-recheck/fab1-meals-cue-70bab8dc.png"
+            ],
+            "imageCommits": [
+              "4e5f9a0cc51ad002f65a6243352b1eb5077c73fc"
+            ],
+            "imagePath": "images/2026-10-21-board-recheck/fab1-meals-cue-70bab8dc.png",
+            "imageCommit": "4e5f9a0cc51ad002f65a6243352b1eb5077c73fc",
+            "imagePrivate": false
+          }
+        }
+      ],
+      "description": "[P3 / layout — executed 2026-10-21, build 5da19550 (B56 79f24d4e), 390x844 @2x] The new first-meal cue 'Mark eaten' (src/pages/_components/nutrition/NutritionMealCard.tsx ~L421, eatenCue at L159) is partly covered by the floating coach-chat button on /nutrition: with the 'Missing meals compounds fast' banner above, the first meal card's label sits at the bottom-right where the green 'Chat with Nisha' FAB is drawn, so the last letters of 'Mark eaten' are hidden until the user scrolls. Repro: fresh install (clear localStorage), open /nutrition on a 390x844 phone viewport with an uneaten plan; screenshot C:/tmp/qa-b56/meals-cue-en.png. Fix: add bottom/right clearance for the cue label or let the FAB hide while the cue is the first card in view. Ring, one-card-only and ring-disappears-after-tap all PASS.",
+      "thread": [
+        {
+          "at": "2026-10-21T19:35:15.373Z",
+          "who": "owner",
+          "kind": "reopen",
+          "text": "QA 2026-10-21 re-check on app f9e68312 in HINDI (my earlier close checked English only): at default scroll on /nutrition with the banner, the first meal card shows the cue label \"खा लिया\" above the circle (flex-col-reverse, NutritionMealCard.tsx:407) and the green coach button (FAB) is drawn on top of it: only the first letter \"ख\" is visible, the rest is hidden until the user scrolls. English \"Mark eaten\" sits just below the FAB and is clear, so the English fix works but Hindi (a longer-above-the-circle label that lands in the FAB band) does not. Screenshot attached (390x844 @2x, prod reads of the QA account, GET responses rewritten to drop the custom meal so the cue shows, nothing written). Fix: do not rely on the label height: add bottom/right padding so the card clears the FAB, or put the cue label where the FAB cannot cover it (left of the circle), then check en and hi.",
+          "by": "qa"
+        }
+      ]
     },
     {
       "id": "i-20261021-hl01",
