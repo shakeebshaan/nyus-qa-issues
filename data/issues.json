@@ -112,10 +112,42 @@
         "42adaa5969f933f2e4a1cbb4de89f500a03acc20"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Coach chat first screen now Hindi in Hindi (app b6df4db3). Welcome greeting/focus line/3 chips (+ crisis variant; a chip sends its Hindi text), composer placeholder 'Freya को मैसेज करें…', mic/send/cancel-reply/pending/admin labels, and message-list labels (Coach: prefix, message options, typing, Response sent, reply sender) all go through i18n in en/hi/hinglish/xx-AE. Hindi + Hinglish machine-drafted, not native-reviewed. Grep: no hardcoded English UI string left in CoachChatWelcomePanel/Composer/MessageList. Test: CoachChat.hindi-first-screen 5 passed; coach chat suites 74/74; tsc 0; vite build OK. Screenshot: 390px Hindi first screen.",
+        "imagePath": "images/i-20261021-cc-hi-first-screen-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-cc-hi-first-screen-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "82b340e19da3e8750bba5ad5a167aa19d8fa0c9b",
+        "imageCommits": [
+          "82b340e19da3e8750bba5ad5a167aa19d8fa0c9b"
+        ],
+        "fixedAt": "2026-10-21T22:07:44.283Z",
+        "by": "shakeebshaan",
+        "appCommit": "b6df4db3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "every listed string through i18n; render test + 390px Hindi screenshot; Hindi machine-drafted"
+        }
+      },
       "history": [],
-      "description": "[P2] Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. The coach chat first screen is English in Hindi: only the header subtitle (\"पर्सनल कोच\") is translated. Hardcoded English: greeting \"Hi {name}\" and \"What's the focus today?\" (src/components/coach/CoachChatWelcomePanel.tsx:98), the three quick-start chips \"Review my training plan\" / \"Plan tomorrow's meals\" / \"How's my recovery?\" (CoachChatWelcomePanel.tsx:29-31), the input placeholder `Message ${coachName}…` and its variants \"Reply to …\", \"Listening…\", \"Send as coach...\" (src/components/coach/CoachChatComposer.tsx:221), and the labels \"Speak your message\" (:228), \"Send message\" (:249), \"Log or add something\" (:189; the Hindi row \"कुछ लॉग करें या जोड़ें\" exists elsewhere) and \"Message options\" (src/components/coach/CoachChatMessageList.tsx:466). None of these strings is in en.json or hi.json. This is the first screen a Hindi user sees after tapping the coach button. Repro: set the app language to Hindi (coach_language syncs to hindi), open /coach-chat. Fix: move them to t() keys with hi/hinglish values. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: CoachChatWelcomePanel.tsx:29-31,98 and CoachChatComposer.tsx:221,228 are still literals on 70bab8dc (components/coach untouched since f24c2985)."
+      "description": "[P2] Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. The coach chat first screen is English in Hindi: only the header subtitle (\"पर्सनल कोच\") is translated. Hardcoded English: greeting \"Hi {name}\" and \"What's the focus today?\" (src/components/coach/CoachChatWelcomePanel.tsx:98), the three quick-start chips \"Review my training plan\" / \"Plan tomorrow's meals\" / \"How's my recovery?\" (CoachChatWelcomePanel.tsx:29-31), the input placeholder `Message ${coachName}…` and its variants \"Reply to …\", \"Listening…\", \"Send as coach...\" (src/components/coach/CoachChatComposer.tsx:221), and the labels \"Speak your message\" (:228), \"Send message\" (:249), \"Log or add something\" (:189; the Hindi row \"कुछ लॉग करें या जोड़ें\" exists elsewhere) and \"Message options\" (src/components/coach/CoachChatMessageList.tsx:466). None of these strings is in en.json or hi.json. This is the first screen a Hindi user sees after tapping the coach button. Repro: set the app language to Hindi (coach_language syncs to hindi), open /coach-chat. Fix: move them to t() keys with hi/hinglish values. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: CoachChatWelcomePanel.tsx:29-31,98 and CoachChatComposer.tsx:221,228 are still literals on 70bab8dc (components/coach untouched since f24c2985).",
+      "thread": [
+        {
+          "at": "2026-10-21T22:07:44.283Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Coach chat first screen now Hindi in Hindi (app b6df4db3). Welcome greeting/focus line/3 chips (+ crisis variant; a chip sends its Hindi text), composer placeholder 'Freya को मैसेज करें…', mic/send/cancel-reply/pending/admin labels, and message-list labels (Coach: prefix, message options, typing, Response sent, reply sender) all go through i18n in en/hi/hinglish/xx-AE. Hindi + Hinglish machine-drafted, not native-reviewed. Grep: no hardcoded English UI string left in CoachChatWelcomePanel/Composer/MessageList. Test: CoachChat.hindi-first-screen 5 passed; coach chat suites 74/74; tsc 0; vite build OK. Screenshot: 390px Hindi first screen.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-fd-coach-blocked",
