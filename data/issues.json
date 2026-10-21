@@ -274,10 +274,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Backend nyu_backend 7935dcf7 (branch firstday-batch5, NOT deployed yet). The 'quiet for 2 days' line was hardcoded; it now counts the real days since the last active day (up to 14) in en/hi/hinglish, and from 7 days says it has been a week or more. test_pattern_detection +5; full backend suite 8,257 passed / 0 failed.",
+        "imagePath": "images/i-20261021-fd-brief-copy-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-fd-brief-copy-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fda301258153053461f183529de4f850718740bd",
+        "imageCommits": [
+          "fda301258153053461f183529de4f850718740bd"
+        ],
+        "fixedAt": "2026-10-21T21:39:36.429Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "real day count in 3 languages; live only after the branch is deployed"
+        }
+      },
       "history": [],
-      "description": "[P4] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The morning brief sends the same fixed sentence every day: coach chat history for the QA account has 'Morning brief - Mon 19 Oct: ...you've been quiet for 2 days...' and the identical text on Tue 20 Oct and (Hindi) Wed 21 Oct, although inactivity grew each day. The number is hardcoded: app/services/coach_copy.py:136 (English) and :137 (Hindi), mirrored in app/services/pattern_detection.py:197. Fix: pass the real days-quiet count (or say 'a few days') and vary the line after the first send. The brief itself is delivered on time (FF_DAILY_BRIEF job runs hourly, composes at user-local 7 AM). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: coach_copy.py:136 still \"quiet for 2 days\" on origin/main e38ef80c."
+      "description": "[P4] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The morning brief sends the same fixed sentence every day: coach chat history for the QA account has 'Morning brief - Mon 19 Oct: ...you've been quiet for 2 days...' and the identical text on Tue 20 Oct and (Hindi) Wed 21 Oct, although inactivity grew each day. The number is hardcoded: app/services/coach_copy.py:136 (English) and :137 (Hindi), mirrored in app/services/pattern_detection.py:197. Fix: pass the real days-quiet count (or say 'a few days') and vary the line after the first send. The brief itself is delivered on time (FF_DAILY_BRIEF job runs hourly, composes at user-local 7 AM). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: coach_copy.py:136 still \"quiet for 2 days\" on origin/main e38ef80c.",
+      "thread": [
+        {
+          "at": "2026-10-21T21:39:36.429Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Backend nyu_backend 7935dcf7 (branch firstday-batch5, NOT deployed yet). The 'quiet for 2 days' line was hardcoded; it now counts the real days since the last active day (up to 14) in en/hi/hinglish, and from 7 days says it has been a week or more. test_pattern_detection +5; full backend suite 8,257 passed / 0 failed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-fd-coach-name",
