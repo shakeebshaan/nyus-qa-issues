@@ -1797,8 +1797,34 @@
         "13bc0845f43f453c7840e1bb1cdeddf115d4d7b0"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "App e7945ec6: the first-meal cue label now sits LEFT of the circle (flex-row-reverse), not above it. The idle coach button covers x 318-374 at 390px; the label ends at x=316 in both languages (measured: hi 'खा लिया' [273..316], en 'Mark eaten' [251..316]), so it cannot sit under the button at any scroll. 390x844 @2x, prod reads of the QA account, writes blocked, GETs rewritten to drop custom logs so the cue shows. Shot 1: Hindi default scroll, label fully visible beside the button. Shots 2-3: card in view, hi + en. (In English the two-line header puts the card under the bottom nav at default scroll, not under the coach button.) Caveat: while a real coach nudge is active the button widens into the 'Chat with …' pill (x 170-374), which covers any card text in its band until dismissed; that is the owner-restored nudge state (2026-08-23), left unchanged. Tests: firstLogCue 8/8 (asserts the row layout), nutrition suites 241/241, tsc 0.",
+        "imagePath": "images/i-20261021-fab1-fix-r2.png",
+        "imagePaths": [
+          "images/i-20261021-fab1-fix-r2.png",
+          "images/i-20261021-fab1-fix-r2-2.png",
+          "images/i-20261021-fab1-fix-r2-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5ccf90d208103cf65f3639bf487ca4432639ed85",
+        "imageCommits": [
+          "5ccf90d208103cf65f3639bf487ca4432639ed85",
+          "e5617f832dfb3b29fa36a3601b12d325c33904bd",
+          "7c2166a720efbf955afbe9a24c44f8c35f71c87c"
+        ],
+        "fixedAt": "2026-10-21T22:44:34.976Z",
+        "by": "shakeebshaan",
+        "appCommit": "e7945ec6",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "geometry-proven clear of the idle button in hi+en; nudge pill caveat stated"
+        }
+      },
       "history": [
         {
           "at": "2026-10-21T19:35:15.373Z",
@@ -1833,8 +1859,16 @@
           "kind": "reopen",
           "text": "QA 2026-10-21 re-check on app f9e68312 in HINDI (my earlier close checked English only): at default scroll on /nutrition with the banner, the first meal card shows the cue label \"खा लिया\" above the circle (flex-col-reverse, NutritionMealCard.tsx:407) and the green coach button (FAB) is drawn on top of it: only the first letter \"ख\" is visible, the rest is hidden until the user scrolls. English \"Mark eaten\" sits just below the FAB and is clear, so the English fix works but Hindi (a longer-above-the-circle label that lands in the FAB band) does not. Screenshot attached (390x844 @2x, prod reads of the QA account, GET responses rewritten to drop the custom meal so the cue shows, nothing written). Fix: do not rely on the label height: add bottom/right padding so the card clears the FAB, or put the cue label where the FAB cannot cover it (left of the circle), then check en and hi.",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-21T22:44:34.976Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App e7945ec6: the first-meal cue label now sits LEFT of the circle (flex-row-reverse), not above it. The idle coach button covers x 318-374 at 390px; the label ends at x=316 in both languages (measured: hi 'खा लिया' [273..316], en 'Mark eaten' [251..316]), so it cannot sit under the button at any scroll. 390x844 @2x, prod reads of the QA account, writes blocked, GETs rewritten to drop custom logs so the cue shows. Shot 1: Hindi default scroll, label fully visible beside the button. Shots 2-3: card in view, hi + en. (In English the two-line header puts the card under the bottom nav at default scroll, not under the coach button.) Caveat: while a real coach nudge is active the button widens into the 'Chat with …' pill (x 170-374), which covers any card text in its band until dismissed; that is the owner-restored nudge state (2026-08-23), left unchanged. Tests: firstLogCue 8/8 (asserts the row layout), nutrition suites 241/241, tsc 0.",
+          "by": "shakeebshaan"
         }
-      ]
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hl01",
