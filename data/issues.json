@@ -421,8 +421,29 @@
         "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in nyu_backend dcc4efe1 (live 22 Oct 01:13 UTC, watcher DEPLOYED in 23s, health 200). Add Food search (GET /logs/meal/custom-ingredients) now also reads food_database (curated Indian dishes, source 'food') and ranks exact / name-prefix / whole-word / word-prefix matches before plain substrings. Proof: post-deploy check against prod with the QA account, 12/12 PASS (biryani, samosa, chole, dal makhani, butter chicken, paneer butter masala, fish curry, chicken curry, vada, jalebi all return rows; tea -> Tea (with milk+sugar), no Idli; apple -> Apple, no Pineapple in the top 3). Backend full suite 8,377 passed / 0 failed on this head; route + ranking tests re-run before push: 168 passed. Backend-only fix, no app change.",
+        "imagePath": "images/i-20261021-fd-search-gaps-fix-r2.png",
+        "imagePaths": [
+          "images/i-20261021-fd-search-gaps-fix-r2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0488deb5516ed63b6a210cc07ced411326ce1701",
+        "imageCommits": [
+          "0488deb5516ed63b6a210cc07ced411326ce1701"
+        ],
+        "fixedAt": "2026-10-22T01:14:41.952Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "All 10 dishes now return rows and tea/apple rank a real tea/apple first; minor: tea's 2nd-3rd hits are long USDA herbal-tea names"
+        }
+      },
       "history": [
         {
           "at": "2026-10-21T20:35:51.486Z",
@@ -468,6 +489,13 @@
           "who": "owner",
           "kind": "reopen",
           "text": "Kept OPEN for the coverage part only: biryani, samosa, chole, dal makhani, butter chicken etc. still return 0 rows. The Indian food seed (data/indian_food_seed, scripts/import_indian_food_seed.py) stays parked per Shaan's no on 21 Oct, so nothing was imported. Parts (a) progress hint (app cb24436e) and (b) ranking (nyu_backend 4a1eec70, awaiting deploy) are done.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-22T01:14:41.952Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in nyu_backend dcc4efe1 (live 22 Oct 01:13 UTC, watcher DEPLOYED in 23s, health 200). Add Food search (GET /logs/meal/custom-ingredients) now also reads food_database (curated Indian dishes, source 'food') and ranks exact / name-prefix / whole-word / word-prefix matches before plain substrings. Proof: post-deploy check against prod with the QA account, 12/12 PASS (biryani, samosa, chole, dal makhani, butter chicken, paneer butter masala, fish curry, chicken curry, vada, jalebi all return rows; tea -> Tea (with milk+sugar), no Idli; apple -> Apple, no Pineapple in the top 3). Backend full suite 8,377 passed / 0 failed on this head; route + ranking tests re-run before push: 168 passed. Backend-only fix, no app change.",
           "by": "shakeebshaan"
         }
       ],
