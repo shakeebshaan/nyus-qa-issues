@@ -11593,6 +11593,97 @@
       ],
       "route": "/ai/overview",
       "description": "[P3 / Hindi, found in the old-issue re-test 22 Oct] /ai/overview (the full weekly overview screen) is entirely English in Hindi: 11 English lines + 6 attributes (\"Weekly Overview\" src/pages/AIOverview.tsx:98 headerLabel, \"Weight\", \"{n}-day streak\" :376, \"this week\" tile text, \"Diet\" and the other section labels). Only the Hindi digits of the shell show. Different from the Home weekly-insights card. Repro (executed on the live build, release/307 web bundle, QA account, Hindi, 390px): set the language to Hindi. New Hindi is machine-drafted, needs native read (nyus-f84785). Fix: route every label through t() (the file has no useTranslation), reuse existing Hindi keys where the English matches (weight, diet, streak). Acceptance test for dev: Hindi /ai/overview with an overview loaded has 0 Latin app strings except values and units (the model text is covered by i-20261022-hi-weekly-overview-english); English unchanged."
+    },
+    {
+      "createdAt": "2026-10-22T15:59:08.280Z",
+      "author": "qa",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "history": [],
+      "id": "i-20261022-seo-qa-fruits-dryfruits",
+      "tags": [
+        "seo",
+        "landing",
+        "draft-qa",
+        "p4"
+      ],
+      "route": "NYUSLANDING draft/seo-fruits-dryfruits @ 1ba93a3b",
+      "status": "open",
+      "fix": null,
+      "description": "[QA verdict: FAIL, one blocking link defect; every number passes] Pages: static/blog/calories-in-grapes-chikoo-litchi-sitaphal-jackfruit-india.html and static/blog/khajoor-kishmish-khubani-dry-fruits-calories-fibre-per-100g-india.html. DEFECT: khajoor-kishmish-khubani-...html:136 links to /blog/seeds-compared-sesame-flax-sunflower-protein-fibre-calories-india.html and line 99 tells the reader to \"see the nuts and seeds pages linked below\", but that seeds page is a held draft and answers 404 on live nyus.in (curl), so uploading the fruit pages alone ships a dead link (audit-links would also block). Fix: drop the seeds link and the sentence at line 99, or ship the seeds page with this upload (it is held by the dietitian read nyus-fad8c0). Everything else PASSES [executed]: all 17 IFCT 2017 Table 1 rows (E005, E016-E019, E021, E022, E026, E030, E035, E050, E051, E054, E057, E058, E060, E063) re-read from the PDF with the column header on each page; the 18 table rows (energy kJ/4.184, carbs, fibre, protein, water, regions) match, the 30 g table (96/93/92/89/86/95 kcal, fibre, protein) recomputes; 5.7x raisin vs grape = 1279/224 kJ = 5.71 (306/54 kcal = 5.67), water 19.69 vs 85.55 g; 1% amla / 5% sitaphal of 2,000 kcal and 5% / 6% of 2,110 / 1,660 kcal correct; DGI 2024 p. 20 (Fruits 100 g in the 2,000 kcal pyramid), p. 22 (Fruits: seasonal fruits), p. 34 (nuts and oilseeds 20 g, ~2020 kcal menu) and ICMR-NIN 2020 p. 4 (2,110 / 1,660) verified in the PDFs, and \"DGI gives no dried-fruit portion\" is true; titles 51 and 50 characters, descriptions 148 and 144, FAQ equals JSON-LD (4 of 4 each), tables.js loaded, other links 200. Sugar/medical: none, only the stated \"no claim about sugar\" and the diabetes/medicines disclaimer. Minor wording, not blocking: khajoor...html:107 \"the same drying effect runs through the other dried fruits in the table\" is an inference (the table has no fresh match for apricot or dates). The REVIEW FLAG comment is kept on both pages until the link is fixed."
+    },
+    {
+      "createdAt": "2026-10-22T15:59:08.280Z",
+      "author": "qa",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "history": [],
+      "id": "i-20261022-seo-qa-fish-mutton",
+      "tags": [
+        "seo",
+        "landing",
+        "draft-qa",
+        "qa-verdict",
+        "p4"
+      ],
+      "route": "NYUSLANDING draft/seo-fish-mutton @ 0b6ef44c (QA comment commit e7bb5367)",
+      "status": "fixed",
+      "description": "[QA verdict: PASS] Re-pass of the mutton curry fix and fish spot-check, 22 Oct.",
+      "fix": {
+        "description": "PASS. Mutton page at 0b6ef44c is byte-identical to the page QA passed earlier today: onion G017 protein 0.6 g and tomato D075 0.2 g (PDF p. 54 and 48, header-anchored), portion total 355 kcal / 33.9 g, 30 g oil variant 535 kcal, no 34.3 left, FAQ equals JSON-LD, within-source chicken comparison wording. Fish page unchanged vs 2377d0d1; 13 fish rows (incl. rohu S006, hilsa P017, pomfret P056/P057, mackerel P034, tuna P084) match the PDF on protein, fat, kcal, regions and kcal per 10 g. The REVIEW FLAG comment was replaced by the QA review comment on both pages (commit e7bb5367, local branch only, nothing pushed). Still held out of upload by the dietitian read (Shaan list item nyus-fad8c0); the REVIEW FLAG comment on the QA-passed pages was replaced by the QA review comment (which names that hold).",
+        "imagePath": null,
+        "imagePaths": [],
+        "imagePrivate": false,
+        "imageCommit": null,
+        "imageCommits": [],
+        "fixedAt": "2026-10-22T15:59:08.280Z",
+        "by": "qa",
+        "appCommit": "e7bb5367",
+        "tests": null,
+        "judge": null,
+        "verifiedAt": "2026-10-22T15:59:08.280Z"
+      }
+    },
+    {
+      "createdAt": "2026-10-22T15:59:08.280Z",
+      "author": "qa",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "history": [],
+      "id": "i-20261022-seo-qa-flour-seeds",
+      "tags": [
+        "seo",
+        "landing",
+        "draft-qa",
+        "qa-verdict",
+        "p4"
+      ],
+      "route": "NYUSLANDING draft/seo-flour-seeds @ ef0921cb (QA comment commit 4de8d702)",
+      "status": "fixed",
+      "description": "[QA verdict: PASS] Re-pass of the swap-sentence fix, 22 Oct.",
+      "fix": {
+        "description": "PASS. static/blog/atta-vs-maida-vs-suji-...html:94 now reads \"changes energy by about 10 kcal (the two rows above)\", which matches the 96 and 106 kcal rows (unrounded 9.46); that is the only change vs the page QA reviewed at eb14a34a, the seeds page is unchanged, the mutton page in the branch equals the passed 0b6ef44c page, FAQ equals JSON-LD. The earlier checks stand: 20 IFCT rows re-read from the PDF (semolina fibre 9.72 g, flax 26.17 g), portions recomputed, DGI pp. 16/19/23/34/71 verbatim. The REVIEW FLAG comment was replaced by the QA review comment on the atta and seeds pages (commit 4de8d702, local branch only, nothing pushed). Note: the fish/mutton pages inside this branch still carry the old REVIEW FLAG until draft/seo-fish-mutton (e7bb5367) is merged in. Still held out of upload by the dietitian read (Shaan list item nyus-fad8c0); the REVIEW FLAG comment on the QA-passed pages was replaced by the QA review comment (which names that hold).",
+        "imagePath": null,
+        "imagePaths": [],
+        "imagePrivate": false,
+        "imageCommit": null,
+        "imageCommits": [],
+        "fixedAt": "2026-10-22T15:59:08.280Z",
+        "by": "qa",
+        "appCommit": "4de8d702",
+        "tests": null,
+        "judge": null,
+        "verifiedAt": "2026-10-22T15:59:08.280Z"
+      }
     }
   ]
 }
