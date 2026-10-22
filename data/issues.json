@@ -12583,6 +12583,33 @@
       "fix": null,
       "history": [],
       "description": "[P4] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Home weekly-insights card prints \"Next week: <focus>\" with the label hardcoded in English: src/components/WeeklyInsightsCard.tsx line 295 (<span className=\"text-caption\">Next week: {overview.next_week_focus}</span>, no t()). The card heading and aria are Hindi. The screenshot was taken with GET /ai/overview stubbed to a sample payload (prod currently answers the \"temporarily unavailable\" fallback for the QA account, so the card hides itself there); the headline, win, improvement and tip lines in the screenshot are the stub text. Fix: add a key (e.g. weekly_insights.next_week with {{focus}}) to en.json and hi.json and use it at line 295."
+    },
+    {
+      "id": "i-20261022-daily-focus-fab-overlap",
+      "createdAt": "2026-10-22T05:04:03.883Z",
+      "author": "qa",
+      "tags": [
+        "layout",
+        "fab",
+        "daily-focus",
+        "p3"
+      ],
+      "route": "/daily-focus",
+      "imagePath": "images/2026-10-22-recheck307/daily-focus-fab-hi.png",
+      "imageCommit": "9934c0af7eff4c8df779c5354e89fc11947a1261",
+      "imagePaths": [
+        "images/2026-10-22-recheck307/daily-focus-fab-hi.png",
+        "images/2026-10-22-recheck307/daily-focus-fab-en.png"
+      ],
+      "imageCommits": [
+        "9934c0af7eff4c8df779c5354e89fc11947a1261",
+        "9934c0af7eff4c8df779c5354e89fc11947a1261"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / layout] [Release 307 smoke follow-up, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, 390x844 @2x] On Daily Focus the floating coach button covers the calendar's right column at the default scroll, so day 24 is unreadable (only part of the '2' shows). Same class as i-20261021-fd-fab-overlap-faq and i-20261021-fab1. Executed in both languages: the button is at x 318-374, y 676-732; the day-24 cell is x 306-345, y 675-715 in English (27x39 px of the 39 px cell hidden, and day 31 loses 27x13 px more) and x 306-345, y 693-732 in Hindi (27x39 px, day 17 loses 27x13 px). Screenshots: Hindi (daily-focus-fab-hi.png, also the original s1-hi-daily-focus.png) and English (daily-focus-fab-en.png). Cause: '/daily-focus' is in the coach-button allowlist (src/lib/chrome-routes.ts line 94), and the calendar grid in src/pages/DailyFocus.tsx (generateCalendarGrid, line 165) has no right/bottom clearance for the button. Fix, either: (a) remove '/daily-focus' from the allowlist as was done for /faq (the page already has its own tap targets), or (b) keep the button and give the calendar right padding (>= 64 px at 390 px) plus bottom padding so no day cell sits under x 318-374 at any scroll. Check in en and hi after the change."
     }
   ]
 }
