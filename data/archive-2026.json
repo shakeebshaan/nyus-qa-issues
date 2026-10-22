@@ -25923,6 +25923,55 @@
       ],
       "needsReview": false,
       "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "createdAt": "2026-10-22T07:36:13.511Z",
+      "author": "qa",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED, PENDING DEPLOY (not live until the landing upload of NYUSLANDING upload/landing-fixes-4 @ b31f5aea, Shaan's yes on the decide item). 3db904b1 merges growth's draft/landing-tdee-og (27 pages: 6 blog hubs, 20 top articles, /sitemap/ which had no og:image), 26ac4b56 applies docs/og-image-plan.csv through scripts/og-images.mjs (generators gen-blog/gen-pages call applyOg, so a regen keeps it). Reuses the live app screenshots F1-F4.webp: sitemap URLs on 2.webp 196 -> 5 (home keeps its brand card; terms, refund, privacy, account-deletion). Counted by the NYUS employee on the branch over all 200 sitemap URLs (executed): F3 113, F4 39, F1 29, F2 14, 2.webp 5, missing 0. og:image, twitter:image and Article JSON-LD image agree on every changed page; og:image:width/height match the real files; og-images.mjs --check 195 pages 0 stale; upload-ready --dry READY. The 795 templated meal pages (robots-blocked, not in the sitemap) are unchanged. Better end state (1200x630 card per article) needs a design yes. Close after the upload: curl 5 sitemap pages and compare og:image to the table.",
+        "fixedAt": "2026-10-22T13:44:37.254Z",
+        "by": "nyus-employee",
+        "appCommit": "26ac4b56",
+        "tests": {
+          "passed": true
+        },
+        "imagePath": "images/2026-10-22-landing-fix4/8-og-table.png",
+        "imagePaths": [
+          "images/2026-10-22-landing-fix4/8-og-table.png"
+        ],
+        "imagePrivate": false
+      },
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. 5 of 5 sampled pages still carry og:image https://nyus.in/2.webp."
+        },
+        {
+          "at": "2026-10-22T13:44:37.254Z",
+          "event": "fixed-pending-deploy",
+          "note": "fixed on upload/landing-fixes-4 b31f5aea, awaiting the landing upload",
+          "by": "nyus-employee"
+        }
+      ],
+      "id": "i-20261022-seo-og-image-shared",
+      "tags": [
+        "seo",
+        "landing",
+        "social",
+        "p4",
+        "pending-deploy"
+      ],
+      "route": "https://nyus.in/ (every sitemap page)",
+      "description": "[P4 / SEO and social previews, live SEO sweep of nyus.in 2026-10-22] 196 of the 197 sitemap URLs use the same og:image, https://nyus.in/2.webp (HTTP 200): every shared blog link (WhatsApp, X, LinkedIn, Facebook) shows the identical card, whatever the article. https://nyus.in/sitemap/ has no og:image at all. Executed: og:image read from every page in sitemap-pages.xml and blog/sitemap-blog.xml; 1 unique value. Not something the pending upload changes (the c5a0c883 pages carry the same og:image tag). Fix, when there is time: a per-article or per-section image (even 4-5 variants: Hindi, meals, exercise, calculators, guides) and an og:image on /sitemap/. Low priority; no ranking effect, only click-through from shares.",
+      "archivedAt": "2026-10-22T16:03:08.123Z"
     }
   ]
 }
