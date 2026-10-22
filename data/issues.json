@@ -10801,6 +10801,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. app/services/context_assembler.py:870-873 still sums every logged row (eaten_logged excludes skipped, but logged_kcal at :873 sums all meals)."
+        },
+        {
+          "at": "2026-10-22T15:16:25.831Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "LIVE check on prod 22 Oct 15:10-15:14 UTC after backend 50d672ba deployed (15:08): PENDING, not closed. Steps run with the QA account (main): baseline counted kcal 1,805 (4 rows: 455+564 plan meals eaten, 331+455 custom); logged 2 meals today (ids 503 = 300 kcal, 504 = 450 kcal, both 201); removed 504 the way the app does (POST /logs/meal/504/skip -> skipped:true); GET /diet/plan then shows only 503, so the day counts 1,805 + 300 = 2,105 and must never include 450 (a reply of 2,555 would be the bug). Sent \"How many calories have I eaten today?\" over the live socket (stored in /coach/history at 15:11:05) but the coach produced NO reply in 3+ minutes and no fallback message was stored: consistent with the daily AI cost cap this account hit at 04:51 UTC, so it proves nothing about the fix. The other QA logins (sim_mira/noah/divya) are unusable: access tokens expired 26 Jun, refresh tokens 11 Aug (401). Cap not touched. Cleaned up: both test meals removed (503 and 504 skipped), the day is back to the 5 original rows / 1,805 kcal. Re-run after the 00:00 UTC 23 Oct reset."
         }
       ]
     },
