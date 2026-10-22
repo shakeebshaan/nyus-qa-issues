@@ -1824,10 +1824,42 @@
         "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844, QA account, prod reads, writes blocked. /faq: 0 English lines on the list (was 83): chrome, all category names and article titles (by the slug of their English). Article bodies on the detail screen stay English (a content translation pass, not part of this list). Tests: hindi-sweep-screens-2 7/7, full app suite 8,249 passed / 0 failed, tsc 0. Hindi machine-drafted (native-read list on nyus-f84785).",
+        "imagePath": "images/i-20261021-hi-faq-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-faq-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bca575d7e7eca5e56d143055ce1e902337e4b78a",
+        "imageCommits": [
+          "bca575d7e7eca5e56d143055ce1e902337e4b78a"
+        ],
+        "fixedAt": "2026-10-22T02:11:51.559Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "list screen 0 English lines; bodies stay English"
+        }
+      },
       "history": [],
-      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Help & FAQ fully English (0 Hindi chars): FAQ.tsx:189,195 'Search Help Articles'; category and article titles come from src/lib/faq-fallback.ts (:18 'Getting Started', :52 'Help & FAQ') and the backend FAQ API. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /faq. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/faq.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /faq in Hindi: 18 Devanagari characters, all 16 categories, \"46 articles found\" and article titles English. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /faq in Hindi: 18 Devanagari characters (bottom nav), 83 English lines (\"Help & FAQ\", \"Search Help Articles\", every category and article title). Minimal repro: localStorage nyus_locale=hi, sign in, open /faq."
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Help & FAQ fully English (0 Hindi chars): FAQ.tsx:189,195 'Search Help Articles'; category and article titles come from src/lib/faq-fallback.ts (:18 'Getting Started', :52 'Help & FAQ') and the backend FAQ API. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /faq. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/faq.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /faq in Hindi: 18 Devanagari characters, all 16 categories, \"46 articles found\" and article titles English. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /faq in Hindi: 18 Devanagari characters (bottom nav), 83 English lines (\"Help & FAQ\", \"Search Help Articles\", every category and article title). Minimal repro: localStorage nyus_locale=hi, sign in, open /faq.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:51.559Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844, QA account, prod reads, writes blocked. /faq: 0 English lines on the list (was 83): chrome, all category names and article titles (by the slug of their English). Article bodies on the detail screen stay English (a content translation pass, not part of this list). Tests: hindi-sweep-screens-2 7/7, full app suite 8,249 passed / 0 failed, tsc 0. Hindi machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hi-health-alerts",
