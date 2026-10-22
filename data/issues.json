@@ -40,59 +40,6 @@
       "description": "[P3] QA health-content review of blog batch 3, NYUSLANDING publish/batch3-dal-peanuts b9621fd8 (checked in upload/landing-batch-3 f5c3aa59), 2026-10-21. English peanuts article: PASS (all IFCT 2017 rows H012/H001/H005/H021/H018 and A019 re-read from the PDF; 85 number checks across both articles, 0 mismatches; per-20 g maths, DGI 2024 p.20 and p.34 claims, FAQ JSON-LD, links, sitemap 169 entries all pass). Hindi dal article: numbers PASS (rows B021/B010/B013/B001/B003, 25 g and 30 g maths, atta comparison), two fixes needed before the QA gate comment can be added, both in static/blog/dal-mein-kitni-calorie-protein-hindi-india.html: (1) line 113 (sources): 'कोड B021, B010, B013, B001, B003, PDF पेज 43-43' is wrong: in IFCT 2017 B010, B013, B001 and B003 are on PDF page 42 and only B021 (red gram dal) is on page 43; write 'PDF पेज 42-43'. (2) line 89: 'दाल सेहतमंद है, लेकिन तड़के की मात्रा नापे बिना हिसाब अधूरा रहता है' is a health claim with no source (batch rule: no claims beyond IFCT/DGI); drop 'दाल सेहतमंद है, लेकिन' and keep 'तड़के की मात्रा नापे बिना हिसाब अधूरा रहता है'. Optional style: line 89 and the intro could say 'हमारा अंदाज़ा' once instead of twice. After the fixes QA adds '<!-- reviewed 21 Oct by QA against IFCT 2017 + ICMR-NIN DGI 2024, no dietitian review -->' to both articles; the dry run's only blockers today are those two missing comments (the DRAFT comment is not a gate, but remove it when the review comment goes in)."
     },
     {
-      "id": "i-20261021-tdee-en-example",
-      "createdAt": "2026-10-21T18:21:44.323Z",
-      "author": "qa",
-      "tags": [
-        "content",
-        "tdee",
-        "growth",
-        "pending-deploy"
-      ],
-      "route": "/blog/how-many-calories-to-lose-weight-india-tdee.html (live)",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "FIXED, PENDING DEPLOY (not live until the landing upload of NYUSLANDING upload/landing-fixes-4 @ b31f5aea). growth's 747731b0 (merged in 3db904b1) rewrites the FAQ answer and its FAQPage JSON-LD identically with the page's own Mifflin-St Jeor formula: 70 kg, 170 cm, 30 y man BMR = 10x70 + 6.25x170 - 5x30 + 5 = 1,617.5 (~1,600); lightly active x1.375 = 2,224 (~2,200), 10-20% below = 1,760-1,980, a 500 kcal deficit = ~1,700; moderately active x1.55 = 2,507 (~2,500), 10-20% below = 2,000-2,250. Body range 1,750 -> 1,760; scripts/_article-tdee.json mirrored so a regen keeps it. Arithmetic recomputed by the NYUS employee (node, executed); check-faq-jsonld 143 pages 0 mismatches; rendered at 390x844 (screenshot). The page also gains hreflang hi/en/x-default + a link to the new Hindi twin. Close after the upload: curl the live page, FAQ says 'Lightly active ... 1,760 to 1,980' in both the visible answer and the JSON-LD.",
-        "fixedAt": "2026-10-22T13:44:37.254Z",
-        "by": "nyus-employee",
-        "appCommit": "747731b0",
-        "tests": {
-          "passed": true
-        },
-        "imagePath": "images/2026-10-22-landing-fix4/2-en-tdee-faq-worked-example.png",
-        "imagePaths": [
-          "images/2026-10-22-landing-fix4/2-en-tdee-faq-worked-example.png"
-        ],
-        "imagePrivate": false
-      },
-      "history": [
-        {
-          "at": "2026-10-22T06:11:57.455Z",
-          "event": "note",
-          "note": "QA sweep 3: still open",
-          "by": "qa"
-        },
-        {
-          "at": "2026-10-22T11:47:26.572Z",
-          "event": "retested",
-          "by": "qa",
-          "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. the FAQ answer still says \"70 kg moderately active man (~2,200 TDEE)\"."
-        },
-        {
-          "at": "2026-10-22T13:44:37.254Z",
-          "event": "fixed-pending-deploy",
-          "note": "fixed on upload/landing-fixes-4 b31f5aea, awaiting the landing upload",
-          "by": "nyus-employee"
-        }
-      ],
-      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] Live English twin, static/blog/how-many-calories-to-lose-weight-india-tdee.html: the FAQ answer (visible line 62, FAQPage JSON-LD line 26) says \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". By the page's own Step 2 multipliers (line 56) 1,600 BMR x 1.375 = ~2,200 is the LIGHTLY active case; moderately active (x1.55) is ~2,480 (about 2,500 with the exact BMR 1,617.5), whose 10-20% range is about 2,000-2,230. The range also disagrees with line 56 (~1,750-1,980; 10-20% of 2,200 is 1,760-1,980): \"1,700\" should be \"1,760\" (or ~1,750). Fix: say \"lightly active man (~2,200 TDEE) ... about 1,760 to 1,980 kcal/day\" in both the FAQ and its JSON-LD (they must stay identical). The new Hindi article labels the same example correctly as \"हल्का सक्रिय\". || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: the live English page https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (after the 17:58 UTC upload) still says \"moderately active man (~2,200 TDEE)... 1,700 to 1,980 kcal/day\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): live https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (curl 22 Oct) still says \"moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\" in both the visible FAQ and the JSON-LD. Fix text is in the description above (lightly active, 1,760 to 1,980). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on LIVE nyus.in (curl, 05:5x UTC): the FAQ answer and its JSON-LD still read \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". Not fixed by any deploy."
-    },
-    {
       "id": "i-20261021-tdee-hi-wording",
       "createdAt": "2026-10-21T18:21:44.323Z",
       "author": "qa",
