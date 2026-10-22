@@ -11303,8 +11303,30 @@
         "eae87e2b7a7d07d3e60a2fa910d41cc331b8ba1f"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app c2593141 (merge/hi-pass5, Hindi pass 5), QA PASS 22 Oct on a fresh build, Hindi, 390px, QA account, writes stubbed: /ai/create-workout-plan has 0 English aria/attributes (was 18); Save plan, day chips (ऊपरी शरीर, निचला शरीर, पुश) and SETS/REPS/REST labels are Hindi; only exercise names stay English. The day types are still stored in English: the save request (POST /onboarding/save-custom-plan) carries focus Upper body, Lower body, Push, Pull, Legs, Full body (localizeFocus translates at render only, src/lib/onboarding-derive.ts). vitest test/i18n + ResumeGate + MuscleMap.today on c2593141: 21 files / 801 passed (QA run); tsc clean per the NYUS employee (my own tsc run timed out on the loaded machine). Not yet in a Play build: close after the next build.",
+        "imagePath": "images/i-20261022-hi-workout-builder-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-workout-builder-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "90dae48974aaa737b929e63fcb753f3b2138a884",
+        "imageCommits": [
+          "90dae48974aaa737b929e63fcb753f3b2138a884"
+        ],
+        "fixedAt": "2026-10-22T15:54:10.593Z",
+        "by": "shakeebshaan",
+        "appCommit": "c2593141",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "all literals and 18 attributes fixed, day types still stored in English (verified in the save request)"
+        }
+      },
       "history": [
         {
           "at": "2026-10-22T11:47:26.572Z",
@@ -11313,7 +11335,17 @@
           "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /ai/create-workout-plan still has 17 English lines and 20 English attributes (day chips Full body/Upper body/Lower body/Conditioning, SETS/REPS/REST, \"Save plan\"). Locations unchanged (CustomWorkoutPlanCreation.tsx:303/328/339, onboarding-derive.ts:186-191, ExercisePickRow.tsx:224/249/345). No fix branch yet: needs dev.  Screenshot images/2026-10-22-mainqa/hi-hi-workout-builder.png (commit 9ddecc93)."
         }
       ],
-      "description": "[P3 / Hindi sweep 4] /ai/create-workout-plan (Activity > create your own plan) is English in Hindi: 17 English lines on screen + 18 aria-labels. Repro (executed on the build 307 web bundle, prod API, QA account): set the language to Hindi (in-app language setting, or localStorage nyus_locale=hi on web), open the route below. Hindi keys are reused where they exist; every NEW Hindi string below is machine-drafted, needs native read (item nyus-f84785). Method: visible innerText lines with 3+ Latin letters and no Devanagari, plus aria-label/placeholder/title attributes. Not covered by sweeps 1-3 or any open board issue.\nLiterals, file:line, expected Hindi:\n1) src/pages/CustomWorkoutPlanCreation.tsx:339 ctaLabel \"Save plan\" -> new, \"प्लान सेव करें\"; :303 and :328 aria-label \"Create your workout plan\" -> new, \"अपना वर्कआउट प्लान बनाएं\". 0 useTranslation in the file.\n2) src/lib/onboarding-derive.ts:186-191 day-type names returned as English strings: \"Full body\", \"Upper body\", \"Lower body\", \"Push\", \"Pull\", \"Legs\", \"Conditioning\" (they also become data, so translate at render, not at creation). Expected: पूरा शरीर, ऊपरी शरीर, निचला शरीर, पुश, पुल, टाँगें (existing activity.muscle_map.bucket.legs \"टाँगें\"), कंडीशनिंग (all new except Legs; machine-drafted, needs native read).\n3) src/components/plan-builder/ExercisePickRow.tsx: column labels :224 \"Sets\" and :249 \"Rest\" (shown uppercase SETS / REST), :345 \"Reps\". Reuse activity.card.sets \"सेट\", activity.reschedule.rest \"आराम\", blocks.workout_edit.reps_label \"रेप्स\". aria: :167 \"Coach must-have\" -> new \"कोच की ज़रूरी पसंद\"; :210 \"Remove {name}\" -> \"{{name}} हटाएं\"; :298 \"Decrease {label}\" and :319 \"Increase {label}\" -> reuse onboarding.builder.activity.decrease_aria / increase_aria (already in ActivityTargetCard.tsx:281, 299); :308 \"{label}: {value}\" with the translated label; :354 \"Reps (e.g. 8-12, 5, AMRAP)\" -> new, \"रेप्स (जैसे 8-12, 5, AMRAP)\".\n4) src/components/plan-builder/DomainHeroHeader.tsx:70, :100 \"Go back\" -> common.go_back \"वापस जाएं\".\n5) src/components/coach/CoachAvatar.tsx:130 and CoachPortrait.tsx:91 aria \"{name}, your coach\" / \"Your coach\" -> new, \"{{name}}, आपके कोच\" / \"आपके कोच\". (Shared with other screens.)\nExercise names (Bench Press etc.) are data and out of scope here.\nCounts: 17 English lines on screen (7 day chips + 3 column labels + button + exercise names), 18 attributes.\nAcceptance test for dev: in Hindi open /ai/create-workout-plan, add a day and an exercise; (a) day chips, SETS/REPS/REST labels and the Save button are Devanagari; (b) steppers' aria-labels (e.g. Sets: 3) are Hindi; (c) the saved plan still stores the same day-type value (English or key) so en users and backend are unchanged; (d) en screenshot identical to before."
+      "description": "[P3 / Hindi sweep 4] /ai/create-workout-plan (Activity > create your own plan) is English in Hindi: 17 English lines on screen + 18 aria-labels. Repro (executed on the build 307 web bundle, prod API, QA account): set the language to Hindi (in-app language setting, or localStorage nyus_locale=hi on web), open the route below. Hindi keys are reused where they exist; every NEW Hindi string below is machine-drafted, needs native read (item nyus-f84785). Method: visible innerText lines with 3+ Latin letters and no Devanagari, plus aria-label/placeholder/title attributes. Not covered by sweeps 1-3 or any open board issue.\nLiterals, file:line, expected Hindi:\n1) src/pages/CustomWorkoutPlanCreation.tsx:339 ctaLabel \"Save plan\" -> new, \"प्लान सेव करें\"; :303 and :328 aria-label \"Create your workout plan\" -> new, \"अपना वर्कआउट प्लान बनाएं\". 0 useTranslation in the file.\n2) src/lib/onboarding-derive.ts:186-191 day-type names returned as English strings: \"Full body\", \"Upper body\", \"Lower body\", \"Push\", \"Pull\", \"Legs\", \"Conditioning\" (they also become data, so translate at render, not at creation). Expected: पूरा शरीर, ऊपरी शरीर, निचला शरीर, पुश, पुल, टाँगें (existing activity.muscle_map.bucket.legs \"टाँगें\"), कंडीशनिंग (all new except Legs; machine-drafted, needs native read).\n3) src/components/plan-builder/ExercisePickRow.tsx: column labels :224 \"Sets\" and :249 \"Rest\" (shown uppercase SETS / REST), :345 \"Reps\". Reuse activity.card.sets \"सेट\", activity.reschedule.rest \"आराम\", blocks.workout_edit.reps_label \"रेप्स\". aria: :167 \"Coach must-have\" -> new \"कोच की ज़रूरी पसंद\"; :210 \"Remove {name}\" -> \"{{name}} हटाएं\"; :298 \"Decrease {label}\" and :319 \"Increase {label}\" -> reuse onboarding.builder.activity.decrease_aria / increase_aria (already in ActivityTargetCard.tsx:281, 299); :308 \"{label}: {value}\" with the translated label; :354 \"Reps (e.g. 8-12, 5, AMRAP)\" -> new, \"रेप्स (जैसे 8-12, 5, AMRAP)\".\n4) src/components/plan-builder/DomainHeroHeader.tsx:70, :100 \"Go back\" -> common.go_back \"वापस जाएं\".\n5) src/components/coach/CoachAvatar.tsx:130 and CoachPortrait.tsx:91 aria \"{name}, your coach\" / \"Your coach\" -> new, \"{{name}}, आपके कोच\" / \"आपके कोच\". (Shared with other screens.)\nExercise names (Bench Press etc.) are data and out of scope here.\nCounts: 17 English lines on screen (7 day chips + 3 column labels + button + exercise names), 18 attributes.\nAcceptance test for dev: in Hindi open /ai/create-workout-plan, add a day and an exercise; (a) day chips, SETS/REPS/REST labels and the Save button are Devanagari; (b) steppers' aria-labels (e.g. Sets: 3) are Hindi; (c) the saved plan still stores the same day-type value (English or key) so en users and backend are unchanged; (d) en screenshot identical to before.",
+      "thread": [
+        {
+          "at": "2026-10-22T15:54:10.593Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app c2593141 (merge/hi-pass5, Hindi pass 5), QA PASS 22 Oct on a fresh build, Hindi, 390px, QA account, writes stubbed: /ai/create-workout-plan has 0 English aria/attributes (was 18); Save plan, day chips (ऊपरी शरीर, निचला शरीर, पुश) and SETS/REPS/REST labels are Hindi; only exercise names stay English. The day types are still stored in English: the save request (POST /onboarding/save-custom-plan) carries focus Upper body, Lower body, Push, Pull, Legs, Full body (localizeFocus translates at render only, src/lib/onboarding-derive.ts). vitest test/i18n + ResumeGate + MuscleMap.today on c2593141: 21 files / 801 passed (QA run); tsc clean per the NYUS employee (my own tsc run timed out on the loaded machine). Not yet in a Play build: close after the next build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261022-hi-log-weight",
