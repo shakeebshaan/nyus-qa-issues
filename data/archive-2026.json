@@ -26026,6 +26026,63 @@
       ],
       "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] Live English twin, static/blog/how-many-calories-to-lose-weight-india-tdee.html: the FAQ answer (visible line 62, FAQPage JSON-LD line 26) says \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". By the page's own Step 2 multipliers (line 56) 1,600 BMR x 1.375 = ~2,200 is the LIGHTLY active case; moderately active (x1.55) is ~2,480 (about 2,500 with the exact BMR 1,617.5), whose 10-20% range is about 2,000-2,230. The range also disagrees with line 56 (~1,750-1,980; 10-20% of 2,200 is 1,760-1,980): \"1,700\" should be \"1,760\" (or ~1,750). Fix: say \"lightly active man (~2,200 TDEE) ... about 1,760 to 1,980 kcal/day\" in both the FAQ and its JSON-LD (they must stay identical). The new Hindi article labels the same example correctly as \"हल्का सक्रिय\". || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: the live English page https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (after the 17:58 UTC upload) still says \"moderately active man (~2,200 TDEE)... 1,700 to 1,980 kcal/day\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): live https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (curl 22 Oct) still says \"moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\" in both the visible FAQ and the JSON-LD. Fix text is in the description above (lightly active, 1,760 to 1,980). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on LIVE nyus.in (curl, 05:5x UTC): the FAQ answer and its JSON-LD still read \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". Not fixed by any deploy.",
       "archivedAt": "2026-10-22T16:03:19.407Z"
+    },
+    {
+      "id": "i-20261021-tdee-hi-wording",
+      "createdAt": "2026-10-21T18:21:44.323Z",
+      "author": "qa",
+      "tags": [
+        "content",
+        "hindi",
+        "tdee",
+        "growth",
+        "pending-deploy"
+      ],
+      "route": "/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html (not live)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED, PENDING DEPLOY. The page https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html still answers 404 until the landing upload of NYUSLANDING upload/landing-fixes-4 @ b31f5aea (Shaan's yes on the decide item). Wording fixes on publish/hindi-tdee-calories c78b1b7c (on top of growth's 500 kcal fix 207b0dd5), taken file-only into the upload branch in 5cfc3fa2: 'वजन टिका रहे तो खाने की वही मात्रा आपके TDEE के आसपास है'; 'इस लेख में इसका कोई सत्यापित आँकड़ा नहीं है'; 'वजन' (no nukta) in the visible FAQ question and its JSON-LD; 500 kcal only as a hedged rule of thumb, the FAQ leads with 10-20% below TDEE; the 'awaits QA' comment replaced by the reviewed-by-QA line. Brought to today's site rules: waitlist button 'NYUS वेटलिस्ट से जुड़ें' + closed-testing line (was a Google Play link), '30 दिन मुफ़्त ... फिर ₹499/महीना', tables.js, og:image F2, title 57 / description 134 chars. Linked from the English twin (hreflang hi/en/x-default both ways), weight-loss-diet-chart-hindi-india and roti-calories-kitni-hoti-hai-hindi-india; sitemap 189 -> 190 URLs. QA RE-READ 2026-10-22 13:52 UTC (qa, executed on b31f5aea): PASS - diff vs 207b0dd5 is only the 4 fixes plus the listed changes, check-faq-jsonld 0 mismatches, 390x844 and 1280 render with no overflow. upload-ready --dry READY. Machine-drafted Hindi: native read is still list item nyus-f84785. Close after the upload: the URL answers 200 and the 4 strings above are on the live page.",
+        "fixedAt": "2026-10-22T13:54:05.593Z",
+        "by": "nyus-employee",
+        "appCommit": "5cfc3fa2",
+        "tests": {
+          "passed": true
+        },
+        "imagePath": "images/2026-10-22-landing-fix4/3-hi-tdee-top.png",
+        "imagePaths": [
+          "images/2026-10-22-landing-fix4/3-hi-tdee-top.png",
+          "images/2026-10-22-landing-fix4/4-hi-tdee-line95.png",
+          "images/2026-10-22-landing-fix4/6-hi-tdee-faq.png"
+        ],
+        "imagePrivate": false
+      },
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. the Hindi page is still not published (404), the wording fix must land before it is uploaded."
+        },
+        {
+          "at": "2026-10-22T13:54:05.593Z",
+          "event": "fixed-pending-deploy",
+          "note": "fixed on upload/landing-fixes-4 b31f5aea, QA re-read PASS, awaiting the landing upload",
+          "by": "nyus-employee"
+        }
+      ],
+      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] All numbers pass (ICMR-NIN 2020 brief note Table 1a/1b PDF p.4: men 65 kg 2110/2710/3470, women 55 kg 1660/2130/2720 kcal; 10-12% BMR overestimate and 3-8 kcal/kg lower on PDF p.2; TEE = BMR x PAL on PDF p.1; every Mifflin-St Jeor example, TDEE row and 10-20% range recomputed by hand and equal; check-faq-jsonld: 0 mismatches; no-dietitian box once, after the intro, visible at 390 px). Wording fixes needed in static/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html: (1) line 95 (grammar, must fix): \"वजन टिका रहे तो वही आपका TDEE के आसपास है\" is not correct Hindi (आपका ... के आसपास); write \"वजन टिका रहे तो खाने की वही मात्रा आपके TDEE के आसपास है\"; (2) line 105 and the FAQ answer (JSON-LD line 25, visible line 128): \"10 से 20 प्रतिशत कम, यानी लगभग 500 कैलोरी रोज़ तक\" / \"लगभग 500 कैलोरी रोज़ का घाटा ≈ हफ़्ते में आधा किलो\" reads as if 500 kcal is the target, but for the page's own examples 10-20% is 222-445 kcal (70 kg man) and 173-346 kcal (58 kg woman), and 500 kcal would be 29% of the woman's TDEE, above the 10-20% cap stated in the same paragraph; rewrite as \"10 से 20 प्रतिशत कम (आपके TDEE के हिसाब से यह 500 कैलोरी से कम भी हो सकता है; 500 कैलोरी ≈ आधा किलो हफ़्ते का मोटा अंदाज़ा सिर्फ़ बड़े TDEE वालों के लिए)\" (same sentence in the English twin); (3) line 105: \"इस लेख के पास इसका कोई सत्यापित आँकड़ा नहीं है\" is a literal translation, use \"इस लेख में इसका कोई सत्यापित आँकड़ा नहीं है\"; (4) lines 25 and 128 spell \"वज़न\" (with nukta) while the rest of the page and the site use \"वजन\": make it \"वजन\". Also replace the growth comment at line 55 (\"awaits QA\") with the QA review comment (text in the QA reply) once 1-3 are fixed. Informational, no change needed: the 58 kg woman's 20% bound is 1,380 and her 10% bound 1,555 shown as ~1,560 (computed from the rounded 1,730), and the Hindi page uses the unrounded BMR 1,617.5 (TDEE ~2,220) while the English twin says ~1,600 and ~2,200. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): the Hindi article is not live (https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html returns 404) and branch publish/hindi-tdee-calories is still at b5de86db with every defect present: line 95 \"वही आपका TDEE\", line 105 \"इस लेख के पास\", lines 25 and 128 \"वज़न\" (nukta) and \"यानी लगभग 500\", line 55 growth comment \"awaits QA\". || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN, not live. https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html answers 404 (never uploaded). The draft on publish/hindi-tdee-calories (b5de86db) still has the unfixed text at lines 95, 105 and 128 (\"लगभग 500 कैलोरी रोज़\"). Fix before it is uploaded; no live user impact today.",
+      "archivedAt": "2026-10-22T16:03:23.333Z"
     }
   ]
 }
