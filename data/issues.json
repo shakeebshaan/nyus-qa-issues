@@ -11556,9 +11556,29 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
-      "history": [],
+      "status": "fixed",
+      "fix": {
+        "description": "QA re-check 22 Oct of growth fixes on draft/launch-calendar-oct22 @ 9af35c9b, marketing/launch-calendar.md (read-only): PASS on both. (A) Rows 1 (line 20) and 13 (line 32) no longer claim the page shows the worked example: line 20 says \"the script shows the working; the page has the formula and the x1.375 factor, not this example\", line 32 says \"the working is in the post itself; the linked page has the calculator, formula and x1.375 factor, not this example\"; row 2 (line 21) only says \"same as day 1\" and never claimed the page. Live https://nyus.in/blog/tdee-calculator.html (200, \"TDEE Calculator — Total Daily Energy Expenditure | NYUS\") contains exactly that: the calculator (3 inputs, 2 selects, 1 button), the Mifflin-St Jeor formulas (Men: 10 x weight(kg) + 6.25 x height(cm) ...) and the activity factors x1.2 / x1.375 / x1.55 / x1.725; none of 2,224, 1,617, 70 kg, 170 cm or 30-year-old appears on it [executed, curl + text search]. (B) Line 111 (English) and line 112 (Hindi) now start \"ONLY IF a creator has said yes AND posted:\" / \"केवल तभी जब किसी क्रिएटर ने हाँ कहा हो और पोस्ट किया हो:\"; line 113 is an English-only fallback caption equal to the Day 1 English caption (and the caption in draft/video-scripts-oct22 01-tdee-maintenance-calories.md) plus the end line (string-equal, 0 Devanagari) and says there is no Hindi fallback; line 30 points to \"V1 re-cut with the English caption (see post copy)\". All 14 Hindi bullets still carry the REVIEW FLAG naming nyus-f84785, so no Hindi line goes out before it clears; 0 Play links; every English and Hindi copy still ends with the full 30-day free trial then Rs 499/month line; the only \"signed\" phrases are the two statements that no creator is signed (nyus-47acba). DIFF: 9af35c9b vs 61442e48 changes only marketing/launch-calendar.md, 6 insertions / 5 deletions = rows 1, 11, 13 (lines 20, 30, 32), English 111, Hindi 112 and the new fallback line 113; nothing else changed (650abd63 is the board commit of my earlier verdict, not a NYUSLANDING commit, so the diff base is 61442e48).",
+        "imagePath": null,
+        "imagePaths": [],
+        "imagePrivate": false,
+        "imageCommit": null,
+        "imageCommits": [],
+        "fixedAt": "2026-10-22T16:13:32.548Z",
+        "by": "qa",
+        "appCommit": "9af35c9b",
+        "tests": null,
+        "judge": null,
+        "verifiedAt": "2026-10-22T16:13:32.548Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T16:13:32.548Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-check 22 Oct of growth fixes on draft/launch-calendar-oct22 @ 9af35c9b, marketing/launch-calendar.md (read-only): PASS on both. (A) Rows 1 (line 20) and 13 (line 32) no longer claim the page shows the worked example: line 20 says \"the script shows the working; the page has the formula and the x1.375 factor, not this example\", line 32 says \"the working is in the post itself; the linked page has the calculator, formula and x1.375 factor, not this example\"; row 2 (line 21) only says \"same as day 1\" and never claimed the page. Live https://nyus.in/blog/tdee-calculator.html (200, \"TDEE Calculator — Total Daily Energy Expenditure | NYUS\") contains exactly that: the calculator (3 inputs, 2 selects, 1 button), the Mifflin-St Jeor formulas (Men: 10 x weight(kg) + 6.25 x height(cm) ...) and the activity factors x1.2 / x1.375 / x1.55 / x1.725; none of 2,224, 1,617, 70 kg, 170 cm or 30-year-old appears on it [executed, curl + text search]. (B) Line 111 (English) and line 112 (Hindi) now start \"ONLY IF a creator has said yes AND posted:\" / \"केवल तभी जब किसी क्रिएटर ने हाँ कहा हो और पोस्ट किया हो:\"; line 113 is an English-only fallback caption equal to the Day 1 English caption (and the caption in draft/video-scripts-oct22 01-tdee-maintenance-calories.md) plus the end line (string-equal, 0 Devanagari) and says there is no Hindi fallback; line 30 points to \"V1 re-cut with the English caption (see post copy)\". All 14 Hindi bullets still carry the REVIEW FLAG naming nyus-f84785, so no Hindi line goes out before it clears; 0 Play links; every English and Hindi copy still ends with the full 30-day free trial then Rs 499/month line; the only \"signed\" phrases are the two statements that no creator is signed (nyus-47acba). DIFF: 9af35c9b vs 61442e48 changes only marketing/launch-calendar.md, 6 insertions / 5 deletions = rows 1, 11, 13 (lines 20, 30, 32), English 111, Hindi 112 and the new fallback line 113; nothing else changed (650abd63 is the board commit of my earlier verdict, not a NYUSLANDING commit, so the diff base is 61442e48)."
+        }
+      ],
       "id": "i-20261022-launch-calendar-qa",
       "tags": [
         "marketing",
