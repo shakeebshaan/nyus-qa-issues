@@ -12722,6 +12722,27 @@
         }
       ],
       "description": "[P4] [Found while re-verifying i-20261021-fd-ai-slow on prod, 2026-10-22, nyu_backend 573232a9] The new per-user cache stores whatever the endpoint built, including the \"I'm temporarily unavailable for live coaching\" fallback. backend.py:15953 (overview_cache.put(cache_key, fingerprint, payload)) runs unconditionally after call_openai, so when the model call is refused or fails (daily cost cap, provider error) overview is null and the fallback message is cached for the 6 h TTL (key includes the date), until the user's data changes: after a short outage a user keeps seeing \"temporarily unavailable\" for up to 6 h although the model is back. Same shape for /ai/weekly-insights (weekly_insights_cache.put, backend.py:14477, 24 h TTL), and separately the Notification row that weekly-insights serves as cached:true can hold a fallback text for a whole ISO week: the QA account's stored row (generated 2026-10-20T13:51:49Z) is the fallback text and GET /ai/weekly-insights returned it cached:true on 22 Oct at 05:34 UTC. Executed on prod: GET /ai/overview x3 returned the same 204-byte fallback body (812, 712, 253 ms); GET /ai/weekly-insights x2 returned cached:true with the fallback text. Fix: do not put() a payload whose overview is null / whose text is the fallback (and do not persist the fallback into the weekly Notification row); keep the cap-refused answer uncached so the next call after the cap resets calls the model. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Inspected at 573232a9: backend.py:15953 and :14477 still put() unconditionally. Executed on prod: GET /ai/overview x3 at 05:34 UTC returned the same 204-byte fallback body; GET /ai/weekly-insights returned cached:true with the 20 Oct fallback text; and that fallback text now sits in the QA account's notifications as \"Your Weekly Wellness Report\"."
+    },
+    {
+      "id": "i-20261022-meal-edit-stale-foods",
+      "createdAt": "2026-10-22T06:37:56.668Z",
+      "author": "qa",
+      "tags": [
+        "backend",
+        "data",
+        "nutrition",
+        "p3"
+      ],
+      "route": "PUT /api/v1/logs/meal/<id> (meal edit)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / data, executed 2026-10-22, QA account vs prod, nyu_backend 573232a9] Editing a meal's totals leaves its food rows stale. Repro: the app's meal edit sends PUT /api/v1/logs/meal/<id> with the new totals only (total_calories, total_protein, total_carbs, total_fat) and no food rows. The totals change but the stored food rows do not, so the meal disagrees with itself: QA account meal 494 'Biryani, Chicken' showed a total of 300 kcal while its food row was still 336 kcal (GET /api/v1/logs/daily/<date>, meal_logs[].total_calories vs sum of meal_logs[].foods[].calories). Anything that reads the rows (ingredient list, re-open for edit, per-food macros) then shows numbers that do not add up to the meal total. Expected: with totals and no food rows, the rows are scaled so they sum to the new totals; rows the app does send are kept as sent. Minimal repro on a clean meal: log a 2-food meal (100 + 200 kcal = 300), PUT totals only 360 kcal, read it back: the total says 360 and the rows still say 100 + 200."
     }
   ]
 }
