@@ -350,6 +350,12 @@
           "event": "note",
           "note": "QA prod re-verify: PENDING (cannot reproduce today), left FIXED",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T16:44:03.535Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA live re-check 22 Oct ~16:50 UTC on prod (nyu_backend d47d9c80, QA account): Deploy state, not behaviour: the quoted fix commit 7935dcf7 is not in origin/main, but 6d4df8d2 \"the morning brief quiet-days line uses the real count and changes as it grows\" is, and prod HEAD d47d9c80 contains it [executed git]. The live text cannot be reproduced read-only: the QA account got a different brief today (lighter-plan card), a real \"quiet for N days\" brief needs an account silent 2+ days. Left as fixed, not archived; the next such brief in a log check closes it."
         }
       ],
       "description": "[P4] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The morning brief sends the same fixed sentence every day: coach chat history for the QA account has 'Morning brief - Mon 19 Oct: ...you've been quiet for 2 days...' and the identical text on Tue 20 Oct and (Hindi) Wed 21 Oct, although inactivity grew each day. The number is hardcoded: app/services/coach_copy.py:136 (English) and :137 (Hindi), mirrored in app/services/pattern_detection.py:197. Fix: pass the real days-quiet count (or say 'a few days') and vary the line after the first send. The brief itself is delivered on time (FF_DAILY_BRIEF job runs hourly, composes at user-local 7 AM). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: coach_copy.py:136 still \"quiet for 2 days\" on origin/main e38ef80c.",
@@ -907,6 +913,12 @@
           "event": "note",
           "note": "QA prod re-verify: PENDING (cannot reproduce today), left FIXED",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T16:44:03.535Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA live re-check 22 Oct ~16:50 UTC on prod (nyu_backend d47d9c80, QA account): Deploy state: the cache commit 573232a9 (perf(ai) per-user cache for /ai/overview and /ai/weekly-insights) is in origin/main and prod HEAD d47d9c80 [executed git]; the quoted bf0769c0 is the branch copy. Live timing proof is blocked: the QA account is still at its daily AI cost cap, GET /ai/overview returns the canned fallback in 1.35 s without a model call, so cold vs warm cannot be measured. The 23 Oct 00:30 UTC run owns the cache proof (bash C:/tmp/g9/cache-proof.sh). Left as fixed."
         }
       ],
       "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Dashboard and Nutrition open fire GET /api/v1/ai/overview?range=week&days=7 and GET /api/v1/ai/weekly-insights on every load and they are by far the slowest calls of the first session: client times 6.2-7.7 s (/health from the same PC is 0.7 s) and prod SLOW_REQUEST lines in ~/nyu_backend/nyus_app.log: 'GET /api/v1/ai/overview 200 6012ms db=271ms queries=126' (17:28:20 UTC), '6977ms db=120ms queries=126' (17:30:45), '5748ms db=109ms queries=123', '5426ms db=124ms queries=123', and 'GET /api/v1/ai/weekly-insights 200 5786ms db=205ms queries=128' (17:24:24). DB time is only 110-270 ms, so ~5.5 s is application time (not the DB), plus 123-128 queries per call. Code: AIOverviewResource backend.py:15788 (route :16919) and AIWeeklyInsightsResource backend.py:14320 (route :16928). Repro: open the web build at /dashboard with any account and watch the network tab, or curl the two routes with a bearer token three times. Fix direction: cache the weekly payload per user per day (weekly-insights is 0.8 s on its 2nd call, so a cache exists but ai/overview has none), move the LLM/aggregation off the request path, and make the dashboard not wait on it. Measure with the SLOW_REQUEST log after the change. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on PROD with the QA account: GET /api/v1/ai/overview?range=week&days=7 6.7 s, 6.3 s, 5.7 s; GET /api/v1/ai/weekly-insights 6.0 s then 0.67 s; GET /api/v1/activity/overview 0.69 s. Nothing shipped for this yet.",
@@ -2006,60 +2018,6 @@
           "who": "claude",
           "kind": "resolve",
           "text": "Shipped on your 'fix all' (2026-10-10). The calorie target now delivers the pace the user chose: deficit = remaining kg / remaining weeks x 7700/7, bounded by the 1 %/week ceiling (0.75 %/week for mid-plan catch-up), the minor 15 % / medical+postpartum+TTC 20 % caps, pregnancy/underweight = maintenance, and the BMR / sex floor. ONE function (macro_calculator.pace_target_kcal) feeds onboarding's stored targets and the weigh-in recompute (BE 8cfce70); the onboarding estimate mirrors it (FE ec82ae57), and the tour shows the longer honest timeline whenever a safety bound slows the plan. LIVE on a fresh prod account (screenshots, persona 29F 78->72 kg Standard ~11 wks): food screen ~1,723 kcal/day, tour 1723 kcal, 156/167/48 g, 0.55 kg/week, 'Lose 6.0 kg over 11 weeks', by Dec 26 - was 1,823 estimate vs 1858 stored at 0.42 kg/week. NOTE: users onboarded before today keep their stored target until their next weigh-in recompute, which then moves them to their pace target (Relaxed users up, Standard/Ambitious down, never past the bounds). Side catch: an old hourly 'git pull' cron on the VM had pulled 8cfce70 without restarting, so prod kept serving the previous code; cron removed, redeployed, and the deploy watcher now tracks the SHA it deployed (BE 68ac229).",
-          "by": "shakeebshaan"
-        }
-      ],
-      "needsReview": false
-    },
-    {
-      "id": "i-20261009-ugc1",
-      "createdAt": "2026-10-09T16:58:22.334Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "play",
-        "policy",
-        "launch-blocker"
-      ],
-      "route": "/partners",
-      "description": "[P1, Play UGC policy] Users cannot REPORT another user or a message anywhere in the app. Found 2026-10-09 while redoing the IARC content rating, which now has to answer 'report users or content: No'. What exists: blocking (POST /coach-social/block/<user>, BlockedUsers page) and admin-side moderation (app/admin_v2/moderation.py reads admin_message_reports and can mute, delete and hide). Nothing WRITES admin_message_reports: no user-facing endpoint, no Report button. Play's User Generated Content policy expects an in-app way to report objectionable UGC and users in apps where users exchange content (DMs, partner/group chat, social feed). Production review may flag it (see d5ro). Fix: (1) BE POST /api/v1/reports {message_id?, source: dm|group|feed, reported_user_id, reason} → insert admin_message_reports, rate-limited, log_generic to Discord with ids only (pii1 rules); (2) FE 'Report' in the DM and group message long-press menus, the partner/user profile sheet and feed post menus, with a short reason picker and a calm confirmation; (3) after shipping, re-answer the IARC question (report = yes) in Play Console → Content ratings.",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "BUILT and LIVE. Backend bd6f263: POST /api/v1/user-reports writes admin_message_reports, which the admin moderation panel already reads. The server decides who is reported; anything the reporter couldn't see gets the same 404 as an unknown id; self-reports are refused; repeats are deduped; 20/day limit; Discord gets ids only. Prod smoke with two throwaway users: 201/200-dedupe/201/404/400, rows correct, all removed after. App: Report in partner chat, leaderboard group chat, Social DMs (long-press or right-click, flag on focus), coach chat AI replies (Reply/Report menu), and 'Report User' in user search, with an optional 'Also block' that applies only after the report is stored. The self-harm reason shows Tele-MANAS 14416. Ships in v1.10.2 (291, internal + alpha). The final P3 (Also block placement, 698e6eab) goes in the next build. Content rating re-answered: users can report = Yes.",
-        "imagePath": "images/i-20261009-ugc1-fix-r1.png",
-        "imagePaths": [
-          "images/i-20261009-ugc1-fix-r1.png",
-          "images/i-20261009-ugc1-fix-r1-2.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "85b34aef9fcc867d866c769ae539b701b234910b",
-        "imageCommits": [
-          "85b34aef9fcc867d866c769ae539b701b234910b",
-          "88c461cbe54c783f8bf67d5e67cf5ab8c0e988d5"
-        ],
-        "fixedAt": "2026-10-10T00:22:13.470Z",
-        "by": "shakeebshaan",
-        "appCommit": "698e6eab",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 93,
-          "bar": 90,
-          "note": "Prod smoke PASS; -0b browser re-verify PASS on 25a4aa33; last P3 fixed in 698e6eab"
-        }
-      },
-      "history": [],
-      "thread": [
-        {
-          "at": "2026-10-10T00:22:13.470Z",
-          "who": "claude",
-          "kind": "resolve",
-          "text": "BUILT and LIVE. Backend bd6f263: POST /api/v1/user-reports writes admin_message_reports, which the admin moderation panel already reads. The server decides who is reported; anything the reporter couldn't see gets the same 404 as an unknown id; self-reports are refused; repeats are deduped; 20/day limit; Discord gets ids only. Prod smoke with two throwaway users: 201/200-dedupe/201/404/400, rows correct, all removed after. App: Report in partner chat, leaderboard group chat, Social DMs (long-press or right-click, flag on focus), coach chat AI replies (Reply/Report menu), and 'Report User' in user search, with an optional 'Also block' that applies only after the report is stored. The self-harm reason shows Tele-MANAS 14416. Ships in v1.10.2 (291, internal + alpha). The final P3 (Also block placement, 698e6eab) goes in the next build. Content rating re-answered: users can report = Yes.",
           "by": "shakeebshaan"
         }
       ],
@@ -3400,58 +3358,6 @@
           "who": "claude",
           "kind": "resolve",
           "text": "Every coach-logged block now refreshes what it wrote. The board framed this as the offline-flush sender, and that clause is stale (useBlockSubmit registers no sender, and a test actively pins that) - but the substance was live one path over, in the ONLINE success handler, which carried a hand-written key list behind type === 'meal_logger'. Wider than reported: workout left activity-overview + dashboard-overview frozen, and measurement, activity and water invalidated NOTHING. Fix derives from the shared FLUSH_INVALIDATION_MAP via ENDPOINT_MAP, so the online and offline routes for one write cannot disagree. Mutation-proved: meal-only list restored -> 4 failed (meal stays green); restored -> 23 passed; full changed suite 85 files / 1399 tests.",
-          "by": "shakeebshaan"
-        }
-      ],
-      "needsReview": false
-    },
-    {
-      "id": "i-20260820-rs1b",
-      "createdAt": "2026-08-19T18:03:44.725Z",
-      "author": "shakeebshaan",
-      "tags": [
-        "self-audit",
-        "residual",
-        "auto"
-      ],
-      "route": "/nutrition",
-      "description": "[residual] BE half of the stale-composer-note fix: logging.py update_meal_log should 409 when entry.skipped is set (FE 409 handler shipped in v274; server currently still accepts the PUT).",
-      "imagePath": null,
-      "imageCommit": null,
-      "imagePaths": [],
-      "imageCommits": [],
-      "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Server now 409s when a PUT targets a skipped meal log, so the FE conflict handler shipped in v274 stops being dead code. A skipped row is out of the diary and the PUT can never un-skip it, so editing one mutated an invisible row and reported success. Payload shape read from the FE handler rather than guessed. Mutation-proved: guard removed -> 1 failed (assert 200 == 409); restored -> 41 passed. Deployed to prod.",
-        "imagePath": "images/i-20260820-rs1b-fix-r1.png",
-        "imagePaths": [
-          "images/i-20260820-rs1b-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ef3c3da3074a1ddf89f48f44c737b58a52eca1a4",
-        "imageCommits": [
-          "ef3c3da3074a1ddf89f48f44c737b58a52eca1a4"
-        ],
-        "fixedAt": "2026-09-06T14:54:14.532Z",
-        "by": "shakeebshaan",
-        "appCommit": "fbe8e76",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 92,
-          "bar": 90,
-          "note": "Root cause, contract read from the consumer not guessed, mutation-proved, deployed and health-verified. Not 100: no live end-to-end tap on a real skipped row."
-        }
-      },
-      "history": [],
-      "thread": [
-        {
-          "at": "2026-09-06T14:54:14.532Z",
-          "who": "claude",
-          "kind": "resolve",
-          "text": "Server now 409s when a PUT targets a skipped meal log, so the FE conflict handler shipped in v274 stops being dead code. A skipped row is out of the diary and the PUT can never un-skip it, so editing one mutated an invisible row and reported success. Payload shape read from the FE handler rather than guessed. Mutation-proved: guard removed -> 1 failed (assert 200 == 409); restored -> 41 passed. Deployed to prod.",
           "by": "shakeebshaan"
         }
       ],
