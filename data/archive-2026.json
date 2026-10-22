@@ -23946,6 +23946,1108 @@
       ],
       "needsReview": false,
       "archivedAt": "2026-10-22T06:38:06.256Z"
+    },
+    {
+      "id": "i-20261021-hi-not-found",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/*",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-21-board-recheck/hi-not-found-70bab8dc.png",
+        "images/2026-10-22-board-recheck/hi-not-found-e7945ec6.png"
+      ],
+      "imageCommits": [
+        "4e5f9a0cc51ad002f65a6243352b1eb5077c73fc",
+        "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+      ],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /zzz-nope: 0 English lines (was 4): title, message, both buttons and the session toast through i18n. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /zzz-nope: English lines 4 -> 0: the 404 page is Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /zzz-nope: English lines 0 (sweep-2 value 0).",
+        "imagePath": "images/i-20261021-hi-not-found-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-not-found-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-not-found-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-not-found.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "be3a6ff971ff7843adafc7c49adab204e6042868",
+        "imageCommits": [
+          "be3a6ff971ff7843adafc7c49adab204e6042868",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:10:53.888Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 73 Devanagari chars on /zzz-not-found-qa. The 4 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-not-found.png."
+        }
+      ],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] 404 page English: NotFound.tsx:73 'Page not found', 'This page isn't available.', 'Back to Dashboard', 'Go Back'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /muscle-atlas (unknown route). Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/muscle-atlas.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) : /zzz-nope in Hindi still shows \"Page not found / This page isn't available. / Back to Dashboard / Go Back\" (NotFound.tsx has no useTranslation). Screenshot images/2026-10-21-board-recheck/hi-not-found-70bab8dc.png. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /zzz-nope in Hindi still shows \"Page not found / This page isn't available. / Back to Dashboard / Go Back\" (4 English lines); src/pages/NotFound.tsx has 0 useTranslation hits, literal at :73. Minimal repro: localStorage nyus_locale=hi, sign in, open /zzz-nope.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:10:53.888Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /zzz-nope: 0 English lines (was 4): title, message, both buttons and the session toast through i18n. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-subscription-settings",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/settings/subscription",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /settings/subscription: 0 English UI lines (the only Latin text left is the referral code); whole page through i18n, status values, facts, notes, toasts, dialog; dates in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /settings/subscription: English lines 6 -> 1 (the one left is the account's referral code, data). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). No screenshot: the page shows the referral code. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /settings/subscription: English lines 1 (sweep-2 value 1) (the referral code, data); no screenshot (shows the referral code).",
+        "imagePath": "images/i-20261021-hi-subscription-settings-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-subscription-settings-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "424d7527fb1207648604b1fd03a8eb828341a1db",
+        "imageCommits": [
+          "424d7527fb1207648604b1fd03a8eb828341a1db"
+        ],
+        "fixedAt": "2026-10-22T02:10:57.660Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 377 Devanagari chars on /settings/subscription. The 4 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-subscription-settings.png."
+        }
+      ],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] SubscriptionSettings.tsx:600 'Restore previous purchase', 'No active plan', 'Status: none', 'Choose a plan' English. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /settings/subscription. Screenshot not kept (shows referral code). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /settings/subscription in Hindi has 14 English lines (Subscription, Free trial, Status: Trial, STARTED, ACCESS UNTIL, TIME LEFT, Choose a plan, What's included, Restore previous purchase); SubscriptionSettings.tsx has 0 useTranslation hits. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /settings/subscription in Hindi: 6 English lines (\"Subscription\", \"No active plan\", \"Status: None\", \"Choose a plan\", \"Restore previous purchase\"); src/pages/SubscriptionSettings.tsx has 0 useTranslation hits, :600 literal. Minimal repro: localStorage nyus_locale=hi, sign in, open /settings/subscription.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:10:57.660Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /settings/subscription: 0 English UI lines (the only Latin text left is the referral code); whole page through i18n, status values, facts, notes, toasts, dialog; dates in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-fasting",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "literal"
+      ],
+      "route": "/fasting",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-board-recheck/hi-fasting-e7945ec6.png"
+      ],
+      "imageCommits": [
+        "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+      ],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /fasting: 0 English lines (was 6): share card lines, ring 'of 16h fast' / 'window reached', OMAD shown as a Hindi label. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /fasting: English lines 6 -> 1 (the one left is the NYUS brand name). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /fasting: English lines 1 (sweep-2 value 1) (NYUS brand name).",
+        "imagePath": "images/i-20261021-hi-fasting-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-fasting-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-fasting-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-fasting.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "92b9b00a29b8463e934ce15402be3a5fbc12b52c",
+        "imageCommits": [
+          "92b9b00a29b8463e934ce15402be3a5fbc12b52c",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:01.292Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 221 Devanagari chars on /fasting. The 4 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-fasting.png."
+        }
+      ],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Fasting screen: 'h fast', 'fasting window', 'OMAD', '/7 this week', 'Discipline, tracked · nyus.in' (FastingShareCard.tsx:100, src/lib/fasting.ts:29). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /fasting. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/fasting.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /fasting in Hindi still English: \"OF 16H FAST\", \"16:8 fasting window\", \"0/7 this week\", \"OMAD\", \"Discipline, tracked · nyus.in\", aria \"Fasting timer\", \"Fasting: 0h 00m of 16h\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /fasting in Hindi: 6 English lines (\"NYUS\", \"OF 16H FAST\", \"16:8 fasting window\", \"0/7 this week\", \"Discipline, tracked · nyus.in\", \"OMAD\"), 4 English aria labels (FastingShareCard.tsx:100, src/lib/fasting.ts:29). Minimal repro: localStorage nyus_locale=hi, sign in, open /fasting.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:01.292Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /fasting: 0 English lines (was 6): share card lines, ring 'of 16h fast' / 'window reached', OMAD shown as a Hindi label. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-plan-timeline",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/plan-timeline",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /plan-timeline: 0 English UI lines (was 27; left: meal names from the plan and the kcal unit): WeeklyTrajectory status/on-track/goal/weeks/shortfall/disclaimer; week date ranges in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /plan-timeline: English lines 27 -> 1 (the one left is the \"kcal\" unit; dates read \"12 सित° – 20 नव°\", week labels, projection and status are Hindi). Minor leftover, not in the issue: the M T W T F S S weekday initials in the week rows are still Latin. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /plan-timeline: English lines 1 (sweep-2 value 1) (the \"1847 kcal\" unit).",
+        "imagePath": "images/i-20261021-hi-plan-timeline-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-plan-timeline-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-plan-timeline-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-plan-timeline.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b927a78e462f3c3279e19f989a3e273da34eb355",
+        "imageCommits": [
+          "b927a78e462f3c3279e19f989a3e273da34eb355",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:04.982Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 1093 Devanagari chars on /plan-timeline. The 5 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-plan-timeline.png."
+        }
+      ],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Plan timeline projection English: WeeklyTrajectory.tsx:68 'Behind plan', :226 'Goal: 72 kg', 'week projection · estimated', 'At a safe pace you will reach…'; date ranges 'Sep 12 – Sep 18' English-formatted; PlanTimeline.tsx has 6 defaultValue-only keys. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /plan-timeline. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/plan-timeline.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed + inspected: the empty state is Hindi now (f24c2985 added the keys), but the projection component is untouched: src/components/plan-builder/WeeklyTrajectory.tsx:68 \"Behind plan\", :157 \"-week projection · estimated\", :226 \"Goal: N kg\", :297 \"At a safe pace you'll reach...\" are literals. Not rendered locally (needs an active plan). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): improved but not fixed: the page chrome is Hindi now (143 -> 513 Devanagari characters), but 27 English lines remain: date ranges \"Sep 12 – Sep 18\" ... \"Nov 14 – Nov 20\" (English-formatted), \"10-week projection · estimated\", \"Behind plan. You're up 0.9 kg so far — the plan expects about 2.2 kg down by now.\", \"Goal: 72 kg\", \"Week 1/2/3\" labels; src/components/plan-builder/WeeklyTrajectory.tsx:68, :157, :226, :297 are still literals. Minimal repro: localStorage nyus_locale=hi, sign in, open /plan-timeline (account with an active plan).",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:04.982Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /plan-timeline: 0 English UI lines (was 27; left: meal names from the plan and the kcal unit): WeeklyTrajectory status/on-track/goal/weeks/shortfall/disclaimer; week date ranges in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-achievements",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "data"
+      ],
+      "route": "/achievements",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /achievements: 0 English lines (was 48): badge and rank names come from the API in English and are now translated by badge_key (src/lib/gamification-i18n.ts, all 43 badges + 10 ranks), share cards and LevelCard through i18n. XP history lines from the API are not part of this screen's re-test count. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /achievements: English lines 48 -> 1 (the one left is the NYUS brand name; the badge names are Hindi now: \"उभरता सितारा\", \"ज़बरदस्त वापसी\", \"सुबह का पंछी\" ...). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /achievements: English lines 1 (sweep-2 value 1) (NYUS brand name).",
+        "imagePath": "images/i-20261021-hi-achievements-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-achievements-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-achievements-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-achievements.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "04da7d5ad37132cc7131f901e546d01619c96dee",
+        "imageCommits": [
+          "04da7d5ad37132cc7131f901e546d01619c96dee",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:08.928Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 553 Devanagari chars on /achievements. The 3 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-achievements.png."
+        }
+      ],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] All 48 badge names are English (Comeback Kid … Century of Strength, from the gamification API); AchievementShareCard.tsx:100 'XP total', :112 'Progress, tracked · nyus.in'; aria 'Comeback Kid, अनलॉक' mixes languages. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /achievements. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/achievements.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /achievements in Hindi: 5 English lines (NYUS, LEVEL, Newcomer, \"0 XP earned\", \"Progress, tracked · nyus.in\"); badge names come from the API. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /achievements in Hindi: 48 English lines (NYUS, LEVEL, Newcomer, \"1,050 XP earned\", \"Progress, tracked · nyus.in\", and all badge names from the gamification API: Rising Star, Comeback Kid, Early Bird, First Check-in ...). Minimal repro: localStorage nyus_locale=hi, sign in, open /achievements.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:08.928Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /achievements: 0 English lines (was 48): badge and rank names come from the API in English and are now translated by badge_key (src/lib/gamification-i18n.ts, all 43 badges + 10 ranks), share cards and LevelCard through i18n. XP history lines from the API are not part of this screen's re-test count. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-daily-focus",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "no-i18n"
+      ],
+      "route": "/daily-focus",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-board-recheck/hi-daily-focus-e7945ec6.png"
+      ],
+      "imageCommits": [
+        "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+      ],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /daily-focus: 0 English lines (was 33 + 40 aria): rings, CTAs, calendar month and weekdays in the app locale, legend, day aria labels, first-run, achievements. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /daily-focus: English lines 33 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /daily-focus: English lines 0 (sweep-2 value 0).",
+        "imagePath": "images/i-20261021-hi-daily-focus-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-daily-focus-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-daily-focus-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-daily-focus.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "55db423e9137b92cfdb05a9b8b47f449e2d06b37",
+        "imageCommits": [
+          "55db423e9137b92cfdb05a9b8b47f449e2d06b37",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:12.434Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 420 Devanagari chars on /daily-focus. The 6 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-daily-focus.png."
+        }
+      ],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Daily Focus nearly all English (15 Hindi chars): DailyFocus.tsx:399 'Log your first meal', :491 'No logged days yet this month — tap below to start.', 'Daily Focus', 'Log lunch', 'Both / Diet only / Activity only', month grid aria 'October 1, missed' (only 2 useTranslation hits in the file). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /daily-focus. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/daily-focus.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /daily-focus in Hindi: 33 Devanagari characters against 24 English lines and 25 English aria labels (\"Log dinner\", \"Start your first streak\", SUN-SAT, \"October 1, missed\"...). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /daily-focus in Hindi: 33 Devanagari characters against 33 English lines (\"Daily Focus\", \"Log dinner\", \"Track your meal so your macros stay on plan.\", \"day streak\", \"October 2026\", SUN...) and 40 English aria labels; DailyFocus.tsx has 2 useTranslation hits. Minimal repro: localStorage nyus_locale=hi, sign in, open /daily-focus.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:12.434Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /daily-focus: 0 English lines (was 33 + 40 aria): rings, CTAs, calendar month and weekdays in the app locale, legend, day aria labels, first-run, achievements. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-partners",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/partners",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-board-recheck/hi-partners-e7945ec6.png"
+      ],
+      "imageCommits": [
+        "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+      ],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /partners: 0 English lines (was 5): title, create, pending invites, empty and error states. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /partners: English lines 5 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /partners: English lines 0 (sweep-2 value 0).",
+        "imagePath": "images/i-20261021-hi-partners-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-partners-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-partners-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-partners.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1b44f72b1470693b93e5a4228c7cc4d17ec7f4b1",
+        "imageCommits": [
+          "1b44f72b1470693b93e5a4228c7cc4d17ec7f4b1",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:16.578Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 132 Devanagari chars on /partners. The 3 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-partners.png."
+        }
+      ],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars): Partners.tsx:194 'Train together. Stay precise.', :196,:204 'Create a group', 'Partner Groups'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /partners. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/partners.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /partners in Hindi: 18 Devanagari characters (bottom nav only); \"Train together. Stay precise.\", \"Create a group\", \"Partner Groups\" English. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /partners in Hindi: 18 Devanagari characters (bottom nav only), English \"Partner Groups\", \"Create\", \"Train together. Stay precise.\", \"Create a group and your friends follow your plan, scaled to their own targets.\", \"Create a group\"; Partners.tsx:194,196,204. Minimal repro: localStorage nyus_locale=hi, sign in, open /partners.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:16.578Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /partners: 0 English lines (was 5): title, create, pending invites, empty and error states. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-measurements",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/measurements",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /measurements: 0 English lines (was 34): title, record card, value label/hint, history, toasts; the 22 measurement type names (API English) translated by slug; ProgressPhotos incl. the privacy line. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /measurements: English lines 34 -> 0: title, body-part names and the 3D hint are Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /measurements: English lines 0 (sweep-2 value 0).",
+        "imagePath": "images/i-20261021-hi-measurements-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-measurements-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-measurements-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-measurements.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c32fd39d949d445d87bf9bb14fd335e1fd4b40fa",
+        "imageCommits": [
+          "c32fd39d949d445d87bf9bb14fd335e1fd4b40fa",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:21.124Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 649 Devanagari chars on /measurements. The 6 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-measurements.png."
+        }
+      ],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars): Measurements.tsx:575-582 'Record New Measurement', body-part aria 'Select Neck/Shoulders…', ProgressPhotos.tsx:228 'Add Photo', 'Progress Photos', 'No measurements yet', 'Front-pose timeline — stored privately on our servers' (a privacy statement left untranslated). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /measurements. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/measurements.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /measurements in Hindi: 18 Devanagari characters; \"Body Measurements\", \"No measurements yet\", \"Track your progress by recording body measurements...\" English. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): improved but not fixed: the new 3D body hint is Hindi (\"आपका शरीर 3D में लॉग करने के लिए शरीर का कोई हिस्सा टैप करें\", \"आगे / पीछे\", 18 -> 205 Devanagari characters), but the title \"Body Measurements\" and 34 English lines remain, mostly the body-part names (\"Right Arm (Bicep)\", \"Right Calf\", \"Chest\", \"Waist\", \"Hips\", \"Neck\", \"Shoulders\", \"Upper Chest\", \"Left Forearm\" ...). Minimal repro: localStorage nyus_locale=hi, sign in, open /measurements.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:21.124Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /measurements: 0 English lines (was 34): title, record card, value label/hint, history, toasts; the 22 measurement type names (API English) translated by slug; ProgressPhotos incl. the privacy line. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-connected-devices",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "defaultValue"
+      ],
+      "route": "/connected-devices",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-board-recheck/hi-connected-devices-e7945ec6.png"
+      ],
+      "imageCommits": [
+        "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+      ],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /connected-devices: 0 English UI lines (was 23 + 10 aria; left: brand names Health Connect / Google Fit and the session's OS value): the page had no t() at all, 90 keys now. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /connected-devices: English lines 23 -> 3 (left: \"Health Connect\" and \"Google Fit\" product names and the fallback device name \"Unknown\", which is a minor leftover not in the issue). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /connected-devices: English lines 3 (sweep-2 value 3) (\"Unknown\", \"Health Connect\", \"Google Fit\").",
+        "imagePath": "images/i-20261021-hi-connected-devices-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-connected-devices-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-connected-devices-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-connected-devices.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e41139d9c2737cd3cbc0156570630f596917c5dd",
+        "imageCommits": [
+          "e41139d9c2737cd3cbc0156570630f596917c5dd",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:24.557Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 361 Devanagari chars on /connected-devices. The 3 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-connected-devices.png."
+        }
+      ],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars) although the file has ~30 t() calls (keys absent from hi.json): ConnectedDevices.tsx:418 'Health Connect runs on the Android app…', :546 'Sign out everywhere', :122 '12d ago'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /connected-devices. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/connected-devices.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /connected-devices in Hindi: 18 Devanagari characters, 18 English lines and 9 English aria labels. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /connected-devices in Hindi: 18 Devanagari characters (bottom nav), 23 English lines (\"Connected Devices\", \"Health Connect runs on the Android app. On the web preview these controls are read-only.\", \"SESSIONS\", \"This device\", \"Unknown · Active now\", \"Sign out\") and 10 English aria labels. Minimal repro: localStorage nyus_locale=hi, sign in, open /connected-devices.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:24.557Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /connected-devices: 0 English UI lines (was 23 + 10 aria; left: brand names Health Connect / Google Fit and the session's OS value): the page had no t() at all, 90 keys now. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-faq",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "content"
+      ],
+      "route": "/faq",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-board-recheck/hi-faq-e7945ec6.png"
+      ],
+      "imageCommits": [
+        "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+      ],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844, QA account, prod reads, writes blocked. /faq: 0 English lines on the list (was 83): chrome, all category names and article titles (by the slug of their English). Article bodies on the detail screen stay English (a content translation pass, not part of this list). Tests: hindi-sweep-screens-2 7/7, full app suite 8,249 passed / 0 failed, tsc 0. Hindi machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /faq: English lines 83 -> 0: title, search, categories and article titles are Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /faq: English lines 0 (sweep-2 value 0).",
+        "imagePath": "images/i-20261021-hi-faq-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-faq-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-faq-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-faq.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bca575d7e7eca5e56d143055ce1e902337e4b78a",
+        "imageCommits": [
+          "bca575d7e7eca5e56d143055ce1e902337e4b78a",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:51.559Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "list screen 0 English lines; bodies stay English"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 2092 Devanagari chars on /faq. The 3 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-faq.png."
+        }
+      ],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Help & FAQ fully English (0 Hindi chars): FAQ.tsx:189,195 'Search Help Articles'; category and article titles come from src/lib/faq-fallback.ts (:18 'Getting Started', :52 'Help & FAQ') and the backend FAQ API. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /faq. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/faq.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /faq in Hindi: 18 Devanagari characters, all 16 categories, \"46 articles found\" and article titles English. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /faq in Hindi: 18 Devanagari characters (bottom nav), 83 English lines (\"Help & FAQ\", \"Search Help Articles\", every category and article title). Minimal repro: localStorage nyus_locale=hi, sign in, open /faq.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:51.559Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844, QA account, prod reads, writes blocked. /faq: 0 English lines on the list (was 83): chrome, all category names and article titles (by the slug of their English). Article bodies on the detail screen stay English (a content translation pass, not part of this list). Tests: hindi-sweep-screens-2 7/7, full app suite 8,249 passed / 0 failed, tsc 0. Hindi machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-health-alerts",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "no-i18n"
+      ],
+      "route": "/health-alerts",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-board-recheck/hi-health-alerts-e7945ec6.png"
+      ],
+      "imageCommits": [
+        "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+      ],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /health-alerts: 0 English lines (was 23 + 11 aria): whole page, plus the server's alert rule names/help translated by rule key. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /health-alerts: English lines 23 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /health-alerts: English lines 0 (sweep-2 value 0).",
+        "imagePath": "images/i-20261021-hi-health-alerts-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-health-alerts-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-health-alerts-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-health-alerts.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "84d7222626082f51a8d0d666afdaee4c42f60d2d",
+        "imageCommits": [
+          "84d7222626082f51a8d0d666afdaee4c42f60d2d",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:27.790Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 850 Devanagari chars on /health-alerts. The 6 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-health-alerts.png."
+        }
+      ],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Whole screen English, 0 Devanagari characters: HealthAlerts.tsx has no useTranslation; strings at :413 'Sleep & vitals', :428 'Nothing synced yet…', alert names and help text from src/lib/healthAlerts.ts:57 ('Steps goal reached', 'Short night', 'Blood oxygen low', 'HRV down' …) and the not-a-medical-device disclaimer. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /health-alerts. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/health-alerts.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /health-alerts in Hindi: 18 Devanagari characters, 23 English lines and 11 English aria labels (HealthAlerts.tsx has 0 useTranslation hits). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /health-alerts in Hindi: 18 Devanagari characters (bottom nav), 23 English lines (\"Health alerts\", \"SLEEP & VITALS\", \"Nothing synced yet...\", \"Steps goal reached\", \"Sleep goal met\" ...) and 11 English aria labels; HealthAlerts.tsx has 0 useTranslation hits. Minimal repro: localStorage nyus_locale=hi, sign in, open /health-alerts.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:27.790Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /health-alerts: 0 English lines (was 23 + 11 aria): whole page, plus the server's alert rule names/help translated by rule key. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-choose-plan",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "billing-copy"
+      ],
+      "route": "/choose-plan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /choose-plan: 0 English lines besides the plan names Active/Core/Elite and 'FAQ' (was: backend feature lines). Backend feature lines and taglines translated at render, 'Save N vs monthly' as one template; also the free-trial timeline and its date. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /choose-plan: English lines 6 -> 3 (left: the plan names Active, Core and Elite; the backend feature lines, the \"Save\" lines and the trial timeline are Hindi). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /choose-plan: English lines 3 (sweep-2 value 3) (plan names Active, Core, Elite).",
+        "imagePath": "images/i-20261021-hi-choose-plan-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-choose-plan-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-choose-plan-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-choose-plan.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "84fff2a687e05c5d4a7e0cdf95362faf68395a7f",
+        "imageCommits": [
+          "84fff2a687e05c5d4a7e0cdf95362faf68395a7f",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:31.892Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 595 Devanagari chars on /choose-plan. The 9 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-choose-plan.png."
+        }
+      ],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Plan cards show English feature lists: ChoosePlan.tsx:341 only translates features that start with 'choose_plan.'; plans fetched from the backend carry raw English strings (see :601), e.g. 'Everything in Core', 'Priority AI — 2× daily limits', 'Unlimited AI coach chats', 'AI-generated diet & workout plans', 'Create partner groups', 'Maximum savings + priority AI'; 'Save ₹198 vs monthly' / 'Save ₹495 vs monthly' are English literals (ChoosePlan.tsx:131,151, kept literal on purpose for a startsWith('Save') check). hi.json HAS translations for the choose_plan.plans.* keys, the backend-fed path bypasses them. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /choose-plan with the QA account (no plan). Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/choose-plan.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /choose-plan in Hindi: plan names and the feature lines \"Everything in Active\", \"Advanced analytics — Your patterns\", \"1.5× daily AI limits\" and the trial timeline (\"Day 27\", \"We remind you\", \"Trial ends\") are English. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): improved but not fixed: most of the page is Hindi now (410 Devanagari characters) but plan feature lines from the backend stay English: \"Everything in Core\", \"Priority AI — 2× daily limits\", \"Create partner groups\" (ChoosePlan.tsx:341 only translates features that start with choose_plan.). Minimal repro: localStorage nyus_locale=hi, sign in, open /choose-plan.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:31.892Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /choose-plan: 0 English lines besides the plan names Active/Core/Elite and 'FAQ' (was: backend feature lines). Backend feature lines and taglines translated at render, 'Save N vs monthly' as one template; also the free-trial timeline and its date. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-profile",
+      "createdAt": "2026-10-21T15:41:01.059Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "data"
+      ],
+      "route": "/profile",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /profile: 0 English UI lines (left: the user's name/email/referral link and the language names English/Hinglish, which stay as they are): referral card, LevelCard ('Lvl', XP, badges), badge names. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /profile: English lines 15 -> 5 (left: the account name, email and referral link, plus the language names \"English\" and \"Hinglish\", which the issue called fine; \"Invite a friend\", \"Share with a friend\" and the badge/level labels are Hindi). No screenshot: the page shows the account email and referral link.. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /profile: English lines 5 (sweep-2 value 5) (account name, email, referral link and \"English\" language name: data); no screenshot, the page shows the account email and referral link.",
+        "imagePath": "images/i-20261021-hi-profile-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-profile-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f6b69e77e9d64417228c676056a7ffdd990c107e",
+        "imageCommits": [
+          "f6b69e77e9d64417228c676056a7ffdd990c107e"
+        ],
+        "fixedAt": "2026-10-22T02:11:35.373Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 1315 Devanagari chars on /profile. The 9 English strings quoted in the issue are gone; remaining English is data only (names, codes, units, brand). Screenshot images/2026-10-22-verify307/v307-hi-profile.png."
+        }
+      ],
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Profile mixed: ProfileReferralCard.tsx:71 'Invite a friend', :73 'Share your link — help a friend start their journey.', :100 'Share with a friend' (literals; Settings.tsx:697 uses the translated key settings.invite_friend, the card does not); LevelCard.tsx:109 'XP total'; 'level' label; level title 'Newcomer' and badge names 'Comeback Kid / Journey Begins / Early Bird' come from the gamification API (English). Language names 'English'/'Hinglish' are fine. Settings screen itself is clean. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /profile. Screenshot not kept (shows referral code). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /profile in Hindi still shows \"Invite a friend\", \"Share your link — help a friend start their journey.\", \"Share with a friend\", \"LVL\", \"NEWCOMER\", \"XP total\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /profile in Hindi: \"Invite a friend\", \"Share your link — help a friend start their journey.\", \"Share with a friend\", and the badge names \"Rising Star\", \"Comeback Kid\", \"Journey Begins\" are English; the rest of the page is Hindi (1,166 Devanagari characters). Minimal repro: localStorage nyus_locale=hi, sign in, open /profile.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:35.373Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /profile: 0 English UI lines (left: the user's name/email/referral link and the language names English/Hinglish, which stay as they are): referral card, LevelCard ('Lvl', XP, badges), badge names. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20261021-hi-leftovers",
+      "createdAt": "2026-10-21T19:23:12.873Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "regression-after-fix"
+      ],
+      "route": "/dashboard, /nutrition",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. WeeklyInsightsCard heading/aria and NutritionEmptyState 'Log what you ate' through i18n (src). The capture account renders neither card; covered by test K1/K3 on both files. /dashboard in Hindi: 0 English lines. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi Home has 0 English lines and the weekly-insights button label reads \"साप्ताहिक जानकारी\" (was \"View weekly insights\"); the card heading uses t(\"weekly_insights.title\") at WeeklyInsightsCard.tsx:238 (inspected). Nutrition first-log state, run on a local build of bf115c95 against a local backend for an account with no diet plan: the button reads \"जो खाया वह लॉग करें\" (was \"Log what you ate\"; key nutrition.empty.log_what_you_ate, NutritionEmptyState.tsx:49). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): with the AI overview GET stubbed (prod /ai/overview currently answers the \"temporarily unavailable\" fallback for the QA account, so the card hides itself), Hindi Home shows the card heading \"साप्ताहिक इनसाइट\" and aria \"साप्ताहिक इनसाइट देखें\"; the English \"View weekly insights\" is gone. NEW (separate issue i-20261022-hi-weekly-insights-next-week): the card line \"Next week: <focus>\" is hardcoded English at WeeklyInsightsCard.tsx:295. The Nutrition first-log empty state was not reachable with this account (it has a plan); the earlier local check stands.",
+        "imagePath": "images/i-20261021-hi-leftovers-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-leftovers-fix-r1.png",
+          "images/2026-10-22-fixed-verify2/hi-nutrition-empty-state-bf115c95.png",
+          "images/2026-10-22-fixed-verify2/hi-home-weekly-insights-bf115c95.png",
+          "images/2026-10-22-recheck307/leftovers-weekly-insights.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "328840432d643df521ade0d0c2ba1852395c5396",
+        "imageCommits": [
+          "328840432d643df521ade0d0c2ba1852395c5396",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "fixedAt": "2026-10-22T02:11:38.656Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        },
+        "verifiedAt": "2026-10-22T10:14:26.053Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T02:26:20.395Z",
+          "event": "verified",
+          "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T10:14:26.053Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test on build 307 (release/307 a5b77f1a web bundle, QA account, prod reads, writes stubbed, Hindi, 390px, seeded Edge) 22 Oct: PASS, 544 Devanagari chars on /dashboard. Dashboard: weekly-insights heading and button in Hindi, no \"Weekly Insights\"/\"View weekly insights\"; /nutrition has no \"Log what you ate\". Screenshot images/2026-10-22-verify307/v307-hi-leftovers-dashboard.png."
+        }
+      ],
+      "description": "[P3] QA board re-check 2026-10-21 19:30 UTC: two English strings remain on Hindi first screens after the d3f2b294 i18n sweep, found while verifying it on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (1) Home weekly-insights card: src/components/WeeklyInsightsCard.tsx:234 heading \"Weekly Insights\" and :204 aria-label \"View weekly insights\" are literals (the card body text comes from the AI and its language was not tested: the local run used the stub). (2) Nutrition empty/first-log state: src/pages/_components/nutrition/NutritionEmptyState.tsx:49 \"Log what you ate\" is a literal although the file already uses useTranslation (the same label exists as key nutrition.diary_card.log_food in en.json:2523 and is used by NutritionDiaryCard.tsx:280). Repro: Hindi, open /dashboard (card \"WEEKLY INSIGHTS\") and /nutrition. Fix: t() keys with hi values. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): the Hindi /dashboard shows 0 English lines for this account, so the Weekly Insights card did not render and (1) could not be executed; inspected on main: src/components/WeeklyInsightsCard.tsx:234 \"Weekly Insights\" and :204 aria-label \"View weekly insights\" are still literals, and src/pages/_components/nutrition/NutritionEmptyState.tsx:49 \"Log what you ate\" is still a literal (the account has meals, so the empty state did not render). No commit on main since 70bab8dc touches either file. Repro: Hindi, account with an AI weekly insight and an empty nutrition day.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:38.656Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. WeeklyInsightsCard heading/aria and NutritionEmptyState 'Log what you ate' through i18n (src). The capture account renders neither card; covered by test K1/K3 on both files. /dashboard in Hindi: 0 English lines. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T10:14:26.053Z"
     }
   ]
 }
