@@ -92,15 +92,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Verified 2026-10-21 on NYUSLANDING publish/batch3-dal-peanuts be8ab96c (growth fix): dal article line 113 now reads PDF पेज 42-43 (B010, B013, B001, B003 on IFCT PDF page 42, B021 on 43) and line 89 no longer contains the unsourced health claim (no \"सेहत\" left); the commit changes only those two lines, so all 85 number checks still stand. QA review comments added: English 3d57f987, Hindi 3e818ff3 (both on publish/batch3-dal-peanuts, merged into upload/landing-batch-3 as 5487c0de and 5866633e). Dry run (never --real) of the batch-3 manifest alone: READY. The live upload branch also carries the unreviewed potato pair (b4pair), which is the only blocker there. || QA SWEEP 2026-10-22: HOLDS. Checked on upload/landing-batch-3 (54317d85), the page is not live (404): line 113 reads \"पेज 42-43\" and the file has 0 occurrences of \"सेहत\".",
+        "description": "Verified 2026-10-21 on NYUSLANDING publish/batch3-dal-peanuts be8ab96c (growth fix): dal article line 113 now reads PDF पेज 42-43 (B010, B013, B001, B003 on IFCT PDF page 42, B021 on 43) and line 89 no longer contains the unsourced health claim (no \"सेहत\" left); the commit changes only those two lines, so all 85 number checks still stand. QA review comments added: English 3d57f987, Hindi 3e818ff3 (both on publish/batch3-dal-peanuts, merged into upload/landing-batch-3 as 5487c0de and 5866633e). Dry run (never --real) of the batch-3 manifest alone: READY. The live upload branch also carries the unreviewed potato pair (b4pair), which is the only blocker there. || QA SWEEP 2026-10-22: HOLDS. Checked on upload/landing-batch-3 (54317d85), the page is not live (404): line 113 reads \"पेज 42-43\" and the file has 0 occurrences of \"सेहत\". || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): 'पेज 42-43' present=True; 'सेहत' count=0",
         "fixedAt": "2026-10-21T18:56:20.937Z",
         "by": "qa",
         "appCommit": "be8ab96c",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] QA health-content review of blog batch 3, NYUSLANDING publish/batch3-dal-peanuts b9621fd8 (checked in upload/landing-batch-3 f5c3aa59), 2026-10-21. English peanuts article: PASS (all IFCT 2017 rows H012/H001/H005/H021/H018 and A019 re-read from the PDF; 85 number checks across both articles, 0 mismatches; per-20 g maths, DGI 2024 p.20 and p.34 claims, FAQ JSON-LD, links, sitemap 169 entries all pass). Hindi dal article: numbers PASS (rows B021/B010/B013/B001/B003, 25 g and 30 g maths, atta comparison), two fixes needed before the QA gate comment can be added, both in static/blog/dal-mein-kitni-calorie-protein-hindi-india.html: (1) line 113 (sources): 'कोड B021, B010, B013, B001, B003, PDF पेज 43-43' is wrong: in IFCT 2017 B010, B013, B001 and B003 are on PDF page 42 and only B021 (red gram dal) is on page 43; write 'PDF पेज 42-43'. (2) line 89: 'दाल सेहतमंद है, लेकिन तड़के की मात्रा नापे बिना हिसाब अधूरा रहता है' is a health claim with no source (batch rule: no claims beyond IFCT/DGI); drop 'दाल सेहतमंद है, लेकिन' and keep 'तड़के की मात्रा नापे बिना हिसाब अधूरा रहता है'. Optional style: line 89 and the intro could say 'हमारा अंदाज़ा' once instead of twice. After the fixes QA adds '<!-- reviewed 21 Oct by QA against IFCT 2017 + ICMR-NIN DGI 2024, no dietitian review -->' to both articles; the dry run's only blockers today are those two missing comments (the DRAFT comment is not a gate, but remove it when the review comment goes in)."
     },
     {
@@ -1103,15 +1111,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "FAQ answer and FAQPage JSON-LD on best-cooking-oil-for-weight-loss-india now match exactly (FAQ equality check passes on all 4 items). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): best-cooking-oil FAQ answers equal the FAQPage JSON-LD on all 4 items.",
+        "description": "FAQ answer and FAQPage JSON-LD on best-cooking-oil-for-weight-loss-india now match exactly (FAQ equality check passes on all 4 items). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): best-cooking-oil FAQ answers equal the FAQPage JSON-LD on all 4 items. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): faq_eq=True",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P4] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/best-cooking-oil-for-weight-loss-india.html: FAQ answer 2 differs from its FAQPage JSON-LD only in punctuation: JSON-LD (line 23) has \"20-50 g\" with a hyphen, the visible answer (line 121) has \"20–50 g\" with an en dash. Make them identical. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1132,15 +1148,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "All five posts now end with a Sources list linking IFCT 2017, DGI 2024 (with the page numbers used: p.25, p.42, p.57, p.71) and the ICMR-NIN 2020 brief note where used; the calories post and the dal-chawal post also say plainly that cooked-dish values are NYUS estimates because IFCT lists raw foods; the oil post cites DGI 2024 p.71 for 20-50 g visible fat (verified in the PDF). The IFCT, DGI and brief-note links answer HTTP 200. NOT VERIFIED: the two FSSAI links on the oil post (press release of 8 February 2021, 3% by January 2021 and 2% by January 2022; Prohibition and Restrictions regulations compendium p.6, regulation 2.3.14(21)) cannot be opened from this machine (no HTTP response), so their wording is unchecked here. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): all five posts now link primary sources on nin.res.in (4-8 links each, every distinct URL returns 200); the two FSSAI links on the oil post were not checked then and still are not.",
+        "description": "All five posts now end with a Sources list linking IFCT 2017, DGI 2024 (with the page numbers used: p.25, p.42, p.57, p.71) and the ICMR-NIN 2020 brief note where used; the calories post and the dal-chawal post also say plainly that cooked-dish values are NYUS estimates because IFCT lists raw foods; the oil post cites DGI 2024 p.71 for 20-50 g visible fat (verified in the PDF). The IFCT, DGI and brief-note links answer HTTP 200. NOT VERIFIED: the two FSSAI links on the oil post (press release of 8 February 2021, 3% by January 2021 and 2% by January 2022; Prohibition and Restrictions regulations compendium p.6, regulation 2.3.14(21)) cannot be opened from this machine (no HTTP response), so their wording is unchecked here. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): all five posts now link primary sources on nin.res.in (4-8 links each, every distinct URL returns 200); the two FSSAI links on the oil post were not checked then and still are not. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): NIN links per page calories-macro:4, indian-diet-pl:4, roti-vs-rice-f:4, dal-chawal-for:4, best-cooking-o:5",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] None of the five oldest food posts has an outbound link to a primary source (0 external links on each): /blog/calories-macros-common-indian-foods.html, /blog/indian-diet-plan-for-weight-loss.html, /blog/roti-vs-rice-for-weight-loss-india.html, /blog/dal-chawal-for-weight-loss-india.html, /blog/best-cooking-oil-for-weight-loss-india.html. /blog/best-cooking-oil-for-weight-loss-india.html line 98 attributes \"20-50 g a day\" visible fat to ICMR-NIN guidance (this is correct: DGI 2024 p.71 \"visible fat (cooking oil) must be limited to 20-50 g (4-10 teaspoon full) per person/day\", 20 g / 30 g for sedentary women / men, up to 40 g / 50 g for active men and 30 g / 40 g for active women) and line 95 states the FSSAI 2% industrial trans-fat cap in force since January 2022 [not verifiable from the IFCT/DGI PDFs], both with no link. The cooked-dish figures on /blog/calories-macros-common-indian-foods.html lines 64-74 (rice, dal, rajma, idli, dosa, poha, chicken curry, curd) have no IFCT row at all (IFCT is raw foods only); rice, dal and rajma recompute within 5-10% from IFCT raw rows (rice A015 356 kcal, 7.94 g protein per 100 g; toor/moong B021/B010; rajma B019), idli, dosa, poha and curd cannot be checked against the two PDFs. Fix: add a short Sources list to each post (IFCT 2017 / DGI 2024 / FSSAI order with the page numbers above) and a line saying cooked-dish values are NYUS estimates. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1160,15 +1184,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "The plate total now reads ~350-400 kcal in the table, FAQ answer and JSON-LD, equal to the sum of the three rows above (190-205 + 120-150 + 40-45), and the tadka row names its fat (about 4.5-5 g, all of its 40-45 kcal; DGI 2024 p.25 900 kcal per 100 g). Correction to the original report: the table has Calories / Protein / Fibre columns, not a fat column, so the tadka row's 0 g cells (protein and fibre) were right and only the plate sum was wrong. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): dal-chawal plate total reads 350-400 kcal in the body, FAQ and JSON-LD and as the sum 190-205 + 120-150 + 40-45.",
+        "description": "The plate total now reads ~350-400 kcal in the table, FAQ answer and JSON-LD, equal to the sum of the three rows above (190-205 + 120-150 + 40-45), and the tadka row names its fat (about 4.5-5 g, all of its 40-45 kcal; DGI 2024 p.25 900 kcal per 100 g). Correction to the original report: the table has Calories / Protein / Fibre columns, not a fat column, so the tadka row's 0 g cells (protein and fibre) were right and only the plate sum was wrong. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): dal-chawal plate total reads 350-400 kcal in the body, FAQ and JSON-LD and as the sum 190-205 + 120-150 + 40-45. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): 350-400 present=True; 4.5-5 g fat=True; faq_eq=True",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/dal-chawal-for-weight-loss-india.html line 71: \"Tadka (1 tsp ghee/oil) ~40-45 kcal | 0 g | 0 g\" - the 40-45 kcal is all fat (9 kcal per g, DGI 2024 p.25 cooking oil/fats 900 kcal per 100 g), so the fat column must read ~4.5-5 g, not 0 g (protein 0 g is right). Line 72: the plate row \"~320-380 kcal\" is below the sum of the three rows above it (190-205 + 120-150 + 40-45 = 350-400); it only works with a half-teaspoon tadka the table does not show. Fix: tadka fat ~4.5-5 g and plate ~350-400 kcal, or label the plate row \"light tadka = 1/2 tsp\". Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1188,15 +1220,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fibre row now ~3.4-3.9 g for the roti (11.36 g per 100 g, IFCT A019, x 30-34 g) and ~1.5 g for 150 g cooked rice (A015, 2.81 g per 100 g, about 55 g raw); big-bowl line now ~325-390 kcal (1.3 kcal per g, as the page states); FAQ and JSON-LD agree; a Sources list explains the rice cooked-to-raw ratio. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): roti-vs-rice Fibre row reads ~3.4-3.9 g for roti and ~1.5 g for 150 g cooked rice.",
+        "description": "Fibre row now ~3.4-3.9 g for the roti (11.36 g per 100 g, IFCT A019, x 30-34 g) and ~1.5 g for 150 g cooked rice (A015, 2.81 g per 100 g, about 55 g raw); big-bowl line now ~325-390 kcal (1.3 kcal per g, as the page states); FAQ and JSON-LD agree; a Sources list explains the rice cooked-to-raw ratio. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): roti-vs-rice Fibre row reads ~3.4-3.9 g for roti and ~1.5 g for 150 g cooked rice. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): fibre, glycemic index and portion size compared for Indian meals. The honest answer — plus how to eat eit; faq_eq=True",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/roti-vs-rice-for-weight-loss-india.html line 70 (Fibre row: roti ~2.5-3 g, cooked rice ~0.4-0.8 g) is low against IFCT 2017: atta A019 has 11.36 g total dietary fibre per 100 g (PDF p.42), so a roti of 30-34 g flour carries 3.4-3.9 g; rice, raw, milled A015 has 2.81 g per 100 g (PDF p.41), so 150 g cooked (about 55 g raw) carries about 1.5 g. Fix: roti ~3.4-3.9 g, rice ~1.5 g (still about 2.5x more in roti, so the conclusion at line 80 holds). Also line 72: \"250-300 g bowls (~350-400 kcal)\" is 325-390 kcal at the page's own 195 kcal per 150 g (1.3 kcal per g); write ~325-390. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1216,15 +1256,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "The 1.2-1.6 g/kg line is replaced by the ICMR-NIN 2020 RDA of 0.83 g/kg/day (about 50 g for 60 kg) with a link to the brief note (HTTP 200); higher intakes are described as common in sports nutrition and explicitly not an ICMR-NIN recommendation, plus a not-medical-advice line for kidney disease, diabetes, pregnancy and medication, and a Sources list. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the \"1.2-1.6\" g/kg line is gone and the ICMR-NIN 0.83 g/kg RDA is present (2 places).",
+        "description": "The 1.2-1.6 g/kg line is replaced by the ICMR-NIN 2020 RDA of 0.83 g/kg/day (about 50 g for 60 kg) with a link to the brief note (HTTP 200); higher intakes are described as common in sports nutrition and explicitly not an ICMR-NIN recommendation, plus a not-medical-advice line for kidney disease, diabetes, pregnancy and medication, and a Sources list. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the \"1.2-1.6\" g/kg line is gone and the ICMR-NIN 0.83 g/kg RDA is present (2 places). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): 0.83 g/kg=True; brief_note link=True; old 1.2-1.6 count=0",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/indian-diet-plan-for-weight-loss.html line 61: \"A practical target is roughly 1.2-1.6 g of protein per kg of body weight per day\" has no source and no outbound link, while the page is a weight-loss health page. The Indian reference is ICMR-NIN 2020 RDA 0.83 g/kg/day (https://www.nin.res.in/rdabook/brief_note.pdf, already cited on the live Hindi diet-chart article), and DGI 2024 does not give 1.2-1.6. Fix: either cite a source for the higher range (and say who it is for, e.g. people training for strength or in a deficit) or quote the 0.83 g/kg RDA and say higher intakes are common in sports nutrition; add the not-medical-advice line. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1244,15 +1292,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Vegetarian lunch row now uses paneer bhurji with 50 g paneer, which the page itself computes as 2 rotis (192 kcal) + dal katori (150) + 50 g paneer (153, IFCT L003) = about 495 kcal, matching the ~500 in the table; day sum 350+500+200+450+80 = 1,580 still fits the ~1,600 heading. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the lunch row uses 50 g paneer; \"paneer bhurji (100g)\" is gone.",
+        "description": "Vegetarian lunch row now uses paneer bhurji with 50 g paneer, which the page itself computes as 2 rotis (192 kcal) + dal katori (150) + 50 g paneer (153, IFCT L003) = about 495 kcal, matching the ~500 in the table; day sum 350+500+200+450+80 = 1,580 still fits the ~1,600 heading. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the lunch row uses 50 g paneer; \"paneer bhurji (100g)\" is gone. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): paneer bhurji (50 g paneer) + salad 2 roti + grilled chicken (120g) + sabzi + salad ~500 Snack Roasted chana (40g) + a few almonds + ",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/indian-diet-plan-for-weight-loss.html line 73 (1-day plate table, Lunch, vegetarian): \"2 roti + 1 katori dal + paneer bhurji (100g) + salad\" is shown as ~500 kcal. By the site's own reference (roti 110 kcal each, dal katori 150, /blog/calories-macros-common-indian-foods.html lines 64, 66) and IFCT 2017 L003 paneer (1278 kJ = 305 kcal per 100 g, PDF p.57) that lunch is already 220 + 150 + 305 = 675 kcal before oil and salad, about 175 kcal above the table. The veg day then sums to about 1,750 kcal, not the ~1,600 in the heading (the arithmetic 350+500+200+450+80 = 1,580 only works with the low lunch). Fix: show ~680 kcal (or use paneer 50 g, ~150 kcal, giving ~520) and update the day total or the heading. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1272,15 +1328,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "static/blog/indian-diet-plan-for-weight-loss.html now says 8,900+ Indian and global foods; no \"800+\" left in the file. The \"recalibrates weekly\" claim was also reworded to what the app does (weekly check-in, adjusts once enough is logged). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): indian-diet-plan-for-weight-loss has 0 \"800+\" and 2 \"8,900+\".",
+        "description": "static/blog/indian-diet-plan-for-weight-loss.html now says 8,900+ Indian and global foods; no \"800+\" left in the file. The \"recalibrates weekly\" claim was also reworded to what the app does (weekly check-in, adjusts once enough is logged). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): indian-diet-plan-for-weight-loss has 0 \"800+\" and 2 \"8,900+\". || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): 800+=0; 8,900+=2",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/indian-diet-plan-for-weight-loss.html line 97 says \"800+ Indian foods with macros\"; the site count is 8,900+ (prod food_database 8,941). Change to \"8,900+ Indian and global foods with macros\". Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1300,15 +1364,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Roti row now states its basis (30 g atta, about 40 g dough) and shows ~96 kcal, 3.2 g protein, 19 g carbohydrate, 0.5 g fat = IFCT A019 (320 kcal, 10.57 g, 64.17 g, 1.53 g per 100 g, PDF p.42) x 30 g; the same 96 kcal is used in the body text, FAQ and JSON-LD, in roti-vs-rice (96-109 kcal for 30-34 g atta) and in indian-diet-plan; the paneer row was also corrected to IFCT L003 (50 g = ~153 kcal, 9.4 g protein, 12.4 g fat). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the roti row reads ~96 kcal (4 places) and the old ~110 kcal roti line is gone.",
+        "description": "Roti row now states its basis (30 g atta, about 40 g dough) and shows ~96 kcal, 3.2 g protein, 19 g carbohydrate, 0.5 g fat = IFCT A019 (320 kcal, 10.57 g, 64.17 g, 1.53 g per 100 g, PDF p.42) x 30 g; the same 96 kcal is used in the body text, FAQ and JSON-LD, in roti-vs-rice (96-109 kcal for 30-34 g atta) and in indian-diet-plan; the paneer row was also corrected to IFCT L003 (50 g = ~153 kcal, 9.4 g protein, 12.4 g fat). fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the roti row reads ~96 kcal (4 places) and the old ~110 kcal roti line is gone. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): 96 kcal mentions=4; '30 g atta'=True",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/calories-macros-common-indian-foods.html line 64 (and the 100-110 kcal roti on /blog/roti-vs-rice-for-weight-loss-india.html line 69, /blog/indian-diet-plan-for-weight-loss.html): \"1 medium roti, ~40 g, ~110 kcal, 3 g protein\" cannot be reproduced from IFCT 2017 A019 (Wheat flour, atta, PDF p.42: 1340 kJ = 320 kcal, 10.57 g protein, 64.17 g carbohydrate, 1.53 g fat per 100 g). 40 g of FLOUR gives 128 kcal / 4.2 g protein; 40 g of DOUGH (about 28 g flour) gives 90 kcal / 3.0 g protein; 110 kcal needs 34 g flour, which carries 3.6 g protein. The page never says whether 40 g is flour or dough. Fix: state the basis, e.g. \"1 roti = 30 g atta (about 40 g dough): ~96 kcal, 3.2 g protein, 19 g carbohydrate, 0.5 g fat, plus oil if brushed\", and align the roti kcal in the other two posts. Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1328,15 +1400,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Boiled egg row now ~74 kcal, 6.7 g protein, 5.3 g fat per 50 g, equal to IFCT 2017 M004 (618 kJ, 13.43 g protein, 10.54 g fat per 100 g, PDF p.58) halved. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the boiled-egg row shows 6.7 g protein and the old 78 kcal is gone.",
+        "description": "Boiled egg row now ~74 kcal, 6.7 g protein, 5.3 g fat per 50 g, equal to IFCT 2017 M004 (618 kJ, 13.43 g protein, 10.54 g fat per 100 g, PDF p.58) halved. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): the boiled-egg row shows 6.7 g protein and the old 78 kcal is gone. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): Boiled egg 1 large ~50 g ~74 kcal 6.7 g ~0 g 5.3 g Curd / dahi (whole milk) 1 katori ~150 g ~90 kcal 5 g 7 g 5 g Portions are where tracking really goes wrong T",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/calories-macros-common-indian-foods.html line 73: Boiled egg, 1 large ~50 g shows ~78 kcal and 6 g protein. IFCT 2017 M004 (Egg, poultry, whole, boiled, PDF p.58) is 618 kJ (148 kcal) and 13.43 g protein per 100 g, i.e. 74 kcal and 6.7 g protein per 50 g. Protein is 0.7 g (10%) low and also disagrees with the site's own Hindi egg article (6.7 g). Fix: ~74 kcal, ~6.7 g protein, ~5.3 g fat (fat 10.54 g per 100 g). Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1356,15 +1436,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "static/blog/calories-macros-common-indian-foods.html no longer contains \"800+\" anywhere (JSON-LD, body, FAQ); body now says 8,900+ Indian and global foods, almost all with macros from food-composition data. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): calories-macros-common-indian-foods has 0 \"800+\" and 4 \"8,900+\".",
+        "description": "static/blog/calories-macros-common-indian-foods.html no longer contains \"800+\" anywhere (JSON-LD, body, FAQ); body now says 8,900+ Indian and global foods, almost all with macros from food-composition data. fixed on upload/landing-batch-1 0d168440, goes live with Shaan list item nyus-3612ff (re-checked on the branch files, not live: nothing is uploaded yet). || QA SWEEP 2026-10-22: HOLDS. Live nyus.in 22 Oct (curl): calories-macros-common-indian-foods has 0 \"800+\" and 4 \"8,900+\". || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): 800+ count=0; 8,900+ count=6; faq_eq=True",
         "fixedAt": "2026-10-21T17:45:40.016Z",
         "by": "qa",
         "appCommit": "0d168440",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Live source-check rotation, 2026-10-21; read-only; page live and identical to NYUSLANDING origin/main] static/blog/calories-macros-common-indian-foods.html lines 23 (FAQPage JSON-LD), 105 (body) and 115 (visible FAQ) still say \"800+ Indian foods\", while the same file's footer promo says 8,900+ and prod food_database has 8,941 rows. One count site-wide: change the three lines to \"8,900+ Indian and global foods\" (same wording as the batch pages). Primary sources read from the PDFs: IFCT 2017 Table 1 (https://www.nin.res.in/ebooks/IFCT2017.pdf), DGI 2024 (https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)."
     },
     {
@@ -1385,15 +1473,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Verified 2026-10-21 against growth commit f459dab9 (NYUSLANDING draft/hindi-milk-calories, static/blog/doodh-mein-kitni-calorie-protein-hindi-india.html and milk-calories-protein-cow-vs-buffalo-india.html). Opened DGI 2024 PDF page 136 myself: row \"Milk 100ml - One small steel glass\" (twice, Evening and Dinner), so the 100 ml small steel glass is now cited to p.136 in both pages (REVIEW-FLAG 2 comment, method paragraph and sources list); p.134 \"Milk 150ml - One and half small steel glass\" unchanged. The 250 ml vs 200 ml sentence now says 36 (cow) and 54 (buffalo) kcal in Hindi and English (unrounded 36.45 and 53.66). Re-ran the full recompute on both committed files: all 12 volume-table cells equal 305/449 kJ and 3.26/3.68 g protein per 100 g at 100/150/200/250/500/1000 ml, FAQ JSON-LD equals the visible FAQ (5/5 each), JSON-LD parses, hreflang hi/en/x-default identical on both pages, no-review box once per page, Hindi meta description 130 chars, English 136. Nothing live; both pages must still go in one upload. || QA SWEEP 2026-10-22: HOLDS. Live 22 Oct: both milk pages cite p.136 and carry the 36 / 54 kcal sentence.",
+        "description": "Verified 2026-10-21 against growth commit f459dab9 (NYUSLANDING draft/hindi-milk-calories, static/blog/doodh-mein-kitni-calorie-protein-hindi-india.html and milk-calories-protein-cow-vs-buffalo-india.html). Opened DGI 2024 PDF page 136 myself: row \"Milk 100ml - One small steel glass\" (twice, Evening and Dinner), so the 100 ml small steel glass is now cited to p.136 in both pages (REVIEW-FLAG 2 comment, method paragraph and sources list); p.134 \"Milk 150ml - One and half small steel glass\" unchanged. The 250 ml vs 200 ml sentence now says 36 (cow) and 54 (buffalo) kcal in Hindi and English (unrounded 36.45 and 53.66). Re-ran the full recompute on both committed files: all 12 volume-table cells equal 305/449 kJ and 3.26/3.68 g protein per 100 g at 100/150/200/250/500/1000 ml, FAQ JSON-LD equals the visible FAQ (5/5 each), JSON-LD parses, hreflang hi/en/x-default identical on both pages, no-review box once per page, Hindi meta description 130 chars, English 136. Nothing live; both pages must still go in one upload. || QA SWEEP 2026-10-22: HOLDS. Live 22 Oct: both milk pages cite p.136 and carry the 36 / 54 kcal sentence. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): doodh-mein-k p136=True; milk-calorie p136=True",
         "fixedAt": "2026-10-21T17:07:16.501Z",
         "by": "qa",
         "appCommit": "f459dab9",
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3 / content, for growth - QA review of the Hindi milk draft, branch draft/hindi-milk-calories at b7411f63 (Hindi file at 0b7171c1 + hreflang), 2026-10-21] All numbers PASS against IFCT 2017 p.57 (L001 buffalo 449 kJ / 3.68 / 6.58 / 8.39, L002 cow 305 kJ / 3.26 / 4.48 / 4.94, 6 regions each) and DGI 2024 pp.25, 129, 134; every kcal/protein figure in the table and FAQ JSON-LD recomputes; FAQ JSON-LD equals the visible text; disclaimer box visible. Two wording fixes before publish, both in content/drafts/doodh-mein-kitni-calorie-protein-hindi-india.html: (1) lines 80-81: the table rows '100 ml (एक छोटा स्टील गिलास)' and '150 ml (डेढ़ छोटा स्टील गिलास)' state a 100 ml small steel glass as fact, but DGI p.134 only says '150 ml milk = one and half small steel glass'; the 100 ml is our derivation (line 76 says so). Fix: label the rows '(हमारे अनुमान से एक छोटा स्टील गिलास)' / '(डेढ़ छोटा स्टील गिलास, DGI पेज 134)' or drop the glass name from the 100 ml row. (2) line 97: 'लगभग 36 (गाय) से 53 (भैंस)' - the unrounded buffalo difference between 250 ml and 200 ml is 53.7, so it rounds to 54; write '36 और 54' (or '53 से 54'). Publish note: the page links to the English twin /blog/milk-calories-protein-cow-vs-buffalo-india.html and carries hreflang to it (reciprocal, verified), so both pages must go in the same upload or the link and hreflang 404. REVIEW-FLAGs 1-5 otherwise clear."
     },
     {
@@ -2883,15 +2979,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Verified live 2026-10-21 after the combined landing upload (nyus-3612ff, 17:58 UTC): curl https://nyus.in/blog/weight-loss-diet-chart-hindi-india.html and .../ghar-par-workout-kaise-karen-hindi-india.html each carry hreflang hi + en + x-default; the en targets (indian-diet-plan-for-weight-loss.html, beginner-home-workout-plan.html) answer 200 and link back with hreflang hi. \"verified macros\" is gone from https://nyus.in/, /faq and /faq/ (0 matches each). || QA SWEEP 2026-10-22: HOLDS. Live 22 Oct: both Hindi pages carry hreflang hi, en, x-default; \"verified macros\" has 0 matches on /, /faq and /faq/.",
+        "description": "Verified live 2026-10-21 after the combined landing upload (nyus-3612ff, 17:58 UTC): curl https://nyus.in/blog/weight-loss-diet-chart-hindi-india.html and .../ghar-par-workout-kaise-karen-hindi-india.html each carry hreflang hi + en + x-default; the en targets (indian-diet-plan-for-weight-loss.html, beginner-home-workout-plan.html) answer 200 and link back with hreflang hi. \"verified macros\" is gone from https://nyus.in/, /faq and /faq/ (0 matches each). || QA SWEEP 2026-10-22: HOLDS. Live 22 Oct: both Hindi pages carry hreflang hi, en, x-default; \"verified macros\" has 0 matches on /, /faq and /faq/. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): weight-loss-diet-cha['en', 'hi', 'x-default']; ghar-par-workout-kai['en', 'hi', 'x-default']; / verified-macros=0; /faq/ verified-macros=0",
         "fixedAt": "2026-10-21T19:23:12.873Z",
         "by": "qa",
         "appCommit": null,
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3 / SEO + copy — executed 2026-10-21] Live nyus.in still has (a) no hreflang on weight-loss-diet-chart-hindi-india.html and ghar-par-workout-kaise-karen-hindi-india.html (0 hreflang tags; JSON-LD Article/Breadcrumb/FAQPage valid, canonical ok), and (b) static/index.html:896 and static/faq/index.html:88 'verified macros' (only 1,210 of 8,941 foods are verified=1). Dev already fixed both in NYUSLANDING 23a81f18 (committed locally, not deployed). Close this once the landing scp is done: repro = curl the two Hindi URLs and grep hreflang (expect hi/en/x-default), curl nyus.in/faq and grep 'verified macros' (expect none)."
     },
     {
@@ -2911,15 +3015,23 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Verified live 2026-10-21 after the combined landing upload (nyus-3612ff): meta description lengths now paneer-vs-tofu 141, is-ghee-good 139, pakora-calories 145, jaggery-vs-sugar 137, are-soya-chunks 144 characters (was 28-49); read with curl + html-unescape of <meta name=\"description\">. || QA SWEEP 2026-10-22: HOLDS. Live 22 Oct: meta description lengths paneer-vs-tofu-for-weight-loss-india 141, is-ghee-good 139, pakora-calories-home-vs-street-fried 145, jaggery-vs-sugar 137, are-soya-chunks 144.",
+        "description": "Verified live 2026-10-21 after the combined landing upload (nyus-3612ff): meta description lengths now paneer-vs-tofu 141, is-ghee-good 139, pakora-calories 145, jaggery-vs-sugar 137, are-soya-chunks 144 characters (was 28-49); read with curl + html-unescape of <meta name=\"description\">. || QA SWEEP 2026-10-22: HOLDS. Live 22 Oct: meta description lengths paneer-vs-tofu-for-weight-loss-india 141, is-ghee-good 139, pakora-calories-home-vs-street-fried 145, jaggery-vs-sugar 137, are-soya-chunks 144. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on LIVE https://nyus.in 2026-10-22 (curl, read-only): meta lengths {\"paneer-vs-tofu-for-weight-loss-india\": 141, \"is-ghee-good-for-weight-loss-india\": 139, \"pakora-calories-home-vs-street-fried-india\": 145, \"jaggery-vs-sugar-for-weight-loss-india\": 137, \"are-soya-chunks-good-for-weight-loss-india\": 144}",
         "fixedAt": "2026-10-21T19:23:12.873Z",
         "by": "qa",
         "appCommit": null,
         "tests": {
           "passed": true
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:43.069Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:43.069Z",
+          "event": "verified",
+          "note": "QA 48h recheck on live nyus.in: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3 / SEO — executed crawl 2026-10-21] 5 live blog pages have meta descriptions far below a useful length (title+desc present everywhere else, 164 blog URLs checked): paneer-vs-tofu-for-weight-loss-india.html = 28 chars, is-ghee-good-for-weight-loss-india.html = 38, pakora-calories-home-vs-street-fried-india.html = 41, jaggery-vs-sugar-for-weight-loss-india.html = 44, are-soya-chunks-good-for-weight-loss-india.html = 49 (all https://nyus.in/blog/<file>). Repro: curl the page, read <meta name=\"description\">. Fix: rewrite each to 110-160 chars in NYUSLANDING static/blog/<file>; ships with the next manual landing scp."
     },
     {
