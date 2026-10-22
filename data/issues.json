@@ -18,19 +18,21 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. WeeklyInsightsCard heading/aria and NutritionEmptyState 'Log what you ate' through i18n (src). The capture account renders neither card; covered by test K1/K3 on both files. /dashboard in Hindi: 0 English lines. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi Home has 0 English lines and the weekly-insights button label reads \"साप्ताहिक जानकारी\" (was \"View weekly insights\"); the card heading uses t(\"weekly_insights.title\") at WeeklyInsightsCard.tsx:238 (inspected). Nutrition first-log state, run on a local build of bf115c95 against a local backend for an account with no diet plan: the button reads \"जो खाया वह लॉग करें\" (was \"Log what you ate\"; key nutrition.empty.log_what_you_ate, NutritionEmptyState.tsx:49). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. WeeklyInsightsCard heading/aria and NutritionEmptyState 'Log what you ate' through i18n (src). The capture account renders neither card; covered by test K1/K3 on both files. /dashboard in Hindi: 0 English lines. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi Home has 0 English lines and the weekly-insights button label reads \"साप्ताहिक जानकारी\" (was \"View weekly insights\"); the card heading uses t(\"weekly_insights.title\") at WeeklyInsightsCard.tsx:238 (inspected). Nutrition first-log state, run on a local build of bf115c95 against a local backend for an account with no diet plan: the button reads \"जो खाया वह लॉग करें\" (was \"Log what you ate\"; key nutrition.empty.log_what_you_ate, NutritionEmptyState.tsx:49). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): with the AI overview GET stubbed (prod /ai/overview currently answers the \"temporarily unavailable\" fallback for the QA account, so the card hides itself), Hindi Home shows the card heading \"साप्ताहिक इनसाइट\" and aria \"साप्ताहिक इनसाइट देखें\"; the English \"View weekly insights\" is gone. NEW (separate issue i-20261022-hi-weekly-insights-next-week): the card line \"Next week: <focus>\" is hardcoded English at WeeklyInsightsCard.tsx:295. The Nutrition first-log empty state was not reachable with this account (it has a plan); the earlier local check stands.",
         "imagePath": "images/i-20261021-hi-leftovers-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-leftovers-fix-r1.png",
           "images/2026-10-22-fixed-verify2/hi-nutrition-empty-state-bf115c95.png",
-          "images/2026-10-22-fixed-verify2/hi-home-weekly-insights-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-home-weekly-insights-bf115c95.png",
+          "images/2026-10-22-recheck307/leftovers-weekly-insights.png"
         ],
         "imagePrivate": true,
         "imageCommit": "328840432d643df521ade0d0c2ba1852395c5396",
         "imageCommits": [
           "328840432d643df521ade0d0c2ba1852395c5396",
           "09051be5d9c2606ede99139dc79ac8c509c406c5",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:38.656Z",
         "by": "shakeebshaan",
@@ -43,13 +45,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -158,17 +166,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Coach chat first screen now Hindi in Hindi (app b6df4db3). Welcome greeting/focus line/3 chips (+ crisis variant; a chip sends its Hindi text), composer placeholder 'Freya को मैसेज करें…', mic/send/cancel-reply/pending/admin labels, and message-list labels (Coach: prefix, message options, typing, Response sent, reply sender) all go through i18n in en/hi/hinglish/xx-AE. Hindi + Hinglish machine-drafted, not native-reviewed. Grep: no hardcoded English UI string left in CoachChatWelcomePanel/Composer/MessageList. Test: CoachChat.hindi-first-screen 5 passed; coach chat suites 74/74; tsc 0; vite build OK. Screenshot: 390px Hindi first screen. || QA SWEEP 2026-10-22: HOLDS. Executed on current main against a local backend (nyu_backend origin/main 3b30aee4, LLM mock, trial account) with the local bundle of e7945ec6, Hindi: the first screen (history emptied so the welcome panel shows) reads \"नमस्ते QA\", \"आज किस पर ध्यान देना है?\", chips \"मेरा ट्रेनिंग प्लान देखें\" / \"कल के खाने का प्लान बनाएँ\" / \"मेरी रिकवरी कैसी है?\" and composer \"अपने कोच को मैसेज करें\" (127 Devanagari characters, only the coach name is Latin). Residual, not in the original list: the header avatar aria label stays English in Hindi (\"Freya, your coach\").",
+        "description": "Coach chat first screen now Hindi in Hindi (app b6df4db3). Welcome greeting/focus line/3 chips (+ crisis variant; a chip sends its Hindi text), composer placeholder 'Freya को मैसेज करें…', mic/send/cancel-reply/pending/admin labels, and message-list labels (Coach: prefix, message options, typing, Response sent, reply sender) all go through i18n in en/hi/hinglish/xx-AE. Hindi + Hinglish machine-drafted, not native-reviewed. Grep: no hardcoded English UI string left in CoachChatWelcomePanel/Composer/MessageList. Test: CoachChat.hindi-first-screen 5 passed; coach chat suites 74/74; tsc 0; vite build OK. Screenshot: 390px Hindi first screen. || QA SWEEP 2026-10-22: HOLDS. Executed on current main against a local backend (nyu_backend origin/main 3b30aee4, LLM mock, trial account) with the local bundle of e7945ec6, Hindi: the first screen (history emptied so the welcome panel shows) reads \"नमस्ते QA\", \"आज किस पर ध्यान देना है?\", chips \"मेरा ट्रेनिंग प्लान देखें\" / \"कल के खाने का प्लान बनाएँ\" / \"मेरी रिकवरी कैसी है?\" and composer \"अपने कोच को मैसेज करें\" (127 Devanagari characters, only the coach name is Latin). Residual, not in the original list: the header avatar aria label stays English in Hindi (\"Freya, your coach\"). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /coach-chat first screen: English lines 1 (sweep-2 value 0) (coach name only); 437 Devanagari characters, composer placeholder and chips are Hindi.",
         "imagePath": "images/i-20261021-cc-hi-first-screen-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-cc-hi-first-screen-fix-r1.png",
-          "images/2026-10-22-fixed-sweep/cc-hi-first-screen-main-e7945ec6.png"
+          "images/2026-10-22-fixed-sweep/cc-hi-first-screen-main-e7945ec6.png",
+          "images/2026-10-22-recheck307/hi-coach-chat.png"
         ],
         "imagePrivate": true,
         "imageCommit": "82b340e19da3e8750bba5ad5a167aa19d8fa0c9b",
         "imageCommits": [
           "82b340e19da3e8750bba5ad5a167aa19d8fa0c9b",
-          "db29abfbacf55275f1855fe318491bc376727408"
+          "db29abfbacf55275f1855fe318491bc376727408",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T22:07:44.283Z",
         "by": "shakeebshaan",
@@ -180,9 +190,17 @@
           "score": 90,
           "bar": 90,
           "note": "every listed string through i18n; render test + 390px Hindi screenshot; Hindi machine-drafted"
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P2] Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. The coach chat first screen is English in Hindi: only the header subtitle (\"पर्सनल कोच\") is translated. Hardcoded English: greeting \"Hi {name}\" and \"What's the focus today?\" (src/components/coach/CoachChatWelcomePanel.tsx:98), the three quick-start chips \"Review my training plan\" / \"Plan tomorrow's meals\" / \"How's my recovery?\" (CoachChatWelcomePanel.tsx:29-31), the input placeholder `Message ${coachName}…` and its variants \"Reply to …\", \"Listening…\", \"Send as coach...\" (src/components/coach/CoachChatComposer.tsx:221), and the labels \"Speak your message\" (:228), \"Send message\" (:249), \"Log or add something\" (:189; the Hindi row \"कुछ लॉग करें या जोड़ें\" exists elsewhere) and \"Message options\" (src/components/coach/CoachChatMessageList.tsx:466). None of these strings is in en.json or hi.json. This is the first screen a Hindi user sees after tapping the coach button. Repro: set the app language to Hindi (coach_language syncs to hindi), open /coach-chat. Fix: move them to t() keys with hi/hinglish values. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: CoachChatWelcomePanel.tsx:29-31,98 and CoachChatComposer.tsx:221,228 are still literals on 70bab8dc (components/coach untouched since f24c2985).",
       "thread": [
         {
@@ -216,7 +234,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name. || QA SWEEP 2026-10-22: HOLDS. Re-executed on current main, local backend + bundle e7945ec6: coach chat opens and replies to an English and a Hindi message. Prod itself is still untestable with the QA account (trial expired). || VERIFIED ON PROD 2026-10-22 ~02:08 UTC, after ops granted the QA account a 7-day trial (Shaan list item nyus-066184; GET /auth/me 200, subscription_active true, is_trial true, 7 days left). App main ca05af96 web build against the prod API, 390x844, seeded Edge, QA account, every REST write stubbed; the chat message goes over the app socket. (1) COACH CHAT: opened /coach-chat, sent ONE message (\"Hi coach, what is one easy protein snack for today?\"); a real coach reply arrived in about 22 s with no 402 and no error toast: \"You've logged about 1182 kcal today against a 1697 kcal target ... Easiest protein snack: a whey protein shake ...\" followed by a Today's Meals card (Chicken Oats Upma, Fish Roti Sabzi, Fish Palak Rice, 1753 kcal) with Mark Eaten / Swap / Skip. (2) INSIGHTS: GET /ai/overview 200, GET /ai/weekly-insights 200 (fresh, generated 02:06 UTC), GET /insights/correlations 200, GET /reviews/latest 200, GET /coach/history 200, GET /dashboard/overview 200: Home loads with the Your patterns card and the weekly challenge card, and /habit-insights shows three patterns (steps to water, sleep to workouts, sleep to meals) instead of the trial-ended lock. No call returned 402. One new defect found in the reply itself: i-20261022-coach-skipped-meals (the \"1182 kcal logged\" counts meals the user had removed). Screenshots attached; no tokens or credentials are on this board.",
+        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name. || QA SWEEP 2026-10-22: HOLDS. Re-executed on current main, local backend + bundle e7945ec6: coach chat opens and replies to an English and a Hindi message. Prod itself is still untestable with the QA account (trial expired). || VERIFIED ON PROD 2026-10-22 ~02:08 UTC, after ops granted the QA account a 7-day trial (Shaan list item nyus-066184; GET /auth/me 200, subscription_active true, is_trial true, 7 days left). App main ca05af96 web build against the prod API, 390x844, seeded Edge, QA account, every REST write stubbed; the chat message goes over the app socket. (1) COACH CHAT: opened /coach-chat, sent ONE message (\"Hi coach, what is one easy protein snack for today?\"); a real coach reply arrived in about 22 s with no 402 and no error toast: \"You've logged about 1182 kcal today against a 1697 kcal target ... Easiest protein snack: a whey protein shake ...\" followed by a Today's Meals card (Chicken Oats Upma, Fish Roti Sabzi, Fish Palak Rice, 1753 kcal) with Mark Eaten / Swap / Skip. (2) INSIGHTS: GET /ai/overview 200, GET /ai/weekly-insights 200 (fresh, generated 02:06 UTC), GET /insights/correlations 200, GET /reviews/latest 200, GET /coach/history 200, GET /dashboard/overview 200: Home loads with the Your patterns card and the weekly challenge card, and /habit-insights shows three patterns (steps to water, sleep to workouts, sleep to meals) instead of the trial-ended lock. No call returned 402. One new defect found in the reply itself: i-20261022-coach-skipped-meals (the \"1182 kcal logged\" counts meals the user had removed). Screenshots attached; no tokens or credentials are on this board. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /coach-chat renders in Hindi (437 Devanagari characters, composer, chips). I did not send a message on prod today; the test gap stays closed by the 21 Oct local run.",
         "fixedAt": "2026-10-21T18:13:19.346Z",
         "by": "qa",
         "appCommit": null,
@@ -226,20 +244,28 @@
         "imagePaths": [
           "images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png",
           "images/2026-10-22-coach-unblock/home-patterns-challenge-prod-390.png",
-          "images/2026-10-22-coach-unblock/your-patterns-prod-390.png"
+          "images/2026-10-22-coach-unblock/your-patterns-prod-390.png",
+          "images/2026-10-22-recheck307/hi-coach-chat.png"
         ],
         "imageCommits": [
           "1e25b7477f7223febe3d81f510f599b1bc21564a",
           "1e25b7477f7223febe3d81f510f599b1bc21564a",
-          "1e25b7477f7223febe3d81f510f599b1bc21564a"
+          "1e25b7477f7223febe3d81f510f599b1bc21564a",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
-        "verifiedAt": "2026-10-22T02:11:06.282Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:11:06.282Z",
           "event": "verified-on-prod",
           "note": "trial granted (nyus-066184); chat reply and insights load without 402",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -265,17 +291,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "The coach button no longer shows on /faq (removed from the FAB allowlist in chrome-routes.ts), so it cannot cover the last answers; FAQ bottom padding switched to pb-safe-bottom. Screenshot: FAQ without the coach button. Tests: chrome-routes + clearance contract pass; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): /faq has no coach button (no chat/coach control found), while /dashboard, /nutrition, /activity, /profile and /weekly-progress still have it.",
+        "description": "The coach button no longer shows on /faq (removed from the FAB allowlist in chrome-routes.ts), so it cannot cover the last answers; FAQ bottom padding switched to pb-safe-bottom. Screenshot: FAQ without the coach button. Tests: chrome-routes + clearance contract pass; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): /faq has no coach button (no chat/coach control found), while /dashboard, /nutrition, /activity, /profile and /weekly-progress still have it. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /faq has no coach button in en or hi (0 coach-name buttons on the page).",
         "imagePath": "images/i-20261021-fd-fab-overlap-faq-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-fab-overlap-faq-fix-r1.png",
-          "images/2026-10-22-fixed-sweep/faq-no-coach-button-e7945ec6.png"
+          "images/2026-10-22-fixed-sweep/faq-no-coach-button-e7945ec6.png",
+          "images/2026-10-22-recheck307/faq-nofab-en.png"
         ],
         "imagePrivate": true,
         "imageCommit": "7531d64430f61f74ebd47c51dfebfc3e6bbaf59d",
         "imageCommits": [
           "7531d64430f61f74ebd47c51dfebfc3e6bbaf59d",
-          "db29abfbacf55275f1855fe318491bc376727408"
+          "db29abfbacf55275f1855fe318491bc376727408",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T21:38:54.179Z",
         "by": "shakeebshaan",
@@ -287,9 +315,17 @@
           "score": 90,
           "bar": 90,
           "note": "screenshot + contract test"
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P4] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The floating coach button covers the right end of list rows on Help & FAQ: 'How do I move around the ap...' is cut by the green button at the default scroll (same pattern as i-20261021-fab1 on Nutrition). Fix: bottom/right padding on list content, or hide the button on /faq. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Not re-run visually; FAQ.tsx and FloatingCoachButton.tsx layout are unchanged since the original report (d3f2b294 only touched the aria keys).",
       "thread": [
         {
@@ -322,17 +358,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Welcome tagline now: 'Your AI fitness and nutrition coach, built for Indian food. Free for 30 days.' (matches the 30-day trial pricing). Updated in en/hinglish/xx-AE plus Hindi (machine-drafted, not native-reviewed). Screenshot: welcome screen with the new line. Test: i18n/welcome-tagline passes; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), signed-out welcome screen: \"Your AI fitness and nutrition coach, built for Indian food. Free for 30 days.\"",
+        "description": "Welcome tagline now: 'Your AI fitness and nutrition coach, built for Indian food. Free for 30 days.' (matches the 30-day trial pricing). Updated in en/hinglish/xx-AE plus Hindi (machine-drafted, not native-reviewed). Screenshot: welcome screen with the new line. Test: i18n/welcome-tagline passes; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), signed-out welcome screen: \"Your AI fitness and nutrition coach, built for Indian food. Free for 30 days.\" || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): logged-out welcome screen reads \"Your AI fitness and nutrition coach, built for Indian food. Free for 30 days.\"; the old \"Precision tracking for serious athletes\" is gone.",
         "imagePath": "images/i-20261021-fd-tagline-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-tagline-fix-r1.png",
-          "images/2026-10-22-fixed-sweep/welcome-tagline-e7945ec6.png"
+          "images/2026-10-22-fixed-sweep/welcome-tagline-e7945ec6.png",
+          "images/2026-10-22-recheck307/tagline-welcome.png"
         ],
         "imagePrivate": true,
         "imageCommit": "a5c3bcb53542d55fd32f953326a63a79bb048c68",
         "imageCommits": [
           "a5c3bcb53542d55fd32f953326a63a79bb048c68",
-          "db29abfbacf55275f1855fe318491bc376727408"
+          "db29abfbacf55275f1855fe318491bc376727408",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T21:39:25.162Z",
         "by": "shakeebshaan",
@@ -344,9 +382,17 @@
           "score": 90,
           "bar": 90,
           "note": "copy fixed in all 4 locales; Hindi machine-drafted, not native-reviewed"
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P4] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Sign-in screen tagline reads 'Precision tracking for serious athletes. Macros, strength, and weight, all in one place.' (src/i18n/locales/en.json:4260) but the product and landing page position NYUS as an AI fitness and nutrition coach built for Indian food with a 30-day free trial; a casual first-time user is told it is for 'serious athletes' and sees no trial mention before signing in. Suggest the landing wording. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: the string is still there, now at src/i18n/locales/en.json:4296.",
       "thread": [
         {
@@ -376,7 +422,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Backend nyu_backend 7935dcf7 (branch firstday-batch5, NOT deployed yet). The 'quiet for 2 days' line was hardcoded; it now counts the real days since the last active day (up to 14) in en/hi/hinglish, and from 7 days says it has been a week or more. test_pattern_detection +5; full backend suite 8,257 passed / 0 failed. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/firstday-batch5 7935dcf7: tests/test_pattern_detection.py + tests/test_plan_week.py 98 passed (executed 22 Oct). On prod: 7935dcf7 is not on origin/main or the VM; the VM still has the hardcoded \"Hey! I've noticed you've been quiet for 2 days.\" at app/services/pattern_detection.py:197 and app/services/coach_copy.py:136, so the morning brief is unchanged live.",
+        "description": "Backend nyu_backend 7935dcf7 (branch firstday-batch5, NOT deployed yet). The 'quiet for 2 days' line was hardcoded; it now counts the real days since the last active day (up to 14) in en/hi/hinglish, and from 7 days says it has been a week or more. test_pattern_detection +5; full backend suite 8,257 passed / 0 failed. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/firstday-batch5 7935dcf7: tests/test_pattern_detection.py + tests/test_plan_week.py 98 passed (executed 22 Oct). On prod: 7935dcf7 is not on origin/main or the VM; the VM still has the hardcoded \"Hey! I've noticed you've been quiet for 2 days.\" at app/services/pattern_detection.py:197 and app/services/coach_copy.py:136, so the morning brief is unchanged live. || QA 48h recheck 2026-10-22: NOT VERIFIABLE on prod: nyu_backend 7935dcf7 (branch firstday-batch5) is not in origin/main, so the day-count wording is not deployed.",
         "imagePath": "images/i-20261021-fd-brief-copy-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-brief-copy-fix-r1.png"
@@ -397,7 +443,14 @@
           "note": "real day count in 3 languages; live only after the branch is deployed"
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "note",
+          "note": "QA recheck: fix not deployed, not verifiable on prod",
+          "by": "qa"
+        }
+      ],
       "description": "[P4] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The morning brief sends the same fixed sentence every day: coach chat history for the QA account has 'Morning brief - Mon 19 Oct: ...you've been quiet for 2 days...' and the identical text on Tue 20 Oct and (Hindi) Wed 21 Oct, although inactivity grew each day. The number is hardcoded: app/services/coach_copy.py:136 (English) and :137 (Hindi), mirrored in app/services/pattern_detection.py:197. Fix: pass the real days-quiet count (or say 'a few days') and vary the line after the first send. The brief itself is delivered on time (FF_DAILY_BRIEF job runs hourly, composes at user-local 7 AM). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: coach_copy.py:136 still \"quiet for 2 days\" on origin/main e38ef80c.",
       "thread": [
         {
@@ -427,7 +480,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Coach name has one source of truth: the name the server sends with chat history (cached under the coach-name key). useCoachName() is now the only reader; the coach button, activity target card, progression picker, day card and both plan builders all use it, and on first load it asks the server once when no name is cached. Dashboard on first load: button reads 'Chat with Freya', same as chat. Tests: useCoachName.resolve 3 passed; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): the coach button reads \"Chat with Freya\" on /dashboard, /nutrition, /activity, /profile and /weekly-progress (one name everywhere).",
+        "description": "Coach name has one source of truth: the name the server sends with chat history (cached under the coach-name key). useCoachName() is now the only reader; the coach button, activity target card, progression picker, day card and both plan builders all use it, and on first load it asks the server once when no name is cached. Dashboard on first load: button reads 'Chat with Freya', same as chat. Tests: useCoachName.resolve 3 passed; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): the coach button reads \"Chat with Freya\" on /dashboard, /nutrition, /activity, /profile and /weekly-progress (one name everywhere). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): the coach button reads the same name, \"Freya\", on /dashboard, /nutrition, /activity, /profile and /weekly-progress in English (\"Chat with Freya\") and Hindi (\"Freya से बात करें\").",
         "imagePath": "images/i-20261021-fd-coach-name-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-coach-name-fix-r1.png"
@@ -447,9 +500,17 @@
           "score": 90,
           "bar": 90,
           "note": "every surface reads one hook; verified on first load"
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The coach is called 'Nisha' on Home and 'Freya' on every other tab for the same account: aria-label 'Chat with Nisha' on /dashboard but 'Chat with Freya' on /nutrition, /activity, /profile and /progress (the visible 'Ask <coach>' pill uses the same name, common.ask_coach). src/components/FloatingCoachButton.tsx:60 initialises coachName from getCoachName() || DEFAULT_COACH_NAME and Home never refreshes it, so the first screen shows the default persona. A new user meets two coach names in the first minute. Fix: resolve the coach name from the profile before first paint (or update it when the profile loads) so every screen agrees. || VERIFIED CAUSE (local run, 2026-10-21): the profile coach is Freya and chat.service.ts:109 caches it in localStorage once /coach/history loads, but the Home FAB keeps the default. src/components/FloatingCoachButton.tsx:60 keeps the name in useState(getCoachName() || DEFAULT_COACH_NAME) and its only refresh listeners (lines 134-145) are the cross-tab \"storage\" event and window \"focus\", NOT the in-tab COACH_NAME_EVENT that setCoachName() dispatches (coach-config.ts:53); the hook useCoachName (src/hooks/useCoachName.ts) already subscribes to that event but the FAB does not use it. Measured: first Home mount \"Chat with Nisha\" with localStorage already holding \"Freya\" 7 s later; Nutrition, Activity and the next Home visit say \"Freya\". Fix: replace the useState with useCoachName(). || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: on every fresh load the Home, Activity and Progress coach button reads \"Nisha से बात करें\" while the profile coach is Freya (chat header says Freya); FloatingCoachButton.tsx changed only its aria keys in d3f2b294.",
       "thread": [
         {
@@ -485,7 +546,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in nyu_backend dcc4efe1 (live 22 Oct 01:13 UTC, watcher DEPLOYED in 23s, health 200). Add Food search (GET /logs/meal/custom-ingredients) now also reads food_database (curated Indian dishes, source 'food') and ranks exact / name-prefix / whole-word / word-prefix matches before plain substrings. Proof: post-deploy check against prod with the QA account, 12/12 PASS (biryani, samosa, chole, dal makhani, butter chicken, paneer butter masala, fish curry, chicken curry, vada, jalebi all return rows; tea -> Tea (with milk+sugar), no Idli; apple -> Apple, no Pineapple in the top 3). Backend full suite 8,377 passed / 0 failed on this head; route + ranking tests re-run before push: 168 passed. Backend-only fix, no app change. || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on PROD 2026-10-22 (nyu_backend dcc4efe1, live, QA account, GET only): GET /api/v1/logs/meal/custom-ingredients now returns rows for all 10 dishes (biryani 6, samosa 3, chole 9, dal makhani 1, butter chicken 1, paneer butter masala 1, fish curry 1, chicken curry 2, vada 3, jalebi 1; was 0), q=tea ranks \"Tea (with milk+sugar)\" first (was Idli (Steamed)), q=apple ranks \"Apple\" first with no Pineapple in the top 3. In the app, three of the dishes were added to a meal, saved with the right kcal/protein for the portion, counted in the day total after a reload, edited and removed (see the earlier food-search step-after check). This one is server-side, so it already reaches testers on closed-track build 306. Screenshot: search \"biryani\" in the app on prod.",
+        "description": "Fixed in nyu_backend dcc4efe1 (live 22 Oct 01:13 UTC, watcher DEPLOYED in 23s, health 200). Add Food search (GET /logs/meal/custom-ingredients) now also reads food_database (curated Indian dishes, source 'food') and ranks exact / name-prefix / whole-word / word-prefix matches before plain substrings. Proof: post-deploy check against prod with the QA account, 12/12 PASS (biryani, samosa, chole, dal makhani, butter chicken, paneer butter masala, fish curry, chicken curry, vada, jalebi all return rows; tea -> Tea (with milk+sugar), no Idli; apple -> Apple, no Pineapple in the top 3). Backend full suite 8,377 passed / 0 failed on this head; route + ranking tests re-run before push: 168 passed. Backend-only fix, no app change. || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on PROD 2026-10-22 (nyu_backend dcc4efe1, live, QA account, GET only): GET /api/v1/logs/meal/custom-ingredients now returns rows for all 10 dishes (biryani 6, samosa 3, chole 9, dal makhani 1, butter chicken 1, paneer butter masala 1, fish curry 1, chicken curry 2, vada 3, jalebi 1; was 0), q=tea ranks \"Tea (with milk+sugar)\" first (was Idli (Steamed)), q=apple ranks \"Apple\" first with no Pineapple in the top 3. In the app, three of the dishes were added to a meal, saved with the right kcal/protein for the portion, counted in the day total after a reload, edited and removed (see the earlier food-search step-after check). This one is server-side, so it already reaches testers on closed-track build 306. Screenshot: search \"biryani\" in the app on prod. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on PROD 2026-10-22 (GET only, QA account): custom-ingredients now returns biryani 6, samosa 3, chole 9, dal makhani 1, butter chicken 1, paneer butter masala 1, fish curry 1, chicken curry 2, vada 3, jalebi 1; q=tea ranks \"Tea (with milk+sugar)\" first and q=apple ranks \"Apple\" first. Add Food search in the 307 build shows 5 hits plus \"Show N more\" (biryani 5+1, beef 5+15) and every hit is addable (release smoke, results.json in C:/tmp/nyus-release-307/smoke).",
         "imagePath": "images/i-20261021-fd-search-gaps-fix-r2.png",
         "imagePaths": [
           "images/i-20261021-fd-search-gaps-fix-r2.png",
@@ -507,7 +568,7 @@
           "bar": 90,
           "note": "All 10 dishes now return rows and tea/apple rank a real tea/apple first; minor: tea's 2nd-3rd hits are long USDA herbal-tea names"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
@@ -543,6 +604,12 @@
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -585,36 +652,46 @@
       "imagePath": "images/2026-10-21-firstday/14-weekly-view.png",
       "imageCommit": "9458264a50c1059bfaea7a36d3570c7f1d7e738c",
       "imagePaths": [
-        "images/2026-10-21-firstday/14-weekly-view.png"
+        "images/2026-10-21-firstday/14-weekly-view.png",
+        "images/2026-10-22-recheck307/weekly-sessions.png"
       ],
       "imageCommits": [
-        "9458264a50c1059bfaea7a36d3570c7f1d7e738c"
+        "9458264a50c1059bfaea7a36d3570c7f1d7e738c",
+        "611adae34deddd44729f576410ad953915f768f5"
       ],
       "imagePrivate": false,
-      "status": "fixed",
-      "fix": {
-        "description": "Backend nyu_backend 232f3b78 (branch firstday-batch5, NOT deployed yet; the NYUS employee pushes). Progressive plans now get a weekly target from their training frequency (5-on/2-off = 5 a week) instead of 0 from week 2 on. Probe on the real calculate_on_track_metrics, week 3, 2 done: 5 total / 2 done / 3 left. test_plan_week 4 passed; full backend suite 8,257 passed / 0 failed. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/firstday-batch5 232f3b78: tests/test_plan_week.py passes (98 passed with test_pattern_detection, executed 22 Oct). On prod: 232f3b78 is not on origin/main or the VM, so /progress weekly sessions are unchanged live.",
-        "imagePath": "images/i-20261021-fd-weekly-sessions-fix-r1.png",
-        "imagePaths": [
-          "images/i-20261021-fd-weekly-sessions-fix-r1.png"
-        ],
-        "imagePrivate": true,
-        "imageCommit": "ea1cfb30e0c05a313b2dacc6cdc262ff99457193",
-        "imageCommits": [
-          "ea1cfb30e0c05a313b2dacc6cdc262ff99457193"
-        ],
-        "fixedAt": "2026-10-21T21:39:30.842Z",
-        "by": "shakeebshaan",
-        "tests": {
-          "passed": true
-        },
-        "judge": {
-          "score": 90,
-          "bar": 90,
-          "note": "fix + probe verified; live only after the branch is deployed"
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "reopened",
+          "note": "Still reproduces on prod with the 307 app (2026-10-22, QA account, /weekly-progress, 390x844): the Weekly view reads \"1 / 0 sessions\", \"0% of plan\" and \"No sessions scheduled this week.\" (screenshot). The fix, nyu_backend 232f3b78 (branch firstday-batch5), is not in origin/main, so it is not deployed; re-close after the NYUS employee pushes it and the weekly total reads 5 for a 5-on/2-off progressive plan.",
+          "by": "qa",
+          "previousFix": {
+            "description": "Backend nyu_backend 232f3b78 (branch firstday-batch5, NOT deployed yet; the NYUS employee pushes). Progressive plans now get a weekly target from their training frequency (5-on/2-off = 5 a week) instead of 0 from week 2 on. Probe on the real calculate_on_track_metrics, week 3, 2 done: 5 total / 2 done / 3 left. test_plan_week 4 passed; full backend suite 8,257 passed / 0 failed. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/firstday-batch5 232f3b78: tests/test_plan_week.py passes (98 passed with test_pattern_detection, executed 22 Oct). On prod: 232f3b78 is not on origin/main or the VM, so /progress weekly sessions are unchanged live.",
+            "imagePath": "images/i-20261021-fd-weekly-sessions-fix-r1.png",
+            "imagePaths": [
+              "images/i-20261021-fd-weekly-sessions-fix-r1.png"
+            ],
+            "imagePrivate": true,
+            "imageCommit": "ea1cfb30e0c05a313b2dacc6cdc262ff99457193",
+            "imageCommits": [
+              "ea1cfb30e0c05a313b2dacc6cdc262ff99457193"
+            ],
+            "fixedAt": "2026-10-21T21:39:30.842Z",
+            "by": "shakeebshaan",
+            "tests": {
+              "passed": true
+            },
+            "judge": {
+              "score": 90,
+              "bar": 90,
+              "note": "fix + probe verified; live only after the branch is deployed"
+            }
+          }
         }
-      },
-      "history": [],
+      ],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] For a progressive-plan user the weekly view says '0 / 0 sessions', '0% of plan' and 'No sessions scheduled this week.' while the Activity tab shows 'Progressive Plan Session 4' for today and a set was logged (Activity days 1 / 7). Source: src/pages/WeeklyProgress.tsx:539 (key progress_weekly.sessions_none) - the session count uses calendar-scheduled sessions, which progressive plans do not have. A new user sees two contradictory answers within one minute. Fix: for progressive plans count completed sessions this week against 'sessions per week' (or hide the card), and word the empty state accordingly. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: WeeklyProgress.tsx:551 still uses progress_weekly.sessions_none for progressive plans (the key now has a Hindi value but the logic is unchanged).",
       "thread": [
         {
@@ -623,6 +700,13 @@
           "kind": "resolve",
           "text": "Backend nyu_backend 232f3b78 (branch firstday-batch5, NOT deployed yet; the NYUS employee pushes). Progressive plans now get a weekly target from their training frequency (5-on/2-off = 5 a week) instead of 0 from week 2 on. Probe on the real calculate_on_track_metrics, week 3, 2 done: 5 total / 2 done / 3 left. test_plan_week 4 passed; full backend suite 8,257 passed / 0 failed.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "who": "owner",
+          "kind": "reopen",
+          "text": "Still reproduces on prod with the 307 app (2026-10-22, QA account, /weekly-progress, 390x844): the Weekly view reads \"1 / 0 sessions\", \"0% of plan\" and \"No sessions scheduled this week.\" (screenshot). The fix, nyu_backend 232f3b78 (branch firstday-batch5), is not in origin/main, so it is not deployed; re-close after the NYUS employee pushes it and the weekly total reads 5 for a 5-on/2-off progressive plan.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -650,14 +734,15 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Re-open fixed (app 2c848494). The dashboard deck now builds the weekly-challenge line with challengeLine(), not the server's English. Prod sends no criteria yet, so the app reads the server's English template (meals / protein days / workouts / steps / all meals on N of 7 days / N new recipes) and phrases it in the app language. Screenshots (Hindi, 390px, challenge endpoint stubbed): without criteria 'कम से कम 4 मील लॉग करें', with criteria same, English unchanged 'Log at least 4 meals'. Tests: firstday-hindi 9 cases incl. every template without criteria; dashboard + deck tests 25/25; tsc 0. Backend criteria commit replayed onto current main: nyu_backend 3b30aee4 (branch weekly-challenge-criteria-main), full suite 8361 passed / 1 failed (async-queue timeout under load, passes alone) - push to main + deploy by the NYUS employee. || QA VERIFIED 2026-10-22: (1) PROD API now sends the criteria: GET https://nyus.in/api/v1/gamification/weekly-challenge (QA account) returned 200 {\"challenge\":\"Log at least 5 meals this week\",\"criteria\":{\"metric\":\"meals_logged\",\"target_value\":5},\"target\":\"5 meals\",\"xp_reward\":75,...}; the Oracle VM HEAD is 3b30aee4 (health 200), so backend 3b30aee4 is live. (2) App screen: app main e7945ec6 against that prod API, Hindi dashboard, 390x844: the card renders \"कम से कम 5 मील लॉग करें\" with \"इस हफ़्ते की चुनौती\" (screenshot hi-weekly-challenge-criteria); English renders \"Log at least 5 meals\" (en-weekly-challenge). Note: this is main, not build 305 on the closed track (305 predates 2c848494), so testers on 305 still see the English line until the next app build. || QA SWEEP 2026-10-22: HOLDS. Already verified today against prod (weekly-challenge criteria live, Hindi card \"कम से कम 5 मील लॉग करें\"); not repeated.",
+        "description": "Re-open fixed (app 2c848494). The dashboard deck now builds the weekly-challenge line with challengeLine(), not the server's English. Prod sends no criteria yet, so the app reads the server's English template (meals / protein days / workouts / steps / all meals on N of 7 days / N new recipes) and phrases it in the app language. Screenshots (Hindi, 390px, challenge endpoint stubbed): without criteria 'कम से कम 4 मील लॉग करें', with criteria same, English unchanged 'Log at least 4 meals'. Tests: firstday-hindi 9 cases incl. every template without criteria; dashboard + deck tests 25/25; tsc 0. Backend criteria commit replayed onto current main: nyu_backend 3b30aee4 (branch weekly-challenge-criteria-main), full suite 8361 passed / 1 failed (async-queue timeout under load, passes alone) - push to main + deploy by the NYUS employee. || QA VERIFIED 2026-10-22: (1) PROD API now sends the criteria: GET https://nyus.in/api/v1/gamification/weekly-challenge (QA account) returned 200 {\"challenge\":\"Log at least 5 meals this week\",\"criteria\":{\"metric\":\"meals_logged\",\"target_value\":5},\"target\":\"5 meals\",\"xp_reward\":75,...}; the Oracle VM HEAD is 3b30aee4 (health 200), so backend 3b30aee4 is live. (2) App screen: app main e7945ec6 against that prod API, Hindi dashboard, 390x844: the card renders \"कम से कम 5 मील लॉग करें\" with \"इस हफ़्ते की चुनौती\" (screenshot hi-weekly-challenge-criteria); English renders \"Log at least 5 meals\" (en-weekly-challenge). Note: this is main, not build 305 on the closed track (305 predates 2c848494), so testers on 305 still see the English line until the next app build. || QA SWEEP 2026-10-22: HOLDS. Already verified today against prod (weekly-challenge criteria live, Hindi card \"कम से कम 5 मील लॉग करें\"); not repeated. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): Hindi Home has 0 English lines and the weekly-challenge line reads \"कम से कम 5 मील लॉग करें\" (no \"Log at least\").",
         "imagePath": "images/i-20261021-fd-hi-strings-fix-r2.png",
         "imagePaths": [
           "images/i-20261021-fd-hi-strings-fix-r2.png",
           "images/i-20261021-fd-hi-strings-fix-r2-2.png",
           "images/i-20261021-fd-hi-strings-fix-r2-3.png",
           "images/2026-10-22-board-recheck/hi-weekly-challenge-criteria-e7945ec6.png",
-          "images/2026-10-22-board-recheck/en-weekly-challenge-e7945ec6.png"
+          "images/2026-10-22-board-recheck/en-weekly-challenge-e7945ec6.png",
+          "images/2026-10-22-recheck307/hi-home.png"
         ],
         "imagePrivate": true,
         "imageCommit": "4e23aaf91ae50e90187138f5cc792f2defe3b5c1",
@@ -666,7 +751,8 @@
           "1f569ac77e46a8840b532a0685b876b94fc93a02",
           "952a18a03fea5b73f6d40c32b6b0a59b782e67ff",
           "a5d0587a866f1e24b8b8e83564f2f16bd596a236",
-          "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
+          "a5d0587a866f1e24b8b8e83564f2f16bd596a236",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T22:35:47.105Z",
         "by": "shakeebshaan",
@@ -678,7 +764,8 @@
           "score": 90,
           "bar": 90,
           "note": "fixed on the mounted surface; works with today's prod backend (no criteria) and the new one"
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
@@ -709,6 +796,12 @@
               "note": "Nutrition literal fixed and verified; challenge line localized in the app with fallback, but it needs the backend criteria field (committed on branch weekly-challenge-criteria) to be deployed before Hindi users see it."
             }
           }
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
         }
       ],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Two more English strings in the Hindi first screens that the hi-* sweep did not list: (1) Dashboard weekly-challenge text 'Log at least 5 meals' is generated by the backend in English: app/services/gamification_service.py:798 f'Log at least {n} meal(s) this week' (no locale); (2) Nutrition 'Micronutrient estimates aren't available for today's meals yet.' is a hardcoded literal at src/components/nutrition/NutritionPanel.tsx:120 (not in en.json/hi.json). Repro: Hindi, open /dashboard and /nutrition. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Inspected: NutritionPanel.tsx:120 still a literal; gamification_service.py:798 still f\"Log at least {n} meal(s) this week\" on origin/main e38ef80c.",
@@ -758,19 +851,21 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app f9e68312: Profile > Support is Hindi (header, welcome, 6 topic chips + the Hindi templates they insert, sender labels, composer, attach/send, error state, toasts, quick-question card). Re-captured in Hindi: 167 Devanagari characters, 0 English strings (was 0 Devanagari). Tests: Support.page Hindi block; full vitest 9,411 passed. Hindi machine-drafted, needs native review. Rides the next Play build. || QA VERIFIED 2026-10-21 on app f9e68312 (web bundle against local backend 992c12e9, 30-day trial account, 390x844, seeded Edge). BEFORE (70bab8dc): /support in Hindi had 0 Devanagari characters and the six topic chips, welcome and welcome line in English (images/2026-10-21-firstday/H-support.png). AFTER: Hindi page has 167 Devanagari characters and 0 English lines: header \"सहायता\", welcome, six chips, composer placeholder; English page unchanged (screenshots attached). Hindi wording is machine-drafted, still needs native review. || QA SWEEP 2026-10-22: HOLDS. Re-executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): Hindi /support has 167 Devanagari characters and 0 English lines.",
+        "description": "Fixed in app f9e68312: Profile > Support is Hindi (header, welcome, 6 topic chips + the Hindi templates they insert, sender labels, composer, attach/send, error state, toasts, quick-question card). Re-captured in Hindi: 167 Devanagari characters, 0 English strings (was 0 Devanagari). Tests: Support.page Hindi block; full vitest 9,411 passed. Hindi machine-drafted, needs native review. Rides the next Play build. || QA VERIFIED 2026-10-21 on app f9e68312 (web bundle against local backend 992c12e9, 30-day trial account, 390x844, seeded Edge). BEFORE (70bab8dc): /support in Hindi had 0 Devanagari characters and the six topic chips, welcome and welcome line in English (images/2026-10-21-firstday/H-support.png). AFTER: Hindi page has 167 Devanagari characters and 0 English lines: header \"सहायता\", welcome, six chips, composer placeholder; English page unchanged (screenshots attached). Hindi wording is machine-drafted, still needs native review. || QA SWEEP 2026-10-22: HOLDS. Re-executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): Hindi /support has 167 Devanagari characters and 0 English lines. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /support: English lines 0 (sweep-2 value 0 (167 Devanagari characters then, 167 now)).",
         "imagePath": "images/i-20261021-fd-support-hi-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-support-hi-fix-r1.png",
           "images/2026-10-21-firstday-verify/fix2-support-hi-after-f9e68312.png",
-          "images/2026-10-21-firstday-verify/fix2-support-en-after-f9e68312.png"
+          "images/2026-10-21-firstday-verify/fix2-support-en-after-f9e68312.png",
+          "images/2026-10-22-recheck307/fd-support-hi.png"
         ],
         "imagePrivate": true,
         "imageCommit": "5d1b02e1d0da5a7b9fbd84371cf30dc7936a9271",
         "imageCommits": [
           "5d1b02e1d0da5a7b9fbd84371cf30dc7936a9271",
           "13bc0845f43f453c7840e1bb1cdeddf115d4d7b0",
-          "13bc0845f43f453c7840e1bb1cdeddf115d4d7b0"
+          "13bc0845f43f453c7840e1bb1cdeddf115d4d7b0",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T19:25:06.644Z",
         "by": "shakeebshaan",
@@ -782,9 +877,17 @@
           "score": 93,
           "bar": 90,
           "note": "Every string on the page now goes through i18n incl. the topic templates the chips insert and the toasts; Hindi capture shows 0 English strings. Hindi not native-reviewed."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Profile > Support is fully English in Hindi: 0 Devanagari characters on the page. src/pages/Support.tsx has no useTranslation; hardcoded strings at :94 (category chips Account issue / Billing question / Report a bug / Feature request / Cancel subscription / Data export), :727 (input placeholder 'Type your support message'), :783 'Welcome to Support', :784 'Send us a message and we'll get back to you within a day.'. This is the screen a Hindi user opens when stuck on day 1. Repro: set language to Hindi, Profile > Support. (The 21 Oct i18n commit f24c2985 did not cover it; board issue i-20261021-hi-faq covers the FAQ page only.) || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /support in Hindi: 18 Devanagari characters; \"Welcome to Support\", the six category chips and the welcome line are English; Support.tsx still has 0 useTranslation hits.",
       "thread": [
         {
@@ -818,17 +921,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app 3c1256c6: any 402 from /insights/correlations that is not tier_required (subscription_required / trial_expired / no reason) shows the lock 'Your free trial has ended' + 'Choose a plan' (/choose-plan), no Core-trial offer, and the query no longer retries a 402. tier_required keeps the Core upsell. Executed: dev web bundle with the expired QA account against prod renders the lock, no 'Couldn't load your patterns' card. Tests: HabitInsights.tier +3 (2 fail on the old code); full vitest 9,413 passed (1 timing flake in BarcodeScanner, passes alone). Rides the next Play build. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge) with GET /insights/correlations forced to 402 {\"reason\":\"trial_expired\"}: /habit-insights shows \"Your free trial has ended\" + \"Choose a plan\", no \"Couldn't load your patterns\" card, no Try again button, and exactly 1 request to the endpoint (no retry loop).",
+        "description": "Fixed in app 3c1256c6: any 402 from /insights/correlations that is not tier_required (subscription_required / trial_expired / no reason) shows the lock 'Your free trial has ended' + 'Choose a plan' (/choose-plan), no Core-trial offer, and the query no longer retries a 402. tier_required keeps the Core upsell. Executed: dev web bundle with the expired QA account against prod renders the lock, no 'Couldn't load your patterns' card. Tests: HabitInsights.tier +3 (2 fail on the old code); full vitest 9,413 passed (1 timing flake in BarcodeScanner, passes alone). Rides the next Play build. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge) with GET /insights/correlations forced to 402 {\"reason\":\"trial_expired\"}: /habit-insights shows \"Your free trial has ended\" + \"Choose a plan\", no \"Couldn't load your patterns\" card, no Try again button, and exactly 1 request to the endpoint (no retry loop). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): with GET /insights/correlations stubbed as 402 trial_expired, /habit-insights shows \"Your free trial has ended\" + \"Choose a plan\", no \"Try again\", and the endpoint is called exactly once (no retry).",
         "imagePath": "images/i-20261021-fd-patterns-402-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-patterns-402-fix-r1.png",
-          "images/2026-10-22-fixed-sweep/patterns-402-lock-e7945ec6.png"
+          "images/2026-10-22-fixed-sweep/patterns-402-lock-e7945ec6.png",
+          "images/2026-10-22-recheck307/patterns-402.png"
         ],
         "imagePrivate": true,
         "imageCommit": "cfdc1cb7b99c9b8d1860c29569a44386e2fabc14",
         "imageCommits": [
           "cfdc1cb7b99c9b8d1860c29569a44386e2fabc14",
-          "db29abfbacf55275f1855fe318491bc376727408"
+          "db29abfbacf55275f1855fe318491bc376727408",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T19:43:07.312Z",
         "by": "shakeebshaan",
@@ -840,9 +945,17 @@
           "score": 94,
           "bar": 90,
           "note": "Executed against prod's real 402 trial_expired with the QA account: lock shown once, no retry card; tests cover the 402 paths and that it is not retried."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] For an account whose trial has ended, Home > 'Your patterns' opens /habit-insights which shows 'Couldn't load your patterns. Try again'; Try again repeats the same failing call forever. The API answers GET /api/v1/insights/correlations -> 402 {\"error\":\"subscription_required\",\"reason\":\"trial_expired\"}, but src/pages/HabitInsights.tsx:192-194 only treats 402 with reason 'tier_required' as the calm upsell; the comment at :175-176 says expired users are handled by PremiumRoute, yet the route is a ProtectedRoute (App.tsx:891), so nobody shows the paywall. Repro: open /habit-insights as the QA account (sub_active false, reason trial_expired). Fix: treat any 402 (subscription_required, tier_required, trial_expired) as the upsell/paywall state, no retry button. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on prod with the QA account: GET /api/v1/insights/correlations still answers 402 subscription_required/trial_expired; HabitInsights.tsx:194 still only handles reason tier_required (inspected).",
       "thread": [
         {
@@ -872,7 +985,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "check-badges no longer fires on page views. It runs after a logging action (gamification bus), once per app session, and on return to the app at most every 10 min. Profile/Achievements no longer check on open. Tests: BadgeWatcher.cadence 5 passed; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): visiting /dashboard, /nutrition, /activity, /profile, /weekly-progress and /faq in one session produced exactly 1 POST /gamification/check-badges (not one per page view); a second session also 1.",
+        "description": "check-badges no longer fires on page views. It runs after a logging action (gamification bus), once per app session, and on return to the app at most every 10 min. Profile/Achievements no longer check on open. Tests: BadgeWatcher.cadence 5 passed; full vitest 9,426 passed / 0 failed. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge): visiting /dashboard, /nutrition, /activity, /profile, /weekly-progress and /faq in one session produced exactly 1 POST /gamification/check-badges (not one per page view); a second session also 1. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): 6 full page loads of Home, Nutrition, Activity, Profile, Progress and FAQ in one browser session produced exactly 1 POST /gamification/check-badges (was one per page view).",
         "imagePath": "images/i-20261021-fd-check-badges-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-check-badges-fix-r1.png"
@@ -892,9 +1005,17 @@
           "score": 90,
           "bar": 90,
           "note": "cadence covered by 5 tests"
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] The app posts /gamification/check-badges on every page view (BadgeWatcher.tsx:23, gamification.service.ts:162); each call takes 0.66-0.9 s server time with 48-59 queries (SLOW_REQUEST 'POST /api/v1/gamification/check-badges 901ms db=367ms queries=59', '791ms ... queries=49', '662ms ... queries=48' on 2026-10-21). In one walk it was the slowest call on Home (1.7 s), Support and Help & FAQ. Fix: debounce on the client (once per N minutes or after a logging action), and short-circuit server-side when nothing changed since the last check. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: one Hindi page load on the current bundle posted /gamification/check-badges 3 times (BadgeWatcher unchanged).",
       "thread": [
         {
@@ -924,7 +1045,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in nyu_backend bf0769c0 (branch ai-overview-cache; push + deploy by the NYUS employee): per-user in-process cache for /ai/overview and /ai/weekly-insights, tied to a fingerprint of the user's data so a new meal log, ticked plan meal, weigh-in, workout or plan change regenerates on the next call; first-week accounts are now cached too. Local probe with a 5.5 s LLM: overview cold 5,634 ms -> warm 4.6 ms (0 LLM calls, 8 statements); weekly-insights 5,531 -> 8.4 ms. Prod before: 5,049-9,383 ms. Dashboard already renders without waiting on these (card skeleton + 12 s cap). Tests 11 + full backend suite 8,259 passed. Re-check SLOW_REQUEST on prod after the deploy. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/ai-overview-cache bf0769c0: tests/test_ai_payload_cache.py 11 passed (executed 22 Oct). On prod: bf0769c0 is not on origin/main and not on the VM (VM HEAD 3b30aee4), so /ai/overview and /ai/weekly-insights are unchanged live. The QA account cannot time /ai/overview (429 \"Daily request limit reached (50 requests)\").",
+        "description": "Fixed in nyu_backend bf0769c0 (branch ai-overview-cache; push + deploy by the NYUS employee): per-user in-process cache for /ai/overview and /ai/weekly-insights, tied to a fingerprint of the user's data so a new meal log, ticked plan meal, weigh-in, workout or plan change regenerates on the next call; first-week accounts are now cached too. Local probe with a 5.5 s LLM: overview cold 5,634 ms -> warm 4.6 ms (0 LLM calls, 8 statements); weekly-insights 5,531 -> 8.4 ms. Prod before: 5,049-9,383 ms. Dashboard already renders without waiting on these (card skeleton + 12 s cap). Tests 11 + full backend suite 8,259 passed. Re-check SLOW_REQUEST on prod after the deploy. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/ai-overview-cache bf0769c0: tests/test_ai_payload_cache.py 11 passed (executed 22 Oct). On prod: bf0769c0 is not on origin/main and not on the VM (VM HEAD 3b30aee4), so /ai/overview and /ai/weekly-insights are unchanged live. The QA account cannot time /ai/overview (429 \"Daily request limit reached (50 requests)\"). || QA 48h recheck 2026-10-22: NOT VERIFIABLE on prod: nyu_backend bf0769c0 (branch ai-overview-cache) is not in origin/main, so the cache is not deployed. Effect seen today: the QA account's /ai/overview and /ai/weekly-insights answer the \"I'm temporarily unavailable for live coaching\" fallback (the daily \"overview\" cap is 50 requests x tier multiplier, [inferred] used up by QA dashboard loads, which is exactly what the cache is meant to prevent); every Home load in the 307 build still calls /ai/overview.",
         "imagePath": "images/i-20261021-fd-ai-slow-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-ai-slow-fix-r1.png"
@@ -945,7 +1066,14 @@
           "note": "Warm calls measured at 4.6/8.4 ms on the real routes with a prod-like LLM delay, invalidation proven per write type, full suite green; prod after-numbers still to be read once the NYUS employee pushes and deploys bf0769c0, and a cold call after new data still pays the LLM once (card-only, dashboard does not wait)."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "note",
+          "note": "QA recheck: fix not deployed, not verifiable on prod",
+          "by": "qa"
+        }
+      ],
       "description": "[P2] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] Dashboard and Nutrition open fire GET /api/v1/ai/overview?range=week&days=7 and GET /api/v1/ai/weekly-insights on every load and they are by far the slowest calls of the first session: client times 6.2-7.7 s (/health from the same PC is 0.7 s) and prod SLOW_REQUEST lines in ~/nyu_backend/nyus_app.log: 'GET /api/v1/ai/overview 200 6012ms db=271ms queries=126' (17:28:20 UTC), '6977ms db=120ms queries=126' (17:30:45), '5748ms db=109ms queries=123', '5426ms db=124ms queries=123', and 'GET /api/v1/ai/weekly-insights 200 5786ms db=205ms queries=128' (17:24:24). DB time is only 110-270 ms, so ~5.5 s is application time (not the DB), plus 123-128 queries per call. Code: AIOverviewResource backend.py:15788 (route :16919) and AIWeeklyInsightsResource backend.py:14320 (route :16928). Repro: open the web build at /dashboard with any account and watch the network tab, or curl the two routes with a bearer token three times. Fix direction: cache the weekly payload per user per day (weekly-insights is 0.8 s on its 2nd call, so a cache exists but ai/overview has none), move the LLM/aggregation off the request path, and make the dashboard not wait on it. Measure with the SLOW_REQUEST log after the change. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed on PROD with the QA account: GET /api/v1/ai/overview?range=week&days=7 6.7 s, 6.3 s, 5.7 s; GET /api/v1/ai/weekly-insights 6.0 s then 0.67 s; GET /api/v1/activity/overview 0.69 s. Nothing shipped for this yet.",
       "thread": [
         {
@@ -1291,9 +1419,17 @@
         "tests": {
           "passed": true
         },
-        "description": "Changes A+B VERIFIED on prod 2026-10-21 19:47 UTC (nyu_backend 0ae42a77, deployed 19:44:55 UTC; VM HEAD = 0ae42a77, health 200). Evidence: (1) PROD, read-only, QA account, GET /api/v1/activity/overview x6: all 200, identical payload every time and the same 11,297 bytes / 49 keys as before the deploy (response unchanged); the slow log (>500 ms server time) shows only the first, cold call at 19:45:57 UTC, \"709ms db=81ms queries=68\" (employee run); my six calls at 19:46:4x produced NO SLOW_REQUEST line, so each was under 500 ms server time (client-side 487-978 ms includes ~220 ms round trip to the VM; the first, cold, was the 978). Same account before the deploy: 92 queries (my 16:xx measurement) and 91-102 for real-user entries, 515-1,008 ms between 16:23 and 17:58 UTC. (2) LOCAL, real backend.py at 0ae42a77 with tools/aov_query_count_harness.py: 62 statements for 5 sessions x 6 exercises (91 at e38ef80c), 61 for 2x2, 62 for 5x8, i.e. flat with the number of exercises (was growing per exercise); the 7-day and 7-week volume loops replaced by 2 queries give identical numbers (21 -> 2 statements, daily and weekly equal=True). NOT DONE, by decision: Change C (merge the two plan lookups): unsafe, the stale-session heal between them can change the plan. Left open as a note, not a defect. STILL TO DO: tomorrow morning re-read the SLOW_REQUEST log for real-user traffic since 19:45 UTC and add the numbers here (owner: NYUS employee; QA can recheck when asked). || QA A/B 10 scenarios, 2026-10-21 20:05 UTC (local, never prod; real backend.py at e38ef80c vs 0ae42a77 on identical seeded data, GET /activity/overview JSON diffed, only the PR achieved_at seeding timestamp ignored): IDENTICAL in all 10: truly no plan (plan_name None, 44 -> 25 statements); no plan with an admin \"Default Strength Plan\" template, i.e. the auto-assign path (93 -> 70); rest day with a progressive plan (is_rest_day_today true, todays_workout withheld, 91 -> 62); rest day with a session in progress (stays visible, 101 -> 67); rest day with a session completed today (stays visible, 106 -> 72); rest day with a traditional plan (62 -> 33); traditional plan; inactive plan healed by the resolver (93 -> 64); session completed today (106 -> 72); session in progress (101 -> 67). Note: the backend date is the user local date, so rest rows were seeded for yesterday, today and tomorrow. Harness: tools/aov_ab_harness.py + tools/aov_ab_diff.py. || QA SWEEP 2026-10-22: HOLDS. Prod, 22 Oct 23:21-23:24 UTC, QA account, 4 calls: 200 in 1,097 / 642 / 599 / 611 ms client time, identical 11,297-byte payload; the VM slow log shows queries=67 per call (was 92 before the fix, 62 claimed in the commit). Caveat: three of my calls were logged SLOW_REQUEST at 668-1,001 ms server time with db 296-440 ms, above the 500 ms mark the verification note reported for warm calls, so the query count holds but latency was not under 500 ms in this sample (VM load unknown)."
+        "description": "Changes A+B VERIFIED on prod 2026-10-21 19:47 UTC (nyu_backend 0ae42a77, deployed 19:44:55 UTC; VM HEAD = 0ae42a77, health 200). Evidence: (1) PROD, read-only, QA account, GET /api/v1/activity/overview x6: all 200, identical payload every time and the same 11,297 bytes / 49 keys as before the deploy (response unchanged); the slow log (>500 ms server time) shows only the first, cold call at 19:45:57 UTC, \"709ms db=81ms queries=68\" (employee run); my six calls at 19:46:4x produced NO SLOW_REQUEST line, so each was under 500 ms server time (client-side 487-978 ms includes ~220 ms round trip to the VM; the first, cold, was the 978). Same account before the deploy: 92 queries (my 16:xx measurement) and 91-102 for real-user entries, 515-1,008 ms between 16:23 and 17:58 UTC. (2) LOCAL, real backend.py at 0ae42a77 with tools/aov_query_count_harness.py: 62 statements for 5 sessions x 6 exercises (91 at e38ef80c), 61 for 2x2, 62 for 5x8, i.e. flat with the number of exercises (was growing per exercise); the 7-day and 7-week volume loops replaced by 2 queries give identical numbers (21 -> 2 statements, daily and weekly equal=True). NOT DONE, by decision: Change C (merge the two plan lookups): unsafe, the stale-session heal between them can change the plan. Left open as a note, not a defect. STILL TO DO: tomorrow morning re-read the SLOW_REQUEST log for real-user traffic since 19:45 UTC and add the numbers here (owner: NYUS employee; QA can recheck when asked). || QA A/B 10 scenarios, 2026-10-21 20:05 UTC (local, never prod; real backend.py at e38ef80c vs 0ae42a77 on identical seeded data, GET /activity/overview JSON diffed, only the PR achieved_at seeding timestamp ignored): IDENTICAL in all 10: truly no plan (plan_name None, 44 -> 25 statements); no plan with an admin \"Default Strength Plan\" template, i.e. the auto-assign path (93 -> 70); rest day with a progressive plan (is_rest_day_today true, todays_workout withheld, 91 -> 62); rest day with a session in progress (stays visible, 101 -> 67); rest day with a session completed today (stays visible, 106 -> 72); rest day with a traditional plan (62 -> 33); traditional plan; inactive plan healed by the resolver (93 -> 64); session completed today (106 -> 72); session in progress (101 -> 67). Note: the backend date is the user local date, so rest rows were seeded for yesterday, today and tomorrow. Harness: tools/aov_ab_harness.py + tools/aov_ab_diff.py. || QA SWEEP 2026-10-22: HOLDS. Prod, 22 Oct 23:21-23:24 UTC, QA account, 4 calls: 200 in 1,097 / 642 / 599 / 611 ms client time, identical 11,297-byte payload; the VM slow log shows queries=67 per call (was 92 before the fix, 62 claimed in the commit). Caveat: three of my calls were logged SLOW_REQUEST at 668-1,001 ms server time with db 296-440 ms, above the 500 ms mark the verification note reported for warm calls, so the query count holds but latency was not under 500 ms in this sample (VM load unknown). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on PROD 2026-10-22: GET /activity/overview x3 all 200, identical 11,206 bytes each, 517-529 ms from this PC (was 1.2-1.5 s; /health is 223 ms), and it carries is_rest_day_today.",
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3 / perf — executed 2026-10-21] GET /api/v1/activity/overview (ActivityOverviewResource in backend.py, helpers under app/services/activity_rest_day.py) is the slowest key route: 1.2-1.5 s from this PC (baseline /health = 0.7 s, so ~0.5-0.8 s server time) and the prod log shows `SLOW_REQUEST GET /api/v1/activity/overview 200 639ms db=174ms queries=92` (nyus_app.log 2026-10-21 16:23:34). 92 SQL queries for one screen load looks like an N+1 pattern (not traced); the app calls it on every Workout tab open. Repro: grep SLOW_REQUEST in ~/nyu_backend/nyus_app.log, or curl the route with any account holding a progressive plan. Fix: batch the per-exercise lookups (strength/previous-cycle/PR queries) into a few IN() queries.\n\n=== FIX SPEC (QA trace 2026-10-21, nyu_backend at prod commit e38ef80c; read-only on prod) ===\nROOT CAUSE (one line): ActivityOverviewResource.get (backend.py:9113-10033) runs ~91 statements because (A) two 7-iteration loops each issue a query per day/week (backend.py:9835-9863 daily, 9870-9885 weekly = 21 statements), (B) the per-exercise loop at backend.py:9556-9608 re-queries inside the loop (9557 'last_session_log' is IDENTICAL for every exercise; 9570 last_sets = 1 query per exercise), and (C) the plan/session helpers are re-run several times per request and each run loads every WorkoutSession with its joined exercises (WorkoutSession.exercises and SessionExercise.exercise are lazy='joined', db_models.py:858-880).\nREPRODUCED locally against the real backend.py (sqlite, 5 sessions x 6 exercises, 2 completed cycles): 91 statements, prod QA account logged 92. Slope: 3 ex/session = 85, 6 = 91, 9 = 97 statements (+2 per exercise, ~79 fixed). Harness: nyus-qa-issues/tools/aov_query_count_harness.py (imports the real monolith with the MySQL connect check stubbed, prints every statement grouped by issuing backend.py line; QA_MAX_STMTS=N makes it a gate; QA_NEX / QA_NSES vary the plan size).\nStatement budget at e38ef80c (91): ~10 auth/session (backend.py:1347, 1415 x3, 1421 x3, app/services/account_status.py:65 x3; a trivial route costs 7, here JWT checks ran 3x); 21 loops (A); 12 per-exercise (B: 9557 x6 + 9570 x6); ~25 repeated helpers (C: backend.py:456/463 x5 = heal_stale_session_logs, 574/588 x4 = get_current_unlocked_session, 632 x2 = resolve_active_workout_plan, app/services/user_time.py:52 x5 = user_today re-reading User); rest ~23 one-offs. cProfile of one warm request: get_current_unlocked_session 4 calls = 0.39 s of 0.69 s handler, resolve_active_workout_plan 2 calls 0.37 s, heal_stale_session_logs 5 calls 0.34 s, i.e. the helper chain (ORM load of all sessions + joined exercises, 5x) is ~half of handler time; prod showed db=174ms of 639ms, so queries are ~27% and the repeated ORM loads are most of the rest.\n\nCHANGE A (-19 statements, verified): replace both loops with TWO queries over the last 49 days and derive the 7 daily and 7 weekly buckets in Python. q1: SELECT DATE(completed_at), SUM(_set_volume_sql()) FROM set_logs JOIN workout_session_logs WHERE user_id=:u AND completed_at IS NOT NULL AND completed_at >= :today-48d 00:00 GROUP BY DATE(completed_at). q2: same window, SELECT DATE(completed_at), COUNT(workout_session_logs.id) with NO join to set_logs (session_count must keep counting logs without sets). daily[i] = vol/count for day today-i; weekly[i] = sum of the 7 days ending today-7i (weeks are contiguous 7-day blocks ending today, so 49 days is exactly the range). I ran old vs new on seeded data: 21 statements -> 2, identical numbers (daily and weekly equal). Also use a range predicate on completed_at instead of func.date(completed_at)==day (non-sargable, defeats idx_sessionlog_user_completed).\nCHANGE B (-10): before the loop at 9556 run the 9557 query once (it depends only on user_id and session.id) and one batched set query: SetLog.query.filter(SetLog.session_log_id==last_session_log.id, SetLog.exercise_id.in_(ids)).order_by(set_number) grouped by exercise_id in Python; do the same for the fallback branches at 9584-9608 (prev_log id once, prev_sets and todays_sets_for_exercise with IN(ids)); those branches did not run in the repro but have the same per-exercise shape. Target: per-exercise slope 0.\nCHANGE C (-15 to -20): per request, resolve the plan ONCE (resolve_active_workout_plan is called at 9274 and again at 9390 with identical args: pass the first result), run heal_stale_session_logs ONCE (called directly at 9313 / 9338 - one of the two ran in the repro - and 4x more inside get_current_unlocked_session, backend.py:541, which itself is called 4x per request: 2x from resolve_active_workout_plan, 1x from get_session_progression_status (backend.py:674), 1x directly at 9439; guard with a per-request flag on flask.g keyed (user_id, plan.id, today)), load the plan's sessions ONCE and pass them in (get_current_unlocked_session(user_id, plan, sessions=None); heal_stale_session_logs only needs ids: query WorkoutSession.id, not entities, backend.py:456), and make user_today(user_id) read User once per request (app/services/user_time.py:52). Optional: JWT callbacks (backend.py:1415/1421) run 3x per request on this route (2x on a trivial route): memoize on flask.g.\n\nEXPECTED COUNTS (seeded 5 x 6, same harness): now 91. After A+B: 62. After A+B+C: ~44. Per-exercise slope now +2, after: 0. Estimated server time ~640 ms -> ~250-300 ms [assumed, measure with the SLOW_REQUEST log after deploy; prod log line to compare: 'SLOW_REQUEST GET /api/v1/activity/overview ... queries=N' in nyus_app.log].\n\nTEST (add to nyu_backend, e.g. tests/test_activity_overview_query_count.py): build the harness seeding in a module-scoped fixture (the route lives in the monolith, which needs the MySQL-connect stub + engine swap shown in the harness; run it in a subprocess or reset sys.modules like tests/conftest.py does) and assert: (1) total statements <= 64 for 5x6 after A+B (ratchet to <= 48 after C); (2) NO N+1: count(9 exercises per session) - count(3 exercises per session) <= 1 (today 97-85 = 12); (3) shape asserts: the number of statements containing 'date(workout_session_logs.completed_at)' (or the range form you use) is <= 2, and no statement repeats more than twice with identical text+params except the auth ones; (4) golden-output check: seed dates spread over 49 days (the harness verification block does this) and assert daily_volume_history and weekly_volume_history in the JSON equal the pre-change values (they are equal under A: verified). Keep the harness-run gate too: QA_MAX_STMTS=64 python tools/aov_query_count_harness.py exits 1 above 64.\nAcceptance: seeded count <= 62 (A+B) / <= 48 (A+B+C), slope 0, JSON of /activity/overview byte-identical on the seeded fixture, backend suite green, SLOW_REQUEST for this route absent or < 400 ms on prod after the next normal deploy. Owner: dev stream. Nothing was changed in nyu_backend or on prod. || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Fix exists but is NOT on main: branch aov-queries 0ae42a77 (worktree C:/tmp/wt/be-aov) re-measured with tools/aov_query_count_harness.py: 62 statements for 5x6, 61 for 2x2, 62 for 5x8 (prod baseline 91 and growing with exercises); the 7-day and 7-week loops give identical numbers (old 21 statements -> 2, daily equal, weekly equal). Close it once it is merged and deployed."
     },
     {
@@ -1339,17 +1475,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /zzz-nope: 0 English lines (was 4): title, message, both buttons and the session toast through i18n. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /zzz-nope: English lines 4 -> 0: the 404 page is Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /zzz-nope: 0 English lines (was 4): title, message, both buttons and the session toast through i18n. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /zzz-nope: English lines 4 -> 0: the 404 page is Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /zzz-nope: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-not-found-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-not-found-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-not-found-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-not-found-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-not-found.png"
         ],
         "imagePrivate": true,
         "imageCommit": "be3a6ff971ff7843adafc7c49adab204e6042868",
         "imageCommits": [
           "be3a6ff971ff7843adafc7c49adab204e6042868",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:10:53.888Z",
         "by": "shakeebshaan",
@@ -1362,13 +1500,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1401,7 +1545,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /settings/subscription: 0 English UI lines (the only Latin text left is the referral code); whole page through i18n, status values, facts, notes, toasts, dialog; dates in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /settings/subscription: English lines 6 -> 1 (the one left is the account's referral code, data). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). No screenshot: the page shows the referral code.",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /settings/subscription: 0 English UI lines (the only Latin text left is the referral code); whole page through i18n, status values, facts, notes, toasts, dialog; dates in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /settings/subscription: English lines 6 -> 1 (the one left is the account's referral code, data). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). No screenshot: the page shows the referral code. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /settings/subscription: English lines 1 (sweep-2 value 1) (the referral code, data); no screenshot (shows the referral code).",
         "imagePath": "images/i-20261021-hi-subscription-settings-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-subscription-settings-fix-r1.png"
@@ -1422,13 +1566,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1465,17 +1615,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /fasting: 0 English lines (was 6): share card lines, ring 'of 16h fast' / 'window reached', OMAD shown as a Hindi label. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /fasting: English lines 6 -> 1 (the one left is the NYUS brand name). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /fasting: 0 English lines (was 6): share card lines, ring 'of 16h fast' / 'window reached', OMAD shown as a Hindi label. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /fasting: English lines 6 -> 1 (the one left is the NYUS brand name). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /fasting: English lines 1 (sweep-2 value 1) (NYUS brand name).",
         "imagePath": "images/i-20261021-hi-fasting-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-fasting-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-fasting-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-fasting-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-fasting.png"
         ],
         "imagePrivate": true,
         "imageCommit": "92b9b00a29b8463e934ce15402be3a5fbc12b52c",
         "imageCommits": [
           "92b9b00a29b8463e934ce15402be3a5fbc12b52c",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:01.292Z",
         "by": "shakeebshaan",
@@ -1488,13 +1640,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1527,17 +1685,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /plan-timeline: 0 English UI lines (was 27; left: meal names from the plan and the kcal unit): WeeklyTrajectory status/on-track/goal/weeks/shortfall/disclaimer; week date ranges in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /plan-timeline: English lines 27 -> 1 (the one left is the \"kcal\" unit; dates read \"12 सित° – 20 नव°\", week labels, projection and status are Hindi). Minor leftover, not in the issue: the M T W T F S S weekday initials in the week rows are still Latin. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /plan-timeline: 0 English UI lines (was 27; left: meal names from the plan and the kcal unit): WeeklyTrajectory status/on-track/goal/weeks/shortfall/disclaimer; week date ranges in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /plan-timeline: English lines 27 -> 1 (the one left is the \"kcal\" unit; dates read \"12 सित° – 20 नव°\", week labels, projection and status are Hindi). Minor leftover, not in the issue: the M T W T F S S weekday initials in the week rows are still Latin. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /plan-timeline: English lines 1 (sweep-2 value 1) (the \"1847 kcal\" unit).",
         "imagePath": "images/i-20261021-hi-plan-timeline-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-plan-timeline-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-plan-timeline-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-plan-timeline-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-plan-timeline.png"
         ],
         "imagePrivate": true,
         "imageCommit": "b927a78e462f3c3279e19f989a3e273da34eb355",
         "imageCommits": [
           "b927a78e462f3c3279e19f989a3e273da34eb355",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:04.982Z",
         "by": "shakeebshaan",
@@ -1550,13 +1710,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1609,17 +1775,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /achievements: 0 English lines (was 48): badge and rank names come from the API in English and are now translated by badge_key (src/lib/gamification-i18n.ts, all 43 badges + 10 ranks), share cards and LevelCard through i18n. XP history lines from the API are not part of this screen's re-test count. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /achievements: English lines 48 -> 1 (the one left is the NYUS brand name; the badge names are Hindi now: \"उभरता सितारा\", \"ज़बरदस्त वापसी\", \"सुबह का पंछी\" ...). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /achievements: 0 English lines (was 48): badge and rank names come from the API in English and are now translated by badge_key (src/lib/gamification-i18n.ts, all 43 badges + 10 ranks), share cards and LevelCard through i18n. XP history lines from the API are not part of this screen's re-test count. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /achievements: English lines 48 -> 1 (the one left is the NYUS brand name; the badge names are Hindi now: \"उभरता सितारा\", \"ज़बरदस्त वापसी\", \"सुबह का पंछी\" ...). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /achievements: English lines 1 (sweep-2 value 1) (NYUS brand name).",
         "imagePath": "images/i-20261021-hi-achievements-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-achievements-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-achievements-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-achievements-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-achievements.png"
         ],
         "imagePrivate": true,
         "imageCommit": "04da7d5ad37132cc7131f901e546d01619c96dee",
         "imageCommits": [
           "04da7d5ad37132cc7131f901e546d01619c96dee",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:08.928Z",
         "by": "shakeebshaan",
@@ -1632,13 +1800,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1675,17 +1849,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /daily-focus: 0 English lines (was 33 + 40 aria): rings, CTAs, calendar month and weekdays in the app locale, legend, day aria labels, first-run, achievements. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /daily-focus: English lines 33 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /daily-focus: 0 English lines (was 33 + 40 aria): rings, CTAs, calendar month and weekdays in the app locale, legend, day aria labels, first-run, achievements. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /daily-focus: English lines 33 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /daily-focus: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-daily-focus-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-daily-focus-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-daily-focus-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-daily-focus-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-daily-focus.png"
         ],
         "imagePrivate": true,
         "imageCommit": "55db423e9137b92cfdb05a9b8b47f449e2d06b37",
         "imageCommits": [
           "55db423e9137b92cfdb05a9b8b47f449e2d06b37",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:12.434Z",
         "by": "shakeebshaan",
@@ -1698,13 +1874,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1741,17 +1923,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /partners: 0 English lines (was 5): title, create, pending invites, empty and error states. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /partners: English lines 5 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /partners: 0 English lines (was 5): title, create, pending invites, empty and error states. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /partners: English lines 5 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /partners: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-partners-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-partners-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-partners-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-partners-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-partners.png"
         ],
         "imagePrivate": true,
         "imageCommit": "1b44f72b1470693b93e5a4228c7cc4d17ec7f4b1",
         "imageCommits": [
           "1b44f72b1470693b93e5a4228c7cc4d17ec7f4b1",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:16.578Z",
         "by": "shakeebshaan",
@@ -1764,13 +1948,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1803,17 +1993,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /measurements: 0 English lines (was 34): title, record card, value label/hint, history, toasts; the 22 measurement type names (API English) translated by slug; ProgressPhotos incl. the privacy line. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /measurements: English lines 34 -> 0: title, body-part names and the 3D hint are Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /measurements: 0 English lines (was 34): title, record card, value label/hint, history, toasts; the 22 measurement type names (API English) translated by slug; ProgressPhotos incl. the privacy line. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /measurements: English lines 34 -> 0: title, body-part names and the 3D hint are Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /measurements: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-measurements-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-measurements-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-measurements-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-measurements-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-measurements.png"
         ],
         "imagePrivate": true,
         "imageCommit": "c32fd39d949d445d87bf9bb14fd335e1fd4b40fa",
         "imageCommits": [
           "c32fd39d949d445d87bf9bb14fd335e1fd4b40fa",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:21.124Z",
         "by": "shakeebshaan",
@@ -1826,13 +2018,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1869,17 +2067,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /connected-devices: 0 English UI lines (was 23 + 10 aria; left: brand names Health Connect / Google Fit and the session's OS value): the page had no t() at all, 90 keys now. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /connected-devices: English lines 23 -> 3 (left: \"Health Connect\" and \"Google Fit\" product names and the fallback device name \"Unknown\", which is a minor leftover not in the issue). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /connected-devices: 0 English UI lines (was 23 + 10 aria; left: brand names Health Connect / Google Fit and the session's OS value): the page had no t() at all, 90 keys now. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /connected-devices: English lines 23 -> 3 (left: \"Health Connect\" and \"Google Fit\" product names and the fallback device name \"Unknown\", which is a minor leftover not in the issue). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /connected-devices: English lines 3 (sweep-2 value 3) (\"Unknown\", \"Health Connect\", \"Google Fit\").",
         "imagePath": "images/i-20261021-hi-connected-devices-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-connected-devices-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-connected-devices-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-connected-devices-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-connected-devices.png"
         ],
         "imagePrivate": true,
         "imageCommit": "e41139d9c2737cd3cbc0156570630f596917c5dd",
         "imageCommits": [
           "e41139d9c2737cd3cbc0156570630f596917c5dd",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:24.557Z",
         "by": "shakeebshaan",
@@ -1892,13 +2092,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -1935,17 +2141,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844, QA account, prod reads, writes blocked. /faq: 0 English lines on the list (was 83): chrome, all category names and article titles (by the slug of their English). Article bodies on the detail screen stay English (a content translation pass, not part of this list). Tests: hindi-sweep-screens-2 7/7, full app suite 8,249 passed / 0 failed, tsc 0. Hindi machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /faq: English lines 83 -> 0: title, search, categories and article titles are Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844, QA account, prod reads, writes blocked. /faq: 0 English lines on the list (was 83): chrome, all category names and article titles (by the slug of their English). Article bodies on the detail screen stay English (a content translation pass, not part of this list). Tests: hindi-sweep-screens-2 7/7, full app suite 8,249 passed / 0 failed, tsc 0. Hindi machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /faq: English lines 83 -> 0: title, search, categories and article titles are Hindi. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /faq: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-faq-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-faq-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-faq-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-faq-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-faq.png"
         ],
         "imagePrivate": true,
         "imageCommit": "bca575d7e7eca5e56d143055ce1e902337e4b78a",
         "imageCommits": [
           "bca575d7e7eca5e56d143055ce1e902337e4b78a",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:51.559Z",
         "by": "shakeebshaan",
@@ -1958,13 +2166,19 @@
           "bar": 90,
           "note": "list screen 0 English lines; bodies stay English"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -2001,17 +2215,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /health-alerts: 0 English lines (was 23 + 11 aria): whole page, plus the server's alert rule names/help translated by rule key. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /health-alerts: English lines 23 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /health-alerts: 0 English lines (was 23 + 11 aria): whole page, plus the server's alert rule names/help translated by rule key. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /health-alerts: English lines 23 -> 0. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /health-alerts: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-health-alerts-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-health-alerts-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-health-alerts-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-health-alerts-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-health-alerts.png"
         ],
         "imagePrivate": true,
         "imageCommit": "84d7222626082f51a8d0d666afdaee4c42f60d2d",
         "imageCommits": [
           "84d7222626082f51a8d0d666afdaee4c42f60d2d",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:27.790Z",
         "by": "shakeebshaan",
@@ -2024,13 +2240,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -2063,17 +2285,19 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /choose-plan: 0 English lines besides the plan names Active/Core/Elite and 'FAQ' (was: backend feature lines). Backend feature lines and taglines translated at render, 'Save N vs monthly' as one template; also the free-trial timeline and its date. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /choose-plan: English lines 6 -> 3 (left: the plan names Active, Core and Elite; the backend feature lines, the \"Save\" lines and the trial timeline are Hindi). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /choose-plan: 0 English lines besides the plan names Active/Core/Elite and 'FAQ' (was: backend feature lines). Backend feature lines and taglines translated at render, 'Save N vs monthly' as one template; also the free-trial timeline and its date. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /choose-plan: English lines 6 -> 3 (left: the plan names Active, Core and Elite; the backend feature lines, the \"Save\" lines and the trial timeline are Hindi). Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /choose-plan: English lines 3 (sweep-2 value 3) (plan names Active, Core, Elite).",
         "imagePath": "images/i-20261021-hi-choose-plan-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-choose-plan-fix-r1.png",
-          "images/2026-10-22-fixed-verify2/hi-choose-plan-bf115c95.png"
+          "images/2026-10-22-fixed-verify2/hi-choose-plan-bf115c95.png",
+          "images/2026-10-22-recheck307/hi-choose-plan.png"
         ],
         "imagePrivate": true,
         "imageCommit": "84fff2a687e05c5d4a7e0cdf95362faf68395a7f",
         "imageCommits": [
           "84fff2a687e05c5d4a7e0cdf95362faf68395a7f",
-          "09051be5d9c2606ede99139dc79ac8c509c406c5"
+          "09051be5d9c2606ede99139dc79ac8c509c406c5",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-22T02:11:31.892Z",
         "by": "shakeebshaan",
@@ -2086,13 +2310,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -2125,15 +2355,17 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app d7d7b780: the plan-ready goal line, target date and week count follow the app language (plan_goal.* keys, Intl date hi-IN, post_plan_tour.goal.weeks_short), also on PlanReadyOverview and the coach preview. Hindi tour now shows '7.0 kg घटाएँ', '1 जन॰ 2027 तक · 32 हफ़्ते'. Full vitest 9,396 passed / 0 failed. Remaining English on this screen: the 'kg/week' pace unit. Hindi wording machine-drafted, needs native review. Rides the next Play build. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED by inspection only: plan_goal.* and post_plan_tour.goal.weeks_short exist in hi.json (lines 5778-5786, 3623) and are used by PostPlanTour.tsx and Screen9_CoachPreview.tsx. NOT executed: /dev/post-plan-tour renders blank on the current bundle (prod build 404, dev server blank after 30 s) and the onboarding flow needs a new account. || QA SWEEP 2026-10-22: HOLDS. The route /dev/post-plan-tour is not served by the prod build (404), so the tour cannot be driven. Executed instead: vitest test/onboarding-calc.test.ts + test/i18n/keys-defined.test.ts, 43 passed; hi.json has plan_goal.lose_fat \"फ़ैट घटाएँ\", plan_goal.build_muscle \"मसल बनाएँ\" and post_plan_tour.goal.weeks_short \"{{count}} हफ़्ते\". The visible tour is still not screenshot-verified.",
+        "description": "Fixed in app d7d7b780: the plan-ready goal line, target date and week count follow the app language (plan_goal.* keys, Intl date hi-IN, post_plan_tour.goal.weeks_short), also on PlanReadyOverview and the coach preview. Hindi tour now shows '7.0 kg घटाएँ', '1 जन॰ 2027 तक · 32 हफ़्ते'. Full vitest 9,396 passed / 0 failed. Remaining English on this screen: the 'kg/week' pace unit. Hindi wording machine-drafted, needs native review. Rides the next Play build. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED by inspection only: plan_goal.* and post_plan_tour.goal.weeks_short exist in hi.json (lines 5778-5786, 3623) and are used by PostPlanTour.tsx and Screen9_CoachPreview.tsx. NOT executed: /dev/post-plan-tour renders blank on the current bundle (prod build 404, dev server blank after 30 s) and the onboarding flow needs a new account. || QA SWEEP 2026-10-22: HOLDS. The route /dev/post-plan-tour is not served by the prod build (404), so the tour cannot be driven. Executed instead: vitest test/onboarding-calc.test.ts + test/i18n/keys-defined.test.ts, 43 passed; hi.json has plan_goal.lose_fat \"फ़ैट घटाएँ\", plan_goal.build_muscle \"मसल बनाएँ\" and post_plan_tour.goal.weeks_short \"{{count}} हफ़्ते\". The visible tour is still not screenshot-verified. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /onboarding (lands on /onboarding/flow): English lines 0 (sweep-2 value n/a), 152 Devanagari characters.",
         "imagePath": "images/i-20261021-hi-onboarding-fix-r1.png",
         "imagePaths": [
-          "images/i-20261021-hi-onboarding-fix-r1.png"
+          "images/i-20261021-hi-onboarding-fix-r1.png",
+          "images/2026-10-22-recheck307/hi-onboarding.png"
         ],
         "imagePrivate": true,
         "imageCommit": "8fba53b030a28b0fd51a91f590ccaf3b88b76cc3",
         "imageCommits": [
-          "8fba53b030a28b0fd51a91f590ccaf3b88b76cc3"
+          "8fba53b030a28b0fd51a91f590ccaf3b88b76cc3",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T16:46:48.988Z",
         "by": "shakeebshaan",
@@ -2145,9 +2377,17 @@
           "score": 91,
           "bar": 90,
           "note": "All three named defects fixed and shown on screen in Hindi (goal label, wk, date), plus the same literals on two sibling screens; minus: 'kg/week' unit still English and Hindi copy not native-reviewed."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] The two strings seen in the B56 run are NOT mock-only; the mock only fed the values: PostPlanTour.tsx:371 appends a literal ${planStats.durationWeeks}wk ('32wk'), the goal label comes from onboarding-calc.ts:220-222 (Lose / Lose fat / Build muscle / Gain literals, English), and the date 'Jan 1, 2027' (stats.targetDateLabel) is English-formatted inside the Hindi 'तक' string. Every user sees these on the plan-ready screen. Onboarding intro slides (/onboarding/flow) are Hindi. The rest of OnboardingFlow could not be walked (account already onboarded). Repro: /dev/post-plan-tour in dev, or finish setup in Hindi. Screenshot: C:/tmp/qa-b56/hint-hi.png",
       "thread": [
         {
@@ -2177,7 +2417,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /profile: 0 English UI lines (left: the user's name/email/referral link and the language names English/Hinglish, which stay as they are): referral card, LevelCard ('Lvl', XP, badges), badge names. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /profile: English lines 15 -> 5 (left: the account name, email and referral link, plus the language names \"English\" and \"Hinglish\", which the issue called fine; \"Invite a friend\", \"Share with a friend\" and the badge/level labels are Hindi). No screenshot: the page shows the account email and referral link.. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device).",
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /profile: 0 English UI lines (left: the user's name/email/referral link and the language names English/Hinglish, which stay as they are): referral card, LevelCard ('Lvl', XP, badges), badge names. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785). || QA VERIFIED 2026-10-22 (sweep 2): HOLDS. Executed on app main bf115c95 (prod-read web build, QA account with the ops-granted trial, Hindi, 390x844, seeded Edge, writes stubbed): Hindi /profile: English lines 15 -> 5 (left: the account name, email and referral link, plus the language names \"English\" and \"Hinglish\", which the issue called fine; \"Invite a friend\", \"Share with a friend\" and the badge/level labels are Hindi). No screenshot: the page shows the account email and referral link.. Note: this fix is on main only. The closed-track build 306 (alpha, API read-back) was cut from c2c6e902 on 21 Oct 12:10 UTC, before bf115c95, so testers on 306 do not have it until the next Play build; I could not test the Play build itself (no device). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /profile: English lines 5 (sweep-2 value 5) (account name, email, referral link and \"English\" language name: data); no screenshot, the page shows the account email and referral link.",
         "imagePath": "images/i-20261021-hi-profile-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-hi-profile-fix-r1.png"
@@ -2198,13 +2438,19 @@
           "bar": 90,
           "note": "Hindi capture: 0 English UI lines left on the route"
         },
-        "verifiedAt": "2026-10-22T02:26:20.395Z"
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
           "at": "2026-10-22T02:26:20.395Z",
           "event": "verified",
           "note": "QA sweep 2: holds on main bundle vs prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
           "by": "qa"
         }
       ],
@@ -2237,15 +2483,29 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name. || QA SWEEP 2026-10-22: HOLDS. Re-executed on current main, local backend + bundle e7945ec6: /coach-chat opens, a Hindi message and an English message each got a reply (mock LLM text).",
+        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name. || QA SWEEP 2026-10-22: HOLDS. Re-executed on current main, local backend + bundle e7945ec6: /coach-chat opens, a Hindi message and an English message each got a reply (mock LLM text). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /coach-chat: English lines 1 (sweep-2 value 0) (the one left is the coach name \"Freya\", data).",
         "fixedAt": "2026-10-21T18:13:19.346Z",
         "by": "qa",
         "appCommit": null,
         "tests": {
           "passed": true
-        }
+        },
+        "imagePaths": [
+          "images/2026-10-22-recheck307/hi-coach-chat.png"
+        ],
+        "imageCommits": [
+          "611adae34deddd44729f576410ad953915f768f5"
+        ],
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] COULD NOT TEST: the QA account has no active plan (Subscription: 'No active plan'), so /coach-chat redirects to /choose-plan (PremiumRoute, App.tsx). Coach chat Hindi strings are unverified. Needs an entitled QA account (trial grant by Shaan) to run the same sweep. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /coach-chat."
     },
     {
@@ -2265,15 +2525,17 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app d3f2b294 (+ f24c2985 for progress_weekly.weight_row_none): weight trend chart, Weekly/Monthly tabs, MON-SUN circles (now the date's weekday in the app language), date range, '0 of 7 days' summary, section and day labels on weekly + monthly. Full vitest green. Hindi machine-drafted, needs native review. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed, empty-state data): /weekly-progress and /monthly-progress in Hindi: tabs, weekday labels, date range \"19 अक्टू॰ - 25 अक्टू॰\" and day aria are Hindi, 0 English lines; Weight Trend chart needs weigh-ins and was not rendered (source literals gone, inspected). || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /weekly-progress (0 English lines) and /monthly-progress (0 English lines).",
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for progress_weekly.weight_row_none): weight trend chart, Weekly/Monthly tabs, MON-SUN circles (now the date's weekday in the app language), date range, '0 of 7 days' summary, section and day labels on weekly + monthly. Full vitest green. Hindi machine-drafted, needs native review. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed, empty-state data): /weekly-progress and /monthly-progress in Hindi: tabs, weekday labels, date range \"19 अक्टू॰ - 25 अक्टू॰\" and day aria are Hindi, 0 English lines; Weight Trend chart needs weigh-ins and was not rendered (source literals gone, inspected). || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /weekly-progress (0 English lines) and /monthly-progress (0 English lines). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /progress (lands on /weekly-progress): English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-progress-fix-r1.png",
         "imagePaths": [
-          "images/i-20261021-hi-progress-fix-r1.png"
+          "images/i-20261021-hi-progress-fix-r1.png",
+          "images/2026-10-22-recheck307/hi-progress.png"
         ],
         "imagePrivate": true,
         "imageCommit": "8cd6c0ee7b08deb4de9fa5644b79ecc2be588245",
         "imageCommits": [
-          "8cd6c0ee7b08deb4de9fa5644b79ecc2be588245"
+          "8cd6c0ee7b08deb4de9fa5644b79ecc2be588245",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T17:42:33.317Z",
         "by": "shakeebshaan",
@@ -2285,9 +2547,17 @@
           "score": 93,
           "bar": 90,
           "note": "Weight chart, tabs, day circles (weekday from date), week range, summaries, aria and the monthly day labels all in Hindi; weight_row_none key added in f24c2985."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Weekly progress is mostly English in Hindi: WeightTrendChart.tsx:74 'Weight Trend', :86 '7 Days'/'30 Days', :129 'Goal: 72 kg', :160 'Moving Avg'; WeeklyProgress.tsx:565 'No weigh-in yet' (key progress_weekly.weight_row_none missing), :756 '0 of 7 days fully completed.', :322 date range 'Oct 19 - Oct 25' (English locale), MON-SUN labels, 'Weekly/Monthly' tabs (ProgressTabBar.tsx), aria WeeklyProgress.tsx:396,746. Monthly tab: only the 'Weekly/Monthly' tabs and day aria 'THU: 0/3 goals' are English. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /progress and /monthly-progress. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/progress.png, monthly-progress.png",
       "thread": [
         {
@@ -2317,15 +2587,17 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app d3f2b294 (+ f24c2985 for NextSessionPreview, ProgressiveOverload, WorkoutSessionHeader, StrengthStrip new_pb): exercise volume chart, '6d ago'-style times, 'reps ·', and 'No previous data' are Hindi. Not changed (data): exercise names and badge names from the catalog / gamification API. Full vitest green. Hindi machine-drafted. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed, empty-state data): /activity in Hindi has 0 English lines or aria labels; volume chart, strength strip, cycle labels with data were not exercised (account has no logged sets), source literals gone (inspected). || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /activity: English left is exercise and badge names from the catalog and gamification API (declared data).",
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for NextSessionPreview, ProgressiveOverload, WorkoutSessionHeader, StrengthStrip new_pb): exercise volume chart, '6d ago'-style times, 'reps ·', and 'No previous data' are Hindi. Not changed (data): exercise names and badge names from the catalog / gamification API. Full vitest green. Hindi machine-drafted. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed, empty-state data): /activity in Hindi has 0 English lines or aria labels; volume chart, strength strip, cycle labels with data were not exercised (account has no logged sets), source literals gone (inspected). || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /activity: English left is exercise and badge names from the catalog and gamification API (declared data). || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /activity: English lines 12 (sweep-2 value n/a): all 12 left are catalog data (exercise and workout names such as \"Legs\", \"March Sit (Wall)\"), which the fix left as data.",
         "imagePath": "images/i-20261021-hi-workout-fix-r1.png",
         "imagePaths": [
-          "images/i-20261021-hi-workout-fix-r1.png"
+          "images/i-20261021-hi-workout-fix-r1.png",
+          "images/2026-10-22-recheck307/hi-workout.png"
         ],
         "imagePrivate": true,
         "imageCommit": "ed43f28bd1312b0c3d058736b255544546377a78",
         "imageCommits": [
-          "ed43f28bd1312b0c3d058736b255544546377a78"
+          "ed43f28bd1312b0c3d058736b255544546377a78",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T17:42:27.515Z",
         "by": "shakeebshaan",
@@ -2337,9 +2609,17 @@
           "score": 90,
           "bar": 90,
           "note": "All named code strings fixed (volume chart, ago times, reps line, No previous data; NextSession/Progression/Header keys in f24c2985). Exercise and badge names stay English: catalog/API data."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Workout screen mixes English into Hindi: ExerciseVolumeChart.tsx:21 'Exercise Volume', :32 'Daily'/'Weekly' toggle, :55 'No volume yet', :57 'Log your first set to start tracking daily volume.'; NextSessionPreview.tsx:106-111 'Cycle' (+13 defaultValue-only keys in that file); ProgressiveOverload.tsx:45 'Session in Cycle' (key activity.progression.session_in_cycle missing); WorkoutSessionHeader.tsx:41 'Progressive Plan' (key activity.session_header.progressive_plan missing); StrengthStrip.tsx:41,43 '6d ago'/'1mo ago', :141 'New personal best' (key activity.strength.new_pb missing), :150 'reps ·'; row text 'पिछली बार: No previous data' (English half, source not located); badge names (Strength Milestone, Record Setter, First Record) come from the gamification API; exercise names are English catalog data (src/data/exercise-catalog.json). Repro: set app language to Hindi (localStorage nyus_locale=hi), open /activity. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/activity.png",
       "thread": [
         {
@@ -2370,15 +2650,17 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app d3f2b294 (+ f24c2985 for PartnerChip / DiaryDateStepper / diet-week keys): diet-week weekday and date follow the app language, macro line reads 'P 41g · C 36g · F 19g' like the meal cards, meal type prefix translated. Not changed (data, decision needed): meal names from the catalog. Full vitest green. Hindi machine-drafted. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed): /nutrition and /diet-plan-week in Hindi show no English except \"Log what you ate\" (new issue i-20261021-hi-leftovers); partner chip and date stepper aria are Hindi. Meal names are catalog data, still English by decision. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /nutrition and /diet-plan-week: the only English lines are meal names and meal descriptions from the catalog (declared data, not changed) plus the \"KCAL\"/\"kcal\" unit.",
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for PartnerChip / DiaryDateStepper / diet-week keys): diet-week weekday and date follow the app language, macro line reads 'P 41g · C 36g · F 19g' like the meal cards, meal type prefix translated. Not changed (data, decision needed): meal names from the catalog. Full vitest green. Hindi machine-drafted. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed): /nutrition and /diet-plan-week in Hindi show no English except \"Log what you ate\" (new issue i-20261021-hi-leftovers); partner chip and date stepper aria are Hindi. Meal names are catalog data, still English by decision. || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /nutrition and /diet-plan-week: the only English lines are meal names and meal descriptions from the catalog (declared data, not changed) plus the \"KCAL\"/\"kcal\" unit. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /nutrition: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-meals-fix-r1.png",
         "imagePaths": [
-          "images/i-20261021-hi-meals-fix-r1.png"
+          "images/i-20261021-hi-meals-fix-r1.png",
+          "images/2026-10-22-recheck307/hi-meals.png"
         ],
         "imagePrivate": true,
         "imageCommit": "68bfab5f1c1648a26c1b8009d89d3432f204dd87",
         "imageCommits": [
-          "68bfab5f1c1648a26c1b8009d89d3432f204dd87"
+          "68bfab5f1c1648a26c1b8009d89d3432f204dd87",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T17:42:21.878Z",
         "by": "shakeebshaan",
@@ -2390,9 +2672,17 @@
           "score": 90,
           "bar": 90,
           "note": "Named aria labels (f24c2985), diet-week weekday/date and macro line fixed, meal-type prefix translated. Meal names stay English: catalog data, a product decision."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Meals list is Hindi except: aria-labels PartnerChip.tsx:80 'Add a diet partner', DiaryDateStepper.tsx:114 'Choose a day to view'; /diet-plan-week weekday and date labels 'Mon/Tue… Oct 19' and macro line 'P:40.7g C:36.4g F:19.2g' (DietPlanWeek.tsx, 5 defaultValue-only keys); meal names (Chicken Oats Upma, Fish Roti Sabzi) are English catalog/API data (src/data/meal-catalog.json), decide whether names need Hindi. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /nutrition and /diet-plan-week. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/nutrition.png, diet-plan-week.png",
       "thread": [
         {
@@ -2422,15 +2712,17 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app d3f2b294 (+ f24c2985 for the dashboard card keys): all screen-reader labels named here go through i18n; re-captured in Hindi (C:/tmp/hi-fix3): no English labels left except the coach's name and the user's name. Full vitest green. Hindi machine-drafted, needs native review. Rides the next Play build. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed): Hindi /dashboard aria labels are Hindi (notifications, diet/activity tracking, fasting timer, main navigation, overview); the only English left are the coach name and \"View weekly insights\" (new issue i-20261021-hi-leftovers). || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /dashboard: 0 English lines; the only English aria labels are the toast region (\"Notifications (F8)\", \"Notifications alt+T\", \"Dismiss\"), a library label.",
+        "description": "Fixed in app d3f2b294 (+ f24c2985 for the dashboard card keys): all screen-reader labels named here go through i18n; re-captured in Hindi (C:/tmp/hi-fix3): no English labels left except the coach's name and the user's name. Full vitest green. Hindi machine-drafted, needs native review. Rides the next Play build. || QA board re-check 2026-10-21 19:30 UTC: VERIFIED on app origin/main 70bab8dc (code = d3f2b294; web bundle built against a local backend e38ef80c with a 30-day trial account, Hindi locale, 390x844, seeded Edge) (executed): Hindi /dashboard aria labels are Hindi (notifications, diet/activity tracking, fasting timer, main navigation, overview); the only English left are the coach name and \"View weekly insights\" (new issue i-20261021-hi-leftovers). || QA SWEEP 2026-10-22: HOLDS. Executed on app main e7945ec6 (prod-read web build, QA account, writes blocked, 390x844, seeded Edge), Hindi /dashboard: 0 English lines; the only English aria labels are the toast region (\"Notifications (F8)\", \"Notifications alt+T\", \"Dismiss\"), a library label. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /dashboard: English lines 0 (sweep-2 value 0).",
         "imagePath": "images/i-20261021-hi-home-fix-r1.png",
         "imagePaths": [
-          "images/i-20261021-hi-home-fix-r1.png"
+          "images/i-20261021-hi-home-fix-r1.png",
+          "images/2026-10-22-recheck307/hi-home.png"
         ],
         "imagePrivate": true,
         "imageCommit": "9f0d473fb7c194a54866c60a55b7bf18956dac7b",
         "imageCommits": [
-          "9f0d473fb7c194a54866c60a55b7bf18956dac7b"
+          "9f0d473fb7c194a54866c60a55b7bf18956dac7b",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T17:42:17.916Z",
         "by": "shakeebshaan",
@@ -2442,9 +2734,17 @@
           "score": 92,
           "bar": 90,
           "note": "Every named label translated (notifications, nav, coach button, skip link, sleep chart, diet/activity card labels via step 2); the weight-card label too. Hindi not native-reviewed."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Home is Hindi on screen; only screen-reader labels stay English: DashboardHeader.tsx:50 'Notifications (N unread)', DashboardDietCard.tsx:69,110 'Open diet tracking' / 'Diet progress: 0% complete', DashboardActivityCard.tsx:59, SleepQualityChart.tsx:68 'Sleep trend chart…', BottomNav.tsx:99 'Main navigation', FloatingCoachButton.tsx:336 'Chat with <coach>', App.tsx:710 'Skip to content'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /dashboard with TalkBack. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/dashboard.png",
       "thread": [
         {
@@ -2478,7 +2778,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "App e7945ec6: the first-meal cue label now sits LEFT of the circle (flex-row-reverse), not above it. The idle coach button covers x 318-374 at 390px; the label ends at x=316 in both languages (measured: hi 'खा लिया' [273..316], en 'Mark eaten' [251..316]), so it cannot sit under the button at any scroll. 390x844 @2x, prod reads of the QA account, writes blocked, GETs rewritten to drop custom logs so the cue shows. Shot 1: Hindi default scroll, label fully visible beside the button. Shots 2-3: card in view, hi + en. (In English the two-line header puts the card under the bottom nav at default scroll, not under the coach button.) Caveat: while a real coach nudge is active the button widens into the 'Chat with …' pill (x 170-374), which covers any card text in its band until dismissed; that is the owner-restored nudge state (2026-08-23), left unchanged. Tests: firstLogCue 8/8 (asserts the row layout), nutrition suites 241/241, tsc 0. || QA VERIFIED 2026-10-21 (re-check after e7945ec6): built app main e7945ec6 (prod-read build, QA account, every non-GET blocked, GETs rewritten so the cue shows, seeded Edge, 390x844 @2x), /nutrition in Hindi and English. Label geometry measured from the DOM: hi \"खा लिया\" x 273-316, en \"Mark eaten\" x 251-316, coach button x 318-374 (2px gap), label never clipped, no horizontal page overflow (scrollWidth 390). Checked at rest and at 5 scroll positions: the label never overlaps the button (label top from 270 to 785 px). The meal name wraps to two lines (\"Chicken Oats / Upma\", 119px wide, not clipped, no line-clamp, overflow visible); the Breakfast chip, 455 kcal and P/C/F row stay below it in order and nothing in the card extends past the card edge. NOT a regression, noted for owner: while the card is scrolled to y 676-732 the circle itself (x 326-350) passes under the coach button, as every meal circle does; and a real coach nudge widens the button into a pill (dev caveat above). Page-level fix of that is the separate FAB overlap work, not this issue. Tests not re-run by QA here (frontend unit suite 8249 passed on 8fb4a210 earlier today). || QA SWEEP 2026-10-22: HOLDS. Verified earlier today on e7945ec6 (hi + en, label clear of the coach button); not repeated.",
+        "description": "App e7945ec6: the first-meal cue label now sits LEFT of the circle (flex-row-reverse), not above it. The idle coach button covers x 318-374 at 390px; the label ends at x=316 in both languages (measured: hi 'खा लिया' [273..316], en 'Mark eaten' [251..316]), so it cannot sit under the button at any scroll. 390x844 @2x, prod reads of the QA account, writes blocked, GETs rewritten to drop custom logs so the cue shows. Shot 1: Hindi default scroll, label fully visible beside the button. Shots 2-3: card in view, hi + en. (In English the two-line header puts the card under the bottom nav at default scroll, not under the coach button.) Caveat: while a real coach nudge is active the button widens into the 'Chat with …' pill (x 170-374), which covers any card text in its band until dismissed; that is the owner-restored nudge state (2026-08-23), left unchanged. Tests: firstLogCue 8/8 (asserts the row layout), nutrition suites 241/241, tsc 0. || QA VERIFIED 2026-10-21 (re-check after e7945ec6): built app main e7945ec6 (prod-read build, QA account, every non-GET blocked, GETs rewritten so the cue shows, seeded Edge, 390x844 @2x), /nutrition in Hindi and English. Label geometry measured from the DOM: hi \"खा लिया\" x 273-316, en \"Mark eaten\" x 251-316, coach button x 318-374 (2px gap), label never clipped, no horizontal page overflow (scrollWidth 390). Checked at rest and at 5 scroll positions: the label never overlaps the button (label top from 270 to 785 px). The meal name wraps to two lines (\"Chicken Oats / Upma\", 119px wide, not clipped, no line-clamp, overflow visible); the Breakfast chip, 455 kcal and P/C/F row stay below it in order and nothing in the card extends past the card edge. NOT a regression, noted for owner: while the card is scrolled to y 676-732 the circle itself (x 326-350) passes under the coach button, as every meal circle does; and a real coach nudge widens the button into a pill (dev caveat above). Page-level fix of that is the separate FAB overlap work, not this issue. Tests not re-run by QA here (frontend unit suite 8249 passed on 8fb4a210 earlier today). || QA SWEEP 2026-10-22: HOLDS. Verified earlier today on e7945ec6 (hi + en, label clear of the coach button); not repeated. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on release/307 web bundle (app main 469a3ed0 + version bump; production build, localhost:8082, QA account, GETs to prod, every write stubbed, Hindi, 390x844 @2x, seeded Edge): /nutrition first-meal cue: en \"Mark eaten\" x 251-316, hi \"खा लिया\" x 273-316; the coach button sits at x 318-374, so the label never sits under it in either language.",
         "imagePath": "images/i-20261021-fab1-fix-r2.png",
         "imagePaths": [
           "images/i-20261021-fab1-fix-r2.png",
@@ -2487,7 +2787,8 @@
           "images/2026-10-21-firstday-verify/fab1-verify-hi-card-in-view-e7945ec6.png",
           "images/2026-10-21-firstday-verify/fab1-verify-en-card-in-view-e7945ec6.png",
           "images/2026-10-21-firstday-verify/fab1-verify-hi-card-crop-e7945ec6.png",
-          "images/2026-10-21-firstday-verify/fab1-verify-en-card-crop-e7945ec6.png"
+          "images/2026-10-21-firstday-verify/fab1-verify-en-card-crop-e7945ec6.png",
+          "images/2026-10-22-recheck307/fab1-hi.png"
         ],
         "imagePrivate": true,
         "imageCommit": "5ccf90d208103cf65f3639bf487ca4432639ed85",
@@ -2498,7 +2799,8 @@
           "4cba21824987d26e014ec97c995b9b6dc06c1a89",
           "4cba21824987d26e014ec97c995b9b6dc06c1a89",
           "4cba21824987d26e014ec97c995b9b6dc06c1a89",
-          "4cba21824987d26e014ec97c995b9b6dc06c1a89"
+          "4cba21824987d26e014ec97c995b9b6dc06c1a89",
+          "611adae34deddd44729f576410ad953915f768f5"
         ],
         "fixedAt": "2026-10-21T22:44:34.976Z",
         "by": "shakeebshaan",
@@ -2510,7 +2812,8 @@
           "score": 90,
           "bar": 90,
           "note": "geometry-proven clear of the idle button in hi+en; nudge pill caveat stated"
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "history": [
         {
@@ -2536,6 +2839,12 @@
             "imageCommit": "4e5f9a0cc51ad002f65a6243352b1eb5077c73fc",
             "imagePrivate": false
           }
+        },
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
         }
       ],
       "description": "[P3 / layout — executed 2026-10-21, build 5da19550 (B56 79f24d4e), 390x844 @2x] The new first-meal cue 'Mark eaten' (src/pages/_components/nutrition/NutritionMealCard.tsx ~L421, eatenCue at L159) is partly covered by the floating coach-chat button on /nutrition: with the 'Missing meals compounds fast' banner above, the first meal card's label sits at the bottom-right where the green 'Chat with Nisha' FAB is drawn, so the last letters of 'Mark eaten' are hidden until the user scrolls. Repro: fresh install (clear localStorage), open /nutrition on a 390x844 phone viewport with an uneaten plan; screenshot C:/tmp/qa-b56/meals-cue-en.png. Fix: add bottom/right clearance for the cue label or let the FAB hide while the cue is the first card in view. Ring, one-card-only and ring-disappears-after-tap all PASS.",
@@ -3217,7 +3526,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Rotated 2026-10-21 06:51-06:58 UTC on Shaan's yes (nyus-a6e92c), runbook nyu_backend docs/ops/DB_PASSWORD_ROTATION.md: rotate (old retained, both connect) -> restart nyu-backend, health 200 in ~15 s -> 6 min on the new password: 80 scheduled jobs OK, 0 Access denied, 0 errors -> discard: OLD PASSWORD REFUSED. No active .env key, box script or bash history holds the old password. Code side: e0f8ba7 (no password in tracked source; prod detected by host + user) + 9ac128f (rotation script + tests). The old literal stays in 14 commits of git history and is now dead. || QA board re-check 2026-10-21 19:30 UTC: Spot check: https://nyus.in/api/v1/health answers 200 after the rotation; the old DSN literal and production_marker are gone from backend.py, CLAUDE.md and DB_DAILY_backups/README.md on origin/main. The residue is tracked in i-20261021-pwres. || QA SWEEP 2026-10-22: HOLDS. Prod health answers 200 on nyus.in/api/v1/health and on the VM (22 Oct); VM HEAD 3b30aee4. Old password refusal is not independently testable by QA; the residue stays tracked in i-20261021-pwres.",
+        "description": "Rotated 2026-10-21 06:51-06:58 UTC on Shaan's yes (nyus-a6e92c), runbook nyu_backend docs/ops/DB_PASSWORD_ROTATION.md: rotate (old retained, both connect) -> restart nyu-backend, health 200 in ~15 s -> 6 min on the new password: 80 scheduled jobs OK, 0 Access denied, 0 errors -> discard: OLD PASSWORD REFUSED. No active .env key, box script or bash history holds the old password. Code side: e0f8ba7 (no password in tracked source; prod detected by host + user) + 9ac128f (rotation script + tests). The old literal stays in 14 commits of git history and is now dead. || QA board re-check 2026-10-21 19:30 UTC: Spot check: https://nyus.in/api/v1/health answers 200 after the rotation; the old DSN literal and production_marker are gone from backend.py, CLAUDE.md and DB_DAILY_backups/README.md on origin/main. The residue is tracked in i-20261021-pwres. || QA SWEEP 2026-10-22: HOLDS. Prod health answers 200 on nyus.in/api/v1/health and on the VM (22 Oct); VM HEAD 3b30aee4. Old password refusal is not independently testable by QA; the residue stays tracked in i-20261021-pwres. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Inspected 2026-10-22: nyu_backend origin/main has no mysql DSN with an embedded password in backend.py, CLAUDE.md or DB_DAILY_backups (the only DSN-shaped strings are .env.example and two test/docker URLs in scripts/migration_roundtrip.py, 3 matches in all, placeholders). That the old password is refused by the database is [assumed from the rotation runbook]: I do not hold the value and did not test it.",
         "imagePath": "images/i-20260926-pwd1-fix-r1.png",
         "imagePaths": [
           "images/i-20260926-pwd1-fix-r1.png"
@@ -3236,9 +3545,17 @@
           "score": 95,
           "bar": 90,
           "note": "Executed end to end on prod with verification at each step; the only residue is the dead literal in git history, out of scope by decision."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ],
       "needsReview": false,
       "reviewedBy": "shakeebshaan",
       "thread": [
@@ -11952,7 +12269,7 @@
       "title": "Activity page ignores a coach-assigned rest day",
       "description": "[bug, verified by reading the code] The coach tool assign_rest_day marks a date by setting DailyLog.is_activity_break + is_diet_break (app/services/coach_actions.py _exec_assign_rest_day). The dashboard honours it (shows Rest Day), but /api/v1/activity/overview (backend.py ActivityOverviewResource, todays_workout built around L9222-9667) never checks those flags, so the Activity tab still shows today's full workout on the rest day the coach just gave. Fix: when today's DailyLog has is_activity_break, return the rest-day state (no todays_workout, or todays_workout with is_rest_day) and render it on Activity like the dashboard card. Found while capturing the launch reels (2026-10-10).",
       "fix": {
-        "description": "Already fixed on 10 Oct and live since then, the board item was never closed. Backend nyu_backend 07bd6d58: /api/v1/activity/overview withholds the scheduled session on a DailyLog break day (coach-assigned or taken on the dashboard) unless it was already started or finished, and returns is_rest_day_today (app/services/activity_rest_day.py; in origin/main = prod fa007bd8). App c428f6f3: Activity renders the rest-day state ('Rest day. Recover well...' + 'Your coach set today aside') in en/hi/hinglish; in every release since build 301 (alpha = 302 today). Verified 2026-10-20: backend tests/services/test_activity_rest_day.py 6 passed, app test/RestDayPreview.test.tsx 3 passed; screenshots = production web bundle at 390 px with prod's real /activity/overview for the QA account, only the rest-day fields flipped as the backend does on a break day; 0 page errors in en and hi. || QA board re-check 2026-10-21 19:30 UTC: Inspected on nyu_backend origin/main e38ef80c: app/services/activity_rest_day.py exists and backend.py:10004,10013 applies it and returns is_rest_day_today; not executed (needs a coach-assigned rest day). || QA SWEEP 2026-10-22: HOLDS. Prod (read-only, QA account, 22 Oct): GET /api/v1/activity/overview returns 200 with is_rest_day_today present (false on a normal day); the rest-day state itself needs a break day and was not triggered.",
+        "description": "Already fixed on 10 Oct and live since then, the board item was never closed. Backend nyu_backend 07bd6d58: /api/v1/activity/overview withholds the scheduled session on a DailyLog break day (coach-assigned or taken on the dashboard) unless it was already started or finished, and returns is_rest_day_today (app/services/activity_rest_day.py; in origin/main = prod fa007bd8). App c428f6f3: Activity renders the rest-day state ('Rest day. Recover well...' + 'Your coach set today aside') in en/hi/hinglish; in every release since build 301 (alpha = 302 today). Verified 2026-10-20: backend tests/services/test_activity_rest_day.py 6 passed, app test/RestDayPreview.test.tsx 3 passed; screenshots = production web bundle at 390 px with prod's real /activity/overview for the QA account, only the rest-day fields flipped as the backend does on a break day; 0 page errors in en and hi. || QA board re-check 2026-10-21 19:30 UTC: Inspected on nyu_backend origin/main e38ef80c: app/services/activity_rest_day.py exists and backend.py:10004,10013 applies it and returns is_rest_day_today; not executed (needs a coach-assigned rest day). || QA SWEEP 2026-10-22: HOLDS. Prod (read-only, QA account, 22 Oct): GET /api/v1/activity/overview returns 200 with is_rest_day_today present (false on a normal day); the rest-day state itself needs a break day and was not triggered. || QA VERIFIED 2026-10-22 (307 recheck): HOLDS. Executed on PROD 2026-10-22: GET /activity/overview returns the is_rest_day_today field (the rest-day logic is live). I did not create a break day on prod, so the withheld-session behaviour itself is covered by the code-level fix, not re-executed.",
         "imagePath": "images/i-20261010-rdac-fix-r1.png",
         "imagePaths": [
           "images/i-20261010-rdac-fix-r1.png",
@@ -11974,7 +12291,8 @@
           "score": 92,
           "bar": 90,
           "note": "Both sides fixed with tests and 3 languages; evidence uses prod's real overview with only the rest-day fields set, not a real coach-assigned day on a phone."
-        }
+        },
+        "verifiedAt": "2026-10-22T05:00:14.706Z"
       },
       "thread": [
         {
@@ -11985,7 +12303,15 @@
           "by": "shakeebshaan"
         }
       ],
-      "needsReview": false
+      "needsReview": false,
+      "history": [
+        {
+          "at": "2026-10-22T05:00:14.706Z",
+          "event": "verified",
+          "note": "QA 48h recheck on release/307: holds",
+          "by": "qa"
+        }
+      ]
     },
     {
       "id": "i-20261022-coach-skipped-meals",
@@ -12045,6 +12371,106 @@
       "fix": null,
       "history": [],
       "description": "[P3] [Release 307 smoke, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Add Food sheet (Nutrition > मील जोड़ें) still has an English title: the heading reads \"Add Food\" (screenshot). Cause confirmed in code: src/components/nutrition/CustomMealModal.tsx line 1038, the non-edit branch of the title is the hardcoded string 'Add Food' (the edit branch uses t('nutrition.custom_meal.edit_title')). Executed: the heading text of #custom-meal-modal-title is \"Add Food\" in both en and hi. Fix: add a key (e.g. nutrition.custom_meal.add_title) to en.json and hi.json and use it at line 1038. Same sheet, other English left in Hindi (same cause, hardcoded or defaultValue-only): the textarea placeholder \"e.g. grilled chicken breast with rice\" (line 1085), the visible link \"Add calories & macros (optional)\", the basket serving label \"1 serving\" (pluralizeServingUnit, line 1280), the \"Cal\" unit on hit rows, and the aria-labels Close (1049), Speak what you ate (1093), Snap meal (1105), Scan barcode (1114) and \"Add <food>, N kcal\" on every hit. The rest of the sheet is Hindi (search label, \"N और दिखाएँ\", खाना लॉग करें, \"2 आइटम\")."
+    },
+    {
+      "id": "i-20261022-hi-tdee-calculator",
+      "createdAt": "2026-10-22T05:00:14.706Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "tdee",
+        "p3"
+      ],
+      "route": "/tdee-calculator",
+      "imagePath": "images/2026-10-22-recheck307/new-hi-tdee.png",
+      "imageCommit": "611adae34deddd44729f576410ad953915f768f5",
+      "imagePaths": [
+        "images/2026-10-22-recheck307/new-hi-tdee.png"
+      ],
+      "imageCommits": [
+        "611adae34deddd44729f576410ad953915f768f5"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /tdee-calculator is mostly English in Hindi: 39 English lines (the header and the input card are Hindi, everything below is English). src/components/tdee/TdeeResults.tsx has no useTranslation (0 uses): line 119 \"Step 1\", 120 \"Basal Metabolic Rate (BMR)\", 125 \"Mifflin-St Jeor ... Most accurate for general population (Frankenfield 2005)\", 131 \"The math:\", 146-147 \"Step 2\" / \"Total Daily Energy Expenditure\", 151 and 187 \"kcal / day\", 159 and 199 \"The math:\", the activity label \"Moderate\" / \"Exercise 3-5 days/week\", and the footer \"Formulas: Mifflin-St Jeor (1990), Katch-McArdle...\" (line 256). The input card's \"Moderate\" under \"गतिविधि\" is English too. Fix: wire TdeeResults through t() with keys in en.json and hi.json; the formula text and citations can stay Latin. Executed: sweep of 24 routes not covered before (hi2.json); this was the worst."
+    },
+    {
+      "id": "i-20261022-hi-science",
+      "createdAt": "2026-10-22T05:00:14.706Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "content",
+        "p3"
+      ],
+      "route": "/science",
+      "imagePath": "images/2026-10-22-recheck307/new-hi-science.png",
+      "imageCommit": "611adae34deddd44729f576410ad953915f768f5",
+      "imagePaths": [
+        "images/2026-10-22-recheck307/new-hi-science.png"
+      ],
+      "imageCommits": [
+        "611adae34deddd44729f576410ad953915f768f5"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /science (\"The science behind your plan\") is entirely English in Hindi: 16 English paragraphs and only 18 Devanagari characters on the page. src/pages/Science.tsx has no useTranslation (0 uses): h1 line 78, the three section titles and bodies in the SECTIONS array (lines 16-35) and the references. A claims problem in the same text, section 3 (lines 30-33, \"How the plan adapts to you ... Each week your coach reviews what you actually logged ... and adjusts the next block ... If you missed sessions, volume is rebalanced rather than piled on ... separates an adaptive plan from a fixed template\"): it claims weekly training adaptation, which the settled wording does not allow (a weekly check-in adjusts calories, macros and step goal once enough is logged). Fix: reword section 3 to the settled claim and move the page text to i18n keys (Hindi translation to be reviewed; the paper references can stay in English)."
+    },
+    {
+      "id": "i-20261022-hi-weight-history",
+      "createdAt": "2026-10-22T05:00:14.706Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "progress",
+        "p3"
+      ],
+      "route": "/weight-history-chart",
+      "imagePath": "images/2026-10-22-recheck307/new-hi-weight-history.png",
+      "imageCommit": "611adae34deddd44729f576410ad953915f768f5",
+      "imagePaths": [
+        "images/2026-10-22-recheck307/new-hi-weight-history.png"
+      ],
+      "imageCommits": [
+        "611adae34deddd44729f576410ad953915f768f5"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /weight-history-chart is English in Hindi: the title \"Weight History\" (src/pages/WeightHistoryChart.tsx line 54, PageShell title), the count \"7 daily entries\" (line 58: chartData.length + chartView + \"entry/entries\"), the \"Daily\" / \"Weekly\" toggle (lines 77 and 89) and the empty text \"No <view> weight entries yet. Log your first weight to see the chart.\" (line 124); the date axis (\"Oct 16\") is English month names. The file has no useTranslation (0 uses) and only 18 Devanagari characters render. Fix: use t() for title, count (with plural), toggle labels and empty state, and format the axis dates with the app locale. Same family, not filed separately: /workout-history month labels (Nov, Dec, Jan ...; 29 English lines) and the /log-weight date axis."
+    },
+    {
+      "id": "i-20261022-hi-weekly-insights-next-week",
+      "createdAt": "2026-10-22T05:00:14.706Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "home",
+        "p4"
+      ],
+      "route": "/dashboard (weekly insights card)",
+      "imagePath": "images/2026-10-22-recheck307/leftovers-weekly-insights.png",
+      "imageCommit": "611adae34deddd44729f576410ad953915f768f5",
+      "imagePaths": [
+        "images/2026-10-22-recheck307/leftovers-weekly-insights.png"
+      ],
+      "imageCommits": [
+        "611adae34deddd44729f576410ad953915f768f5"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Home weekly-insights card prints \"Next week: <focus>\" with the label hardcoded in English: src/components/WeeklyInsightsCard.tsx line 295 (<span className=\"text-caption\">Next week: {overview.next_week_focus}</span>, no t()). The card heading and aria are Hindi. The screenshot was taken with GET /ai/overview stubbed to a sample payload (prod currently answers the \"temporarily unavailable\" fallback for the QA account, so the card hides itself there); the headline, win, improvement and tip lines in the screenshot are the stub text. Fix: add a key (e.g. weekly_insights.next_week with {{focus}}) to en.json and hi.json and use it at line 295."
     }
   ]
 }
