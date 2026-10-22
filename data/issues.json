@@ -12722,6 +12722,47 @@
         }
       ],
       "description": "[P4] [Found while re-verifying i-20261021-fd-ai-slow on prod, 2026-10-22, nyu_backend 573232a9] The new per-user cache stores whatever the endpoint built, including the \"I'm temporarily unavailable for live coaching\" fallback. backend.py:15953 (overview_cache.put(cache_key, fingerprint, payload)) runs unconditionally after call_openai, so when the model call is refused or fails (daily cost cap, provider error) overview is null and the fallback message is cached for the 6 h TTL (key includes the date), until the user's data changes: after a short outage a user keeps seeing \"temporarily unavailable\" for up to 6 h although the model is back. Same shape for /ai/weekly-insights (weekly_insights_cache.put, backend.py:14477, 24 h TTL), and separately the Notification row that weekly-insights serves as cached:true can hold a fallback text for a whole ISO week: the QA account's stored row (generated 2026-10-20T13:51:49Z) is the fallback text and GET /ai/weekly-insights returned it cached:true on 22 Oct at 05:34 UTC. Executed on prod: GET /ai/overview x3 returned the same 204-byte fallback body (812, 712, 253 ms); GET /ai/weekly-insights x2 returned cached:true with the fallback text. Fix: do not put() a payload whose overview is null / whose text is the fallback (and do not persist the fallback into the weekly Notification row); keep the cap-refused answer uncached so the next call after the cap resets calls the model. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Inspected at 573232a9: backend.py:15953 and :14477 still put() unconditionally. Executed on prod: GET /ai/overview x3 at 05:34 UTC returned the same 204-byte fallback body; GET /ai/weekly-insights returned cached:true with the 20 Oct fallback text; and that fallback text now sits in the QA account's notifications as \"Your Weekly Wellness Report\"."
+    },
+    {
+      "createdAt": "2026-10-22T07:36:13.511Z",
+      "author": "qa",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20261022-seo-men-meta-168",
+      "tags": [
+        "seo",
+        "landing",
+        "p4"
+      ],
+      "route": "https://nyus.in/blog/best-ai-fitness-app-for-men-india.html",
+      "description": "[P4 / SEO, live SEO sweep of nyus.in 2026-10-22] The meta description of https://nyus.in/blog/best-ai-fitness-app-for-men-india.html is 168 characters (limit 160), so Google will cut it in the results. Executed: all 197 URLs in the three sitemaps fetched (read-only); this is the only page with a meta description over 160. Not fixed by the pending upload: in NYUSLANDING upload/landing-batch-7 head c5a0c883 the same page's description is still 164 characters (static/blog/best-ai-fitness-app-for-men-india.html, <meta name=\"description\">, and its og:description). Fix: shorten the description (and og:description) to 160 characters or fewer."
+    },
+    {
+      "createdAt": "2026-10-22T07:36:13.511Z",
+      "author": "qa",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20261022-seo-og-image-shared",
+      "tags": [
+        "seo",
+        "landing",
+        "social",
+        "p4"
+      ],
+      "route": "https://nyus.in/ (every sitemap page)",
+      "description": "[P4 / SEO and social previews, live SEO sweep of nyus.in 2026-10-22] 196 of the 197 sitemap URLs use the same og:image, https://nyus.in/2.webp (HTTP 200): every shared blog link (WhatsApp, X, LinkedIn, Facebook) shows the identical card, whatever the article. https://nyus.in/sitemap/ has no og:image at all. Executed: og:image read from every page in sitemap-pages.xml and blog/sitemap-blog.xml; 1 unique value. Not something the pending upload changes (the c5a0c883 pages carry the same og:image tag). Fix, when there is time: a per-article or per-section image (even 4-5 variants: Hindi, meals, exercise, calculators, guides) and an og:image on /sitemap/. Low priority; no ranking effect, only click-through from shares."
     }
   ]
 }
