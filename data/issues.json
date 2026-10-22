@@ -12020,6 +12020,31 @@
         }
       ],
       "history": []
+    },
+    {
+      "id": "i-20261022-hi-add-food-title",
+      "createdAt": "2026-10-22T04:33:32.897Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "nutrition",
+        "p3"
+      ],
+      "route": "/nutrition (Add Food sheet, CustomMealModal)",
+      "imagePath": "images/2026-10-22-release307/hi-add-food-title-307.png",
+      "imageCommit": "abb2eaa1dc51abf56db998eb14b8c15994ff1180",
+      "imagePaths": [
+        "images/2026-10-22-release307/hi-add-food-title-307.png"
+      ],
+      "imageCommits": [
+        "abb2eaa1dc51abf56db998eb14b8c15994ff1180"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3] [Release 307 smoke, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Add Food sheet (Nutrition > मील जोड़ें) still has an English title: the heading reads \"Add Food\" (screenshot). Cause confirmed in code: src/components/nutrition/CustomMealModal.tsx line 1038, the non-edit branch of the title is the hardcoded string 'Add Food' (the edit branch uses t('nutrition.custom_meal.edit_title')). Executed: the heading text of #custom-meal-modal-title is \"Add Food\" in both en and hi. Fix: add a key (e.g. nutrition.custom_meal.add_title) to en.json and hi.json and use it at line 1038. Same sheet, other English left in Hindi (same cause, hardcoded or defaultValue-only): the textarea placeholder \"e.g. grilled chicken breast with rice\" (line 1085), the visible link \"Add calories & macros (optional)\", the basket serving label \"1 serving\" (pluralizeServingUnit, line 1280), the \"Cal\" unit on hit rows, and the aria-labels Close (1049), Speak what you ate (1093), Snap meal (1105), Scan barcode (1114) and \"Add <food>, N kcal\" on every hit. The rest of the sheet is Hindi (search label, \"N और दिखाएँ\", खाना लॉग करें, \"2 आइटम\")."
     }
   ]
 }
