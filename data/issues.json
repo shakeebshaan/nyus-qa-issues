@@ -430,7 +430,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Backend nyu_backend 7935dcf7 (branch firstday-batch5, NOT deployed yet). The 'quiet for 2 days' line was hardcoded; it now counts the real days since the last active day (up to 14) in en/hi/hinglish, and from 7 days says it has been a week or more. test_pattern_detection +5; full backend suite 8,257 passed / 0 failed. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/firstday-batch5 7935dcf7: tests/test_pattern_detection.py + tests/test_plan_week.py 98 passed (executed 22 Oct). On prod: 7935dcf7 is not on origin/main or the VM; the VM still has the hardcoded \"Hey! I've noticed you've been quiet for 2 days.\" at app/services/pattern_detection.py:197 and app/services/coach_copy.py:136, so the morning brief is unchanged live. || QA 48h recheck 2026-10-22: NOT VERIFIABLE on prod: nyu_backend 7935dcf7 (branch firstday-batch5) is not in origin/main, so the day-count wording is not deployed.",
+        "description": "Backend nyu_backend 7935dcf7 (branch firstday-batch5, NOT deployed yet). The 'quiet for 2 days' line was hardcoded; it now counts the real days since the last active day (up to 14) in en/hi/hinglish, and from 7 days says it has been a week or more. test_pattern_detection +5; full backend suite 8,257 passed / 0 failed. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/firstday-batch5 7935dcf7: tests/test_pattern_detection.py + tests/test_plan_week.py 98 passed (executed 22 Oct). On prod: 7935dcf7 is not on origin/main or the VM; the VM still has the hardcoded \"Hey! I've noticed you've been quiet for 2 days.\" at app/services/pattern_detection.py:197 and app/services/coach_copy.py:136, so the morning brief is unchanged live. || QA 48h recheck 2026-10-22: NOT VERIFIABLE on prod: nyu_backend 7935dcf7 (branch firstday-batch5) is not in origin/main, so the day-count wording is not deployed. || QA PROD RE-VERIFY 2026-10-22 (after nyu_backend 573232a9 deployed 05:14:21 UTC): PENDING, left FIXED. What I could do today: (1) executed locally at 573232a9: tests/test_pattern_detection.py passes with its 5 new cases (count walks back to the last active day, the text changes with the gap, the 7+ day line, lookback failure falls back to 2); 109 tests passed across test_pattern_detection, test_plan_week and test_ai_payload_cache. (2) PROD read, GET /api/v1/coach/history for the QA account: the pre-fix briefs are all \"quiet for 2 days\" (Sat 10 to Wed 14 Oct, Sun 18 to Tue 20 Oct, Hindi \"दो दिन से\" on Wed 21 Oct), so the original repro is confirmed historically; the last stored brief is Wed 21 Oct 07:05 UTC, i.e. before the deploy. What blocks the prod proof: the brief only says \"quiet\" after a 2-day gap with no log in any source, and the QA account was active on 21 and 22 Oct (meal logs and a coach message), so today's brief (sent about 07:05 UTC) will be a normal brief, not a quiet one. Re-check plan: leave the QA account untouched (no logs) on 23 and 24 Oct, then read the briefs of Sun 25 and Mon 26 Oct 07:05 UTC from GET /coach/history: expected \"quiet for 3 days\" then \"4 days\" (Hindi equivalents), not 2 on both days. If they still say 2, reopen with the two message ids.",
         "imagePath": "images/i-20261021-fd-brief-copy-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-brief-copy-fix-r1.png"
@@ -456,6 +456,12 @@
           "at": "2026-10-22T05:00:14.706Z",
           "event": "note",
           "note": "QA recheck: fix not deployed, not verifiable on prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:39:33.123Z",
+          "event": "note",
+          "note": "QA prod re-verify: PENDING (cannot reproduce today), left FIXED",
           "by": "qa"
         }
       ],
@@ -981,7 +987,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in nyu_backend bf0769c0 (branch ai-overview-cache; push + deploy by the NYUS employee): per-user in-process cache for /ai/overview and /ai/weekly-insights, tied to a fingerprint of the user's data so a new meal log, ticked plan meal, weigh-in, workout or plan change regenerates on the next call; first-week accounts are now cached too. Local probe with a 5.5 s LLM: overview cold 5,634 ms -> warm 4.6 ms (0 LLM calls, 8 statements); weekly-insights 5,531 -> 8.4 ms. Prod before: 5,049-9,383 ms. Dashboard already renders without waiting on these (card skeleton + 12 s cap). Tests 11 + full backend suite 8,259 passed. Re-check SLOW_REQUEST on prod after the deploy. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/ai-overview-cache bf0769c0: tests/test_ai_payload_cache.py 11 passed (executed 22 Oct). On prod: bf0769c0 is not on origin/main and not on the VM (VM HEAD 3b30aee4), so /ai/overview and /ai/weekly-insights are unchanged live. The QA account cannot time /ai/overview (429 \"Daily request limit reached (50 requests)\"). || QA 48h recheck 2026-10-22: NOT VERIFIABLE on prod: nyu_backend bf0769c0 (branch ai-overview-cache) is not in origin/main, so the cache is not deployed. Effect seen today: the QA account's /ai/overview and /ai/weekly-insights answer the \"I'm temporarily unavailable for live coaching\" fallback (the daily \"overview\" cap is 50 requests x tier multiplier, [inferred] used up by QA dashboard loads, which is exactly what the cache is meant to prevent); every Home load in the 307 build still calls /ai/overview.",
+        "description": "Fixed in nyu_backend bf0769c0 (branch ai-overview-cache; push + deploy by the NYUS employee): per-user in-process cache for /ai/overview and /ai/weekly-insights, tied to a fingerprint of the user's data so a new meal log, ticked plan meal, weigh-in, workout or plan change regenerates on the next call; first-week accounts are now cached too. Local probe with a 5.5 s LLM: overview cold 5,634 ms -> warm 4.6 ms (0 LLM calls, 8 statements); weekly-insights 5,531 -> 8.4 ms. Prod before: 5,049-9,383 ms. Dashboard already renders without waiting on these (card skeleton + 12 s cap). Tests 11 + full backend suite 8,259 passed. Re-check SLOW_REQUEST on prod after the deploy. || QA SWEEP 2026-10-22: FIX NOT LIVE (not reopened: the code is fixed on its branch, deploy is the NYUS employee's push). Branch origin/ai-overview-cache bf0769c0: tests/test_ai_payload_cache.py 11 passed (executed 22 Oct). On prod: bf0769c0 is not on origin/main and not on the VM (VM HEAD 3b30aee4), so /ai/overview and /ai/weekly-insights are unchanged live. The QA account cannot time /ai/overview (429 \"Daily request limit reached (50 requests)\"). || QA 48h recheck 2026-10-22: NOT VERIFIABLE on prod: nyu_backend bf0769c0 (branch ai-overview-cache) is not in origin/main, so the cache is not deployed. Effect seen today: the QA account's /ai/overview and /ai/weekly-insights answer the \"I'm temporarily unavailable for live coaching\" fallback (the daily \"overview\" cap is 50 requests x tier multiplier, [inferred] used up by QA dashboard loads, which is exactly what the cache is meant to prevent); every Home load in the 307 build still calls /ai/overview. || QA PROD RE-VERIFY 2026-10-22 (after nyu_backend 573232a9 deployed 05:14:21 UTC): PENDING, left FIXED, re-check on 23 Oct after 00:30 UTC. Why not today: the QA account hit its per-user daily AI cost cap (USER_DAILY_COST_CAP_USD, window = the UTC day, token_budget.py:120-147) around 04:51 UTC, so GET /ai/overview answers the fallback text without calling the model; the three calls I made at 05:34 UTC returned 812, 712 and 253 ms with an identical 204-byte fallback body (253 ms equals /health), which proves nothing about the cache. No other QA account is usable (the sim account tokens answer 401 \"Signature verification failed\"). I did not touch the cap. Executed locally at 573232a9 (tests/perf/ai_cache_probe.py, LLM stubbed at 1.0 s): overview cold 1,236 ms with 1 LLM call and 88 statements; warm 6.3 ms and 4.6 ms with 0 LLM calls and 8 statements; after a new meal log 1,066 ms with a new headline; warm again 9.9 ms; after ticking a plan meal regenerated; other user and other date regenerate; weekly cold 1,154 ms, warm 21 ms (cached true). Re-check plan (23 Oct, QA account, cap reset): call 1 cold with the real model (expect several seconds, a real overview, not the fallback text), call 2 immediately with no data change (expect about the /health time, about 250 ms from this PC, same body), then log one meal and call again (expect a regenerated body, slow once), then remove the meal. For weekly-insights use ?force=1 on the first call: the QA account's stored row for this ISO week (generated 20 Oct 13:51 UTC) is a fallback text and is served as cached:true until Mon 26 Oct. See the new issue i-20261022-ai-cache-stores-fallback.",
         "imagePath": "images/i-20261021-fd-ai-slow-fix-r1.png",
         "imagePaths": [
           "images/i-20261021-fd-ai-slow-fix-r1.png"
@@ -1007,6 +1013,12 @@
           "at": "2026-10-22T05:00:14.706Z",
           "event": "note",
           "note": "QA recheck: fix not deployed, not verifiable on prod",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T05:39:33.123Z",
+          "event": "note",
+          "note": "QA prod re-verify: PENDING (cannot reproduce today), left FIXED",
           "by": "qa"
         }
       ],
@@ -12538,6 +12550,27 @@
       "fix": null,
       "history": [],
       "description": "[P3 / layout] [Release 307 smoke follow-up, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, 390x844 @2x] On Daily Focus the floating coach button covers the calendar's right column at the default scroll, so day 24 is unreadable (only part of the '2' shows). Same class as i-20261021-fd-fab-overlap-faq and i-20261021-fab1. Executed in both languages: the button is at x 318-374, y 676-732; the day-24 cell is x 306-345, y 675-715 in English (27x39 px of the 39 px cell hidden, and day 31 loses 27x13 px more) and x 306-345, y 693-732 in Hindi (27x39 px, day 17 loses 27x13 px). Screenshots: Hindi (daily-focus-fab-hi.png, also the original s1-hi-daily-focus.png) and English (daily-focus-fab-en.png). Cause: '/daily-focus' is in the coach-button allowlist (src/lib/chrome-routes.ts line 94), and the calendar grid in src/pages/DailyFocus.tsx (generateCalendarGrid, line 165) has no right/bottom clearance for the button. Fix, either: (a) remove '/daily-focus' from the allowlist as was done for /faq (the page already has its own tap targets), or (b) keep the button and give the calendar right padding (>= 64 px at 390 px) plus bottom padding so no day cell sits under x 318-374 at any scroll. Check in en and hi after the change."
+    },
+    {
+      "id": "i-20261022-ai-cache-stores-fallback",
+      "createdAt": "2026-10-22T05:39:33.123Z",
+      "author": "qa",
+      "tags": [
+        "backend",
+        "ai",
+        "cache",
+        "p4"
+      ],
+      "route": "/api/v1/ai/overview, /api/v1/ai/weekly-insights",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4] [Found while re-verifying i-20261021-fd-ai-slow on prod, 2026-10-22, nyu_backend 573232a9] The new per-user cache stores whatever the endpoint built, including the \"I'm temporarily unavailable for live coaching\" fallback. backend.py:15953 (overview_cache.put(cache_key, fingerprint, payload)) runs unconditionally after call_openai, so when the model call is refused or fails (daily cost cap, provider error) overview is null and the fallback message is cached for the 6 h TTL (key includes the date), until the user's data changes: after a short outage a user keeps seeing \"temporarily unavailable\" for up to 6 h although the model is back. Same shape for /ai/weekly-insights (weekly_insights_cache.put, backend.py:14477, 24 h TTL), and separately the Notification row that weekly-insights serves as cached:true can hold a fallback text for a whole ISO week: the QA account's stored row (generated 2026-10-20T13:51:49Z) is the fallback text and GET /ai/weekly-insights returned it cached:true on 22 Oct at 05:34 UTC. Executed on prod: GET /ai/overview x3 returned the same 204-byte fallback body (812, 712, 253 ms); GET /ai/weekly-insights x2 returned cached:true with the fallback text. Fix: do not put() a payload whose overview is null / whose text is the fallback (and do not persist the fallback into the weekly Notification row); keep the cap-refused answer uncached so the next call after the cap resets calls the model."
     }
   ]
 }
