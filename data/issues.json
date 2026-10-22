@@ -12645,8 +12645,36 @@
         "9934c0af7eff4c8df779c5354e89fc11947a1261"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "VERIFIED 2026-10-22 on the prod web build of app 1eacfeef (C:/tmp/nyus-dffab/dist; QA account, prod reads, writes stubbed, 390x844 @2x, seeded Edge). /daily-focus: no coach button in English or Hindi (was x 318-374, y 676-732 covering day 24 by 27x39 px in both languages, plus day 31 in en and day 17 in hi). After: days 17, 24 and 31 are fully readable (cell rects en 17 [306,632,345,671], 24 [306,675,345,715], 31 [306,719,345,758]; hi 17 [306,649,345,689], 24 [306,693,345,732], 31 [306,736,345,776]; element at each cell centre is the day itself). Page bottom after scrolling to the end: the last Achievements row ends about 49 px above the screen bottom, no dead gap and no clipped button in en or hi (the two Log buttons stack in Hindi, both visible). Control: /dashboard still shows the coach button at x 318-374, y 676-732 (en 'Chat with Freya', hi 'Freya से बात करें'). The bundle's FAB allowlist array has no '/daily-focus'. Before/after pairs: images/2026-10-22-dffab/ (before-en, after-en, before-hi, after-hi). Note: an unrelated server (C:/tmp/g9/spa8082.cjs) holds port 8082, so the first run measured the old bundle; rerun on 8081 with the right bundle (index-WFQQJZkZ.js).",
+        "imagePath": "images/i-20261022-daily-focus-fab-overlap-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-daily-focus-fab-overlap-fix-r1.png",
+          "images/i-20261022-daily-focus-fab-overlap-fix-r1-2.png",
+          "images/i-20261022-daily-focus-fab-overlap-fix-r1-3.png",
+          "images/i-20261022-daily-focus-fab-overlap-fix-r1-4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d368c078b53913b88c0a8e814e70ac44bddcc362",
+        "imageCommits": [
+          "d368c078b53913b88c0a8e814e70ac44bddcc362",
+          "c2706ec73f9db099ecd4ad38be2f78fce4ecf447",
+          "fcfacf0a94759b9310a175b6dba640fa3c92b142",
+          "2b9081336e1924a4243d046228db5c09e3760d30"
+        ],
+        "fixedAt": "2026-10-22T06:36:14.116Z",
+        "by": "shakeebshaan",
+        "appCommit": "1eacfeef",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Original repro (coach button over day 24 at default scroll, en and hi) re-run on the fixed build: button absent, days readable, bottom clean, control route unchanged."
+        }
+      },
       "history": [
         {
           "at": "2026-10-22T06:11:57.455Z",
@@ -12655,7 +12683,17 @@
           "by": "qa"
         }
       ],
-      "description": "[P3 / layout] [Release 307 smoke follow-up, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, 390x844 @2x] On Daily Focus the floating coach button covers the calendar's right column at the default scroll, so day 24 is unreadable (only part of the '2' shows). Same class as i-20261021-fd-fab-overlap-faq and i-20261021-fab1. Executed in both languages: the button is at x 318-374, y 676-732; the day-24 cell is x 306-345, y 675-715 in English (27x39 px of the 39 px cell hidden, and day 31 loses 27x13 px more) and x 306-345, y 693-732 in Hindi (27x39 px, day 17 loses 27x13 px). Screenshots: Hindi (daily-focus-fab-hi.png, also the original s1-hi-daily-focus.png) and English (daily-focus-fab-en.png). Cause: '/daily-focus' is in the coach-button allowlist (src/lib/chrome-routes.ts line 94), and the calendar grid in src/pages/DailyFocus.tsx (generateCalendarGrid, line 165) has no right/bottom clearance for the button. Fix, either: (a) remove '/daily-focus' from the allowlist as was done for /faq (the page already has its own tap targets), or (b) keep the button and give the calendar right padding (>= 64 px at 390 px) plus bottom padding so no day cell sits under x 318-374 at any scroll. Check in en and hi after the change. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: the coach button (x 318-374, y 676-732) covers day 24 in English (27x39 px) and Hindi (27x39 px), plus day 31 / day 17 partly; chrome-routes.ts allowlist unchanged (open-en-dailyfocus.png, open-hi-dailyfocus.png)."
+      "description": "[P3 / layout] [Release 307 smoke follow-up, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, 390x844 @2x] On Daily Focus the floating coach button covers the calendar's right column at the default scroll, so day 24 is unreadable (only part of the '2' shows). Same class as i-20261021-fd-fab-overlap-faq and i-20261021-fab1. Executed in both languages: the button is at x 318-374, y 676-732; the day-24 cell is x 306-345, y 675-715 in English (27x39 px of the 39 px cell hidden, and day 31 loses 27x13 px more) and x 306-345, y 693-732 in Hindi (27x39 px, day 17 loses 27x13 px). Screenshots: Hindi (daily-focus-fab-hi.png, also the original s1-hi-daily-focus.png) and English (daily-focus-fab-en.png). Cause: '/daily-focus' is in the coach-button allowlist (src/lib/chrome-routes.ts line 94), and the calendar grid in src/pages/DailyFocus.tsx (generateCalendarGrid, line 165) has no right/bottom clearance for the button. Fix, either: (a) remove '/daily-focus' from the allowlist as was done for /faq (the page already has its own tap targets), or (b) keep the button and give the calendar right padding (>= 64 px at 390 px) plus bottom padding so no day cell sits under x 318-374 at any scroll. Check in en and hi after the change. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: the coach button (x 318-374, y 676-732) covers day 24 in English (27x39 px) and Hindi (27x39 px), plus day 31 / day 17 partly; chrome-routes.ts allowlist unchanged (open-en-dailyfocus.png, open-hi-dailyfocus.png).",
+      "thread": [
+        {
+          "at": "2026-10-22T06:36:14.116Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "VERIFIED 2026-10-22 on the prod web build of app 1eacfeef (C:/tmp/nyus-dffab/dist; QA account, prod reads, writes stubbed, 390x844 @2x, seeded Edge). /daily-focus: no coach button in English or Hindi (was x 318-374, y 676-732 covering day 24 by 27x39 px in both languages, plus day 31 in en and day 17 in hi). After: days 17, 24 and 31 are fully readable (cell rects en 17 [306,632,345,671], 24 [306,675,345,715], 31 [306,719,345,758]; hi 17 [306,649,345,689], 24 [306,693,345,732], 31 [306,736,345,776]; element at each cell centre is the day itself). Page bottom after scrolling to the end: the last Achievements row ends about 49 px above the screen bottom, no dead gap and no clipped button in en or hi (the two Log buttons stack in Hindi, both visible). Control: /dashboard still shows the coach button at x 318-374, y 676-732 (en 'Chat with Freya', hi 'Freya से बात करें'). The bundle's FAB allowlist array has no '/daily-focus'. Before/after pairs: images/2026-10-22-dffab/ (before-en, after-en, before-hi, after-hi). Note: an unrelated server (C:/tmp/g9/spa8082.cjs) holds port 8082, so the first run measured the old bundle; rerun on 8081 with the right bundle (index-WFQQJZkZ.js).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261022-ai-cache-stores-fallback",
