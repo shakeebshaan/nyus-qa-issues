@@ -12739,10 +12739,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "VERIFIED ON PROD 2026-10-22 06:37 UTC after nyu_backend 1a910b17 (deployed 06:34:19 UTC, VM HEAD 1a910b17, health 200). One run of C:/tmp/g9/postdeploy-mealedit-v2.mjs (QA account only, creates, edits and removes its own test meal): POST create 201, meal #500 foods 100+200 = 300 kcal, every macro AGREE; PUT totals only (360 kcal, 15 g protein) 200; read back #500: calories 360/360, protein 15/15, carbs 40/40, fat 10/10, foods [120,240] -> AGREE (rows scaled to the new totals, 100+200 -> 120+240); cleanup skip 200. Not exercised by me: meal 494 itself (it is skipped, so PUT answers 409 by design, per the NYUS employee's check) and the case where the app sends food rows (kept as sent, per the commit; not re-run).",
+        "imagePath": "images/i-20261022-meal-edit-stale-foods-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-meal-edit-stale-foods-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "033b6322868d6a80f269837db55578122ce93aff",
+        "imageCommits": [
+          "033b6322868d6a80f269837db55578122ce93aff"
+        ],
+        "fixedAt": "2026-10-22T06:38:01.777Z",
+        "by": "shakeebshaan",
+        "appCommit": "1a910b17",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Original repro (totals-only PUT leaves food rows stale) re-run on prod after deploy: rows follow the totals, all four macros agree, test meal removed."
+        }
+      },
       "history": [],
-      "description": "[P3 / data, executed 2026-10-22, QA account vs prod, nyu_backend 573232a9] Editing a meal's totals leaves its food rows stale. Repro: the app's meal edit sends PUT /api/v1/logs/meal/<id> with the new totals only (total_calories, total_protein, total_carbs, total_fat) and no food rows. The totals change but the stored food rows do not, so the meal disagrees with itself: QA account meal 494 'Biryani, Chicken' showed a total of 300 kcal while its food row was still 336 kcal (GET /api/v1/logs/daily/<date>, meal_logs[].total_calories vs sum of meal_logs[].foods[].calories). Anything that reads the rows (ingredient list, re-open for edit, per-food macros) then shows numbers that do not add up to the meal total. Expected: with totals and no food rows, the rows are scaled so they sum to the new totals; rows the app does send are kept as sent. Minimal repro on a clean meal: log a 2-food meal (100 + 200 kcal = 300), PUT totals only 360 kcal, read it back: the total says 360 and the rows still say 100 + 200."
+      "description": "[P3 / data, executed 2026-10-22, QA account vs prod, nyu_backend 573232a9] Editing a meal's totals leaves its food rows stale. Repro: the app's meal edit sends PUT /api/v1/logs/meal/<id> with the new totals only (total_calories, total_protein, total_carbs, total_fat) and no food rows. The totals change but the stored food rows do not, so the meal disagrees with itself: QA account meal 494 'Biryani, Chicken' showed a total of 300 kcal while its food row was still 336 kcal (GET /api/v1/logs/daily/<date>, meal_logs[].total_calories vs sum of meal_logs[].foods[].calories). Anything that reads the rows (ingredient list, re-open for edit, per-food macros) then shows numbers that do not add up to the meal total. Expected: with totals and no food rows, the rows are scaled so they sum to the new totals; rows the app does send are kept as sent. Minimal repro on a clean meal: log a 2-food meal (100 + 200 kcal = 300), PUT totals only 360 kcal, read it back: the total says 360 and the rows still say 100 + 200.",
+      "thread": [
+        {
+          "at": "2026-10-22T06:38:01.777Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "VERIFIED ON PROD 2026-10-22 06:37 UTC after nyu_backend 1a910b17 (deployed 06:34:19 UTC, VM HEAD 1a910b17, health 200). One run of C:/tmp/g9/postdeploy-mealedit-v2.mjs (QA account only, creates, edits and removes its own test meal): POST create 201, meal #500 foods 100+200 = 300 kcal, every macro AGREE; PUT totals only (360 kcal, 15 g protein) 200; read back #500: calories 360/360, protein 15/15, carbs 40/40, fat 10/10, foods [120,240] -> AGREE (rows scaled to the new totals, 100+200 -> 120+240); cleanup skip 200. Not exercised by me: meal 494 itself (it is skipped, so PUT answers 409 by design, per the NYUS employee's check) and the case where the app sends food rows (kept as sent, per the commit; not re-run).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     }
   ]
 }
