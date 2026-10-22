@@ -11527,6 +11527,27 @@
         "judge": null,
         "verifiedAt": "2026-10-22T15:59:08.280Z"
       }
+    },
+    {
+      "createdAt": "2026-10-22T16:04:48.365Z",
+      "author": "qa",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "id": "i-20261022-launch-calendar-qa",
+      "tags": [
+        "marketing",
+        "launch-calendar",
+        "draft-qa",
+        "p4"
+      ],
+      "route": "NYUSLANDING draft/launch-calendar-oct22 @ 61442e48, marketing/launch-calendar.md",
+      "description": "[QA of the 14-day launch calendar, 22 Oct: checks 1 and 2 PASS with one source note, check 3 PASS, check 4 PASS with one defect; two small defects to fix before day 1] DEFECT A (P4) marketing/launch-calendar.md:20, :21 and :32 (days 1, 2, 13) say the numbers come from \"page tdee-calculator\" / \"the page and script show the working\", and day 13's post sends readers to https://nyus.in/blog/tdee-calculator.html. That live page (200) has the Mifflin-St Jeor formula and the x1.375 activity factor but NOT the worked example (70 kg, 170 cm, 30 y, 1,617.5, 2,224): none of those numbers appear on it [executed, curl + text search]. The arithmetic itself is right (10x70 + 6.25x170 - 5x30 + 5 = 1,617.5; x 1.375 = 2,224). Fix: say \"formula and factors on the page, worked example in the script/post\", or point to a page that carries the example (the English twin how-many-calories-to-lose-weight-india-tdee.html has 1,617.5 but rounds to about 2,200). DEFECT B (P3) marketing/launch-calendar.md:30 (day 11 row) and :111-113 (day 11 copy): the fallback is \"V1 re-cut with the Hindi caption\", but every Hindi line is under the REVIEW FLAG and may not be posted before the native read (nyus-f84785), so the fallback is not postable if no creator posted. Give an English fallback caption in the day 11 block, and mark the creator copy at :111 \"ONLY IF a creator has said yes AND posted\" in the copy itself (today only the Note line at :113 says CONDITIONAL; the post text reads as fact). Nothing in the file says or implies a creator is signed (:30, :113 say none is, nyus-47acba). CHECK RESULTS [executed 22 Oct]: (1) all 6 distinct nyus.in URLs (waitlist, blog/tdee-calculator, best-ai-fitness-app-for-men-india, calories-in-fruits-apple-guava-papaya-orange-india, chicken-mein-kitna-protein-hindi-india, doodh-mein-kitni-calorie-protein-hindi-india) return 200 and are the pages the rows describe: the men page mentions 8,900+ foods, the fruit page has papaya 24 kcal and banana 105 kcal, the chicken page has 21.81, the milk page has 73 and 107 (the TDEE page is the DEFECT A caveat). (2) From the IFCT 2017 PDF, header-anchored: chicken breast N003 protein 21.81 g (p. 58), milk whole cow L002 305 kJ = 72.9 = 73 kcal and buffalo L001 449 kJ = 107.3 = 107 kcal (p. 57), papaya E049 100 kJ = 24 kcal (p. 51), banana ripe E012 440 kJ = 105 kcal (p. 49), ratio 4.4; Mifflin numbers and x1.375 = 2,224 recomputed; exercise catalog has 1,309 entries; 8,941 foods is the ledger count from 21 Oct (not re-counted by QA). (3) All 14 days: English copy and Hindi copy both end with the full end line (30-day free trial then Rs 499/month / ₹499/माह), 0 Play links in the file, every Hindi bullet carries the REVIEW FLAG, English and Hindi numbers agree, X posts are 240 / 266 / 275 characters (days 3, 8, 10). (4) See DEFECT B; the row has the fallback and states a creator must have said yes and posted."
     }
   ]
 }
