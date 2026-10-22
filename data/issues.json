@@ -1736,10 +1736,42 @@
         "a5d0587a866f1e24b8b8e83564f2f16bd596a236"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /connected-devices: 0 English UI lines (was 23 + 10 aria; left: brand names Health Connect / Google Fit and the session's OS value): the page had no t() at all, 90 keys now. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+        "imagePath": "images/i-20261021-hi-connected-devices-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-connected-devices-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e41139d9c2737cd3cbc0156570630f596917c5dd",
+        "imageCommits": [
+          "e41139d9c2737cd3cbc0156570630f596917c5dd"
+        ],
+        "fixedAt": "2026-10-22T02:11:24.557Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        }
+      },
       "history": [],
-      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars) although the file has ~30 t() calls (keys absent from hi.json): ConnectedDevices.tsx:418 'Health Connect runs on the Android app…', :546 'Sign out everywhere', :122 '12d ago'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /connected-devices. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/connected-devices.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /connected-devices in Hindi: 18 Devanagari characters, 18 English lines and 9 English aria labels. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /connected-devices in Hindi: 18 Devanagari characters (bottom nav), 23 English lines (\"Connected Devices\", \"Health Connect runs on the Android app. On the web preview these controls are read-only.\", \"SESSIONS\", \"This device\", \"Unknown · Active now\", \"Sign out\") and 10 English aria labels. Minimal repro: localStorage nyus_locale=hi, sign in, open /connected-devices."
+      "description": "[P2] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Screen fully English (0 Hindi chars) although the file has ~30 t() calls (keys absent from hi.json): ConnectedDevices.tsx:418 'Health Connect runs on the Android app…', :546 'Sign out everywhere', :122 '12d ago'. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /connected-devices. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/connected-devices.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /connected-devices in Hindi: 18 Devanagari characters, 18 English lines and 9 English aria labels. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /connected-devices in Hindi: 18 Devanagari characters (bottom nav), 23 English lines (\"Connected Devices\", \"Health Connect runs on the Android app. On the web preview these controls are read-only.\", \"SESSIONS\", \"This device\", \"Unknown · Active now\", \"Sign out\") and 10 English aria labels. Minimal repro: localStorage nyus_locale=hi, sign in, open /connected-devices.",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:24.557Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /connected-devices: 0 English UI lines (was 23 + 10 aria; left: brand names Health Connect / Google Fit and the session's OS value): the page had no t() at all, 90 keys now. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hi-faq",
