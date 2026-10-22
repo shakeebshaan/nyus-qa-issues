@@ -25048,6 +25048,881 @@
       ],
       "needsReview": false,
       "archivedAt": "2026-10-22T10:14:26.053Z"
+    },
+    {
+      "id": "i-20260728-e5b8",
+      "createdAt": "\"2026-07-28T14:27:30.000Z\"",
+      "route": "/social",
+      "description": "[bug-hunt] Social hub page: src/pages/Social.tsx has ZERO i18n hookup (no useTranslation import, no t() calls — verified: useTranslation=0, t()=0). EVERY visible string on the /social home screen is hardcoded English: the page title (\"Social\"), all 7 section rows (labels \"Friends\", \"Partners\", \"Messages\", \"Groups\", \"Challenges\", \"Leaderboard\", \"Activity feed\" + their subtitles \"Train together\", \"Direct chats with friends\", \"Train circles & crews\", \"Compete head-to-head\", \"See where you stand\", \"Latest from your circle\"), the hero (\"Your circle today\", \"Build your circle\", \"Add friends or start a partner group to train together.\", \"Open your partners hub and stay in sync.\"), quick actions (\"Find Friends\", \"Requests\"), \"My Friends\", \"You haven’t added any friends yet\", the Partners block (\"Partner groups\", \"Train together. Beat together.\", \"Create your first group\", \"Open Partners hub\", \"View all (N)\"), the Leaderboard scope tabs (\"Friends\"/\"Global\"), and aria-labels (\"Back to Social hub\", \"Go back\"). Expected: a Hindi/Hinglish user (startup language picker shipped) sees the Social hub in their language. Actual: the entire hub renders raw English. Same class as FIXED i-20260720-tr9i (Dashboard), i-20260717-rda1 (RecurringActivityStep), i-20260717-pf2a (ProfilePreferencesCard) per the owner 2026-07-07 translate-the-ENTIRE-app directive. Repro: switch app language to Hindi → open /social. Fix: route all literals through t() with defaultValue fallbacks + add keys across all 4 locale bundles (en/hi/hinglish/xx-AE) per the missing-keys parity guard. Related partial-coverage siblings on the same surface: FriendsLeaderboardView.tsx (3 t() calls, some hardcoded), Partners.tsx (4 t() calls).",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "i18n",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Social hub screen (Social.tsx) had zero i18n hookup, so every label, section row, hero line and aria-label rendered in English regardless of the app language. Fix: routed all of them through the translation system with Hindi/Hinglish/pseudo values added across all four locale bundles; the hub now renders fully in the selected language.",
+        "imagePath": "images/i-20260728-e5b8-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260728-e5b8-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a9bc48268bae6727aee1aff75dd2ba70de920259",
+        "imageCommits": [
+          "a9bc48268bae6727aee1aff75dd2ba70de920259"
+        ],
+        "fixedAt": "2026-07-28T15:41:13.634Z",
+        "by": "shakeebshaan",
+        "appCommit": "9933c974",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Hindi capture shows the whole hub (title, hero, all 7 rows + plural subtitles) in Devanagari; locale-parity + Social.page tests green."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /social home in Hindi: 0 English lines (89 Devanagari chars). Screenshot images/2026-10-22-oldqa/hi_social.png (board commit 434acdb6)."
+        }
+      ],
+      "thread": [
+        {
+          "at": "2026-07-28T15:41:13.634Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Social hub screen (Social.tsx) had zero i18n hookup, so every label, section row, hero line and aria-label rendered in English regardless of the app language. Fix: routed all of them through the translation system with Hindi/Hinglish/pseudo values added across all four locale bundles; the hub now renders fully in the selected language.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260728-c17a",
+      "createdAt": "\"2026-07-28T14:27:30.000Z\"",
+      "route": "/social",
+      "description": "[bug-hunt] Global Leaderboard: src/components/LeaderboardView.tsx has ZERO i18n hookup (no useTranslation import, no t() calls — verified: useTranslation=0, t()=0). Every control + label on the /social → Leaderboard → Global board is hardcoded English: the privacy card (\"Leaderboard visibility\", \"Your name and score are visible to others.\", \"You are hidden from public leaderboards.\"), scope tabs (\"Global\"/\"My Group\"), the 4 type buttons (\"Streak\", \"Weekly\", \"All Time\", \"PR\" + full labels \"Wellness Streak\", \"Weight Loss (Week)\", \"Weight Loss (All)\", \"Exercise PR\"), period chips (\"Weekly\"/\"Monthly\"/\"All Time\"), \"Your Rank\", loading/error states (\"Loading leaderboard...\", \"Error loading leaderboard\", \"Too many requests\", \"Please try again later\"), the rate-limit toast (\"Slow down\" / \"You’re checking the leaderboard a lot — try again in a minute.\"), privacy toasts (\"Now visible on leaderboards\" / \"Hidden from leaderboards\" / \"Couldn’t update privacy\"), empty states (\"No leaderboard data yet\", \"No group members on this board yet\", \"Complete workouts to build your streak.\"), the provenance footer (\"Showing {n} of {total} participants\") and the \"Anonymous\" name fallback. Expected vs actual: a Hindi/Hinglish user sees this whole board in raw English. Same accepted class as FIXED i-20260720-tr9i / rda1 / pf2a under the owner 2026-07-07 whole-app i18n directive. Repro: set app language to Hindi → /social → Leaderboard → Global. Fix: add useTranslation + t() with defaultValue fallbacks across all visible strings + keys in en/hi/hinglish/xx-AE.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "i18n",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Global Leaderboard (LeaderboardView.tsx) was entirely hardcoded English - the privacy card, scope/type/period tabs, Your Rank, the loading/error/empty states, the rate-limit toast and the participants footer. Fix: localized every string (with count-aware and interpolated variants) and added the keys to all four locale bundles, so a Hindi/Hinglish user sees the whole board translated.",
+        "imagePath": "images/i-20260728-c17a-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260728-c17a-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f000491bea223afb357a5b5c4b22e561f5217030",
+        "imageCommits": [
+          "f000491bea223afb357a5b5c4b22e561f5217030"
+        ],
+        "fixedAt": "2026-07-28T15:41:38.338Z",
+        "by": "shakeebshaan",
+        "appCommit": "9933c974",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Global board renders fully in Hindi (privacy/tabs/rank/kicker); byte-exact English defaults, locale-parity + LeaderboardView tests green."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. Social > Board > Global in Hindi: 0 English lines (231 Devanagari chars). Screenshot images/2026-10-22-oldqa/social-board.png (board commit 434acdb6)."
+        }
+      ],
+      "thread": [
+        {
+          "at": "2026-07-28T15:41:38.338Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Global Leaderboard (LeaderboardView.tsx) was entirely hardcoded English - the privacy card, scope/type/period tabs, Your Rank, the loading/error/empty states, the rate-limit toast and the participants footer. Fix: localized every string (with count-aware and interpolated variants) and added the keys to all four locale bundles, so a Hindi/Hinglish user sees the whole board translated.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Weekly Review screen was almost entirely hardcoded English (section pills, stat labels, insights, proposed changes, reflection card, toasts) and ignored the app language. Fix: routed the whole screen and its child cards through t() with hi/hinglish/xx-AE bundles. Proof: the screen now renders in Hindi (सप्ताह 14 समीक्षा, ओवरव्यू/इनसाइट्स/प्लान बदलाव, औसत कैलोरी/प्रोटीन, वज़न में बदलाव).",
+        "imagePath": "images/i-20260810-c4e1-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260810-c4e1-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "542212f971f032e36bb80b6ef2ca2b3a6b557116",
+        "imageCommits": [
+          "542212f971f032e36bb80b6ef2ca2b3a6b557116"
+        ],
+        "fixedAt": "2026-08-11T08:01:50.581Z",
+        "by": "shakeebshaan",
+        "appCommit": "2b7fc27f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Full Hindi capture of the whole screen; 58 keys present across 4 bundles, no raw literals."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /weekly-review in Hindi: 0 English lines (199 Devanagari chars). Screenshot images/2026-10-22-oldqa/hi_weekly-review.png (board commit 434acdb6)."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-10T11:22:46.871Z",
+      "id": "i-20260810-c4e1",
+      "route": "/weekly-review",
+      "description": "[bug-hunt] Weekly Review screen (src/pages/WeeklyReviewScreen.tsx) is almost entirely UN-TRANSLATED: it imports useTranslation but calls t() ONLY inside ComplianceVerdict (tier word + \"Weekly compliance\" kicker). Every other string on this fully-shipped ProtectedRoute (App.tsx:800) is hardcoded English and ignores the selected app language (EN/Hindi/Hinglish/xx-AE): the section pills Overview/Insights/Plan Changes (SECTION_LABELS line ~145), \"THIS WEEK\", \"workouts\", Avg calories/Avg protein/Meals/Steps/Water/Sleep/Supplements labels, \"Weight change\", \"AI Insights\" + \"Patterns detected from your week data\", \"Proposed Changes\" + \"Select which changes to apply for next week\", \"At a glance\", the ExpandableInsight Read more/Show less toggle (line ~104), both swipe hints, the entire ReflectionPrompt card (\"What did you learn this week?\", the placeholder, \"Save reflection\", and all toasts), the ReviewedSummary read-only card (\"Changes applied\"/\"Plan kept as-is\"/\"Discuss\"/\"Back to dashboard\"), and the AcceptChangesFlow controls + toasts (\"Approve All Changes\"/\"Keep Current\"/\"Select all\"/\"Changes applied\"/\"Couldnt save\"). The child WeeklyInsightCard (src/components/review/WeeklyInsightCard.tsx) pattern labels (Progress/Consistency/Recovery/...) are also hardcoded. Expected: all render via t() with hi/hinglish/xx-AE bundles. Actual: English only. Repro: switch app language to Hindi, open /weekly-review -> whole screen stays English. Same i18n class as fixed b4f2 / 5e2c / c1e9 / 3b9d, but a distinct never-migrated screen.",
+      "thread": [
+        {
+          "at": "2026-08-11T08:01:50.581Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Weekly Review screen was almost entirely hardcoded English (section pills, stat labels, insights, proposed changes, reflection card, toasts) and ignored the app language. Fix: routed the whole screen and its child cards through t() with hi/hinglish/xx-AE bundles. Proof: the screen now renders in Hindi (सप्ताह 14 समीक्षा, ओवरव्यू/इनसाइट्स/प्लान बदलाव, औसत कैलोरी/प्रोटीन, वज़न में बदलाव).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260804-5e2c",
+      "createdAt": "2026-08-04T09:52:20.921Z",
+      "status": "fixed",
+      "route": "/health-score",
+      "description": "[bug-hunt] Health Score surface renders 100% HARDCODED English, ignoring the selected app language. No useTranslation() anywhere across the whole surface (grep of HealthScore*/healthScore*/HealthQuiz* returns zero i18n).\n\nAffected (all ProtectedRoute, reachable to every logged-in user):\n- /health-score page (src/pages/HealthScore.tsx): 'Health Score', 'Pillar breakdown', 'Recent trend', 'What changed', 'Last updated N min ago', 'since last check', 'Retake quiz' / 'Retake quiz (recommended)', 'Composite of 6 pillars ... Recomputes nightly ...', and the empty/error/computing states ('No score yet', 'Take the quiz', 'Calculating your score...', 'Check back shortly', \"Couldn't load your score\", 'Retry').\n- /health-quiz flow (src/pages/health-quiz/HealthQuizFlow.tsx): header 'Health Score' / 'Refresh Health Score', BACK/NEXT/FINISH/SAVING..., exit dialog 'Leave the health quiz?' / 'Your answers are saved as a draft.' / Stay / Leave, and ALL 23 question prompts + every option label in src/lib/healthScoreQuestions.ts, plus section labels Eat/Lifestyle/Mind/Exercise.\n- post-quiz reveal (src/pages/health-quiz/HealthScoreReveal.tsx): 'Your baseline', tier advice, 'See trend & history'.\n- shared TIER_META labels+advice and PILLAR_LABELS in src/services/healthScore.service.ts: tiers Critical/At Risk/Moderate/Good/Strong/Elite and pillars Nutrition/Activity/Body/Recovery/Consistency/Lifestyle.\n\nExpected: with app language = Hindi / Hinglish / xx-AE, this surface localizes like the already-fixed sibling surfaces. Actual: every string stays English regardless of language.\n\nRepro: set language to Hindi in the startup language picker -> Profile -> (Body section) 'Health Score' row (ProfileBodySection.tsx:71) -> /health-score -> tap 'Take the quiz'. All copy renders in English.\n\nSame i18n class as the fixed e5b8/c17a/b4f2/3b9d/c1e9/3c18 cards; distinct never-migrated surface. NOTE: src/components/dashboard/HealthScoreCard.tsx is DEAD code (imported nowhere) so the live entry point is the /health-score page, not the card.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto",
+        "i18n"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": {
+        "description": "Root cause: Health Score surface (HealthScore.tsx, HealthQuizFlow.tsx, HealthScoreReveal.tsx, trend chart) shipped 100% hardcoded English with zero useTranslation(). Fix (e3b88293): hooked every user-facing string through t() with EN defaults across healthScore+healthQuiz namespaces (124 keys x4 bundles en/hi/hinglish/xx-AE full parity) — page states, pillar labels/weights, trend, retake CTA, all 23 quiz prompts+options, exit dialog, ARIA. Proof: /health-score renders fully in Hindi.",
+        "imagePath": "images/i-20260804-5e2c-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-5e2c-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "75fe1b7e6a559021864c6617e74e2d6b6bc029fb",
+        "imageCommits": [
+          "75fe1b7e6a559021864c6617e74e2d6b6bc029fb"
+        ],
+        "fixedAt": "2026-08-04T17:41:59.730Z",
+        "by": "shakeebshaan",
+        "appCommit": "0aca6dcb",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Committed+pushed fix, full unit gate EXIT=0, Hindi proof PNG confirms every string localized."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /health-score in Hindi: 0 English lines. Screenshot images/2026-10-22-oldqa/hi_health-score.png (board commit 434acdb6)."
+        }
+      ],
+      "thread": [
+        {
+          "at": "2026-08-04T17:41:59.730Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: Health Score surface (HealthScore.tsx, HealthQuizFlow.tsx, HealthScoreReveal.tsx, trend chart) shipped 100% hardcoded English with zero useTranslation(). Fix (e3b88293): hooked every user-facing string through t() with EN defaults across healthScore+healthQuiz namespaces (124 keys x4 bundles en/hi/hinglish/xx-AE full parity) — page states, pillar labels/weights, trend, retake CTA, all 23 quiz prompts+options, exit dialog, ARIA. Proof: /health-score renders fully in Hindi.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Body Fat Estimator page had zero i18n hookup, so every label stayed English even when the app language was Hindi or Hinglish. Fix: wired translation across the entire screen — header, the six body-fat range cards and descriptions, the calculator, all inputs/hints/tooltips, the result card, coaching insights, the gender-switch dialog, toasts, and the evidence note — and added those strings to all four language bundles (proper nouns like Katch-McArdle kept as-is). Switching the app to Hindi now renders the whole page in Hindi with no English left over.",
+        "imagePath": "images/i-20260809-4ccd-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260809-4ccd-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "7e15f07868ca1e9ba2ca516de90c9c4d83af2d8e",
+        "imageCommits": [
+          "7e15f07868ca1e9ba2ca516de90c9c4d83af2d8e"
+        ],
+        "fixedAt": "2026-08-10T01:59:29.537Z",
+        "by": "shakeebshaan",
+        "appCommit": "5c108a56",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Live Hindi render shows full Devanagari with ENGLISH_LEAKS: NONE; 145 i18n guard + 56 BodyFatEstimator tests green; 4-bundle parity preserved (3186 keys each)."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /body-fat-estimator in Hindi: 0 English lines (624 Devanagari chars). Screenshot images/2026-10-22-oldqa/hi_body-fat-estimator.png (board commit 434acdb6)."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-09T16:39:32.863Z",
+      "id": "i-20260809-4ccd",
+      "route": "/body-fat-estimator",
+      "description": "[bug-hunt] Body Fat Estimator page (/body-fat-estimator, src/pages/BodyFatEstimator.tsx) has ZERO i18n hookup — no useTranslation / t() call anywhere in the file; every user-facing string is a hardcoded English literal, so it never localizes to Hindi/Hinglish. Affected strings: header ('Body Fat Estimator', 'Visual estimate or Navy method calculation'), 'Visual Reference', Male/Female toggle, all six BF-range names + descriptions (MALE_RANGES/FEMALE_RANGES: Very lean/Athletic/Fit/Average/Above average/Higher, lines 43-59), 'Calculator' / 'Navy method or Katch-McArdle BMR', the Navy/Katch tab labels, every InputField label+hint+placeholder+tooltip, 'Calculate Body Fat' / 'Calculate BMR', result card ('Your Estimate', 'estimated body fat', method labels, 'Save to Profile' / 'Saved to Profile' / 'Saving...'), all goalInsight sentences, all toasts (Missing measurements / Check measurements / Hip measurement needed / Add your height first / Invalid body fat % / Body fat saved / Save failed), the gender-switch AlertDialog (title/description/Cancel/Continue), and the evidence footnote. Reachable via ProtectedRoute (App.tsx:811), linked from BodyComposition.tsx:556 and the FloatingCoachButton allowlist. Same never-migrated i18n class as fixed i-20260804-b4f2 (BodyComposition), c1e9, 3b9d, 020c, d1f7, e2a4 — distinct untranslated page. REPRO: set app language to Hindi -> open /body-fat-estimator -> entire page stays English.",
+      "thread": [
+        {
+          "at": "2026-08-10T01:59:29.537Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the Body Fat Estimator page had zero i18n hookup, so every label stayed English even when the app language was Hindi or Hinglish. Fix: wired translation across the entire screen — header, the six body-fat range cards and descriptions, the calculator, all inputs/hints/tooltips, the result card, coaching insights, the gender-switch dialog, toasts, and the evidence note — and added those strings to all four language bundles (proper nouns like Katch-McArdle kept as-is). Switching the app to Hindi now renders the whole page in Hindi with no English left over.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260804-b4f2",
+      "createdAt": "2026-08-04T02:23:54.285Z",
+      "route": "/body-composition",
+      "description": "[bug-hunt] Body Composition page (/body-composition, src/pages/BodyComposition.tsx) has ZERO i18n hookup — no useTranslation import, no t() call anywhere; every user-facing string is a hardcoded English literal. Same i18n class as fixed e5b8/c17a/d24e/3b9d and open 3c18/c1e9, but a DISTINCT never-migrated page. Reachable by ALL authenticated users (ProtectedRoute, App.tsx:804); linked from Log Weight (src/pages/LogWeight.tsx) and the Profile Body section (src/pages/_components/profile/ProfileBodySection.tsx).\n\nHardcoded strings (all English, no t()):\n- Header \"Body Composition\" + subtitle \"Estimated from your profile, weight, and plan\" (L587-588).\n- Empty state: \"Need profile data\" / \"Log your weight and complete your profile (height, age, gender)...\" / \"Log Weight\" button (L256-264).\n- Hero \"Fitness Age\" (L390) + all three sentence variants \"Your fitness age is N years below/above your real age...\" (L398-402) + \"Estimated from VO2max model. Nes et al. 2013.\" (L404).\n- Sub-group titles \"Mass\" / \"Composition\" / \"Metabolism\" (L409/414/419); \"Derived Insights\" + \"8 metrics\" + \"Show\"/\"Hide\" (L435-439).\n- Every metric label: Weight, BMI, Bone Mass, Body Fat, Subcutaneous Fat, Visceral Fat, Muscle Rate, BMR, Body Water, Metabolic Age, Lean Body Mass, Fat Mass, FFMI, VO2 Max, TDEE, Protein Need, Water Need, Goal (L276-513) + every tooltip string.\n- Category/badge helpers all return English: bmiCategory \"Underweight/Normal/Overweight/Obese\" (L99-102); bodyFatBadge \"Essential/Athletic/Fit/Average/High\" (L801-814); visceral \"Normal/High/Very High\" (L327); metabolic-age \"Younger/Older/On par\" (L365).\n- \"Discuss all metrics with Coach\" CTA + subtitle (L544-545); footnote \"Estimates use peer-reviewed equations...\" + \"Body Fat Estimator\" link (L556-565).\n\nRepro: Profile -> App language -> Hindi (or pick Hindi at the startup language picker). Navigate to /body-composition (from Log Weight, or Profile -> Body). Entire screen renders in English.\nExpected: all strings localized via t() across en/hi/hinglish/xx-AE; badge/category helper functions resolve their labels through t() too.\nActual: file imports no i18n (useTranslation/react-i18next absent); 0 t() calls.\nFix: add useTranslation, move literals to a bodyComposition.* key namespace in all 4 bundles, and route bmiCategory/bodyFatBadge/visceral/metabolic-age labels through t().",
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: src/pages/BodyComposition.tsx had zero i18n — no useTranslation, every user-facing string a hardcoded English literal, so /body-composition rendered English regardless of app language. Fix: added useTranslation and moved all chrome (header+subtitle, empty state, Fitness Age hero + 3 age-delta variants + VO2max source, Mass/Composition/Metabolism group titles, Derived Insights + count + Show/Hide, every metric label+tooltip, coach CTA, footnote+Body Fat Estimator link) to a bodyComposition.* key tree across en/hi/hinglish/xx-AE at parity; bmiCategory/bodyFatBadge/visceral/metabolic-age labels resolve through t() at the consumer with byte-exact English defaultValue fallbacks (coach-prompt strings stay English — backend LLM). Proof: full-screen /body-composition rendered in Hindi (शरीर संरचना, फ़िटनेस उम्र hero with interpolated age/delta, द्रव्यमान/संरचना groups, वज़न/BMI/हड्डी द्रव्यमान/शरीर वसा labels, मोटापा/सामान्य/उच्च badges). i18n parity+pseudo+hardcoded suites green; BodyComposition page/wave4/summary tests green; full test:unit gate all 10 shards passed.",
+        "imagePath": "images/i-20260804-b4f2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-b4f2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "792c961ee4b4280713e5e010d02bc42bf85d0db7",
+        "imageCommits": [
+          "792c961ee4b4280713e5e010d02bc42bf85d0db7"
+        ],
+        "fixedAt": "2026-08-04T05:56:52.248Z",
+        "by": "shakeebshaan",
+        "appCommit": "d8aee0aa",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Complete migration verified end-to-end: 4-bundle parity (0 missing/extra), placeholders preserved, helper labels routed through t(), rendered live in Hindi, full unit gate green (10/10 shards EXIT=0)."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /body-composition in Hindi: only the terms BMI, BMR and the unit kcal are Latin. Screenshot images/2026-10-22-oldqa/hi_body-composition.png (board commit 434acdb6)."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "thread": [
+        {
+          "at": "2026-08-04T05:56:52.248Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: src/pages/BodyComposition.tsx had zero i18n — no useTranslation, every user-facing string a hardcoded English literal, so /body-composition rendered English regardless of app language. Fix: added useTranslation and moved all chrome (header+subtitle, empty state, Fitness Age hero + 3 age-delta variants + VO2max source, Mass/Composition/Metabolism group titles, Derived Insights + count + Show/Hide, every metric label+tooltip, coach CTA, footnote+Body Fat Estimator link) to a bodyComposition.* key tree across en/hi/hinglish/xx-AE at parity; bmiCategory/bodyFatBadge/visceral/metabolic-age labels resolve through t() at the consumer with byte-exact English defaultValue fallbacks (coach-prompt strings stay English — backend LLM). Proof: full-screen /body-composition rendered in Hindi (शरीर संरचना, फ़िटनेस उम्र hero with interpolated age/delta, द्रव्यमान/संरचना groups, वज़न/BMI/हड्डी द्रव्यमान/शरीर वसा labels, मोटापा/सामान्य/उच्च badges). i18n parity+pseudo+hardcoded suites green; BodyComposition page/wave4/summary tests green; full test:unit gate all 10 shards passed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260803-c1e9",
+      "createdAt": "2026-08-03T19:36:51.809Z",
+      "route": "/goal-change",
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Change Goal wizard (GoalChangeWizard.tsx) had ZERO i18n hookup — no useTranslation/t() anywhere. Fix: full i18n hookup — every user-facing string moved to goal_change.* keys across en/hi/hinglish/xx-AE, Devanagari-pinned in tests. Proof shows wizard fully in Hindi (लक्ष्य बदलें, नया लक्ष्य, मसल गेन...).",
+        "imagePath": "images/i-20260803-c1e9-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-c1e9-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ab5d8b94cd1bb906ada92c441089072167c8da2b",
+        "imageCommits": [
+          "ab5d8b94cd1bb906ada92c441089072167c8da2b"
+        ],
+        "fixedAt": "2026-08-04T04:06:42.828Z",
+        "by": "shakeebshaan",
+        "appCommit": "81a0c360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Full i18n verified in code + key parity tests (dcf8ad13); proof PNG renders wizard in Hindi; unit gate green."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /goal-change in Hindi: 0 English lines (284 Devanagari chars). Screenshot images/2026-10-22-oldqa/hi_goal-change.png (board commit 434acdb6)."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "description": "[bug-hunt] Change Goal wizard (/goal-change, src/pages/GoalChangeWizard.tsx) has ZERO i18n hookup — no useTranslation / t() anywhere (grep count = 0). Every user-facing string is hardcoded English: header Change Goal; step labels [New Goal, Body Stats, Preferences, Preview]; What is your new goal?; all 5 GOAL labels+descriptions (Fat Loss / Muscle Gain / Body Recomp / Maintenance / Endurance); Updated body stats, Current Weight, Goal Weight, Activity Level + 5 ACTIVITY_LEVELS labels/descriptions; Diet preferences + DIET_TYPES labels; the carry-over note; Here is your new plan; macro-row labels (Daily Calories/Protein/Carbs/Fat); Plan Details / BMR / TDEE / Weekly weight target / Plan duration; the Set your weights first, Preview failed and Goal updated toasts; and the empty/error screens. Under a Hindi/Hinglish locale the whole wizard renders in English. Expected: strings resolve via t() with keys in en/hi/hinglish/xx-AE bundles (per the translate-the-entire-app directive). Actual: hardcoded English. Same class as filed+fixed e5b8 (Social) / c17a (Leaderboard) / d24e (PartnerGroupHub) / 3b9d (NotificationPreferences) but a distinct, never-migrated route.",
+      "thread": [
+        {
+          "at": "2026-08-04T04:06:42.828Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: Change Goal wizard (GoalChangeWizard.tsx) had ZERO i18n hookup — no useTranslation/t() anywhere. Fix: full i18n hookup — every user-facing string moved to goal_change.* keys across en/hi/hinglish/xx-AE, Devanagari-pinned in tests. Proof shows wizard fully in Hindi (लक्ष्य बदलें, नया लक्ष्य, मसल गेन...).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260803-3b9d",
+      "createdAt": "2026-08-03T18:08:14.585Z",
+      "status": "fixed",
+      "route": "/notification-preferences",
+      "description": "[bug-hunt] Notification Settings page (/notification-preferences) is almost entirely UN-TRANSLATED: only the \"Coach check-ins\" card calls t(); every other string is a hardcoded English literal, so a Hindi / Hinglish / xx-AE user sees a mixed-language screen.\n\nExpected: all user-facing strings localized via t(), like the sibling coach_checkins block and the rest of the app under the i18n directive.\n\nActual: src/pages/NotificationPreferences.tsx renders raw English for: header \"Notification Settings\" (L256, L281); global toggle \"Push Notifications\" / \"Enable all push notifications\" (L352-353); all 5 CATEGORIES labels+descs (defined L54-59, rendered raw at L442-443 -> Workout Reminders / Meal Reminders / Progress Updates / Social / Tips & Offers); \"Categories\" kicker (L435); \"Quiet Hours\" / \"No push during sleep\" (L463-464); \"From\" / \"To\" (L480, L492); \"Weekly Limit\" / \"Max scheduled notifications per week\" (L511-512); FREQUENCY_OPTIONS labels \"1/week\"..\"5/week\" (L62-65); auto-paused + device-permission banners (L304-338); every toast (L84-103, L135); and all aria-labels (L359, L449, L459, L471, ...).\n\nRoot cause: partial i18n migration. The notification_prefs i18n namespace exists in all 4 bundles (en/hi/hinglish/xx-AE) but contains ONLY coach_checkins.* keys -- verified Object.keys(en.notification_prefs) === [\"coach_checkins\"]. The categories/header/quiet-hours/frequency/banner/toast strings were never added and their call sites were never wired to t(). Same class as i-20260727-mac9 / i-20260727-hyd8 (profile), i-20260803-pf6i, i-20260717-e5f1.\n\nRepro: switch app language to Hindi (Profile -> language) -> open Profile -> Notification Settings (/notification-preferences). The \"Coach check-ins\" card renders in Hindi; the header, all 5 category rows, Quiet Hours, and Weekly Limit stay in English.\n\nFix: add notification_prefs.* keys (header, global toggle, categories, quiet_hours, frequency, banners, toasts, aria) to all 4 bundles and replace the hardcoded literals with t(); move the CATEGORIES / FREQUENCY_OPTIONS label+desc strings to key references resolved at render.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": {
+        "description": "Root cause: Notification Settings page (/notification-preferences) was almost entirely un-translated; only the Coach check-ins card called t(). Fix: added useTranslation and moved every string (header, pause banner, push toggle, all category cards + descriptions) to i18n keys across en/hi/hinglish/xx-AE (NotificationPreferences.tsx, 51 t() calls). Proof shows full Hindi render.",
+        "imagePath": "images/i-20260803-3b9d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-3b9d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "acfec4135c50f55e5d7e3a9ab8a4b389387b7e98",
+        "imageCommits": [
+          "acfec4135c50f55e5d7e3a9ab8a4b389387b7e98"
+        ],
+        "fixedAt": "2026-08-04T04:06:08.380Z",
+        "by": "shakeebshaan",
+        "appCommit": "81a0c360",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Full i18n hookup verified (51 t() calls); proof PNG renders entire page in Hindi; unit gate green."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /notification-preferences in Hindi: 0 English lines (433 Devanagari chars). Screenshot images/2026-10-22-oldqa/hi_notification-preferences.png (board commit 434acdb6)."
+        }
+      ],
+      "thread": [
+        {
+          "at": "2026-08-04T04:06:08.380Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: Notification Settings page (/notification-preferences) was almost entirely un-translated; only the Coach check-ins card called t(). Fix: added useTranslation and moved every string (header, pause banner, push toggle, all category cards + descriptions) to i18n keys across en/hi/hinglish/xx-AE (NotificationPreferences.tsx, 51 t() calls). Proof shows full Hindi render.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "status": "fixed",
+      "fix": {
+        "description": "WaterTrackerCard now reads every string through useTranslation() in all four locales: title, tank subline, the L readout, the Glass/Bottle/Large chips plus the custom '{ml} ml' size, the Add button, the Profile-Hydration footer and all four aria-labels. BASE_CONTAINERS is module-level so t() cannot run there; fixed sizes now carry a labelKey resolved at render. The readout bolds the current value in a nested span, so the visual pieces are aria-hidden and the whole localized phrase is exposed once via aria-label. Screenshot is /dev/i18n-surfaces?lng=hi (new dev harness) rather than /nutrition: the QA account has no diet plan, so the real page shows an empty state and the card never mounts - a Hindi capture there contains no English and proves nothing. The harness asserts the component is MOUNTED before judging language, and the en control still shows the English literals.",
+        "imagePath": "images/i-20260804-d1f7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-d1f7-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d98d6afe49ab7728873eb874e002ce0ba4aca50f",
+        "imageCommits": [
+          "d98d6afe49ab7728873eb874e002ce0ba4aca50f"
+        ],
+        "fixedAt": "2026-08-06T12:23:35.540Z",
+        "by": "shakeebshaan",
+        "appCommit": "c2158a27",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Every literal named in the report is localized across all 4 locales and proven by three independent layers: locale-parity Devanagari pins, rendered-output component tests (mutation-verified - restoring one English literal fails the matching assertion), and a mounted-component screenshot in Hindi with an English control run. Not 100 because the capture is a dev harness rather than the live /nutrition page - the QA account has no diet plan so the card cannot mount there, which is a QA-data gap, not a fix gap."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /nutrition in Hindi: no English app string on the page (only food names, kcal and units); water card is Hindi. Screenshot images/2026-10-22-oldqa/hi_nutrition.png (board commit 434acdb6)."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-04T22:38:31.145Z",
+      "id": "i-20260804-d1f7",
+      "route": "/nutrition",
+      "description": "[bug-hunt] Water tracker card renders 100% HARDCODED English, ignoring the selected app language. src/components/nutrition/WaterTrackerCard.tsx has NO useTranslation hook — every string is an English literal: the \"Water\" title (l181), the tank subline \"Goal reached — nicely done\" / \"{L} L to go\" (l85-87), the \"{value} / {goal} L\" readout (l183-186), the container-picker labels \"Glass\"/\"Bottle\"/\"Large\" (BASE_CONTAINERS l53-57) and the \"{ml} ml\" custom label, the \"Add {ml} ml\" button (l277), the footer \"Adjust container sizes & your daily goal in Profile · Hydration\" (l281), plus every aria-label (\"Water intake\" l196, \"Container size\" l233, \"Add {ml} ml of water\" l273, \"Remove the selected amount of water\" l265). Same i18n-gap class as fixed b4f2/5e2c/3b9d/c1e9/3c18 but a DISTINCT never-migrated component. Reachable live: NutritionTodayView.tsx:219 mounts <WaterTrackerCard> on /nutrition for any user with an active diet plan. Expected: all copy + aria localized via t(). Actual: stays English in Hindi/Hinglish/xx-AE. Repro: set app language to Hindi (startup picker or Profile → Language) → open /nutrition (plan account) → scroll to the water tracker below the meal list → every label above is still English.",
+      "thread": [
+        {
+          "at": "2026-08-06T12:23:35.540Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "WaterTrackerCard now reads every string through useTranslation() in all four locales: title, tank subline, the L readout, the Glass/Bottle/Large chips plus the custom '{ml} ml' size, the Add button, the Profile-Hydration footer and all four aria-labels. BASE_CONTAINERS is module-level so t() cannot run there; fixed sizes now carry a labelKey resolved at render. The readout bolds the current value in a nested span, so the visual pieces are aria-hidden and the whole localized phrase is exposed once via aria-label. Screenshot is /dev/i18n-surfaces?lng=hi (new dev harness) rather than /nutrition: the QA account has no diet plan, so the real page shows an empty state and the card never mounts - a Hindi capture there contains no English and proves nothing. The harness asserts the component is MOUNTED before judging language, and the en control still shows the English literals.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "status": "fixed",
+      "fix": {
+        "description": "CalorieBalanceRing now reads its copy through useTranslation() in all four locales: the surplus/deficit directional label, the 'kcal {label}' ring caption, the Intake/Target/Burned breakdown headers and the aria-label. Units still honour imperial per d7b3. Screenshot is /dev/i18n-surfaces?lng=hi - on the live /weekly-progress the QA account has no meal plan so the Week-Plate section renders empty and the ring never mounts, which would make a Hindi capture there meaningless. Root-cause note beyond the string fix: this component lives at src/components/CalorieBalanceRing.tsx, outside the src/components/progress/** glob that body-progress watched, so impact-check reported 'no affected flows' whenever it changed - it is now listed explicitly in the impact map so future edits force a re-capture.",
+        "imagePath": "images/i-20260804-e2a4-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260804-e2a4-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "bf3e5e91aab5ca37a0613d3b60f742babda7d02b",
+        "imageCommits": [
+          "bf3e5e91aab5ca37a0613d3b60f742babda7d02b"
+        ],
+        "fixedAt": "2026-08-06T12:24:05.480Z",
+        "by": "shakeebshaan",
+        "appCommit": "c2158a27",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "All four reported literals (surplus/deficit, the kcal caption, Intake/Target/Burned, and the aria-label) are localized across 4 locales, proven by locale-parity pins, mutation-verified rendered-output tests, and a mounted-component Hindi screenshot with an English control. Also closed the process gap that let this ship: CalorieBalanceRing.tsx sits at the components root and slipped the src/components/progress/** glob, so impact-check reported 'no affected flows' for edits to it. Not 100 for the same dev-harness-vs-live-page reason as its sibling d1f7."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /weekly-progress in Hindi: 0 English lines, calorie ring labels in Hindi. Screenshot images/2026-10-22-oldqa/hi_weekly-progress.png (board commit 434acdb6)."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "createdAt": "2026-08-04T22:38:31.145Z",
+      "id": "i-20260804-e2a4",
+      "route": "/weekly-progress",
+      "description": "[bug-hunt] Calorie Balance ring renders HARDCODED English, ignoring the selected app language. src/components/CalorieBalanceRing.tsx has NO useTranslation hook — the directional label \"surplus\"/\"deficit\" (l57), the ring-center caption \"kcal {label}\" (l106-108), the breakdown column headers \"Intake\"/\"Target\"/\"Burned\" (l115/121/127), and the aria-label \"Calorie balance: {n} kcal {label}\" (l67) are all English literals. Same i18n-gap class as fixed d7b3/0473/b4f2 on the same page but a DISTINCT never-migrated component. Reachable live: WeeklyProgress.tsx:926 mounts <CalorieBalanceRing> in the Week-Plate section on /weekly-progress. Expected: label/caption/headers/aria localized via t() (units still honor imperial per d7b3). Actual: stays English in Hindi/Hinglish/xx-AE. Repro: set app language to Hindi → open /weekly-progress → the calorie ring center reads \"surplus/deficit\" + \"kcal\" and the 3-column breakdown reads \"Intake / Target / Burned\" in English.",
+      "thread": [
+        {
+          "at": "2026-08-06T12:24:05.480Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "CalorieBalanceRing now reads its copy through useTranslation() in all four locales: the surplus/deficit directional label, the 'kcal {label}' ring caption, the Intake/Target/Burned breakdown headers and the aria-label. Units still honour imperial per d7b3. Screenshot is /dev/i18n-surfaces?lng=hi - on the live /weekly-progress the QA account has no meal plan so the Week-Plate section renders empty and the ring never mounts, which would make a Hindi capture there meaningless. Root-cause note beyond the string fix: this component lives at src/components/CalorieBalanceRing.tsx, outside the src/components/progress/** glob that body-progress watched, so impact-check reported 'no affected flows' whenever it changed - it is now listed explicitly in the impact map so future edits force a re-capture.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260720-tr9i",
+      "createdAt": "2026-07-20T00:00:00.000Z",
+      "route": "/dashboard",
+      "description": "[bug-hunt] Dashboard: src/pages/Dashboard.tsx and src/components/TrialBanner.tsx have ZERO i18n hookup (no useTranslation import, no t() calls) — every string is hardcoded English, including all rendered by TrialBanner (\"Trial · {days}d left\", \"Your free trial ends in {days}\", \"Keep your coach, plans and progress. Choose a plan to continue.\", \"See plans\") and Dashboard.tsx's own literals. This contradicts the owner's 2026-07-07 i18n directive (translate the ENTIRE app across EN/Hindi/Hinglish) — a Hindi/Hinglish user hits raw English on the app's own home screen and on the trial-ending nudge (the exact moment you want them to convert). Contrast: most sibling cards in src/pages/_components/dashboard/*.tsx (CoachIntakeCard, CyclePhaseCard, DashboardActivityCard, DashboardDietCard, DashboardErrorBanner, DashboardHeader, DashboardMissingPlanBanner, DashboardWeightCard, SleepLogPrompt, SupplementsCard) DO use useTranslation already, so this is a genuine two-file gap, not a stale system-wide TODO. Scope: adding useTranslation + t() calls to Dashboard.tsx (large orchestrator file, many literals) and TrialBanner.tsx, plus new keys across the 4 locale bundles (en/hi/hinglish/xx-AE) per the missing-keys-audit parity guard — too large for a single bounded fix in this tick, filing for the i18n rollout track.",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "i18n",
+        "dashboard"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Dashboard.tsx and TrialBanner.tsx shipped with zero i18n hookup - every string, including the trial-ending nudge, was hardcoded English, so Hindi/Hinglish users hit raw English on the app's home screen. Fix: routed all visible text and aria-labels through t(), added keys across all 4 locale bundles (en/hi/hinglish/xx-AE) with _one/_other plural forms for day counts, and localized the 4 remaining section-landmark aria-labels the first pass missed. Screenshot: the full dashboard AND the trial-ending banner now render in Hindi.",
+        "imagePath": "images/i-20260720-tr9i-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260720-tr9i-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9a05299e6d398a56bd26b8e153b5ef865b897aeb",
+        "imageCommits": [
+          "9a05299e6d398a56bd26b8e153b5ef865b897aeb"
+        ],
+        "fixedAt": "2026-07-20T01:30:22.074Z",
+        "by": "shakeebshaan",
+        "appCommit": "d14c90e0",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Dashboard + trial nudge render fully in Devanagari; 4-locale parity + Hindi pinned by 71 passing i18n tests; full unit suite green (5491 passed / 0 failed - verify exit-1 was worker-OOM, the 10 OOM'd files re-run green in isolation)."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /dashboard in Hindi: 0 English lines, trial pill in Hindi. Screenshot images/2026-10-22-oldqa/hi_dashboard.png (board commit 434acdb6)."
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260803-d7b3",
+      "createdAt": "2026-08-03T12:09:13.168Z",
+      "route": "/weekly-progress",
+      "status": "fixed",
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "fix": {
+        "description": "Root cause: /weekly-progress (src/pages/WeeklyProgress.tsx) rendered every weight in kg, ignoring unit_preference while LogWeight/Measurements/WeightTrendChart convert to lb. Fix: read ['profile-basic-info'] and convert+relabel for imperial users — WeightTrendChart axis/tooltip/goal, MultiMetricBarChart weight bars+drawer, ledger row, weekly-change insight, Figure, and target-pace rate; i18n weight_row_value now takes {{unit}} across en/hi/hinglish/xx-AE. Proof PNG shows Weekly Progress in lb (248.2 lbs weight, 1.3 lbs/wk target pace).",
+        "imagePath": "images/i-20260803-d7b3-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260803-d7b3-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "1a0a5b5ebffdde67781d6e4ef5be5cee923b4bb2",
+        "imageCommits": [
+          "1a0a5b5ebffdde67781d6e4ef5be5cee923b4bb2"
+        ],
+        "fixedAt": "2026-08-03T14:23:33.302Z",
+        "by": "shakeebshaan",
+        "appCommit": "f0a31e68",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 90,
+          "note": "FE-only unit conversion across all weight sites + MultiMetricBarChart unit prop + i18n; test/WeeklyProgress.page.test.tsx + MultiMetricBarChart.test.tsx + progress.wave4 mock fix; full test:unit gate 10/10 shards EXIT 0; imperial screen proven full-screen."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "description": "[bug-hunt] Weekly Progress page (/weekly-progress) renders EVERY weight value in kilograms, ignoring an imperial (lbs) user’s unit_preference — while the rest of the app (LogWeight, Measurements, and even WeightTrendChart itself) correctly converts to lbs. The app has a real imperial path: LogWeight.tsx:64-65 + 216 reads unit_preference===\"imperial\" -> \"lb\"/\"lbs\", Measurements respects it, and WeightTrendChart.tsx accepts a `unit` prop and converts kg->lbs via convert() (KG_TO_LB, 2.20462). But on WeeklyProgress.tsx: (1) WeightTrendChart is mounted WITHOUT a unit prop (WeeklyProgress.tsx:941-944) so it falls back to the default unit=\"kg\" — Y-axis, tooltip \"X kg\", and the \"Goal: X kg\" reference label all render kg. (2) MultiMetricBarChart \"Daily breakdown\" hardcodes kg — the Weight row bar format is `${n.toFixed(1)} kg` (MultiMetricBarChart.tsx:247) and the drilldown-drawer weight is `${selectedDay.weight.toFixed(1)} kg` (MultiMetricBarChart.tsx:367), with no conversion and no unit prop passed (WeeklyProgress.tsx:960). (3) The weight ledger rows + weekly-change strings are literal \"kg\" against the raw kg number (WeeklyProgress.tsx:236-237, 678-680, 740). Expected: an imperial user sees weight/goal/change in lbs (converted), consistent with LogWeight & Measurements. Actual: /weekly-progress shows kg everywhere — a 180 lb user who logs \"81.6 kg\" in LogWeight sees \"81.6 kg\" on Progress instead of \"~180 lbs\", so units disagree across screens. Repro: Profile -> set Units to Imperial (unit_preference=imperial) -> log a weight -> open /weekly-progress: the Weight Trend chart axis/tooltip/goal label, the Daily-breakdown bars + tap-drawer, and the weight ledger rows all read \"kg\". Fix: read unit_preference (query [\"profile-basic-info\"], as LogWeight does) and (a) pass unit to WeightTrendChart, (b) convert + pass unit into MultiMetricBarChart’s weight format + drawer, (c) convert the ledger/change kg values and swap the \"kg\" suffix.",
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /weekly-progress with unit_preference imperial (profile reads rewritten in the browser): 4 kg values in metric became 4 lb, 0 kg left. Screenshot images/2026-10-22-oldqa/imp_weekly-progress.png (board commit 434acdb6)."
+        }
+      ],
+      "thread": [
+        {
+          "at": "2026-08-03T14:23:33.302Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: /weekly-progress (src/pages/WeeklyProgress.tsx) rendered every weight in kg, ignoring unit_preference while LogWeight/Measurements/WeightTrendChart convert to lb. Fix: read ['profile-basic-info'] and convert+relabel for imperial users — WeightTrendChart axis/tooltip/goal, MultiMetricBarChart weight bars+drawer, ledger row, weekly-change insight, Figure, and target-pace rate; i18n weight_row_value now takes {{unit}} across en/hi/hinglish/xx-AE. Proof PNG shows Weekly Progress in lb (248.2 lbs weight, 1.3 lbs/wk target pace).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260718-b7c2",
+      "createdAt": "2026-07-18T15:55:00.000Z",
+      "route": "/measurements",
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: Measurements seeded the cm/inch toggle only from the [profile-basic-info] React-Query cache at mount, which is empty on a cold, direct load of /measurements — so an imperial user was shown centimetres until they toggled manually. Fix: added a one-shot effect that reads unit_preference from this screen's own [user-profile] query once it resolves and switches to inch, guarded by unitInitDone + unitTouched so a manual toggle always wins (mirrors LogWeight). Verified on a direct cold load of /measurements as an imperial user: the toggle now defaults to inch ('Measurement (inch)').",
+        "imagePath": "images/i-20260718-b7c2-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260718-b7c2-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "69e001d283551148f669dde15aed2f959c75bfd6",
+        "imageCommits": [
+          "69e001d283551148f669dde15aed2f959c75bfd6"
+        ],
+        "fixedAt": "2026-07-18T21:12:11.586Z",
+        "by": "shakeebshaan",
+        "appCommit": "a287803f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Fix in main a287803f + test Measurements.page.test.tsx; full test:unit green (5680); cold-cache scenario render proves imperial default = inch (aria-pressed inch, hint 'Measurement (inch)')."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. /measurements with imperial on a cold session (nothing cached): cm labels 2 -> 0, inch labels shown. Screenshot images/2026-10-22-oldqa/imp_measurements.png (board commit 434acdb6)."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "description": "[bug-hunt] Body Measurements ignores an imperial user’s unit_preference when the profile cache is cold — the cm/inch default fix is incomplete.\n\nWhat’s wrong: src/pages/Measurements.tsx seeds the unit toggle ONCE at mount by reading the React-Query cache for key [profile-basic-info] (L78-81): cached?.unit_preference === imperial ? inch : cm. But this component never FETCHES [profile-basic-info] — it queries [user-profile] (L95-99, profileService.getProfile) and [measurements-overview]. There is NO effect that re-derives `unit` once the profile resolves. So when the [profile-basic-info] cache is empty at mount, an imperial user is shown centimetres and stays on cm until they manually toggle.\n\nExpected vs actual: An imperial (unit_preference=imperial) user opening Measurements should default to inch. Actual: defaults to cm whenever [profile-basic-info] wasn’t already cached by a prior screen.\n\nThe recent fix (commit 595b3015 “Measurements cm/inch default respects unit_preference”, +5/-1 lines) added only the cache read — it works when the cache is warm (e.g. after visiting Profile/LogWeight which DO fetch that key) but does nothing on a cold cache. The comment on L77 claims it ‘mirrors LogWeight.tsx’, but LogWeight actually (a) fetches [profile-basic-info] itself (LogWeight.tsx L158-162) AND (b) has a one-shot sync effect (L224-233, `unitInitDone` ref) that calls handleUnitChange(lb) once profileData loads imperial. Measurements copied the cache-init but not the fetch + sync, so it self-corrects only by luck of a warm cache.\n\nRepro: cold app start (or hard refresh) navigating directly to /measurements as an imperial user, with no prior screen having loaded [profile-basic-info] → toggle shows cm. Note: saved values are always canonical cm so no data corruption; this is a display-default bug.\n\nFix: mirror LogWeight fully — read unit_preference from the [user-profile] query this component already runs (or fetch [profile-basic-info]) and set `unit` in a one-shot effect when the profile resolves, guarded so it never overrides a manual toggle.",
+      "needsReview": false,
+      "reviewedBy": "shakeebshaan",
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260716-365d",
+      "createdAt": "2026-07-16T15:10:27.236Z",
+      "route": "/shopping-list",
+      "description": "[bug-hunt] The Shopping List page (/shopping-list, linked from Diet Plan Week) never sets a descriptive browser/tab title — it falls back to the generic \"NYUS\". The PATH_TITLES map in src/App.tsx (309-370) that powers the WCAG 2.4.2 \"set a descriptive page title on every route change\" effect lists ~60 routes but omits \"/shopping-list\". Resolution (App.tsx:373-375) does an exact lookup then a prefix scan (path.startsWith(k+\"/\")); no key matches \"/shopping-list\", so document.title=\"NYUS\" instead of \"Shopping List | NYUS\". Every sibling nutrition route (/nutrition, /meal-ingredients, /diet-plan-week, /barcode-scan …) is present, so this is an inconsistency + minor a11y gap. EXPECTED: title \"Shopping List | NYUS\". ACTUAL: \"NYUS\". REPRO: navigate to /shopping-list, inspect document.title. FIX: add \"/shopping-list\": \"Shopping List\" to PATH_TITLES.",
+      "status": "fixed",
+      "fix": {
+        "description": "Root cause: the Shopping List page was the one nutrition route missing from the browser-title map, so its tab/page title fell back to the generic 'NYUS' while every sibling page (Nutrition, Ingredients, Diet Plan, Scan Barcode) had a proper one. Fix: added the entry so the page now titles itself 'Shopping List | NYUS'. Verified live: navigating to /shopping-list now reports document.title 'Shopping List | NYUS' (was 'NYUS').",
+        "imagePath": "images/i-20260716-365d-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260716-365d-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c5982820b3d50d3790d0cc9d24c556303463ab7a",
+        "imageCommits": [
+          "c5982820b3d50d3790d0cc9d24c556303463ab7a"
+        ],
+        "fixedAt": "2026-07-16T15:39:04.486Z",
+        "by": "shakeebshaan",
+        "appCommit": "edfcd825",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 96,
+          "bar": 90,
+          "note": "Trivial map entry; proven by execution (document.title = 'Shopping List | NYUS'); real /shopping-list screen renders; no prefix collision with /dev/shopping-list-preview."
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. document.title on /shopping-list is \"Shopping List | NYUS\" (curl/browser). Note: the page itself currently crashes, see reopened i-20260717-gbc1."
+        }
+      ],
+      "author": "shakeebshaan",
+      "tags": [
+        "bug-hunt",
+        "auto"
+      ],
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
+    },
+    {
+      "id": "i-20260811-9d2f",
+      "createdAt": "2026-08-11T00:00:00.000Z",
+      "status": "fixed",
+      "description": "[content] Published: Uttapam Calories vs Plain Dosa — The Real Numbers — https://nyus.in/blog/uttapam-calories-weight-loss-india.html. Ideas added: 3. Escalated: 0.",
+      "imagePaths": [],
+      "imagePrivate": false,
+      "tags": [
+        "content",
+        "auto"
+      ],
+      "author": "shakeebshaan",
+      "route": null,
+      "fix": {
+        "description": "Root cause: the post (and poori-vs-bhatura) was committed to NYUSLANDING but never copied to the nyus.in server, so the URL 404'd and the live blog index and sitemap did not list it. Fix: deployed both posts plus the repo's blog index (97 guides) and sitemap; both URLs now return 200 (server backups *.bak-9d2f-*). Owner note: most live blog pages are older than the repo — the 2026-07-18 change of every blog CTA to /waitlist never reached the server (live pages still link to the Play listing); I did not bulk-redeploy because which CTA is right now is your call.",
+        "imagePath": "images/i-20260811-9d2f-fix-r1.png",
+        "imagePaths": [
+          "images/i-20260811-9d2f-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a0ccb527689fcf7e3679d30bba27d1076aae7cbc",
+        "imageCommits": [
+          "a0ccb527689fcf7e3679d30bba27d1076aae7cbc"
+        ],
+        "fixedAt": "2026-10-10T00:23:13.814Z",
+        "by": "shakeebshaan",
+        "appCommit": "9ba8eb9d",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Live page returns 200 with the full article at 390x844; index and sitemap list it; the 404 in the issue is gone"
+        },
+        "verifiedAt": "2026-10-22T14:36:05.743Z"
+      },
+      "history": [
+        {
+          "at": "2026-10-22T14:36:05.743Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px, seeded Edge): PASS. https://nyus.in/blog/uttapam-calories-weight-loss-india.html answers 200 live, is listed in blog/sitemap-blog.xml (1 hit) and on the blog index (1 hit) [curl]."
+        }
+      ],
+      "thread": [
+        {
+          "at": "2026-10-10T00:23:13.814Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Root cause: the post (and poori-vs-bhatura) was committed to NYUSLANDING but never copied to the nyus.in server, so the URL 404'd and the live blog index and sitemap did not list it. Fix: deployed both posts plus the repo's blog index (97 guides) and sitemap; both URLs now return 200 (server backups *.bak-9d2f-*). Owner note: most live blog pages are older than the repo — the 2026-07-18 change of every blog CTA to /waitlist never reached the server (live pages still link to the Play listing); I did not bulk-redeploy because which CTA is right now is your call.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-22T14:36:05.743Z"
     }
   ]
 }
