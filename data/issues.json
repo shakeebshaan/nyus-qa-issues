@@ -172,15 +172,33 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name. || QA SWEEP 2026-10-22: HOLDS. Re-executed on current main, local backend + bundle e7945ec6: coach chat opens and replies to an English and a Hindi message. Prod itself is still untestable with the QA account (trial expired).",
+        "description": "Test gap closed. Closed 2026-10-21 by a local run, not on prod: Local coach-chat run 2026-10-21: nyu_backend origin/main e38ef80c (real backend.py + Socket.IO, in-memory sqlite, LLM_MOCK_MODE stub: no AI key, no prod DB, no prod calls) with the web bundle of NYUS origin/main fcb3bf56 built against http://localhost:5000, test account with a 30-day trial, 390x844 seeded Edge, all external requests blocked. Screenshots C:/tmp/nyus-coach. Result: coach chat opens in 1.3-2.2 s (5.3 s once while the machine was busy), an English and a Hindi message each got a reply (server transcript: user/ai pairs), no console or page errors, no failed API calls, coach name Freya consistent in chat header, Home (after the first mount), Nutrition and Activity (see i-20261021-fd-coach-name for the first-mount defect). Limits: the AI call is the stub, so reply latency (0.6-1.3 s idle, up to 3.4 s under load) is the stub's and says nothing about the real model, and reply LANGUAGE for Hindi was not exercised (code path inspected: llm_service.py:1134 passes coach_language and llm_prompts.py:726 adds \"Reply in Hindi\" for hindi). Still untested: coach chat against prod with an entitled account and the real model. New defects from the run: i-20261021-cc-hi-first-screen (P2) and the verified cause on i-20261021-fd-coach-name. || QA SWEEP 2026-10-22: HOLDS. Re-executed on current main, local backend + bundle e7945ec6: coach chat opens and replies to an English and a Hindi message. Prod itself is still untestable with the QA account (trial expired). || VERIFIED ON PROD 2026-10-22 ~02:08 UTC, after ops granted the QA account a 7-day trial (Shaan list item nyus-066184; GET /auth/me 200, subscription_active true, is_trial true, 7 days left). App main ca05af96 web build against the prod API, 390x844, seeded Edge, QA account, every REST write stubbed; the chat message goes over the app socket. (1) COACH CHAT: opened /coach-chat, sent ONE message (\"Hi coach, what is one easy protein snack for today?\"); a real coach reply arrived in about 22 s with no 402 and no error toast: \"You've logged about 1182 kcal today against a 1697 kcal target ... Easiest protein snack: a whey protein shake ...\" followed by a Today's Meals card (Chicken Oats Upma, Fish Roti Sabzi, Fish Palak Rice, 1753 kcal) with Mark Eaten / Swap / Skip. (2) INSIGHTS: GET /ai/overview 200, GET /ai/weekly-insights 200 (fresh, generated 02:06 UTC), GET /insights/correlations 200, GET /reviews/latest 200, GET /coach/history 200, GET /dashboard/overview 200: Home loads with the Your patterns card and the weekly challenge card, and /habit-insights shows three patterns (steps to water, sleep to workouts, sleep to meals) instead of the trial-ended lock. No call returned 402. One new defect found in the reply itself: i-20261022-coach-skipped-meals (the \"1182 kcal logged\" counts meals the user had removed). Screenshots attached; no tokens or credentials are on this board.",
         "fixedAt": "2026-10-21T18:13:19.346Z",
         "by": "qa",
         "appCommit": null,
         "tests": {
           "passed": true
-        }
+        },
+        "imagePaths": [
+          "images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png",
+          "images/2026-10-22-coach-unblock/home-patterns-challenge-prod-390.png",
+          "images/2026-10-22-coach-unblock/your-patterns-prod-390.png"
+        ],
+        "imageCommits": [
+          "1e25b7477f7223febe3d81f510f599b1bc21564a",
+          "1e25b7477f7223febe3d81f510f599b1bc21564a",
+          "1e25b7477f7223febe3d81f510f599b1bc21564a"
+        ],
+        "verifiedAt": "2026-10-22T02:11:06.282Z"
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T02:11:06.282Z",
+          "event": "verified-on-prod",
+          "note": "trial granted (nyus-066184); chat reply and insights load without 402",
+          "by": "qa"
+        }
+      ],
       "description": "[P3] [First-day regression 2026-10-21, QA account vs prod API, web bundle of NYUS origin/main f24c2985 (source versionCode 306) at 390x844 in seeded Edge; screenshots in C:/tmp/nyus-firstday and attached] COULD NOT TEST on prod: the QA account is out of trial (/auth/me sub_active false; insights and chat answer 402 trial_expired), so tapping the coach button opens /choose-plan and a coach chat message cannot be sent; the other QA tokens in the creds file expired in June. Verified instead: coach history GET works and holds 3 delivered morning briefs, support chat opens, add-food AI estimate works. To close the gap someone with admin access must grant the QA account a trial (a prod write: Shaan's call) or give a fresh QA login; then re-run steps 'open coach chat, send one message, morning brief card'."
     },
     {
@@ -11501,6 +11519,40 @@
         }
       ],
       "needsReview": false
+    },
+    {
+      "id": "i-20261022-coach-skipped-meals",
+      "createdAt": "2026-10-22T02:11:06.282Z",
+      "author": "qa",
+      "tags": [
+        "coach",
+        "data",
+        "backend",
+        "first-day"
+      ],
+      "route": "Coach chat context (nyu_backend app/services/context_assembler.py:873)",
+      "imagePath": "images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png",
+      "imageCommit": "1e25b7477f7223febe3d81f510f599b1bc21564a",
+      "imagePaths": [
+        "images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png"
+      ],
+      "imageCommits": [
+        "1e25b7477f7223febe3d81f510f599b1bc21564a"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "needsReview": false,
+      "description": "[P2 / data, executed 2026-10-22 ~02:08 UTC on prod, QA account with the ops-granted trial, app main ca05af96, nyu_backend dcc4efe1] The coach counts meals the user REMOVED as eaten. Repro: (1) /nutrition > Add a meal > search a dish > Log Meal (POST /logs/meal 201); (2) tap Remove on that meal (POST /logs/meal/<id>/skip; the row stays with skipped=true); Nutrition then reads \"0 / 1847 KCAL\" and GET /logs/daily/<date> lists the meal as skipped; (3) open coach chat and ask anything about today. The reply said \"You've logged about 1182 kcal today against a 1697 kcal target, so you have roughly 515 kcal left.\" 1182 is exactly the four removed test meals (300 + 150 + 380 + 352 kcal) that the screen shows as removed. Cause (inspected): app/services/context_assembler.py:873 `logged_kcal = int(sum(m.total_calories or 0 for m in meals))` sums every MealLog row including skipped ones, although line 870 builds `eaten_logged = [m for m in meals if not m.skipped]` and line 871 lists the skipped numbers; line 880 then writes \"Meals eaten: ... ~{plan_kcal + logged_kcal} kcal\" into the coach context, so the coach tells the user a wrong number. Fix: sum over `eaten_logged` (and keep the skipped list as is). Test: a MealLog with skipped=True must not add to logged_kcal. Also noticed, not traced: the same reply names a 1697 kcal target while the Nutrition screen shows 1847 kcal. Screenshot: images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png (the reply with the Today's Meals card).",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:06.282Z",
+          "who": "owner",
+          "kind": "report",
+          "text": "Filed by QA while closing i-20261021-fd-coach-blocked.",
+          "by": "qa"
+        }
+      ],
+      "history": []
     }
   ]
 }
