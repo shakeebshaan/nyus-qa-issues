@@ -1426,10 +1426,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /plan-timeline: 0 English UI lines (was 27; left: meal names from the plan and the kcal unit): WeeklyTrajectory status/on-track/goal/weeks/shortfall/disclaimer; week date ranges in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+        "imagePath": "images/i-20261021-hi-plan-timeline-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261021-hi-plan-timeline-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b927a78e462f3c3279e19f989a3e273da34eb355",
+        "imageCommits": [
+          "b927a78e462f3c3279e19f989a3e273da34eb355"
+        ],
+        "fixedAt": "2026-10-22T02:11:04.982Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf115c95",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi capture: 0 English UI lines left on the route"
+        }
+      },
       "history": [],
-      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Plan timeline projection English: WeeklyTrajectory.tsx:68 'Behind plan', :226 'Goal: 72 kg', 'week projection · estimated', 'At a safe pace you will reach…'; date ranges 'Sep 12 – Sep 18' English-formatted; PlanTimeline.tsx has 6 defaultValue-only keys. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /plan-timeline. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/plan-timeline.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed + inspected: the empty state is Hindi now (f24c2985 added the keys), but the projection component is untouched: src/components/plan-builder/WeeklyTrajectory.tsx:68 \"Behind plan\", :157 \"-week projection · estimated\", :226 \"Goal: N kg\", :297 \"At a safe pace you'll reach...\" are literals. Not rendered locally (needs an active plan). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): improved but not fixed: the page chrome is Hindi now (143 -> 513 Devanagari characters), but 27 English lines remain: date ranges \"Sep 12 – Sep 18\" ... \"Nov 14 – Nov 20\" (English-formatted), \"10-week projection · estimated\", \"Behind plan. You're up 0.9 kg so far — the plan expects about 2.2 kg down by now.\", \"Goal: 72 kg\", \"Week 1/2/3\" labels; src/components/plan-builder/WeeklyTrajectory.tsx:68, :157, :226, :297 are still literals. Minimal repro: localStorage nyus_locale=hi, sign in, open /plan-timeline (account with an active plan)."
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Plan timeline projection English: WeeklyTrajectory.tsx:68 'Behind plan', :226 'Goal: 72 kg', 'week projection · estimated', 'At a safe pace you will reach…'; date ranges 'Sep 12 – Sep 18' English-formatted; PlanTimeline.tsx has 6 defaultValue-only keys. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /plan-timeline. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/plan-timeline.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed + inspected: the empty state is Hindi now (f24c2985 added the keys), but the projection component is untouched: src/components/plan-builder/WeeklyTrajectory.tsx:68 \"Behind plan\", :157 \"-week projection · estimated\", :226 \"Goal: N kg\", :297 \"At a safe pace you'll reach...\" are literals. Not rendered locally (needs an active plan). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): improved but not fixed: the page chrome is Hindi now (143 -> 513 Devanagari characters), but 27 English lines remain: date ranges \"Sep 12 – Sep 18\" ... \"Nov 14 – Nov 20\" (English-formatted), \"10-week projection · estimated\", \"Behind plan. You're up 0.9 kg so far — the plan expects about 2.2 kg down by now.\", \"Goal: 72 kg\", \"Week 1/2/3\" labels; src/components/plan-builder/WeeklyTrajectory.tsx:68, :157, :226, :297 are still literals. Minimal repro: localStorage nyus_locale=hi, sign in, open /plan-timeline (account with an active plan).",
+      "thread": [
+        {
+          "at": "2026-10-22T02:11:04.982Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "App main 46944182 + bf115c95 (pushed). Hindi capture 22 Oct, 390x844 @2x, QA account, prod reads, every write blocked, seeded Edge. /plan-timeline: 0 English UI lines (was 27; left: meal names from the plan and the kcal unit): WeeklyTrajectory status/on-track/goal/weeks/shortfall/disclaimer; week date ranges in the app locale. Tests: test/i18n/hindi-sweep-screens-2.test.tsx 7/7 (K1 every static key on these screens has Hindi, K2 server-text maps, K3 QA literals gone, K4 rendered); full app suite 8,249 passed / 0 failed; tsc 0. Hindi is machine-drafted (native-read list on nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261021-hi-notifications",
