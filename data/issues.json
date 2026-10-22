@@ -62,6 +62,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. the FAQ answer still says \"70 kg moderately active man (~2,200 TDEE)\"."
         }
       ],
       "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] Live English twin, static/blog/how-many-calories-to-lose-weight-india-tdee.html: the FAQ answer (visible line 62, FAQPage JSON-LD line 26) says \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". By the page's own Step 2 multipliers (line 56) 1,600 BMR x 1.375 = ~2,200 is the LIGHTLY active case; moderately active (x1.55) is ~2,480 (about 2,500 with the exact BMR 1,617.5), whose 10-20% range is about 2,000-2,230. The range also disagrees with line 56 (~1,750-1,980; 10-20% of 2,200 is 1,760-1,980): \"1,700\" should be \"1,760\" (or ~1,750). Fix: say \"lightly active man (~2,200 TDEE) ... about 1,760 to 1,980 kcal/day\" in both the FAQ and its JSON-LD (they must stay identical). The new Hindi article labels the same example correctly as \"हल्का सक्रिय\". || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: the live English page https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (after the 17:58 UTC upload) still says \"moderately active man (~2,200 TDEE)... 1,700 to 1,980 kcal/day\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): live https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (curl 22 Oct) still says \"moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\" in both the visible FAQ and the JSON-LD. Fix text is in the description above (lightly active, 1,760 to 1,980). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on LIVE nyus.in (curl, 05:5x UTC): the FAQ answer and its JSON-LD still read \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". Not fixed by any deploy."
@@ -90,6 +96,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. the Hindi page is still not published (404), the wording fix must land before it is uploaded."
         }
       ],
       "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] All numbers pass (ICMR-NIN 2020 brief note Table 1a/1b PDF p.4: men 65 kg 2110/2710/3470, women 55 kg 1660/2130/2720 kcal; 10-12% BMR overestimate and 3-8 kcal/kg lower on PDF p.2; TEE = BMR x PAL on PDF p.1; every Mifflin-St Jeor example, TDEE row and 10-20% range recomputed by hand and equal; check-faq-jsonld: 0 mismatches; no-dietitian box once, after the intro, visible at 390 px). Wording fixes needed in static/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html: (1) line 95 (grammar, must fix): \"वजन टिका रहे तो वही आपका TDEE के आसपास है\" is not correct Hindi (आपका ... के आसपास); write \"वजन टिका रहे तो खाने की वही मात्रा आपके TDEE के आसपास है\"; (2) line 105 and the FAQ answer (JSON-LD line 25, visible line 128): \"10 से 20 प्रतिशत कम, यानी लगभग 500 कैलोरी रोज़ तक\" / \"लगभग 500 कैलोरी रोज़ का घाटा ≈ हफ़्ते में आधा किलो\" reads as if 500 kcal is the target, but for the page's own examples 10-20% is 222-445 kcal (70 kg man) and 173-346 kcal (58 kg woman), and 500 kcal would be 29% of the woman's TDEE, above the 10-20% cap stated in the same paragraph; rewrite as \"10 से 20 प्रतिशत कम (आपके TDEE के हिसाब से यह 500 कैलोरी से कम भी हो सकता है; 500 कैलोरी ≈ आधा किलो हफ़्ते का मोटा अंदाज़ा सिर्फ़ बड़े TDEE वालों के लिए)\" (same sentence in the English twin); (3) line 105: \"इस लेख के पास इसका कोई सत्यापित आँकड़ा नहीं है\" is a literal translation, use \"इस लेख में इसका कोई सत्यापित आँकड़ा नहीं है\"; (4) lines 25 and 128 spell \"वज़न\" (with nukta) while the rest of the page and the site use \"वजन\": make it \"वजन\". Also replace the growth comment at line 55 (\"awaits QA\") with the QA review comment (text in the QA reply) once 1-3 are fixed. Informational, no change needed: the 58 kg woman's 20% bound is 1,380 and her 10% bound 1,555 shown as ~1,560 (computed from the rounded 1,730), and the Hindi page uses the unrounded BMR 1,617.5 (TDEE ~2,220) while the English twin says ~1,600 and ~2,200. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): the Hindi article is not live (https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html returns 404) and branch publish/hindi-tdee-calories is still at b5de86db with every defect present: line 95 \"वही आपका TDEE\", line 105 \"इस लेख के पास\", lines 25 and 128 \"वज़न\" (nukta) and \"यानी लगभग 500\", line 55 growth comment \"awaits QA\". || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN, not live. https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html answers 404 (never uploaded). The draft on publish/hindi-tdee-calories (b5de86db) still has the unfixed text at lines 95, 105 and 128 (\"लगभग 500 कैलोरी रोज़\"). Fix before it is uploaded; no live user impact today."
@@ -1466,6 +1478,12 @@
           "event": "note",
           "note": "QA dev handoff: exact repro + expected Hindi for every notification template",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. notification titles/bodies still English (backend.py:14458 and :15939 \"Your Weekly Wellness Report\", retention_sequences.py, engagement.py)."
         }
       ],
       "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Notification titles and bodies are English (backend-generated: 'Your Weekly Wellness Report', 'Coach is waiting', 'Subscription expiring soon', 'Day 4 since your last log…'); Notifications.tsx:22,375 'Mark all read' literal. Backend text needs locale-aware templates. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /notifications. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/notifications.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /notifications in Hindi still has English title, \"All caught up\" and the empty-state body; backend notification titles/bodies are not localised (not exercised: no notifications on the local account). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /notifications in Hindi: 38 English lines (title \"Notifications\", \"20 unread\", \"Mark all read\", \"TODAY\", \"Achievement unlocked: Rising Star\", \"Your Weekly Wellness Report\", \"Coach is waiting 👋\", \"Day 4 since your last log...\", \"Your streak misses you\"); titles and bodies come from the backend in English, Notifications.tsx:22,375 literals. Minimal repro: localStorage nyus_locale=hi, sign in, open /notifications. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /notifications in Hindi has 31 English lines (screenshot open-hi-notifications.png in C:/tmp/nyus-release-307/board): \"Achievement unlocked: Rising Star\", \"Your Weekly Wellness Report\", \"Coach is waiting\", \"Day 4 since your last log\", \"Your streak misses you\". New detail: one of the stored notifications is the AI fallback text itself (\"I'm temporarily unavailable for live coaching ...\") as the body of \"Your Weekly Wellness Report\" (see i-20261022-ai-cache-stores-fallback). Needs locale-aware backend templates. || QA NOTE 2026-10-22 (board sweep, dev handoff): DEV HANDOFF (oldest open app issue, no fix queued; checked in build 307 = release/307 a5b77f1a and nyu_backend 29dbd011, unchanged). REPRO: 1) set the app language to Hindi (Profile > language, or on web localStorage nyus_locale=hi; the app also sends PUT /api/v1/profile {coach_language:\"hindi\"}). 2) Open the bell / /notifications. 3) The page chrome is Hindi, but every stored notification title and body is English. Cause: the backend writes English title/body strings into the notification row at creation, whatever the user's language. EXPECTED: for a Hindi user the title and body are Hindi. Recommended design: store a template key plus params and render them in the app with the app locale (the language can change after the row is created); the simpler alternative is to pick the string by the user's language at creation (en / hi / hinglish dict per template). Templates to translate, with expected Hindi (machine-drafted, needs a native read like nyus-f84785): RE_ENGAGEMENT, app/services/retention_sequences.py:54-61: 3 days \"Your streak misses you / One log keeps it alive.\" -> \"आपकी स्ट्रीक आपको याद कर रही है / एक लॉग इसे ज़िंदा रखता है।\"; 7 days \"Quick check-in? / Let's get back on track.\" -> \"छोटा चेक-इन? / चलिए फिर से सही रास्ते पर लौटें।\"; 14 days \"Your coach has a plan / A fresh start is waiting.\" -> \"आपके कोच के पास एक प्लान है / नई शुरुआत इंतज़ार कर रही है।\"; 30 days \"We saved your progress / Pick up where you left off.\" -> \"हमने आपकी प्रगति सहेज ली है / वहीं से शुरू करें जहाँ छोड़ा था।\"; 60 days \"A lot has changed / New features waiting for you.\" -> \"बहुत कुछ बदल गया है / नए फ़ीचर आपका इंतज़ार कर रहे हैं।\"; 90 days \"Your journey isn't over / Come back anytime.\" -> \"आपका सफ़र ख़त्म नहीं हुआ / जब चाहें लौट आइए।\". Engagement ladder, app/services/scheduler_jobs.py ~1048-1080: \"Coach is waiting 👋 / Day 4 since your last log. A quick check-in keeps your streak alive.\" -> \"कोच आपका इंतज़ार कर रहा है 👋 / आपके आख़िरी लॉग को 4 दिन हो गए। एक छोटा चेक-इन आपकी स्ट्रीक बचाए रखता है।\"; \"Your plan is paused / Day 7 inactive — we'll skip Saturday's plan refresh until you're back. Tap to resume.\" -> \"आपका प्लान रुका हुआ है / 7 दिन से निष्क्रिय: आपके लौटने तक हम शनिवार का प्लान रिफ़्रेश छोड़ देंगे। फिर शुरू करने के लिए टैप करें।\"; \"We need to talk / 10+ days off the plan. Coach is ready to rebuild from where you are — open the app to restart.\" -> \"बात करनी होगी / प्लान से 10+ दिन दूर। कोच आपकी मौजूदा स्थिति से प्लान फिर बनाने को तैयार है: दोबारा शुरू करने के लिए ऐप खोलें।\". Badges, app/routes/gamification.py:337: \"Achievement unlocked: {badge}\" -> \"उपलब्धि अनलॉक: {badge}\" and its body \"Earned 1,000 total XP (+50 XP)\" -> \"कुल 1,000 XP मिले (+50 XP)\" (badge names come from the catalog and stay as data). Health score, scheduler_jobs.py:1496: \"Your Health Score moved up 5 pts / Your score is now 62 (good). Check what changed.\" -> \"आपका हेल्थ स्कोर 5 अंक ऊपर गया / आपका स्कोर अब 62 (अच्छा) है। देखें क्या बदला।\" (down: \"नीचे\"). \"Your Weekly Wellness Report\" -> \"आपकी साप्ताहिक वेलनेस रिपोर्ट\"; its body is the AI headline, which follows the coach language, so test it separately (and see i-20261022-ai-cache-stores-fallback: the fallback text can end up as this body). ACCEPTANCE: Hindi user, 4 days inactive: the /notifications row reads in Hindi; an English user sees the English text unchanged; old rows may stay English (backfill optional)."
@@ -11462,6 +11480,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. app/services/context_assembler.py:870-873 still sums every logged row (eaten_logged excludes skipped, but logged_kcal at :873 sums all meals)."
         }
       ]
     },
@@ -11499,6 +11523,12 @@
           "event": "note",
           "note": "QA dev handoff: exact repro + expected Hindi/English text for the Add Food sheet",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. Add Food sheet heading reads \"Add Food\" in Hindi (src/components/nutrition/CustomMealModal.tsx:1038), 13 English lines + 13 English attributes on /nutrition with the sheet open. Fix exists, not merged: branch draft/hi-i18n-pass4 9c28ac07 (QA PASS 22 Oct, vitest test/i18n 765 passed, tsc clean); it is not in origin/main. Merge it to close this.  Screenshot images/2026-10-22-mainqa/hi-hi-add-food-title.png (commit 9ddecc93)."
         }
       ],
       "description": "[P3] [Release 307 smoke, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Add Food sheet (Nutrition > मील जोड़ें) still has an English title: the heading reads \"Add Food\" (screenshot). Cause confirmed in code: src/components/nutrition/CustomMealModal.tsx line 1038, the non-edit branch of the title is the hardcoded string 'Add Food' (the edit branch uses t('nutrition.custom_meal.edit_title')). Executed: the heading text of #custom-meal-modal-title is \"Add Food\" in both en and hi. Fix: add a key (e.g. nutrition.custom_meal.add_title) to en.json and hi.json and use it at line 1038. Same sheet, other English left in Hindi (same cause, hardcoded or defaultValue-only): the textarea placeholder \"e.g. grilled chicken breast with rice\" (line 1085), the visible link \"Add calories & macros (optional)\", the basket serving label \"1 serving\" (pluralizeServingUnit, line 1280), the \"Cal\" unit on hit rows, and the aria-labels Close (1049), Speak what you ate (1093), Snap meal (1105), Scan barcode (1114) and \"Add <food>, N kcal\" on every hit. The rest of the sheet is Hindi (search label, \"N और दिखाएँ\", खाना लॉग करें, \"2 आइटम\"). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: the Add Food sheet heading reads \"Add Food\" in Hindi (open-hi-addfood.png). CustomMealModal.tsx:1038 is unchanged on main and release/307. || QA NOTE 2026-10-22 (board sweep, dev handoff): DEV HANDOFF (no fix queued; present in build 307, CustomMealModal.tsx identical on release/307 and main). REPRO: 1) language Hindi (Profile > language, or web localStorage nyus_locale=hi). 2) Nutrition tab. 3) Tap the dashed \"मील जोड़ें\" card (en: \"Add a meal\"); the Add Food sheet opens. 4) The sheet heading reads \"Add Food\". EXPECTED heading: \"खाना जोड़ें\" (English stays \"Add Food\"). CODE: src/components/nutrition/CustomMealModal.tsx:1036-1039, the non-edit branch is the literal 'Add Food'; the edit branch next to it already uses t('nutrition.custom_meal.edit_title', {defaultValue:'Fix this log'}). FIX: add key nutrition.custom_meal.add_title (en \"Add Food\", hi \"खाना जोड़ें\", hinglish file too) and use t('nutrition.custom_meal.add_title', {defaultValue:'Add Food'}). Same file, same sheet, other literals to fix in the same commit with the expected Hindi: placeholder line 1085 \"e.g. grilled chicken breast with rice\" -> \"जैसे: चावल के साथ ग्रिल्ड चिकन ब्रेस्ट\"; aria-label line 1049 \"Close\" -> reuse the existing hi common close \"बंद करें\" (hi.json:794); line 1093 \"Speak what you ate\" -> \"बोलकर बताएँ क्या खाया\" and \"Stop listening\" -> \"सुनना बंद करें\"; line 1105 \"Snap meal\" -> reuse the existing hi key quick_log.photo_meal \"खाने की फ़ोटो लें\" (hi.json:634) and \"Reading photo…\" -> \"फ़ोटो पढ़ी जा रही है…\"; line 1114 \"Scan barcode\" -> reuse the existing hi \"बारकोड स्कैन करें\" (hi.json:643); the visible link \"Add calories & macros (optional)\" -> \"कैलोरी और मैक्रो जोड़ें (वैकल्पिक)\"; the basket serving label \"1 serving\" (pluralizeServingUnit, line 1280) -> \"1 सर्विंग\"; each result row's aria-label \"Add <food>, N kcal\" -> \"<food> जोड़ें, N kcal\". Hindi is machine-drafted (native read item nyus-f84785). ACCEPTANCE: open the sheet in Hindi, search \"biryani\": every line with 3+ Latin letters and no Devanagari is a food name or a unit (kcal, g); the English sheet is unchanged; a unit test renders the sheet with i18n.language='hi' and asserts the heading text \"खाना जोड़ें\"."
@@ -11537,6 +11567,12 @@
           "event": "note",
           "note": "QA dev handoff: exact repro + expected Hindi text for every TDEE card string",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /tdee-calculator: 39 English lines under the input card, all in src/components/tdee/TdeeResults.tsx:119-256 (0 useTranslation). Fix exists, not merged: branch draft/hi-i18n-pass4 9c28ac07 (QA PASS 22 Oct, vitest test/i18n 765 passed, tsc clean); it is not in origin/main. Merge it to close this.  Screenshot images/2026-10-22-mainqa/hi-hi-tdee-calculator.png (commit 9ddecc93)."
         }
       ],
       "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /tdee-calculator is mostly English in Hindi: 39 English lines (the header and the input card are Hindi, everything below is English). src/components/tdee/TdeeResults.tsx has no useTranslation (0 uses): line 119 \"Step 1\", 120 \"Basal Metabolic Rate (BMR)\", 125 \"Mifflin-St Jeor ... Most accurate for general population (Frankenfield 2005)\", 131 \"The math:\", 146-147 \"Step 2\" / \"Total Daily Energy Expenditure\", 151 and 187 \"kcal / day\", 159 and 199 \"The math:\", the activity label \"Moderate\" / \"Exercise 3-5 days/week\", and the footer \"Formulas: Mifflin-St Jeor (1990), Katch-McArdle...\" (line 256). The input card's \"Moderate\" under \"गतिविधि\" is English too. Fix: wire TdeeResults through t() with keys in en.json and hi.json; the formula text and citations can stay Latin. Executed: sweep of 24 routes not covered before (hi2.json); this was the worst. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /tdee-calculator in Hindi still has 39 English lines (open-hi-tdee.png); TdeeResults.tsx unchanged. || QA NOTE 2026-10-22 (board sweep, dev handoff): DEV HANDOFF (no fix queued; present in build 307, TdeeResults.tsx identical on release/307 and main). REPRO: 1) language Hindi (Profile > language, or web localStorage nyus_locale=hi). 2) Open the TDEE calculator at /tdee-calculator (aliases /tdee, /tdee/male, /tdee/female; I found no in-app link to it, so open it by URL or deep link). 3) The page header and the input card (लिंग, वज़न, लंबाई, उम्र, गतिविधि, लक्ष्य) are Hindi, but every card below is English (39 lines). Cause: src/components/tdee/TdeeResults.tsx has no useTranslation at all. EXPECTED (line numbers at 469a3ed0; machine-drafted Hindi, native read item nyus-f84785; formulas, citations and units stay Latin): l.119 \"Step 1\" -> \"चरण 1\"; l.120 \"Basal Metabolic Rate (BMR)\" -> \"बेसल मेटाबॉलिक रेट (BMR)\"; the line under it \"Calories your body burns at complete rest, heartbeat, breathing, brain function.\" -> \"पूरे आराम में आपका शरीर जितनी कैलोरी जलाता है: धड़कन, साँस, दिमाग़ का काम।\"; l.32 \"(used)\" -> \"(इस्तेमाल किया)\"; l.125 \"Most accurate for general population (Frankenfield 2005)\" -> \"सामान्य आबादी के लिए सबसे सटीक (Frankenfield 2005)\" (the formula names Mifflin-St Jeor and Katch-McArdle stay Latin); l.127 \"Uses lean mass: {{lbm}} kg at {{bodyFatPct}}% body fat\" -> \"लीन मास इस्तेमाल: {{lbm}} kg, {{bodyFatPct}}% शरीर वसा पर\"; l.131, 159, 199 \"The math:\" -> \"गणित:\"; l.146 \"Step 2\" -> \"चरण 2\"; l.147 \"Total Daily Energy Expenditure\" -> \"कुल दैनिक ऊर्जा खर्च (TDEE)\"; l.151 and 187 \"kcal / day\" -> \"kcal / दिन\"; l.164 \"Where your calories go:\" -> \"आपकी कैलोरी कहाँ जाती है:\"; l.166 \"BMR (organs, breathing)\" -> \"BMR (अंग, साँस)\"; l.167 \"NEAT (steps, fidgeting)\" -> \"NEAT (क़दम, हल्की हलचल)\"; l.168 \"Exercise (workouts)\" -> \"व्यायाम (वर्कआउट)\"; l.169 \"TEF (digesting food)\" -> \"TEF (खाना पचाना)\"; l.175 \"Step 3\" -> \"चरण 3\"; l.176 \"Your Daily Target\" -> \"आपका दैनिक लक्ष्य\"; l.207 \"Maintenance = TDEE =\" -> \"मेंटेनेंस = TDEE =\"; l.222 \"Step 4\" -> \"चरण 4\"; l.223 \"Macro Split\" -> \"मैक्रो का बँटवारा\"; l.228/235 \"Protein\" -> \"प्रोटीन\", l.229/240 \"Fat\" -> \"वसा\", l.230/245 \"Carbs\" -> \"कार्बोहाइड्रेट\"; l.228 \"{{g}} g/kg bodyweight (ISSN recommendation)\" -> \"{{g}} g/kg शरीर का वज़न (ISSN की सिफ़ारिश)\"; l.229 \"(hormonal health floor)\" -> \"(हार्मोन स्वास्थ्य के लिए न्यूनतम)\"; l.230 \"Remainder after protein and fat targets met\" -> \"प्रोटीन और वसा का लक्ष्य पूरा होने के बाद बाकी\"; footer l.256 \"Formulas: Mifflin-St Jeor (1990), Katch-McArdle. Protein per ISSN guidelines (Morton 2018, Mettler 2010).\" -> \"सूत्र: Mifflin-St Jeor (1990), Katch-McArdle। प्रोटीन ISSN दिशानिर्देशों के अनुसार (Morton 2018, Mettler 2010)।\". The activity labels (\"Moderate\" in the input card and \"Exercise 3-5 days/week\" next to the TDEE) come from the calculator's activity table: \"Moderate\" -> \"मध्यम\", \"Exercise 3-5 days/week\" -> \"हफ़्ते में 3-5 दिन व्यायाम\" (translate the other levels the same way). ACCEPTANCE: in Hindi the page has Latin letters only in formula text, citations and units; English unchanged; a render test with i18n.language='hi' asserts \"चरण 1\" and \"कुल दैनिक ऊर्जा खर्च (TDEE)\"."
@@ -11569,6 +11605,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /science: 16 English lines (title, 3 sections, references, CTA), src/pages/Science.tsx:18-35, 60-140. Fix exists, not merged: branch draft/hi-i18n-pass4 9c28ac07 (QA PASS 22 Oct, vitest test/i18n 765 passed, tsc clean); it is not in origin/main. Merge it to close this. Includes the settled Section 3 wording.  Screenshot images/2026-10-22-mainqa/hi-hi-science.png (commit 9ddecc93)."
         }
       ],
       "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /science (\"The science behind your plan\") is entirely English in Hindi: 16 English paragraphs and only 18 Devanagari characters on the page. src/pages/Science.tsx has no useTranslation (0 uses): h1 line 78, the three section titles and bodies in the SECTIONS array (lines 16-35) and the references. A claims problem in the same text, section 3 (lines 30-33, \"How the plan adapts to you ... Each week your coach reviews what you actually logged ... and adjusts the next block ... If you missed sessions, volume is rebalanced rather than piled on ... separates an adaptive plan from a fixed template\"): it claims weekly training adaptation, which the settled wording does not allow (a weekly check-in adjusts calories, macros and step goal once enough is logged). Fix: reword section 3 to the settled claim and move the page text to i18n keys (Hindi translation to be reviewed; the paper references can stay in English). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /science in Hindi still has 16 English paragraphs and 18 Devanagari characters (open-hi-science.png); Science.tsx unchanged, including the weekly-adapts-training paragraph (lines 30-33)."
@@ -11601,6 +11643,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /weight-history-chart: 10 English lines (\"Weight History\", Daily/Weekly, \"7 daily entries\", axis dates \"Oct 16\"..\"Oct 22\"), src/pages/WeightHistoryChart.tsx:54-124. Fix exists, not merged: branch draft/hi-i18n-pass4 9c28ac07 (QA PASS 22 Oct, vitest test/i18n 765 passed, tsc clean); it is not in origin/main. Merge it to close this.  Screenshot images/2026-10-22-mainqa/hi-hi-weight-history.png (commit 9ddecc93)."
         }
       ],
       "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /weight-history-chart is English in Hindi: the title \"Weight History\" (src/pages/WeightHistoryChart.tsx line 54, PageShell title), the count \"7 daily entries\" (line 58: chartData.length + chartView + \"entry/entries\"), the \"Daily\" / \"Weekly\" toggle (lines 77 and 89) and the empty text \"No <view> weight entries yet. Log your first weight to see the chart.\" (line 124); the date axis (\"Oct 16\") is English month names. The file has no useTranslation (0 uses) and only 18 Devanagari characters render. Fix: use t() for title, count (with plural), toggle labels and empty state, and format the axis dates with the app locale. Same family, not filed separately: /workout-history month labels (Nov, Dec, Jan ...; 29 English lines) and the /log-weight date axis. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /weight-history-chart in Hindi still shows \"Weight History\", \"7 daily entries\", \"Daily\" and \"Weekly\" (open-hi-weight.png); WeightHistoryChart.tsx unchanged."
@@ -11633,6 +11681,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. Home weekly-insights card still prints the English label \"Next week: <focus>\" in Hindi (src/components/WeeklyInsightsCard.tsx:295). Fix exists, not merged: branch draft/hi-i18n-pass4 9c28ac07 (QA PASS 22 Oct, vitest test/i18n 765 passed, tsc clean); it is not in origin/main. Merge it to close this. The focus value itself is backend text, see i-20261022-hi-weekly-overview-english.  Screenshot images/2026-10-22-mainqa/hi-hi-weekly-insights-next-week.png (commit 9ddecc93)."
         }
       ],
       "description": "[P4] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Home weekly-insights card prints \"Next week: <focus>\" with the label hardcoded in English: src/components/WeeklyInsightsCard.tsx line 295 (<span className=\"text-caption\">Next week: {overview.next_week_focus}</span>, no t()). The card heading and aria are Hindi. The screenshot was taken with GET /ai/overview stubbed to a sample payload (prod currently answers the \"temporarily unavailable\" fallback for the QA account, so the card hides itself there); the headline, win, improvement and tip lines in the screenshot are the stub text. Fix: add a key (e.g. weekly_insights.next_week with {{focus}}) to en.json and hi.json and use it at line 295. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge with GET /ai/overview stubbed to a sample payload: the Hindi Home card prints \"Next week: Protein\" (open-hi-nextweek.png); WeeklyInsightsCard.tsx:295 unchanged. On prod the card is hidden for the QA account today because /ai/overview returns the fallback."
@@ -11733,6 +11787,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. backend.py:14477 weekly_insights_cache.put and :15953 overview_cache.put are still unconditional, so a fallback body is cached."
         }
       ],
       "description": "[P4] [Found while re-verifying i-20261021-fd-ai-slow on prod, 2026-10-22, nyu_backend 573232a9] The new per-user cache stores whatever the endpoint built, including the \"I'm temporarily unavailable for live coaching\" fallback. backend.py:15953 (overview_cache.put(cache_key, fingerprint, payload)) runs unconditionally after call_openai, so when the model call is refused or fails (daily cost cap, provider error) overview is null and the fallback message is cached for the 6 h TTL (key includes the date), until the user's data changes: after a short outage a user keeps seeing \"temporarily unavailable\" for up to 6 h although the model is back. Same shape for /ai/weekly-insights (weekly_insights_cache.put, backend.py:14477, 24 h TTL), and separately the Notification row that weekly-insights serves as cached:true can hold a fallback text for a whole ISO week: the QA account's stored row (generated 2026-10-20T13:51:49Z) is the fallback text and GET /ai/weekly-insights returned it cached:true on 22 Oct at 05:34 UTC. Executed on prod: GET /ai/overview x3 returned the same 204-byte fallback body (812, 712, 253 ms); GET /ai/weekly-insights x2 returned cached:true with the fallback text. Fix: do not put() a payload whose overview is null / whose text is the fallback (and do not persist the fallback into the weekly Notification row); keep the cap-refused answer uncached so the next call after the cap resets calls the model. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Inspected at 573232a9: backend.py:15953 and :14477 still put() unconditionally. Executed on prod: GET /ai/overview x3 at 05:34 UTC returned the same 204-byte fallback body; GET /ai/weekly-insights returned cached:true with the 20 Oct fallback text; and that fallback text now sits in the QA account's notifications as \"Your Weekly Wellness Report\"."
@@ -11753,6 +11813,12 @@
           "event": "note",
           "note": "QA: fix is in the CTA-label upload, not batch 7; 144 chars (146 bytes); closes when that upload is live",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. meta description of best-ai-fitness-app-for-men-india.html is 164 characters live; the shorter version (6094e842) is on upload/landing-cta-label and goes live only with that upload."
         }
       ],
       "id": "i-20261022-seo-men-meta-168",
@@ -11774,7 +11840,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. 5 of 5 sampled pages still carry og:image https://nyus.in/2.webp."
+        }
+      ],
       "id": "i-20261022-seo-og-image-shared",
       "tags": [
         "seo",
@@ -11807,7 +11880,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /customize/diet still has 56 English lines and 47 English aria-labels (\"Save plan\", \"Micronutrients\", ingredient aria templates). Locations unchanged from the issue (CustomizeDiet.tsx:271/291/298, MicronutrientPanel.tsx, IngredientRow.tsx:173-270, MealSlotCard.tsx:743/878). No fix branch yet: needs dev.  Screenshot images/2026-10-22-mainqa/hi-hi-customize-diet.png (commit 9ddecc93)."
+        }
+      ],
       "description": "[P3 / Hindi sweep 4] /customize/diet (Home > Customize) is mostly English in Hindi: 56 English lines on screen (28 distinct literals in code + 45 aria-labels, per-ingredient templates repeat). Repro (executed on the build 307 web bundle, prod API, QA account): set the language to Hindi (in-app language setting, or localStorage nyus_locale=hi on web), open the route below. Hindi keys are reused where they exist; every NEW Hindi string below is machine-drafted, needs native read (item nyus-f84785). Method: visible innerText lines with 3+ Latin letters and no Devanagari, plus aria-label/placeholder/title attributes. Not covered by sweeps 1-3 or any open board issue.\nLiterals, file:line, expected Hindi:\n1) src/pages/CustomizeDiet.tsx:298 ctaLabel \"Save plan\" -> new key, \"प्लान सेव करें\" (new; app uses सेव करें elsewhere). CustomizeDiet.tsx:271 and :291 aria-label \"Customize your diet plan\" -> new, \"अपना डाइट प्लान कस्टमाइज़ करें\". The file has 0 useTranslation.\n2) src/components/plan-builder/MicronutrientPanel.tsx (0 useTranslation): line ~89 \"Micronutrients\" -> new key, \"सूक्ष्म पोषक तत्व\" (do NOT reuse nutrition.micros.title, it says 'this week'); line 91 \"{knownCount}/{MICROS.length} tracked\" -> new, \"{{n}}/{{total}} ट्रैक किए गए\"; line 123 \" of limit\" -> new, \"सीमा का\"; line 133 footnote -> new, \"— का मतलब है कि इस पोषक तत्व का डेटा अभी नहीं है। जैसे-जैसे आप ज्ञात सूक्ष्म पोषक तत्वों वाले खाद्य पदार्थ जोड़ेंगे, मान भरते जाएंगे।\". MICROS label array lines ~25-37: reuse nutrition.micros.n_iron_mg आयरन, n_calcium_mg कैल्शियम, n_vitamin_d_mcg विटामिन D, n_vitamin_b12_mcg विटामिन B12, n_vitamin_c_mg विटामिन C, n_zinc_mg ज़िंक, n_magnesium_mg मैग्नीशियम, n_potassium_mg पोटैशियम, n_folate_mcg फोलेट, n_sodium_mg सोडियम; no key exists for Vitamin A (new, \"विटामिन A\") and Omega-3 (new, \"ओमेगा-3\").\n3) src/components/plan-builder/IngredientRow.tsx (0 useTranslation): aria templates :173 \"Remove {name}\", :188 \"Decrease {name} quantity\", :210 \"{name} quantity in grams/unit\", :221 \"Increase {name} quantity\", :233 \"{name} measurement unit\" -> new keys with {{name}}: \"{{name}} हटाएं\", \"{{name}} की मात्रा घटाएं\", \"{{name}} की मात्रा (ग्राम में)\", \"{{name}} की मात्रा बढ़ाएं\", \"{{name}} की माप इकाई\". :270 \"P {protein}g\" macro letter -> use the existing protein short label (or new \"प्रो {{n}}ग्रा\").\n4) src/components/plan-builder/MealSlotCard.tsx:743 and :878 macro letters \"P .. · C .. · F ..g\" -> localised short labels (protein/carbs/fat keys exist under nutrition.*; reuse).\n5) src/components/plan-builder/DomainHeroHeader.tsx:70 and :100 aria-label \"Go back\" -> existing common.go_back \"वापस जाएं\".\nCounts: 56 English lines on screen, 28 distinct code literals, 45 aria-labels.\nAcceptance test for dev: in Hindi, open /customize/diet with a diet plan loaded; (a) the visible-text scan (innerText lines with 3+ Latin letters and no Devanagari) returns only food names and units (g, kcal, mg, mcg, kg); (b) no aria-label/placeholder/title on the page matches /^[A-Za-z ]+$/ except food names; (c) the en snapshot is unchanged (defaultValue = current English); (d) add a vitest that renders MicronutrientPanel and IngredientRow under hi and asserts no hardcoded English. Native read of the new Hindi before release."
     },
     {
@@ -11832,7 +11912,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /ai/create-workout-plan still has 17 English lines and 20 English attributes (day chips Full body/Upper body/Lower body/Conditioning, SETS/REPS/REST, \"Save plan\"). Locations unchanged (CustomWorkoutPlanCreation.tsx:303/328/339, onboarding-derive.ts:186-191, ExercisePickRow.tsx:224/249/345). No fix branch yet: needs dev.  Screenshot images/2026-10-22-mainqa/hi-hi-workout-builder.png (commit 9ddecc93)."
+        }
+      ],
       "description": "[P3 / Hindi sweep 4] /ai/create-workout-plan (Activity > create your own plan) is English in Hindi: 17 English lines on screen + 18 aria-labels. Repro (executed on the build 307 web bundle, prod API, QA account): set the language to Hindi (in-app language setting, or localStorage nyus_locale=hi on web), open the route below. Hindi keys are reused where they exist; every NEW Hindi string below is machine-drafted, needs native read (item nyus-f84785). Method: visible innerText lines with 3+ Latin letters and no Devanagari, plus aria-label/placeholder/title attributes. Not covered by sweeps 1-3 or any open board issue.\nLiterals, file:line, expected Hindi:\n1) src/pages/CustomWorkoutPlanCreation.tsx:339 ctaLabel \"Save plan\" -> new, \"प्लान सेव करें\"; :303 and :328 aria-label \"Create your workout plan\" -> new, \"अपना वर्कआउट प्लान बनाएं\". 0 useTranslation in the file.\n2) src/lib/onboarding-derive.ts:186-191 day-type names returned as English strings: \"Full body\", \"Upper body\", \"Lower body\", \"Push\", \"Pull\", \"Legs\", \"Conditioning\" (they also become data, so translate at render, not at creation). Expected: पूरा शरीर, ऊपरी शरीर, निचला शरीर, पुश, पुल, टाँगें (existing activity.muscle_map.bucket.legs \"टाँगें\"), कंडीशनिंग (all new except Legs; machine-drafted, needs native read).\n3) src/components/plan-builder/ExercisePickRow.tsx: column labels :224 \"Sets\" and :249 \"Rest\" (shown uppercase SETS / REST), :345 \"Reps\". Reuse activity.card.sets \"सेट\", activity.reschedule.rest \"आराम\", blocks.workout_edit.reps_label \"रेप्स\". aria: :167 \"Coach must-have\" -> new \"कोच की ज़रूरी पसंद\"; :210 \"Remove {name}\" -> \"{{name}} हटाएं\"; :298 \"Decrease {label}\" and :319 \"Increase {label}\" -> reuse onboarding.builder.activity.decrease_aria / increase_aria (already in ActivityTargetCard.tsx:281, 299); :308 \"{label}: {value}\" with the translated label; :354 \"Reps (e.g. 8-12, 5, AMRAP)\" -> new, \"रेप्स (जैसे 8-12, 5, AMRAP)\".\n4) src/components/plan-builder/DomainHeroHeader.tsx:70, :100 \"Go back\" -> common.go_back \"वापस जाएं\".\n5) src/components/coach/CoachAvatar.tsx:130 and CoachPortrait.tsx:91 aria \"{name}, your coach\" / \"Your coach\" -> new, \"{{name}}, आपके कोच\" / \"आपके कोच\". (Shared with other screens.)\nExercise names (Bench Press etc.) are data and out of scope here.\nCounts: 17 English lines on screen (7 day chips + 3 column labels + button + exercise names), 18 attributes.\nAcceptance test for dev: in Hindi open /ai/create-workout-plan, add a day and an exercise; (a) day chips, SETS/REPS/REST labels and the Save button are Devanagari; (b) steppers' aria-labels (e.g. Sets: 3) are Hindi; (c) the saved plan still stores the same day-type value (English or key) so en users and backend are unchanged; (d) en screenshot identical to before."
     },
     {
@@ -11857,7 +11944,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /log-weight chart axis still shows \"Oct 16\"..\"Oct 22\" (6 lines) plus \"/wk\" and tooltip names. Cause is the backend date label (nyu_backend backend.py:7170, 7183, 7203, 7214 strftime('%b %d')) and LogWeight.Chart.tsx:73 has no tick formatter; the pass-4 branch fixed /weight-history-chart only, not this chart. Needs dev (backend + app).  Screenshot images/2026-10-22-mainqa/hi-hi-log-weight.png (commit 9ddecc93)."
+        }
+      ],
       "description": "[P3 / Hindi sweep 4] /log-weight (daily weigh-in) is Hindi except the chart: 6 English lines (x-axis dates \"Oct 16\" ... \"Oct 22\") plus 4 English literals in chart, ruler and trend text. Repro (executed on the build 307 web bundle, prod API, QA account): set the language to Hindi (in-app language setting, or localStorage nyus_locale=hi on web), open the route below. Hindi keys are reused where they exist; every NEW Hindi string below is machine-drafted, needs native read (item nyus-f84785). Method: visible innerText lines with 3+ Latin letters and no Devanagari, plus aria-label/placeholder/title attributes. Not covered by sweeps 1-3 or any open board issue. Scroll to the \"वज़न की प्रगति\" chart.\nLiterals, file:line, expected:\n1) Chart x-axis (6 lines). Cause is the BACKEND: nyu_backend backend.py:7170, 7183 (daily) and 7203, 7214 (weekly) return \"date\": strftime('%b %d'), an English month; src/pages/LogWeight.Chart.tsx:73 XAxis dataKey=\"date\" has no tick formatter. Fix: return an ISO date (or add a second field) and format in the chart with a tickFormatter using activeLocale() (src/lib/format.ts), as LogWeight.tsx:398-399 already does. Expected \"16 अक्टू\", ..., \"22 अक्टू\". Same root cause as i-20261022-hi-weight-history and /workout-history (src/pages/WorkoutHistory.tsx:184, 219, 242 call toLocaleDateString(undefined, ...)), so one date-format fix covers them (backend.py:9890 has the same pattern).\n2) src/pages/LogWeight.Chart.tsx:98 tooltip name 'Trend (EWMA)' and :99 'Weight' -> reuse the Hindi \"ट्रेंड\" already on the screen and the page's वज़न key; new \"ट्रेंड (EWMA)\" is machine-drafted, needs native read.\n3) src/pages/LogWeight.tsx:811 and :1286 \"{unit}/wk\" shown as \"+0.59 kg/wk\" -> new, \"{{unit}}/सप्ताह\".\n4) src/components/weight/WeightRuler.tsx:89 aria-label \"Scrub weight\" -> new, \"वज़न स्लाइड करें\" (machine-drafted).\nCounts: 6 on-screen English lines (dates), plus 1 trend suffix, 2 tooltip names, 1 aria-label = 10 literals.\nAcceptance test for dev: in Hindi the chart x-axis shows Devanagari month names in both Daily and Weekly view; the tooltip names are Hindi; the trend line reads \"/सप्ताह\"; en output unchanged (\"Oct 16\" style); vitest on the chart tick formatter for en and hi."
     },
     {
@@ -11874,7 +11968,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. app/routes/coach.py:387 and backend.py:17436 still build the English \"Today's Meals\" label."
+        }
+      ],
       "id": "i-20261022-hi-meal-card-day-label",
       "tags": [
         "hindi",
@@ -11895,7 +11996,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. llm_prompts.py build_overview_system_prompt (:2008-2085) still has no coach_language block."
+        }
+      ],
       "id": "i-20261022-hi-weekly-overview-english",
       "tags": [
         "hindi",
@@ -11925,7 +12033,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. aria scan on /plan-timeline still has 10 English labels (day cells, toast region \"Notifications (F8)\"). Fix exists, not merged: branch fix/hi-aria-leftovers a9bc16ae (QA PASS 22 Oct: 0 English aria on the 4 routes, English unchanged, 10 keys in 4 locales, merge-tree clean, vitest test/i18n 771 passed). Merge it to close this.  Screenshot images/2026-10-22-mainqa/hi-hi-aria-leftovers.png (commit 9ddecc93)."
+        }
+      ],
       "description": "[P4 / Hindi screen-reader labels, found in the build 307 re-test 22 Oct] Visible text on the 14 re-tested screens is Hindi, but some aria-labels are still English in Hindi (a screen reader reads them aloud in English). Executed on the 307 web bundle, Hindi, 390px, aria-label/placeholder/title scan: (1) every page: toast region \"Notifications (F8)\" (Radix ToastViewport default label, src/components/ui/toast.tsx:14, pass a translated label prop). (2) /plan-timeline: \"{day}: workout and meals planned / workout planned / meals planned / rest day\" and \" (today)\" at src/pages/PlanTimeline.tsx:979-987. (3) /profile quick actions: \"Notifications, 41 new\", \"Subscription\", \"Notification Settings\", \"Connected Devices\", \"Social\", \"Settings\" (src/pages/_components/profile/ProfileQuickActions.tsx:43-100; the visible labels are already Hindi, the aria text is not). (4) /dashboard and /nutrition: banner close button \"Dismiss\". Also seen, not in scope: \"Unknown\" device OS on /connected-devices comes from data (the key connected_devices.os_unknown 'अज्ञात' exists). Fix: route each label through t() with existing keys where they exist (the visible labels share keys), new Hindi machine-drafted, needs native read. Acceptance test for dev: in Hindi, a scan of aria-label/placeholder/title on /dashboard, /nutrition, /plan-timeline and /profile finds no value matching /^[A-Za-z ,()0-9:\\/+-]+$/ except names, emails and units; en unchanged; vitest renders PlanTimeline and ProfileQuickActions under hi."
     }
   ]
