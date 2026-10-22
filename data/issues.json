@@ -12042,6 +12042,53 @@
         }
       ],
       "description": "[P4 / Hindi screen-reader labels, found in the build 307 re-test 22 Oct] Visible text on the 14 re-tested screens is Hindi, but some aria-labels are still English in Hindi (a screen reader reads them aloud in English). Executed on the 307 web bundle, Hindi, 390px, aria-label/placeholder/title scan: (1) every page: toast region \"Notifications (F8)\" (Radix ToastViewport default label, src/components/ui/toast.tsx:14, pass a translated label prop). (2) /plan-timeline: \"{day}: workout and meals planned / workout planned / meals planned / rest day\" and \" (today)\" at src/pages/PlanTimeline.tsx:979-987. (3) /profile quick actions: \"Notifications, 41 new\", \"Subscription\", \"Notification Settings\", \"Connected Devices\", \"Social\", \"Settings\" (src/pages/_components/profile/ProfileQuickActions.tsx:43-100; the visible labels are already Hindi, the aria text is not). (4) /dashboard and /nutrition: banner close button \"Dismiss\". Also seen, not in scope: \"Unknown\" device OS on /connected-devices comes from data (the key connected_devices.os_unknown 'अज्ञात' exists). Fix: route each label through t() with existing keys where they exist (the visible labels share keys), new Hindi machine-drafted, needs native read. Acceptance test for dev: in Hindi, a scan of aria-label/placeholder/title on /dashboard, /nutrition, /plan-timeline and /profile finds no value matching /^[A-Za-z ,()0-9:\\/+-]+$/ except names, emails and units; en unchanged; vitest renders PlanTimeline and ProfileQuickActions under hi."
+    },
+    {
+      "id": "i-20261022-muscle-today-faces-back",
+      "createdAt": "2026-10-22T12:56:52.250Z",
+      "author": "qa",
+      "tags": [
+        "activity",
+        "muscle-map",
+        "3d-body",
+        "p4"
+      ],
+      "route": "/activity (muscle card, Today chip)",
+      "imagePath": "images/2026-10-22-muscle-card/en-today-back-and-fab.png",
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-muscle-card/en-today-back-and-fab.png"
+      ],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4] The Today view of the Activity muscle card opens with the 3D body facing BACKWARDS, so the main target can be hidden. In the screenshot the session is Upper + Legs with Chest 4 sets as the first chip, but the body shows the back (glutes glow red) and the chest is only visible after tapping the Chest chip. Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected, not changed): src/components/activity/TodaysTargetsCard.tsx:102, todaysTargetsFigure() picks the side from targets.regions[0], which here is a back-side region rather than the top chip. Fix idea: face the side with the most target sets (or the first chip shown), and let the camera orbit show the other side. Repro: open /activity on a day with a mixed front/back session, Today chip selected."
+    },
+    {
+      "id": "i-20261022-muscle-also-working-fab",
+      "createdAt": "2026-10-22T12:56:52.250Z",
+      "author": "qa",
+      "tags": [
+        "activity",
+        "muscle-map",
+        "fab",
+        "layout",
+        "p4"
+      ],
+      "route": "/activity (muscle card, Also working line)",
+      "imagePath": "images/2026-10-22-muscle-card/en-today-back-and-fab.png",
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-22-muscle-card/en-today-back-and-fab.png"
+      ],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4] The floating coach button covers the right end of the \"Also working: ...\" line in the Activity muscle card at 390px: \"Quads,\" is cut off behind the green button at the default scroll (same pattern as the FAB overlaps already fixed on /faq and Nutrition). Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected): the line is rendered in src/components/activity/TodaysTargetsCard.tsx:143. Fix idea: right padding on the card details that clears the FAB, or the shared FAB clearance used on other pages. Repro: open /activity, Today chip, a session with 6+ secondary muscles."
     }
   ]
 }
