@@ -11445,7 +11445,14 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T16:11:52.254Z",
+          "event": "verified",
+          "by": "qa",
+          "note": "QA re-check 22 Oct of growth fix 05d6141e on draft/seo-fruits-dryfruits (read-only worktree): PASS on all five checks. (1) All 9 internal links on khajoor-kishmish-khubani-...html return 200 on nyus.in (/, /blog/, peanuts-almonds-cashews, calories-in-common-indian-vegetables-bhindi-lauki-palak-india, calories-in-fruits-apple-guava-papaya-orange-india, /faq/, /waitlist, /logoo.svg). (2) Line 99 now says \"For comparison with another snack food, see the peanuts, almonds and cashews guide linked below\" and the guide is linked at line 135; line 107 now says the table shows grapes 54 kcal against raisins 306 kcal side by side and has no fresh row for dates or apricot: both match the table (E026 54 kcal, E057 306 kcal, no other fresh row). The seeds link at line 136 is replaced by the vegetables page (line 136). (3) Related block lines 133-139: /blog/ + 3 posts (peanuts, vegetables, fruits) + /faq/. (4) REVIEW FLAG comment still at line 56. (5) The page checker, pointed at a worktree of 05d6141e (copy of scripts/draft-checks/check3.mjs with only the worktree path changed, run from C:/tmp/qa-chk; main untouched): ALL CHECKS PASSED, including 17 of 17 IFCT rows header-anchored, the 30 g table, DGI pp. 20/22/34 and ICMR-NIN p. 4. The earlier numbers pass stands. SHIP NOTE: static/blog/sitemap-blog.xml on this branch (lines 192-197) lists six new URLs, all 404 on live today; lines 192-195 are the HELD pages (fish, mutton, atta-vs-maida, seeds-compared, dietitian read nyus-fad8c0) and must be dropped if this branch ships before they are cleared; lines 196-197 (the two fruit pages) are this draft. The REVIEW FLAG on the two fruit pages stays until the dietitian/nutritionist read, so upload-ready still blocks them."
+        }
+      ],
       "id": "i-20261022-seo-qa-fruits-dryfruits",
       "tags": [
         "seo",
@@ -11454,8 +11461,21 @@
         "p4"
       ],
       "route": "NYUSLANDING draft/seo-fruits-dryfruits @ 1ba93a3b",
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "QA re-check 22 Oct of growth fix 05d6141e on draft/seo-fruits-dryfruits (read-only worktree): PASS on all five checks. (1) All 9 internal links on khajoor-kishmish-khubani-...html return 200 on nyus.in (/, /blog/, peanuts-almonds-cashews, calories-in-common-indian-vegetables-bhindi-lauki-palak-india, calories-in-fruits-apple-guava-papaya-orange-india, /faq/, /waitlist, /logoo.svg). (2) Line 99 now says \"For comparison with another snack food, see the peanuts, almonds and cashews guide linked below\" and the guide is linked at line 135; line 107 now says the table shows grapes 54 kcal against raisins 306 kcal side by side and has no fresh row for dates or apricot: both match the table (E026 54 kcal, E057 306 kcal, no other fresh row). The seeds link at line 136 is replaced by the vegetables page (line 136). (3) Related block lines 133-139: /blog/ + 3 posts (peanuts, vegetables, fruits) + /faq/. (4) REVIEW FLAG comment still at line 56. (5) The page checker, pointed at a worktree of 05d6141e (copy of scripts/draft-checks/check3.mjs with only the worktree path changed, run from C:/tmp/qa-chk; main untouched): ALL CHECKS PASSED, including 17 of 17 IFCT rows header-anchored, the 30 g table, DGI pp. 20/22/34 and ICMR-NIN p. 4. The earlier numbers pass stands. SHIP NOTE: static/blog/sitemap-blog.xml on this branch (lines 192-197) lists six new URLs, all 404 on live today; lines 192-195 are the HELD pages (fish, mutton, atta-vs-maida, seeds-compared, dietitian read nyus-fad8c0) and must be dropped if this branch ships before they are cleared; lines 196-197 (the two fruit pages) are this draft. The REVIEW FLAG on the two fruit pages stays until the dietitian/nutritionist read, so upload-ready still blocks them.",
+        "imagePath": null,
+        "imagePaths": [],
+        "imagePrivate": false,
+        "imageCommit": null,
+        "imageCommits": [],
+        "fixedAt": "2026-10-22T16:11:52.254Z",
+        "by": "qa",
+        "appCommit": "05d6141e",
+        "tests": null,
+        "judge": null,
+        "verifiedAt": "2026-10-22T16:11:52.254Z"
+      },
       "description": "[QA verdict: FAIL, one blocking link defect; every number passes] Pages: static/blog/calories-in-grapes-chikoo-litchi-sitaphal-jackfruit-india.html and static/blog/khajoor-kishmish-khubani-dry-fruits-calories-fibre-per-100g-india.html. DEFECT: khajoor-kishmish-khubani-...html:136 links to /blog/seeds-compared-sesame-flax-sunflower-protein-fibre-calories-india.html and line 99 tells the reader to \"see the nuts and seeds pages linked below\", but that seeds page is a held draft and answers 404 on live nyus.in (curl), so uploading the fruit pages alone ships a dead link (audit-links would also block). Fix: drop the seeds link and the sentence at line 99, or ship the seeds page with this upload (it is held by the dietitian read nyus-fad8c0). Everything else PASSES [executed]: all 17 IFCT 2017 Table 1 rows (E005, E016-E019, E021, E022, E026, E030, E035, E050, E051, E054, E057, E058, E060, E063) re-read from the PDF with the column header on each page; the 18 table rows (energy kJ/4.184, carbs, fibre, protein, water, regions) match, the 30 g table (96/93/92/89/86/95 kcal, fibre, protein) recomputes; 5.7x raisin vs grape = 1279/224 kJ = 5.71 (306/54 kcal = 5.67), water 19.69 vs 85.55 g; 1% amla / 5% sitaphal of 2,000 kcal and 5% / 6% of 2,110 / 1,660 kcal correct; DGI 2024 p. 20 (Fruits 100 g in the 2,000 kcal pyramid), p. 22 (Fruits: seasonal fruits), p. 34 (nuts and oilseeds 20 g, ~2020 kcal menu) and ICMR-NIN 2020 p. 4 (2,110 / 1,660) verified in the PDFs, and \"DGI gives no dried-fruit portion\" is true; titles 51 and 50 characters, descriptions 148 and 144, FAQ equals JSON-LD (4 of 4 each), tables.js loaded, other links 200. Sugar/medical: none, only the stated \"no claim about sugar\" and the diabetes/medicines disclaimer. Minor wording, not blocking: khajoor...html:107 \"the same drying effect runs through the other dried fruits in the table\" is an inference (the table has no fresh match for apricot or dates). The REVIEW FLAG comment is kept on both pages until the link is fixed."
     },
     {
