@@ -128,8 +128,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] Live English twin, static/blog/how-many-calories-to-lose-weight-india-tdee.html: the FAQ answer (visible line 62, FAQPage JSON-LD line 26) says \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". By the page's own Step 2 multipliers (line 56) 1,600 BMR x 1.375 = ~2,200 is the LIGHTLY active case; moderately active (x1.55) is ~2,480 (about 2,500 with the exact BMR 1,617.5), whose 10-20% range is about 2,000-2,230. The range also disagrees with line 56 (~1,750-1,980; 10-20% of 2,200 is 1,760-1,980): \"1,700\" should be \"1,760\" (or ~1,750). Fix: say \"lightly active man (~2,200 TDEE) ... about 1,760 to 1,980 kcal/day\" in both the FAQ and its JSON-LD (they must stay identical). The new Hindi article labels the same example correctly as \"हल्का सक्रिय\". || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: the live English page https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (after the 17:58 UTC upload) still says \"moderately active man (~2,200 TDEE)... 1,700 to 1,980 kcal/day\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): live https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (curl 22 Oct) still says \"moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\" in both the visible FAQ and the JSON-LD. Fix text is in the description above (lightly active, 1,760 to 1,980)."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] Live English twin, static/blog/how-many-calories-to-lose-weight-india-tdee.html: the FAQ answer (visible line 62, FAQPage JSON-LD line 26) says \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". By the page's own Step 2 multipliers (line 56) 1,600 BMR x 1.375 = ~2,200 is the LIGHTLY active case; moderately active (x1.55) is ~2,480 (about 2,500 with the exact BMR 1,617.5), whose 10-20% range is about 2,000-2,230. The range also disagrees with line 56 (~1,750-1,980; 10-20% of 2,200 is 1,760-1,980): \"1,700\" should be \"1,760\" (or ~1,750). Fix: say \"lightly active man (~2,200 TDEE) ... about 1,760 to 1,980 kcal/day\" in both the FAQ and its JSON-LD (they must stay identical). The new Hindi article labels the same example correctly as \"हल्का सक्रिय\". || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: the live English page https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (after the 17:58 UTC upload) still says \"moderately active man (~2,200 TDEE)... 1,700 to 1,980 kcal/day\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): live https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (curl 22 Oct) still says \"moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\" in both the visible FAQ and the JSON-LD. Fix text is in the description above (lightly active, 1,760 to 1,980). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on LIVE nyus.in (curl, 05:5x UTC): the FAQ answer and its JSON-LD still read \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". Not fixed by any deploy."
     },
     {
       "id": "i-20261021-tdee-hi-wording",
@@ -149,8 +156,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] All numbers pass (ICMR-NIN 2020 brief note Table 1a/1b PDF p.4: men 65 kg 2110/2710/3470, women 55 kg 1660/2130/2720 kcal; 10-12% BMR overestimate and 3-8 kcal/kg lower on PDF p.2; TEE = BMR x PAL on PDF p.1; every Mifflin-St Jeor example, TDEE row and 10-20% range recomputed by hand and equal; check-faq-jsonld: 0 mismatches; no-dietitian box once, after the intro, visible at 390 px). Wording fixes needed in static/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html: (1) line 95 (grammar, must fix): \"वजन टिका रहे तो वही आपका TDEE के आसपास है\" is not correct Hindi (आपका ... के आसपास); write \"वजन टिका रहे तो खाने की वही मात्रा आपके TDEE के आसपास है\"; (2) line 105 and the FAQ answer (JSON-LD line 25, visible line 128): \"10 से 20 प्रतिशत कम, यानी लगभग 500 कैलोरी रोज़ तक\" / \"लगभग 500 कैलोरी रोज़ का घाटा ≈ हफ़्ते में आधा किलो\" reads as if 500 kcal is the target, but for the page's own examples 10-20% is 222-445 kcal (70 kg man) and 173-346 kcal (58 kg woman), and 500 kcal would be 29% of the woman's TDEE, above the 10-20% cap stated in the same paragraph; rewrite as \"10 से 20 प्रतिशत कम (आपके TDEE के हिसाब से यह 500 कैलोरी से कम भी हो सकता है; 500 कैलोरी ≈ आधा किलो हफ़्ते का मोटा अंदाज़ा सिर्फ़ बड़े TDEE वालों के लिए)\" (same sentence in the English twin); (3) line 105: \"इस लेख के पास इसका कोई सत्यापित आँकड़ा नहीं है\" is a literal translation, use \"इस लेख में इसका कोई सत्यापित आँकड़ा नहीं है\"; (4) lines 25 and 128 spell \"वज़न\" (with nukta) while the rest of the page and the site use \"वजन\": make it \"वजन\". Also replace the growth comment at line 55 (\"awaits QA\") with the QA review comment (text in the QA reply) once 1-3 are fixed. Informational, no change needed: the 58 kg woman's 20% bound is 1,380 and her 10% bound 1,555 shown as ~1,560 (computed from the rounded 1,730), and the Hindi page uses the unrounded BMR 1,617.5 (TDEE ~2,220) while the English twin says ~1,600 and ~2,200. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): the Hindi article is not live (https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html returns 404) and branch publish/hindi-tdee-calories is still at b5de86db with every defect present: line 95 \"वही आपका TDEE\", line 105 \"इस लेख के पास\", lines 25 and 128 \"वज़न\" (nukta) and \"यानी लगभग 500\", line 55 growth comment \"awaits QA\"."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] All numbers pass (ICMR-NIN 2020 brief note Table 1a/1b PDF p.4: men 65 kg 2110/2710/3470, women 55 kg 1660/2130/2720 kcal; 10-12% BMR overestimate and 3-8 kcal/kg lower on PDF p.2; TEE = BMR x PAL on PDF p.1; every Mifflin-St Jeor example, TDEE row and 10-20% range recomputed by hand and equal; check-faq-jsonld: 0 mismatches; no-dietitian box once, after the intro, visible at 390 px). Wording fixes needed in static/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html: (1) line 95 (grammar, must fix): \"वजन टिका रहे तो वही आपका TDEE के आसपास है\" is not correct Hindi (आपका ... के आसपास); write \"वजन टिका रहे तो खाने की वही मात्रा आपके TDEE के आसपास है\"; (2) line 105 and the FAQ answer (JSON-LD line 25, visible line 128): \"10 से 20 प्रतिशत कम, यानी लगभग 500 कैलोरी रोज़ तक\" / \"लगभग 500 कैलोरी रोज़ का घाटा ≈ हफ़्ते में आधा किलो\" reads as if 500 kcal is the target, but for the page's own examples 10-20% is 222-445 kcal (70 kg man) and 173-346 kcal (58 kg woman), and 500 kcal would be 29% of the woman's TDEE, above the 10-20% cap stated in the same paragraph; rewrite as \"10 से 20 प्रतिशत कम (आपके TDEE के हिसाब से यह 500 कैलोरी से कम भी हो सकता है; 500 कैलोरी ≈ आधा किलो हफ़्ते का मोटा अंदाज़ा सिर्फ़ बड़े TDEE वालों के लिए)\" (same sentence in the English twin); (3) line 105: \"इस लेख के पास इसका कोई सत्यापित आँकड़ा नहीं है\" is a literal translation, use \"इस लेख में इसका कोई सत्यापित आँकड़ा नहीं है\"; (4) lines 25 and 128 spell \"वज़न\" (with nukta) while the rest of the page and the site use \"वजन\": make it \"वजन\". Also replace the growth comment at line 55 (\"awaits QA\") with the QA review comment (text in the QA reply) once 1-3 are fixed. Informational, no change needed: the 58 kg woman's 20% bound is 1,380 and her 10% bound 1,555 shown as ~1,560 (computed from the rounded 1,730), and the Hindi page uses the unrounded BMR 1,617.5 (TDEE ~2,220) while the English twin says ~1,600 and ~2,200. || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): the Hindi article is not live (https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html returns 404) and branch publish/hindi-tdee-calories is still at b5de86db with every defect present: line 95 \"वही आपका TDEE\", line 105 \"इस लेख के पास\", lines 25 and 128 \"वज़न\" (nukta) and \"यानी लगभग 500\", line 55 growth comment \"awaits QA\". || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN, not live. https://nyus.in/blog/roz-kitni-calorie-khani-chahiye-hindi-india.html answers 404 (never uploaded). The draft on publish/hindi-tdee-calories (b5de86db) still has the unfixed text at lines 95, 105 and 128 (\"लगभग 500 कैलोरी रोज़\"). Fix before it is uploaded; no live user impact today."
     },
     {
       "id": "i-20261021-cc-hi-first-screen",
@@ -1485,8 +1499,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P2 / security residue after pwd1 - executed read-only on the Oracle VM 2026-10-21 16:35 UTC, no values printed] The pwd1 rotation fixed the DB login, but the old DB password still lives on the box and is related to a live secret: (1) .env keeps a commented-out old DATABASE_URL line holding the OLD DSN; (2) 11 backup copies .env.bak-* in ~/nyu_backend contain the old password and every other key; most are mode 664 (others can read), one is 600; .env itself is also mode 664; (3) RAZORPAY_WEBHOOK_SECRET (razorpay_webhook.py:224) is derived from the old DB password, which sits in git history, so it must be treated as weak and rotated. Next owner: Shaan (webhook secret rotation touches Razorpay = money gate; file hygiene = prod VM change, per-change yes) - Shaan's list item 'NYUS: clean old secrets off the VM + rotate the Razorpay webhook secret'. Not re-verified: that the OLD DB password is refused (assumed from the pwd1 fix note). [Redacted 2026-10-21 by the NYUS employee: an earlier version of this text described the secret; this board repo is public.] || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): read-only on the Oracle VM (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, and of the 12 files (.env plus the 11 backups) one is mode 600 and 11 are 664, and .env still contains 2 commented-out DATABASE_URL lines. VM HEAD is 3b30aee4, health 200. Nothing cleaned yet; Razorpay webhook secret rotation is still Shaan's (money gate)."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P2 / security residue after pwd1 - executed read-only on the Oracle VM 2026-10-21 16:35 UTC, no values printed] The pwd1 rotation fixed the DB login, but the old DB password still lives on the box and is related to a live secret: (1) .env keeps a commented-out old DATABASE_URL line holding the OLD DSN; (2) 11 backup copies .env.bak-* in ~/nyu_backend contain the old password and every other key; most are mode 664 (others can read), one is 600; .env itself is also mode 664; (3) RAZORPAY_WEBHOOK_SECRET (razorpay_webhook.py:224) is derived from the old DB password, which sits in git history, so it must be treated as weak and rotated. Next owner: Shaan (webhook secret rotation touches Razorpay = money gate; file hygiene = prod VM change, per-change yes) - Shaan's list item 'NYUS: clean old secrets off the VM + rotate the Razorpay webhook secret'. Not re-verified: that the OLD DB password is refused (assumed from the pwd1 fix note). [Redacted 2026-10-21 by the NYUS employee: an earlier version of this text described the secret; this board repo is public.] || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): read-only on the Oracle VM (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, and of the 12 files (.env plus the 11 backups) one is mode 600 and 11 are 664, and .env still contains 2 commented-out DATABASE_URL lines. VM HEAD is 3b30aee4, health 200. Nothing cleaned yet; Razorpay webhook secret rotation is still Shaan's (money gate). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Read-only on the Oracle VM today (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, modes 600 x1 and 664 x11 across the 12 files, 2 commented-out DATABASE_URL lines in .env; VM HEAD is 573232a9. Waiting on Shaan's per-change yes (VM file hygiene) and the Razorpay webhook secret rotation (money gate)."
     },
     {
       "id": "i-20261021-hi-not-found",
@@ -1791,8 +1812,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Notification titles and bodies are English (backend-generated: 'Your Weekly Wellness Report', 'Coach is waiting', 'Subscription expiring soon', 'Day 4 since your last log…'); Notifications.tsx:22,375 'Mark all read' literal. Backend text needs locale-aware templates. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /notifications. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/notifications.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /notifications in Hindi still has English title, \"All caught up\" and the empty-state body; backend notification titles/bodies are not localised (not exercised: no notifications on the local account). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /notifications in Hindi: 38 English lines (title \"Notifications\", \"20 unread\", \"Mark all read\", \"TODAY\", \"Achievement unlocked: Rising Star\", \"Your Weekly Wellness Report\", \"Coach is waiting 👋\", \"Day 4 since your last log...\", \"Your streak misses you\"); titles and bodies come from the backend in English, Notifications.tsx:22,375 literals. Minimal repro: localStorage nyus_locale=hi, sign in, open /notifications."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Notification titles and bodies are English (backend-generated: 'Your Weekly Wellness Report', 'Coach is waiting', 'Subscription expiring soon', 'Day 4 since your last log…'); Notifications.tsx:22,375 'Mark all read' literal. Backend text needs locale-aware templates. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /notifications. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/notifications.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /notifications in Hindi still has English title, \"All caught up\" and the empty-state body; backend notification titles/bodies are not localised (not exercised: no notifications on the local account). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /notifications in Hindi: 38 English lines (title \"Notifications\", \"20 unread\", \"Mark all read\", \"TODAY\", \"Achievement unlocked: Rising Star\", \"Your Weekly Wellness Report\", \"Coach is waiting 👋\", \"Day 4 since your last log...\", \"Your streak misses you\"); titles and bodies come from the backend in English, Notifications.tsx:22,375 literals. Minimal repro: localStorage nyus_locale=hi, sign in, open /notifications. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /notifications in Hindi has 31 English lines (screenshot open-hi-notifications.png in C:/tmp/nyus-release-307/board): \"Achievement unlocked: Rising Star\", \"Your Weekly Wellness Report\", \"Coach is waiting\", \"Day 4 since your last log\", \"Your streak misses you\". New detail: one of the stored notifications is the AI fallback text itself (\"I'm temporarily unavailable for live coaching ...\") as the body of \"Your Weekly Wellness Report\" (see i-20261022-ai-cache-stores-fallback). Needs locale-aware backend templates."
     },
     {
       "id": "i-20261021-hi-achievements",
@@ -3146,7 +3174,7 @@
         "owner-decision"
       ],
       "route": "/health-alerts",
-      "description": "[OWNER — go/no-go, not built] Skin temperature and alerts-without-opening-the-app are PLAN-7 Phase C. Skin temperature needs the Health Connect client bumped 1.1.0-alpha07 → 1.1.0: that release made record Metadata mandatory, which touches the live weight/workout write-back for every connected user, so it needs a device test, not just a compile. Background alerts additionally need READ_HEALTH_DATA_IN_BACKGROUND (a second, stricter Play declaration) plus a WorkManager job. Today alerts are checked whenever the app syncs (open/resume) — the screen says so. The backend already accepts skin temperature; only the native read is missing. Plan: docs/plans/PLAN-7-HEALTH-VITALS-ALERTS.md §5. Reply go/no-go. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check).",
+      "description": "[OWNER — go/no-go, not built] Skin temperature and alerts-without-opening-the-app are PLAN-7 Phase C. Skin temperature needs the Health Connect client bumped 1.1.0-alpha07 → 1.1.0: that release made record Metadata mandatory, which touches the live weight/workout write-back for every connected user, so it needs a device test, not just a compile. Background alerts additionally need READ_HEALTH_DATA_IN_BACKGROUND (a second, stricter Play declaration) plus a WorkManager job. Today alerts are checked whenever the app syncs (open/resume) — the screen says so. The backend already accepts skin temperature; only the native read is missing. Plan: docs/plans/PLAN-7-HEALTH-VITALS-ALERTS.md §5. Reply go/no-go. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN, owner go/no-go (Health Connect client bump for skin temperature and background alerts); not built, nothing to re-test.",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -3154,7 +3182,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
       "needsReview": true,
       "reviewReason": "NOT BUILT, deliberately (2026-10-09), even though you listed it under 'fix all'. Pushing back once, for this reason: skin temperature needs the Health Connect client bumped from 1.1.0-alpha07 to 1.1.0. That release makes record Metadata mandatory, which changes the weight and workout WRITE-BACK every connected user runs today. A compile would pass, but only a run on a real phone proves the write-back still lands, and there is no Android device on this machine. A broken write-back would ship to every user, and the bump cannot be put behind a flag. Background alerts also need READ_HEALTH_DATA_IN_BACKGROUND, a second and stricter Play declaration. What is live now: vitals and alerts are checked on each app sync (open/resume), and v1.10.0 (289) carries the four new vitals. To go ahead: connect an Android phone with Health Connect (USB debugging on) and say 'build hcv2'. I'll do the bump, device-test the write-back, add skin temperature, and file the declaration through the same internal-track route used for hcv1.",
       "reviewedAt": "2026-10-09T16:58:42.855Z",
@@ -4815,7 +4850,7 @@
         "blocked"
       ],
       "route": null,
-      "description": "[owner-gate D5] ROLLOUT STAGES: production rollout goes 10% -> 25% -> 50% -> 100%, each stage advanced ONLY by owner say-so after the crash-free + funnel read. DEFAULT: stay at current percentage, never auto-advance. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check).",
+      "description": "[owner-gate D5] ROLLOUT STAGES: production rollout goes 10% -> 25% -> 50% -> 100%, each stage advanced ONLY by owner say-so after the crash-free + funnel read. DEFAULT: stay at current percentage, never auto-advance. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN, owner gate (staged rollout percentages); not testable by QA.",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -4825,7 +4860,14 @@
       "needsReview": true,
       "reviewReason": "UPDATED 2026-10-21 (NYUS employee): production access is not granted yet (Shaan's machine list nyus-d9991d, blocked; earliest 29 Oct). No rollout item on the list yet; the staged rollout starts after that. Default unchanged: never auto-advance. || Before: BLOCKED BY GOOGLE, not by code (checked 2026-10-10). Play Console → Dashboard: production is 'Inactive' and 'Apply for production' is locked behind the closed-test rule: at least 12 testers opted in for at least 14 days. 5 testers are opted in now. Nobody can promote until that is met, so no 'fastlane release' can work yet. YOUR STEPS: (1) Play Console → Test and release → Closed testing (alpha) → Testers: add 7+ more Google accounts (friends/team) to the email list. (2) Send them the opt-in link https://play.google.com/apps/testing/com.nyus.nyusand; each must tap 'Become a tester'. (3) After 14 days with 12+ opted in, Dashboard → Apply for production (a short questionnaire about the test). (4) Once granted, 'fastlane release' from android/ promotes alpha to production at 100% per your 2026-09-07 decision. Everything else production needs is done: data safety, content rating, privacy URL, both listings, Health declaration (all PUBLISHED), plus in-app Report (Play UGC/AI policy). Alpha is v1.10.2 (291), in review.",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
       "thread": [
         {
           "at": "2026-09-07T03:45:07.359Z",
@@ -4873,7 +4915,7 @@
         "hard-gate"
       ],
       "route": null,
-      "description": "[owner-gate D4] VITALS + SIGN-IN + SUPPORT (Play G3/G7/G10): (a) crash-free baseline read from Play vitals after 269+ soak; (b) Google sign-in verified on a PLAY-SIGNED build (OAuth SHA for Play App Signing key — engineering preps the SHA check); (c) support email inbox someone actually reads. HARD GATES. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check).",
+      "description": "[owner-gate D4] VITALS + SIGN-IN + SUPPORT (Play G3/G7/G10): (a) crash-free baseline read from Play vitals after 269+ soak; (b) Google sign-in verified on a PLAY-SIGNED build (OAuth SHA for Play App Signing key — engineering preps the SHA check); (c) support email inbox someone actually reads. HARD GATES. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN, owner gate (vitals, Play-signed Google sign-in, support inbox); not testable by QA.",
       "imagePath": null,
       "imageCommit": null,
       "imagePaths": [],
@@ -4883,7 +4925,14 @@
       "needsReview": true,
       "reviewReason": "UPDATED 2026-10-21 (NYUS employee): covered on Shaan's machine list: (b) one Google sign-in on Play build 304 = nyus-e68c45 (closes G7); (a) Play vitals read access for the bot = nyus-67180d; (c) received NYUS mail copied to shakeebshaan@gmail.com = nyus-310c3e. Stays open until all three are done. || Before: UPDATED 2026-10-10. (b) Google sign-in config is complete: both Play app-signing certs (legacy 7C:0B…, latest A5:83…) plus the upload and debug keys have Android OAuth clients; the consent screen is In production. Left: one sign-in on a phone with the app installed FROM Play (internal/alpha, 291). No device on this machine. (a) Play shows no crash/ANR data at alpha volume; it will exist after the closed test grows (see d5ro). App crashes reach #errors meanwhile. (c) Support@nyus.in is hosted on Zoho Mail; only you can confirm someone reads it.",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
       "thread": [
         {
           "at": "2026-09-07T03:22:34.450Z",
@@ -12279,7 +12328,7 @@
         "launch"
       ],
       "title": "Launch asset pack: the steps only you can do",
-      "description": "[OWNER] docs/marketing/LAUNCH_ASSETS.md was executed on 2026-10-10. Done: Play listing text + 8 screenshots (release 297, in review), creator promo codes (live), one-time review ask (297), launch email script (backend scripts/send_launch_email.py), reels / promo video / demo GIF / Product Hunt gallery (rendered in .qa-report/_launch/), two new SEO posts + one rewrite (NYUSLANDING 07ca8f89). Yours: (1) scp the blog posts live, then npm run indexnow; (2) upload promo-landscape.mp4 to YouTube and give me the URL for the listing; (3) create creator codes + 3650-day grants and do the outreach; after production access: (4) staged rollout, (5) send the launch email, (6) tell me to point the 69 old blog CTAs at the Play listing, (7) post the reels, founder post and Product Hunt. Exact commands are in the attached report. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check).",
+      "description": "[OWNER] docs/marketing/LAUNCH_ASSETS.md was executed on 2026-10-10. Done: Play listing text + 8 screenshots (release 297, in review), creator promo codes (live), one-time review ask (297), launch email script (backend scripts/send_launch_email.py), reels / promo video / demo GIF / Product Hunt gallery (rendered in .qa-report/_launch/), two new SEO posts + one rewrite (NYUSLANDING 07ca8f89). Yours: (1) scp the blog posts live, then npm run indexnow; (2) upload promo-landscape.mp4 to YouTube and give me the URL for the listing; (3) create creator codes + 3650-day grants and do the outreach; after production access: (4) staged rollout, (5) send the launch email, (6) tell me to point the 69 old blog CTAs at the Play listing, (7) post the reels, founder post and Product Hunt. Exact commands are in the attached report. || QA board re-check 2026-10-22: STILL OPEN, owner decision/gate, not testable by QA (no code or live behaviour to re-check). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN, owner launch steps. Observable today: the blog posts are live on nyus.in (landing batches uploaded 22 Oct); steps 2 and 4-7 wait on the YouTube login (nyus-c56aa3) and production access (nyus-d9991d). Not testable by QA.",
       "needsReview": true,
       "reviewReason": "UPDATED 2026-10-21 (NYUS employee): (2) the promo video upload needs YouTube signed in on the NYUS bot browser = Shaan's machine list nyus-c56aa3; (4)-(7) wait on production access = nyus-d9991d (blocked, earliest 29 Oct). || Before: Owner-only launch steps from the asset pack: blog scp + indexnow, promo video to YouTube, creator codes/grants + outreach, then (after production access) rollout, launch email, CTA flip, posts. Commands in the attached report.",
       "reviewedAt": "2026-10-21T09:31:13.464Z",
@@ -12299,7 +12348,15 @@
         }
       ],
       "reportPath": "reports/launch-owner-steps-20261010.html",
-      "reportLabel": "Launch steps for you"
+      "reportLabel": "Launch steps for you",
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ]
     },
     {
       "author": "shakeebshaan",
@@ -12387,7 +12444,7 @@
       "imagePrivate": false,
       "status": "open",
       "needsReview": false,
-      "description": "[P2 / data, executed 2026-10-22 ~02:08 UTC on prod, QA account with the ops-granted trial, app main ca05af96, nyu_backend dcc4efe1] The coach counts meals the user REMOVED as eaten. Repro: (1) /nutrition > Add a meal > search a dish > Log Meal (POST /logs/meal 201); (2) tap Remove on that meal (POST /logs/meal/<id>/skip; the row stays with skipped=true); Nutrition then reads \"0 / 1847 KCAL\" and GET /logs/daily/<date> lists the meal as skipped; (3) open coach chat and ask anything about today. The reply said \"You've logged about 1182 kcal today against a 1697 kcal target, so you have roughly 515 kcal left.\" 1182 is exactly the four removed test meals (300 + 150 + 380 + 352 kcal) that the screen shows as removed. Cause (inspected): app/services/context_assembler.py:873 `logged_kcal = int(sum(m.total_calories or 0 for m in meals))` sums every MealLog row including skipped ones, although line 870 builds `eaten_logged = [m for m in meals if not m.skipped]` and line 871 lists the skipped numbers; line 880 then writes \"Meals eaten: ... ~{plan_kcal + logged_kcal} kcal\" into the coach context, so the coach tells the user a wrong number. Fix: sum over `eaten_logged` (and keep the skipped list as is). Test: a MealLog with skipped=True must not add to logged_kcal. Also noticed, not traced: the same reply names a 1697 kcal target while the Nutrition screen shows 1847 kcal. Screenshot: images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png (the reply with the Today's Meals card).",
+      "description": "[P2 / data, executed 2026-10-22 ~02:08 UTC on prod, QA account with the ops-granted trial, app main ca05af96, nyu_backend dcc4efe1] The coach counts meals the user REMOVED as eaten. Repro: (1) /nutrition > Add a meal > search a dish > Log Meal (POST /logs/meal 201); (2) tap Remove on that meal (POST /logs/meal/<id>/skip; the row stays with skipped=true); Nutrition then reads \"0 / 1847 KCAL\" and GET /logs/daily/<date> lists the meal as skipped; (3) open coach chat and ask anything about today. The reply said \"You've logged about 1182 kcal today against a 1697 kcal target, so you have roughly 515 kcal left.\" 1182 is exactly the four removed test meals (300 + 150 + 380 + 352 kcal) that the screen shows as removed. Cause (inspected): app/services/context_assembler.py:873 `logged_kcal = int(sum(m.total_calories or 0 for m in meals))` sums every MealLog row including skipped ones, although line 870 builds `eaten_logged = [m for m in meals if not m.skipped]` and line 871 lists the skipped numbers; line 880 then writes \"Meals eaten: ... ~{plan_kcal + logged_kcal} kcal\" into the coach context, so the coach tells the user a wrong number. Fix: sum over `eaten_logged` (and keep the skipped list as is). Test: a MealLog with skipped=True must not add to logged_kcal. Also noticed, not traced: the same reply names a 1697 kcal target while the Nutrition screen shows 1847 kcal. Screenshot: images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png (the reply with the Today's Meals card). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Inspected at nyu_backend 573232a9 (prod HEAD): app/services/context_assembler.py:873 is still logged_kcal = int(sum(m.total_calories or 0 for m in meals)), i.e. it still includes skipped rows although line 870 builds eaten_logged. The file's last change is d627cabc, so none of today's deploys touched it. Not re-run with the model: the QA account is at its daily AI cost cap.",
       "thread": [
         {
           "at": "2026-10-22T02:11:06.282Z",
@@ -12397,7 +12454,14 @@
           "by": "qa"
         }
       ],
-      "history": []
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ]
     },
     {
       "id": "i-20261022-hi-add-food-title",
@@ -12421,8 +12485,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3] [Release 307 smoke, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Add Food sheet (Nutrition > मील जोड़ें) still has an English title: the heading reads \"Add Food\" (screenshot). Cause confirmed in code: src/components/nutrition/CustomMealModal.tsx line 1038, the non-edit branch of the title is the hardcoded string 'Add Food' (the edit branch uses t('nutrition.custom_meal.edit_title')). Executed: the heading text of #custom-meal-modal-title is \"Add Food\" in both en and hi. Fix: add a key (e.g. nutrition.custom_meal.add_title) to en.json and hi.json and use it at line 1038. Same sheet, other English left in Hindi (same cause, hardcoded or defaultValue-only): the textarea placeholder \"e.g. grilled chicken breast with rice\" (line 1085), the visible link \"Add calories & macros (optional)\", the basket serving label \"1 serving\" (pluralizeServingUnit, line 1280), the \"Cal\" unit on hit rows, and the aria-labels Close (1049), Speak what you ate (1093), Snap meal (1105), Scan barcode (1114) and \"Add <food>, N kcal\" on every hit. The rest of the sheet is Hindi (search label, \"N और दिखाएँ\", खाना लॉग करें, \"2 आइटम\")."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3] [Release 307 smoke, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Add Food sheet (Nutrition > मील जोड़ें) still has an English title: the heading reads \"Add Food\" (screenshot). Cause confirmed in code: src/components/nutrition/CustomMealModal.tsx line 1038, the non-edit branch of the title is the hardcoded string 'Add Food' (the edit branch uses t('nutrition.custom_meal.edit_title')). Executed: the heading text of #custom-meal-modal-title is \"Add Food\" in both en and hi. Fix: add a key (e.g. nutrition.custom_meal.add_title) to en.json and hi.json and use it at line 1038. Same sheet, other English left in Hindi (same cause, hardcoded or defaultValue-only): the textarea placeholder \"e.g. grilled chicken breast with rice\" (line 1085), the visible link \"Add calories & macros (optional)\", the basket serving label \"1 serving\" (pluralizeServingUnit, line 1280), the \"Cal\" unit on hit rows, and the aria-labels Close (1049), Speak what you ate (1093), Snap meal (1105), Scan barcode (1114) and \"Add <food>, N kcal\" on every hit. The rest of the sheet is Hindi (search label, \"N और दिखाएँ\", खाना लॉग करें, \"2 आइटम\"). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: the Add Food sheet heading reads \"Add Food\" in Hindi (open-hi-addfood.png). CustomMealModal.tsx:1038 is unchanged on main and release/307."
     },
     {
       "id": "i-20261022-hi-tdee-calculator",
@@ -12446,8 +12517,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /tdee-calculator is mostly English in Hindi: 39 English lines (the header and the input card are Hindi, everything below is English). src/components/tdee/TdeeResults.tsx has no useTranslation (0 uses): line 119 \"Step 1\", 120 \"Basal Metabolic Rate (BMR)\", 125 \"Mifflin-St Jeor ... Most accurate for general population (Frankenfield 2005)\", 131 \"The math:\", 146-147 \"Step 2\" / \"Total Daily Energy Expenditure\", 151 and 187 \"kcal / day\", 159 and 199 \"The math:\", the activity label \"Moderate\" / \"Exercise 3-5 days/week\", and the footer \"Formulas: Mifflin-St Jeor (1990), Katch-McArdle...\" (line 256). The input card's \"Moderate\" under \"गतिविधि\" is English too. Fix: wire TdeeResults through t() with keys in en.json and hi.json; the formula text and citations can stay Latin. Executed: sweep of 24 routes not covered before (hi2.json); this was the worst."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /tdee-calculator is mostly English in Hindi: 39 English lines (the header and the input card are Hindi, everything below is English). src/components/tdee/TdeeResults.tsx has no useTranslation (0 uses): line 119 \"Step 1\", 120 \"Basal Metabolic Rate (BMR)\", 125 \"Mifflin-St Jeor ... Most accurate for general population (Frankenfield 2005)\", 131 \"The math:\", 146-147 \"Step 2\" / \"Total Daily Energy Expenditure\", 151 and 187 \"kcal / day\", 159 and 199 \"The math:\", the activity label \"Moderate\" / \"Exercise 3-5 days/week\", and the footer \"Formulas: Mifflin-St Jeor (1990), Katch-McArdle...\" (line 256). The input card's \"Moderate\" under \"गतिविधि\" is English too. Fix: wire TdeeResults through t() with keys in en.json and hi.json; the formula text and citations can stay Latin. Executed: sweep of 24 routes not covered before (hi2.json); this was the worst. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /tdee-calculator in Hindi still has 39 English lines (open-hi-tdee.png); TdeeResults.tsx unchanged."
     },
     {
       "id": "i-20261022-hi-science",
@@ -12471,8 +12549,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /science (\"The science behind your plan\") is entirely English in Hindi: 16 English paragraphs and only 18 Devanagari characters on the page. src/pages/Science.tsx has no useTranslation (0 uses): h1 line 78, the three section titles and bodies in the SECTIONS array (lines 16-35) and the references. A claims problem in the same text, section 3 (lines 30-33, \"How the plan adapts to you ... Each week your coach reviews what you actually logged ... and adjusts the next block ... If you missed sessions, volume is rebalanced rather than piled on ... separates an adaptive plan from a fixed template\"): it claims weekly training adaptation, which the settled wording does not allow (a weekly check-in adjusts calories, macros and step goal once enough is logged). Fix: reword section 3 to the settled claim and move the page text to i18n keys (Hindi translation to be reviewed; the paper references can stay in English)."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /science (\"The science behind your plan\") is entirely English in Hindi: 16 English paragraphs and only 18 Devanagari characters on the page. src/pages/Science.tsx has no useTranslation (0 uses): h1 line 78, the three section titles and bodies in the SECTIONS array (lines 16-35) and the references. A claims problem in the same text, section 3 (lines 30-33, \"How the plan adapts to you ... Each week your coach reviews what you actually logged ... and adjusts the next block ... If you missed sessions, volume is rebalanced rather than piled on ... separates an adaptive plan from a fixed template\"): it claims weekly training adaptation, which the settled wording does not allow (a weekly check-in adjusts calories, macros and step goal once enough is logged). Fix: reword section 3 to the settled claim and move the page text to i18n keys (Hindi translation to be reviewed; the paper references can stay in English). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /science in Hindi still has 16 English paragraphs and 18 Devanagari characters (open-hi-science.png); Science.tsx unchanged, including the weekly-adapts-training paragraph (lines 30-33)."
     },
     {
       "id": "i-20261022-hi-weight-history",
@@ -12496,8 +12581,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /weight-history-chart is English in Hindi: the title \"Weight History\" (src/pages/WeightHistoryChart.tsx line 54, PageShell title), the count \"7 daily entries\" (line 58: chartData.length + chartView + \"entry/entries\"), the \"Daily\" / \"Weekly\" toggle (lines 77 and 89) and the empty text \"No <view> weight entries yet. Log your first weight to see the chart.\" (line 124); the date axis (\"Oct 16\") is English month names. The file has no useTranslation (0 uses) and only 18 Devanagari characters render. Fix: use t() for title, count (with plural), toggle labels and empty state, and format the axis dates with the app locale. Same family, not filed separately: /workout-history month labels (Nov, Dec, Jan ...; 29 English lines) and the /log-weight date axis."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /weight-history-chart is English in Hindi: the title \"Weight History\" (src/pages/WeightHistoryChart.tsx line 54, PageShell title), the count \"7 daily entries\" (line 58: chartData.length + chartView + \"entry/entries\"), the \"Daily\" / \"Weekly\" toggle (lines 77 and 89) and the empty text \"No <view> weight entries yet. Log your first weight to see the chart.\" (line 124); the date axis (\"Oct 16\") is English month names. The file has no useTranslation (0 uses) and only 18 Devanagari characters render. Fix: use t() for title, count (with plural), toggle labels and empty state, and format the axis dates with the app locale. Same family, not filed separately: /workout-history month labels (Nov, Dec, Jan ...; 29 English lines) and the /log-weight date axis. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /weight-history-chart in Hindi still shows \"Weight History\", \"7 daily entries\", \"Daily\" and \"Weekly\" (open-hi-weight.png); WeightHistoryChart.tsx unchanged."
     },
     {
       "id": "i-20261022-hi-weekly-insights-next-week",
@@ -12521,8 +12613,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P4] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Home weekly-insights card prints \"Next week: <focus>\" with the label hardcoded in English: src/components/WeeklyInsightsCard.tsx line 295 (<span className=\"text-caption\">Next week: {overview.next_week_focus}</span>, no t()). The card heading and aria are Hindi. The screenshot was taken with GET /ai/overview stubbed to a sample payload (prod currently answers the \"temporarily unavailable\" fallback for the QA account, so the card hides itself there); the headline, win, improvement and tip lines in the screenshot are the stub text. Fix: add a key (e.g. weekly_insights.next_week with {{focus}}) to en.json and hi.json and use it at line 295."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P4] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] In Hindi the Home weekly-insights card prints \"Next week: <focus>\" with the label hardcoded in English: src/components/WeeklyInsightsCard.tsx line 295 (<span className=\"text-caption\">Next week: {overview.next_week_focus}</span>, no t()). The card heading and aria are Hindi. The screenshot was taken with GET /ai/overview stubbed to a sample payload (prod currently answers the \"temporarily unavailable\" fallback for the QA account, so the card hides itself there); the headline, win, improvement and tip lines in the screenshot are the stub text. Fix: add a key (e.g. weekly_insights.next_week with {{focus}}) to en.json and hi.json and use it at line 295. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge with GET /ai/overview stubbed to a sample payload: the Hindi Home card prints \"Next week: Protein\" (open-hi-nextweek.png); WeeklyInsightsCard.tsx:295 unchanged. On prod the card is hidden for the QA account today because /ai/overview returns the fallback."
     },
     {
       "id": "i-20261022-daily-focus-fab-overlap",
@@ -12548,8 +12647,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P3 / layout] [Release 307 smoke follow-up, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, 390x844 @2x] On Daily Focus the floating coach button covers the calendar's right column at the default scroll, so day 24 is unreadable (only part of the '2' shows). Same class as i-20261021-fd-fab-overlap-faq and i-20261021-fab1. Executed in both languages: the button is at x 318-374, y 676-732; the day-24 cell is x 306-345, y 675-715 in English (27x39 px of the 39 px cell hidden, and day 31 loses 27x13 px more) and x 306-345, y 693-732 in Hindi (27x39 px, day 17 loses 27x13 px). Screenshots: Hindi (daily-focus-fab-hi.png, also the original s1-hi-daily-focus.png) and English (daily-focus-fab-en.png). Cause: '/daily-focus' is in the coach-button allowlist (src/lib/chrome-routes.ts line 94), and the calendar grid in src/pages/DailyFocus.tsx (generateCalendarGrid, line 165) has no right/bottom clearance for the button. Fix, either: (a) remove '/daily-focus' from the allowlist as was done for /faq (the page already has its own tap targets), or (b) keep the button and give the calendar right padding (>= 64 px at 390 px) plus bottom padding so no day cell sits under x 318-374 at any scroll. Check in en and hi after the change."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P3 / layout] [Release 307 smoke follow-up, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, 390x844 @2x] On Daily Focus the floating coach button covers the calendar's right column at the default scroll, so day 24 is unreadable (only part of the '2' shows). Same class as i-20261021-fd-fab-overlap-faq and i-20261021-fab1. Executed in both languages: the button is at x 318-374, y 676-732; the day-24 cell is x 306-345, y 675-715 in English (27x39 px of the 39 px cell hidden, and day 31 loses 27x13 px more) and x 306-345, y 693-732 in Hindi (27x39 px, day 17 loses 27x13 px). Screenshots: Hindi (daily-focus-fab-hi.png, also the original s1-hi-daily-focus.png) and English (daily-focus-fab-en.png). Cause: '/daily-focus' is in the coach-button allowlist (src/lib/chrome-routes.ts line 94), and the calendar grid in src/pages/DailyFocus.tsx (generateCalendarGrid, line 165) has no right/bottom clearance for the button. Fix, either: (a) remove '/daily-focus' from the allowlist as was done for /faq (the page already has its own tap targets), or (b) keep the button and give the calendar right padding (>= 64 px at 390 px) plus bottom padding so no day cell sits under x 318-374 at any scroll. Check in en and hi after the change. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: the coach button (x 318-374, y 676-732) covers day 24 in English (27x39 px) and Hindi (27x39 px), plus day 31 / day 17 partly; chrome-routes.ts allowlist unchanged (open-en-dailyfocus.png, open-hi-dailyfocus.png)."
     },
     {
       "id": "i-20261022-ai-cache-stores-fallback",
@@ -12569,8 +12675,15 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
-      "description": "[P4] [Found while re-verifying i-20261021-fd-ai-slow on prod, 2026-10-22, nyu_backend 573232a9] The new per-user cache stores whatever the endpoint built, including the \"I'm temporarily unavailable for live coaching\" fallback. backend.py:15953 (overview_cache.put(cache_key, fingerprint, payload)) runs unconditionally after call_openai, so when the model call is refused or fails (daily cost cap, provider error) overview is null and the fallback message is cached for the 6 h TTL (key includes the date), until the user's data changes: after a short outage a user keeps seeing \"temporarily unavailable\" for up to 6 h although the model is back. Same shape for /ai/weekly-insights (weekly_insights_cache.put, backend.py:14477, 24 h TTL), and separately the Notification row that weekly-insights serves as cached:true can hold a fallback text for a whole ISO week: the QA account's stored row (generated 2026-10-20T13:51:49Z) is the fallback text and GET /ai/weekly-insights returned it cached:true on 22 Oct at 05:34 UTC. Executed on prod: GET /ai/overview x3 returned the same 204-byte fallback body (812, 712, 253 ms); GET /ai/weekly-insights x2 returned cached:true with the fallback text. Fix: do not put() a payload whose overview is null / whose text is the fallback (and do not persist the fallback into the weekly Notification row); keep the cap-refused answer uncached so the next call after the cap resets calls the model."
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        }
+      ],
+      "description": "[P4] [Found while re-verifying i-20261021-fd-ai-slow on prod, 2026-10-22, nyu_backend 573232a9] The new per-user cache stores whatever the endpoint built, including the \"I'm temporarily unavailable for live coaching\" fallback. backend.py:15953 (overview_cache.put(cache_key, fingerprint, payload)) runs unconditionally after call_openai, so when the model call is refused or fails (daily cost cap, provider error) overview is null and the fallback message is cached for the 6 h TTL (key includes the date), until the user's data changes: after a short outage a user keeps seeing \"temporarily unavailable\" for up to 6 h although the model is back. Same shape for /ai/weekly-insights (weekly_insights_cache.put, backend.py:14477, 24 h TTL), and separately the Notification row that weekly-insights serves as cached:true can hold a fallback text for a whole ISO week: the QA account's stored row (generated 2026-10-20T13:51:49Z) is the fallback text and GET /ai/weekly-insights returned it cached:true on 22 Oct at 05:34 UTC. Executed on prod: GET /ai/overview x3 returned the same 204-byte fallback body (812, 712, 253 ms); GET /ai/weekly-insights x2 returned cached:true with the fallback text. Fix: do not put() a payload whose overview is null / whose text is the fallback (and do not persist the fallback into the weekly Notification row); keep the cap-refused answer uncached so the next call after the cap resets calls the model. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Inspected at 573232a9: backend.py:15953 and :14477 still put() unconditionally. Executed on prod: GET /ai/overview x3 at 05:34 UTC returned the same 204-byte fallback body; GET /ai/weekly-insights returned cached:true with the 20 Oct fallback text; and that fallback text now sits in the QA account's notifications as \"Your Weekly Wellness Report\"."
     }
   ]
 }
