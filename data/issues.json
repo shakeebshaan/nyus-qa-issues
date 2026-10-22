@@ -46,7 +46,8 @@
       "tags": [
         "content",
         "tdee",
-        "growth"
+        "growth",
+        "pending-deploy"
       ],
       "route": "/blog/how-many-calories-to-lose-weight-india-tdee.html (live)",
       "imagePath": null,
@@ -54,8 +55,21 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED, PENDING DEPLOY (not live until the landing upload of NYUSLANDING upload/landing-fixes-4 @ b31f5aea). growth's 747731b0 (merged in 3db904b1) rewrites the FAQ answer and its FAQPage JSON-LD identically with the page's own Mifflin-St Jeor formula: 70 kg, 170 cm, 30 y man BMR = 10x70 + 6.25x170 - 5x30 + 5 = 1,617.5 (~1,600); lightly active x1.375 = 2,224 (~2,200), 10-20% below = 1,760-1,980, a 500 kcal deficit = ~1,700; moderately active x1.55 = 2,507 (~2,500), 10-20% below = 2,000-2,250. Body range 1,750 -> 1,760; scripts/_article-tdee.json mirrored so a regen keeps it. Arithmetic recomputed by the NYUS employee (node, executed); check-faq-jsonld 143 pages 0 mismatches; rendered at 390x844 (screenshot). The page also gains hreflang hi/en/x-default + a link to the new Hindi twin. Close after the upload: curl the live page, FAQ says 'Lightly active ... 1,760 to 1,980' in both the visible answer and the JSON-LD.",
+        "fixedAt": "2026-10-22T13:44:37.254Z",
+        "by": "nyus-employee",
+        "appCommit": "747731b0",
+        "tests": {
+          "passed": true
+        },
+        "imagePath": "images/2026-10-22-landing-fix4/2-en-tdee-faq-worked-example.png",
+        "imagePaths": [
+          "images/2026-10-22-landing-fix4/2-en-tdee-faq-worked-example.png"
+        ],
+        "imagePrivate": false
+      },
       "history": [
         {
           "at": "2026-10-22T06:11:57.455Z",
@@ -68,6 +82,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. the FAQ answer still says \"70 kg moderately active man (~2,200 TDEE)\"."
+        },
+        {
+          "at": "2026-10-22T13:44:37.254Z",
+          "event": "fixed-pending-deploy",
+          "note": "fixed on upload/landing-fixes-4 b31f5aea, awaiting the landing upload",
+          "by": "nyus-employee"
         }
       ],
       "description": "[P3] [QA review of the held Hindi TDEE article, 2026-10-21; NYUSLANDING publish/hindi-tdee-calories at b5de86db] Live English twin, static/blog/how-many-calories-to-lose-weight-india-tdee.html: the FAQ answer (visible line 62, FAQPage JSON-LD line 26) says \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". By the page's own Step 2 multipliers (line 56) 1,600 BMR x 1.375 = ~2,200 is the LIGHTLY active case; moderately active (x1.55) is ~2,480 (about 2,500 with the exact BMR 1,617.5), whose 10-20% range is about 2,000-2,230. The range also disagrees with line 56 (~1,750-1,980; 10-20% of 2,200 is 1,760-1,980): \"1,700\" should be \"1,760\" (or ~1,750). Fix: say \"lightly active man (~2,200 TDEE) ... about 1,760 to 1,980 kcal/day\" in both the FAQ and its JSON-LD (they must stay identical). The new Hindi article labels the same example correctly as \"हल्का सक्रिय\". || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: the live English page https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (after the 17:58 UTC upload) still says \"moderately active man (~2,200 TDEE)... 1,700 to 1,980 kcal/day\". || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): live https://nyus.in/blog/how-many-calories-to-lose-weight-india-tdee.html (curl 22 Oct) still says \"moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\" in both the visible FAQ and the JSON-LD. Fix text is in the description above (lightly active, 1,760 to 1,980). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on LIVE nyus.in (curl, 05:5x UTC): the FAQ answer and its JSON-LD still read \"For a 70 kg moderately active man (~2,200 TDEE), that's about 1,700 to 1,980 kcal/day\". Not fixed by any deploy."
@@ -11805,8 +11825,22 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "VERIFIED LIVE 2026-10-22 12:51 UTC (NYUS employee, executed: curl https://nyus.in/blog/best-ai-fitness-app-for-men-india.html, html-unescaped): meta description = og:description = Article JSON-LD description, 144 characters each (was 164 live at the 11:47 re-test). Went live with the CTA-label upload at 12:28 UTC (Shaan's yes on nyus-0b97ca; NYUSLANDING b278dfa7, merged to main 8aff3442). The pending landing upload upload/landing-fixes-4 (b31f5aea) keeps the same 144-character text.",
+        "fixedAt": "2026-10-22T13:44:37.254Z",
+        "by": "nyus-employee",
+        "appCommit": "8aff3442",
+        "tests": {
+          "passed": true
+        },
+        "imagePath": "images/2026-10-22-landing-fix4/1-men-top.png",
+        "imagePaths": [
+          "images/2026-10-22-landing-fix4/1-men-top.png"
+        ],
+        "imagePrivate": false,
+        "verifiedAt": "2026-10-22T13:44:37.254Z"
+      },
       "history": [
         {
           "at": "2026-10-22T09:01:06.155Z",
@@ -11819,6 +11853,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. meta description of best-ai-fitness-app-for-men-india.html is 164 characters live; the shorter version (6094e842) is on upload/landing-cta-label and goes live only with that upload."
+        },
+        {
+          "at": "2026-10-22T13:44:37.254Z",
+          "event": "verified",
+          "note": "live 144 chars after the 12:28 UTC CTA-label upload",
+          "by": "nyus-employee"
         }
       ],
       "id": "i-20261022-seo-men-meta-168",
@@ -11838,14 +11878,33 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED, PENDING DEPLOY (not live until the landing upload of NYUSLANDING upload/landing-fixes-4 @ b31f5aea, Shaan's yes on the decide item). 3db904b1 merges growth's draft/landing-tdee-og (27 pages: 6 blog hubs, 20 top articles, /sitemap/ which had no og:image), 26ac4b56 applies docs/og-image-plan.csv through scripts/og-images.mjs (generators gen-blog/gen-pages call applyOg, so a regen keeps it). Reuses the live app screenshots F1-F4.webp: sitemap URLs on 2.webp 196 -> 5 (home keeps its brand card; terms, refund, privacy, account-deletion). Counted by the NYUS employee on the branch over all 200 sitemap URLs (executed): F3 113, F4 39, F1 29, F2 14, 2.webp 5, missing 0. og:image, twitter:image and Article JSON-LD image agree on every changed page; og:image:width/height match the real files; og-images.mjs --check 195 pages 0 stale; upload-ready --dry READY. The 795 templated meal pages (robots-blocked, not in the sitemap) are unchanged. Better end state (1200x630 card per article) needs a design yes. Close after the upload: curl 5 sitemap pages and compare og:image to the table.",
+        "fixedAt": "2026-10-22T13:44:37.254Z",
+        "by": "nyus-employee",
+        "appCommit": "26ac4b56",
+        "tests": {
+          "passed": true
+        },
+        "imagePath": "images/2026-10-22-landing-fix4/8-og-table.png",
+        "imagePaths": [
+          "images/2026-10-22-landing-fix4/8-og-table.png"
+        ],
+        "imagePrivate": false
+      },
       "history": [
         {
           "at": "2026-10-22T11:47:26.572Z",
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct on live nyus.in (curl): STILL OPEN, no change. 5 of 5 sampled pages still carry og:image https://nyus.in/2.webp."
+        },
+        {
+          "at": "2026-10-22T13:44:37.254Z",
+          "event": "fixed-pending-deploy",
+          "note": "fixed on upload/landing-fixes-4 b31f5aea, awaiting the landing upload",
+          "by": "nyus-employee"
         }
       ],
       "id": "i-20261022-seo-og-image-shared",
@@ -11853,7 +11912,8 @@
         "seo",
         "landing",
         "social",
-        "p4"
+        "p4",
+        "pending-deploy"
       ],
       "route": "https://nyus.in/ (every sitemap page)",
       "description": "[P4 / SEO and social previews, live SEO sweep of nyus.in 2026-10-22] 196 of the 197 sitemap URLs use the same og:image, https://nyus.in/2.webp (HTTP 200): every shared blog link (WhatsApp, X, LinkedIn, Facebook) shows the identical card, whatever the article. https://nyus.in/sitemap/ has no og:image at all. Executed: og:image read from every page in sitemap-pages.xml and blog/sitemap-blog.xml; 1 unique value. Not something the pending upload changes (the c5a0c883 pages carry the same og:image tag). Fix, when there is time: a per-article or per-section image (even 4-5 variants: Hindi, meals, exercise, calculators, guides) and an og:image on /sitemap/. Low priority; no ranking effect, only click-through from shares."
