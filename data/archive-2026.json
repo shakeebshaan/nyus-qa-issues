@@ -26207,6 +26207,73 @@
       ],
       "needsReview": false,
       "archivedAt": "2026-10-22T16:44:03.535Z"
+    },
+    {
+      "id": "i-20261022-ai-cache-stores-fallback",
+      "createdAt": "2026-10-22T05:39:33.123Z",
+      "author": "qa",
+      "tags": [
+        "backend",
+        "ai",
+        "cache",
+        "p4"
+      ],
+      "route": "/api/v1/ai/overview, /api/v1/ai/weekly-insights",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "fixed",
+      "fix": {
+        "description": "Verified on prod 23 Oct 00:13-00:16 UTC (QA account), fix deployed as nyu_backend 2def9f43 (VM HEAD cdaf3120 contains it). Overview call 1: HTTP 200 13904 ms, real model reply ('Last week was a reset week...'); call 2: HTTP 200 853 ms, same overview (cache hit); cost-cap lines 0 -> 0, overview slow lines 0 -> 1 (call 1 only, call 2 logged nothing). Weekly call 1: HTTP 200 9337 ms cached=false fallback=false; weekly call 2: HTTP 200 304 ms cached=true fallback=false. Inbox: HTTP 200, weekly reports=3, with fallback text=0. Read-only DB check: the 20 Oct 2026-W43 row was refreshed in place and no longer holds the temporarily-unavailable text.",
+        "imagePath": "images/i-20261022-ai-cache-stores-fallback-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-ai-cache-stores-fallback-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4e2c82c444a74af34bc3bfd6d3de555a6ea0e397",
+        "imageCommits": [
+          "4e2c82c444a74af34bc3bfd6d3de555a6ea0e397"
+        ],
+        "fixedAt": "2026-10-23T00:21:32.404Z",
+        "by": "shakeebshaan",
+        "appCommit": "2def9f43",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Every pass criterion was checked by running it on prod. Gap: the second overview call was matched to the first by its opening text, its speed (16x faster) and the absence of a log line, not by comparing the full response."
+        }
+      },
+      "history": [
+        {
+          "at": "2026-10-22T06:11:57.455Z",
+          "event": "note",
+          "note": "QA sweep 3: still open",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-22T11:47:26.572Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. backend.py:14477 weekly_insights_cache.put and :15953 overview_cache.put are still unconditional, so a fallback body is cached."
+        }
+      ],
+      "description": "[P4] [Found while re-verifying i-20261021-fd-ai-slow on prod, 2026-10-22, nyu_backend 573232a9] The new per-user cache stores whatever the endpoint built, including the \"I'm temporarily unavailable for live coaching\" fallback. backend.py:15953 (overview_cache.put(cache_key, fingerprint, payload)) runs unconditionally after call_openai, so when the model call is refused or fails (daily cost cap, provider error) overview is null and the fallback message is cached for the 6 h TTL (key includes the date), until the user's data changes: after a short outage a user keeps seeing \"temporarily unavailable\" for up to 6 h although the model is back. Same shape for /ai/weekly-insights (weekly_insights_cache.put, backend.py:14477, 24 h TTL), and separately the Notification row that weekly-insights serves as cached:true can hold a fallback text for a whole ISO week: the QA account's stored row (generated 2026-10-20T13:51:49Z) is the fallback text and GET /ai/weekly-insights returned it cached:true on 22 Oct at 05:34 UTC. Executed on prod: GET /ai/overview x3 returned the same 204-byte fallback body (812, 712, 253 ms); GET /ai/weekly-insights x2 returned cached:true with the fallback text. Fix: do not put() a payload whose overview is null / whose text is the fallback (and do not persist the fallback into the weekly Notification row); keep the cap-refused answer uncached so the next call after the cap resets calls the model. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Inspected at 573232a9: backend.py:15953 and :14477 still put() unconditionally. Executed on prod: GET /ai/overview x3 at 05:34 UTC returned the same 204-byte fallback body; GET /ai/weekly-insights returned cached:true with the 20 Oct fallback text; and that fallback text now sits in the QA account's notifications as \"Your Weekly Wellness Report\".",
+      "thread": [
+        {
+          "at": "2026-10-23T00:21:32.404Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Verified on prod 23 Oct 00:13-00:16 UTC (QA account), fix deployed as nyu_backend 2def9f43 (VM HEAD cdaf3120 contains it). Overview call 1: HTTP 200 13904 ms, real model reply ('Last week was a reset week...'); call 2: HTTP 200 853 ms, same overview (cache hit); cost-cap lines 0 -> 0, overview slow lines 0 -> 1 (call 1 only, call 2 logged nothing). Weekly call 1: HTTP 200 9337 ms cached=false fallback=false; weekly call 2: HTTP 200 304 ms cached=true fallback=false. Inbox: HTTP 200, weekly reports=3, with fallback text=0. Read-only DB check: the 20 Oct 2026-W43 row was refreshed in place and no longer holds the temporarily-unavailable text.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false,
+      "archivedAt": "2026-10-23T00:21:42.246Z"
     }
   ]
 }
