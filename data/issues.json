@@ -11913,10 +11913,8 @@
       "createdAt": "2026-10-23T08:46:44.000Z",
       "author": "qa",
       "tags": [
-        "play",
-        "listing",
-        "claims",
-        "p2"
+        "play-listing",
+        "waiting-shaan"
       ],
       "route": "Play Console store listing en-US and en-GB, section CALM BY DESIGN",
       "imagePath": null,
@@ -11927,7 +11925,18 @@
       "status": "open",
       "fix": null,
       "history": [],
-      "description": "[P2 claims / Play listing] The live en-US and en-GB full description (read through the Play API, read-only edit, 23 Oct 08:00 UTC) still says: Precise data, quiet design, zero hype. No neon, no gimmicks, no wall of badges. The app has an Achievements screen with a badge catalog, earned badges, levels and share cards (App.tsx:876, pages/Achievements.tsx, 43 badges). The repo source dropped that line in app commit 8b2d6d3f, but the corrected text is not on Play. FIX: replace the line on Play with: Quiet design, zero hype. No neon and no gimmicks. Achievements are there if you want them. (Dropping Precise data is deliberate: photo estimates are approximate.) Both languages carry the same text; hi-IN does not contain the line. Store-listing text needs Shaan yes; the NYUS employee pushes it."
+      "description": "[P2 claims / Play listing] The live en-US and en-GB full description (read through the Play API, read-only edit, 23 Oct 08:00 UTC) still says: Precise data, quiet design, zero hype. No neon, no gimmicks, no wall of badges. The app has an Achievements screen with a badge catalog, earned badges, levels and share cards (App.tsx:876, pages/Achievements.tsx, 43 badges). The repo source dropped that line in app commit 8b2d6d3f, but the corrected text is not on Play. FIX: replace the line on Play with: Quiet design, zero hype. No neon and no gimmicks. Achievements are there if you want them. (Dropping Precise data is deliberate: photo estimates are approximate.) Both languages carry the same text; hi-IN does not contain the line. Store-listing text needs Shaan yes; the NYUS employee pushes it.",
+      "needsReview": true,
+      "reviewReason": "Fix prepared, waiting for Shaan's yes (store-listing text is per-change gated): Shaan's list item nyus-4deebd. One sentence per locale (en-US, en-GB, hi-IN), rest word for word; files in nyus-well-tracker main 1cf94c44 docs/play-listing-live/ (live snapshot read from the Play API 23 Oct 08:51 UTC + fix-badges-2026-10-23/). No other sentence contradicts build 310. On yes: one Play API edit + commit, read back, no new build.",
+      "reviewedAt": "2026-10-23T08:56:20.068Z",
+      "thread": [
+        {
+          "at": "2026-10-23T08:56:20.068Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Fix prepared, waiting for Shaan's yes (store-listing text is per-change gated): Shaan's list item nyus-4deebd. One sentence per locale (en-US, en-GB, hi-IN), rest word for word; files in nyus-well-tracker main 1cf94c44 docs/play-listing-live/ (live snapshot read from the Play API 23 Oct 08:51 UTC + fix-badges-2026-10-23/). No other sentence contradicts build 310. On yes: one Play API edit + commit, read back, no new build."
+        }
+      ]
     },
     {
       "id": "i-20261023-nudge-retrigger-not-exempt",
