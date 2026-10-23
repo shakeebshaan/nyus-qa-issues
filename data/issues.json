@@ -12336,10 +12336,44 @@
         "dd151f4f02996e9aaed9c77ed84fd58fa91fc51a"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Rule settled (Governor GO 23 Oct): what the user sees is what gets saved. In the new Day 1..N cycle (build 312+) there is no silent fill: an empty Day tab says 'Day 3 has no meals - copy a day into it or remove it.' with Copy Day 1's meals + Remove Day 3, and Save is blocked ('Fill or remove Day 3 to continue', footer 'Go to Day 3' from other tabs). The payload sends every cycle day and refuses an empty one (EmptyCycleDayError). Server: a cycle save with an empty day, a gap or >7 days is a 400 (CYCLE_DAY_EMPTY / CYCLE_DAYS_NOT_CONTIGUOUS / CYCLE_DAYS_INVALID) before anything is written, the old compaction to a shorter cycle is gone, and the bridge no longer fills a cycle day from day 1. Weekday plans and builds <=311 keep the Monday fill on purpose (today's plan, coach today/tomorrow and the Saturday re-bridge read it), unchanged. Commits on feat/diet-day-cycle: app 13c30aa3 (branch head 0ae53855), backend f64dcb54 (branch head 7804ecda). Tests: app tsc 0 + pre-push CI 3641 passed; backend full suite on 7804ecda 8625 passed / 21 skipped; test/copy-diet-day.test.ts now covers every export (18 tests). QA re-run on the local harness (app 1b18bf3c = same patches, backend 7804ecda): 6/6 pass incl. hi. Lands with the cycle (backend deploy, then app build 312).",
+        "imagePath": "images/i-20261023-copyday-empty-days-become-monday-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-copyday-empty-days-become-monday-fix-r1.png",
+          "images/i-20261023-copyday-empty-days-become-monday-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b6dc29e3ca6524f754efe9dcb62eb76cc20b4fe0",
+        "imageCommits": [
+          "b6dc29e3ca6524f754efe9dcb62eb76cc20b4fe0",
+          "dd6f00e879ae524edb8d3ad6696715fa8c96933f"
+        ],
+        "fixedAt": "2026-10-23T15:47:49.353Z",
+        "by": "shakeebshaan",
+        "appCommit": "13c30aa3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Rule implemented in app and server, QA re-ran 6/6 on the local harness incl. hi, full suites green. Not 100: on the branch until the cycle lands (backend deploy + build 312), and the next-week preview card was unit-tested only (preview is empty until the Saturday job)."
+        }
+      },
       "history": [],
-      "description": "[P3 / behaviour to settle BEFORE the Day 1..N cycle change lands] In Vary by day, a tester who builds Mon, Tue, Wed (Mon 689 kcal, Tue 565, Wed 565) and leaves Thu to Sun empty sees empty tabs with a 'Copy Monday's meals' button, but after Save plan the plan has meals on every day: GET /diet/plan?date=2026-10-29 (Thu) returns '689 kcal . P:18.7g C:151.9g F:1.8g' and /onboarding/custom-plan/current-diet returns thursday..sunday with 2 ingredients each, i.e. empty days were filled with Monday's meals. The payload itself (buildDietPayloadDays, src/lib/builder-payload.ts:72) only sends days with ingredients, so the fill happens on the server and the UI never says so. Same family: a vary plan whose 7 days are identical is stored and re-opened as Repeat mode 'same' with one day. Both may be intended, but they decide what a Day 1..N cycle means, so please confirm the intended rule (empty day = repeat Monday? skip? rest day?) and show it on the empty tab. What checks out: the weekday mapping (Tue 2026-10-27 = 565, Wed 28 = 565, Fri 23 = 689), kcal and macros equal the builder totals, no duplicate meals after two saves and a reload (meals=1 per day). Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes."
+      "description": "[P3 / behaviour to settle BEFORE the Day 1..N cycle change lands] In Vary by day, a tester who builds Mon, Tue, Wed (Mon 689 kcal, Tue 565, Wed 565) and leaves Thu to Sun empty sees empty tabs with a 'Copy Monday's meals' button, but after Save plan the plan has meals on every day: GET /diet/plan?date=2026-10-29 (Thu) returns '689 kcal . P:18.7g C:151.9g F:1.8g' and /onboarding/custom-plan/current-diet returns thursday..sunday with 2 ingredients each, i.e. empty days were filled with Monday's meals. The payload itself (buildDietPayloadDays, src/lib/builder-payload.ts:72) only sends days with ingredients, so the fill happens on the server and the UI never says so. Same family: a vary plan whose 7 days are identical is stored and re-opened as Repeat mode 'same' with one day. Both may be intended, but they decide what a Day 1..N cycle means, so please confirm the intended rule (empty day = repeat Monday? skip? rest day?) and show it on the empty tab. What checks out: the weekday mapping (Tue 2026-10-27 = 565, Wed 28 = 565, Fri 23 = 689), kcal and macros equal the builder totals, no duplicate meals after two saves and a reload (meals=1 per day). Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes.",
+      "thread": [
+        {
+          "at": "2026-10-23T15:47:49.353Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Rule settled (Governor GO 23 Oct): what the user sees is what gets saved. In the new Day 1..N cycle (build 312+) there is no silent fill: an empty Day tab says 'Day 3 has no meals - copy a day into it or remove it.' with Copy Day 1's meals + Remove Day 3, and Save is blocked ('Fill or remove Day 3 to continue', footer 'Go to Day 3' from other tabs). The payload sends every cycle day and refuses an empty one (EmptyCycleDayError). Server: a cycle save with an empty day, a gap or >7 days is a 400 (CYCLE_DAY_EMPTY / CYCLE_DAYS_NOT_CONTIGUOUS / CYCLE_DAYS_INVALID) before anything is written, the old compaction to a shorter cycle is gone, and the bridge no longer fills a cycle day from day 1. Weekday plans and builds <=311 keep the Monday fill on purpose (today's plan, coach today/tomorrow and the Saturday re-bridge read it), unchanged. Commits on feat/diet-day-cycle: app 13c30aa3 (branch head 0ae53855), backend f64dcb54 (branch head 7804ecda). Tests: app tsc 0 + pre-push CI 3641 passed; backend full suite on 7804ecda 8625 passed / 21 skipped; test/copy-diet-day.test.ts now covers every export (18 tests). QA re-run on the local harness (app 1b18bf3c = same patches, backend 7804ecda): 6/6 pass incl. hi. Lands with the cycle (backend deploy, then app build 312).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-customize-diet-unsaved-copy-lost",
