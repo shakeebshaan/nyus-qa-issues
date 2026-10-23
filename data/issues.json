@@ -12365,6 +12365,50 @@
       "fix": null,
       "history": [],
       "description": "[P4 / unsaved edits] On /customize/diet, a copy (or any edit) is written to the localStorage draft (nyus_builder_draft shows friday:1 ingredient 0.2 s and 4 s after the copy) but after an app reload the screen loads the saved plan from /onboarding/custom-plan/current-diet and the draft is ignored: Friday goes back to 689 kcal, the copy of Tuesday (565 kcal) is lost. For a tester who copies a few days and is interrupted (Android kills the WebView, a call) the work vanishes without a message. Steps: open /customize/diet on an existing plan, Friday > Copy from another day > Tuesday > Replace, reload before Save plan. Fix idea: restore the draft over the saved plan when it is newer, or warn on leaving with unsaved changes. Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes."
+    },
+    {
+      "id": "i-20261023-diet-reopen-splits-comma-ingredient",
+      "createdAt": "2026-10-23T15:45:00.000Z",
+      "author": "qa",
+      "tags": [
+        "diet-builder",
+        "save-custom-plan",
+        "p3"
+      ],
+      "route": "POST /onboarding/save-custom-plan then GET /onboarding/custom-plan/current-diet; /customize/diet reopen",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-dietcycle/d05-day2-reopened.png"
+      ],
+      "imageCommits": [
+        "24ec2a7fd5631637aaba9a1be28520dd37672cf9"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / data round trip] A day whose only ingredient is 'Chana Dal (Split Chickpea), Cooked' (100 g, 124 kcal) is saved fine, but current-diet and the reopened /customize/diet show TWO ingredients: 'Chana Dal (Split Chickpea)' 50 g and 'Cooked' 50 g (62 kcal each; the total stays 124 kcal). The name is split at the comma and the grams are halved; the second row is not a food. Reproduced by POSTing the same payload to main 6e340c63 (a weekday vary plan, Monday = that one ingredient: current-diet returned 'Chana Dal (Split Chickpea)@50+Cooked@50'). A day that also holds another ingredient (poha + the same dal) came back intact in the copy-a-day run, so it seems to need a single-ingredient meal. Steps: Vary by day, Day 1 breakfast = search 'dal' > 'Chana Dal (Split Chickpea), Cooked' > Add, Save plan, reopen /customize/diet, Day 1. Many catalog names contain a comma, so this will hit real plans: after the next save the split rows are what the plan contains. Found 23 Oct 2026 ~15:40 UTC in the diet-cycle verification [executed]: local nyu_backend (in-memory sqlite) at origin/main 6e340c63 AND at branch feat/diet-day-cycle 7804ecda, fake account qa.local@example.test, so it is not caused by the cycle change."
+    },
+    {
+      "id": "i-20261023-weekday-resave-keeps-removed-day-row",
+      "createdAt": "2026-10-23T15:45:00.000Z",
+      "author": "qa",
+      "tags": [
+        "diet-builder",
+        "save-custom-plan",
+        "p4"
+      ],
+      "route": "POST /onboarding/save-custom-plan (weekday vary payload, build 311) then GET /plans/<id>/week/1",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / old weekday plans] Saving a weekday vary plan with Monday, Tuesday, Wednesday and then again with Monday and Tuesday only (what a build-311 tester does after removing Wednesday) leaves the Wednesday diet row: GET /plans/1/week/1 returns diet rows with day_of_week [0,1,2] after both saves. I did not check what Wednesday's date serves afterwards (the old Wednesday meal or Monday's fill), so please confirm the intended result. Same on main 6e340c63 and on feat/diet-day-cycle 7804ecda, so it is not a cycle regression; cycle saves (repeat_mode 'cycle') replaced the rows correctly in every step I ran (cycle 3 to 2 days, weekday to cycle through the builder). Found 23 Oct 2026 ~15:40 UTC in the diet-cycle verification [executed]: local nyu_backend (in-memory sqlite) at origin/main 6e340c63 AND at branch feat/diet-day-cycle 7804ecda, fake account qa.local@example.test, so it is not caused by the cycle change."
     }
   ]
 }
