@@ -1390,6 +1390,12 @@
           "event": "note",
           "note": "QA sweep 3: still open",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: STILL OPEN. Executed read-only on the Oracle VM 08:45 UTC (counts and modes only, no values): 11 .env.bak-* files in ~/nyu_backend, modes 600 x 1 and 664 x 11 across .env and the backups, 2 commented-out DATABASE_URL lines in .env; VM HEAD cf71e0cd. Unchanged since 22 Oct. Owner: Shaan (webhook secret rotation is a money gate; file clean-up is a prod VM change).",
+          "by": "qa"
         }
       ],
       "description": "[P2 / security residue after pwd1 - executed read-only on the Oracle VM 2026-10-21 16:35 UTC, no values printed] The pwd1 rotation fixed the DB login, but the old DB password still lives on the box and is related to a live secret: (1) .env keeps a commented-out old DATABASE_URL line holding the OLD DSN; (2) 11 backup copies .env.bak-* in ~/nyu_backend contain the old password and every other key; most are mode 664 (others can read), one is 600; .env itself is also mode 664; (3) RAZORPAY_WEBHOOK_SECRET (razorpay_webhook.py:224) is derived from the old DB password, which sits in git history, so it must be treated as weak and rotated. Next owner: Shaan (webhook secret rotation touches Razorpay = money gate; file hygiene = prod VM change, per-change yes) - Shaan's list item 'NYUS: clean old secrets off the VM + rotate the Razorpay webhook secret'. Not re-verified: that the OLD DB password is refused (assumed from the pwd1 fix note). [Redacted 2026-10-21 by the NYUS employee: an earlier version of this text described the secret; this board repo is public.] || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): read-only on the Oracle VM (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, and of the 12 files (.env plus the 11 backups) one is mode 600 and 11 are 664, and .env still contains 2 commented-out DATABASE_URL lines. VM HEAD is 3b30aee4, health 200. Nothing cleaned yet; Razorpay webhook secret rotation is still Shaan's (money gate). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Read-only on the Oracle VM today (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, modes 600 x1 and 664 x11 across the 12 files, 2 commented-out DATABASE_URL lines in .env; VM HEAD is 573232a9. Waiting on Shaan's per-change yes (VM file hygiene) and the Razorpay webhook secret rotation (money gate)."
@@ -1429,6 +1435,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. notification titles/bodies still English (backend.py:14458 and :15939 \"Your Weekly Wellness Report\", retention_sequences.py, engagement.py)."
+        },
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: STILL OPEN, narrower. Executed 2026-10-23 08:50 UTC on the production web build of app main 4c79e100 (Hindi, 390x844, seeded Edge, a QA account, GET reads live, every non-GET stubbed) unless marked inspected. Fixed: the page chrome and the Mark all read label (Notifications.tsx:411 now t(notifications_page.mark_all_read), hi.json:6661). Still English: every notification TITLE and BODY, because the backend stores English text: /notifications in Hindi lists rows such as Your plan is paused, Subscription expiring soon, We need to talk (12 titles and their bodies). No Hindi template exists in nyu_backend main (no match for the proposed Hindi strings). Fix stays: locale-aware templates in create_notification callers (behavior_triggers.py, scheduler_jobs.py, gamification.py:337, notification_service.py).",
+          "by": "qa"
         }
       ],
       "description": "[P3] [Hindi locale, executed 2026-10-21, build 5da19550, QA account qa.store.demo7 vs prod reads, writes blocked, 390px] Notification titles and bodies are English (backend-generated: 'Your Weekly Wellness Report', 'Coach is waiting', 'Subscription expiring soon', 'Day 4 since your last log…'); Notifications.tsx:22,375 'Mark all read' literal. Backend text needs locale-aware templates. Repro: set app language to Hindi (localStorage nyus_locale=hi), open /notifications. Root cause class: literal JSX string, or t(key,{defaultValue}) where the key is absent from en.json AND hi.json (so Hindi falls back to the English default). Screenshot: C:/tmp/qa-hindi/notifications.png || QA board re-check 2026-10-21 19:30 UTC: STILL OPEN. Executed: /notifications in Hindi still has English title, \"All caught up\" and the empty-state body; backend notification titles/bodies are not localised (not exercised: no notifications on the local account). || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): /notifications in Hindi: 38 English lines (title \"Notifications\", \"20 unread\", \"Mark all read\", \"TODAY\", \"Achievement unlocked: Rising Star\", \"Your Weekly Wellness Report\", \"Coach is waiting 👋\", \"Day 4 since your last log...\", \"Your streak misses you\"); titles and bodies come from the backend in English, Notifications.tsx:22,375 literals. Minimal repro: localStorage nyus_locale=hi, sign in, open /notifications. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /notifications in Hindi has 31 English lines (screenshot open-hi-notifications.png in C:/tmp/nyus-release-307/board): \"Achievement unlocked: Rising Star\", \"Your Weekly Wellness Report\", \"Coach is waiting\", \"Day 4 since your last log\", \"Your streak misses you\". New detail: one of the stored notifications is the AI fallback text itself (\"I'm temporarily unavailable for live coaching ...\") as the body of \"Your Weekly Wellness Report\" (see i-20261022-ai-cache-stores-fallback). Needs locale-aware backend templates. || QA NOTE 2026-10-22 (board sweep, dev handoff): DEV HANDOFF (oldest open app issue, no fix queued; checked in build 307 = release/307 a5b77f1a and nyu_backend 29dbd011, unchanged). REPRO: 1) set the app language to Hindi (Profile > language, or on web localStorage nyus_locale=hi; the app also sends PUT /api/v1/profile {coach_language:\"hindi\"}). 2) Open the bell / /notifications. 3) The page chrome is Hindi, but every stored notification title and body is English. Cause: the backend writes English title/body strings into the notification row at creation, whatever the user's language. EXPECTED: for a Hindi user the title and body are Hindi. Recommended design: store a template key plus params and render them in the app with the app locale (the language can change after the row is created); the simpler alternative is to pick the string by the user's language at creation (en / hi / hinglish dict per template). Templates to translate, with expected Hindi (machine-drafted, needs a native read like nyus-f84785): RE_ENGAGEMENT, app/services/retention_sequences.py:54-61: 3 days \"Your streak misses you / One log keeps it alive.\" -> \"आपकी स्ट्रीक आपको याद कर रही है / एक लॉग इसे ज़िंदा रखता है।\"; 7 days \"Quick check-in? / Let's get back on track.\" -> \"छोटा चेक-इन? / चलिए फिर से सही रास्ते पर लौटें।\"; 14 days \"Your coach has a plan / A fresh start is waiting.\" -> \"आपके कोच के पास एक प्लान है / नई शुरुआत इंतज़ार कर रही है।\"; 30 days \"We saved your progress / Pick up where you left off.\" -> \"हमने आपकी प्रगति सहेज ली है / वहीं से शुरू करें जहाँ छोड़ा था।\"; 60 days \"A lot has changed / New features waiting for you.\" -> \"बहुत कुछ बदल गया है / नए फ़ीचर आपका इंतज़ार कर रहे हैं।\"; 90 days \"Your journey isn't over / Come back anytime.\" -> \"आपका सफ़र ख़त्म नहीं हुआ / जब चाहें लौट आइए।\". Engagement ladder, app/services/scheduler_jobs.py ~1048-1080: \"Coach is waiting 👋 / Day 4 since your last log. A quick check-in keeps your streak alive.\" -> \"कोच आपका इंतज़ार कर रहा है 👋 / आपके आख़िरी लॉग को 4 दिन हो गए। एक छोटा चेक-इन आपकी स्ट्रीक बचाए रखता है।\"; \"Your plan is paused / Day 7 inactive — we'll skip Saturday's plan refresh until you're back. Tap to resume.\" -> \"आपका प्लान रुका हुआ है / 7 दिन से निष्क्रिय: आपके लौटने तक हम शनिवार का प्लान रिफ़्रेश छोड़ देंगे। फिर शुरू करने के लिए टैप करें।\"; \"We need to talk / 10+ days off the plan. Coach is ready to rebuild from where you are — open the app to restart.\" -> \"बात करनी होगी / प्लान से 10+ दिन दूर। कोच आपकी मौजूदा स्थिति से प्लान फिर बनाने को तैयार है: दोबारा शुरू करने के लिए ऐप खोलें।\". Badges, app/routes/gamification.py:337: \"Achievement unlocked: {badge}\" -> \"उपलब्धि अनलॉक: {badge}\" and its body \"Earned 1,000 total XP (+50 XP)\" -> \"कुल 1,000 XP मिले (+50 XP)\" (badge names come from the catalog and stay as data). Health score, scheduler_jobs.py:1496: \"Your Health Score moved up 5 pts / Your score is now 62 (good). Check what changed.\" -> \"आपका हेल्थ स्कोर 5 अंक ऊपर गया / आपका स्कोर अब 62 (अच्छा) है। देखें क्या बदला।\" (down: \"नीचे\"). \"Your Weekly Wellness Report\" -> \"आपकी साप्ताहिक वेलनेस रिपोर्ट\"; its body is the AI headline, which follows the coach language, so test it separately (and see i-20261022-ai-cache-stores-fallback: the fallback text can end up as this body). ACCEPTANCE: Hindi user, 4 days inactive: the /notifications row reads in Hindi; an English user sees the English text unchanged; old rows may stay English (backfill optional)."
@@ -11488,6 +11500,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. aria scan on /plan-timeline still has 10 English labels (day cells, toast region \"Notifications (F8)\"). Fix exists, not merged: branch fix/hi-aria-leftovers a9bc16ae (QA PASS 22 Oct: 0 English aria on the 4 routes, English unchanged, 10 keys in 4 locales, merge-tree clean, vitest test/i18n 771 passed). Merge it to close this.  Screenshot images/2026-10-22-mainqa/hi-hi-aria-leftovers.png (commit 9ddecc93)."
+        },
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: PARTIALLY FIXED, still open (P4). Inspected on app main 4c79e100: the literals at PlanTimeline.tsx (workout and meals planned) and ProfileQuickActions.tsx (Notification Settings, Connected Devices) no longer match; the banner Dismiss literal is gone. Still English: the toast viewport default label (Radix, toast.tsx has no label prop) and toast.tsx:79 aria-label Dismiss notification; FloatingCoachButton.tsx:316 Dismiss nudge; the Go back aria-label on /weight-history-chart and /social/search; the bottom-nav profile badge aria, which reads the English word notifications inside a Hindi label (Profile (32 notifications)).",
+          "by": "qa"
         }
       ],
       "description": "[P4 / Hindi screen-reader labels, found in the build 307 re-test 22 Oct] Visible text on the 14 re-tested screens is Hindi, but some aria-labels are still English in Hindi (a screen reader reads them aloud in English). Executed on the 307 web bundle, Hindi, 390px, aria-label/placeholder/title scan: (1) every page: toast region \"Notifications (F8)\" (Radix ToastViewport default label, src/components/ui/toast.tsx:14, pass a translated label prop). (2) /plan-timeline: \"{day}: workout and meals planned / workout planned / meals planned / rest day\" and \" (today)\" at src/pages/PlanTimeline.tsx:979-987. (3) /profile quick actions: \"Notifications, 41 new\", \"Subscription\", \"Notification Settings\", \"Connected Devices\", \"Social\", \"Settings\" (src/pages/_components/profile/ProfileQuickActions.tsx:43-100; the visible labels are already Hindi, the aria text is not). (4) /dashboard and /nutrition: banner close button \"Dismiss\". Also seen, not in scope: \"Unknown\" device OS on /connected-devices comes from data (the key connected_devices.os_unknown 'अज्ञात' exists). Fix: route each label through t() with existing keys where they exist (the visible labels share keys), new Hindi machine-drafted, needs native read. Acceptance test for dev: in Hindi, a scan of aria-label/placeholder/title on /dashboard, /nutrition, /plan-timeline and /profile finds no value matching /^[A-Za-z ,()0-9:\\/+-]+$/ except names, emails and units; en unchanged; vitest renders PlanTimeline and ProfileQuickActions under hi."
@@ -11512,7 +11530,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: STILL OPEN (inspected, app main 4c79e100). TodaysTargetsCard.tsx:102 still picks the side from ATLAS_REGION_SIDE[targets.regions[0]] when no chip is focused.",
+          "by": "qa"
+        }
+      ],
       "description": "[P4] The Today view of the Activity muscle card opens with the 3D body facing BACKWARDS, so the main target can be hidden. In the screenshot the session is Upper + Legs with Chest 4 sets as the first chip, but the body shows the back (glutes glow red) and the chest is only visible after tapping the Chest chip. Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected, not changed): src/components/activity/TodaysTargetsCard.tsx:102, todaysTargetsFigure() picks the side from targets.regions[0], which here is a back-side region rather than the top chip. Fix idea: face the side with the most target sets (or the first chip shown), and let the camera orbit show the other side. Repro: open /activity on a day with a mixed front/back session, Today chip selected."
     },
     {
@@ -11536,7 +11561,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: STILL OPEN (inspected, app main 4c79e100). TodaysTargetsCard.tsx:142-144 still renders the Also working line with no right padding that clears the floating coach button.",
+          "by": "qa"
+        }
+      ],
       "description": "[P4] The floating coach button covers the right end of the \"Also working: ...\" line in the Activity muscle card at 390px: \"Quads,\" is cut off behind the green button at the default scroll (same pattern as the FAB overlaps already fixed on /faq and Nutrition). Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected): the line is rendered in src/components/activity/TodaysTargetsCard.tsx:143. Fix idea: right padding on the card details that clears the FAB, or the shared FAB clearance used on other pages. Repro: open /activity, Today chip, a session with 6+ secondary muscles."
     },
     {
@@ -11555,7 +11587,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: STILL OPEN. Executed 2026-10-23 08:50 UTC on the production web build of app main 4c79e100 (Hindi, 390x844, seeded Edge, a QA account, GET reads live, every non-GET stubbed) unless marked inspected. /social Board tab: It is just you so far, Add a friend and you will see each other active days here, week by week., Find Friends; Messages tab: Start a Conversation, You need friends to start messaging, Find Friends (all English). FriendsLeaderboardView.tsx:245 and MessagesView.tsx:123 unchanged (MessagesView.tsx has no useTranslation).",
+          "by": "qa"
+        }
+      ],
       "id": "i-20261022-hi-social-empty-states",
       "tags": [
         "hindi",
@@ -11581,7 +11620,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: STILL OPEN. Executed 2026-10-23 08:50 UTC on the production web build of app main 4c79e100 (Hindi, 390x844, seeded Edge, a QA account, GET reads live, every non-GET stubbed) unless marked inspected. /social/search in Hindi: Find Friends, Requests, Blocked, Search users by name or email, Search by name or email to add friends and the placeholder are all English; UserSearch.tsx still has no useTranslation (0 uses, line 272 unchanged).",
+          "by": "qa"
+        }
+      ],
       "id": "i-20261022-hi-user-search",
       "tags": [
         "hindi",
@@ -11607,7 +11653,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: STILL OPEN (inspected). AIOverview.tsx:98 still sets headerLabel = Weekly Overview and the file has no useTranslation. Not run live: the QA account used for this check has no active plan, so /ai/overview redirects to /choose-plan.",
+          "by": "qa"
+        }
+      ],
       "id": "i-20261022-hi-ai-overview",
       "tags": [
         "hindi",
@@ -11795,6 +11848,12 @@
           "event": "partial-verified",
           "by": "qa",
           "note": "Gaps 8 and 9 CONFIRMED FIXED live 22 Oct after the privacy upload (NYUSLANDING fb121d7c, 17:04 UTC): https://nyus.in/privacy answers 200, \"Last updated: October 22, 2026\"; Health Connect section lists \"Exercise (READ_EXERCISE) - completed sessions. NYUS never writes workouts to Health Connect.\" and has 0 mentions of WRITE_EXERCISE (WRITE_WEIGHT is still listed, which is right); it now names optional health details (medical conditions and medications you enter, and menstrual cycle if you turn it on, stored with the profile), mental-health check-ins (optional PHQ-9: answers and score stored), meal photos (\"sent to OpenAI to estimate what is on the plate. NYUS does not store that photo\") and voice input (the phone speech recogniser, an Android or Google service, turns speech into text; NYUS receives only the text and does not record or store audio) [executed, curl + text search]. Gaps 2, 3, 10, 13, 19 and 20 stay open (gap 10: WRITE_EXERCISE is still in the app manifest until build 308; the privacy text is now ahead of the build, which is true because no code writes it)."
+        },
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23 (A3 walk 07:50 UTC, evidence in docs/PLAY_PRODUCTION_ACCESS.md section 5 and 5b, branch qa/a3-checklist-oct23): GAP 10 FIXED (the Play-served build 309 requests exactly the 11 health permissions and no WRITE_EXERCISE; executed with aapt2 on the generated APK). Gaps 8 and 9 stay fixed (privacy updated 22 Oct, live). STILL OPEN: GAP 2 engagement (tester numbers 07:48 UTC: 3 active accounts, 0 on 2+ days, nobody active since 17 Oct, 0 ratings, 0 lines); GAP 3 G7 (no Google sign-in seen since 21 Oct and none ever on Android 12 or older; not runnable on a device here); GAP 13 Hindi account deletion (not re-checked); GAP 19 and 20 (paste text still names build 308; closed track is now 309). NEW, filed as i-20261023-a3-ad-id-permission and i-20261023-listing-wall-of-badges-live.",
+          "by": "qa"
         }
       ],
       "description": "[P2 / Play production access dry run, 22 Oct, 7 days before the earliest apply on Thu 29 Oct (LAUNCH_TODO A3)] Pre-submit checklist of docs/PLAY_PRODUCTION_ACCESS.md run read-only against today's state: 28 lines = 13 OK, 8 GAP, 7 CONSOLE-ONLY (full table with evidence in the QA dry-run file C:/tmp/a3-checklist-dryrun.md on the dev box). Only the GAPs are listed here.\n\nGAP 2 (5 row 2): Tester engagement: ~6 non-owner testers on 2+ days.\nGAP 3 (5 row 3 + 4): G7 Google sign-in on the Play build.\nFIXED 22 Oct (privacy upload 17:04 UTC, fb121d7c, verified live) GAP 8 (5 row 6): Privacy policy matches the data the app handles: sensitive health data, meal photos, voice.\nFIXED 22 Oct (privacy upload 17:04 UTC, fb121d7c, verified live) GAP 9 (5 row 6): Privacy text consistent with the permissions the production build will request.\nGAP 10 (4a / checklist): Production bundle asks for no unused health permission (WRITE_EXERCISE).\nGAP 13 (5 row 6): Hindi users see the account-deletion confirm screen in Hindi.\nGAP 19 (5 row 9): Brackets in section 3 filled.\nGAP 20 (3 / 4): Every claim in section 3 has an evidence row in section 4 (and is still true).\n\nEXACT FIXES\n- #2 Tester engagement: ~6 non-owner testers on 2+ days\n  - Fix: No code fix. Follow the doc section 8 plan (one small action a day); re-run tester-usage.py and tester-days.py on 28 Oct 12:30 UTC. If testers active on 2+ days is still below ~6, do not apply on the 29th (doc section 0). Build 308 adds the two feedback entry points (Profile > Support, first-log ask), so ship 308 to the closed track before 28 Oct if you want ratings counted.\n- #3 G7 Google sign-in on the Play build\n  - Fix: Do one real Google sign-in on build 307 from an Android 12-or-older phone (the owner test phone RMX1901 is Android 11), then re-count POST /auth/google 200s in nginx and note \"Android 7-12 proven\" in row 3; otherwise keep the email-code fallback line in the App access text.\n- FIXED #8 Privacy policy matches the data the app handles: sensitive health data, meal photos, voice\n  - Fix: nyus.in/privacy (landing, manual upload): add to 1 Information We Collect and 4 Sharing: (a) optional health details you enter: medical conditions, medications, menstrual cycle and mental-health (PHQ-9) check-ins, stored and used for coaching; (b) meal photos are sent to OpenAI to estimate the meal and are not stored by NYUS; (c) voice input uses the phone OS speech recogniser (microphone permission), NYUS receives only the text. Then Data safety and the policy say the same thing.\n- FIXED #9 Privacy text consistent with the permissions the production build will request\n  - Fix: In the same privacy edit, change the Health Connect line to \"Exercise (READ_EXERCISE) - completed sessions\" and delete \"WRITE_EXERCISE ... we may write logged workouts back\" (keep WRITE_WEIGHT). Upload together with the app 308 change.\n- #10 Production bundle asks for no unused health permission (WRITE_EXERCISE)\n  - Fix: App repo: delete android/app/src/main/AndroidManifest.xml:145 (android.permission.health.WRITE_EXERCISE); bump android/app/build.gradle:25-26 to versionCode 308 / versionName 1.10.19; build the signed AAB, upload to the closed track, and release production from 308 or later (not 305-307). In the Console tick WRITE_WEIGHT with its justification (nyus-e74aeb).\n- #13 Hindi users see the account-deletion confirm screen in Hindi\n  - Fix: Add Hindi strings for src/pages/AccountDeletion.tsx (title, intro, what gets deleted, field labels, checkbox, button, help line); acceptance: Hindi /account-deletion has 0 Latin app strings. Not a Play blocker.\n- #19 Brackets in section 3 filled\n  - Fix: Edit docs/PLAY_PRODUCTION_ACCESS.md: 3a builds \"299-302 on 18-20 Oct, 304 and 305 on 21 Oct, 306 on [date from LAUNCH_TODO B56], 307 on 22 Oct 07:46 UTC\" and drop the brackets; section 5 row 4 -> alpha = 307 (1.10.18); 3c: remove \"in main, not yet in a build\" from the 6 items now in release/307; 1c: K = 3, D from tester-days.py (active days 15-17 Oct only); 3b vitals sentence only with \"data fresh to 16 Oct\".\n- #20 Every claim in section 3 has an evidence row in section 4 (and is still true)\n  - Fix: Add section 4 rows for the 2b claims, each with a command or commit: meal logging by photo / barcode / search (the CustomMealModal photo flow, /barcode page and search tests, build 307 smoke); 1,300+ exercises with demos (exercise-catalog.json 1,309 entries + the demo share); Health Connect steps / sleep / heart (manifest READ_STEPS, READ_SLEEP, READ_HEART_RATE + HealthConnectPlugin.kt); en / hi / hinglish (locales); 30 days free then Rs 499 a month with no auto-renewal and no ads / no data sold (pricing page, docs/PLAY_BILLING_DECISION.md, privacy text).\n\nBlocking before the 29th: GAP 10 (WRITE_EXERCISE still on main, no build 308) with 9 (privacy sentence) and 8 (privacy omissions); GAP 2 is the known main risk and needs engagement, not code. Hindi account-deletion (13) is minor. No secrets or tester identities are in this issue (aggregates only)."
@@ -11809,7 +11868,14 @@
       "imagePrivate": false,
       "status": "open",
       "fix": null,
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-23T08:46:44.000Z",
+          "event": "recheck",
+          "note": "QA board re-check 2026-10-23: cannot re-test. The draft branch draft/social-pack-7day-oct22 and content/drafts/social-pack-7day-2026-10-22.md no longer exist on any NYUSLANDING remote branch or main, so the four lines (84, 89, 128, 133) cannot be re-read. Left open for the growth stream: confirm the pack was rewritten (the app added about 150 g of rice that was not on the plate and counted the garnish as a 30 kcal salad) or retired.",
+          "by": "qa"
+        }
+      ],
       "id": "i-20261022-social-pack7-salad-wording",
       "tags": [
         "marketing",
@@ -11819,6 +11885,70 @@
       ],
       "route": "NYUSLANDING draft/social-pack-7day-oct22 @ cf4b424b, content/drafts/social-pack-7day-2026-10-22.md",
       "description": "[QA of the 7-day social pack, 22 Oct: PASS on days 1, 2, 4, 6, 7; FIX on days 3 and 5 (one wording defect, numbers are right)] DEFECT (P3) content/drafts/social-pack-7day-2026-10-22.md:84 (day 3 table \"The rice and the salad were not on the plate.\"), :89 (day 3 English caption \"...a salad (30) that were not on the plate\"), :128 (day 5 table \"चावल और सलाद थाली में थे ही नहीं\") and :133 (day 5 Hindi caption, same claim): the test photo (C:/tmp/qa-photo/fm/jhol.jpg, the only copy, used by both runs) shows NO rice, but it does show a small garnish at the plate edge (onion rings, tomato wedges, lemon slices, coriander) [inspected, opened the photo]. \"The salad was not on the plate\" is therefore overstated and a viewer who sees the photo can say so. Fix: say the app added about 150 g of rice (200 kcal) that was not on the plate and counted the garnish as a 30 kcal salad; keep \"Our AI invented rice\" as the hook (true). Lines 83 and 127 (card) can stay. CHECKS THAT PASS [executed 22 Oct]: (1) 630 = Chicken Curry 400 + Rice \"~150 g cooked\" 200 + Salad 30 in C:/tmp/qa-photo/fm-calls.jsonl (08:06 UTC run) and 400 = one item \"Chicken curry with potatoes\" in fm-calls-after.jsonl (16:05 UTC, one minute after nyu_backend d47d9c80 deployed at 16:04:17), same photo name jhol; the story says \"one test photo\" and \"not a promise\" (days 3 and 5) and makes no accuracy claim. (2) Numbers vs the live pages: TDEE page formula and factors 1.2/1.375/1.55/1.725/1.9 plus the \"most common mistake\" and \"most people overestimate\" lines (days 1, 4); Hindi page woman example BMR 1,256.5 and the x1.375 row ~1,730 (1,256.5 x 1.375 = 1,727.7), and the 2,110 / 1,660 kcal table (days 2, 6; ICMR-NIN 2020 p. 4). (3) All 14 links (7 days x Instagram and YouTube) return 200 and carry utm_campaign=pack7_oct22, utm_source instagram or youtube; 0 Play links. (4) Every caption ends with the full \"30-day free trial, then Rs 499/month\" line (EN and HI variants); live home, FAQ and men guide say the same and the app Choose plan shows 1 month = 499. (5) 0 free-app, weight-loss-promise, sugar or medical-claim wording; \"accuracy\" appears only in \"no accuracy promise\" lines. (6) Day 7 app claim matches nyus-well-tracker CustomMealModal.tsx:612-628 on main (609-626 on release/307): the photo estimate fills a description plus calories and macros, no item list, toast \"review and log\". (7) Hindi days 2, 5, 6 carry the REVIEW FLAG naming nyus-f84785. (8) No duplicate of marketing/social or marketing/reels: the only matches are ICMR-NIN/IFCT source tags on other topics (protein RDA, flour calories). Reminder from the pack: dietitian read nyus-fad8c0 still open for the TDEE pages; photo rights still unchecked, so days 3/5 use illustrated cards."
+    },
+    {
+      "id": "i-20261023-a3-ad-id-permission",
+      "createdAt": "2026-10-23T08:46:44.000Z",
+      "author": "qa",
+      "tags": [
+        "play",
+        "launch",
+        "production-access",
+        "a3",
+        "p2"
+      ],
+      "route": "android/app/build.gradle:100 (firebase-analytics); Play Console App content > Advertising ID",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / Play production access, found in the A3 walk 23 Oct 07:50 UTC, 6 days before the earliest apply] The Play-served build 309 (1.10.20) requests com.google.android.gms.permission.AD_ID and four android.permission.ACCESS_ADSERVICES_* permissions. They are not in the repo manifest: they are merged in by com.google.firebase:firebase-analytics (android/app/build.gradle:100). The store listing says no ads and the privacy page says Health Connect data is never used for advertising, and it names a Firebase Analytics app-instance ID but not the Advertising ID. A Console Advertising ID declaration of No while the bundle carries AD_ID can block a release; Yes needs the Data safety form to match. Executed: aapt2 dump permissions on the universal APK Play generates for versionCode 309. FIX (decide first): either declare Yes for analytics in Console App content > Advertising ID and mention it in Data safety and the privacy page, or add tools:node=remove entries for AD_ID and the four ACCESS_ADSERVICES permissions to AndroidManifest.xml, ship a new closed-track build and re-run aapt2. Owner: Shaan (Console answer), NYUS employee (manifest and build). Evidence table: docs/PLAY_PRODUCTION_ACCESS.md section 4 (23 Oct rows) and 5b R3 on branch qa/a3-checklist-oct23."
+    },
+    {
+      "id": "i-20261023-listing-wall-of-badges-live",
+      "createdAt": "2026-10-23T08:46:44.000Z",
+      "author": "qa",
+      "tags": [
+        "play",
+        "listing",
+        "claims",
+        "p2"
+      ],
+      "route": "Play Console store listing en-US and en-GB, section CALM BY DESIGN",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 claims / Play listing] The live en-US and en-GB full description (read through the Play API, read-only edit, 23 Oct 08:00 UTC) still says: Precise data, quiet design, zero hype. No neon, no gimmicks, no wall of badges. The app has an Achievements screen with a badge catalog, earned badges, levels and share cards (App.tsx:876, pages/Achievements.tsx, 43 badges). The repo source dropped that line in app commit 8b2d6d3f, but the corrected text is not on Play. FIX: replace the line on Play with: Quiet design, zero hype. No neon and no gimmicks. Achievements are there if you want them. (Dropping Precise data is deliberate: photo estimates are approximate.) Both languages carry the same text; hi-IN does not contain the line. Store-listing text needs Shaan yes; the NYUS employee pushes it."
+    },
+    {
+      "id": "i-20261023-nudge-retrigger-not-exempt",
+      "createdAt": "2026-10-23T08:46:44.000Z",
+      "author": "qa",
+      "tags": [
+        "backend",
+        "push",
+        "admin",
+        "p3"
+      ],
+      "route": "nyu_backend app/admin_v2/broadcasts.py:960-1005; app/services/push_budget.py:67-78",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / push cap QA 23 Oct] The admin single-user nudge retrigger (POST /nudge-retrigger) sends with trigger_type manual. Only the inactive_user nudge maps to admin_message, which is exempt from the daily push cap; streak_risk, weekly_review, weight_reminder, meal_reminder and workout_reminder are counted and can be silently held by the 2-per-IST-day cap, and the admin sees the wrong reason (push suppressed by user prefs / no token, broadcasts.py:1027). Executed: the live is_exempt on the VM returns False for those five type and manual pairs. FIX: in push_budget.py add EXEMPT_TRIGGERS = frozenset({manual}) and return True for it in is_exempt after the COUNTED_TRIGGERS check (broadcasts.py:1005 is the only place that sets manual); surface result push_skipped in the retrigger message; add a test to tests/test_push_daily_cap.py. Not a release blocker."
     }
   ]
 }
