@@ -12057,10 +12057,44 @@
         "c41793e867c37762322bad3500c3d25e3a0981cb"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app main 734784e1. Root cause: right after /onboarding/generate-profile, OnboardingFlow prefetched ['diet-plan', today] while no diet existed yet (empty plan, 30 s staleTime). Nothing invalidated it after save-custom-plan/finalize, so 'Log your first meal' within 30 s showed Nutrition's 'No diet plan yet'. Fix: handleFinish (the one exit from onboarding) now marks every plan-derived query stale (invalidatePlanQueries) once the server confirms completion, before navigating. Proof [executed]: QA's own day-1 replay (fresh account, 'I'll build it myself' + Poha, local backend with mock LLM, 390 px), same script on both builds. Image 1 = BEFORE (main 07d5d52c): /diet/plan fetched once at 23.0 s with 0 meals, finalize at 42.3 s, landed at 47.6 s with no refetch -> 'No diet plan yet'. Image 2 = AFTER (fix): same empty prefetch at 25.3 s, finalize at 47.7 s, then a fresh /diet/plan at 50.2 s with 1 meal -> 'Rice Flakes Bowl 565 kcal, Mark eaten'. Tests: test/OnboardingFlow.test.tsx +2 (the invalidation test fails on the old code), full app vitest 9,591 passed / 0 failed (superset of test:unit; loop.mjs verify could not run here, it looks for the app under NYUS CODE/, the main-machine layout), tsc 0, pre-push gate green. Reaches phones with the next Play build. Still to confirm on a real phone with a real account.",
+        "imagePath": "images/i-20261023-d1-stale-no-diet-plan-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-d1-stale-no-diet-plan-fix-r1.png",
+          "images/i-20261023-d1-stale-no-diet-plan-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f9d2ffc756825d1d2d8b763125fed107e3b65f7a",
+        "imageCommits": [
+          "f9d2ffc756825d1d2d8b763125fed107e3b65f7a",
+          "94ca9d29cb9d7c809a3b3bcd975024f8dfdd5300"
+        ],
+        "fixedAt": "2026-10-23T13:58:17.789Z",
+        "by": "shakeebshaan",
+        "appCommit": "734784e1",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root cause proven by an A/B replay of QA's exact flow (before: stale empty plan, after: refetch with the meal) plus a unit test that fails on the old code; not yet seen on a real phone."
+        }
+      },
       "history": [],
-      "description": "[P2 / first two days, TOP 1] A tester who has just built a plan taps 'Log your first meal' on the 'Your plan is ready' screen and lands on Today's Nutrition showing 'No diet plan yet. Generate a personalized macro-based plan in under a minute.' with 'Create Diet Plan with AI'. The plan exists: a reload of /nutrition shows 'Rice Flakes Bowl, 565 kcal, Mark eaten'. Steps: new account, finish onboarding (build the meal manually: I'll build it myself, add one ingredient, Continue), wait for 'Your plan is ready', tap 'Log your first meal'. Seen 2 of 2 runs when the flow was driven at normal speed (a slower first run showed the plan); the diet-plan query was fetched at 12:21:19 before save-custom-plan finished at 12:21:38 and was not refetched, so it looks like a stale cache. Why it matters: the very first screen after onboarding tells a tester there is no plan; many will tap Create Diet Plan with AI (a second plan, 30+ s) or leave. Fix idea: invalidate the diet-plan query after onboarding finalize / save-custom-plan, or have 'Log your first meal' refetch before navigating. Caveat: the harness LLM is a mock, so real timing is longer; please confirm on a real phone with a real account. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+      "description": "[P2 / first two days, TOP 1] A tester who has just built a plan taps 'Log your first meal' on the 'Your plan is ready' screen and lands on Today's Nutrition showing 'No diet plan yet. Generate a personalized macro-based plan in under a minute.' with 'Create Diet Plan with AI'. The plan exists: a reload of /nutrition shows 'Rice Flakes Bowl, 565 kcal, Mark eaten'. Steps: new account, finish onboarding (build the meal manually: I'll build it myself, add one ingredient, Continue), wait for 'Your plan is ready', tap 'Log your first meal'. Seen 2 of 2 runs when the flow was driven at normal speed (a slower first run showed the plan); the diet-plan query was fetched at 12:21:19 before save-custom-plan finished at 12:21:38 and was not refetched, so it looks like a stale cache. Why it matters: the very first screen after onboarding tells a tester there is no plan; many will tap Create Diet Plan with AI (a second plan, 30+ s) or leave. Fix idea: invalidate the diet-plan query after onboarding finalize / save-custom-plan, or have 'Log your first meal' refetch before navigating. Caveat: the harness LLM is a mock, so real timing is longer; please confirm on a real phone with a real account. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
+      "thread": [
+        {
+          "at": "2026-10-23T13:58:17.789Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app main 734784e1. Root cause: right after /onboarding/generate-profile, OnboardingFlow prefetched ['diet-plan', today] while no diet existed yet (empty plan, 30 s staleTime). Nothing invalidated it after save-custom-plan/finalize, so 'Log your first meal' within 30 s showed Nutrition's 'No diet plan yet'. Fix: handleFinish (the one exit from onboarding) now marks every plan-derived query stale (invalidatePlanQueries) once the server confirms completion, before navigating. Proof [executed]: QA's own day-1 replay (fresh account, 'I'll build it myself' + Poha, local backend with mock LLM, 390 px), same script on both builds. Image 1 = BEFORE (main 07d5d52c): /diet/plan fetched once at 23.0 s with 0 meals, finalize at 42.3 s, landed at 47.6 s with no refetch -> 'No diet plan yet'. Image 2 = AFTER (fix): same empty prefetch at 25.3 s, finalize at 47.7 s, then a fresh /diet/plan at 50.2 s with 1 meal -> 'Rice Flakes Bowl 565 kcal, Mark eaten'. Tests: test/OnboardingFlow.test.tsx +2 (the invalidation test fails on the old code), full app vitest 9,591 passed / 0 failed (superset of test:unit; loop.mjs verify could not run here, it looks for the app under NYUS CODE/, the main-machine layout), tsc 0, pre-push gate green. Reaches phones with the next Play build. Still to confirm on a real phone with a real account.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-d1-goal-weight-equals-current",
