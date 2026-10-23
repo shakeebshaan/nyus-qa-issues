@@ -10885,8 +10885,30 @@
         "611adae34deddd44729f576410ad953915f768f5"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main 4c79e100 (fixes 9c28ac07 and 92024743 chart dates, both ancestors of main). QA board re-check 2026-10-23 08:50 UTC. Executed (production web build of app main, Hindi, 390x844, seeded Edge, QA account, writes stubbed; GET /weight/log-data stubbed with 7 sample daily points because the QA account has none): /weight-history-chart shows the Hindi title and toggle, no English line except the 'Go back' aria-label (tracked in i-20261022-hi-aria-leftovers), and the date axis reads '16 अक्टू॰, 17 अक्टू॰, 18 अक्टू॰ ...' (Hindi month) instead of 'Oct 16' (screenshot). Inspected: WeightHistoryChart.tsx now uses useTranslation and chartDateLabel(p, i18n.language) from src/lib/chart-date.ts, which formats the server's ISO date or '%b %d' label in the app language; English keeps 'Oct 16'. Not covered: /workout-history month labels (same helper, ExerciseVolumeChart uses it; WorkoutHistory.tsx not re-run).",
+        "imagePath": "images/i-20261022-hi-weight-history-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-weight-history-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "df959079bcd3c6f0625333a98802d5319316fe5a",
+        "imageCommits": [
+          "df959079bcd3c6f0625333a98802d5319316fe5a"
+        ],
+        "fixedAt": "2026-10-23T08:45:54.756Z",
+        "by": "shakeebshaan",
+        "appCommit": "9c28ac07",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Executed on the production web bundle of app main 4c79e100 in Hindi with GET reads and stubbed writes; where prod data was empty the GET was stubbed (named in the text). Gap: machine-drafted Hindi still waits for the native read (nyus-f84785); no new unit test was written by QA."
+        }
+      },
       "history": [
         {
           "at": "2026-10-22T06:11:57.455Z",
@@ -10901,7 +10923,17 @@
           "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /weight-history-chart: 10 English lines (\"Weight History\", Daily/Weekly, \"7 daily entries\", axis dates \"Oct 16\"..\"Oct 22\"), src/pages/WeightHistoryChart.tsx:54-124. Fix exists, not merged: branch draft/hi-i18n-pass4 9c28ac07 (QA PASS 22 Oct, vitest test/i18n 765 passed, tsc clean); it is not in origin/main. Merge it to close this.  Screenshot images/2026-10-22-mainqa/hi-hi-weight-history.png (commit 9ddecc93)."
         }
       ],
-      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /weight-history-chart is English in Hindi: the title \"Weight History\" (src/pages/WeightHistoryChart.tsx line 54, PageShell title), the count \"7 daily entries\" (line 58: chartData.length + chartView + \"entry/entries\"), the \"Daily\" / \"Weekly\" toggle (lines 77 and 89) and the empty text \"No <view> weight entries yet. Log your first weight to see the chart.\" (line 124); the date axis (\"Oct 16\") is English month names. The file has no useTranslation (0 uses) and only 18 Devanagari characters render. Fix: use t() for title, count (with plural), toggle labels and empty state, and format the axis dates with the app locale. Same family, not filed separately: /workout-history month labels (Nov, Dec, Jan ...; 29 English lines) and the /log-weight date axis. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /weight-history-chart in Hindi still shows \"Weight History\", \"7 daily entries\", \"Daily\" and \"Weekly\" (open-hi-weight.png); WeightHistoryChart.tsx unchanged."
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /weight-history-chart is English in Hindi: the title \"Weight History\" (src/pages/WeightHistoryChart.tsx line 54, PageShell title), the count \"7 daily entries\" (line 58: chartData.length + chartView + \"entry/entries\"), the \"Daily\" / \"Weekly\" toggle (lines 77 and 89) and the empty text \"No <view> weight entries yet. Log your first weight to see the chart.\" (line 124); the date axis (\"Oct 16\") is English month names. The file has no useTranslation (0 uses) and only 18 Devanagari characters render. Fix: use t() for title, count (with plural), toggle labels and empty state, and format the axis dates with the app locale. Same family, not filed separately: /workout-history month labels (Nov, Dec, Jan ...; 29 English lines) and the /log-weight date axis. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /weight-history-chart in Hindi still shows \"Weight History\", \"7 daily entries\", \"Daily\" and \"Weekly\" (open-hi-weight.png); WeightHistoryChart.tsx unchanged.",
+      "thread": [
+        {
+          "at": "2026-10-23T08:45:54.756Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main 4c79e100 (fixes 9c28ac07 and 92024743 chart dates, both ancestors of main). QA board re-check 2026-10-23 08:50 UTC. Executed (production web build of app main, Hindi, 390x844, seeded Edge, QA account, writes stubbed; GET /weight/log-data stubbed with 7 sample daily points because the QA account has none): /weight-history-chart shows the Hindi title and toggle, no English line except the 'Go back' aria-label (tracked in i-20261022-hi-aria-leftovers), and the date axis reads '16 अक्टू॰, 17 अक्टू॰, 18 अक्टू॰ ...' (Hindi month) instead of 'Oct 16' (screenshot). Inspected: WeightHistoryChart.tsx now uses useTranslation and chartDateLabel(p, i18n.language) from src/lib/chart-date.ts, which formats the server's ISO date or '%b %d' label in the app language; English keeps 'Oct 16'. Not covered: /workout-history month labels (same helper, ExerciseVolumeChart uses it; WorkoutHistory.tsx not re-run).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261022-hi-weekly-insights-next-week",
