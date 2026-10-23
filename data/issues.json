@@ -10574,7 +10574,7 @@
         "1e25b7477f7223febe3d81f510f599b1bc21564a"
       ],
       "imagePrivate": false,
-      "status": "open",
+      "status": "fixed",
       "needsReview": false,
       "description": "[P2 / data, executed 2026-10-22 ~02:08 UTC on prod, QA account with the ops-granted trial, app main ca05af96, nyu_backend dcc4efe1] The coach counts meals the user REMOVED as eaten. Repro: (1) /nutrition > Add a meal > search a dish > Log Meal (POST /logs/meal 201); (2) tap Remove on that meal (POST /logs/meal/<id>/skip; the row stays with skipped=true); Nutrition then reads \"0 / 1847 KCAL\" and GET /logs/daily/<date> lists the meal as skipped; (3) open coach chat and ask anything about today. The reply said \"You've logged about 1182 kcal today against a 1697 kcal target, so you have roughly 515 kcal left.\" 1182 is exactly the four removed test meals (300 + 150 + 380 + 352 kcal) that the screen shows as removed. Cause (inspected): app/services/context_assembler.py:873 `logged_kcal = int(sum(m.total_calories or 0 for m in meals))` sums every MealLog row including skipped ones, although line 870 builds `eaten_logged = [m for m in meals if not m.skipped]` and line 871 lists the skipped numbers; line 880 then writes \"Meals eaten: ... ~{plan_kcal + logged_kcal} kcal\" into the coach context, so the coach tells the user a wrong number. Fix: sum over `eaten_logged` (and keep the skipped list as is). Test: a MealLog with skipped=True must not add to logged_kcal. Also noticed, not traced: the same reply names a 1697 kcal target while the Nutrition screen shows 1847 kcal. Screenshot: images/2026-10-22-coach-unblock/coach-chat-real-reply-prod-390.png (the reply with the Today's Meals card). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Inspected at nyu_backend 573232a9 (prod HEAD): app/services/context_assembler.py:873 is still logged_kcal = int(sum(m.total_calories or 0 for m in meals)), i.e. it still includes skipped rows although line 870 builds eaten_logged. The file's last change is d627cabc, so none of today's deploys touched it. Not re-run with the model: the QA account is at its daily AI cost cap.",
       "thread": [
@@ -10584,6 +10584,13 @@
           "kind": "report",
           "text": "Filed by QA while closing i-20261021-fd-coach-blocked.",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-23T02:27:06.916Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Live check 23 Oct 2026 02:25 UTC (QA account, nyus.in, coach_language english, backend 50d672ba live, VM HEAD 7c2b329e): meal A 300 kcal logged, meal B 450 kcal logged and removed via POST /logs/meal/<id>/skip. Coach reply to 'How many calories have I eaten today?': 'You’ve eaten about 300 kcal today so far, so you have roughly 1397 kcal left before your 1697 kcal target' (expected counted kcal 300; the bug would have said 750). Test basis: nyu_backend full suite on 7c2b329e (contains 50d672ba), 8,502 tests, 8,501 passed, 1 failure (tests/test_b33_server_runtime.py::test_gil_holding_stall_is_dumped_without_the_gil, a 2 s faulthandler timing test, passes alone: 10 passed).",
+          "by": "shakeebshaan"
         }
       ],
       "history": [
@@ -10611,7 +10618,30 @@
           "by": "qa",
           "note": "Retry 22 Oct 16:35 UTC: still PENDING-cap, no coach message sent. Cap probe (read-only, no chat turn): GET /api/v1/ai/overview?range=week&days=7 with the QA account answered 200 in 1.35 s with the canned fallback (\"I am temporarily unavailable for live coaching. Your data is logged and your plan is unchanged...\") and no overview object, i.e. the daily AI cost cap is still hit and no model call was made. Cap not touched. The scheduled 23 Oct 00:30 UTC morning run (after the 00:00 UTC reset) repeats the probe first and runs C:/tmp/coach-live.mjs only if the overview is a real reply. Backend 50d672ba (live since 15:08 UTC) unchanged; issue stays open."
         }
-      ]
+      ],
+      "fix": {
+        "description": "Live check 23 Oct 2026 02:25 UTC (QA account, nyus.in, coach_language english, backend 50d672ba live, VM HEAD 7c2b329e): meal A 300 kcal logged, meal B 450 kcal logged and removed via POST /logs/meal/<id>/skip. Coach reply to 'How many calories have I eaten today?': 'You’ve eaten about 300 kcal today so far, so you have roughly 1397 kcal left before your 1697 kcal target' (expected counted kcal 300; the bug would have said 750). Test basis: nyu_backend full suite on 7c2b329e (contains 50d672ba), 8,502 tests, 8,501 passed, 1 failure (tests/test_b33_server_runtime.py::test_gil_holding_stall_is_dumped_without_the_gil, a 2 s faulthandler timing test, passes alone: 10 passed).",
+        "imagePath": "images/i-20261022-coach-skipped-meals-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-coach-skipped-meals-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5e4729d0eed65367c72077d8efd3a566253a8171",
+        "imageCommits": [
+          "5e4729d0eed65367c72077d8efd3a566253a8171"
+        ],
+        "fixedAt": "2026-10-23T02:27:06.916Z",
+        "by": "shakeebshaan",
+        "appCommit": "50d672ba",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Reply matches the expected 300 kcal and excludes the removed 450 kcal meal; the exact scenario of the issue passes. Limits: one run, one account, one phrasing; the earlier 3 silent runs were the test script missing directed_to ai, not the coach. --tests pass rests on the backend suite above (one load-dependent timing flake that passes alone), not an app-repo test run."
+        }
+      }
     },
     {
       "id": "i-20261022-hi-add-food-title",
