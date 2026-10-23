@@ -11148,6 +11148,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. llm_prompts.py build_overview_system_prompt (:2008-2085) still has no coach_language block."
+        },
+        {
+          "at": "2026-10-23T01:40:50.945Z",
+          "event": "retested",
+          "by": "nyus",
+          "note": "Log check 20261023a live proof (QA account, coach_language hindi, 23 Oct 01:33 UTC, one GET /ai/overview?range=week&days=7, 12.8 s; nyu_backend c8df0b36 live in cdaf3120): MOSTLY FIXED, not closed. All five fields (headline, wins, improvements, tip, next-week focus) are Devanagari sentences with English JSON keys, so the overview is no longer English. Remaining gap (qa judge 70 < bar 90): English nouns that are not food or exercise names stay in Latin script inside the Hindi sentences, e.g. headline: 'पिछले हफ्ते आपने 7 में से 1 workout session पूरा किया, weight 0.3kg कम हुआ, लेकिन diet logging नहीं हो पाई।' The prompt rule (nyu_backend llm_prompts.py:722) keeps only food names, exercise names and numbers in their common form, so weight / diet logging / tracking / calendar should be Devanagari. Evidence on the dev box: C:/tmp/g9/hi-overview-20261023.json + .png. Resolve is also blocked by the board test gate (npm run test:unit) although this fix is backend-only (backend suite 8,458 passed / 0 failed at c8df0b36)."
         }
       ],
       "id": "i-20261022-hi-weekly-overview-english",
