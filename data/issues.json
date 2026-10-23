@@ -12211,6 +12211,84 @@
       "fix": null,
       "history": [],
       "description": "[P4 / tone] In the first minute after sign-up, with nothing yet due, Today's Nutrition shows a red-tinted tip 'Missing meals compounds fast. One correction now fixes the day.', and on day 2 'Protein is still catchable' with 0 meals logged. For a brand-new tester this reads as a scolding for something they could not have done yet; the tip shown after the first meal ('Ghee in moderation is not the enemy') has nothing to do with the meal logged (poha). Fix idea: no missed-meal tips on the account's first day or before the first meal slot has passed; tie the tip to what was logged. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+    },
+    {
+      "id": "i-20261023-copyday-no-undo",
+      "createdAt": "2026-10-23T13:55:00.000Z",
+      "author": "qa",
+      "tags": [
+        "diet-builder",
+        "copy-day",
+        "build-311",
+        "p4"
+      ],
+      "route": "/customize/diet (vary by day): Copy meals into <day>",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-copyday/c09-tuesday-copied.png",
+        "images/2026-10-23-copyday/c12-confirm.png"
+      ],
+      "imageCommits": [
+        "dd151f4f02996e9aaed9c77ed84fd58fa91fc51a",
+        "dd151f4f02996e9aaed9c77ed84fd58fa91fc51a"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / copy-a-day, no undo] After 'Copy Monday's meals' or 'Copy to <day>' the toast reads \"Copied Monday's meals to Tuesday. Each day is its own copy, so edits stay on that day.\" and has no Undo button. Replacing a day that has food asks first (\"Replace Tuesday's meals? Tuesday's meals will be replaced with a copy of Monday's.\") but does not show what will be lost, and once confirmed the old meals cannot be brought back except by re-entering them. 'Copy to all 5 empty days' has no confirm (fine) but also no Undo for a week of wrong copies. Delete afterwards works (Remove <ingredient> per row, Remove <day> tab). Steps: Vary by day, build Monday (poha + chana dal), Tuesday: Copy Monday's meals; Wednesday: Copy from another day > Tuesday > Copy to Wednesday; Friday (has food): Copy from another day > Tuesday > Copy to Friday > Replace. Fix idea: add Undo to the toast for 6 s (the copy is a pure state transform, so restoring the previous days array is trivial) and list the day's current kcal in the replace dialog. Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes."
+    },
+    {
+      "id": "i-20261023-copyday-empty-days-become-monday",
+      "createdAt": "2026-10-23T13:55:00.000Z",
+      "author": "qa",
+      "tags": [
+        "diet-builder",
+        "copy-day",
+        "build-311",
+        "cycle",
+        "p3"
+      ],
+      "route": "/customize/diet > Save plan (POST /onboarding/save-custom-plan, then GET /diet/plan?date=)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-copyday/c19-vary-again.png"
+      ],
+      "imageCommits": [
+        "dd151f4f02996e9aaed9c77ed84fd58fa91fc51a"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / behaviour to settle BEFORE the Day 1..N cycle change lands] In Vary by day, a tester who builds Mon, Tue, Wed (Mon 689 kcal, Tue 565, Wed 565) and leaves Thu to Sun empty sees empty tabs with a 'Copy Monday's meals' button, but after Save plan the plan has meals on every day: GET /diet/plan?date=2026-10-29 (Thu) returns '689 kcal . P:18.7g C:151.9g F:1.8g' and /onboarding/custom-plan/current-diet returns thursday..sunday with 2 ingredients each, i.e. empty days were filled with Monday's meals. The payload itself (buildDietPayloadDays, src/lib/builder-payload.ts:72) only sends days with ingredients, so the fill happens on the server and the UI never says so. Same family: a vary plan whose 7 days are identical is stored and re-opened as Repeat mode 'same' with one day. Both may be intended, but they decide what a Day 1..N cycle means, so please confirm the intended rule (empty day = repeat Monday? skip? rest day?) and show it on the empty tab. What checks out: the weekday mapping (Tue 2026-10-27 = 565, Wed 28 = 565, Fri 23 = 689), kcal and macros equal the builder totals, no duplicate meals after two saves and a reload (meals=1 per day). Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes."
+    },
+    {
+      "id": "i-20261023-customize-diet-unsaved-copy-lost",
+      "createdAt": "2026-10-23T13:55:00.000Z",
+      "author": "qa",
+      "tags": [
+        "diet-builder",
+        "copy-day",
+        "build-311",
+        "p4"
+      ],
+      "route": "/customize/diet (reload before Save plan)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-copyday/c21-after-reload-unsaved.png"
+      ],
+      "imageCommits": [
+        "dd151f4f02996e9aaed9c77ed84fd58fa91fc51a"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / unsaved edits] On /customize/diet, a copy (or any edit) is written to the localStorage draft (nyus_builder_draft shows friday:1 ingredient 0.2 s and 4 s after the copy) but after an app reload the screen loads the saved plan from /onboarding/custom-plan/current-diet and the draft is ignored: Friday goes back to 689 kcal, the copy of Tuesday (565 kcal) is lost. For a tester who copies a few days and is interrupted (Android kills the WebView, a call) the work vanishes without a message. Steps: open /customize/diet on an existing plan, Friday > Copy from another day > Tuesday > Replace, reload before Save plan. Fix idea: restore the draft over the saved plan when it is newer, or warn on leaving with unsaved changes. Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes."
     }
   ]
 }
