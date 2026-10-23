@@ -10815,8 +10815,30 @@
         "611adae34deddd44729f576410ad953915f768f5"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main 4c79e100 (fix 9c28ac07, i18n(hi) pass 4). QA board re-check 2026-10-23 08:50 UTC. Executed (production web build of app main, Hindi, 390x844, seeded Edge, QA account): /science now has 1,562 Devanagari characters (was 18); the only Latin lines left are the paper citations (Mifflin, Thomas, Morton, Schoenfeld, ACSM), which the issue allowed to stay in English. Inspected: Science.tsx uses useTranslation (was 0); the section-3 claim now reads the settled wording (the weekly check-in adjusts calories, macros and the step goal; training does not adapt weekly: Science.tsx / en.json), so the 'plan adapts training every week' claim is gone. Hindi text is machine-drafted until the native read (nyus-f84785).",
+        "imagePath": "images/i-20261022-hi-science-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-science-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "99f0d5f4aa554d6f300e0d3807f4d07ab75dc20a",
+        "imageCommits": [
+          "99f0d5f4aa554d6f300e0d3807f4d07ab75dc20a"
+        ],
+        "fixedAt": "2026-10-23T08:45:51.186Z",
+        "by": "shakeebshaan",
+        "appCommit": "9c28ac07",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Executed on the production web bundle of app main 4c79e100 in Hindi with GET reads and stubbed writes; where prod data was empty the GET was stubbed (named in the text). Gap: machine-drafted Hindi still waits for the native read (nyus-f84785); no new unit test was written by QA."
+        }
+      },
       "history": [
         {
           "at": "2026-10-22T06:11:57.455Z",
@@ -10831,7 +10853,17 @@
           "note": "QA re-test 22 Oct on a fresh build of app main e32a9dc2 (QA account, prod reads, writes stubbed, 390px, seeded Edge), Hindi + English: STILL OPEN. /science: 16 English lines (title, 3 sections, references, CTA), src/pages/Science.tsx:18-35, 60-140. Fix exists, not merged: branch draft/hi-i18n-pass4 9c28ac07 (QA PASS 22 Oct, vitest test/i18n 765 passed, tsc clean); it is not in origin/main. Merge it to close this. Includes the settled Section 3 wording.  Screenshot images/2026-10-22-mainqa/hi-hi-science.png (commit 9ddecc93)."
         }
       ],
-      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /science (\"The science behind your plan\") is entirely English in Hindi: 16 English paragraphs and only 18 Devanagari characters on the page. src/pages/Science.tsx has no useTranslation (0 uses): h1 line 78, the three section titles and bodies in the SECTIONS array (lines 16-35) and the references. A claims problem in the same text, section 3 (lines 30-33, \"How the plan adapts to you ... Each week your coach reviews what you actually logged ... and adjusts the next block ... If you missed sessions, volume is rebalanced rather than piled on ... separates an adaptive plan from a fixed template\"): it claims weekly training adaptation, which the settled wording does not allow (a weekly check-in adjusts calories, macros and step goal once enough is logged). Fix: reword section 3 to the settled claim and move the page text to i18n keys (Hindi translation to be reviewed; the paper references can stay in English). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /science in Hindi still has 16 English paragraphs and 18 Devanagari characters (open-hi-science.png); Science.tsx unchanged, including the weekly-adapts-training paragraph (lines 30-33)."
+      "description": "[P3] [Release 307 board recheck, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, Hindi, 390x844, writes stubbed] /science (\"The science behind your plan\") is entirely English in Hindi: 16 English paragraphs and only 18 Devanagari characters on the page. src/pages/Science.tsx has no useTranslation (0 uses): h1 line 78, the three section titles and bodies in the SECTIONS array (lines 16-35) and the references. A claims problem in the same text, section 3 (lines 30-33, \"How the plan adapts to you ... Each week your coach reviews what you actually logged ... and adjusts the next block ... If you missed sessions, volume is rebalanced rather than piled on ... separates an adaptive plan from a fixed template\"): it claims weekly training adaptation, which the settled wording does not allow (a weekly check-in adjusts calories, macros and step goal once enough is logged). Fix: reword section 3 to the settled claim and move the page text to i18n keys (Hindi translation to be reviewed; the paper references can stay in English). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: /science in Hindi still has 16 English paragraphs and 18 Devanagari characters (open-hi-science.png); Science.tsx unchanged, including the weekly-adapts-training paragraph (lines 30-33).",
+      "thread": [
+        {
+          "at": "2026-10-23T08:45:51.186Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main 4c79e100 (fix 9c28ac07, i18n(hi) pass 4). QA board re-check 2026-10-23 08:50 UTC. Executed (production web build of app main, Hindi, 390x844, seeded Edge, QA account): /science now has 1,562 Devanagari characters (was 18); the only Latin lines left are the paper citations (Mifflin, Thomas, Morton, Schoenfeld, ACSM), which the issue allowed to stay in English. Inspected: Science.tsx uses useTranslation (was 0); the section-3 claim now reads the settled wording (the weekly check-in adjusts calories, macros and the step goal; training does not adapt weekly: Science.tsx / en.json), so the 'plan adapts training every week' claim is gone. Hindi text is machine-drafted until the native read (nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261022-hi-weight-history",
