@@ -11142,8 +11142,29 @@
         "8764eb02fde3f01f6af84524c769079142fe88f3"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in nyu_backend 9464bd48 + ff4aef4f (main ff4aef4f, auto-deployed 23 Oct 03:46:44 UTC). Cause: the socket reply path called user_coach_language(user_id), a name not defined there, so the meal-card enrichment threw and was swallowed at WARNING: every live meal_plan_card since b171e814 shipped with no day_label and no meals. Now sender_id; both enrichment excepts log at ERROR with the traceback. Live proof on the QA account over the socket (directed_to ai): Hindi 'aaj ke meal dikhao' -> day_label 'आज के मील' + 3 meals; English 'Show me today's meals' -> 'Today's Meals' + same 3 meals; saved history cards match; 0 'Failed to enrich meal_plan_card' and 0 errors in nyus_app.log / backend.log since the deploy. Tests: backend full suite 8,485 passed on the fix; new tests/test_coach_meal_card_socket_enrichment.py 4/4 (3 fail with the old line). coach_language restored to english.",
+        "imagePath": "images/i-20261022-hi-meal-card-day-label-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-meal-card-day-label-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0ec7832fc9195b15e634d7fb2cf2fcfbc3aa60fa",
+        "imageCommits": [
+          "0ec7832fc9195b15e634d7fb2cf2fcfbc3aa60fa"
+        ],
+        "fixedAt": "2026-10-23T03:48:10.811Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 95,
+          "bar": 90,
+          "note": "Live socket proof in both languages plus logs; backend suite is the relevant gate (no app change)"
+        }
+      },
       "history": [
         {
           "at": "2026-10-22T11:47:26.572Z",
@@ -11166,7 +11187,17 @@
         "p4"
       ],
       "route": "/coach-chat (meal_plan_card block)",
-      "description": "[P4 / Hindi, found in the pass-4 check 22 Oct] The coach meal card header \"Today's Meals\" stays English for a Hindi user, while the rest of the card (नाश्ता, खा लिया दर्ज करें, बदलें, छोड़ें) is Hindi after app pass 4. Cause: the backend builds the header as an English f-string and the app prints it verbatim (src/components/blocks/MealPlanCard.tsx:162 {data.day_label}). Repro (executed on a build of draft/hi-i18n-pass4 9c28ac07, 390px): Hindi app + coach language Hindi, ask the coach what to eat today; the reply carries a meal_plan_card block; header reads \"Today's Meals\" (screenshot). Where: nyu_backend app/routes/coach.py:387 and backend.py:17436-17438 (day_label = \"Today's {Type}\" or \"Today's Meals\", no coach_copy lookup; the same f-string pattern exists for single-type requests: \"Today's Breakfast/Lunch/Dinner\"). Fix: either (a) localise in the backend with coach_copy.t(...) using user_coach_language(user_id) (add keys for Meals and per-type, hindi \"आज के मील\", \"आज का नाश्ता/लंच/डिनर\"; new Hindi is machine-drafted, needs native read), or (b) send a stable key (e.g. meal_type 'all'|'breakfast'...) and let the app translate with the existing nutrition.meal.type_* keys; (b) also fixes old stored chat messages if the app falls back on the key when day_label equals the English default. Acceptance test: with coach_language=hindi, POST a coach chat asking for today's meals; the stored block's data.day_label has Devanagari for 'all' and for each single meal type; with english the label is byte-identical to today (\"Today's Meals\", \"Today's Lunch\"); pytest for both; old messages with day_label \"Today's Meals\" still render. Note: the same card's macro letters \"P:41g · C:36g · F:19g\" are app strings (MealPlanCard.tsx:218) and are covered by i-20261022-hi-customize-diet item 4's macro-letter decision."
+      "description": "[P4 / Hindi, found in the pass-4 check 22 Oct] The coach meal card header \"Today's Meals\" stays English for a Hindi user, while the rest of the card (नाश्ता, खा लिया दर्ज करें, बदलें, छोड़ें) is Hindi after app pass 4. Cause: the backend builds the header as an English f-string and the app prints it verbatim (src/components/blocks/MealPlanCard.tsx:162 {data.day_label}). Repro (executed on a build of draft/hi-i18n-pass4 9c28ac07, 390px): Hindi app + coach language Hindi, ask the coach what to eat today; the reply carries a meal_plan_card block; header reads \"Today's Meals\" (screenshot). Where: nyu_backend app/routes/coach.py:387 and backend.py:17436-17438 (day_label = \"Today's {Type}\" or \"Today's Meals\", no coach_copy lookup; the same f-string pattern exists for single-type requests: \"Today's Breakfast/Lunch/Dinner\"). Fix: either (a) localise in the backend with coach_copy.t(...) using user_coach_language(user_id) (add keys for Meals and per-type, hindi \"आज के मील\", \"आज का नाश्ता/लंच/डिनर\"; new Hindi is machine-drafted, needs native read), or (b) send a stable key (e.g. meal_type 'all'|'breakfast'...) and let the app translate with the existing nutrition.meal.type_* keys; (b) also fixes old stored chat messages if the app falls back on the key when day_label equals the English default. Acceptance test: with coach_language=hindi, POST a coach chat asking for today's meals; the stored block's data.day_label has Devanagari for 'all' and for each single meal type; with english the label is byte-identical to today (\"Today's Meals\", \"Today's Lunch\"); pytest for both; old messages with day_label \"Today's Meals\" still render. Note: the same card's macro letters \"P:41g · C:36g · F:19g\" are app strings (MealPlanCard.tsx:218) and are covered by i-20261022-hi-customize-diet item 4's macro-letter decision.",
+      "thread": [
+        {
+          "at": "2026-10-23T03:48:10.811Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in nyu_backend 9464bd48 + ff4aef4f (main ff4aef4f, auto-deployed 23 Oct 03:46:44 UTC). Cause: the socket reply path called user_coach_language(user_id), a name not defined there, so the meal-card enrichment threw and was swallowed at WARNING: every live meal_plan_card since b171e814 shipped with no day_label and no meals. Now sender_id; both enrichment excepts log at ERROR with the traceback. Live proof on the QA account over the socket (directed_to ai): Hindi 'aaj ke meal dikhao' -> day_label 'आज के मील' + 3 meals; English 'Show me today's meals' -> 'Today's Meals' + same 3 meals; saved history cards match; 0 'Failed to enrich meal_plan_card' and 0 errors in nyus_app.log / backend.log since the deploy. Tests: backend full suite 8,485 passed on the fix; new tests/test_coach_meal_card_socket_enrichment.py 4/4 (3 fail with the old line). coach_language restored to english.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "createdAt": "2026-10-22T09:37:59.359Z",
