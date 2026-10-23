@@ -12181,7 +12181,9 @@
         "at": "2026-10-23T15:19:50.856Z",
         "expiresAt": "2026-10-24T15:19:50.856Z",
         "note": "dev 23 Oct: HANG FIXED on app main b8c73428 (60 s deadline per coach build; empty/failed/late AI answer -> 'Couldn't build your meals' + Try again; real-browser proof at 59 s; tests +2 fail on old code, full app vitest 9,599 passed). TIMING: prod 23 Oct cold build 29.6 s = model ~21 s (1.8k output tokens, ~85 tok/s) + grounding 7.3 s (56 unindexed LIKE queries) + images 1.3 s; 40-name grounding probe 18.2 s cold. Backend fix (per-term cache + boot warm-up) on nyu_backend perf/ground-cache-warm 6e340c63, full suite 8,584 passed; expected cold ~30 s -> ~22-23 s. OPEN until deployed + live after-timing (nyus_app.log 'ground-cache warm' line, probe re-run, next cold build ground=). Resolve then with the after number."
-      }
+      },
+      "reportPath": "reports/meal-build-slow-status.html",
+      "reportLabel": "Landed: nyu_backend 6e340c63 live, app 113d3d47 on main; after-timing pending first prod build"
     },
     {
       "id": "i-20261023-d1-hi-onboarding-english",
