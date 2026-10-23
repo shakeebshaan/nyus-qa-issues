@@ -1401,9 +1401,8 @@
       "createdAt": "2026-10-21T16:28:35.368Z",
       "author": "qa",
       "tags": [
-        "security",
-        "ops",
-        "owner-gate"
+        "owner-gate",
+        "waiting-shaan"
       ],
       "route": "/home/ubuntu/nyu_backend (Oracle VM)",
       "imagePath": null,
@@ -1433,7 +1432,18 @@
           "note": "QA re-check 23 Oct 2026, executed read-only on the Oracle VM (modes and counts only, no values): STILL OPEN. ~/nyu_backend/.env is mode 664, there are 11 .env.bak-* files (10 at 664, 1 at 600) and .env still has 2 commented lines mentioning DATABASE_URL. Razorpay webhook secret rotation not checked. Owner: Shaan (VM change and money gate)."
         }
       ],
-      "description": "[P2 / security residue after pwd1 - executed read-only on the Oracle VM 2026-10-21 16:35 UTC, no values printed] The pwd1 rotation fixed the DB login, but the old DB password still lives on the box and is related to a live secret: (1) .env keeps a commented-out old DATABASE_URL line holding the OLD DSN; (2) 11 backup copies .env.bak-* in ~/nyu_backend contain the old password and every other key; most are mode 664 (others can read), one is 600; .env itself is also mode 664; (3) RAZORPAY_WEBHOOK_SECRET (razorpay_webhook.py:224) is derived from the old DB password, which sits in git history, so it must be treated as weak and rotated. Next owner: Shaan (webhook secret rotation touches Razorpay = money gate; file hygiene = prod VM change, per-change yes) - Shaan's list item 'NYUS: clean old secrets off the VM + rotate the Razorpay webhook secret'. Not re-verified: that the OLD DB password is refused (assumed from the pwd1 fix note). [Redacted 2026-10-21 by the NYUS employee: an earlier version of this text described the secret; this board repo is public.] || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): read-only on the Oracle VM (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, and of the 12 files (.env plus the 11 backups) one is mode 600 and 11 are 664, and .env still contains 2 commented-out DATABASE_URL lines. VM HEAD is 3b30aee4, health 200. Nothing cleaned yet; Razorpay webhook secret rotation is still Shaan's (money gate). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Read-only on the Oracle VM today (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, modes 600 x1 and 664 x11 across the 12 files, 2 commented-out DATABASE_URL lines in .env; VM HEAD is 573232a9. Waiting on Shaan's per-change yes (VM file hygiene) and the Razorpay webhook secret rotation (money gate)."
+      "description": "[P2 / security residue after pwd1 - executed read-only on the Oracle VM 2026-10-21 16:35 UTC, no values printed] The pwd1 rotation fixed the DB login, but the old DB password still lives on the box and is related to a live secret: (1) .env keeps a commented-out old DATABASE_URL line holding the OLD DSN; (2) 11 backup copies .env.bak-* in ~/nyu_backend contain the old password and every other key; most are mode 664 (others can read), one is 600; .env itself is also mode 664; (3) RAZORPAY_WEBHOOK_SECRET (razorpay_webhook.py:224) is derived from the old DB password, which sits in git history, so it must be treated as weak and rotated. Next owner: Shaan (webhook secret rotation touches Razorpay = money gate; file hygiene = prod VM change, per-change yes) - Shaan's list item 'NYUS: clean old secrets off the VM + rotate the Razorpay webhook secret'. Not re-verified: that the OLD DB password is refused (assumed from the pwd1 fix note). [Redacted 2026-10-21 by the NYUS employee: an earlier version of this text described the secret; this board repo is public.] || QA board re-check 2026-10-22: STILL OPEN. Executed on app main e7945ec6 (prod-read web build, QA account, every non-GET blocked, Hindi, 390x844 @2x, seeded Edge): read-only on the Oracle VM (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, and of the 12 files (.env plus the 11 backups) one is mode 600 and 11 are 664, and .env still contains 2 commented-out DATABASE_URL lines. VM HEAD is 3b30aee4, health 200. Nothing cleaned yet; Razorpay webhook secret rotation is still Shaan's (money gate). || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL OPEN. Read-only on the Oracle VM today (counts and modes only, no values): ~/nyu_backend has 11 .env.bak-* files, modes 600 x1 and 664 x11 across the 12 files, 2 commented-out DATABASE_URL lines in .env; VM HEAD is 573232a9. Waiting on Shaan's per-change yes (VM file hygiene) and the Razorpay webhook secret rotation (money gate).",
+      "needsReview": true,
+      "reviewReason": "Owner-gated hand-run VM change: decide item nyus-fd8604 on Shaan's list (re-read 23 Oct 23:47 UTC: .env 664, 10 of 11 backups 664, newest backup 600, 2 commented DATABASE_URL lines; option A = chmod 600, keep only the newest backup, drop the 2 comment lines). Close after the change and a re-read of the modes.",
+      "reviewedAt": "2026-10-23T23:44:17.632Z",
+      "thread": [
+        {
+          "at": "2026-10-23T23:44:17.632Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Owner-gated hand-run VM change: decide item nyus-fd8604 on Shaan's list (re-read 23 Oct 23:47 UTC: .env 664, 10 of 11 backups 664, newest backup 600, 2 commented DATABASE_URL lines; option A = chmod 600, keep only the newest backup, drop the 2 comment lines). Close after the change and a re-read of the modes."
+        }
+      ]
     },
     {
       "id": "i-20261021-hi-notifications",
