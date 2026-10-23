@@ -11176,8 +11176,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Live check 23 Oct 2026 01:33 UTC (QA account, nyus.in, coach_language hindi, backend c8df0b36 live, VM HEAD later 7c2b329e): ONE GET /ai/overview?range=week&days=7 (12.8 s) returns headline, wins, improvements, tip_of_the_week and next_week_focus in Devanagari, JSON keys English. Headline: 'पिछले हफ्ते आपने 7 में से 1 workout session पूरा किया, weight 0.3kg कम हुआ, लेकिन diet logging नहीं हो पाई।'; next_week_focus: 'इस हफ्ते आपका #1 priority भोजन logging को दोबारा शुरू करना और कम से कम 2 planned workout sessions पूरे करना होना चाहिए।' Before the fix all five fields were English. Latin-script fitness nouns inside Devanagari sentences (workout, weight, diet logging, meals log, calendar, tracking) are the accepted Hinglish register (Governor decision 23 Oct 02:33 UTC). Test basis: nyu_backend full suite on 7c2b329e, 8,502 tests, 8,501 passed, 1 load-dependent timing flake (tests/test_b33_server_runtime.py::test_gil_holding_stall_is_dumped_without_the_gil, passes alone: 10 passed).",
+        "imagePath": "images/i-20261022-hi-weekly-overview-english-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-weekly-overview-english-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "aaf887c94da553425e9e988ebddfe78eab340f63",
+        "imageCommits": [
+          "aaf887c94da553425e9e988ebddfe78eab340f63"
+        ],
+        "fixedAt": "2026-10-23T03:12:36.812Z",
+        "by": "shakeebshaan",
+        "appCommit": "c8df0b36",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "All five fields are Devanagari; the remaining Latin nouns are accepted per the Governor decision. One run, one account, one week of data; native Hindi read still pending (nyus-f84785). --tests pass rests on the backend suite above, not an app-repo test run."
+        }
+      },
       "history": [
         {
           "at": "2026-10-22T11:47:26.572Z",
@@ -11207,7 +11229,17 @@
         "p3"
       ],
       "route": "GET /api/v1/ai/overview (Home weekly insights card)",
-      "description": "[P3 / Hindi, found in the pass-4 check 22 Oct] The weekly insights overview is generated in English for every user: headline, wins, improvements, tip_of_the_week and next_week_focus (the card shows \"अगले सप्ताह: Protein\", and the whole body is English under Hindi labels). Cause: the overview system prompt has no language instruction. nyu_backend llm_prompts.py:2008 build_overview_system_prompt() (output format at 2036-2048, rules 2050-2060) never calls coach_language_block(), which the other coach prompts use (llm_prompts.py:755 and :832 via context['coach_language']); the overview context built at backend.py ~15895-15908 (context['weekly_summary']) is not given coach_language either. Executed: grep for lang/hindi in llm_prompts.py lines 2008-2085 returns nothing; the QA account's coach_language is hindi (GET /profile, read-only) and the overview text is still English. Fix: add the coach_language_block to the overview prompt and pass context['coach_language'] (JSON keys stay English, values in the user's language; keep numbers and food names). Also the overview cache must include the language, otherwise a user who switches language sees the old-language text for up to 6 h (see i-20261022-ai-cache-stores-fallback, same cache at backend.py:15953). The app label is already Hindi (WeeklyInsightsCard.tsx:295 after pass 4). Acceptance test: with coach_language=hindi, a fresh /ai/overview returns headline, wins[], improvements[], tip_of_the_week and next_week_focus with Devanagari (food names, numbers and units may stay Latin); with english, unchanged; switching language and calling again returns the new language (not the cache); pytest on build_overview_system_prompt asserting the language block is present for hindi/hinglish and absent for english. Hindi output quality needs a native read."
+      "description": "[P3 / Hindi, found in the pass-4 check 22 Oct] The weekly insights overview is generated in English for every user: headline, wins, improvements, tip_of_the_week and next_week_focus (the card shows \"अगले सप्ताह: Protein\", and the whole body is English under Hindi labels). Cause: the overview system prompt has no language instruction. nyu_backend llm_prompts.py:2008 build_overview_system_prompt() (output format at 2036-2048, rules 2050-2060) never calls coach_language_block(), which the other coach prompts use (llm_prompts.py:755 and :832 via context['coach_language']); the overview context built at backend.py ~15895-15908 (context['weekly_summary']) is not given coach_language either. Executed: grep for lang/hindi in llm_prompts.py lines 2008-2085 returns nothing; the QA account's coach_language is hindi (GET /profile, read-only) and the overview text is still English. Fix: add the coach_language_block to the overview prompt and pass context['coach_language'] (JSON keys stay English, values in the user's language; keep numbers and food names). Also the overview cache must include the language, otherwise a user who switches language sees the old-language text for up to 6 h (see i-20261022-ai-cache-stores-fallback, same cache at backend.py:15953). The app label is already Hindi (WeeklyInsightsCard.tsx:295 after pass 4). Acceptance test: with coach_language=hindi, a fresh /ai/overview returns headline, wins[], improvements[], tip_of_the_week and next_week_focus with Devanagari (food names, numbers and units may stay Latin); with english, unchanged; switching language and calling again returns the new language (not the cache); pytest on build_overview_system_prompt asserting the language block is present for hindi/hinglish and absent for english. Hindi output quality needs a native read.",
+      "thread": [
+        {
+          "at": "2026-10-23T03:12:36.812Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Live check 23 Oct 2026 01:33 UTC (QA account, nyus.in, coach_language hindi, backend c8df0b36 live, VM HEAD later 7c2b329e): ONE GET /ai/overview?range=week&days=7 (12.8 s) returns headline, wins, improvements, tip_of_the_week and next_week_focus in Devanagari, JSON keys English. Headline: 'पिछले हफ्ते आपने 7 में से 1 workout session पूरा किया, weight 0.3kg कम हुआ, लेकिन diet logging नहीं हो पाई।'; next_week_focus: 'इस हफ्ते आपका #1 priority भोजन logging को दोबारा शुरू करना और कम से कम 2 planned workout sessions पूरे करना होना चाहिए।' Before the fix all five fields were English. Latin-script fitness nouns inside Devanagari sentences (workout, weight, diet logging, meals log, calendar, tracking) are the accepted Hinglish register (Governor decision 23 Oct 02:33 UTC). Test basis: nyu_backend full suite on 7c2b329e, 8,502 tests, 8,501 passed, 1 load-dependent timing flake (tests/test_b33_server_runtime.py::test_gil_holding_stall_is_dumped_without_the_gil, passes alone: 10 passed).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261022-hi-aria-leftovers",
