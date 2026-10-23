@@ -12352,7 +12352,7 @@
         ],
         "fixedAt": "2026-10-23T15:47:49.353Z",
         "by": "shakeebshaan",
-        "appCommit": "13c30aa3",
+        "appCommit": "c7f46b81",
         "tests": {
           "passed": true
         },
@@ -12360,6 +12360,15 @@
           "score": 92,
           "bar": 90,
           "note": "Rule implemented in app and server, QA re-ran 6/6 on the local harness incl. hi, full suites green. Not 100: on the branch until the cycle lands (backend deploy + build 312), and the next-week preview card was unit-tested only (preview is empty until the Saturday job)."
+        },
+        "landed": {
+          "appMain": "e63b4f7d",
+          "appFixCommit": "c7f46b81",
+          "branchCommit": "13c30aa3",
+          "backendMain": "7804ecda",
+          "backendFixCommit": "f64dcb54",
+          "backendDeployedAt": "2026-10-23T15:49:48Z",
+          "note": "Landed on both mains; backend live (watcher DEPLOYED 6e340c63 -> 7804ecda, migration diet_plans_002_cycle applied, health 200, 0 errors in the 10-min window). Phones get it with build 312."
         }
       },
       "history": [],
