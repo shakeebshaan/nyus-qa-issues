@@ -11585,8 +11585,32 @@
         "434acdb6"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app main 777d3a81: the Board (friends leaderboard: empty, loading, error, kudos) and Messages tab strings now go through t() with Hindi keys; screenshots are the hi locale at 390 px from the QA build. 11 new hi tests (test/i18n/hindi-social-search.test.tsx, hindi-coach-fab-dismiss.test.tsx) find 0 hardcoded English in visible text, placeholders and aria values; those plus the UserSearch/MessagesView/FloatingCoachButton/Social suites = 188 passed after the rebase; the pre-push gate passed on the push to main. Hindi is machine-drafted, native read pending (nyus-f84785).",
+        "imagePath": "images/i-20261022-hi-social-empty-states-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-social-empty-states-fix-r1.png",
+          "images/i-20261022-hi-social-empty-states-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a438518d91babd7a9e567e64785656e1de0527da",
+        "imageCommits": [
+          "a438518d91babd7a9e567e64785656e1de0527da",
+          "e6ab03219ed6aa269969552ecd18ca232cafb304"
+        ],
+        "fixedAt": "2026-10-23T09:43:24.551Z",
+        "by": "shakeebshaan",
+        "appCommit": "777d3a81",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi wording is machine-drafted; native read still open"
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T08:46:44.000Z",
@@ -11610,7 +11634,17 @@
         "social"
       ],
       "route": "/social (Board and Messages tabs)",
-      "description": "[P3 / Hindi, found in the old-issue re-test 22 Oct] The Social tabs are Hindi except the empty states: Board > Friends shows \"It's just you so far\" and \"Add a friend and you'll see each other's active days here, week by week.\" (src/components/FriendsLeaderboardView.tsx:245, 248; also :137 \"{n} kudos this week\"); Messages shows \"Start a Conversation\" and \"You need friends to start messaging\" (src/components/MessagesView.tsx:123, 151); both show a \"Find Friends\" button (UserSearch route); the coach button's aria-label \"Dismiss nudge\" (src/components/FloatingCoachButton.tsx:316) is English everywhere. Repro (executed on the live build, release/307 web bundle, QA account, Hindi, 390px): set the language to Hindi. New Hindi is machine-drafted, needs native read (nyus-f84785). Expected Hindi (new, drafted): \"अभी सिर्फ़ आप हैं\", \"एक दोस्त जोड़ें, फिर आप दोनों के सक्रिय दिन हफ़्ते-दर-हफ़्ते यहाँ दिखेंगे।\", \"बातचीत शुरू करें\", \"मैसेज शुरू करने के लिए दोस्त चाहिए\", \"दोस्त खोजें\", \"सुझाव हटाएं\". Acceptance test for dev: Hindi, new account with no friends: Board > Friends, Messages and the coach button have 0 Latin app strings (scan innerText lines with 3+ Latin letters and no Devanagari, plus aria-labels); English unchanged."
+      "description": "[P3 / Hindi, found in the old-issue re-test 22 Oct] The Social tabs are Hindi except the empty states: Board > Friends shows \"It's just you so far\" and \"Add a friend and you'll see each other's active days here, week by week.\" (src/components/FriendsLeaderboardView.tsx:245, 248; also :137 \"{n} kudos this week\"); Messages shows \"Start a Conversation\" and \"You need friends to start messaging\" (src/components/MessagesView.tsx:123, 151); both show a \"Find Friends\" button (UserSearch route); the coach button's aria-label \"Dismiss nudge\" (src/components/FloatingCoachButton.tsx:316) is English everywhere. Repro (executed on the live build, release/307 web bundle, QA account, Hindi, 390px): set the language to Hindi. New Hindi is machine-drafted, needs native read (nyus-f84785). Expected Hindi (new, drafted): \"अभी सिर्फ़ आप हैं\", \"एक दोस्त जोड़ें, फिर आप दोनों के सक्रिय दिन हफ़्ते-दर-हफ़्ते यहाँ दिखेंगे।\", \"बातचीत शुरू करें\", \"मैसेज शुरू करने के लिए दोस्त चाहिए\", \"दोस्त खोजें\", \"सुझाव हटाएं\". Acceptance test for dev: Hindi, new account with no friends: Board > Friends, Messages and the coach button have 0 Latin app strings (scan innerText lines with 3+ Latin letters and no Devanagari, plus aria-labels); English unchanged.",
+      "thread": [
+        {
+          "at": "2026-10-23T09:43:24.551Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app main 777d3a81: the Board (friends leaderboard: empty, loading, error, kudos) and Messages tab strings now go through t() with Hindi keys; screenshots are the hi locale at 390 px from the QA build. 11 new hi tests (test/i18n/hindi-social-search.test.tsx, hindi-coach-fab-dismiss.test.tsx) find 0 hardcoded English in visible text, placeholders and aria values; those plus the UserSearch/MessagesView/FloatingCoachButton/Social suites = 188 passed after the rebase; the pre-push gate passed on the push to main. Hindi is machine-drafted, native read pending (nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "createdAt": "2026-10-22T14:36:05.743Z",
