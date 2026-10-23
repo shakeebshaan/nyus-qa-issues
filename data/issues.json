@@ -11593,6 +11593,12 @@
           "event": "recheck",
           "note": "QA board re-check 2026-10-23: STILL OPEN. Executed 2026-10-23 08:50 UTC on the production web build of app main 4c79e100 (Hindi, 390x844, seeded Edge, a QA account, GET reads live, every non-GET stubbed) unless marked inspected. /social Board tab: It is just you so far, Add a friend and you will see each other active days here, week by week., Find Friends; Messages tab: Start a Conversation, You need friends to start messaging, Find Friends (all English). FriendsLeaderboardView.tsx:245 and MessagesView.tsx:123 unchanged (MessagesView.tsx has no useTranslation).",
           "by": "qa"
+        },
+        {
+          "at": "2026-10-23T09:16:45.000Z",
+          "event": "fix-on-branch",
+          "note": "FIXED ON BRANCH, not merged: nyus-well-tracker fix/hi-social-search @ 89ff2d3b (off app main 3253f721; pending push and merge by the NYUS employee, no release build). Executed 2026-10-23 on a production web build of that branch (Hindi, 390x844 at 2x, seeded Edge, a QA account, GET reads live, every non-GET stubbed): /social Board tab shows \"अभी सिर्फ़ आप हैं\" with the Hindi body and \"दोस्त खोजें\"; the Messages tab shows \"बातचीत शुरू करें\", \"मैसेज शुरू करने के लिए दोस्त चाहिए\" and \"दोस्त खोजें\"; a scan of each screen (visible text, placeholder, title and aria-label values with 3+ Latin letters and no Devanagari) finds 0 English strings. The coach button dismiss aria is now t(coach_fab.dismiss_nudge_aria) = \"सुझाव हटाएं\" (FloatingCoachButton.tsx:316). Tests: test/i18n/hindi-social-search.test.tsx and hindi-coach-fab-dismiss.test.tsx (11 tests, 8 fail on the old code); English output pinned unchanged by test S4. Hindi and Hinglish are machine-drafted (native read: nyus-f84785). Close this issue (resolve with the merged commit) after the branch lands on main.",
+          "by": "qa"
         }
       ],
       "id": "i-20261022-hi-social-empty-states",
@@ -11625,6 +11631,12 @@
           "at": "2026-10-23T08:46:44.000Z",
           "event": "recheck",
           "note": "QA board re-check 2026-10-23: STILL OPEN. Executed 2026-10-23 08:50 UTC on the production web build of app main 4c79e100 (Hindi, 390x844, seeded Edge, a QA account, GET reads live, every non-GET stubbed) unless marked inspected. /social/search in Hindi: Find Friends, Requests, Blocked, Search users by name or email, Search by name or email to add friends and the placeholder are all English; UserSearch.tsx still has no useTranslation (0 uses, line 272 unchanged).",
+          "by": "qa"
+        },
+        {
+          "at": "2026-10-23T09:16:45.000Z",
+          "event": "fix-on-branch",
+          "note": "FIXED ON BRANCH, not merged: nyus-well-tracker fix/hi-social-search @ 89ff2d3b (off app main 3253f721; pending push and merge by the NYUS employee, no release build). Executed 2026-10-23 on a production web build of that branch (Hindi, 390x844 at 2x, seeded Edge, a QA account, GET reads live, every non-GET stubbed): /social/search shows the Hindi title \"दोस्त खोजें\", the \"अनुरोध\" and \"ब्लॉक किए गए\" pills, the placeholder \"नाम या ईमेल से खोजें...\" and the hint \"दोस्त जोड़ने के लिए नाम या ईमेल से खोजें\"; 0 English strings. Beyond the issue text, the same commit routes the rest of UserSearch.tsx through t(): result rows (Add, Pending, Respond, Friends), the row menu (Remove Friend, Block User, Report User), every toast, the no-results and error states and both confirm dialogs (all covered by the vitest render under hi). 61 new keys in en, hi, hinglish and xx-AE. Close this issue after the branch lands on main.",
           "by": "qa"
         }
       ],
