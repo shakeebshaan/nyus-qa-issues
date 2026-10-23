@@ -12116,10 +12116,44 @@
         "c41793e867c37762322bad3500c3d25e3a0981cb"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app main 82b1547b + bf272c71. Cause: the Goal tab's goalWeightConflict only held Fat Loss when the goal weight was ABOVE current (and Muscle Gain when below), so the 70 = 70 kg defaults passed, and calcOnboardingStats then took the direction from the goal type and quoted 0.42 kg/week. Fix: (1) Fat Loss / Muscle Gain with the goal weight within 0.5 kg of current (the calc's own tolerance) now hold Continue with an inline hint: 'Your goal weight is the same as your current weight. Set a lower (higher) goal weight on the Body tab, or choose Maintenance.' in en / hi / hinglish / xx-AE (Hindi uses the app's existing terms मौजूदा वज़न, शरीर टैब, मेंटेनेंस; machine-drafted). (2) With no weight change the calc reports 0.00 kg/week, so the tour, plan-ready overview and coach preview never quote a pace next to '70 = 70' (resumed drafts, at-goal users); calories unchanged. Proof [executed]: the real Goal tab at 390 px, 70 = 70 kg, Fat Loss + a pace tapped: Continue disabled, hint shown; image 1 English, image 2 Hindi. Tests: fe-goal-screen4 +4 (all fail on the old screen), fe-goal-calc +3, tap-budget walk now sets a Fat Loss goal weight on the Body ruler (still 15 taps); full app vitest 9,597 passed before that one test update, pre-push gate 3,558 related passed, tsc 0. Reaches phones with the next Play build.",
+        "imagePath": "images/i-20261023-d1-goal-weight-equals-current-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-d1-goal-weight-equals-current-fix-r1.png",
+          "images/i-20261023-d1-goal-weight-equals-current-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c96ae531c18b328c72904dc0377055879652d2f9",
+        "imageCommits": [
+          "c96ae531c18b328c72904dc0377055879652d2f9",
+          "dd1c8d27cf4303f6625edd14fd1ecd2cfd63274b"
+        ],
+        "fixedAt": "2026-10-23T14:45:29.965Z",
+        "by": "shakeebshaan",
+        "appCommit": "bf272c71",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Gate + display guard both covered by tests that fail on the old code; screenshots of the real screen in en and hi; not yet on a phone."
+        }
+      },
       "history": [],
-      "description": "[P2 / first two days, TOP 2] The Body step lets a tester pick Fat Loss while Current Weight and Goal Weight are both the 70.0 kg default (the step even says 'Goal: Maintain 0.0 kg change'), with no warning. The result screen then says 'Lose fat over 12 weeks', 'Weekly pace 0.42 kg/week', 'YOUR GOAL 70 Current kg = 70 Goal kg, Lose fat by Jan 21, 2027': the numbers contradict each other on the first screen that is supposed to build trust (about 5 kg of loss is promised with a goal of 0 kg). Steps: onboarding, leave the weights at default, Goal step: Fat Loss, 90 Days. Fix idea: when the goal is Fat Loss / Muscle Gain and goal weight = current weight, show an inline prompt on the Body step ('Set a goal weight to continue') or derive the goal weight from the pace. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+      "description": "[P2 / first two days, TOP 2] The Body step lets a tester pick Fat Loss while Current Weight and Goal Weight are both the 70.0 kg default (the step even says 'Goal: Maintain 0.0 kg change'), with no warning. The result screen then says 'Lose fat over 12 weeks', 'Weekly pace 0.42 kg/week', 'YOUR GOAL 70 Current kg = 70 Goal kg, Lose fat by Jan 21, 2027': the numbers contradict each other on the first screen that is supposed to build trust (about 5 kg of loss is promised with a goal of 0 kg). Steps: onboarding, leave the weights at default, Goal step: Fat Loss, 90 Days. Fix idea: when the goal is Fat Loss / Muscle Gain and goal weight = current weight, show an inline prompt on the Body step ('Set a goal weight to continue') or derive the goal weight from the pace. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
+      "thread": [
+        {
+          "at": "2026-10-23T14:45:29.965Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app main 82b1547b + bf272c71. Cause: the Goal tab's goalWeightConflict only held Fat Loss when the goal weight was ABOVE current (and Muscle Gain when below), so the 70 = 70 kg defaults passed, and calcOnboardingStats then took the direction from the goal type and quoted 0.42 kg/week. Fix: (1) Fat Loss / Muscle Gain with the goal weight within 0.5 kg of current (the calc's own tolerance) now hold Continue with an inline hint: 'Your goal weight is the same as your current weight. Set a lower (higher) goal weight on the Body tab, or choose Maintenance.' in en / hi / hinglish / xx-AE (Hindi uses the app's existing terms मौजूदा वज़न, शरीर टैब, मेंटेनेंस; machine-drafted). (2) With no weight change the calc reports 0.00 kg/week, so the tour, plan-ready overview and coach preview never quote a pace next to '70 = 70' (resumed drafts, at-goal users); calories unchanged. Proof [executed]: the real Goal tab at 390 px, 70 = 70 kg, Fat Loss + a pace tapped: Continue disabled, hint shown; image 1 English, image 2 Hindi. Tests: fe-goal-screen4 +4 (all fail on the old screen), fe-goal-calc +3, tap-budget walk now sets a Fat Loss goal weight on the Body ruler (still 15 taps); full app vitest 9,597 passed before that one test update, pre-push gate 3,558 related passed, tsc 0. Reaches phones with the next Play build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-d1-prod-meal-build-slow",
