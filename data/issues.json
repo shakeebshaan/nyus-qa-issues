@@ -11150,6 +11150,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-test 22 Oct against nyu_backend origin/main 29dbd011 (read at the cited lines; prod VM HEAD was 29dbd011 earlier today): STILL OPEN, no change. app/routes/coach.py:387 and backend.py:17436 still build the English \"Today's Meals\" label."
+        },
+        {
+          "at": "2026-10-23T02:27:23.964Z",
+          "event": "reply",
+          "by": "qa",
+          "note": "QA live check 23 Oct 2026 02:24-02:25 UTC (QA account, coach_language hindi, socket send_message with directed_to ai, text: आज के मील दिखाओ): backend b171e814 is NOT working, and it is worse than a missing label. The reply text is Hindi, but the meal_plan_card block arrives not enriched: data = {reason, meal_type} only, no day_label and no meals (same in /coach/history). VM nyus_app.log 02:23:46, 02:24:18, 02:25:47: WARNING backend - Failed to enrich meal_plan_card: name user_id is not defined. Cause: the change calls _coach_copy.user_coach_language(user_id) in the socket reply path (backend.py about line 17516 on 7c2b329e) where the user variable is sender_id; the except around it swallows the NameError so the whole enrichment is skipped. This empties the coach meal card for every user and language since the 22 Oct 21:56 UTC deploy. Fix: use sender_id there, redeploy, then re-check header आज के मील (hindi) and Todays Meals (english). The REST path app/routes/coach.py:389 uses its own user_id and is not affected."
         }
       ],
       "id": "i-20261022-hi-meal-card-day-label",
@@ -11184,6 +11190,12 @@
           "event": "retested",
           "by": "nyus",
           "note": "Log check 20261023a live proof (QA account, coach_language hindi, 23 Oct 01:33 UTC, one GET /ai/overview?range=week&days=7, 12.8 s; nyu_backend c8df0b36 live in cdaf3120): MOSTLY FIXED, not closed. All five fields (headline, wins, improvements, tip, next-week focus) are Devanagari sentences with English JSON keys, so the overview is no longer English. Remaining gap (qa judge 70 < bar 90): English nouns that are not food or exercise names stay in Latin script inside the Hindi sentences, e.g. headline: 'पिछले हफ्ते आपने 7 में से 1 workout session पूरा किया, weight 0.3kg कम हुआ, लेकिन diet logging नहीं हो पाई।' The prompt rule (nyu_backend llm_prompts.py:722) keeps only food names, exercise names and numbers in their common form, so weight / diet logging / tracking / calendar should be Devanagari. Evidence on the dev box: C:/tmp/g9/hi-overview-20261023.json + .png. Resolve is also blocked by the board test gate (npm run test:unit) although this fix is backend-only (backend suite 8,458 passed / 0 failed at c8df0b36)."
+        },
+        {
+          "at": "2026-10-23T02:27:23.964Z",
+          "event": "reply",
+          "by": "qa",
+          "note": "QA live check 23 Oct 2026 01:33 UTC (backend c8df0b36): the overview is now Devanagari in all five fields (headline: पिछले हफ्ते आपने 7 में से 1 workout session पूरा किया, weight 0.3kg कम हुआ, लेकिन diet logging नहीं हो पाई।), so the English-for-everyone bug is fixed. Not resolved yet because my honest score is 70, below the 90 bar: fitness nouns stay Latin inside Devanagari sentences (workout session, weight, diet logging, meals log, calendar, schedule, consistency, tracking, priority), i.e. Hinglish register. Decide whether that is acceptable for coach_language hindi (native Hindi read nyus-f84785); if yes, resolve with the PNG in qa notes (hi-overview-20261023.png)."
         }
       ],
       "id": "i-20261022-hi-weekly-overview-english",
