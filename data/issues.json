@@ -11658,8 +11658,30 @@
         "434acdb6"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app main 777d3a81: every literal in UserSearch.tsx (header, pills, placeholder, hint, search states, result buttons, row menu, toasts, both confirm dialogs) goes through t() with Hindi keys; screenshot is /social/search in the hi locale at 390 px. Covered by test/i18n/hindi-social-search.test.tsx (empty, results, row menu, both dialogs, no-results, error: 0 hardcoded English); 188 targeted tests passed after the rebase; pre-push gate passed on the push to main. Hindi is machine-drafted, native read pending (nyus-f84785).",
+        "imagePath": "images/i-20261022-hi-user-search-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-user-search-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "09745e123f77ab35e592e342bb5890143be2cdef",
+        "imageCommits": [
+          "09745e123f77ab35e592e342bb5890143be2cdef"
+        ],
+        "fixedAt": "2026-10-23T09:43:36.040Z",
+        "by": "shakeebshaan",
+        "appCommit": "777d3a81",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Hindi wording is machine-drafted; native read still open"
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T08:46:44.000Z",
@@ -11683,7 +11705,17 @@
         "social"
       ],
       "route": "/social/search",
-      "description": "[P3 / Hindi, found in the old-issue re-test 22 Oct] /social/search (Find Friends) is English in Hindi: 5 English lines + 4 attributes: \"Find Friends\" (src/pages/UserSearch.tsx:272), tabs \"Requests\" and \"Blocked\", the field label/placeholder \"Search users by name or email\" (:310) and \"Search by name or email to add friends\" (:337). The file has no useTranslation (it also had the apiErrorMessage compile clash, i-20260717-1d76, fixed). Repro (executed on the live build, release/307 web bundle, QA account, Hindi, 390px): set the language to Hindi. New Hindi is machine-drafted, needs native read (nyus-f84785). Expected Hindi (new, drafted): \"दोस्त खोजें\", \"अनुरोध\", \"ब्लॉक किए गए\", \"नाम या ईमेल से यूज़र खोजें\", \"दोस्त जोड़ने के लिए नाम या ईमेल से खोजें\". Acceptance test for dev: Hindi /social/search has 0 Latin app strings in text, placeholders and aria-labels; English unchanged; vitest renders UserSearch under hi."
+      "description": "[P3 / Hindi, found in the old-issue re-test 22 Oct] /social/search (Find Friends) is English in Hindi: 5 English lines + 4 attributes: \"Find Friends\" (src/pages/UserSearch.tsx:272), tabs \"Requests\" and \"Blocked\", the field label/placeholder \"Search users by name or email\" (:310) and \"Search by name or email to add friends\" (:337). The file has no useTranslation (it also had the apiErrorMessage compile clash, i-20260717-1d76, fixed). Repro (executed on the live build, release/307 web bundle, QA account, Hindi, 390px): set the language to Hindi. New Hindi is machine-drafted, needs native read (nyus-f84785). Expected Hindi (new, drafted): \"दोस्त खोजें\", \"अनुरोध\", \"ब्लॉक किए गए\", \"नाम या ईमेल से यूज़र खोजें\", \"दोस्त जोड़ने के लिए नाम या ईमेल से खोजें\". Acceptance test for dev: Hindi /social/search has 0 Latin app strings in text, placeholders and aria-labels; English unchanged; vitest renders UserSearch under hi.",
+      "thread": [
+        {
+          "at": "2026-10-23T09:43:36.040Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app main 777d3a81: every literal in UserSearch.tsx (header, pills, placeholder, hint, search states, result buttons, row menu, toasts, both confirm dialogs) goes through t() with Hindi keys; screenshot is /social/search in the hi locale at 390 px. Covered by test/i18n/hindi-social-search.test.tsx (empty, results, row menu, both dialogs, no-results, error: 0 hardcoded English); 188 targeted tests passed after the rebase; pre-push gate passed on the push to main. Hindi is machine-drafted, native read pending (nyus-f84785).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "createdAt": "2026-10-22T14:36:05.743Z",
