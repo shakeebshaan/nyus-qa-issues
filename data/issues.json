@@ -12036,6 +12036,181 @@
       "fix": null,
       "history": [],
       "description": "[P3 / push cap QA 23 Oct] The admin single-user nudge retrigger (POST /nudge-retrigger) sends with trigger_type manual. Only the inactive_user nudge maps to admin_message, which is exempt from the daily push cap; streak_risk, weekly_review, weight_reminder, meal_reminder and workout_reminder are counted and can be silently held by the 2-per-IST-day cap, and the admin sees the wrong reason (push suppressed by user prefs / no token, broadcasts.py:1027). Executed: the live is_exempt on the VM returns False for those five type and manual pairs. FIX: in push_budget.py add EXEMPT_TRIGGERS = frozenset({manual}) and return True for it in is_exempt after the COUNTED_TRIGGERS check (broadcasts.py:1005 is the only place that sets manual); surface result push_skipped in the retrigger message; add a test to tests/test_push_daily_cap.py. Not a release blocker."
+    },
+    {
+      "id": "i-20261023-d1-stale-no-diet-plan",
+      "createdAt": "2026-10-23T12:40:00.000Z",
+      "author": "qa",
+      "tags": [
+        "first-day",
+        "onboarding",
+        "tester-retention",
+        "p2"
+      ],
+      "route": "/nutrition (first screen after 'Log your first meal')",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-day1-tester/65-first-landing.png"
+      ],
+      "imageCommits": [
+        "c41793e867c37762322bad3500c3d25e3a0981cb"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / first two days, TOP 1] A tester who has just built a plan taps 'Log your first meal' on the 'Your plan is ready' screen and lands on Today's Nutrition showing 'No diet plan yet. Generate a personalized macro-based plan in under a minute.' with 'Create Diet Plan with AI'. The plan exists: a reload of /nutrition shows 'Rice Flakes Bowl, 565 kcal, Mark eaten'. Steps: new account, finish onboarding (build the meal manually: I'll build it myself, add one ingredient, Continue), wait for 'Your plan is ready', tap 'Log your first meal'. Seen 2 of 2 runs when the flow was driven at normal speed (a slower first run showed the plan); the diet-plan query was fetched at 12:21:19 before save-custom-plan finished at 12:21:38 and was not refetched, so it looks like a stale cache. Why it matters: the very first screen after onboarding tells a tester there is no plan; many will tap Create Diet Plan with AI (a second plan, 30+ s) or leave. Fix idea: invalidate the diet-plan query after onboarding finalize / save-custom-plan, or have 'Log your first meal' refetch before navigating. Caveat: the harness LLM is a mock, so real timing is longer; please confirm on a real phone with a real account. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+    },
+    {
+      "id": "i-20261023-d1-goal-weight-equals-current",
+      "createdAt": "2026-10-23T12:40:00.000Z",
+      "author": "qa",
+      "tags": [
+        "first-day",
+        "onboarding",
+        "tester-retention",
+        "p2"
+      ],
+      "route": "/onboarding/flow (Body step, then 'Your plan is ready')",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-day1-tester/64-landed.png"
+      ],
+      "imageCommits": [
+        "c41793e867c37762322bad3500c3d25e3a0981cb"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / first two days, TOP 2] The Body step lets a tester pick Fat Loss while Current Weight and Goal Weight are both the 70.0 kg default (the step even says 'Goal: Maintain 0.0 kg change'), with no warning. The result screen then says 'Lose fat over 12 weeks', 'Weekly pace 0.42 kg/week', 'YOUR GOAL 70 Current kg = 70 Goal kg, Lose fat by Jan 21, 2027': the numbers contradict each other on the first screen that is supposed to build trust (about 5 kg of loss is promised with a goal of 0 kg). Steps: onboarding, leave the weights at default, Goal step: Fat Loss, 90 Days. Fix idea: when the goal is Fat Loss / Muscle Gain and goal weight = current weight, show an inline prompt on the Body step ('Set a goal weight to continue') or derive the goal weight from the pace. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+    },
+    {
+      "id": "i-20261023-d1-prod-meal-build-slow",
+      "createdAt": "2026-10-23T12:40:00.000Z",
+      "author": "qa",
+      "tags": [
+        "first-day",
+        "onboarding",
+        "performance",
+        "tester-retention",
+        "p3"
+      ],
+      "route": "POST /api/v1/ai/suggest-meals-batch, /ai/suggest-meal (onboarding 'Build your meals', Suggest ideas)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / first two days, TOP 3, slow screen > 3 s, measured on PROD] Read-only from the prod nyus_app.log SLOW_REQUEST lines of 23 Oct: POST /ai/suggest-meals-batch 29.6 s and 45.0 s (11:23 UTC), POST /ai/suggest-meal 28.6 s and 11.9 s (11:39 UTC), POST /onboarding/save-custom-plan 4.4 s (11:53 UTC). This is the 'Build your meals' step of onboarding, the longest wait a tester has in the first minutes. The app does show 'Reading your goals...', 'Taking a bit longer than usual', a Continue to my plan button and 'Finishing your meals - continuing automatically' [executed locally], so it is not a dead screen, but 30-45 s is where a first-day tester gives up. In the local run the mock LLM returned non-JSON, so meals came back empty and the screen stayed on 'Finishing your meals - continuing automatically' for over 2 minutes with empty Breakfast/Lunch/Dinner and no message that the AI failed: the AI-failure path needs a visible message and a retry. Fix idea: build one meal first, cache the first batch, and add an explicit failure message. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+    },
+    {
+      "id": "i-20261023-d1-hi-onboarding-english",
+      "createdAt": "2026-10-23T12:40:00.000Z",
+      "author": "qa",
+      "tags": [
+        "first-day",
+        "hindi",
+        "onboarding",
+        "p3"
+      ],
+      "route": "/onboarding/flow in Hindi: Body step, workout builder; Home sleep card",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-day1-tester/hio-s2.png",
+        "images/2026-10-23-day1-tester/hio-s11.png",
+        "images/2026-10-23-day1-tester/hi-dashboard.png"
+      ],
+      "imageCommits": [
+        "c41793e867c37762322bad3500c3d25e3a0981cb",
+        "c41793e867c37762322bad3500c3d25e3a0981cb",
+        "c41793e867c37762322bad3500c3d25e3a0981cb"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / Hindi, first two days] Hindi tester, three untranslated spots found while walking onboarding and Home in hi: (1) Body step, pregnancy block: the safety sentence \"We don't recommend weight-loss deficits during pregnancy or nursing - this keeps your plan safe.\" and the disabled-Continue hint \"Answer the pregnancy question to continue\" are English (health-safety copy, hio-s2). (2) Workout builder (I'll build it myself path): the green button reads \"Coach River can build दिन 1\" (English sentence with a Hindi word, hio-s11). (3) Home sleep card: slider ends \"4h\" and \"10h\" while the value says \"7 घंटे\" (hi-dashboard). Also the welcome carousel dots keep the English aria-label \"Go to slide 1 of 3\" (already covered by i-20261022-hi-aria-leftovers). Fix idea: add the three keys to the hi locale; use घंटे on the slider ends. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+    },
+    {
+      "id": "i-20261023-d1-pb-zero-kg",
+      "createdAt": "2026-10-23T12:40:00.000Z",
+      "author": "qa",
+      "tags": [
+        "first-day",
+        "activity",
+        "tester-retention",
+        "p3"
+      ],
+      "route": "/activity (Personal bests card after the first workout)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-day1-tester/76-activity-scrolled.png"
+      ],
+      "imageCommits": [
+        "c41793e867c37762322bad3500c3d25e3a0981cb"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / first workout] After logging 3 sets of Wide Push-Up (bodyweight, 10 reps, 0 kg added) the Activity page shows a Personal bests card: 'NEW PERSONAL BEST, Wide Push-Up, 0 kg, x 10 reps, today'. A 0 kg personal best on the first ever workout reads as a bug and cheapens the badge. The set rows in the logger also say '10 reps x 0kg'. Fix idea: for bodyweight exercises show reps instead of kg, or do not celebrate a PB with zero load on the first log. On the same page 'Total Volume 0kg' and 'COMPLETED 0 / 36' stay at 0 after the first exercise is completed (Sets 3/18 and 1/6 exercises do update), so the session card looks broken until the day ends. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+    },
+    {
+      "id": "i-20261023-d1-sessions-0-of-7",
+      "createdAt": "2026-10-23T12:40:00.000Z",
+      "author": "qa",
+      "tags": [
+        "first-day",
+        "activity",
+        "p4"
+      ],
+      "route": "/activity (Workout sessions this week)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-day1-tester/70-activity.png"
+      ],
+      "imageCommits": [
+        "c41793e867c37762322bad3500c3d25e3a0981cb"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / confusion] A tester who just built a 3-day plan (Push, Pull, Legs) sees 'Workout sessions this week 0/7' with a row of seven days, on day 1 and 1/7 on day 2. The target is 7 although the plan has 3 training days, so a tester who trains exactly as planned always looks 4 sessions behind. Fix idea: use the plan's days per week as the denominator. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+    },
+    {
+      "id": "i-20261023-d1-first-minute-scold-banner",
+      "createdAt": "2026-10-23T12:40:00.000Z",
+      "author": "qa",
+      "tags": [
+        "first-day",
+        "nutrition",
+        "tone",
+        "p4"
+      ],
+      "route": "/nutrition (first view after onboarding)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-23-day1-tester/65-after-cta.png"
+      ],
+      "imageCommits": [
+        "c41793e867c37762322bad3500c3d25e3a0981cb"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / tone] In the first minute after sign-up, with nothing yet due, Today's Nutrition shows a red-tinted tip 'Missing meals compounds fast. One correction now fixes the day.', and on day 2 'Protein is still catchable' with 0 meals logged. For a brand-new tester this reads as a scolding for something they could not have done yet; the tip shown after the first meal ('Ghee in moderation is not the enemy') has nothing to do with the meal logged (poha). Fix idea: no missed-meal tips on the account's first day or before the first meal slot has passed; tie the tip to what was logged. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
     }
   ]
 }
