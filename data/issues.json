@@ -12125,11 +12125,8 @@
       "createdAt": "2026-10-23T08:46:44.000Z",
       "author": "qa",
       "tags": [
-        "play",
-        "launch",
-        "production-access",
-        "a3",
-        "p2"
+        "owner-gate",
+        "waiting-shaan"
       ],
       "route": "android/app/build.gradle:100 (firebase-analytics); Play Console App content > Advertising ID",
       "imagePath": null,
@@ -12147,7 +12144,18 @@
           "note": "QA re-check 23 Oct 2026 (inspected): the source is fixed. android/app/src/main/AndroidManifest.xml:130-134 now carries tools:node=remove for AD_ID and the four ACCESS_ADSERVICES permissions (commit dc80ba17, v1.10.21 build 310, so it is in 311 and 312). STILL OPEN until aapt2 is run on a Play-served build 312 (no 312 bundle or APK on this box; cannot test here). Owner for the Console Advertising ID answer: Shaan."
         }
       ],
-      "description": "[P2 / Play production access, found in the A3 walk 23 Oct 07:50 UTC, 6 days before the earliest apply] The Play-served build 309 (1.10.20) requests com.google.android.gms.permission.AD_ID and four android.permission.ACCESS_ADSERVICES_* permissions. They are not in the repo manifest: they are merged in by com.google.firebase:firebase-analytics (android/app/build.gradle:100). The store listing says no ads and the privacy page says Health Connect data is never used for advertising, and it names a Firebase Analytics app-instance ID but not the Advertising ID. A Console Advertising ID declaration of No while the bundle carries AD_ID can block a release; Yes needs the Data safety form to match. Executed: aapt2 dump permissions on the universal APK Play generates for versionCode 309. FIX (decide first): either declare Yes for analytics in Console App content > Advertising ID and mention it in Data safety and the privacy page, or add tools:node=remove entries for AD_ID and the four ACCESS_ADSERVICES permissions to AndroidManifest.xml, ship a new closed-track build and re-run aapt2. Owner: Shaan (Console answer), NYUS employee (manifest and build). Evidence table: docs/PLAY_PRODUCTION_ACCESS.md section 4 (23 Oct rows) and 5b R3 on branch qa/a3-checklist-oct23."
+      "description": "[P2 / Play production access, found in the A3 walk 23 Oct 07:50 UTC, 6 days before the earliest apply] The Play-served build 309 (1.10.20) requests com.google.android.gms.permission.AD_ID and four android.permission.ACCESS_ADSERVICES_* permissions. They are not in the repo manifest: they are merged in by com.google.firebase:firebase-analytics (android/app/build.gradle:100). The store listing says no ads and the privacy page says Health Connect data is never used for advertising, and it names a Firebase Analytics app-instance ID but not the Advertising ID. A Console Advertising ID declaration of No while the bundle carries AD_ID can block a release; Yes needs the Data safety form to match. Executed: aapt2 dump permissions on the universal APK Play generates for versionCode 309. FIX (decide first): either declare Yes for analytics in Console App content > Advertising ID and mention it in Data safety and the privacy page, or add tools:node=remove entries for AD_ID and the four ACCESS_ADSERVICES permissions to AndroidManifest.xml, ship a new closed-track build and re-run aapt2. Owner: Shaan (Console answer), NYUS employee (manifest and build). Evidence table: docs/PLAY_PRODUCTION_ACCESS.md section 4 (23 Oct rows) and 5b R3 on branch qa/a3-checklist-oct23.",
+      "needsReview": true,
+      "reviewReason": "Not duplicated: the Console side is Shaan's list item nyus-797703 (App content > Advertising ID = No, Data safety Device IDs without an ad purpose). Build side: builds 310+ strip AD_ID and the 4 ACCESS_ADSERVICES_* (app dc80ba17; aapt2 on the 310 bundle). This card closes when aapt2 on the next Play-served build (generatedApks) shows no AD_ID and nyus-797703 is done.",
+      "reviewedAt": "2026-10-23T23:44:20.613Z",
+      "thread": [
+        {
+          "at": "2026-10-23T23:44:20.613Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Not duplicated: the Console side is Shaan's list item nyus-797703 (App content > Advertising ID = No, Data safety Device IDs without an ad purpose). Build side: builds 310+ strip AD_ID and the 4 ACCESS_ADSERVICES_* (app dc80ba17; aapt2 on the 310 bundle). This card closes when aapt2 on the next Play-served build (generatedApks) shows no AD_ID and nyus-797703 is done."
+        }
+      ]
     },
     {
       "id": "i-20261023-listing-wall-of-badges-live",
