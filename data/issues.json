@@ -2,6 +2,70 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261024-hi-meal-customize-page",
+      "createdAt": "2026-10-24T05:36:20.766Z",
+      "author": "dev",
+      "tags": [
+        "hindi",
+        "i18n",
+        "coach",
+        "p3"
+      ],
+      "route": "/ai/meal-customize (src/pages/AIMealCustomization.tsx)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / Hindi] The AI meal customisation screen has no i18n at all (no useTranslation; ~32 English strings), including its AI-unavailable toasts: 'Couldn't load your meal' / 'Check your connection and try again.' (~:173-178) and on a failed reply 'Slow down a moment' / 'Coach is unavailable' / 'No response from coach' (~:214-220). Note: it never shows the backend's 'AI service temporarily unavailable' payload (it builds its own text from the HTTP status), so the backend side is fine; the page copy itself needs keys in en/hi/hinglish. NOT FIXED (whole-page i18n, larger than this lead). Repro: language Hindi, open a meal's 'customise with coach'."
+    },
+    {
+      "id": "i-20261024-hi-unavailable-literals",
+      "createdAt": "2026-10-24T05:36:20.766Z",
+      "author": "dev",
+      "tags": [
+        "hindi",
+        "i18n",
+        "nutrition",
+        "p4"
+      ],
+      "route": "Food detail sheet (src/components/plan-builder/FoodDetailSheet.tsx:670) and the coach chat meal-logger block (src/components/blocks/MealLoggerBlock.tsx:34, :56)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / Hindi] 'Micronutrient detail unavailable — macros are still accurate.' (+ 'Loading micronutrients…') and 'Nutrition unavailable' were literal English; both files had no i18n. FIX LANDED: app main a4f199ab, ships in the next app build (nutrition.micros.loading / detail_unavailable, blocks.meal_logger.nutrition_unavailable). STILL ENGLISH in the same files (not in this fix): FoodDetailSheet ~6 other literals, MealLoggerBlock ~7 (e.g. aria 'Decrease {name} quantity', 'Log Lunch'). Acceptance for this card: the two named lines read Hindi in hi."
+    },
+    {
+      "id": "i-20261024-hi-ai-error-toasts",
+      "createdAt": "2026-10-24T05:36:20.766Z",
+      "author": "dev",
+      "tags": [
+        "hindi",
+        "i18n",
+        "nutrition",
+        "backend",
+        "p4"
+      ],
+      "route": "Log meal sheet (CustomMealModal) photo + 'describe it' estimate; nyu_backend app/routes/plan_builder_routes.py ai_analyze_meal_photo / ai_estimate_meal_text",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / Hindi] The meal-photo and AI-estimate error toasts are English for a Hindi reader. CustomMealModal.tsx:631-636 (photo) and :880-884 (estimate) used English titles and show the backend's response.data.error verbatim as the description, and the backend wrote those 13 lines in English only ('Photo analysis is unavailable right now. Type what you ate instead.', the daily photo / AI-estimate limit, the budget pause, 'Couldn't spot a meal in that photo'). FIX LANDED: nyu_backend 3e4432aa (route errors translated by coach_language via coach_copy.PHRASES; live 24 Oct 05:19 UTC) + app main a4f199ab (toast titles + defaults through t(); ships in the next app build). Hindi machine-drafted, native read nyus-f84785. Acceptance: Hindi user hits the daily photo limit -> Hindi title and Hindi reason; English unchanged."
+    },
+    {
       "id": "i-20261024-hi-paywall-suffix",
       "createdAt": "2026-10-24T05:35:39.904Z",
       "author": "shakeebshaan",
