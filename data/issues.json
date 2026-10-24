@@ -175,8 +175,31 @@
         "9d9c64453c918c7627bbc605e80c2f8144e9f7da"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Landed on app main 8b05f207 (24 Oct 11:48 UTC; ships in the next build). Checked on a web build of main, 390 px, cold boot with storage blocked: the storage toast shows in Hindi (स्टोरेज उपलब्ध नहीं है ...) and in Hinglish (Storage available nahi hai ...), never English. Tests: test/hi-storage-toast-and-diet-tab.test.tsx.",
+        "imagePath": "images/i-20261024-storage-toast-english-hi-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-storage-toast-english-hi-fix-r1.png",
+          "images/i-20261024-storage-toast-english-hi-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ec27afebf6039441a67de01800d2a480fa95ec56",
+        "imageCommits": [
+          "ec27afebf6039441a67de01800d2a480fa95ec56",
+          "778eef6a2e65f24fe49cfb64b4f79518e1e57443"
+        ],
+        "fixedAt": "2026-10-24T11:54:59.582Z",
+        "by": "shakeebshaan",
+        "appCommit": "8b05f207",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90
+        }
+      },
       "history": [
         {
           "at": "2026-10-24T11:23:33.708Z",
@@ -185,7 +208,17 @@
           "note": "ON APP MAIN 8b05f207 (fix/qa-reg-three rebased from 9c5ed5f8 onto e3c292c3, pushed 24 Oct 11:48 UTC; ships in the next build). Cause verified: the toast fired on first mount while the lazy hi / hinglish chunk was still loading (initI18n renders English until ensureLocale(...).then(changeLanguage)). The toast now waits for the user language bundle (languageChanged / loaded; English after 4 s if the chunk never arrives). Test: test/hi-storage-toast-and-diet-tab.test.tsx, hi and hinglish cold boot shows the toast in that language, never English (fails on main). Full suite green."
         }
       ],
-      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. REPRO: nyus_locale = hi (also hinglish), make localStorage.setItem throw for the key __nyus_storage_test__ (private-browsing case), open /dashboard. EXPECTED: the toast in Hindi / Hinglish. The strings exist: hi.json:7728-7729 and hinglish.json:7728-7729 (auth_toast.storage_title, auth_toast.storage_desc). OBSERVED: a red toast \"Storage unavailable / Your browser's storage is blocked (private browsing?). You may need to log in again after each session.\" in English in both locales. In the same run the \"Session expired\" toast and the CSAT \"thanks\" toast, which fire later, ARE translated. LIKELY CAUSE [assumed from the code, not stepped through]: the effect at AuthContext.tsx:169 has deps [] and calls i18n.t() on mount, before the lazy hi / hinglish chunk is loaded (config.ts:31-38; changeLanguage runs after ensureLocale at :147), so t() answers with the English fallback and the toast text is fixed at that moment. The unit test test/GlobalToasts.hindi.test.tsx presumably calls t() after the locale is loaded, so it would not catch the timing [assumed]. FIX IDEA: fire the toast after the locale bundle is ready (ensureLocale / i18n \"loaded\"), or pass the keys and translate when the toast renders. Only affects browsers with blocked storage (rare on the Android app), so P4."
+      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. REPRO: nyus_locale = hi (also hinglish), make localStorage.setItem throw for the key __nyus_storage_test__ (private-browsing case), open /dashboard. EXPECTED: the toast in Hindi / Hinglish. The strings exist: hi.json:7728-7729 and hinglish.json:7728-7729 (auth_toast.storage_title, auth_toast.storage_desc). OBSERVED: a red toast \"Storage unavailable / Your browser's storage is blocked (private browsing?). You may need to log in again after each session.\" in English in both locales. In the same run the \"Session expired\" toast and the CSAT \"thanks\" toast, which fire later, ARE translated. LIKELY CAUSE [assumed from the code, not stepped through]: the effect at AuthContext.tsx:169 has deps [] and calls i18n.t() on mount, before the lazy hi / hinglish chunk is loaded (config.ts:31-38; changeLanguage runs after ensureLocale at :147), so t() answers with the English fallback and the toast text is fixed at that moment. The unit test test/GlobalToasts.hindi.test.tsx presumably calls t() after the locale is loaded, so it would not catch the timing [assumed]. FIX IDEA: fire the toast after the locale bundle is ready (ensureLocale / i18n \"loaded\"), or pass the keys and translate when the toast renders. Only affects browsers with blocked storage (rare on the Android app), so P4.",
+      "thread": [
+        {
+          "at": "2026-10-24T11:54:59.582Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Landed on app main 8b05f207 (24 Oct 11:48 UTC; ships in the next build). Checked on a web build of main, 390 px, cold boot with storage blocked: the storage toast shows in Hindi (स्टोरेज उपलब्ध नहीं है ...) and in Hinglish (Storage available nahi hai ...), never English. Tests: test/hi-storage-toast-and-diet-tab.test.tsx.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-expired-login-reload-loop",
