@@ -2,6 +2,30 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261024-route-error-screen-english-hi",
+      "createdAt": "2026-10-24T11:13:26.655Z",
+      "author": "qa",
+      "tags": [
+        "hindi",
+        "i18n",
+        "p3"
+      ],
+      "route": "app: src/components/RouteErrorBoundary.tsx:73-85 (message, hint, actionLabel are English literals); fallbackTitle \"Dashboard Error\" in src/App.tsx:766-772 and other routes",
+      "imagePath": "images/2026-10-24-build315-qa/route-error-boundary-hi.png",
+      "imageCommit": "c30ff848faa1f482b3c28dce10a61aeaadcda349",
+      "imagePaths": [
+        "images/2026-10-24-build315-qa/route-error-boundary-hi.png"
+      ],
+      "imageCommits": [
+        "c30ff848faa1f482b3c28dce10a61aeaadcda349"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "Found in a local web build of app main f1394d22 (build 315, versionCode 315; worktree C:/tmp/qa-wt-app, vite build against a mocked API, 390 x 844 at 2x). No prod call, no real account. REPRO: nyus_locale = hi, signed in with a mock user, open /dashboard while GET /dashboard/overview answers 200 with an empty data object (any render crash on a route has the same effect). EXPECTED: the route crash screen in Hindi, like the app-level ErrorBoundary that build 315 translated (error_boundary.title / body in hi.json). ACTUAL: \"Dashboard Error\", \"This page encountered an error. Refresh to try again.\" and the \"Refresh\" button, all English, with the bottom tab bar in Hindi. The chunk-load variant (\"Update available\", \"The app was updated while this page was loading. Refresh to get the new version.\") is English too. Not a regression: this file did not change in 315 and 314 shows the same text; it is the same class of leftover as the 3cc14203 crash screen, on the route-level boundary. Fix: read all four strings (and the fallbackTitle props) through t() with keys in en, hi, hinglish, xx-AE."
+    },
+    {
       "id": "i-20261024-hi-nutrition-and-announcer-english",
       "createdAt": "2026-10-24T09:38:50.861Z",
       "author": "qa",
