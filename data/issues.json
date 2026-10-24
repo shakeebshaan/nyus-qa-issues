@@ -657,10 +657,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main ed6dcced (ships in the next normal build). The Workout tab now speaks Hindi and Hinglish: walking-only hero (headline, bullets, CTA), the body-weight date in the set logger (Hindi via Intl, e.g. '4 जन॰'), partner follow banner and leave-group sheet. Plate calculator, exercise picker and volume chart were already translated on main. Skip-reason chips render translated; their English values are what the backend stores. Image: 390 px /activity in hi (top) and Hinglish (bottom), upper and lower part. Checks: tsc 0 errors, full unit suite 8,671 passed, 23 new tests, QA flows recaptured (2b05ade5).",
+        "imagePath": "images/i-20261024-hi-workout-tab-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-workout-tab-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e23d53108614e0b12ed66701155fe716c4745747",
+        "imageCommits": [
+          "e23d53108614e0b12ed66701155fe716c4745747"
+        ],
+        "fixedAt": "2026-10-24T20:58:32.172Z",
+        "by": "shakeebshaan",
+        "appCommit": "ed6dcced",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Workout tab leftovers translated (walking-only hero, body-weight date via Intl for hi); plate calculator / exercise picker / volume chart were already on main; picker steps not re-driven live (driver selector drift); native read pending."
+        }
+      },
       "history": [],
-      "description": "[P2 / Hindi] Workout tab: 32 English strings, plus 17 in ExercisePickerSheet.tsx (shared with the onboarding workout builder) and 8 in LeaveGroupSheet.tsx (shared with diet). PlateCalculatorSheet.tsx 24 ('Plate calculator', 'per side breakdown', ...), ExerciseVolumeChart 3, ExerciseWheelPicker 3, WalkingOnlyHero 1, SessionClosePlate 1. ExercisePickerSheet: 'Add exercise', 'Search exercises…'.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P2 / Hindi] Workout tab: 32 English strings, plus 17 in ExercisePickerSheet.tsx (shared with the onboarding workout builder) and 8 in LeaveGroupSheet.tsx (shared with diet). PlateCalculatorSheet.tsx 24 ('Plate calculator', 'per side breakdown', ...), ExerciseVolumeChart 3, ExerciseWheelPicker 3, WalkingOnlyHero 1, SessionClosePlate 1. ExercisePickerSheet: 'Add exercise', 'Search exercises…'.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-24T20:58:32.172Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main ed6dcced (ships in the next normal build). The Workout tab now speaks Hindi and Hinglish: walking-only hero (headline, bullets, CTA), the body-weight date in the set logger (Hindi via Intl, e.g. '4 जन॰'), partner follow banner and leave-group sheet. Plate calculator, exercise picker and volume chart were already translated on main. Skip-reason chips render translated; their English values are what the backend stores. Image: 390 px /activity in hi (top) and Hinglish (bottom), upper and lower part. Checks: tsc 0 errors, full unit suite 8,671 passed, 23 new tests, QA flows recaptured (2b05ade5).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-diet-tab",
