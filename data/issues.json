@@ -385,7 +385,7 @@
       "imagePrivate": false,
       "status": "fixed",
       "fix": {
-        "description": "Fixed in app main 7a499355 (dev, fast-forward from e43b53e3; ships in the next app build). Today and its cards plus the 8 dashboard charts go through t(): 95 keys in en / hi / hinglish, pseudo-locale regenerated; static scan of Today 61 -> 4 (the 4 are gradient/element ids, not visible text). Checks [executed by the NYUS employee on the tip]: tsc 0; test/Today.hindi.test.tsx 12/12; pre-push gate 'local CI passed in 364.7s'. Dev's full suite on 7a499355: 564 files / 8,567 tests passed, 0 failed. Screen [executed]: local build of 7a499355 at 390 px in Hindi, every API call answered on the dev box (0 to prod, 0 page errors): morning brief, overview error banner, sleep card (7 घंटे, 4 घंटे / 10 घंटे), weight card, bottom nav all Hindi.",
+        "description": "Fixed in app main 7a499355 (dev, fast-forward from e43b53e3; ships in the next app build). Today and its cards plus the 8 dashboard charts go through t(): 95 keys in en / hi / hinglish, pseudo-locale regenerated; static scan of Today 61 -> 4 (the 4 are gradient/element ids, not visible text). Checks [executed by the NYUS employee on the tip]: tsc 0; test/Today.hindi.test.tsx 12/12; pre-push gate 'local CI passed in 364.7s'. Dev's full suite on 7a499355: 564 files / 8,567 tests passed, 0 failed. Screen [executed]: local build of 7a499355 at 390 px in Hindi, every API call answered on the dev box (0 to prod, 0 page errors): morning brief, overview error banner, sleep card (7 घंटे, 4 घंटे / 10 घंटे), weight card, bottom nav all Hindi. Follow-up: no-name greeting fixed in app main 0fa2c451 (no English \"there\").",
         "imagePath": "images/i-20261024-hi-today-cards-fix-r1.png",
         "imagePaths": [
           "images/i-20261024-hi-today-cards-fix-r1.png",
@@ -417,6 +417,13 @@
           "who": "claude",
           "kind": "resolve",
           "text": "Fixed in app main 7a499355 (dev, fast-forward from e43b53e3; ships in the next app build). Today and its cards plus the 8 dashboard charts go through t(): 95 keys in en / hi / hinglish, pseudo-locale regenerated; static scan of Today 61 -> 4 (the 4 are gradient/element ids, not visible text). Checks [executed by the NYUS employee on the tip]: tsc 0; test/Today.hindi.test.tsx 12/12; pre-push gate 'local CI passed in 364.7s'. Dev's full suite on 7a499355: 564 files / 8,567 tests passed, 0 failed. Screen [executed]: local build of 7a499355 at 390 px in Hindi, every API call answered on the dev box (0 to prod, 0 page errors): morning brief, overview error banner, sleep card (7 घंटे, 4 घंटे / 10 घंटे), weight card, bottom nav all Hindi.",
+          "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-24T09:06:58.437Z",
+          "who": "claude",
+          "kind": "note",
+          "text": "Follow-up landed: the greeting gap noted at review (\"सुप्रभात, there\", DashboardHeader.tsx:29) is fixed in app main 0fa2c451 (fast-forward from 8efc9ca9; ships in the next app build). With no first name the heading is just the translated greeting (English users now see \"Good morning\", no \", there\" - intended); with a name it uses the new key dashboard.greeting_named (en / hi / hinglish, pseudo-locale regenerated). Checks [executed by the NYUS employee on the rebased tip]: typecheck tsconfig.app.json 0 vs 0 baseline; DashboardHeader.greeting.hindi + Today.hindi + Dashboard.page + i18n-builder/launch-copy 465/465; test/i18n 23 files / 815 passed; full npm run test:unit 567 files / 8,585 passed, 22 skipped, 0 failed; pre-push gate 4,085 related tests passed, \"local CI passed in 537.8s\". Hindi machine-drafted, native read nyus-f84785.",
           "by": "shakeebshaan"
         }
       ],
