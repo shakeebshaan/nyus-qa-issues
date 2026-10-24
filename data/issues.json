@@ -17,10 +17,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main c88cc020 (rebased onto a4f199ab, the Hindi AI-error fix). AIMealCustomization.tsx now reads all its text through t(), using a new meal_customize namespace with 51 keys in en, hi, hinglish and xx-AE (none missing). That covers the load, limit, unavailable and no-response toasts. The route is /ai/customize-meal, not /ai/meal-customize. Checks on the exact pushed tree: tsc 0 errors; AIMealCustomization.hindi.test.tsx 9/9; AIMealCustomization.test.tsx 27/27; i18n/hindi-error-copy.test.tsx 6/6; CustomMealModal.test.tsx 25/25; pre-push gate 271 files, 3,897 tests passed. Dev's full suite on the branch: 8,525 passed, 22 skipped. Screenshot: a local build in Hindi against a mock API. Ships in the next app build; no separate release.",
+        "imagePath": "images/i-20261024-hi-meal-customize-page-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-meal-customize-page-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "edc6a12054da75e7b39923ccd2d25fea1e1dab79",
+        "imageCommits": [
+          "edc6a12054da75e7b39923ccd2d25fea1e1dab79"
+        ],
+        "fixedAt": "2026-10-24T05:51:46.519Z",
+        "by": "shakeebshaan",
+        "appCommit": "c88cc020",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Seen in Hindi at 390 px on a local build of c88cc020: empty state, chat with chips and placeholder, and the 503 'coach unavailable' toast. Not shot: the updated-meal and macro-change card (unit tests only). Mock API, not the phone build (ships in the next app release). The Hindi is a machine draft; a native speaker still needs to read it (nyus-f84785)."
+        }
+      },
       "history": [],
-      "description": "[P3 / Hindi] The AI meal customisation screen has no i18n at all (no useTranslation; ~32 English strings), including its AI-unavailable toasts: 'Couldn't load your meal' / 'Check your connection and try again.' (~:173-178) and on a failed reply 'Slow down a moment' / 'Coach is unavailable' / 'No response from coach' (~:214-220). Note: it never shows the backend's 'AI service temporarily unavailable' payload (it builds its own text from the HTTP status), so the backend side is fine; the page copy itself needs keys in en/hi/hinglish. NOT FIXED (whole-page i18n, larger than this lead). Repro: language Hindi, open a meal's 'customise with coach'."
+      "description": "[P3 / Hindi] The AI meal customisation screen has no i18n at all (no useTranslation; ~32 English strings), including its AI-unavailable toasts: 'Couldn't load your meal' / 'Check your connection and try again.' (~:173-178) and on a failed reply 'Slow down a moment' / 'Coach is unavailable' / 'No response from coach' (~:214-220). Note: it never shows the backend's 'AI service temporarily unavailable' payload (it builds its own text from the HTTP status), so the backend side is fine; the page copy itself needs keys in en/hi/hinglish. NOT FIXED (whole-page i18n, larger than this lead). Repro: language Hindi, open a meal's 'customise with coach'.",
+      "thread": [
+        {
+          "at": "2026-10-24T05:51:46.519Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main c88cc020 (rebased onto a4f199ab, the Hindi AI-error fix). AIMealCustomization.tsx now reads all its text through t(), using a new meal_customize namespace with 51 keys in en, hi, hinglish and xx-AE (none missing). That covers the load, limit, unavailable and no-response toasts. The route is /ai/customize-meal, not /ai/meal-customize. Checks on the exact pushed tree: tsc 0 errors; AIMealCustomization.hindi.test.tsx 9/9; AIMealCustomization.test.tsx 27/27; i18n/hindi-error-copy.test.tsx 6/6; CustomMealModal.test.tsx 25/25; pre-push gate 271 files, 3,897 tests passed. Dev's full suite on the branch: 8,525 passed, 22 skipped. Screenshot: a local build in Hindi against a mock API. Ships in the next app build; no separate release.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-unavailable-literals",
