@@ -13752,8 +13752,32 @@
         "c41793e867c37762322bad3500c3d25e3a0981cb"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main 65cff65c; it ships in the next app build (versionCode 316 or later). Before: the card's own screenshot, the red 'Missing meals compounds fast' tip one minute after sign-up. After (these screenshots, 390 px, local web build with a mock account created 1 minute ago, nothing logged, en + hi): Nutrition shows 'Your plan is ready. Log meals as you eat them.' instead. Rule now, on Nutrition and Today: a diet-behind tip needs the lunch slot to have passed (14:00 local) and the account to be past its first local day (from /auth/me created_at). After 14:00 on a later day, a real shortfall still gets the nudge. Not done: tying the after-meal tip to the meal that was logged (the card's second idea). Tests: test/hooks-useMoments.first-day.test.ts (8 cases, fixed clocks); full unit suite on 65cff65c 8,679 passed, 0 failed; pre-push gate 5,128 passed.",
+        "imagePath": "images/i-20261023-d1-first-minute-scold-banner-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-d1-first-minute-scold-banner-fix-r1.png",
+          "images/i-20261023-d1-first-minute-scold-banner-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fcd30bd9f6716ae4ea473b26ae07c36e647be009",
+        "imageCommits": [
+          "fcd30bd9f6716ae4ea473b26ae07c36e647be009",
+          "407ac7c69f86e3a4689ec788a9816e0657b93cf9"
+        ],
+        "fixedAt": "2026-10-24T22:32:26.532Z",
+        "by": "shakeebshaan",
+        "appCommit": "65cff65c",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Main complaint fixed and tested (no scold before lunch or on day 1, welcome copy en/hi/hinglish); the secondary idea (tie the after-meal tip to the logged meal) is not done."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -13762,7 +13786,17 @@
           "note": "QA re-check 23 Oct 2026: CANNOT TEST today. It needs a brand-new account in its first minute, and a prod account is not new. Inspected: the tip text 'Missing meals compounds fast...' is still in src/i18n/locales/en.json:2137 and nothing in the tip rules changed since the report."
         }
       ],
-      "description": "[P4 / tone] In the first minute after sign-up, with nothing yet due, Today's Nutrition shows a red-tinted tip 'Missing meals compounds fast. One correction now fixes the day.', and on day 2 'Protein is still catchable' with 0 meals logged. For a brand-new tester this reads as a scolding for something they could not have done yet; the tip shown after the first meal ('Ghee in moderation is not the enemy') has nothing to do with the meal logged (poha). Fix idea: no missed-meal tips on the account's first day or before the first meal slot has passed; tie the tip to what was logged. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+      "description": "[P4 / tone] In the first minute after sign-up, with nothing yet due, Today's Nutrition shows a red-tinted tip 'Missing meals compounds fast. One correction now fixes the day.', and on day 2 'Protein is still catchable' with 0 meals logged. For a brand-new tester this reads as a scolding for something they could not have done yet; the tip shown after the first meal ('Ghee in moderation is not the enemy') has nothing to do with the meal logged (poha). Fix idea: no missed-meal tips on the account's first day or before the first meal slot has passed; tie the tip to what was logged. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
+      "thread": [
+        {
+          "at": "2026-10-24T22:32:26.532Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main 65cff65c; it ships in the next app build (versionCode 316 or later). Before: the card's own screenshot, the red 'Missing meals compounds fast' tip one minute after sign-up. After (these screenshots, 390 px, local web build with a mock account created 1 minute ago, nothing logged, en + hi): Nutrition shows 'Your plan is ready. Log meals as you eat them.' instead. Rule now, on Nutrition and Today: a diet-behind tip needs the lunch slot to have passed (14:00 local) and the account to be past its first local day (from /auth/me created_at). After 14:00 on a later day, a real shortfall still gets the nudge. Not done: tying the after-meal tip to the meal that was logged (the card's second idea). Tests: test/hooks-useMoments.first-day.test.ts (8 cases, fixed clocks); full unit suite on 65cff65c 8,679 passed, 0 failed; pre-push gate 5,128 passed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-copyday-no-undo",
