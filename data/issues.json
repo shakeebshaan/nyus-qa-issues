@@ -20,10 +20,46 @@
         "c30ff848faa1f482b3c28dce10a61aeaadcda349"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main 839394b5 (Hindi batch 3, on main since 24 Oct 14:59 UTC). RouteErrorBoundary reads title, hint, the chunk-load variant and Refresh through route_error.* (en, hi, hinglish, xx-AE). fallbackTitle ('Dashboard Error' etc.) is now a console log label only, so the screen shows one translated title on every route. Proof re-run on main 47801713: the real RouteErrorBoundary rendered locally at 390 px around a component that throws, in hi (render crash + chunk-load) and Hinglish; no English left on the screen. Tests: RouteErrorBoundary.test.tsx + loading-labels.i18n batch 3 block; full unit suite on 47801713 575 files / 8,671 passed.",
+        "imagePath": "images/i-20261024-route-error-screen-english-hi-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-route-error-screen-english-hi-fix-r1.png",
+          "images/i-20261024-route-error-screen-english-hi-fix-r1-2.png",
+          "images/i-20261024-route-error-screen-english-hi-fix-r1-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2f8c39f54f9fc377f22893bbe0b559794bee2f12",
+        "imageCommits": [
+          "2f8c39f54f9fc377f22893bbe0b559794bee2f12",
+          "2d6385a0570967bfb7bdf3afb7c562a1597b79c7",
+          "f2499ae8435acf9a865ce8fafc98aed9e19d62d6"
+        ],
+        "fixedAt": "2026-10-24T20:02:01.165Z",
+        "by": "shakeebshaan",
+        "appCommit": "839394b5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Both crash variants translated in hi and Hinglish; per-route English titles removed from the screen"
+        }
+      },
       "history": [],
-      "description": "Found in a local web build of app main f1394d22 (build 315, versionCode 315; worktree C:/tmp/qa-wt-app, vite build against a mocked API, 390 x 844 at 2x). No prod call, no real account. REPRO: nyus_locale = hi, signed in with a mock user, open /dashboard while GET /dashboard/overview answers 200 with an empty data object (any render crash on a route has the same effect). EXPECTED: the route crash screen in Hindi, like the app-level ErrorBoundary that build 315 translated (error_boundary.title / body in hi.json). ACTUAL: \"Dashboard Error\", \"This page encountered an error. Refresh to try again.\" and the \"Refresh\" button, all English, with the bottom tab bar in Hindi. The chunk-load variant (\"Update available\", \"The app was updated while this page was loading. Refresh to get the new version.\") is English too. Not a regression: this file did not change in 315 and 314 shows the same text; it is the same class of leftover as the 3cc14203 crash screen, on the route-level boundary. Fix: read all four strings (and the fallbackTitle props) through t() with keys in en, hi, hinglish, xx-AE."
+      "description": "Found in a local web build of app main f1394d22 (build 315, versionCode 315; worktree C:/tmp/qa-wt-app, vite build against a mocked API, 390 x 844 at 2x). No prod call, no real account. REPRO: nyus_locale = hi, signed in with a mock user, open /dashboard while GET /dashboard/overview answers 200 with an empty data object (any render crash on a route has the same effect). EXPECTED: the route crash screen in Hindi, like the app-level ErrorBoundary that build 315 translated (error_boundary.title / body in hi.json). ACTUAL: \"Dashboard Error\", \"This page encountered an error. Refresh to try again.\" and the \"Refresh\" button, all English, with the bottom tab bar in Hindi. The chunk-load variant (\"Update available\", \"The app was updated while this page was loading. Refresh to get the new version.\") is English too. Not a regression: this file did not change in 315 and 314 shows the same text; it is the same class of leftover as the 3cc14203 crash screen, on the route-level boundary. Fix: read all four strings (and the fallbackTitle props) through t() with keys in en, hi, hinglish, xx-AE.",
+      "thread": [
+        {
+          "at": "2026-10-24T20:02:01.165Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main 839394b5 (Hindi batch 3, on main since 24 Oct 14:59 UTC). RouteErrorBoundary reads title, hint, the chunk-load variant and Refresh through route_error.* (en, hi, hinglish, xx-AE). fallbackTitle ('Dashboard Error' etc.) is now a console log label only, so the screen shows one translated title on every route. Proof re-run on main 47801713: the real RouteErrorBoundary rendered locally at 390 px around a component that throws, in hi (render crash + chunk-load) and Hinglish; no English left on the screen. Tests: RouteErrorBoundary.test.tsx + loading-labels.i18n batch 3 block; full unit suite on 47801713 575 files / 8,671 passed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-nutrition-and-announcer-english",
