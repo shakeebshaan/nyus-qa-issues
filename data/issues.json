@@ -2,6 +2,30 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261024-hi-coach-fallback-english",
+      "createdAt": "2026-10-24T03:26:10.259Z",
+      "author": "qa",
+      "tags": [
+        "hindi",
+        "i18n",
+        "coach",
+        "backend",
+        "p4"
+      ],
+      "route": "/ai/overview in Hindi; nyu_backend app/services/coach/fallback_templates.py:49-54 (_TEMPLATES) and :126-143 (get_fallback)",
+      "imagePath": "images/2026-10-24-hi-fallback/overview-hi-314.png",
+      "imageCommit": null,
+      "imagePaths": [
+        "images/2026-10-24-hi-fallback/overview-hi-314.png"
+      ],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / Hindi] The coach fallback paragraph is English for a Hindi reader. On /ai/overview in Hindi the whole screen is Hindi except the card that says: \"I'm temporarily unavailable for live coaching. Your data is logged and your plan is unchanged. Try again in a few minutes - or check your dashboard for today's targets.\" (screenshot).\nREPRO (executed 24 Oct 2026 02:42 and 03:20 UTC, release-314 web build against prod, QA account, Hindi, 390 px): set the app language to Hindi and open /ai/overview while the account's AI allowance is spent or the LLM fails. The QA account is AI-capped until 25 Oct 00:00 UTC, so it shows every time.\nWHY: nyu_backend app/services/coach/fallback_templates.py:49-54 holds one English text per domain in _TEMPLATES, and get_fallback (:126-143) returns it with no coach_language branch (no Hindi or Hinglish variant). The text is the fallback for every AI surface that uses it, so a Hindi user sees English whenever AI is down or capped, which is exactly when they most need to understand the message.\nFIX IDEA (dev, not done here): give get_fallback the user's coach_language and route the templates through app/services/coach_copy (hindi / hinglish) like the other coach copy. The Hindi text will be machine-drafted and needs a native read (nyus-f84785). Acceptance: with coach_language hi, /ai/overview and the coach chat fallback show Hindi (no Latin words except units); English unchanged; is_fallback_text (:119-123) still recognises the Hindi templates so they are not stored or re-sent as real coach answers.\nChecked first: no open card covers it (search for 'temporarily unavailable', 'fallback_templates' and 'fallback' finds only fixed cards about other text, e.g. i-20261022-hi-ai-overview, which was the screen labels)."
+    },
+    {
       "id": "i-20261023-meal-build-llm-latency",
       "createdAt": "2026-10-23T16:26:07.356Z",
       "author": "shakeebshaan",
