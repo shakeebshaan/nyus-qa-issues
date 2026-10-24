@@ -764,10 +764,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app main d415c874 (dev ffb06e73 rebased onto e0cc6f80; ships in the next app build). Food search sheet, food detail sheet and the meal-ideas swiper now use 49 i18n keys in en/hi/hinglish (food_search, food_detail, ideas); the shared bottom-sheet Close uses common.close. New test test/DietBuilderSheets.hindi.test.tsx 9/9. Push hook: typecheck 0 errors, 366 files / 4,894 tests passed. Full unit suite on 155158d7: 8,600 passed, 1 failed (ChoosePlan.offer-gating OG2, unrelated, flaky under load; 6/6 alone on the branch and on main). Wording flagged for the native read nyus-f84785.",
+        "imagePath": "images/i-20261024-hi-onboarding-diet-builder-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-onboarding-diet-builder-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ae5fdab726b6e2c05ff228da00ef23bbf983f4d6",
+        "imageCommits": [
+          "ae5fdab726b6e2c05ff228da00ef23bbf983f4d6"
+        ],
+        "fixedAt": "2026-10-24T12:59:32.604Z",
+        "by": "shakeebshaan",
+        "appCommit": "d415c874",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Checked by render tests (DietBuilderSheets.hindi 9/9: key parity en/hi/hinglish with placeholders, Devanagari-only hi, all three sheets render Hindi), not on a phone screen; Hindi/Hinglish wording waits on the native read nyus-f84785."
+        }
+      },
       "history": [],
-      "description": "[P2 / Hindi] The onboarding diet builder's sheets are English in Hindi: 41 strings. FoodDetailSheet.tsx 15 (macro summary aria, Decrease/Increase), MealSuggestionSwiper.tsx 14 ('Meal ideas for ...', 'Close meal ideas'), FoodSearchSheet.tsx 12 ('Add ingredient', 'Search by Food Name/Dish'). Every new Hindi user meets these on day 0.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P2 / Hindi] The onboarding diet builder's sheets are English in Hindi: 41 strings. FoodDetailSheet.tsx 15 (macro summary aria, Decrease/Increase), MealSuggestionSwiper.tsx 14 ('Meal ideas for ...', 'Close meal ideas'), FoodSearchSheet.tsx 12 ('Add ingredient', 'Search by Food Name/Dish'). Every new Hindi user meets these on day 0.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-24T12:59:32.604Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app main d415c874 (dev ffb06e73 rebased onto e0cc6f80; ships in the next app build). Food search sheet, food detail sheet and the meal-ideas swiper now use 49 i18n keys in en/hi/hinglish (food_search, food_detail, ideas); the shared bottom-sheet Close uses common.close. New test test/DietBuilderSheets.hindi.test.tsx 9/9. Push hook: typecheck 0 errors, 366 files / 4,894 tests passed. Full unit suite on 155158d7: 8,600 passed, 1 failed (ChoosePlan.offer-gating OG2, unrelated, flaky under load; 6/6 alone on the branch and on main). Wording flagged for the native read nyus-f84785.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-coach-fallback-english",
