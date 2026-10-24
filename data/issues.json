@@ -11672,8 +11672,32 @@
       ],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Muscle card header, chips and the Also working line keep a 40 px right gutter, so nothing ends under the floating coach button at 390 px. Landed on app main 689fbb2e, ships in Play build 313.",
+        "imagePath": "images/i-20261022-muscle-also-working-fab-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-muscle-also-working-fab-fix-r1.png",
+          "images/i-20261022-muscle-also-working-fab-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "cadd2be50e3b43ad30124ed38f73ff57f468c623",
+        "imageCommits": [
+          "cadd2be50e3b43ad30124ed38f73ff57f468c623",
+          "31b404d19c01ab1a83a256c386069ba063520741"
+        ],
+        "fixedAt": "2026-10-24T01:04:30.215Z",
+        "by": "shakeebshaan",
+        "appCommit": "689fbb2e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Captured at 390 px en+hi; gutter unit-tested; not yet seen on a physical phone."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T08:46:44.000Z",
@@ -11688,7 +11712,17 @@
           "note": "QA re-check 23 Oct 2026, executed on current app main 5ef9ee7d (prod-read web build, QA account, every write blocked, 390 px) and prod backend e4a3754d, en, /activity at the default scroll: STILL OPEN. The floating coach button covers the right end of the Today's targets card header ('Full body' is cut to 'Ful'), and the 'Also working' line sits in the same band (src/components/activity/TodaysTargetsCard.tsx:143). Shots: images/2026-10-23-board-recheck/en-activity.png and en-activity-muscle.png."
         }
       ],
-      "description": "[P4] The floating coach button covers the right end of the \"Also working: ...\" line in the Activity muscle card at 390px: \"Quads,\" is cut off behind the green button at the default scroll (same pattern as the FAB overlaps already fixed on /faq and Nutrition). Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected): the line is rendered in src/components/activity/TodaysTargetsCard.tsx:143. Fix idea: right padding on the card details that clears the FAB, or the shared FAB clearance used on other pages. Repro: open /activity, Today chip, a session with 6+ secondary muscles."
+      "description": "[P4] The floating coach button covers the right end of the \"Also working: ...\" line in the Activity muscle card at 390px: \"Quads,\" is cut off behind the green button at the default scroll (same pattern as the FAB overlaps already fixed on /faq and Nutrition). Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected): the line is rendered in src/components/activity/TodaysTargetsCard.tsx:143. Fix idea: right padding on the card details that clears the FAB, or the shared FAB clearance used on other pages. Repro: open /activity, Today chip, a session with 6+ secondary muscles.",
+      "thread": [
+        {
+          "at": "2026-10-24T01:04:30.215Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Muscle card header, chips and the Also working line keep a 40 px right gutter, so nothing ends under the floating coach button at 390 px. Landed on app main 689fbb2e, ships in Play build 313.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "createdAt": "2026-10-22T14:36:05.743Z",
