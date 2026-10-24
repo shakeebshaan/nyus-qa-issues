@@ -60,10 +60,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed. Backend nyu_backend 3e4432aa (live 24 Oct 05:19 UTC: DEPLOYED cda715f3 -> 3e4432aa in 25s, health 200, 0 app-log errors after; full suite 8,680 passed): the 13 error texts of /ai/analyze-meal-photo and /ai/estimate-meal-text come back in the caller's coach_language (coach_copy.PHRASES, unknown text unchanged). App main a4f199ab (CustomMealModal photo/estimate toast titles and defaults through t(); full unit suite 8,517 passed, tsc 0) ships in the next app build. Live check on prod, QA test account, language restored to english after: hindi -> 'पहले लिखें कि आपने क्या खाया।' / 'एक सही फ़ोटो लगाएं।', hinglish -> 'Pehle likho ki aapne kya khaya.' / 'Ek sahi photo lagao.', english unchanged (all 400 validation errors, no AI call).",
+        "imagePath": "images/i-20261024-hi-ai-error-toasts-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-ai-error-toasts-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "13812f3defa4e59fa8d3bc7e5c597659a0f74523",
+        "imageCommits": [
+          "13812f3defa4e59fa8d3bc7e5c597659a0f74523"
+        ],
+        "fixedAt": "2026-10-24T05:36:44.736Z",
+        "by": "shakeebshaan",
+        "appCommit": "a4f199ab",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Backend verified live on 2 of the 13 texts (the input-validation ones; limit/outage/pause texts covered by tests/test_ai_error_language.py, not forced live); app toasts not seen on a phone until the next build; Hindi machine-drafted, native read pending."
+        }
+      },
       "history": [],
-      "description": "[P4 / Hindi] The meal-photo and AI-estimate error toasts are English for a Hindi reader. CustomMealModal.tsx:631-636 (photo) and :880-884 (estimate) used English titles and show the backend's response.data.error verbatim as the description, and the backend wrote those 13 lines in English only ('Photo analysis is unavailable right now. Type what you ate instead.', the daily photo / AI-estimate limit, the budget pause, 'Couldn't spot a meal in that photo'). FIX LANDED: nyu_backend 3e4432aa (route errors translated by coach_language via coach_copy.PHRASES; live 24 Oct 05:19 UTC) + app main a4f199ab (toast titles + defaults through t(); ships in the next app build). Hindi machine-drafted, native read nyus-f84785. Acceptance: Hindi user hits the daily photo limit -> Hindi title and Hindi reason; English unchanged."
+      "description": "[P4 / Hindi] The meal-photo and AI-estimate error toasts are English for a Hindi reader. CustomMealModal.tsx:631-636 (photo) and :880-884 (estimate) used English titles and show the backend's response.data.error verbatim as the description, and the backend wrote those 13 lines in English only ('Photo analysis is unavailable right now. Type what you ate instead.', the daily photo / AI-estimate limit, the budget pause, 'Couldn't spot a meal in that photo'). FIX LANDED: nyu_backend 3e4432aa (route errors translated by coach_language via coach_copy.PHRASES; live 24 Oct 05:19 UTC) + app main a4f199ab (toast titles + defaults through t(); ships in the next app build). Hindi machine-drafted, native read nyus-f84785. Acceptance: Hindi user hits the daily photo limit -> Hindi title and Hindi reason; English unchanged.",
+      "thread": [
+        {
+          "at": "2026-10-24T05:36:44.736Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed. Backend nyu_backend 3e4432aa (live 24 Oct 05:19 UTC: DEPLOYED cda715f3 -> 3e4432aa in 25s, health 200, 0 app-log errors after; full suite 8,680 passed): the 13 error texts of /ai/analyze-meal-photo and /ai/estimate-meal-text come back in the caller's coach_language (coach_copy.PHRASES, unknown text unchanged). App main a4f199ab (CustomMealModal photo/estimate toast titles and defaults through t(); full unit suite 8,517 passed, tsc 0) ships in the next app build. Live check on prod, QA test account, language restored to english after: hindi -> 'पहले लिखें कि आपने क्या खाया।' / 'एक सही फ़ोटो लगाएं।', hinglish -> 'Pehle likho ki aapne kya khaya.' / 'Ek sahi photo lagao.', english unchanged (all 400 validation errors, no AI call).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-paywall-suffix",
