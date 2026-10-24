@@ -47,8 +47,31 @@
         "9d9c64453c918c7627bbc605e80c2f8144e9f7da"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Landed on app main 8b05f207 (24 Oct 11:48 UTC; ships in the next build). Checked on a web build of main, 390 px, Hindi: the Profile hydration caption now reads डाइट टैब इनका उपयोग करता है (Hinglish: Diet tab inhe use karta hai), no Nutrition left; the screen-reader announcement of a toast is सूचना + the toast text (captured from the live region), no English Notification prefix. Tests: test/toaster-announcer.hindi.test.tsx, test/hi-storage-toast-and-diet-tab.test.tsx.",
+        "imagePath": "images/i-20261024-hi-nutrition-and-announcer-english-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-nutrition-and-announcer-english-fix-r1.png",
+          "images/i-20261024-hi-nutrition-and-announcer-english-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d29a16ed26ed5efa664cdb16654247be86f9a69b",
+        "imageCommits": [
+          "d29a16ed26ed5efa664cdb16654247be86f9a69b",
+          "47f95240c566f25e6328a8955d628aafb47e28b6"
+        ],
+        "fixedAt": "2026-10-24T11:55:13.052Z",
+        "by": "shakeebshaan",
+        "appCommit": "8b05f207",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90
+        }
+      },
       "history": [
         {
           "at": "2026-10-24T11:23:33.708Z",
@@ -57,7 +80,17 @@
           "note": "ON APP MAIN 8b05f207 (fix/qa-reg-three rebased from 9c5ed5f8 onto e3c292c3, pushed 24 Oct 11:48 UTC; ships in the next build). ToastProvider label = toast.announce_label (hi सूचना), so toasts are announced without the English Notification prefix; the two sentences now name the Diet tab (डाइट / Diet) in hi, hinglish and en. Tests: test/toaster-announcer.hindi.test.tsx and test/hi-storage-toast-and-diet-tab.test.tsx (fail on main). Full suite green."
         }
       ],
-      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. Two small English leftovers in Hindi. (1) hi.json:2060 profile hydration caption \"... आमतौर पर पीते हैं। Nutrition ट्रैकर इनका उपयोग करता है।\" and hi.json:1212 \"... प्लान Nutrition टैब में मिलेगा।\" use the English word \"Nutrition\" inside a Hindi sentence; the tab itself is called \"डाइट\" in Hindi, so the sentence points at a name that is not on the screen. (2) Every toast in hi (and hinglish) is announced to screen readers with the English prefix \"Notification\": the live region reads \"Notification सेशन खत्म हो गया ...\". It is Radix's default ToastProvider label; src/components/ui/toaster.tsx:10 uses <ToastProvider> without the label prop (the viewport at :24 is already localised with t(\"toast.region_label\")). FIX: <ToastProvider label={t(\"toast.region_label\")}> or a dedicated key. Checks that PASSED in the same walk: no raw key or {{placeholder}} text on any of the 5 screens in hi, hinglish or en; no horizontal overflow at 390 px (scrollWidth 390 = clientWidth on all 15 screens); the CSAT survey (title, five \"5 में से N दें\" faces, Send / Skip / Close) and its thanks toast are Hindi; the Session expired toast is Hindi."
+      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. Two small English leftovers in Hindi. (1) hi.json:2060 profile hydration caption \"... आमतौर पर पीते हैं। Nutrition ट्रैकर इनका उपयोग करता है।\" and hi.json:1212 \"... प्लान Nutrition टैब में मिलेगा।\" use the English word \"Nutrition\" inside a Hindi sentence; the tab itself is called \"डाइट\" in Hindi, so the sentence points at a name that is not on the screen. (2) Every toast in hi (and hinglish) is announced to screen readers with the English prefix \"Notification\": the live region reads \"Notification सेशन खत्म हो गया ...\". It is Radix's default ToastProvider label; src/components/ui/toaster.tsx:10 uses <ToastProvider> without the label prop (the viewport at :24 is already localised with t(\"toast.region_label\")). FIX: <ToastProvider label={t(\"toast.region_label\")}> or a dedicated key. Checks that PASSED in the same walk: no raw key or {{placeholder}} text on any of the 5 screens in hi, hinglish or en; no horizontal overflow at 390 px (scrollWidth 390 = clientWidth on all 15 screens); the CSAT survey (title, five \"5 में से N दें\" faces, Send / Skip / Close) and its thanks toast are Hindi; the Session expired toast is Hindi.",
+      "thread": [
+        {
+          "at": "2026-10-24T11:55:13.052Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Landed on app main 8b05f207 (24 Oct 11:48 UTC; ships in the next build). Checked on a web build of main, 390 px, Hindi: the Profile hydration caption now reads डाइट टैब इनका उपयोग करता है (Hinglish: Diet tab inhe use karta hai), no Nutrition left; the screen-reader announcement of a toast is सूचना + the toast text (captured from the live region), no English Notification prefix. Tests: test/toaster-announcer.hindi.test.tsx, test/hi-storage-toast-and-diet-tab.test.tsx.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hinglish-core-screens-english",
