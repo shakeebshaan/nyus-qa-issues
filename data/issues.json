@@ -13854,8 +13854,30 @@
         "24ec2a7fd5631637aaba9a1be28520dd37672cf9"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in nyu_backend b570d5d9, live since 24 Oct 20:15:44 UTC. Root cause: _bridge_diet_to_legacy treated every single-food meal as an LLM combined name and split it on , / + / & / with / and. A meal whose one food carries a catalog food_id now skips that repair (no split, no slot template), and _split_combined_food_name never splits off a bare preparation word (Cooked, Raw, Boiled ...); a real combined LLM name ('Rice + Dal') is still split. Prod check [executed] 20:16 UTC on the QA test account: save-custom-plan with a snack of only fd_699 'Chana Dal (Split Chickpea), Cooked' 100 g, then GET current-diet: one item, full name, 100 g, 124 kcal/100 g. The account's original diet was saved back and matches exactly. Tests: tests/test_bridge_single_catalog_food.py (9; 5 failed on old main); full backend suite on b570d5d9 8,904 passed before the push; deploy watcher DEPLOYED, VM HEAD = origin/main, health 200, 0 new errors.",
+        "imagePath": "images/i-20261023-diet-reopen-splits-comma-ingredient-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-diet-reopen-splits-comma-ingredient-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "aa9a812b003fb7e9ab5d1827343cd7ed6fbce900",
+        "imageCommits": [
+          "aa9a812b003fb7e9ab5d1827343cd7ed6fbce900"
+        ],
+        "fixedAt": "2026-10-24T20:18:03.186Z",
+        "by": "shakeebshaan",
+        "appCommit": "b570d5d9",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Exact repro checked on prod after deploy, original QA diet restored; backend-only fix"
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -13864,7 +13886,17 @@
           "note": "QA re-check 23 Oct 2026: CANNOT TEST on prod: the repro needs a save-custom-plan write on the QA account and this check is read-only. No commit touched the save or reopen path since the report (plan_builder_routes.py history: b7f1ab19, e4a3754d, 66cd39de, f64dcb54 only, none about names). Treat as still open."
         }
       ],
-      "description": "[P3 / data round trip] A day whose only ingredient is 'Chana Dal (Split Chickpea), Cooked' (100 g, 124 kcal) is saved fine, but current-diet and the reopened /customize/diet show TWO ingredients: 'Chana Dal (Split Chickpea)' 50 g and 'Cooked' 50 g (62 kcal each; the total stays 124 kcal). The name is split at the comma and the grams are halved; the second row is not a food. Reproduced by POSTing the same payload to main 6e340c63 (a weekday vary plan, Monday = that one ingredient: current-diet returned 'Chana Dal (Split Chickpea)@50+Cooked@50'). A day that also holds another ingredient (poha + the same dal) came back intact in the copy-a-day run, so it seems to need a single-ingredient meal. Steps: Vary by day, Day 1 breakfast = search 'dal' > 'Chana Dal (Split Chickpea), Cooked' > Add, Save plan, reopen /customize/diet, Day 1. Many catalog names contain a comma, so this will hit real plans: after the next save the split rows are what the plan contains. Found 23 Oct 2026 ~15:40 UTC in the diet-cycle verification [executed]: local nyu_backend (in-memory sqlite) at origin/main 6e340c63 AND at branch feat/diet-day-cycle 7804ecda, fake account qa.local@example.test, so it is not caused by the cycle change."
+      "description": "[P3 / data round trip] A day whose only ingredient is 'Chana Dal (Split Chickpea), Cooked' (100 g, 124 kcal) is saved fine, but current-diet and the reopened /customize/diet show TWO ingredients: 'Chana Dal (Split Chickpea)' 50 g and 'Cooked' 50 g (62 kcal each; the total stays 124 kcal). The name is split at the comma and the grams are halved; the second row is not a food. Reproduced by POSTing the same payload to main 6e340c63 (a weekday vary plan, Monday = that one ingredient: current-diet returned 'Chana Dal (Split Chickpea)@50+Cooked@50'). A day that also holds another ingredient (poha + the same dal) came back intact in the copy-a-day run, so it seems to need a single-ingredient meal. Steps: Vary by day, Day 1 breakfast = search 'dal' > 'Chana Dal (Split Chickpea), Cooked' > Add, Save plan, reopen /customize/diet, Day 1. Many catalog names contain a comma, so this will hit real plans: after the next save the split rows are what the plan contains. Found 23 Oct 2026 ~15:40 UTC in the diet-cycle verification [executed]: local nyu_backend (in-memory sqlite) at origin/main 6e340c63 AND at branch feat/diet-day-cycle 7804ecda, fake account qa.local@example.test, so it is not caused by the cycle change.",
+      "thread": [
+        {
+          "at": "2026-10-24T20:18:03.186Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in nyu_backend b570d5d9, live since 24 Oct 20:15:44 UTC. Root cause: _bridge_diet_to_legacy treated every single-food meal as an LLM combined name and split it on , / + / & / with / and. A meal whose one food carries a catalog food_id now skips that repair (no split, no slot template), and _split_combined_food_name never splits off a bare preparation word (Cooked, Raw, Boiled ...); a real combined LLM name ('Rice + Dal') is still split. Prod check [executed] 20:16 UTC on the QA test account: save-custom-plan with a snack of only fd_699 'Chana Dal (Split Chickpea), Cooked' 100 g, then GET current-diet: one item, full name, 100 g, 124 kcal/100 g. The account's original diet was saved back and matches exactly. Tests: tests/test_bridge_single_catalog_food.py (9; 5 failed on old main); full backend suite on b570d5d9 8,904 passed before the push; deploy watcher DEPLOYED, VM HEAD = origin/main, health 200, 0 new errors.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-weekday-resave-keeps-removed-day-row",
