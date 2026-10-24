@@ -319,10 +319,44 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app main 7a499355 (dev, fast-forward from e43b53e3; ships in the next app build). Today and its cards plus the 8 dashboard charts go through t(): 95 keys in en / hi / hinglish, pseudo-locale regenerated; static scan of Today 61 -> 4 (the 4 are gradient/element ids, not visible text). Checks [executed by the NYUS employee on the tip]: tsc 0; test/Today.hindi.test.tsx 12/12; pre-push gate 'local CI passed in 364.7s'. Dev's full suite on 7a499355: 564 files / 8,567 tests passed, 0 failed. Screen [executed]: local build of 7a499355 at 390 px in Hindi, every API call answered on the dev box (0 to prod, 0 page errors): morning brief, overview error banner, sleep card (7 घंटे, 4 घंटे / 10 घंटे), weight card, bottom nav all Hindi.",
+        "imagePath": "images/i-20261024-hi-today-cards-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-today-cards-fix-r1.png",
+          "images/i-20261024-hi-today-cards-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "be1e0e05a5f6acd8cae102dc94bf0fa53888909b",
+        "imageCommits": [
+          "be1e0e05a5f6acd8cae102dc94bf0fa53888909b",
+          "b1a95e46b7e1f53ae2df14724778f29cfeb8b80a"
+        ],
+        "fixedAt": "2026-10-24T07:57:05.697Z",
+        "by": "shakeebshaan",
+        "appCommit": "7a499355",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "One English word left on Today: the greeting falls back to 'there' when no first name loads ('सुप्रभात, there'), src/pages/_components/dashboard/DashboardHeader.tsx:29 (|| 'there'), not in this change. Charts checked by test only, not on screen (no chart data in the local capture). Hindi machine-drafted, native read nyus-f84785."
+        }
+      },
       "history": [],
-      "description": "[P2 / Hindi] Today / dashboard: 61 English strings. Charts 41 (MeasurementChangeChart, StepsActivityChart, CalorieBalanceChart, MacroAdherenceChart 7 each, FastingTrendChart 5, MicronutrientRadar 4, SleepQualityChart 3, WeightTrendChart 1: titles like 'Calorie Balance', 'No data yet'), ActivityFeedTimeline 5, LockedPlanCard 5 ('Plan build failed', 'Tap retry', 'Talk to coach'), WelcomeBackBanner 4 ('Plan refreshed', \"Couldn't rebuild your plan\"), PartnerChatCard 3, WeeklyInsightsCard 2, CoachIntakeSheet 1.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P2 / Hindi] Today / dashboard: 61 English strings. Charts 41 (MeasurementChangeChart, StepsActivityChart, CalorieBalanceChart, MacroAdherenceChart 7 each, FastingTrendChart 5, MicronutrientRadar 4, SleepQualityChart 3, WeightTrendChart 1: titles like 'Calorie Balance', 'No data yet'), ActivityFeedTimeline 5, LockedPlanCard 5 ('Plan build failed', 'Tap retry', 'Talk to coach'), WelcomeBackBanner 4 ('Plan refreshed', \"Couldn't rebuild your plan\"), PartnerChatCard 3, WeeklyInsightsCard 2, CoachIntakeSheet 1.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-24T07:57:05.697Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app main 7a499355 (dev, fast-forward from e43b53e3; ships in the next app build). Today and its cards plus the 8 dashboard charts go through t(): 95 keys in en / hi / hinglish, pseudo-locale regenerated; static scan of Today 61 -> 4 (the 4 are gradient/element ids, not visible text). Checks [executed by the NYUS employee on the tip]: tsc 0; test/Today.hindi.test.tsx 12/12; pre-push gate 'local CI passed in 364.7s'. Dev's full suite on 7a499355: 564 files / 8,567 tests passed, 0 failed. Screen [executed]: local build of 7a499355 at 390 px in Hindi, every API call answered on the dev box (0 to prod, 0 page errors): morning brief, overview error banner, sleep card (7 घंटे, 4 घंटे / 10 घंटे), weight card, bottom nav all Hindi.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-onboarding-pickers",
