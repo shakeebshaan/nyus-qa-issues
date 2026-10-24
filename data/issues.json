@@ -2,6 +2,207 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261024-hi-paywall-suffix",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "paywall"
+      ],
+      "route": "/choose-plan",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / Hindi] ChoosePlan.tsx is otherwise Hindi; the price suffix '/mo' (line ~1331) and '/ mo' (line ~1589) stay English next to the Hindi plan names.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-global-toasts",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi"
+      ],
+      "route": "app-wide (AuthContext, CSAT)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / Hindi] App-wide English: AuthContext.tsx 4 toasts ('Session expired', 'Please sign in again to continue.', 'Storage unavailable', ...) shown on any screen, and CsatModal.tsx 6 (\"How's your NYUS experience?\", 'Thanks for your feedback!', 'Rate 1 out of 5') on Today / workout / log weight. Also the class-based ErrorBoundary.tsx fallback (\"We're sorry, but something unexpected happened\") needs i18n.t.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-share-button",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "daily-focus"
+      ],
+      "route": "/daily-focus (share)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / Hindi] ShareButton.tsx: 16 English strings, all toasts and labels of the share flow ('Could not find content to share', 'Shared successfully.', 'Image downloaded.', ...). Used on Daily Focus.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-profile-sheets",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "profile"
+      ],
+      "route": "/profile",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / Hindi] Profile: 20 English strings in the edit sheets and avatar upload: ProfileEditNameSheet.tsx 11 (\"Name can't be empty\", 'Name is too long', ...), ProfileIdentityCard.tsx 9 ('Unsupported image type', 'Image too large', ...). MacroTargetsSheet is on the diet-tab card.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-workout-tab",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "activity"
+      ],
+      "route": "/activity",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / Hindi] Workout tab: 32 English strings, plus 17 in ExercisePickerSheet.tsx (shared with the onboarding workout builder) and 8 in LeaveGroupSheet.tsx (shared with diet). PlateCalculatorSheet.tsx 24 ('Plate calculator', 'per side breakdown', ...), ExerciseVolumeChart 3, ExerciseWheelPicker 3, WalkingOnlyHero 1, SessionClosePlate 1. ExercisePickerSheet: 'Add exercise', 'Search exercises…'.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-diet-tab",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "nutrition"
+      ],
+      "route": "/nutrition",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / Hindi] Diet tab: 42 English strings, plus 17 in MacroTargetsSheet.tsx (shared with Profile). CustomMealModal.tsx 21 ('Photo too large', 'Please add details', ...), useNutritionData.tsx 6 (toasts), SnapTipsCarousel.tsx 6, MealStatusBadge.tsx 5, NutritionPanel.tsx 3, NutritionMealCard.tsx 1. MacroTargetsSheet: 'Enter at least one target', 'Targets updated', ...\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-today-cards",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "dashboard"
+      ],
+      "route": "/dashboard",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / Hindi] Today / dashboard: 61 English strings. Charts 41 (MeasurementChangeChart, StepsActivityChart, CalorieBalanceChart, MacroAdherenceChart 7 each, FastingTrendChart 5, MicronutrientRadar 4, SleepQualityChart 3, WeightTrendChart 1: titles like 'Calorie Balance', 'No data yet'), ActivityFeedTimeline 5, LockedPlanCard 5 ('Plan build failed', 'Tap retry', 'Talk to coach'), WelcomeBackBanner 4 ('Plan refreshed', \"Couldn't rebuild your plan\"), PartnerChatCard 3, WeeklyInsightsCard 2, CoachIntakeSheet 1.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-onboarding-pickers",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "onboarding",
+        "a11y"
+      ],
+      "route": "/onboarding/flow (You & Goal, intro)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / Hindi, screen reader] 6 English aria labels on the onboarding pickers: ScrollableScale.tsx 3 / ScrollableRuler.tsx 2 ('Current value: ... Tap to edit.', 'Edit value in kg', '<unit> selector') and IntroDots.tsx 1 ('Go to slide 1 of 4'). Visible text is already Hindi.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-onboarding-coach-preview",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "onboarding"
+      ],
+      "route": "/onboarding/flow (step 5, coach preview)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / Hindi] Screen9_CoachPreview.tsx (the coach-preview step every user passes in the condensed flow) has 29 English strings: 'Back', 'Back to previous step', 'Hi ...' greeting and the preview copy.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
+      "id": "i-20261024-hi-onboarding-diet-builder",
+      "createdAt": "2026-10-24T05:35:39.904Z",
+      "author": "shakeebshaan",
+      "tags": [
+        "i18n",
+        "hindi",
+        "onboarding",
+        "diet"
+      ],
+      "route": "/onboarding/flow (diet builder)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / Hindi] The onboarding diet builder's sheets are English in Hindi: 41 strings. FoodDetailSheet.tsx 15 (macro summary aria, Decrease/Increase), MealSuggestionSwiper.tsx 14 ('Meal ideas for ...', 'Close meal ideas'), FoodSearchSheet.tsx 12 ('Add ingredient', 'Search by Food Name/Dish'). Every new Hindi user meets these on day 0.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+    },
+    {
       "id": "i-20261024-hi-coach-fallback-english",
       "createdAt": "2026-10-24T03:26:10.259Z",
       "author": "qa",
