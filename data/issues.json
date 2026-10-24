@@ -743,10 +743,44 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main 47801713 (dev's 1fb61f68 rebased onto 164db9a0). Screen9_CoachPreview reads every visible string through t(): greeting, coach line, goal card (current/goal weight, lose X kg, by date, weeks), daily nutrition (kcal/day, deficit, protein/carbs/fat, BMR/TDEE line, formula note), sleep/water/workouts row, the plan-includes list and the CTA. Keys in en, hi, hinglish, xx-AE. Screenshots: 390 px, hi and Hinglish. Local CI before the merge: typecheck 0 errors, full unit suite 575 files / 8,671 tests passed; pre-push gate 373 files / 5,097 tests passed. Ships in the next normal build.",
+        "imagePath": "images/i-20261024-hi-onboarding-coach-preview-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-onboarding-coach-preview-fix-r1.png",
+          "images/i-20261024-hi-onboarding-coach-preview-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2f19eed71aae53f43aa2dbecfec5ab22bf2acae0",
+        "imageCommits": [
+          "2f19eed71aae53f43aa2dbecfec5ab22bf2acae0",
+          "3148a2804cf5a6c49a23da36220b827b01b3cddd"
+        ],
+        "fixedAt": "2026-10-24T20:01:37.062Z",
+        "by": "shakeebshaan",
+        "appCommit": "47801713",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Every visible string on the card translated in hi + Hinglish, test added; brand/coach names stay as-is"
+        }
+      },
       "history": [],
-      "description": "[P2 / Hindi] Screen9_CoachPreview.tsx (the coach-preview step every user passes in the condensed flow) has 29 English strings: 'Back', 'Back to previous step', 'Hi ...' greeting and the preview copy.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P2 / Hindi] Screen9_CoachPreview.tsx (the coach-preview step every user passes in the condensed flow) has 29 English strings: 'Back', 'Back to previous step', 'Hi ...' greeting and the preview copy.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-24T20:01:37.062Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main 47801713 (dev's 1fb61f68 rebased onto 164db9a0). Screen9_CoachPreview reads every visible string through t(): greeting, coach line, goal card (current/goal weight, lose X kg, by date, weeks), daily nutrition (kcal/day, deficit, protein/carbs/fat, BMR/TDEE line, formula note), sleep/water/workouts row, the plan-includes list and the CTA. Keys in en, hi, hinglish, xx-AE. Screenshots: 390 px, hi and Hinglish. Local CI before the merge: typecheck 0 errors, full unit suite 575 files / 8,671 tests passed; pre-push gate 373 files / 5,097 tests passed. Ships in the next normal build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-onboarding-diet-builder",
