@@ -11622,10 +11622,7 @@
       "createdAt": "2026-10-22T12:56:52.250Z",
       "author": "qa",
       "tags": [
-        "activity",
-        "muscle-map",
-        "3d-body",
-        "p4"
+        "awaiting-device"
       ],
       "route": "/activity (muscle card, Today chip)",
       "imagePath": "images/2026-10-22-muscle-card/en-today-back-and-fab.png",
@@ -11651,7 +11648,20 @@
           "note": "QA re-check 23 Oct 2026, executed + inspected: NOT REPRODUCED with today's QA data (session with Chest 6 sets first; the body faces the front, en-activity-muscle.png), but the code is unchanged: src/components/activity/TodaysTargetsCard.tsx:102 still picks the side from targets.regions[0], not the first chip. Stays open as P4; it shows when a back-side region comes first (Upper + Legs session)."
         }
       ],
-      "description": "[P4] The Today view of the Activity muscle card opens with the 3D body facing BACKWARDS, so the main target can be hidden. In the screenshot the session is Upper + Legs with Chest 4 sets as the first chip, but the body shows the back (glutes glow red) and the chest is only visible after tapping the Chest chip. Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected, not changed): src/components/activity/TodaysTargetsCard.tsx:102, todaysTargetsFigure() picks the side from targets.regions[0], which here is a back-side region rather than the top chip. Fix idea: face the side with the most target sets (or the first chip shown), and let the camera orbit show the other side. Repro: open /activity on a day with a mixed front/back session, Today chip selected."
+      "description": "[P4] The Today view of the Activity muscle card opens with the 3D body facing BACKWARDS, so the main target can be hidden. In the screenshot the session is Upper + Legs with Chest 4 sets as the first chip, but the body shows the back (glutes glow red) and the chest is only visible after tapping the Chest chip. Found in the QA pass of the merged Activity muscle card (branch fix/activity-one-muscle-card 4a9a3c79, merged into app main c59a70b6 on 22 Oct), web build at 390px, en + hi. Not part of that merge; filed separately as low priority. Location (inspected, not changed): src/components/activity/TodaysTargetsCard.tsx:102, todaysTargetsFigure() picks the side from targets.regions[0], which here is a back-side region rather than the top chip. Fix idea: face the side with the most target sets (or the first chip shown), and let the camera orbit show the other side. Repro: open /activity on a day with a mixed front/back session, Today chip selected.",
+      "needsReview": true,
+      "reviewReason": "Fix on app main 689fbb2e, in Play build 313. Touch-emulated check on the 313 bundle passed all 4 cases (swipe, tap, drag, no touch); waiting for one physical-phone look on 313 before closing.",
+      "reviewedAt": "2026-10-24T01:21:50.087Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-10-24T01:21:50.087Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Fix on app main 689fbb2e, in Play build 313. Touch-emulated check on the 313 bundle passed all 4 cases (swipe, tap, drag, no touch); waiting for one physical-phone look on 313 before closing.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20261022-muscle-also-working-fab",
