@@ -11894,8 +11894,30 @@
         "434acdb6"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app 229c68a4 (main 02c13694, release 314 / 1.10.25 on the Play closed track, read back alpha 314 completed). Live check 24 Oct 02:42 UTC: release-314 web build against prod (QA account, Hindi, 390px, prod GETs live, every write stubbed): header साप्ताहिक सारांश, वज़न, डाइट '3 में से 0 मील लॉग हुए', एक्टिविटी '6 में से 0 एक्सरसाइज़ पूरी', पैटर्न; 0 Latin app strings except units (KG/kg). One English paragraph remains: the coach fallback 'I'm temporarily unavailable for live coaching...' (nyu_backend app/services/coach/fallback_templates.py:51), shown because the QA account's AI allowance is spent until 25 Oct; that is server text, not this screen's labels. Full unit suite 8468 passed; typecheck 0. Hindi machine-drafted, native read nyus-f84785.",
+        "imagePath": "images/i-20261022-hi-ai-overview-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261022-hi-ai-overview-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "08d16c087148a075c5c9b1ced33dc10f4745d1f0",
+        "imageCommits": [
+          "08d16c087148a075c5c9b1ced33dc10f4745d1f0"
+        ],
+        "fixedAt": "2026-10-24T02:49:45.055Z",
+        "by": "shakeebshaan",
+        "appCommit": "229c68a4",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Acceptance met in the release web build against prod; not yet seen on a phone; the AI-cap fallback paragraph is English (server, separate)."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T08:46:44.000Z",
@@ -11918,7 +11940,17 @@
         "app"
       ],
       "route": "/ai/overview",
-      "description": "[P3 / Hindi, found in the old-issue re-test 22 Oct] /ai/overview (the full weekly overview screen) is entirely English in Hindi: 11 English lines + 6 attributes (\"Weekly Overview\" src/pages/AIOverview.tsx:98 headerLabel, \"Weight\", \"{n}-day streak\" :376, \"this week\" tile text, \"Diet\" and the other section labels). Only the Hindi digits of the shell show. Different from the Home weekly-insights card. Repro (executed on the live build, release/307 web bundle, QA account, Hindi, 390px): set the language to Hindi. New Hindi is machine-drafted, needs native read (nyus-f84785). Fix: route every label through t() (the file has no useTranslation), reuse existing Hindi keys where the English matches (weight, diet, streak). Acceptance test for dev: Hindi /ai/overview with an overview loaded has 0 Latin app strings except values and units (the model text is covered by i-20261022-hi-weekly-overview-english); English unchanged."
+      "description": "[P3 / Hindi, found in the old-issue re-test 22 Oct] /ai/overview (the full weekly overview screen) is entirely English in Hindi: 11 English lines + 6 attributes (\"Weekly Overview\" src/pages/AIOverview.tsx:98 headerLabel, \"Weight\", \"{n}-day streak\" :376, \"this week\" tile text, \"Diet\" and the other section labels). Only the Hindi digits of the shell show. Different from the Home weekly-insights card. Repro (executed on the live build, release/307 web bundle, QA account, Hindi, 390px): set the language to Hindi. New Hindi is machine-drafted, needs native read (nyus-f84785). Fix: route every label through t() (the file has no useTranslation), reuse existing Hindi keys where the English matches (weight, diet, streak). Acceptance test for dev: Hindi /ai/overview with an overview loaded has 0 Latin app strings except values and units (the model text is covered by i-20261022-hi-weekly-overview-english); English unchanged.",
+      "thread": [
+        {
+          "at": "2026-10-24T02:49:45.055Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app 229c68a4 (main 02c13694, release 314 / 1.10.25 on the Play closed track, read back alpha 314 completed). Live check 24 Oct 02:42 UTC: release-314 web build against prod (QA account, Hindi, 390px, prod GETs live, every write stubbed): header साप्ताहिक सारांश, वज़न, डाइट '3 में से 0 मील लॉग हुए', एक्टिविटी '6 में से 0 एक्सरसाइज़ पूरी', पैटर्न; 0 Latin app strings except units (KG/kg). One English paragraph remains: the coach fallback 'I'm temporarily unavailable for live coaching...' (nyu_backend app/services/coach/fallback_templates.py:51), shown because the QA account's AI allowance is spent until 25 Oct; that is server text, not this screen's labels. Full unit suite 8468 passed; typecheck 0. Hindi machine-drafted, native read nyus-f84785.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "createdAt": "2026-10-22T15:59:08.280Z",
