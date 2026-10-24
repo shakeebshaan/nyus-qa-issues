@@ -38,10 +38,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed in app main a4f199ab (ships in the next app build): FoodDetailSheet 'Micronutrient detail unavailable — macros are still accurate.' + 'Loading micronutrients…' (nutrition.micros.detail_unavailable / loading) and MealLoggerBlock 'Nutrition unavailable' (:34, :56; blocks.meal_logger.nutrition_unavailable) go through t() in en / hi / hinglish. test/i18n/hindi-error-copy.test.tsx renders them in hi; full unit suite 8,517 passed, tsc 0, pre-push gate passed.",
+        "imagePath": "images/i-20261024-hi-unavailable-literals-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-unavailable-literals-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ad230f4e0928328476b3568a477594a6fdb71a37",
+        "imageCommits": [
+          "ad230f4e0928328476b3568a477594a6fdb71a37"
+        ],
+        "fixedAt": "2026-10-24T05:37:05.274Z",
+        "by": "shakeebshaan",
+        "appCommit": "a4f199ab",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Verified by render tests, not yet on a phone (next build); other English literals remain in both files (~6 FoodDetailSheet, ~7 MealLoggerBlock), out of this card's scope; Hindi machine-drafted."
+        }
+      },
       "history": [],
-      "description": "[P4 / Hindi] 'Micronutrient detail unavailable — macros are still accurate.' (+ 'Loading micronutrients…') and 'Nutrition unavailable' were literal English; both files had no i18n. FIX LANDED: app main a4f199ab, ships in the next app build (nutrition.micros.loading / detail_unavailable, blocks.meal_logger.nutrition_unavailable). STILL ENGLISH in the same files (not in this fix): FoodDetailSheet ~6 other literals, MealLoggerBlock ~7 (e.g. aria 'Decrease {name} quantity', 'Log Lunch'). Acceptance for this card: the two named lines read Hindi in hi."
+      "description": "[P4 / Hindi] 'Micronutrient detail unavailable — macros are still accurate.' (+ 'Loading micronutrients…') and 'Nutrition unavailable' were literal English; both files had no i18n. FIX LANDED: app main a4f199ab, ships in the next app build (nutrition.micros.loading / detail_unavailable, blocks.meal_logger.nutrition_unavailable). STILL ENGLISH in the same files (not in this fix): FoodDetailSheet ~6 other literals, MealLoggerBlock ~7 (e.g. aria 'Decrease {name} quantity', 'Log Lunch'). Acceptance for this card: the two named lines read Hindi in hi.",
+      "thread": [
+        {
+          "at": "2026-10-24T05:37:05.274Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed in app main a4f199ab (ships in the next app build): FoodDetailSheet 'Micronutrient detail unavailable — macros are still accurate.' + 'Loading micronutrients…' (nutrition.micros.detail_unavailable / loading) and MealLoggerBlock 'Nutrition unavailable' (:34, :56; blocks.meal_logger.nutrition_unavailable) go through t() in en / hi / hinglish. test/i18n/hindi-error-copy.test.tsx renders them in hi; full unit suite 8,517 passed, tsc 0, pre-push gate passed.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-ai-error-toasts",
