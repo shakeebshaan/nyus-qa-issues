@@ -12518,10 +12518,8 @@
       "createdAt": "2026-10-23T12:40:00.000Z",
       "author": "qa",
       "tags": [
-        "first-day",
-        "hindi",
-        "onboarding",
-        "p3"
+        "owner-decision",
+        "hindi"
       ],
       "route": "/onboarding/flow in Hindi: Body step, workout builder; Home sleep card",
       "imagePath": null,
@@ -12549,7 +12547,20 @@
       ],
       "description": "[P3 / Hindi, first two days] Hindi tester, three untranslated spots found while walking onboarding and Home in hi: (1) Body step, pregnancy block: the safety sentence \"We don't recommend weight-loss deficits during pregnancy or nursing - this keeps your plan safe.\" and the disabled-Continue hint \"Answer the pregnancy question to continue\" are English (health-safety copy, hio-s2). (2) Workout builder (I'll build it myself path): the green button reads \"Coach River can build दिन 1\" (English sentence with a Hindi word, hio-s11). (3) Home sleep card: slider ends \"4h\" and \"10h\" while the value says \"7 घंटे\" (hi-dashboard). Also the welcome carousel dots keep the English aria-label \"Go to slide 1 of 3\" (already covered by i-20261022-hi-aria-leftovers). Fix idea: add the three keys to the hi locale; use घंटे on the slider ends. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
       "reportPath": "reports/i-20261023-d1-hi-onboarding-english-sleep.html",
-      "reportLabel": "24 Oct status + live sleep card"
+      "reportLabel": "24 Oct status + live sleep card",
+      "needsReview": true,
+      "reviewReason": "Sleep-card part FIXED and live: app 229c68a4 (main 02c13694, release 314 on the Play closed track); slider ends read '4 घंटे' / '10 घंटे' in the release web build against prod (24 Oct 02:55 UTC, picture in the attached report). 'Coach River can build दिन 1' was fixed earlier (423674cf). HELD for an owner decision: the pregnancy safety sentence and 'Answer the pregnancy question to continue' stay English in hi/hinglish by the medical-safety copy rule (test/i18n-launch-copy.test.ts pins them); translating needs Shaan to reverse that rule. The Governor has put the decide item on Shaan's list. Close this card when he decides.",
+      "reviewedAt": "2026-10-24T02:50:18.031Z",
+      "reviewedBy": "shakeebshaan",
+      "thread": [
+        {
+          "at": "2026-10-24T02:50:18.031Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "Sleep-card part FIXED and live: app 229c68a4 (main 02c13694, release 314 on the Play closed track); slider ends read '4 घंटे' / '10 घंटे' in the release web build against prod (24 Oct 02:55 UTC, picture in the attached report). 'Coach River can build दिन 1' was fixed earlier (423674cf). HELD for an owner decision: the pregnancy safety sentence and 'Answer the pregnancy question to continue' stay English in hi/hinglish by the medical-safety copy rule (test/i18n-launch-copy.test.ts pins them); translating needs Shaan to reverse that rule. The Governor has put the decide item on Shaan's list. Close this card when he decides.",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20261023-d1-pb-zero-kg",
