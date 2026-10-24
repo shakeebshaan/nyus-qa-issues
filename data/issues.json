@@ -12522,8 +12522,32 @@
         "c41793e867c37762322bad3500c3d25e3a0981cb"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Workout sessions this week now counts against the plan's training days (weeklySessionTarget): a 3-day plan reads 2/3, not 2/7. Landed on app main 689fbb2e (fix 26e8805d), ships in Play build 313. Screen-reader label still says 'of 7 days logged'; reword queued to dev.",
+        "imagePath": "images/i-20261023-d1-sessions-0-of-7-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-d1-sessions-0-of-7-fix-r1.png",
+          "images/i-20261023-d1-sessions-0-of-7-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5013b64ddc1236dec18dfc1f187d79b7f78714da",
+        "imageCommits": [
+          "5013b64ddc1236dec18dfc1f187d79b7f78714da",
+          "17d49e134172a2d4c0ce811a02645b11469b0dc5"
+        ],
+        "fixedAt": "2026-10-24T00:59:42.548Z",
+        "by": "shakeebshaan",
+        "appCommit": "689fbb2e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Visible count fixed and unit-tested en+hi; aria label wording follow-up pending (dev)."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -12532,7 +12556,17 @@
           "note": "QA re-check 23 Oct 2026, executed on current app main 5ef9ee7d (prod-read web build, QA account, every write blocked, 390 px) and prod backend e4a3754d, en, /activity: STILL OPEN. The card reads 'Workout sessions this week 2/7' with 7 day dots (src/components/activity/TodaysActivityCard.tsx:333, and the aria text at :339, hard-code 7). The denominator is not the plan's training days. Shot: images/2026-10-23-board-recheck/en-activity.png."
         }
       ],
-      "description": "[P4 / confusion] A tester who just built a 3-day plan (Push, Pull, Legs) sees 'Workout sessions this week 0/7' with a row of seven days, on day 1 and 1/7 on day 2. The target is 7 although the plan has 3 training days, so a tester who trains exactly as planned always looks 4 sessions behind. Fix idea: use the plan's days per week as the denominator. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+      "description": "[P4 / confusion] A tester who just built a 3-day plan (Push, Pull, Legs) sees 'Workout sessions this week 0/7' with a row of seven days, on day 1 and 1/7 on day 2. The target is 7 although the plan has 3 training days, so a tester who trains exactly as planned always looks 4 sessions behind. Fix idea: use the plan's days per week as the denominator. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
+      "thread": [
+        {
+          "at": "2026-10-24T00:59:42.548Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Workout sessions this week now counts against the plan's training days (weeklySessionTarget): a 3-day plan reads 2/3, not 2/7. Landed on app main 689fbb2e (fix 26e8805d), ships in Play build 313. Screen-reader label still says 'of 7 days logged'; reword queued to dev.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-d1-first-minute-scold-banner",
