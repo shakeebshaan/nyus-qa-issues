@@ -13752,8 +13752,36 @@
         "c41793e867c37762322bad3500c3d25e3a0981cb"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Complete fix, three parts, all on app main; ships in the next normal app build (versionCode 316 / 1.10.27 or later, no separate Play upload). Part 1 (65cff65c): no red missed-meals tip in the first minute after sign-up or before lunch. Part 2 (1aba7e1f): the Nutrition tip after a log names that meal and what is next on the plan ('Poha logged. Next up: Lunch.' + 'Dal rice is next on your plan.'). Part 3 (ce0d8c1b): the Today tip (Morning Ledger line; coach deck card for users without a subscription) uses the same after-meal line. A log from the last 2 h (or a plan meal marked eaten) wins over the workout-done / behind / streak lines; an older log gives way to a real shortfall after lunch; the Activity card still shows the workout state. Screens (390 px, local web build, fake API, poha eaten, account 3 days old): Nutrition en, Today en, Today hi, Today hinglish. Tests: 13 new fixed-clock tests (test/hooks-useDashboardMoment.after-meal.test.tsx) + part 2's 11; typecheck 0 errors; full unit suite on the rebased head 578 files / 8,703 passed, 0 failed; pre-push gate 114 / 114.",
+        "imagePath": "images/i-20261023-d1-first-minute-scold-banner-fix-r2.png",
+        "imagePaths": [
+          "images/i-20261023-d1-first-minute-scold-banner-fix-r2.png",
+          "images/i-20261023-d1-first-minute-scold-banner-fix-r2-2.png",
+          "images/i-20261023-d1-first-minute-scold-banner-fix-r2-3.png",
+          "images/i-20261023-d1-first-minute-scold-banner-fix-r2-4.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "208cac82a368e1c68847a28902d3cb901fe0766d",
+        "imageCommits": [
+          "208cac82a368e1c68847a28902d3cb901fe0766d",
+          "7117e245ade0d93048549b6c11e7a36c4d854916",
+          "6be29558188b18eca3a9d249f52544fe1ba411ed",
+          "c11e566d8af6f88c13a5c181306df503812887e4"
+        ],
+        "fixedAt": "2026-10-24T23:09:59.900Z",
+        "by": "shakeebshaan",
+        "appCommit": "ce0d8c1b",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Both ideas on the card are now done: no scold on day 1 or before lunch (part 1), and the tip after a log names that meal and the next plan meal on Nutrition and Today (parts 2 and 3), en / hi / hinglish, fixed-clock tests."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -13806,6 +13834,13 @@
           "who": "owner",
           "kind": "reopen",
           "text": "Re-resolving with the complete fix: parts 2 and 3 (after-meal tip names the meal just logged and what is next, on Nutrition and Today) are now on app main 1aba7e1f + ce0d8c1b. Part 1's fix (65cff65c) is kept in history."
+        },
+        {
+          "at": "2026-10-24T23:09:59.900Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Complete fix, three parts, all on app main; ships in the next normal app build (versionCode 316 / 1.10.27 or later, no separate Play upload). Part 1 (65cff65c): no red missed-meals tip in the first minute after sign-up or before lunch. Part 2 (1aba7e1f): the Nutrition tip after a log names that meal and what is next on the plan ('Poha logged. Next up: Lunch.' + 'Dal rice is next on your plan.'). Part 3 (ce0d8c1b): the Today tip (Morning Ledger line; coach deck card for users without a subscription) uses the same after-meal line. A log from the last 2 h (or a plan meal marked eaten) wins over the workout-done / behind / streak lines; an older log gives way to a real shortfall after lunch; the Activity card still shows the workout state. Screens (390 px, local web build, fake API, poha eaten, account 3 days old): Nutrition en, Today en, Today hi, Today hinglish. Tests: 13 new fixed-clock tests (test/hooks-useDashboardMoment.after-meal.test.tsx) + part 2's 11; typecheck 0 errors; full unit suite on the rebased head 578 files / 8,703 passed, 0 failed; pre-push gate 114 / 114.",
+          "by": "shakeebshaan"
         }
       ],
       "needsReview": false
