@@ -106,8 +106,32 @@
         "9d9c64453c918c7627bbc605e80c2f8144e9f7da"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Landed on app main 8b05f207 (24 Oct 11:48 UTC, local CI passed; ships in the next build). Re-ran QA harness s1 (390 px, every API answered locally, 45 s) on a web build of main: C refresh 503 and D refresh 429 stay on /dashboard with both tokens kept (was the sign-in screen), refresh retried at +31.5 s / +31.7 s; F 503 then 200: refresh recovers at +31.9 s, /dashboard/overview fetched and Today renders (shot 2); A refresh 401 control still signs out to the welcome screen with tokens cleared. 1 page load per run, 0 page errors.",
+        "imagePath": "images/i-20261024-transient-refresh-welcome-screen-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-transient-refresh-welcome-screen-fix-r1.png",
+          "images/i-20261024-transient-refresh-welcome-screen-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e8aadb57c12d3f9c80bb498098db915724804c84",
+        "imageCommits": [
+          "e8aadb57c12d3f9c80bb498098db915724804c84",
+          "7ea4300dbe48e52850fc7b484d0f4e84a1ae6c8a"
+        ],
+        "fixedAt": "2026-10-24T11:54:39.873Z",
+        "by": "shakeebshaan",
+        "appCommit": "8b05f207",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "QA harness s1 re-run on a web build of app main 8b05f207"
+        }
+      },
       "history": [
         {
           "at": "2026-10-24T11:23:33.708Z",
@@ -116,7 +140,17 @@
           "note": "ON APP MAIN 8b05f207 (nyus-well-tracker fix/qa-reg-three rebased from 9c5ed5f8 onto e3c292c3, pushed 24 Oct 11:48 UTC; ships in the next build). Expired access token + refresh 503/429/offline keeps the app shell (tokens kept, expired access token not sent) and retries the refresh when the back-off ends; a good refresh refetches failed screens. Re-ran the QA harness s1.mjs on a web build of 9c5ed5f8 (all API answered locally, 60 s): C 503 and D 429 end on /dashboard (was the sign-in screen), refresh at +2.6 s and +33.1 s / +1.6 s and +32.1 s; F 503 then 200: refresh recovers at +31.5 s and /dashboard/overview is fetched at +31.5 s, Today renders (was stuck on Couldnt load overview data). A, B unchanged (sign-in, tokens cleared). Tests: test/auth-transient-refresh-recovery.test.tsx 5/5 (fail on main except the 401 control); full suite 570 files / 8595 tests passed."
         }
       ],
-      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. Check 1 result: the reload loop is gone. Definitive failures (refresh 401, or no refresh token) end on the in-app Welcome / sign-in screen with 1 page load, 4 and 2 API calls in the first 30 s, 0 afterwards, tokens cleared, \"Session expired\" toast shown. Temporary failure with 3 days of access life left (refresh 503) keeps /dashboard, 9 API calls in the first 30 s, refresh back-off 30 s (next refresh at +33 s, step 2). So the 4a0345af goal holds. TWO GAPS around the temporary-failure path: (1) COLD START WITH AN ALREADY-EXPIRED ACCESS TOKEN (nyus_token_expiry in the past, i.e. the user was away for more than the 14-day access window while the refresh token, 60 days, is still good) and the refresh answers 503 or 429, or the phone is offline: the app ends on the Welcome / \"Continue with Google / Sign in with email\" screen, although nyus_access_token and nyus_refresh_token stay in storage and nyus_refresh_backoff = {\"step\":1,\"until\":+30 s} is set. The user sees what looks like a logout, and nothing retries in the next 100 s that I watched (0 API calls after the first 3). The commit text says the session is kept; the screen says otherwise. AuthContext.tsx:60-72: authenticated = isAuthenticated() is false for an expired expiry, the silent refresh throws or returns false on a transient error, and setIsAuthenticated(false) sends the guards to \"/\". EXPECTED: keep the app shell (error states with Retry, as with 3 days left) or show \"can't reach the server, retry\", and retry after the back-off. (2) AFTER A GOOD REFRESH, NO REFETCH: 3 days left, refresh 503 for 30 s then 200: the refresh succeeds at +32.7 s, back-off cleared, tokens replaced, but zero requests follow; Today stays on \"Couldn't load overview data - Pull down to retry\" until the user acts. EXPECTED: the failed queries refetch once the session is restored. Both are P3: a flaky network on the first open after a long absence is a normal case. Evidence JSON and counts: scenarios C, D, E, F of the harness C:/tmp/qa-reg/s1.mjs."
+      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. Check 1 result: the reload loop is gone. Definitive failures (refresh 401, or no refresh token) end on the in-app Welcome / sign-in screen with 1 page load, 4 and 2 API calls in the first 30 s, 0 afterwards, tokens cleared, \"Session expired\" toast shown. Temporary failure with 3 days of access life left (refresh 503) keeps /dashboard, 9 API calls in the first 30 s, refresh back-off 30 s (next refresh at +33 s, step 2). So the 4a0345af goal holds. TWO GAPS around the temporary-failure path: (1) COLD START WITH AN ALREADY-EXPIRED ACCESS TOKEN (nyus_token_expiry in the past, i.e. the user was away for more than the 14-day access window while the refresh token, 60 days, is still good) and the refresh answers 503 or 429, or the phone is offline: the app ends on the Welcome / \"Continue with Google / Sign in with email\" screen, although nyus_access_token and nyus_refresh_token stay in storage and nyus_refresh_backoff = {\"step\":1,\"until\":+30 s} is set. The user sees what looks like a logout, and nothing retries in the next 100 s that I watched (0 API calls after the first 3). The commit text says the session is kept; the screen says otherwise. AuthContext.tsx:60-72: authenticated = isAuthenticated() is false for an expired expiry, the silent refresh throws or returns false on a transient error, and setIsAuthenticated(false) sends the guards to \"/\". EXPECTED: keep the app shell (error states with Retry, as with 3 days left) or show \"can't reach the server, retry\", and retry after the back-off. (2) AFTER A GOOD REFRESH, NO REFETCH: 3 days left, refresh 503 for 30 s then 200: the refresh succeeds at +32.7 s, back-off cleared, tokens replaced, but zero requests follow; Today stays on \"Couldn't load overview data - Pull down to retry\" until the user acts. EXPECTED: the failed queries refetch once the session is restored. Both are P3: a flaky network on the first open after a long absence is a normal case. Evidence JSON and counts: scenarios C, D, E, F of the harness C:/tmp/qa-reg/s1.mjs.",
+      "thread": [
+        {
+          "at": "2026-10-24T11:54:39.873Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Landed on app main 8b05f207 (24 Oct 11:48 UTC, local CI passed; ships in the next build). Re-ran QA harness s1 (390 px, every API answered locally, 45 s) on a web build of main: C refresh 503 and D refresh 429 stay on /dashboard with both tokens kept (was the sign-in screen), refresh retried at +31.5 s / +31.7 s; F 503 then 200: refresh recovers at +31.9 s, /dashboard/overview fetched and Today renders (shot 2); A refresh 401 control still signs out to the welcome screen with tokens cleared. 1 page load per run, 0 page errors.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-storage-toast-english-hi",
