@@ -14011,8 +14011,29 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed for flagged full-week saves; the current app sends no weekday (vary) save, so the bug was only reachable via the API or old builds. Landed as nyu_backend 350e1075 (live 24 Oct 23:00 UTC). A weekday save with diet.replace_week: true now deletes this plan's week-1 weekday rows whose day is not in the payload (a removed Wednesday goes); without the flag, saves keep the partial meaning older builds rely on (i-20260718-326f). Non-boolean flag = 400 REPLACE_WEEK_INVALID; true with no days = 400 REPLACE_WEEK_EMPTY, never a wipe. Tests: tests/test_weekday_replace_week.py (flag drops Wednesday, no flag keeps it, other week/plan/cycle rows untouched, validation, route wiring); full suite on 350e1075 8,927 passed, 21 skipped. Live [executed]: both 400s returned on prod and the QA plan's week 1 was byte-identical before and after. Not run: a two-write save on the QA account, because its 21 AI diet rows would be recomputed from the catalog and its meal assignments rebuilt, so it could not be restored exactly.",
+        "imagePath": "images/i-20261023-weekday-resave-keeps-removed-day-row-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-weekday-resave-keeps-removed-day-row-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2d05f44beebe4a905f893398ad22136ed5b93ebf",
+        "imageCommits": [
+          "2d05f44beebe4a905f893398ad22136ed5b93ebf"
+        ],
+        "fixedAt": "2026-10-24T23:02:05.653Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Fixed for flagged full-week saves and verified live with zero-write checks; the two-write prod check on the QA account was not run because its 21 AI diet rows could not be restored exactly."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -14021,7 +14042,17 @@
           "note": "QA re-check 23 Oct 2026: CANNOT TEST on prod (needs two writes). Inspected: app/routes/plan_builder_routes.py:3453 still deletes only the day_of_week values in the payload, so a day dropped from a re-save keeps its row. Treat as still open."
         }
       ],
-      "description": "[P4 / old weekday plans] Saving a weekday vary plan with Monday, Tuesday, Wednesday and then again with Monday and Tuesday only (what a build-311 tester does after removing Wednesday) leaves the Wednesday diet row: GET /plans/1/week/1 returns diet rows with day_of_week [0,1,2] after both saves. I did not check what Wednesday's date serves afterwards (the old Wednesday meal or Monday's fill), so please confirm the intended result. Same on main 6e340c63 and on feat/diet-day-cycle 7804ecda, so it is not a cycle regression; cycle saves (repeat_mode 'cycle') replaced the rows correctly in every step I ran (cycle 3 to 2 days, weekday to cycle through the builder). Found 23 Oct 2026 ~15:40 UTC in the diet-cycle verification [executed]: local nyu_backend (in-memory sqlite) at origin/main 6e340c63 AND at branch feat/diet-day-cycle 7804ecda, fake account qa.local@example.test, so it is not caused by the cycle change."
+      "description": "[P4 / old weekday plans] Saving a weekday vary plan with Monday, Tuesday, Wednesday and then again with Monday and Tuesday only (what a build-311 tester does after removing Wednesday) leaves the Wednesday diet row: GET /plans/1/week/1 returns diet rows with day_of_week [0,1,2] after both saves. I did not check what Wednesday's date serves afterwards (the old Wednesday meal or Monday's fill), so please confirm the intended result. Same on main 6e340c63 and on feat/diet-day-cycle 7804ecda, so it is not a cycle regression; cycle saves (repeat_mode 'cycle') replaced the rows correctly in every step I ran (cycle 3 to 2 days, weekday to cycle through the builder). Found 23 Oct 2026 ~15:40 UTC in the diet-cycle verification [executed]: local nyu_backend (in-memory sqlite) at origin/main 6e340c63 AND at branch feat/diet-day-cycle 7804ecda, fake account qa.local@example.test, so it is not caused by the cycle change.",
+      "thread": [
+        {
+          "at": "2026-10-24T23:02:05.653Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed for flagged full-week saves; the current app sends no weekday (vary) save, so the bug was only reachable via the API or old builds. Landed as nyu_backend 350e1075 (live 24 Oct 23:00 UTC). A weekday save with diet.replace_week: true now deletes this plan's week-1 weekday rows whose day is not in the payload (a removed Wednesday goes); without the flag, saves keep the partial meaning older builds rely on (i-20260718-326f). Non-boolean flag = 400 REPLACE_WEEK_INVALID; true with no days = 400 REPLACE_WEEK_EMPTY, never a wipe. Tests: tests/test_weekday_replace_week.py (flag drops Wednesday, no flag keeps it, other week/plan/cycle rows untouched, validation, route wiring); full suite on 350e1075 8,927 passed, 21 skipped. Live [executed]: both 400s returned on prod and the QA plan's week 1 was byte-identical before and after. Not run: a two-write save on the QA account, because its 21 AI diet rows would be recomputed from the catalog and its meal assignments rebuilt, so it could not be restored exactly.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     }
   ]
 }
