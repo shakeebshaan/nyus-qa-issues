@@ -12491,8 +12491,32 @@
         "c41793e867c37762322bad3500c3d25e3a0981cb"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "A personal best with no added load shows '12 reps', not '0 kg x 12 reps'. Landed on app main 689fbb2e (fix abb6bed1), ships in Play build 313.",
+        "imagePath": "images/i-20261023-d1-pb-zero-kg-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-d1-pb-zero-kg-fix-r1.png",
+          "images/i-20261023-d1-pb-zero-kg-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "152f57d704e17b24e3b367a75313a0e9d6d20028",
+        "imageCommits": [
+          "152f57d704e17b24e3b367a75313a0e9d6d20028",
+          "ab4af743e3997304e7aa9d932ab193a5e28b95a2"
+        ],
+        "fixedAt": "2026-10-24T01:02:03.042Z",
+        "by": "shakeebshaan",
+        "appCommit": "689fbb2e",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Before/after captured en+hi on local build; unit tests in StrengthStrip.test.tsx."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -12501,7 +12525,17 @@
           "note": "QA re-check 23 Oct 2026 (inspected): STILL OPEN. src/components/activity/StrengthStrip.tsx:148 and :182 always render fmtKg(weight_kg) + 'kg', so a bodyweight 0 kg best still shows as '0 kg'. Not re-run live: a workout log is a prod write and this board check is read-only."
         }
       ],
-      "description": "[P3 / first workout] After logging 3 sets of Wide Push-Up (bodyweight, 10 reps, 0 kg added) the Activity page shows a Personal bests card: 'NEW PERSONAL BEST, Wide Push-Up, 0 kg, x 10 reps, today'. A 0 kg personal best on the first ever workout reads as a bug and cheapens the badge. The set rows in the logger also say '10 reps x 0kg'. Fix idea: for bodyweight exercises show reps instead of kg, or do not celebrate a PB with zero load on the first log. On the same page 'Total Volume 0kg' and 'COMPLETED 0 / 36' stay at 0 after the first exercise is completed (Sets 3/18 and 1/6 exercises do update), so the session card looks broken until the day ends. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only."
+      "description": "[P3 / first workout] After logging 3 sets of Wide Push-Up (bodyweight, 10 reps, 0 kg added) the Activity page shows a Personal bests card: 'NEW PERSONAL BEST, Wide Push-Up, 0 kg, x 10 reps, today'. A 0 kg personal best on the first ever workout reads as a bug and cheapens the badge. The set rows in the logger also say '10 reps x 0kg'. Fix idea: for bodyweight exercises show reps instead of kg, or do not celebrate a PB with zero load on the first log. On the same page 'Total Volume 0kg' and 'COMPLETED 0 / 36' stay at 0 after the first exercise is completed (Sets 3/18 and 1/6 exercises do update), so the session card looks broken until the day ends. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
+      "thread": [
+        {
+          "at": "2026-10-24T01:02:03.042Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "A personal best with no added load shows '12 reps', not '0 kg x 12 reps'. Landed on app main 689fbb2e (fix abb6bed1), ships in Play build 313.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-d1-sessions-0-of-7",
