@@ -677,10 +677,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main ed6dcced (ships in the next normal build). The Diet tab's sheets and toasts now speak Hindi and Hinglish: photo-tips carousel, macro-targets sheet (shared with Profile, incl. its toasts), custom-meal macro fields and AI-estimated badge, snack ideas, food-preference chips, replaced-meal badge, Fiber row, macro-ring labels, meal-card undo label, shopping 'Other' group, partner banner and leave-group sheet. Image: 390 px, hi (top) and Hinglish (bottom): /nutrition, food prefs, macro targets. Checks: tsc 0 errors, full unit suite 8,671 passed, 23 new tests in test/i18n/hindi-diet-workout-tabs.test.tsx, QA flows recaptured (2b05ade5). Units (kcal, g) and FODMAP stay Latin by design.",
+        "imagePath": "images/i-20261024-hi-diet-tab-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-diet-tab-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "8ef83a9bb307ec6121bcc7d0c94df7ed5058d724",
+        "imageCommits": [
+          "8ef83a9bb307ec6121bcc7d0c94df7ed5058d724"
+        ],
+        "fixedAt": "2026-10-24T20:58:27.135Z",
+        "by": "shakeebshaan",
+        "appCommit": "ed6dcced",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Diet tab sheets, toasts and aria labels translated; checked by hand at 390 px in hi + Hinglish on a fake-API server; native read still pending (nyus-f84785); server text (API errors, meal names) stays as sent."
+        }
+      },
       "history": [],
-      "description": "[P2 / Hindi] Diet tab: 42 English strings, plus 17 in MacroTargetsSheet.tsx (shared with Profile). CustomMealModal.tsx 21 ('Photo too large', 'Please add details', ...), useNutritionData.tsx 6 (toasts), SnapTipsCarousel.tsx 6, MealStatusBadge.tsx 5, NutritionPanel.tsx 3, NutritionMealCard.tsx 1. MacroTargetsSheet: 'Enter at least one target', 'Targets updated', ...\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P2 / Hindi] Diet tab: 42 English strings, plus 17 in MacroTargetsSheet.tsx (shared with Profile). CustomMealModal.tsx 21 ('Photo too large', 'Please add details', ...), useNutritionData.tsx 6 (toasts), SnapTipsCarousel.tsx 6, MealStatusBadge.tsx 5, NutritionPanel.tsx 3, NutritionMealCard.tsx 1. MacroTargetsSheet: 'Enter at least one target', 'Targets updated', ...\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-24T20:58:27.135Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main ed6dcced (ships in the next normal build). The Diet tab's sheets and toasts now speak Hindi and Hinglish: photo-tips carousel, macro-targets sheet (shared with Profile, incl. its toasts), custom-meal macro fields and AI-estimated badge, snack ideas, food-preference chips, replaced-meal badge, Fiber row, macro-ring labels, meal-card undo label, shopping 'Other' group, partner banner and leave-group sheet. Image: 390 px, hi (top) and Hinglish (bottom): /nutrition, food prefs, macro targets. Checks: tsc 0 errors, full unit suite 8,671 passed, 23 new tests in test/i18n/hindi-diet-workout-tabs.test.tsx, QA flows recaptured (2b05ade5). Units (kcal, g) and FODMAP stay Latin by design.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-today-cards",
