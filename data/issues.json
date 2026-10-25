@@ -1099,8 +1099,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Profile edit-name sheet (title, help text, label, buttons) and avatar-upload toasts are Hindi (profile.edit_name.*, profile.avatar.*). Test: 'edit-name sheet is Hindi, and its toasts' passes; app main a440d5f3.",
+        "imagePath": "images/i-20261024-hi-profile-sheets-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-profile-sheets-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a4a5c3e99d462c9d1a1a86ee16b11a57a3774bd9",
+        "imageCommits": [
+          "a4a5c3e99d462c9d1a1a86ee16b11a57a3774bd9"
+        ],
+        "fixedAt": "2026-10-25T23:50:19.758Z",
+        "by": "shakeebshaan",
+        "appCommit": "a440d5f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "toasts proven in the unit test, not on screen; Hindi is a draft for nyus-f84785"
+        }
+      },
       "history": [
         {
           "at": "2026-10-25T22:40:00.000Z",
@@ -1109,7 +1131,17 @@
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: STILL BROKEN [executed on current app main 236b0908 / prod]. Reproduced on app main 236b0908, hi, /profile > edit name: the sheet reads \"Edit your name\", \"Shown in your profile, leaderboards, and partner groups.\", \"Display name\", placeholder \"Your name\", \"Save\" in English; only Cancel/Close are Hindi. Proof: images/2026-10-25-sweep/profile-name-sheet-hi.png."
         }
       ],
-      "description": "[P3 / Hindi] Profile: 20 English strings in the edit sheets and avatar upload: ProfileEditNameSheet.tsx 11 (\"Name can't be empty\", 'Name is too long', ...), ProfileIdentityCard.tsx 9 ('Unsupported image type', 'Image too large', ...). MacroTargetsSheet is on the diet-tab card.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P3 / Hindi] Profile: 20 English strings in the edit sheets and avatar upload: ProfileEditNameSheet.tsx 11 (\"Name can't be empty\", 'Name is too long', ...), ProfileIdentityCard.tsx 9 ('Unsupported image type', 'Image too large', ...). MacroTargetsSheet is on the diet-tab card.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-25T23:50:19.758Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Profile edit-name sheet (title, help text, label, buttons) and avatar-upload toasts are Hindi (profile.edit_name.*, profile.avatar.*). Test: 'edit-name sheet is Hindi, and its toasts' passes; app main a440d5f3.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-workout-tab",
