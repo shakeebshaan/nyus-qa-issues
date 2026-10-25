@@ -1274,8 +1274,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "ScrollableScale, ScrollableRuler and IntroDots screen-reader labels now come from onboarding.ruler.* / onboarding.intro_dots.* in Hindi. Test: 'onboarding scale and intro dots speak Hindi to a screen reader' passes (13/13 in the file); app main a440d5f3.",
+        "imagePath": "images/i-20261024-hi-onboarding-pickers-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-onboarding-pickers-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e3055153a402941fe0aa3c2bf17a72e90a5f79f5",
+        "imageCommits": [
+          "e3055153a402941fe0aa3c2bf17a72e90a5f79f5"
+        ],
+        "fixedAt": "2026-10-25T23:49:52.585Z",
+        "by": "shakeebshaan",
+        "appCommit": "a440d5f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "screen-reader labels proven in jsdom (unit test), not on a device with TalkBack"
+        }
+      },
       "history": [
         {
           "at": "2026-10-25T22:40:00.000Z",
@@ -1284,7 +1306,17 @@
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: STILL BROKEN [code read on current main, not run]. Current main src/components/onboarding/ScrollableScale.tsx has no useTranslation and hardcodes aria-label \"Current value: ... Tap to edit.\" (:228), \"Edit value in {unit}\" (:239), \"{unit} selector\" (:263). The onboarding flow cannot be opened for a completed QA account."
         }
       ],
-      "description": "[P4 / Hindi, screen reader] 6 English aria labels on the onboarding pickers: ScrollableScale.tsx 3 / ScrollableRuler.tsx 2 ('Current value: ... Tap to edit.', 'Edit value in kg', '<unit> selector') and IntroDots.tsx 1 ('Go to slide 1 of 4'). Visible text is already Hindi.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P4 / Hindi, screen reader] 6 English aria labels on the onboarding pickers: ScrollableScale.tsx 3 / ScrollableRuler.tsx 2 ('Current value: ... Tap to edit.', 'Edit value in kg', '<unit> selector') and IntroDots.tsx 1 ('Go to slide 1 of 4'). Visible text is already Hindi.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-25T23:49:52.585Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "ScrollableScale, ScrollableRuler and IntroDots screen-reader labels now come from onboarding.ruler.* / onboarding.intro_dots.* in Hindi. Test: 'onboarding scale and intro dots speak Hindi to a screen reader' passes (13/13 in the file); app main a440d5f3.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-onboarding-coach-preview",
