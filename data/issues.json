@@ -173,8 +173,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Hindi now writes the unit as kg everywhere (30 hi.json values that said किग्रा). Activity personal bests and workout history rows show kg only. Test: hi-leftovers-1025 'Hindi spells the weight unit one way' passes; app main a440d5f3.",
+        "imagePath": "images/i-20261025-hi-kg-unit-mixed-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-hi-kg-unit-mixed-fix-r1.png",
+          "images/i-20261025-hi-kg-unit-mixed-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0b64ce4ddb5ad8a766c439598ec52bb2addbede8",
+        "imageCommits": [
+          "0b64ce4ddb5ad8a766c439598ec52bb2addbede8",
+          "7df267655889348fd453f3c091b9ffaf3e2fb27e"
+        ],
+        "fixedAt": "2026-10-25T23:45:45.535Z",
+        "by": "shakeebshaan",
+        "appCommit": "a440d5f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "web build at 390px; not yet on a device build"
+        }
+      },
       "history": [
         {
           "at": "2026-10-25T22:40:00.000Z",
@@ -184,7 +208,15 @@
         }
       ],
       "description": "[P4 / Hindi] Found 25 Oct 2026 in a web build of app main 8bf83230 (same code as Play build 316) on the QA account, prod API read-only, 390 px, nyus_locale = hi. On /activity the same finished-exercise row mixes two spellings of the unit: \"दर्ज 3 × 8 · 63.4 kg\" and, under it, \"3 सेट दर्ज · 1,522 किग्रा\". The Personal bests card shows \"63.4kg\" and the Today weight card \"kg\". EXPECTED: one spelling per language (the app's own Hindi term किग्रा, or kg everywhere). Cosmetic; no data is wrong.\n\nHOW TO FIX: pick one and route the set-row weight and the best figure through the same unit label key as the volume line.",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-25T23:45:45.535Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Hindi now writes the unit as kg everywhere (30 hi.json values that said किग्रा). Activity personal bests and workout history rows show kg only. Test: hi-leftovers-1025 'Hindi spells the weight unit one way' passes; app main a440d5f3.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
