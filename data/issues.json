@@ -2,6 +2,60 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261025-focus-calendar-all-missed",
+      "createdAt": "2026-10-26T00:02:00.000Z",
+      "author": "qa",
+      "tags": [
+        "bug",
+        "daily-focus",
+        "streaks",
+        "p2"
+      ],
+      "route": "/daily-focus (GET /focus/<year>/<month>, nyu_backend backend.py:7323-7335 calendar_days via get_calendar_day_status:7254)",
+      "imagePath": "images/2026-10-25-proof30/focus-calendar-all-missed.png",
+      "imageCommit": "087fbe0c79487e010dc7b0444fb6f95c560d4f7c",
+      "imagePaths": [
+        "images/2026-10-25-proof30/focus-calendar-all-missed.png"
+      ],
+      "imageCommits": [
+        "087fbe0c79487e010dc7b0444fb6f95c560d4f7c"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / calendar contradicts the streak rings] Found 25 Oct 2026 while proving the Daily Focus FAB card, web build of app main 236b0908 against the PROD API, QA account, 390 px. REPRO: open /daily-focus. The ring row says ACTIVITY 4 day streak, but the month calendar underneath shows no logged day at all and the caption reads 'No logged days yet this month - tap below to start.' Prod API: GET /focus/2026/10 returns streaks.activity.current = 4 and calendar_days status 'missed' for every day from 2026-10-01 to 2026-10-25 (the account logged workouts on 21, 24 and 25 Oct and ate planned meals on 21 and 22 Oct; GET /dashboard/overview?day=2026-10-25 shows logged_activity_count 3). ROOT CAUSE (code read, nyu_backend origin/main b74c9d4a): the streaks were moved to source data in 26dc8028 (_source_diet_dates / _source_activity_dates), but calendar_days is still built from DailyLog.diet_completed / activity_completed via get_calendar_day_status (backend.py:7254-7276). Nothing writes those flags except PUT /daily-logs (backend.py:18624-18637), which the app does not call, so for a real user every past day is 'missed'. Same class as i-20260714-dfdc, whose fix did not cover calendar_days. EXPECTED: day status from the same source dates as the streaks (both / diet only / activity only / missed). FIX IDEA: in DailyFocusResource.get compute diet_dates = _source_diet_dates(user_id, first_day, last_day) and activity_dates likewise, and derive status from set membership (keep breaks if the DailyLog row says is_*_break).",
+      "thread": [],
+      "needsReview": false
+    },
+    {
+      "id": "i-20261025-hi-group-chat-names-english",
+      "createdAt": "2026-10-26T00:02:00.000Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "social",
+        "p4"
+      ],
+      "route": "/social > Messages > Groups (src/components/GroupChatView.tsx:141, :199, :215 render group.name raw; names are database rows)",
+      "imagePath": "images/2026-10-25-proof30/hi-group-names-english.png",
+      "imageCommit": "087fbe0c79487e010dc7b0444fb6f95c560d4f7c",
+      "imagePaths": [
+        "images/2026-10-25-proof30/hi-group-names-english.png"
+      ],
+      "imageCommits": [
+        "087fbe0c79487e010dc7b0444fb6f95c560d4f7c"
+      ],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / Hindi] Found 25 Oct 2026 while proving i-20260811-8c7a, web build of app main 236b0908, hi, 390 px, QA account. The Groups list heading, sub-line and empty rows are Hindi, but the four group names are English: 'Streak Leaders', 'Weekly Weight Loss', 'All Time Weight Loss', 'PR Champions' (GroupChatView renders group.name as returned by the API; the names are rows in the groups table, not app strings). The same names are also interpolated into 'अभी तक कोई संदेश नहीं' headers when a group is opened. EXPECTED: a Hindi/Hinglish user sees translated names. FIX IDEA: key the display name off the leaderboard type the group maps to (t('social.groups.name.<type>')), falling back to group.name for user-created groups.",
+      "thread": [],
+      "needsReview": false
+    },
+    {
       "id": "i-20261025-shopping-list-route-crash",
       "createdAt": "2026-10-25T22:40:00.000Z",
       "author": "qa",
@@ -4225,6 +4279,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). curl GET https://nyus.in/privacy names Razorpay, Resend, OpenAI, Google, Discord ids-only, HC vitals; /terms (301) says 30-day free trial then one-time Razorpay plans, no 'free of charge'; /refund-policy says Razorpay not Google Play; /account-deletion says Health Connect data retained then deleted."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: curl of the live pages, 25 Oct 23:19 UTC]. /privacy 200: names Razorpay, Resend, OpenAI, Google (FCM, Analytics, Sign-In), the Discord alert channel, Health Connect. /terms/ 200: '30-day free trial', Active Rs 499 / Core Rs 1,299 / Elite Rs 2,499, 'one-time payment processed by Razorpay and does not renew automatically'; 'free of charge' is absent. /refund-policy/ 200: 'processed by Razorpay, not by Google Play'. /account-deletion 200: lists Health Connect data under what is deleted. Proof: images/2026-10-25-proof30/i-20261009-lgl1.png."
         }
       ],
       "thread": [
@@ -6162,6 +6222,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). GroupChatView.tsx uses t() for heading/loading/empty/placeholder/toast (e.g. :69,:122,:145,:281); hi.json has social.groups keys (plural _other present)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi (Messages tab > Groups chip)]. Heading 'लीडरबोर्ड ग्रुप चैट', sub-line 'अन्य लीडरबोर्ड प्रतिभागियों के साथ बातचीत में शामिल हों।', empty rows 'अभी तक कोई संदेश नहीं।'. NOTE: Residual (new card filed): the four group NAMES (Streak Leaders, Weekly Weight Loss, All Time Weight Loss, PR Champions) are English database values rendered raw. Proof: images/2026-10-25-proof30/i-20260811-8c7a.png images/2026-10-25-proof30/o1soc-groups.png."
         }
       ],
       "route": "/social",
@@ -6220,6 +6286,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). ChallengesView.tsx t('social.challenges.*') throughout (:339,:392,:518); all keys in en/hi/hinglish (plural _other forms exist)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi (Board tab > Challenges chip, create form open)]. 'नया चैलेंज बनाएँ', 'सक्रिय' / 'पूर्ण', form 'चैलेंज का नाम', 'प्रकार', 'वर्कआउट स्ट्रीक / कुल वॉल्यूम / वर्कआउट संख्या', 'लक्ष्य (दिन)', '7 / 14 / 30 दिन', 'दोस्तों को न्योता दें', empty 'कोई सक्रिय चैलेंज नहीं'. Proof: images/2026-10-25-proof30/i-20260811-c4a1.png images/2026-10-25-proof30/p2soc-challenge-create.png."
         }
       ],
       "route": "/social",
@@ -6278,6 +6350,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). ActivityFeedView.tsx t('social.feed.*') (:123); all 9 keys present in en/hi/hinglish."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi; GET /social/activity-feed stubbed with 4 events (the QA account has no friends)]. Verbs render as 'एक वर्कआउट पूरा किया', 'वज़न का माइलस्टोन हासिल किया', 'लेवल 7 पर पहुँचे', 'एक चैलेंज पूरा किया'; the unstubbed prod empty state reads 'अभी कोई गतिविधि नहीं'. Proof: images/2026-10-25-proof30/i-20260811-af2d.png images/2026-10-25-proof30/p2soc-feed-events.png."
         }
       ],
       "route": "/social",
@@ -6334,6 +6412,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). pages/Verify.tsx uses useTranslation; 14 verify.* keys present in en/hi/hinglish; only remaining literal is internal Error('No email') :113."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally logged OUT, Hindi, /auth/register and /auth/verify stubbed]. Welcome > email > /verify: 'अपना ईमेल देखें', 'पर भेजा गया 6-अंकों का कोड दर्ज करें', 'कोड फिर से भेजें', 'ईमेल बदलें'. A wrong code shows the toast title 'ग़लत कोड' (the 'Invalid code' text beside it is my stub's server message). Proof: images/2026-10-25-proof30/i-20260810-4e1a.png images/2026-10-25-proof30/r1verify-verify-wrong-code-hi.png."
         }
       ],
       "author": "shakeebshaan",
@@ -6392,6 +6476,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). ChoosePlan.tsx:880-883 web prefill spreads name/email only when known, contact omitted (native :838-841 same)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally; Razorpay constructor stubbed to record its options]. Tapped 'Subscribe to Elite' on /choose-plan; window.Razorpay was constructed with options.prefill = {name, email} only. No contact key and no empty string anywhere in prefill (the card's two defects). name and email carry the signed-in account's values. create-order POST answered locally (no order created). Proof: images/2026-10-25-proof30/i-20260810-9c3f.png images/2026-10-25-proof30/s9c3f-choose-plan-before.png."
         }
       ],
       "author": "shakeebshaan",
@@ -6918,6 +7008,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). ShareProgressButton.tsx uses t(); 23 keys incl. progress.share.* present in en/hi/hinglish; no hardcoded literals found in grep."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi, /weekly-progress share icon]. Menu: 'फ़ॉर्मैट', 'इमेज', 'PDF', 'रिपोर्ट रेंज', 'पिछले 7 दिन', 'पिछले 30 दिन', 'पिछले 90 दिन', 'डिफ़ॉल्ट', 'आपके डाइटीशियन के लिए', 'रिपोर्ट एक्सपोर्ट करें (PDF)'. The only English token is 'PDF'. Proof: images/2026-10-25-proof30/i-20260804-0473.png images/2026-10-25-proof30/q0share-p2-share-menu-hi.png."
         }
       ],
       "description": "[bug-hunt] Share Progress Report menu + toasts render HARDCODED English, ignoring the app language.\n\nComponent: src/components/progress/ShareProgressButton.tsx — the share icon in the header of BOTH /weekly-progress and /monthly-progress (rendered at WeeklyProgress.tsx & MonthlyProgress.tsx:322). Reachable by every authenticated user (ProtectedRoute). Same i18n class as fixed e5b8/c17a/d24e/3b9d/3c18 and b4f2, but a DISTINCT never-migrated surface.\n\nThe component clearly INTENDS to localize — its sibling \"Export report (PDF)\" path already uses t() for every string (handleDietitianExport ~L184-194, section label L393, menu label L402, and its toasts). But the social-share path + the range/format menu are hardcoded English literals with no t():\n- Range chooser menu (opened by tapping the share icon): \"Format\" (L350), \"Image\"/\"PDF\" toggle (L368), \"Report range\" (L373), \"Last {n} days\" (L383), \"Default\" (L385).\n- ARIA labels: \"Share progress report\" (L314), \"Preparing your progress image\" (L321), \"Choose a report range\" (L347), \"Report format\" (L355).\n- Share payload title/text: title = \"My NYUS progress\" (L228), text = `My last {n} days with NYUS.` (L229).\n- Toasts: web-download fallback \"Sharing works on the app — {PDF|image} downloaded instead.\" (L293); error toast \"Couldn’t create your progress {PDF|image}. Please try again.\" (L299-301).\n\nExpected: a Hindi/Hinglish user sees the menu, aria labels, and toasts in their selected language (exactly as the adjacent dietitian-export path already does). Actual: all of the above render English regardless of app language.\n\nRepro: set app language to Hindi -> open /weekly-progress or /monthly-progress -> tap the share icon (top-right header) -> the popup menu (\"Format / Image / PDF / Report range / Last 30 days / Default\") is English; completing a web share/download shows an English toast.\n\nNote: the rasterized card image + dietitian PDF are hand-drawn English documents by design (see file headers) — this report is scoped to the interactive UI chrome (menu, aria labels, toasts, share caption), not the document pixels.",
@@ -7450,6 +7546,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). src/pages/LogWeight.tsx:357 `if (isNoResponseError(err) && weightKgConfirmed != null)` enqueue({blockType:'weight_log',endpoint:'/logs/daily',...}) + saved-offline toast + return, in handleConfirmWeight."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally; first POST /logs/daily returns the big-change warning, the confirm POST is aborted (network failure)]. After 'Save & Track' and 'Yes, this is correct' with the network dead the page shows the toast 'Saved - will sync when back online' and opens the weigh-in moment. No 'Save failed' toast (the old destructive path). Proof: images/2026-10-25-proof30/i-20260803-b2e8.png images/2026-10-25-proof30/bb2e8-p2-lw-offline-confirm-en.png."
         }
       ],
       "description": "[bug-hunt] Confirming a large (>2%) weigh-in while OFFLINE silently LOSES the log. In src/pages/LogWeight.tsx, handleSave treats a network failure as must-not-lose (lines 330-343: `if (isNoResponseError(err)) { enqueue({ blockType:'weight_log', endpoint:'/logs/daily', payload:{...} }); openMoment(weightKg); toast('Saved - will sync when back online'); return; }` — upholding the 'the morning weigh-in must never be lost (audit #14)' invariant). handleConfirmWeight (lines 355-381) — the path taken after the backend flags a daily change over its 2% threshold and the user taps Confirm — has NO isNoResponseError branch: its catch (371-380) goes straight to captureException + a destructive 'Save failed' toast. Repro: log a weight that differs >2% from your last log so the confirmation warning renders, disable the network, tap Confirm. confirmAndSubmit -> upsertDailyLog throws a no-response error -> generic catch -> 'Save failed' toast and the weigh-in is DISCARDED (never queued). Expected: the confirmed weigh-in is enqueued for replay exactly like handleSave. Actual: real data loss on the confirm path, violating the code's own stated invariant. Fix: add the same isNoResponseError -> enqueue/openMoment/saved-offline branch to handleConfirmWeight's catch.",
@@ -7936,6 +8038,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). nyu_backend app/routes/coach.py:722 history filter Message.sender_type.in_(['user','ai','coach','admin']) (comment L714-718)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: pytest on nyu_backend origin/main b74c9d4a (= prod VM HEAD), 5 files / 48 tests, 48 passed in 2.92s, run through the machine pytest lock]. tests/integration/test_coach_history_includes_human_coach_cb47.py passes: GET /coach/history returns sender_type 'user', 'ai', 'coach' and 'admin' messages. Prod, QA account: GET /coach/history?limit=100 returns 74 messages (56 ai, 18 user); the account has no human-coach rows, so only the test shows the coach/admin types. NOTE: Test-DB execution for the human-coach path. Proof: images/2026-10-25-proof30/i-20260727-cb47.png."
         }
       ],
       "route": "/coach-chat",
@@ -8316,6 +8424,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). backend.py:3687-3698 PaymentSubscriptionResource.get uses entitlement.get_active_subscription + build_subscription_view (entitlement.py:298-358): status in ('active','canceled') within period -> active:true, wire status 'cancelled'. Test tests/api/test_payments_subscription_view.py."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: prod API GET /payments/subscription, QA account]. Response carries active=true, status='trial', current_period_end 2026-10-29, started_on 2026-09-12 (built by entitlement.build_subscription_view). Top-level and 'subscription' envelopes agree. The cancelled-in-period branch is covered by the pytest card. Proof: images/2026-10-25-proof30/i-20260726-9f2a.png."
         }
       ],
       "author": "shakeebshaan",
@@ -8374,6 +8488,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). entitlement.py:336,354-356 next_charge_amount/date null unless subscription_is_recurring (or cancel pending date); FE grid hides when null. Test: test_payments_subscription_view.py."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: prod API GET /payments/subscription, QA account (trial)]. status=trial, is_trial=true, auto_renews=false, days_remaining=4. next_charge_amount=null and next_charge_date=null (card: null unless recurring), so the app's next-charge row stays hidden. Proof: images/2026-10-25-proof30/i-20260726-4c7e.png."
         }
       ],
       "author": "shakeebshaan",
@@ -8698,6 +8818,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). logging.py:2079-2098 per-session e1rm = max Epley across all sets; test tests/test_exercise_progression.py."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: pytest on nyu_backend origin/main b74c9d4a (= prod VM HEAD), 5 files / 48 tests, 48 passed in 2.92s, run through the machine pytest lock]. tests/test_exercise_progression.py (7 tests) passes, including the max-Epley-across-sets case. Prod API: 5 of 5 session rows satisfy e1rm = weight x (1 + reps/30) at the reported top set (no row below its own top-set Epley). NOTE: Test-DB execution; the QA account has no session where the heaviest set differs from the best-e1RM set, so prod cannot show the max-across-sets branch. Proof: images/2026-10-25-proof30/i-20260722-e1f7.png."
         }
       ],
       "needsReview": false
@@ -8747,6 +8873,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). logging.py:2102-2114 returns all_time_peak_weight_kg/e1rm computed before 90-day trim; FE ExerciseProgressionSheet.tsx:182,186 uses them."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: pytest on nyu_backend origin/main b74c9d4a (= prod VM HEAD), 5 files / 48 tests, 48 passed in 2.92s, run through the machine pytest lock + prod API GET /strength/exercise-progression for all 5 exercises in /strength/summary]. tests/test_exercise_progression.py (7 tests) passes. Prod, QA account: 5 of 5 exercises return all_time_peak_e1rm >= every session e1rm and all_time_peak_weight_kg >= every top-set weight (e.g. March Sit (Wall): peak 88.8 = 63.4 x (1 + 12/30)). NOTE: The QA account has only 1-2 sessions per exercise, so the 90-day trim itself is only exercised by pytest. Proof: images/2026-10-25-proof30/i-20260722-c3a9.png."
         }
       ],
       "needsReview": false
@@ -9045,6 +9177,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). DietPlanWeek.tsx:408 isFuture; :583 onClick guarded if(!isFuture), :584 disabled={isFuture||isPending}; hi.json:2772 upcoming_hint."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally; browser clock set to Wed 21 Oct 12:00 UTC so Sun 25 Oct is a future day]. Opened SUN OCT 25: hint 'Upcoming - you can mark these off once the day arrives.'; all 3 meal buttons have disabled=true with aria-label '<meal> can be marked eaten once the day arrives'. Tapping them sent no write (the only write body was the harness's own profile PUT). Proof: images/2026-10-25-proof30/i-20260720-8639.png images/2026-10-25-proof30/d8639-dpw-future-after-tap.png."
         }
       ],
       "needsReview": false
@@ -9244,6 +9382,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). Notifications.tsx:243 navigate(staticNotificationRoute(type)); lib/notificationRoutes.ts:24-30 maps meal/water/weight_reminder. Shared map."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally]. Tapped 5 notifications on /notifications: 'Your new week starts tomorrow' > /weekly-review, 'Your Health Score moved up' > /health-score, 'Quick Check-in' > /dashboard, 'Your streak misses you' > /dashboard, 'Coach is waiting' > /dashboard. None is a dead tap. NOTE: The QA account's list has no weight_reminder / meal-reminder rows, so those types were not tapped. Proof: images/2026-10-25-proof30/i-20260719-7f3a.png images/2026-10-25-proof30/h7f3a-p2-notif-tap-en.png."
         }
       ],
       "needsReview": false
@@ -9746,6 +9890,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). Measurements.tsx:8 imports apiErrorMessage; used :354."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally; POST /logs/measurement forced to 500 {error:'boom'}]. After 'Save measurement' the destructive toast reads \"Couldn't save measurement boom\" (title + server message). No page error captured (the old ReferenceError: apiErrorMessage is not defined would appear in pageerrors; the list held only the 500 resource line). Proof: images/2026-10-25-proof30/i-20260718-9a4b.png images/2026-10-25-proof30/c9a4b-p2-meas-save-fail-en.png."
         }
       ],
       "author": "shakeebshaan",
@@ -10089,6 +10239,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). UserSearch.tsx:9 imports apiErrorMessage; no local const redeclaration (grep shows only import + uses)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally; /users/search stubbed with one user, POST /friends/request forced to 400 {error:'You already sent this person a request'}]. Search for 'zed' lists the user; tapping Add shows the toast \"Couldn't send request You already sent this person a request\" (the server's own message, not axios' 'Request failed with status code 400'). Proof: images/2026-10-25-proof30/i-20260717-1d76.png images/2026-10-25-proof30/g1d76-search-add-fail.png."
         }
       ],
       "route": "/social/search",
@@ -11963,6 +12119,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). pages/_components/profile/ProfilePreferencesCard.tsx (32 t() calls) and ProfileDeleteAccountDialog.tsx:33 t(profile.delete_account.title); delete_account keys in 4 locale files :2101."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi (nyus_locale=hi)]. /settings in Hindi: 'प्राथमिकताएँ और डेटा', 'थीम', 'भाषा', 'इकाइयाँ', 'ध्वनियाँ', 'वॉइस संकेत', 'मेरा डेटा एक्सपोर्ट करें'. The only English text on the page is the version line 'NYUS 1.10.28'. Proof: images/2026-10-25-proof30/i-20260717-pf2a.png images/2026-10-25-proof30/m-settings-top.png."
         }
       ]
     },
@@ -12137,6 +12299,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). Backend profile.py:148-173 _attach_response_only_intake merges primary_intent/past_attempts from OnboardingResponse; called in GET profile at profile.py:302. FE coach-intake-questions.ts:225,236 isAnswered reads them. Test: tests/test_routes_profile.py (primary_intent)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: prod API GET /profile, QA account]. past_attempts = ['calorie_apps'] is returned. past_attempts has no profile column, so it can only come from the OnboardingResponse merge (_attach_response_only_intake). NOTE: primary_intent is absent for this account because it never answered that question; the same loop handles both keys. Proof: images/2026-10-25-proof30/i-20260718-72c9.png."
         }
       ],
       "needsReview": false,
@@ -12208,6 +12376,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). DietPlanWeek.tsx:98 nutritionService.logMeal({assigned_meal_id,was_eaten}); :583 button onClick toggles unless isFuture (:408), aria-pressed at :585; past days toggle-able."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally]. Tapped today's dinner row on /diet-plan-week: the app POSTed /diet/log-meal {assigned_meal_id:42303, was_eaten:false}; the write was blocked locally. was_eaten carries the PRE-tap state (the backend toggles; nutrition.service.ts:234 treats was_eaten=false as 'ate it'), so this is the intended payload. Proof: images/2026-10-25-proof30/i-20260718-9f24.png images/2026-10-25-proof30/e9f24-dpw-today-tap.png."
         }
       ],
       "needsReview": false
@@ -12330,6 +12504,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). PlanTimeline.tsx:414 planPaceStatus() from real logged weight vs plannedWeeklyKg; :424 weekDateLabel(week)=rangeLabel(w.start,w.end) passed to WeeklyTrajectory (:583-590) with onTrack banner."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally]. /plan-timeline, week 7 expanded: week header carries the date range ('WEEK 7 - CURRENT, Oct 24 - Oct 30') and the Projected trajectory block shows a pace banner built from the logged weight: \"Behind plan. You're up 0.9 kg so far - the plan expects about 2.5 kg down by now.\" plus the W1..W10 chart. NOTE: The QA account's plan is labelled Fat Loss while its goal weight (72 kg) is above its current weight, so the 'behind plan' wording reflects that test-data mismatch, not the banner logic. Proof: images/2026-10-25-proof30/i-20260718-443b.png images/2026-10-25-proof30/t0pt-pt-week7.png."
         }
       ],
       "needsReview": false,
@@ -12435,6 +12615,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). backend.py:8155-8207 /diet/plan day view sums rows_v2 per-row calories/protein/carbs/fat directly (rows_v2_totals) instead of ingredient_id lookup. No dedicated unit test found for this branch."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: prod API GET /diet/plan?date=..., QA account, 45 days back from 25 Oct]. 5 days have meals, 11 meals in total: every meal's macros_summary carries a non-zero kcal figure; none shows '0 kcal'. NOTE: None of the 11 meals is confirmed to be a rows_v2-edited one, so the exact branch is not proven by this scan. Proof: images/2026-10-25-proof30/i-20260718-f6b8.png."
         }
       ],
       "needsReview": false
@@ -12762,6 +12948,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). Same fix as 72c9: profile.py:148-173,302 returns primary_intent/past_attempts; FE coach-intake-questions.ts:225,236 isAnswered. Test tests/test_routes_profile.py."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: prod API GET /profile, QA account (same call and result as 72c9)]. past_attempts is present in the GET /profile envelope, so the dashboard drip can detect it server-side and stop re-asking. Proof: images/2026-10-25-proof30/i-20260719-83b5.png."
         }
       ],
       "needsReview": false
@@ -12812,6 +13004,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). backend.py:9783-9824 activity overview re-scopes todays_log to the shown session id for progressive plans, else paints blank (total_volume_today=0). Test: tests/test_activity_overview_session_scope.py (cb0b/13a1)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: pytest on nyu_backend origin/main b74c9d4a (= prod VM HEAD), 5 files / 48 tests, 48 passed in 2.92s, run through the machine pytest lock + prod API GET /activity/overview]. tests/test_activity_overview_session_scope.py (3 tests) passes: a fresh session paints blank, only its own in-progress log fills it, own log wins over a stray one. Prod, QA account: is_progressive=true, todays_workout.completed_today=true, planned_volume_today_kg 11412 - the response is well-formed and scoped to one session. NOTE: Test-DB execution for the scoping logic; the prod call only proves the endpoint answers for a progressive plan (the QA account has no stray in-progress log to reproduce the original). Proof: images/2026-10-25-proof30/i-20260719-cb0b.png."
         }
       ],
       "needsReview": false,
@@ -12855,6 +13053,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). Achievements.tsx:96-98 isError+refetch from three hooks; :212 branch !loadingCatalog && !catalog && any error renders error_title/error_desc + retry button (:229). Test: test/Achievements.errorState.test.tsx; en+hi keys present."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally; /badges/catalog, /badges/earned, /gamification/overview forced to 500]. Page shows 'Couldn't load achievements', 'Something went wrong reaching your progress...' and a 'Try again' button. It does not show 'No badges yet' / '0 of 0 unlocked'. Proof: images/2026-10-25-proof30/i-20260721-48af.png images/2026-10-25-proof30/a48af-p2-achievements-500-en.png."
         }
       ],
       "needsReview": false,
@@ -13023,6 +13227,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). Achievements.tsx and ProfileHydrationSection.tsx/HydrationSheet.tsx use useTranslation; all t() keys exist in en.json and hi.json (checked by script); only unit-suffix strings equal English ({{xp}} XP, ml, L)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi]. /profile/plan Hydration block reads 'पानी', 'दैनिक लक्ष्य', '3 L' with no English-only line. Proof: images/2026-10-25-proof30/i-20260727-hyd8.png images/2026-10-25-proof30/m-profile_plan-top.png."
         }
       ],
       "thread": [
@@ -13107,6 +13317,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). ProfileMacroTargetsCard.tsx and ProfileChallengeCard.tsx use t(); keys present in en+hi. ProfileTutorialPicker.tsx no longer exists and its keys are unused (component removed)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi]. /profile/plan: 'मैक्रो लक्ष्य समायोजित करें' + 'अपनी दैनिक कैलोरी और प्रोटीन / कार्ब्स / फैट सेट करें'. /profile: '30-दिन की चुनौती' + '30 में से 16 दिन · 14 दिन बाकी'. No English-only lines on either page. Proof: images/2026-10-25-proof30/i-20260727-mac9.png images/2026-10-25-proof30/m-profile_plan-top.png."
         }
       ],
       "needsReview": false,
@@ -13314,6 +13530,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). ProfileSupportSection/ProgressSection/BodySection/Appearance/IdentityCard all use t(); every key exists in en and hi (script check, 0 missing); no JSX English literals left."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally, Hindi]. /profile progress rows: 'साप्ताहिक प्रगति', 'साप्ताहिक भोजन प्लान', 'वर्कआउट इतिहास', 'कोच चैट'. /body: 'वजन इतिहास', 'TDEE कैलकुलेटर'. /settings: 'थीम' + caption. Page scans found 0 English-only lines beyond the user's name, email and referral link. Proof: images/2026-10-25-proof30/i-20260802-pf6i.png images/2026-10-25-proof30/m-body-top.png."
         }
       ]
     },
@@ -13991,6 +14213,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). lib/chrome-routes.ts:94-99 /daily-focus deliberately omitted from COACH_FAB_EXACT, so the coach FAB is not rendered on the page (no prefix entry matches)."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally]. /daily-focus renders with no coach FAB element (no button or link whose aria-label matches 'chat with' / 'coach'); control: the FAB is present on /profile in the same session. Proof: images/2026-10-25-proof30/i-20261022-daily-focus-fab-overlap.png images/2026-10-25-proof30/s1fab-p2-dailyfocus-top-en.png."
         }
       ],
       "description": "[P3 / layout] [Release 307 smoke follow-up, 2026-10-22; app main 469a3ed0 + version bump, production web build served locally, QA account, 390x844 @2x] On Daily Focus the floating coach button covers the calendar's right column at the default scroll, so day 24 is unreadable (only part of the '2' shows). Same class as i-20261021-fd-fab-overlap-faq and i-20261021-fab1. Executed in both languages: the button is at x 318-374, y 676-732; the day-24 cell is x 306-345, y 675-715 in English (27x39 px of the 39 px cell hidden, and day 31 loses 27x13 px more) and x 306-345, y 693-732 in Hindi (27x39 px, day 17 loses 27x13 px). Screenshots: Hindi (daily-focus-fab-hi.png, also the original s1-hi-daily-focus.png) and English (daily-focus-fab-en.png). Cause: '/daily-focus' is in the coach-button allowlist (src/lib/chrome-routes.ts line 94), and the calendar grid in src/pages/DailyFocus.tsx (generateCalendarGrid, line 165) has no right/bottom clearance for the button. Fix, either: (a) remove '/daily-focus' from the allowlist as was done for /faq (the page already has its own tap targets), or (b) keep the button and give the calendar right padding (>= 64 px at 390 px) plus bottom padding so no day cell sits under x 318-374 at any scroll. Check in en and hi after the change. || QA board re-check 2026-10-22 (sweep 3, after nyu_backend 573232a9): STILL BROKEN. Executed on release/307 web bundle (app main 469a3ed0 + version bump; no later commit touches these files), QA account, prod reads, writes stubbed, 390x844, seeded Edge: the coach button (x 318-374, y 676-732) covers day 24 in English (27x39 px) and Hindi (27x39 px), plus day 31 / day 17 partly; chrome-routes.ts allowlist unchanged (open-en-dailyfocus.png, open-hi-dailyfocus.png).",
@@ -15390,6 +15618,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [code read on current main, not run]. FIXED (code read on current main, not run). Screen4_Goal.tsx:72-86 goalWeightConflict returns same for fat_loss/muscle_gain within 0.5 kg; :293 blocks Continue, :324-326 hint. Test: test/fe-goal-screen4.test.tsx:218. 0-pace in plan-ready not separately read."
+        },
+        {
+          "at": "2026-10-26T00:02:00.000Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA executed-proof run 25 Oct 2026 23:xx UTC (app main 236b0908 code / origin 5ce65a24, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: REALLY FIXED [executed: web build of app main (code = 236b0908; origin/main 5ce65a24 differs by one docs line) at 390 px against PROD API, QA account, every write answered locally; onboarding opened on /onboarding/flow with the QA session: Welcome > Basics > Body (70.0 / 70.0 defaults) > Goal]. Picked Fat Loss + 90 Days: Continue is disabled and the line under it reads 'Your goal weight is the same as your current weight. Set a lower goal weight on the Body tab, or choose Maintenance.' Tapping Continue stays on 'Your Goal'. The Hindi run of the same steps reached the same step fully translated. Proof: images/2026-10-25-proof30/i-20261023-d1-goal-weight-equals-current.png images/2026-10-25-proof30/j3onb-onb-after-continue.png."
         }
       ],
       "description": "[P2 / first two days, TOP 2] The Body step lets a tester pick Fat Loss while Current Weight and Goal Weight are both the 70.0 kg default (the step even says 'Goal: Maintain 0.0 kg change'), with no warning. The result screen then says 'Lose fat over 12 weeks', 'Weekly pace 0.42 kg/week', 'YOUR GOAL 70 Current kg = 70 Goal kg, Lose fat by Jan 21, 2027': the numbers contradict each other on the first screen that is supposed to build trust (about 5 kg of loss is promised with a goal of 0 kg). Steps: onboarding, leave the weights at default, Goal step: Fat Loss, 90 Days. Fix idea: when the goal is Fat Loss / Muscle Gain and goal weight = current weight, show an inline prompt on the Body step ('Set a goal weight to continue') or derive the goal weight from the pace. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
