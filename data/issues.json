@@ -128,11 +128,41 @@
         "aac6962eccaee00a09883a9eccb6841ba4ddc046"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "TrainingHeatmap months and weekday letters use the app language (formatAppDate), not the browser locale, and re-render on a language change: Hindi shows अप्रैल … अक्टू॰ and सो/बु/शु. Test: 'training heatmap months and weekday letters are Hindi' passes; app main a440d5f3.",
+        "imagePath": "images/i-20261025-training-heatmap-locale-months-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-training-heatmap-locale-months-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "899fa6fd948a2a07fa6442b7efce81b2252fff39",
+        "imageCommits": [
+          "899fa6fd948a2a07fa6442b7efce81b2252fff39"
+        ],
+        "fixedAt": "2026-10-25T23:50:03.259Z",
+        "by": "shakeebshaan",
+        "appCommit": "a440d5f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "web build at 390px"
+        }
+      },
       "history": [],
       "description": "[P4 / Hindi] Found 25 Oct 2026 in the board sweep, web build of app main 236b0908, hi, 390 px. The training heatmap's month labels (Apr, May, Jun ... Oct above the grid, and the month-jump buttons Nov ... May below the legend) and the weekday letters M / W / F are English in Hindi. Cause (inspected): TrainingHeatmap.tsx:186 and :203 call toLocaleDateString(undefined, { month: 'short' }), which uses the browser locale, not the app language (the page's own month header at WorkoutHistory.tsx:187 correctly uses intlLocale(i18n.language)); :286 hardcodes 'M', 'W', 'F'. The legend words (कम / ज़्यादा) are already Hindi. FIX: pass intlLocale(i18n.language) and put the weekday letters through t().",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-25T23:50:03.259Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "TrainingHeatmap months and weekday letters use the app language (formatAppDate), not the browser locale, and re-render on a language change: Hindi shows अप्रैल … अक्टू॰ and सो/बु/शु. Test: 'training heatmap months and weekday letters are Hindi' passes; app main a440d5f3.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
