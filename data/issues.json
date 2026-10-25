@@ -209,10 +209,44 @@
         "9d9c64453c918c7627bbc605e80c2f8144e9f7da"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main d768b657 (merged as a1a538ab, ships in the next build). 1,428 Hinglish values that were still English are now Hinglish, core screens first: values identical to English 2,601 -> 1,189 of 6,627 (the rest are loanwords, names and units, each listed with a reason in docs/i18n/HINGLISH-REVIEW-2026-10-24.md). Today 41 -> 16, Diet 173 -> 90, Workout 224 -> 96, Coach 39 -> 28, Profile 83 -> 54. Every example on this card is translated (Dose (zaroori nahi), Fast ka din:, Poora fast, Roz ki activity, JALDI KE KAAM, Hafte ki Progress, Coach ki bhasha, Madad & FAQ, Logout karein, Content par jaayein, PAANI, PASAND AUR DATA, MADAD, Diet tracking kholo, Mukhya navigation ...) except three kept as loanwords on purpose: 16:8 window, the Good morning greeting, and the FAQ page title. Only hinglish.json values changed: key set unchanged, 0 placeholder or tag mismatches vs en.json. 8 pregnancy / postpartum / underweight safety strings stay English by owner decision. Weekday / month names are a separate follow-up (fix/hinglish-dates). Before / after at 390 px attached (Today, Profile); Diet and Workout in the NYUS Reports channel.",
+        "imagePath": "images/i-20261024-hinglish-core-screens-english-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hinglish-core-screens-english-fix-r1.png",
+          "images/i-20261024-hinglish-core-screens-english-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "4a4cc4b2434315f3139e1e9a12788264d9b2254f",
+        "imageCommits": [
+          "4a4cc4b2434315f3139e1e9a12788264d9b2254f",
+          "dff2c9b450069f0a595f514335840f33d8180eee"
+        ],
+        "fixedAt": "2026-10-25T02:01:02.154Z",
+        "by": "shakeebshaan",
+        "appCommit": "d768b657",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Full unit suite 8,703 passed on d768b657, pre-push gate 5,145 passed; all card examples fixed or a documented loanword call. Open: wording is a model translation until the native Hindi read (Shaan's list nyus-f84785); FAQ page title stays Help & FAQ while the Profile row says Madad & FAQ."
+        }
+      },
       "history": [],
-      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. Walk in Hinglish (nyus_locale = hinglish) on Today, Diet, Workout, Coach, Profile with mock data. Lines identical to the English screen: Today 11 of 41, Diet 13 of 46, Workout 11 of 40, Coach 3 of 10, Profile 55 of 84. Hindi on the same screens has 0 untranslated sentences (only the proper nouns and two small items in card i-20261024-hi-nutrition-and-announcer-english). Many Hinglish entries are fine as loanwords (Home, Diet, Profile, Weight), so this needs the native Hinglish read to separate by-design from missing: it is NOT a missing-key problem (all 5,960 keys exist in hinglish.json, no raw key or {{placeholder}} on any screen). EXAMPLES that are whole labels or sentences still in English: hinglish.json:2739 \"Log what you ate\"; :4588 \"Dose (optional)\"; :2030 \"UI language - menus, labels, onboarding\"; :2790 \"Fasting day:\"; :2792 \"Full fast\"; :2793 \"16:8 window\"; :3395 \"Daily activity\"; :1874 \"Customize\"; :2105 \"QUICK ACTIONS\"; :2126 \"Weekly Progress\"; :2022 \"Coach language\"; :1998 \"Help & FAQ\"; :2001 \"Logout\"; :6548 \"Skip to content\" (screen-reader). Also identical on Today: \"Good morning, X\", \"+2 logged - 820 kcal extra\", \"FASTING\"; Diet \"AI PLAN\"; Profile \"HYDRATION\", \"PREFERENCES & DATA\", \"SUPPORT\"; screen-reader labels such as \"Open diet tracking\", \"Customize Diet\", \"Diet progress: 43% complete\", \"Weekly insights\", \"Main navigation\". The Hinglish toasts and the CSAT survey ARE translated (Feedback ke liye shukriya!, 5 mein se 4 dein) except the storage toast (card i-20261024-storage-toast-english-hi). ACTION: native Hinglish read (item nyus-f84785) with this list, then fill the real gaps."
+      "description": "Found in a local web build of app main 8efc9ca9 (worktree C:/tmp/qa-wt-reg, vite build against a mocked API, served on localhost:8091, seeded Edge profile, 390 x 844 at 2x). No prod call, no real account. Walk in Hinglish (nyus_locale = hinglish) on Today, Diet, Workout, Coach, Profile with mock data. Lines identical to the English screen: Today 11 of 41, Diet 13 of 46, Workout 11 of 40, Coach 3 of 10, Profile 55 of 84. Hindi on the same screens has 0 untranslated sentences (only the proper nouns and two small items in card i-20261024-hi-nutrition-and-announcer-english). Many Hinglish entries are fine as loanwords (Home, Diet, Profile, Weight), so this needs the native Hinglish read to separate by-design from missing: it is NOT a missing-key problem (all 5,960 keys exist in hinglish.json, no raw key or {{placeholder}} on any screen). EXAMPLES that are whole labels or sentences still in English: hinglish.json:2739 \"Log what you ate\"; :4588 \"Dose (optional)\"; :2030 \"UI language - menus, labels, onboarding\"; :2790 \"Fasting day:\"; :2792 \"Full fast\"; :2793 \"16:8 window\"; :3395 \"Daily activity\"; :1874 \"Customize\"; :2105 \"QUICK ACTIONS\"; :2126 \"Weekly Progress\"; :2022 \"Coach language\"; :1998 \"Help & FAQ\"; :2001 \"Logout\"; :6548 \"Skip to content\" (screen-reader). Also identical on Today: \"Good morning, X\", \"+2 logged - 820 kcal extra\", \"FASTING\"; Diet \"AI PLAN\"; Profile \"HYDRATION\", \"PREFERENCES & DATA\", \"SUPPORT\"; screen-reader labels such as \"Open diet tracking\", \"Customize Diet\", \"Diet progress: 43% complete\", \"Weekly insights\", \"Main navigation\". The Hinglish toasts and the CSAT survey ARE translated (Feedback ke liye shukriya!, 5 mein se 4 dein) except the storage toast (card i-20261024-storage-toast-english-hi). ACTION: native Hinglish read (item nyus-f84785) with this list, then fill the real gaps.",
+      "thread": [
+        {
+          "at": "2026-10-25T02:01:02.154Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main d768b657 (merged as a1a538ab, ships in the next build). 1,428 Hinglish values that were still English are now Hinglish, core screens first: values identical to English 2,601 -> 1,189 of 6,627 (the rest are loanwords, names and units, each listed with a reason in docs/i18n/HINGLISH-REVIEW-2026-10-24.md). Today 41 -> 16, Diet 173 -> 90, Workout 224 -> 96, Coach 39 -> 28, Profile 83 -> 54. Every example on this card is translated (Dose (zaroori nahi), Fast ka din:, Poora fast, Roz ki activity, JALDI KE KAAM, Hafte ki Progress, Coach ki bhasha, Madad & FAQ, Logout karein, Content par jaayein, PAANI, PASAND AUR DATA, MADAD, Diet tracking kholo, Mukhya navigation ...) except three kept as loanwords on purpose: 16:8 window, the Good morning greeting, and the FAQ page title. Only hinglish.json values changed: key set unchanged, 0 placeholder or tag mismatches vs en.json. 8 pregnancy / postpartum / underweight safety strings stay English by owner decision. Weekday / month names are a separate follow-up (fix/hinglish-dates). Before / after at 390 px attached (Today, Profile); Diet and Workout in the NYUS Reports channel.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-transient-refresh-welcome-screen",
