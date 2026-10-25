@@ -980,8 +980,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Share menu heading and 'More options' are Hindi (यहाँ शेयर करें / और विकल्प), toasts moved to share_sheet.*; Facebook/Twitter/Instagram/LinkedIn stay as brand names. Test: 'share menu and its not-found toast are Hindi' passes; app main a440d5f3.",
+        "imagePath": "images/i-20261024-hi-share-button-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-share-button-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ce396053ce9159e1d116a3574ccb0912105626fb",
+        "imageCommits": [
+          "ce396053ce9159e1d116a3574ccb0912105626fb"
+        ],
+        "fixedAt": "2026-10-25T23:49:45.426Z",
+        "by": "shakeebshaan",
+        "appCommit": "a440d5f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "toasts proven in the unit test; brand names stay English by design"
+        }
+      },
       "history": [
         {
           "at": "2026-10-25T22:40:00.000Z",
@@ -990,7 +1012,17 @@
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: STILL BROKEN [code read on current main, not run]. Current main src/components/ShareButton.tsx still has English toasts at :29 \"Could not find content to share\", :136 \"Shared successfully.\", :144 \"Image downloaded.\", :149 \"Failed to share. Please try again.\" (hardcoded, not through t()). The toasts only appear on a share action, which a read-only run cannot trigger."
         }
       ],
-      "description": "[P3 / Hindi] ShareButton.tsx: 16 English strings, all toasts and labels of the share flow ('Could not find content to share', 'Shared successfully.', 'Image downloaded.', ...). Used on Daily Focus.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P3 / Hindi] ShareButton.tsx: 16 English strings, all toasts and labels of the share flow ('Could not find content to share', 'Shared successfully.', 'Image downloaded.', ...). Used on Daily Focus.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-25T23:49:45.426Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Share menu heading and 'More options' are Hindi (यहाँ शेयर करें / और विकल्प), toasts moved to share_sheet.*; Facebook/Twitter/Instagram/LinkedIn stay as brand names. Test: 'share menu and its not-found toast are Hindi' passes; app main a440d5f3.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-profile-sheets",
