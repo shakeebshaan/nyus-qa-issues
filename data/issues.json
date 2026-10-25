@@ -2,6 +2,50 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261025-customize-workout-direct-open-crash",
+      "createdAt": "2026-10-25T00:35:05.689Z",
+      "author": "qa",
+      "tags": [
+        "crash",
+        "workout-builder",
+        "p4"
+      ],
+      "route": "/customize/workout (CustomWorkoutBuilder / plan-builder/ActivityTargetCard.tsx:40)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / crash, no in-app link] Found 25 Oct 2026 in a web build of app main 8bf83230 (same code as Play build 316), QA store account, prod API read-only, 390 px. REPRO: signed in, open /customize/workout directly (URL or deep link; nothing in the app links to it, grep finds only the route in App.tsx:859). ACTUAL: the route error screen \"This page couldn't load\" (hi: \"यह पेज लोड नहीं हो पाया\"); console: TypeError: Cannot read properties of undefined (reading 'toLocaleString') from ActivityTargetCard.tsx:40 (value.daily_steps_goal.toLocaleString(), no guard) inside CustomWorkoutBuilder; RouteErrorBoundary logs \"Customize Workout Error\". The in-app path works: Activity > Change workout plan opens /ai/create-workout-plan (\"Build your workout, Day 1 of 7 · 7 built\", 10,500 steps). EXPECTED: the builder, or a redirect to /ai/create-workout-plan; at least no crash when activity_targets is missing from the seed.\n\nImpact is low only because no screen links to the route; any future link or a deep link would crash. HOW TO FIX: guard value.daily_steps_goal (and the other activity_targets fields) in ActivityTargetCard, or redirect the standalone route.",
+      "thread": [],
+      "needsReview": false
+    },
+    {
+      "id": "i-20261025-hi-kg-unit-mixed",
+      "createdAt": "2026-10-25T00:35:05.689Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "units"
+      ],
+      "route": "/activity (Hindi, Workout tab, finished-session rows and Personal bests)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P4 / Hindi] Found 25 Oct 2026 in a web build of app main 8bf83230 (same code as Play build 316) on the QA account, prod API read-only, 390 px, nyus_locale = hi. On /activity the same finished-exercise row mixes two spellings of the unit: \"दर्ज 3 × 8 · 63.4 kg\" and, under it, \"3 सेट दर्ज · 1,522 किग्रा\". The Personal bests card shows \"63.4kg\" and the Today weight card \"kg\". EXPECTED: one spelling per language (the app's own Hindi term किग्रा, or kg everywhere). Cosmetic; no data is wrong.\n\nHOW TO FIX: pick one and route the set-row weight and the best figure through the same unit label key as the volume line.",
+      "thread": [],
+      "needsReview": false
+    },
+    {
       "id": "i-20261024-route-error-screen-english-hi",
       "createdAt": "2026-10-24T11:13:26.655Z",
       "author": "qa",
@@ -48,7 +92,14 @@
           "note": "Both crash variants translated in hi and Hinglish; per-route English titles removed from the screen"
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "FIXED-VERIFIED. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). A real route crash rendered the screen in Hindi: /customize/workout in hi shows \"यह पेज लोड नहीं हो पाया / इस पेज में कोई गड़बड़ी हुई। फिर से कोशिश करने के लिए रीफ़्रेश करें। / रीफ़्रेश करें\" and in en \"This page couldn't load / ... Refresh to try again.\" (the crash itself is filed as i-20261025-customize-workout-direct-open-crash)."
+        }
+      ],
       "description": "Found in a local web build of app main f1394d22 (build 315, versionCode 315; worktree C:/tmp/qa-wt-app, vite build against a mocked API, 390 x 844 at 2x). No prod call, no real account. REPRO: nyus_locale = hi, signed in with a mock user, open /dashboard while GET /dashboard/overview answers 200 with an empty data object (any render crash on a route has the same effect). EXPECTED: the route crash screen in Hindi, like the app-level ErrorBoundary that build 315 translated (error_boundary.title / body in hi.json). ACTUAL: \"Dashboard Error\", \"This page encountered an error. Refresh to try again.\" and the \"Refresh\" button, all English, with the bottom tab bar in Hindi. The chunk-load variant (\"Update available\", \"The app was updated while this page was loading. Refresh to get the new version.\") is English too. Not a regression: this file did not change in 315 and 314 shows the same text; it is the same class of leftover as the 3cc14203 crash screen, on the route-level boundary. Fix: read all four strings (and the fallbackTitle props) through t() with keys in en, hi, hinglish, xx-AE.",
       "thread": [
         {
@@ -57,6 +108,13 @@
           "kind": "resolve",
           "text": "Fixed on app main 839394b5 (Hindi batch 3, on main since 24 Oct 14:59 UTC). RouteErrorBoundary reads title, hint, the chunk-load variant and Refresh through route_error.* (en, hi, hinglish, xx-AE). fallbackTitle ('Dashboard Error' etc.) is now a console log label only, so the screen shows one translated title on every route. Proof re-run on main 47801713: the real RouteErrorBoundary rendered locally at 390 px around a component that throws, in hi (render crash + chunk-load) and Hinglish; no English left on the screen. Tests: RouteErrorBoundary.test.tsx + loading-labels.i18n batch 3 block; full unit suite on 47801713 575 files / 8,671 passed.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED-VERIFIED. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). A real route crash rendered the screen in Hindi: /customize/workout in hi shows \"यह पेज लोड नहीं हो पाया / इस पेज में कोई गड़बड़ी हुई। फिर से कोशिश करने के लिए रीफ़्रेश करें। / रीफ़्रेश करें\" and in en \"This page couldn't load / ... Refresh to try again.\" (the crash itself is filed as i-20261025-customize-workout-direct-open-crash).",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -681,7 +739,14 @@
           "note": "Workout tab leftovers translated (walking-only hero, body-weight date via Intl for hi); plate calculator / exercise picker / volume chart were already on main; picker steps not re-driven live (driver selector drift); native read pending."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Hindi (nyus_locale hi) /activity: every Latin-letter word on the rendered first screens is a food or exercise name from the data (Chicken Oats Upma, Decline Bench Press, Fat Loss Program) or a unit; no English app text. Not reached: plate calculator, exercise picker, leave-group sheet. One small leftover seen: the same set row mixes units, \"63.4 kg\" and \"1,522 किग्रा\" (filed as i-20261025-hi-kg-unit-mixed)."
+        }
+      ],
       "description": "[P2 / Hindi] Workout tab: 32 English strings, plus 17 in ExercisePickerSheet.tsx (shared with the onboarding workout builder) and 8 in LeaveGroupSheet.tsx (shared with diet). PlateCalculatorSheet.tsx 24 ('Plate calculator', 'per side breakdown', ...), ExerciseVolumeChart 3, ExerciseWheelPicker 3, WalkingOnlyHero 1, SessionClosePlate 1. ExercisePickerSheet: 'Add exercise', 'Search exercises…'.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
       "thread": [
         {
@@ -690,6 +755,13 @@
           "kind": "resolve",
           "text": "Fixed on app main ed6dcced (ships in the next normal build). The Workout tab now speaks Hindi and Hinglish: walking-only hero (headline, bullets, CTA), the body-weight date in the set logger (Hindi via Intl, e.g. '4 जन॰'), partner follow banner and leave-group sheet. Plate calculator, exercise picker and volume chart were already translated on main. Skip-reason chips render translated; their English values are what the backend stores. Image: 390 px /activity in hi (top) and Hinglish (bottom), upper and lower part. Checks: tsc 0 errors, full unit suite 8,671 passed, 23 new tests, QA flows recaptured (2b05ade5).",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Hindi (nyus_locale hi) /activity: every Latin-letter word on the rendered first screens is a food or exercise name from the data (Chicken Oats Upma, Decline Bench Press, Fat Loss Program) or a unit; no English app text. Not reached: plate calculator, exercise picker, leave-group sheet. One small leftover seen: the same set row mixes units, \"63.4 kg\" and \"1,522 किग्रा\" (filed as i-20261025-hi-kg-unit-mixed).",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -733,7 +805,14 @@
           "note": "Diet tab sheets, toasts and aria labels translated; checked by hand at 390 px in hi + Hinglish on a fake-API server; native read still pending (nyus-f84785); server text (API errors, meal names) stays as sent."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Hindi (nyus_locale hi) /nutrition: every Latin-letter word on the rendered first screens is a food or exercise name from the data (Chicken Oats Upma, Decline Bench Press, Fat Loss Program) or a unit; no English app text. Not reached on this account: the sheets (macro targets, custom-meal modal, photo tips) - they need taps with writes; the dev proof stands for those."
+        }
+      ],
       "description": "[P2 / Hindi] Diet tab: 42 English strings, plus 17 in MacroTargetsSheet.tsx (shared with Profile). CustomMealModal.tsx 21 ('Photo too large', 'Please add details', ...), useNutritionData.tsx 6 (toasts), SnapTipsCarousel.tsx 6, MealStatusBadge.tsx 5, NutritionPanel.tsx 3, NutritionMealCard.tsx 1. MacroTargetsSheet: 'Enter at least one target', 'Targets updated', ...\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
       "thread": [
         {
@@ -742,6 +821,13 @@
           "kind": "resolve",
           "text": "Fixed on app main ed6dcced (ships in the next normal build). The Diet tab's sheets and toasts now speak Hindi and Hinglish: photo-tips carousel, macro-targets sheet (shared with Profile, incl. its toasts), custom-meal macro fields and AI-estimated badge, snack ideas, food-preference chips, replaced-meal badge, Fiber row, macro-ring labels, meal-card undo label, shopping 'Other' group, partner banner and leave-group sheet. Image: 390 px, hi (top) and Hinglish (bottom): /nutrition, food prefs, macro targets. Checks: tsc 0 errors, full unit suite 8,671 passed, 23 new tests in test/i18n/hindi-diet-workout-tabs.test.tsx, QA flows recaptured (2b05ade5). Units (kcal, g) and FODMAP stay Latin by design.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Hindi (nyus_locale hi) /nutrition: every Latin-letter word on the rendered first screens is a food or exercise name from the data (Chicken Oats Upma, Decline Bench Press, Fat Loss Program) or a unit; no English app text. Not reached on this account: the sheets (macro targets, custom-meal modal, photo tips) - they need taps with writes; the dev proof stands for those.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -787,7 +873,14 @@
           "note": "One English word left on Today: the greeting falls back to 'there' when no first name loads ('सुप्रभात, there'), src/pages/_components/dashboard/DashboardHeader.tsx:29 (|| 'there'), not in this change. Charts checked by test only, not on screen (no chart data in the local capture). Hindi machine-drafted, native read nyus-f84785."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Hindi (nyus_locale hi) /dashboard: every Latin-letter word on the rendered first screens is a food or exercise name from the data (Chicken Oats Upma, Decline Bench Press, Fat Loss Program) or a unit; no English app text. Only the cards above the fold were rendered (sleep, weight, diet, activity, fasting); the 8 charts lower down were not scrolled into view in this pass."
+        }
+      ],
       "description": "[P2 / Hindi] Today / dashboard: 61 English strings. Charts 41 (MeasurementChangeChart, StepsActivityChart, CalorieBalanceChart, MacroAdherenceChart 7 each, FastingTrendChart 5, MicronutrientRadar 4, SleepQualityChart 3, WeightTrendChart 1: titles like 'Calorie Balance', 'No data yet'), ActivityFeedTimeline 5, LockedPlanCard 5 ('Plan build failed', 'Tap retry', 'Talk to coach'), WelcomeBackBanner 4 ('Plan refreshed', \"Couldn't rebuild your plan\"), PartnerChatCard 3, WeeklyInsightsCard 2, CoachIntakeSheet 1.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
       "thread": [
         {
@@ -803,6 +896,13 @@
           "kind": "note",
           "text": "Follow-up landed: the greeting gap noted at review (\"सुप्रभात, there\", DashboardHeader.tsx:29) is fixed in app main 0fa2c451 (fast-forward from 8efc9ca9; ships in the next app build). With no first name the heading is just the translated greeting (English users now see \"Good morning\", no \", there\" - intended); with a name it uses the new key dashboard.greeting_named (en / hi / hinglish, pseudo-locale regenerated). Checks [executed by the NYUS employee on the rebased tip]: typecheck tsconfig.app.json 0 vs 0 baseline; DashboardHeader.greeting.hindi + Today.hindi + Dashboard.page + i18n-builder/launch-copy 465/465; test/i18n 23 files / 815 passed; full npm run test:unit 567 files / 8,585 passed, 22 skipped, 0 failed; pre-push gate 4,085 related tests passed, \"local CI passed in 537.8s\". Hindi machine-drafted, native read nyus-f84785.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Hindi (nyus_locale hi) /dashboard: every Latin-letter word on the rendered first screens is a food or exercise name from the data (Chicken Oats Upma, Decline Bench Press, Fat Loss Program) or a unit; no English app text. Only the cards above the fold were rendered (sleep, weight, diet, activity, fasting); the 8 charts lower down were not scrolled into view in this pass.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -1025,6 +1125,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-check 23 Oct 2026 23:40 UTC. PART 2 VERIFIED LIVE: prod POST /ai/suggest-meals-batch on a capped account now returns HTTP 429 {code ai_daily_cap, \"You've reached today's AI limit. Try again tomorrow, or add meals yourself.\"} in 0.76 s instead of an empty 200 (backend b7f1ab19 deployed, VM HEAD e4a3754d; evidence images/2026-10-23-board-recheck/ev-mealcap.png). PART 1 STILL OPEN: the 23.9 s build (about 22 s in the OpenAI call) was not re-measured because the QA account is at its daily cap; no change to the prompt, model or batching since (git log of app/routes/plan_builder_routes.py shows only b7f1ab19, e4a3754d, 66cd39de, f64dcb54). Not checked: whether the app shows the 429 message."
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "RE-TIME 25 Oct 2026 00:2x UTC (the one blocked by the QA AI cap until 00:00 UTC). Executed on prod, QA account, same request the build sends (3 slots, lead 1/slot + rest 5/slot fired together, vegetarian, lose_weight; script C:/tmp/qa_retime.mjs on the QA box): round 1 lead 10.2 s, deck complete 19.2 s; round 2 lead 6.6 s, deck complete 15.4 s. The 5.1 / 5.4 s first-meals result of 24 Oct 00:01 UTC did not reproduce (LLM latency varies, 6.6-10.2 s today). SECOND FINDING: the decks come back almost empty. The rest call asked for 15 ideas and returned 3 (1 per slot); one breakfast call with count 8 returned 1 idea (\"Suji Paneer Upma\"). The VM log shows the model did write them (OpenAI response tokens=531/1577, content_len 5424) and the route then returned suggs=3, so about 4 in 5 ideas are dropped after generation. The dev's own 24 Oct prod run shows the same (ideas 1-2 per slot of 5-6 asked). Likely place (inspected, not proven): the post-LLM filter in app/routes/plan_builder_routes.py ~2500-2590 (diet/allergen name screen, grounding, the kcal ceiling of 1.25 x slot kcal that sends over-target ideas to a single fallback). User impact: the coach build offers 1-2 meal ideas per slot instead of a deck of 6-8. Needs a log line per drop reason to confirm."
         }
       ],
       "description": "[P2 / performance + error state] After the grounding fix (i-20261023-d1-prod-meal-build-slow, ground= 7.3 s -> 0.1 s, closed) the coach meal build is still slow, and a capped build comes back empty without telling the user.\n\nEVIDENCE (prod nyus_app.log, 23 Oct, read-only):\n- 16:02:47 `OpenAI response: domain=suggest_meal_batch, tokens=516/1892, finish=stop, content_len=6610`\n- 16:02:48 `suggest-meals-batch timing ... ground=0.1s images=1.2s suggs=6`\n- 16:02:48 `SLOW_REQUEST POST /api/v1/ai/suggest-meals-batch 200 23863ms db=47ms queries=17`\n  -> 23.9 s total, about 22 s is the OpenAI call (1,892 output tokens for 6 meals, ~85 tokens/s); 516 input tokens, so the prompt is not the cost.\n- 16:03:45 `user_cost_cap reached ... reason=daily_cost_cap_reached -> fallback`, then `suggest-meals-batch: non-JSON LLM response ... (likely fallback), returning empty`\n  -> the 'empty' build was NOT a bad model reply: the account hit its daily AI cost cap, the fallback text failed JSON parsing and the route returned an empty list silently.\n\nWANTED: (1) first meals on screen fast: cut the time to the first meal (e.g. stream or split the batch so meal 1 renders first, fewer output tokens per meal, a faster model for this batch if quality holds), measured before/after from the prod log; (2) a cap-reached build returns a clear 'daily AI limit reached, try again tomorrow or add meals yourself' state instead of an empty list (distinguish cap/fallback from a real non-JSON reply; retry only a real non-JSON reply, once). OpenAI spend stays inside the NYUS spend guard and the per-user cap.",
@@ -13305,7 +13411,14 @@
           "note": "Verified by Play API read-back, not a store-page screenshot (the public page can lag). Hindi line is machine-drafted; native read open as nyus-f84785. Tests: full unit suite on 82613a61 = 8418 passed, 1 failed (stale seam test from the vary->cycle rename); fixed in 72dd60e3, that file 15/15, pre-push gate green."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "FIXED-VERIFIED. Play API, read-only edit (created, listings read, edit deleted) 25 Oct 00:27 UTC: en-US, en-GB and hi-IN full descriptions no longer contain \"wall of badges\" or \"Precise data, quiet design\"; CALM BY DESIGN now reads \"Quiet design, zero hype. No neon and no gimmicks. Achievements are there if you want them.\" (en-US/en-GB). Lengths 2776 / 2776 / 2699, so the text has moved on since the 23 Oct fix (the 24 Oct ASO and pricing edits); the badge line is still correct."
+        }
+      ],
       "description": "[P2 claims / Play listing] The live en-US and en-GB full description (read through the Play API, read-only edit, 23 Oct 08:00 UTC) still says: Precise data, quiet design, zero hype. No neon, no gimmicks, no wall of badges. The app has an Achievements screen with a badge catalog, earned badges, levels and share cards (App.tsx:876, pages/Achievements.tsx, 43 badges). The repo source dropped that line in app commit 8b2d6d3f, but the corrected text is not on Play. FIX: replace the line on Play with: Quiet design, zero hype. No neon and no gimmicks. Achievements are there if you want them. (Dropping Precise data is deliberate: photo estimates are approximate.) Both languages carry the same text; hi-IN does not contain the line. Store-listing text needs Shaan yes; the NYUS employee pushes it.",
       "needsReview": false,
       "thread": [
@@ -13321,6 +13434,13 @@
           "kind": "resolve",
           "text": "Live Play full description fixed 23 Oct 16:48 UTC on Shaan's yes (nyus-4deebd, A): the 'no wall of badges' / 'precise data' line was replaced in en-US, en-GB and hi-IN, nothing else. Pre-check: live text byte-equal to docs/play-listing-live/live-2026-10-23. Read back from the Play API in a fresh edit: byte-equal to fix-badges-2026-10-23 in all three; title and short description unchanged; lengths 2680/2680/2699.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED-VERIFIED. Play API, read-only edit (created, listings read, edit deleted) 25 Oct 00:27 UTC: en-US, en-GB and hi-IN full descriptions no longer contain \"wall of badges\" or \"Precise data, quiet design\"; CALM BY DESIGN now reads \"Quiet design, zero hype. No neon and no gimmicks. Achievements are there if you want them.\" (en-US/en-GB). Lengths 2776 / 2776 / 2699, so the text has moved on since the 23 Oct fix (the 24 Oct ASO and pricing edits); the badge line is still correct.",
+          "by": "qa"
         }
       ]
     },
@@ -13530,7 +13650,14 @@
           "note": "Backend verified on prod by log; app hang fix verified by a failing-then-passing test and full suite, reaches phones with the next Play build (not yet seen on a real phone); Hindi strings machine-drafted."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "FIXED-VERIFIED for what this card fixed (grounding / DB time). Prod nyus_app.log read-only: suggest-meals-batch timing lines of 25 Oct 00:26 UTC show ground=0.0-0.1s (was 7.3 s); SLOW_REQUEST db=10-25 ms on the 24 Oct runs (was ~7,200 ms). The remaining wait is the LLM, tracked on i-20261023-meal-build-llm-latency, where today's re-time is recorded: it did NOT reproduce the 5 s first-meals claim."
+        }
+      ],
       "description": "[P3 / first two days, TOP 3, slow screen > 3 s, measured on PROD] Read-only from the prod nyus_app.log SLOW_REQUEST lines of 23 Oct: POST /ai/suggest-meals-batch 29.6 s and 45.0 s (11:23 UTC), POST /ai/suggest-meal 28.6 s and 11.9 s (11:39 UTC), POST /onboarding/save-custom-plan 4.4 s (11:53 UTC). This is the 'Build your meals' step of onboarding, the longest wait a tester has in the first minutes. The app does show 'Reading your goals...', 'Taking a bit longer than usual', a Continue to my plan button and 'Finishing your meals - continuing automatically' [executed locally], so it is not a dead screen, but 30-45 s is where a first-day tester gives up. In the local run the mock LLM returned non-JSON, so meals came back empty and the screen stayed on 'Finishing your meals - continuing automatically' for over 2 minutes with empty Breakfast/Lunch/Dinner and no message that the AI failed: the AI-failure path needs a visible message and a retry. Fix idea: build one meal first, cache the first batch, and add an explicit failure message. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
       "reportPath": "reports/meal-build-slow-status.html",
       "reportLabel": "Landed: nyu_backend 6e340c63 live, app 113d3d47 on main; after-timing pending first prod build",
@@ -13541,6 +13668,13 @@
           "kind": "resolve",
           "text": "Backend nyu_backend 6e340c63 live 23 Oct 15:06 UTC (per-term grounding cache + boot warm-up, 100/100 foods in 30.8s): first prod build after it 23.9 s, ground=0.1s, db 47 ms / 17 queries (before 29.6 s / 31.3 s, ground=7.3s, db ~7.2 s / 56 queries). App 113d3d47 on main: 60 s deadline per coach build, Try again toast, late answers ignored; no more silent 'Finishing your meals' hang. Hindi strings machine-drafted, need a native read.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED-VERIFIED for what this card fixed (grounding / DB time). Prod nyus_app.log read-only: suggest-meals-batch timing lines of 25 Oct 00:26 UTC show ground=0.0-0.1s (was 7.3 s); SLOW_REQUEST db=10-25 ms on the 24 Oct runs (was ~7,200 ms). The remaining wait is the LLM, tracked on i-20261023-meal-build-llm-latency, where today's re-time is recorded: it did NOT reproduce the 5 s first-meals claim.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -13653,6 +13787,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-check 23 Oct 2026 (inspected): STILL OPEN. src/components/activity/StrengthStrip.tsx:148 and :182 always render fmtKg(weight_kg) + 'kg', so a bodyweight 0 kg best still shows as '0 kg'. Not re-run live: a workout log is a prod write and this board check is read-only."
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "FIXED-VERIFIED (supersedes the 23 Oct STILL OPEN, which predated the fix). QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Code on main: StrengthStrip.tsx:45 loaded = best.weight_kg > 0, an unloaded best shows reps and the unit label \"Reps\" (lines 49-55 featured tile, 147-166 rows). Executed: test/StrengthStrip.test.tsx, test/TodaysActivityCard.test.tsx, test/Activity.extra.test.tsx = 56 passed, including \"a best with no added load shows the reps, not 0 kg; loaded bests keep kg\". Live /activity (hi) renders the new Personal bests card with loaded bests as \"63.4kg  x 8 reps\"; the QA account has no zero-load best, so the 0 kg case itself was proven by the test, not on the live card."
         }
       ],
       "description": "[P3 / first workout] After logging 3 sets of Wide Push-Up (bodyweight, 10 reps, 0 kg added) the Activity page shows a Personal bests card: 'NEW PERSONAL BEST, Wide Push-Up, 0 kg, x 10 reps, today'. A 0 kg personal best on the first ever workout reads as a bug and cheapens the badge. The set rows in the logger also say '10 reps x 0kg'. Fix idea: for bodyweight exercises show reps instead of kg, or do not celebrate a PB with zero load on the first log. On the same page 'Total Volume 0kg' and 'COMPLETED 0 / 36' stay at 0 after the first exercise is completed (Sets 3/18 and 1/6 exercises do update), so the session card looks broken until the day ends. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
@@ -13663,6 +13803,13 @@
           "kind": "resolve",
           "text": "A personal best with no added load shows '12 reps', not '0 kg x 12 reps'. Landed on app main 689fbb2e (fix abb6bed1), ships in Play build 313.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED-VERIFIED (supersedes the 23 Oct STILL OPEN, which predated the fix). QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Code on main: StrengthStrip.tsx:45 loaded = best.weight_kg > 0, an unloaded best shows reps and the unit label \"Reps\" (lines 49-55 featured tile, 147-166 rows). Executed: test/StrengthStrip.test.tsx, test/TodaysActivityCard.test.tsx, test/Activity.extra.test.tsx = 56 passed, including \"a best with no added load shows the reps, not 0 kg; loaded bests keep kg\". Live /activity (hi) renders the new Personal bests card with loaded bests as \"63.4kg  x 8 reps\"; the QA account has no zero-load best, so the 0 kg case itself was proven by the test, not on the live card.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -13718,6 +13865,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-check 23 Oct 2026, executed on current app main 5ef9ee7d (prod-read web build, QA account, every write blocked, 390 px) and prod backend e4a3754d, en, /activity: STILL OPEN. The card reads 'Workout sessions this week 2/7' with 7 day dots (src/components/activity/TodaysActivityCard.tsx:333, and the aria text at :339, hard-code 7). The denominator is not the plan's training days. Shot: images/2026-10-23-board-recheck/en-activity.png."
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "FIXED-VERIFIED (supersedes the 23 Oct STILL OPEN, which predated the fix). QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Executed: weeklySessionTarget test in test/TodaysActivityCard.test.tsx (\"the plan's sessions, else the 7 days\") passes. Live /activity: \"This week 4 / 7 sessions\" for the QA account, whose plan is 84 sessions over 12 weeks (7 a week), so 7 is the plan's own number; a 3-day plan reading 2/3 is covered by the test only (no 3-day account to walk)."
         }
       ],
       "description": "[P4 / confusion] A tester who just built a 3-day plan (Push, Pull, Legs) sees 'Workout sessions this week 0/7' with a row of seven days, on day 1 and 1/7 on day 2. The target is 7 although the plan has 3 training days, so a tester who trains exactly as planned always looks 4 sessions behind. Fix idea: use the plan's days per week as the denominator. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
@@ -13728,6 +13881,13 @@
           "kind": "resolve",
           "text": "Workout sessions this week now counts against the plan's training days (weeklySessionTarget): a 3-day plan reads 2/3, not 2/7. Landed on app main 689fbb2e (fix 26e8805d), ships in Play build 313. Screen-reader label still says 'of 7 days logged'; reword queued to dev.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED-VERIFIED (supersedes the 23 Oct STILL OPEN, which predated the fix). QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Executed: weeklySessionTarget test in test/TodaysActivityCard.test.tsx (\"the plan's sessions, else the 7 days\") passes. Live /activity: \"This week 4 / 7 sessions\" for the QA account, whose plan is 84 sessions over 12 weeks (7 a week), so 7 is the plan's own number; a 3-day plan reading 2/3 is covered by the test only (no 3-day account to walk).",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -13818,6 +13978,12 @@
               "note": "Main complaint fixed and tested (no scold before lunch or on day 1, welcome copy en/hi/hinglish); the secondary idea (tie the after-meal tip to the logged meal) is not done."
             }
           }
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Live /nutrition in en and hi, 06:00 IST, one meal logged and one skipped: the red \"Missing meals compounds fast\" tip is absent, and the tip reads \"Chicken Oats Upma logged. Next up: Dinner.\" + \"Fish Palak Rice is next on your plan.\" (hi: \"Chicken Oats Upma लॉग हो गया। अगला: डिनर।\") - parts 1 and 2 pass. NOT verified: part 3 (the Today tip): the Today screen showed no after-meal line in this session (the Morning Ledger echo did not appear), so part 3 rests on the dev tests only. A fresh account in its first minute still cannot be walked on prod."
         }
       ],
       "description": "[P4 / tone] In the first minute after sign-up, with nothing yet due, Today's Nutrition shows a red-tinted tip 'Missing meals compounds fast. One correction now fixes the day.', and on day 2 'Protein is still catchable' with 0 meals logged. For a brand-new tester this reads as a scolding for something they could not have done yet; the tip shown after the first meal ('Ghee in moderation is not the enemy') has nothing to do with the meal logged (poha). Fix idea: no missed-meal tips on the account's first day or before the first meal slot has passed; tie the tip to what was logged. Method [executed 23 Oct 2026]: web build of nyus-well-tracker origin/main 33ebbfbe (app code = Play build 310) at 390 px against a LOCAL nyu_backend origin/main b519fa63 (in-memory sqlite, mock LLM, OTP code captured by the harness; a closed-tester flag forced on, day 2 = every date in the local DB shifted back one day). Fresh fake account qa.day1.tester@example.test, nothing touched on prod. Not a phone: native reminders, push and Health Connect were inspected in code only.",
@@ -13841,6 +14007,13 @@
           "kind": "resolve",
           "text": "Complete fix, three parts, all on app main; ships in the next normal app build (versionCode 316 / 1.10.27 or later, no separate Play upload). Part 1 (65cff65c): no red missed-meals tip in the first minute after sign-up or before lunch. Part 2 (1aba7e1f): the Nutrition tip after a log names that meal and what is next on the plan ('Poha logged. Next up: Lunch.' + 'Dal rice is next on your plan.'). Part 3 (ce0d8c1b): the Today tip (Morning Ledger line; coach deck card for users without a subscription) uses the same after-meal line. A log from the last 2 h (or a plan meal marked eaten) wins over the workout-done / behind / streak lines; an older log gives way to a real shortfall after lunch; the Activity card still shows the workout state. Screens (390 px, local web build, fake API, poha eaten, account 3 days old): Nutrition en, Today en, Today hi, Today hinglish. Tests: 13 new fixed-clock tests (test/hooks-useDashboardMoment.after-meal.test.tsx) + part 2's 11; typecheck 0 errors; full unit suite on the rebased head 578 files / 8,703 passed, 0 failed; pre-push gate 114 / 114.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "PARTLY VERIFIED, status left fixed. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Live /nutrition in en and hi, 06:00 IST, one meal logged and one skipped: the red \"Missing meals compounds fast\" tip is absent, and the tip reads \"Chicken Oats Upma logged. Next up: Dinner.\" + \"Fish Palak Rice is next on your plan.\" (hi: \"Chicken Oats Upma लॉग हो गया। अगला: डिनर।\") - parts 1 and 2 pass. NOT verified: part 3 (the Today tip): the Today screen showed no after-meal line in this session (the Morning Ledger echo did not appear), so part 3 rests on the dev tests only. A fresh account in its first minute still cannot be walked on prod.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -13935,7 +14108,14 @@
           "note": "Landed on both mains; backend live (watcher DEPLOYED 6e340c63 -> 7804ecda, migration diet_plans_002_cycle applied, health 200, 0 errors in the 10-min window). Phones get it with build 312."
         }
       },
-      "history": [],
+      "history": [
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "FIXED-VERIFIED (server half). QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Executed on prod, zero-write: POST /onboarding/save-custom-plan with repeat_mode cycle and (a) Day 2 with no meals -> 400 CYCLE_DAY_EMPTY \"Day 2 has no meals - add food to it or remove it.\"; (b) day_index 1 then 3 -> 400 CYCLE_DAYS_NOT_CONTIGUOUS; (c) 8 days -> 400 CYCLE_DAYS_INVALID \"A diet cycle has 1 to 7 days.\"; current-diet read before and after is byte-identical (nothing written). Not re-run live: the app half (Day tab text + blocked Save) needs a builder walk with writes; it ships in build 312+ and was not exercised here."
+        }
+      ],
       "description": "[P3 / behaviour to settle BEFORE the Day 1..N cycle change lands] In Vary by day, a tester who builds Mon, Tue, Wed (Mon 689 kcal, Tue 565, Wed 565) and leaves Thu to Sun empty sees empty tabs with a 'Copy Monday's meals' button, but after Save plan the plan has meals on every day: GET /diet/plan?date=2026-10-29 (Thu) returns '689 kcal . P:18.7g C:151.9g F:1.8g' and /onboarding/custom-plan/current-diet returns thursday..sunday with 2 ingredients each, i.e. empty days were filled with Monday's meals. The payload itself (buildDietPayloadDays, src/lib/builder-payload.ts:72) only sends days with ingredients, so the fill happens on the server and the UI never says so. Same family: a vary plan whose 7 days are identical is stored and re-opened as Repeat mode 'same' with one day. Both may be intended, but they decide what a Day 1..N cycle means, so please confirm the intended rule (empty day = repeat Monday? skip? rest day?) and show it on the empty tab. What checks out: the weekday mapping (Tue 2026-10-27 = 565, Wed 28 = 565, Fri 23 = 689), kcal and macros equal the builder totals, no duplicate meals after two saves and a reload (meals=1 per day). Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes.",
       "thread": [
         {
@@ -13944,6 +14124,13 @@
           "kind": "resolve",
           "text": "Rule settled (Governor GO 23 Oct): what the user sees is what gets saved. In the new Day 1..N cycle (build 312+) there is no silent fill: an empty Day tab says 'Day 3 has no meals - copy a day into it or remove it.' with Copy Day 1's meals + Remove Day 3, and Save is blocked ('Fill or remove Day 3 to continue', footer 'Go to Day 3' from other tabs). The payload sends every cycle day and refuses an empty one (EmptyCycleDayError). Server: a cycle save with an empty day, a gap or >7 days is a 400 (CYCLE_DAY_EMPTY / CYCLE_DAYS_NOT_CONTIGUOUS / CYCLE_DAYS_INVALID) before anything is written, the old compaction to a shorter cycle is gone, and the bridge no longer fills a cycle day from day 1. Weekday plans and builds <=311 keep the Monday fill on purpose (today's plan, coach today/tomorrow and the Saturday re-bridge read it), unchanged. Commits on feat/diet-day-cycle: app 13c30aa3 (branch head 0ae53855), backend f64dcb54 (branch head 7804ecda). Tests: app tsc 0 + pre-push CI 3641 passed; backend full suite on 7804ecda 8625 passed / 21 skipped; test/copy-diet-day.test.ts now covers every export (18 tests). QA re-run on the local harness (app 1b18bf3c = same patches, backend 7804ecda): 6/6 pass incl. hi. Lands with the cycle (backend deploy, then app build 312).",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED-VERIFIED (server half). QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). Executed on prod, zero-write: POST /onboarding/save-custom-plan with repeat_mode cycle and (a) Day 2 with no meals -> 400 CYCLE_DAY_EMPTY \"Day 2 has no meals - add food to it or remove it.\"; (b) day_index 1 then 3 -> 400 CYCLE_DAYS_NOT_CONTIGUOUS; (c) 8 days -> 400 CYCLE_DAYS_INVALID \"A diet cycle has 1 to 7 days.\"; current-diet read before and after is byte-identical (nothing written). Not re-run live: the app half (Day tab text + blocked Save) needs a builder walk with writes; it ships in build 312+ and was not exercised here.",
+          "by": "qa"
         }
       ],
       "needsReview": false
@@ -14029,6 +14216,12 @@
           "event": "retested",
           "by": "qa",
           "note": "QA re-check 23 Oct 2026: CANNOT TEST on prod: the repro needs a save-custom-plan write on the QA account and this check is read-only. No commit touched the save or reopen path since the report (plan_builder_routes.py history: b7f1ab19, e4a3754d, 66cd39de, f64dcb54 only, none about names). Treat as still open."
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "FIXED-VERIFIED. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). VM HEAD 350e1075 contains b570d5d9 (git merge-base --is-ancestor, executed). tests/test_bridge_single_catalog_food.py on the fix: 9 passed (executed). Live read: GET /onboarding/custom-plan/current-diet on the QA account, 21 ingredient names, none is a bare preparation word (Cooked, Raw ...). Not re-run: the write round trip (save then read) - it rewrites the QA account's diet; the dev's own 24 Oct 20:16 UTC prod round trip stands."
         }
       ],
       "description": "[P3 / data round trip] A day whose only ingredient is 'Chana Dal (Split Chickpea), Cooked' (100 g, 124 kcal) is saved fine, but current-diet and the reopened /customize/diet show TWO ingredients: 'Chana Dal (Split Chickpea)' 50 g and 'Cooked' 50 g (62 kcal each; the total stays 124 kcal). The name is split at the comma and the grams are halved; the second row is not a food. Reproduced by POSTing the same payload to main 6e340c63 (a weekday vary plan, Monday = that one ingredient: current-diet returned 'Chana Dal (Split Chickpea)@50+Cooked@50'). A day that also holds another ingredient (poha + the same dal) came back intact in the copy-a-day run, so it seems to need a single-ingredient meal. Steps: Vary by day, Day 1 breakfast = search 'dal' > 'Chana Dal (Split Chickpea), Cooked' > Add, Save plan, reopen /customize/diet, Day 1. Many catalog names contain a comma, so this will hit real plans: after the next save the split rows are what the plan contains. Found 23 Oct 2026 ~15:40 UTC in the diet-cycle verification [executed]: local nyu_backend (in-memory sqlite) at origin/main 6e340c63 AND at branch feat/diet-day-cycle 7804ecda, fake account qa.local@example.test, so it is not caused by the cycle change.",
@@ -14039,6 +14232,13 @@
           "kind": "resolve",
           "text": "Fixed in nyu_backend b570d5d9, live since 24 Oct 20:15:44 UTC. Root cause: _bridge_diet_to_legacy treated every single-food meal as an LLM combined name and split it on , / + / & / with / and. A meal whose one food carries a catalog food_id now skips that repair (no split, no slot template), and _split_combined_food_name never splits off a bare preparation word (Cooked, Raw, Boiled ...); a real combined LLM name ('Rice + Dal') is still split. Prod check [executed] 20:16 UTC on the QA test account: save-custom-plan with a snack of only fd_699 'Chana Dal (Split Chickpea), Cooked' 100 g, then GET current-diet: one item, full name, 100 g, 124 kcal/100 g. The account's original diet was saved back and matches exactly. Tests: tests/test_bridge_single_catalog_food.py (9; 5 failed on old main); full backend suite on b570d5d9 8,904 passed before the push; deploy watcher DEPLOYED, VM HEAD = origin/main, health 200, 0 new errors.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-10-25T00:35:05.689Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED-VERIFIED. QA re-test 25 Oct 2026 00:3x UTC. App checks: web build of app main 8bf83230 (same app code as Play build 316, 45de71ff), served on localhost, signed in as the QA store account against the PROD API, every write answered locally, 390 px; API checks: prod nyus.in on the QA account (zero-write) and the VM (read-only). VM HEAD 350e1075 contains b570d5d9 (git merge-base --is-ancestor, executed). tests/test_bridge_single_catalog_food.py on the fix: 9 passed (executed). Live read: GET /onboarding/custom-plan/current-diet on the QA account, 21 ingredient names, none is a bare preparation word (Cooked, Raw ...). Not re-run: the write round trip (save then read) - it rewrites the QA account's diet; the dev's own 24 Oct 20:16 UTC prod round trip stands.",
+          "by": "qa"
         }
       ],
       "needsReview": false
