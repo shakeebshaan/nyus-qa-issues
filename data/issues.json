@@ -71,11 +71,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "The hardcoded aria 'Go back' in nine files now uses common.go_back. Live web build in Hindi: back button aria is वापस जाएं on /tdee-calculator, /workout-history, /daily-focus, 0 English 'Go back' labels. Test: no aria-label=\"Go back\" anywhere in src; app main a440d5f3.",
+        "imagePath": "images/i-20261025-pageshell-go-back-aria-english-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-pageshell-go-back-aria-english-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d9ba45ac2ba08af9ba1bca39ee62c78856b7c880",
+        "imageCommits": [
+          "d9ba45ac2ba08af9ba1bca39ee62c78856b7c880"
+        ],
+        "fixedAt": "2026-10-25T23:49:57.959Z",
+        "by": "shakeebshaan",
+        "appCommit": "a440d5f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "live DOM read on 3 screens plus a src-wide test"
+        }
+      },
       "history": [],
       "description": "[P4 / Hindi, screen reader] Found 25 Oct 2026 in the board sweep, web build of app main 236b0908, hi, 390 px, aria-label/placeholder/title scan with the board's usual Latin-only regex. The back button of every PageShell page has the hardcoded aria-label \"Go back\": found on /tdee-calculator, /weight-history-chart, /workout-history (and /weight-history). A Hindi screen-reader user hears English. The key already exists (common.go_back: hi.json lines 114, 299, 358; CoachChatHeader.tsx:45 and BodyComposition.tsx:597 use it). i-20261022-hi-aria-leftovers was verified only on /dashboard, /plan-timeline and /profile, so it did not cover these. FIX: t('common.go_back') in the five files above.",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-25T23:49:57.959Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "The hardcoded aria 'Go back' in nine files now uses common.go_back. Live web build in Hindi: back button aria is वापस जाएं on /tdee-calculator, /workout-history, /daily-focus, 0 English 'Go back' labels. Test: no aria-label=\"Go back\" anywhere in src; app main a440d5f3.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
