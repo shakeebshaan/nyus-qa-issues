@@ -851,8 +851,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "ChoosePlan price suffixes read /माह in Hindi; the 1.5x/2x AI-limit lines and the Core/Elite taglines now have keys. Test: 'ChoosePlan has no literal /mo suffix' passes; app main a440d5f3.",
+        "imagePath": "images/i-20261024-hi-paywall-suffix-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261024-hi-paywall-suffix-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d47a6550fc4a4a4671fd22bcd84a1858e42c7e6d",
+        "imageCommits": [
+          "d47a6550fc4a4a4671fd22bcd84a1858e42c7e6d"
+        ],
+        "fixedAt": "2026-10-25T23:45:56.822Z",
+        "by": "shakeebshaan",
+        "appCommit": "a440d5f3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "web build at 390px; Hindi is a draft for the native read nyus-f84785"
+        }
+      },
       "history": [
         {
           "at": "2026-10-25T22:40:00.000Z",
@@ -861,7 +883,17 @@
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: STILL BROKEN [executed on current app main 236b0908 / prod]. Reproduced on app main 236b0908, hi, /choose-plan: plan rows show \"₹433/mo\" and \"₹417/mo\" (English suffix) next to Hindi labels. Also new on the same screen: the feature row \"2× daily AI request limits (daily AI usage cap same on every plan)\" is English. Proof: images/2026-10-25-sweep/choose-plan-hi.png."
         }
       ],
-      "description": "[P4 / Hindi] ChoosePlan.tsx is otherwise Hindi; the price suffix '/mo' (line ~1331) and '/ mo' (line ~1589) stay English next to the Hindi plan names.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026."
+      "description": "[P4 / Hindi] ChoosePlan.tsx is otherwise Hindi; the price suffix '/mo' (line ~1331) and '/ mo' (line ~1589) stay English next to the Hindi plan names.\n\nHOW TO FIX: same pattern as fix/hindi-meal-customize and fix/hindi-coach-chat: t() keys in en / hi / hinglish, pseudo-locale regenerated (node scripts/generate-pseudo-locale.mjs), hi in Devanagari, hinglish in Latin, both machine-drafted for the native read nyus-f84785, plus a test that renders the screen in Hindi and finds no English app text (units kcal/g/ml/kg may stay Latin). Counts are from a static scan (lower bound: strings held in consts are not counted). Found by the dev sub-agent's Hindi first-week audit, 24 Oct 2026.",
+      "thread": [
+        {
+          "at": "2026-10-25T23:45:56.822Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "ChoosePlan price suffixes read /माह in Hindi; the 1.5x/2x AI-limit lines and the Core/Elite taglines now have keys. Test: 'ChoosePlan has no literal /mo suffix' passes; app main a440d5f3.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261024-hi-global-toasts",
