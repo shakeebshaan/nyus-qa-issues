@@ -10296,7 +10296,7 @@
     {
       "id": "i-20260717-gbc1",
       "createdAt": "2026-07-17T20:38:40.558Z",
-      "status": "open",
+      "status": "fixed",
       "route": "/shopping-list",
       "description": "[suggestion] Weekly grocery-list cost estimate + running budget on the Shopping List screen. Problem: Indian users are price-sensitive week-to-week grocery spend, but ShoppingList.tsx / ShoppingListItem has no price field at all — the list shows qty+unit only, no cost signal, while Blinkit/Zepto deep-links already exist for the same items. Evidence: grep of ShoppingListItem + ShoppingList.tsx shows zero cost/budget fields; comparable apps (Cult.fit, HealthifyMe) surface an estimated weekly grocery spend to reinforce diet-plan adherence via cost awareness. Proposed v1: backend attaches a per-item avg-price estimate (static INR price table by ingredient, refreshed manually) to the /shopping-list response; FE sums to a \"~₹XXX this week\" pill at the top of ShoppingList.tsx, no per-store live pricing needed. Effort: ~1-2 days (small backend price table + one route field, small FE sum+pill).",
       "imagePath": null,
@@ -10308,7 +10308,31 @@
         "suggestion",
         "auto"
       ],
-      "fix": null,
+      "fix": {
+        "description": "FIXED (app main be9662c6). The weekly ₹ estimate now renders on both surfaces. /shopping-list: unblocked by the numeric fix (the string quantities made toQuantityGrams drop every item's grams, so nothing was priced). Nutrition > More plan actions > Shopping list (the modal): it summed per-row est_price_inr, which the list never carries; Nutrition now fetches the same POST /grocery/estimate-costs the page uses and the modal's closing 'Est. total' row shows the range. Proof [executed, 26 Oct 02:31 UTC]: local web build vs prod API, QA account, 390 px, This Week: modal 'Est. total ≈ ₹690–₹1,194' (image 1), page plate 'Estimated weekly cost ≈ ₹690–₹1,194' with per-item ranges (image 2). Tests: test/shopping-list.api-numbers.test.tsx (modal range + page). Reaches users with the next Play build / OTA.",
+        "imagePath": "images/i-20260717-gbc1-fix-r2.png",
+        "imagePaths": [
+          "images/i-20260717-gbc1-fix-r2.png",
+          "images/i-20260717-gbc1-fix-r2-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "c6a9b6cfd4abf71784393c8466e68160a3cb30b9",
+        "imageCommits": [
+          "c6a9b6cfd4abf71784393c8466e68160a3cb30b9",
+          "2431d2ce857f917563b6a136a87278cf11a5def0"
+        ],
+        "fixedAt": "2026-10-26T02:32:15.433Z",
+        "by": "shakeebshaan",
+        "appCommit": "86599ad3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Both surfaces show the estimate on prod data (QA account, 390 px)"
+        }
+      },
       "history": [
         {
           "at": "2026-10-22T14:35:30.116Z",
@@ -10380,6 +10404,13 @@
           "who": "owner",
           "kind": "reopen",
           "text": "QA re-test 22 Oct on the live build (release/307 web bundle vs prod API, QA account, 390px): /shopping-list CRASHES to the error screen ('Nutrition Error - This page encountered an error') and shows no list or cost estimate. Console: 'TypeError: t.toFixed is not a function' (ShoppingList chunk). Cause: GET /api/v1/diet/shopping-list returns every item's quantity as a STRING (\"140.00\", Decimal serialised; all 90 items for the QA week of 2026-10-19), and src/pages/ShoppingList.tsx:79-82 formatQty(qty:number) calls qty.toFixed(1) on it (strings fail the qty === Math.floor(qty) test). Used at :162 (share text), :329 (aria-label), :352 (row). Fix either side: Number(item.quantity) in the page (also in toQuantityGrams, :109) or float(quantity) in nyu_backend backend.py ~8995-9025 (quantity = ri.quantity is a Decimal). Acceptance: open /shopping-list for an account with a plan, the list renders with quantities (1 decimal max) and the estimated weekly cost; vitest with quantity as a string. Screenshot images/2026-10-22-oldqa/shop-en.png."
+        },
+        {
+          "at": "2026-10-26T02:32:15.433Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED (app main be9662c6). The weekly ₹ estimate now renders on both surfaces. /shopping-list: unblocked by the numeric fix (the string quantities made toQuantityGrams drop every item's grams, so nothing was priced). Nutrition > More plan actions > Shopping list (the modal): it summed per-row est_price_inr, which the list never carries; Nutrition now fetches the same POST /grocery/estimate-costs the page uses and the modal's closing 'Est. total' row shows the range. Proof [executed, 26 Oct 02:31 UTC]: local web build vs prod API, QA account, 390 px, This Week: modal 'Est. total ≈ ₹690–₹1,194' (image 1), page plate 'Estimated weekly cost ≈ ₹690–₹1,194' with per-item ranges (image 2). Tests: test/shopping-list.api-numbers.test.tsx (modal range + page). Reaches users with the next Play build / OTA.",
+          "by": "shakeebshaan"
         }
       ]
     },
