@@ -84,10 +84,45 @@
         "99fbba26a3c0d6a63e22d1c0b389d28c9a4c9872"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed live in nyu_backend 702adb24 (deployed 26 Oct 10:44:59 UTC, health 200, 0 errors since restart). Cause: the plan generator gives every food in every generated meal its own ingredient row named '<food> <12 hex>' (it must: each row carries that serving's exact macros), and GET /diet/shopping-list merged only identical names, so nothing merged and the suffix showed. Fix (endpoint, read time, so existing and new plans both): rows group on the suffix-stripped name + unit, mixed units stay separate rows, quantities are summed, ingredient_id is the smallest merged source id (stable) plus ingredient_ids, and a real DB category wins over 'other'. Generation is unchanged on purpose (reusing one row per name would mix per-serving macros). No DB edit. Live QA account, same plan before/after: This Week 108 rows / 10 foods -> 10 rows, every total equal to the sum of the old rows (Onion (Raw) 600 g, Tomato (Raw) 600 g, MCT Oil 90 g, Fish 2310 g, Chicken 840 g, Palak Saag 750 g, Okra/Bhindi (Cooked) 720 g, Rice Flour 660 g, Wheat Flour/Atta 390 g, Oats 210 g); Today 18 -> 10 rows; 0 names with a hex suffix. Tests: tests/test_shopping_list_merge.py + test_shopping_list_numbers.py 6/6 on 702adb24 in the land; full suite on the same change 9372 passed, 22 skipped, 0 failed. Prod regex check (qa, read-only): all 97,711 matching ingredient names are generated rows (category other), no real catalog name matches. Screens: before 08:29 UTC, after 10:48 UTC.",
+        "imagePath": "images/i-20261026-shopping-list-duplicate-ingredient-rows-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261026-shopping-list-duplicate-ingredient-rows-fix-r1.png",
+          "images/i-20261026-shopping-list-duplicate-ingredient-rows-fix-r1-2.png",
+          "images/i-20261026-shopping-list-duplicate-ingredient-rows-fix-r1-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f9b06f806468435520d8e7eb311705b171bba261",
+        "imageCommits": [
+          "f9b06f806468435520d8e7eb311705b171bba261",
+          "0a2beb4121ee120faa86420a9bb5b4e986949dd7",
+          "2d7ba8270e17b013c933f71d89207ceaa762ac4d"
+        ],
+        "fixedAt": "2026-10-26T10:48:44.482Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Meets the card goal live (10 rows, totals exact). Gaps: the /shopping-list page keeps ticks in localStorage keyed by name+unit, so ticks saved under old suffixed names are dropped once; a backend comment says the modal ticks by ingredient_id (it ticks by index) - wording only. Generation still creates per-meal rows by design."
+        }
+      },
       "history": [],
-      "description": "[P3 / data shape + usability] Reproduced 26 Oct 2026 in the web build of app main (C:/tmp/qa-app-dist-p2, 390 x 844 at 2x, seeded Edge) with EVERY /api call answered locally: the 114 rows are MOCK data shaped like the real ones (base name + a 12-character code, quantity as a string), not the QA account. The live QA account could not be read: its saved login now answers 401 \"Token has been revoked\" on GET /auth/me and on GET /diet/shopping-list, and a fresh session needs Shaan's yes (ops/qa_mint_session.py). Nothing was written to prod. SYMPTOM (dev, on the QA account): the shopping list shows 114 separate rows, and each row carries a code in its name, e.g. \"Tomato (Raw) 60b984a49095\", so the same food appears many times and its quantities are never added up (the screenshot shows the Nutrition Shopping List pop-up; every row ends in the code; the whole list sits in one OTHER group). CAUSE (inspected, not run): plan_generator.py:3427-3429 creates a NEW Ingredient row for every food in every meal (\"Always create a new ingredient with exact macros for this food\", name = food name + uuid4 hex[:12], category \"other\"). The shopping-list endpoint merges only rows whose ingredient.name matches exactly (backend.py:9311-9333), and no two of these names match, so nothing merges and the code leaks into the visible name. NOT MEASURED: how many of the 114 live rows would merge by base name. That needs one GET of /diet/shopping-list on the QA account (this card will get the number once a session exists: rows -> distinct base name + unit). WHICH FIX: display-side (strip a trailing 12-hex token in nutrition.service normalizeShoppingList and sum by base name + unit) repairs the pop-up and /shopping-list at once, but checkedItems is keyed by ingredient_id (Nutrition.tsx, Set<number>) and the cost estimate posts per-item ids, so the merged row needs a stable id and the estimate must use the merged quantity. Backend-side (aggregate on the base name in backend.py:9311, strip the token) fixes every client and every EXISTING plan in one place and is the smaller change; stopping the per-plan copies at plan_generator.py:3427 only fixes plans generated after the change. Suggested: backend aggregation now, then stop appending the token to the stored name (keep a separate unique column if one is needed). Also note category is \"other\" for all generated copies, so the grouping by category in the pop-up is lost."
+      "description": "[P3 / data shape + usability] Reproduced 26 Oct 2026 in the web build of app main (C:/tmp/qa-app-dist-p2, 390 x 844 at 2x, seeded Edge) with EVERY /api call answered locally: the 114 rows are MOCK data shaped like the real ones (base name + a 12-character code, quantity as a string), not the QA account. The live QA account could not be read: its saved login now answers 401 \"Token has been revoked\" on GET /auth/me and on GET /diet/shopping-list, and a fresh session needs Shaan's yes (ops/qa_mint_session.py). Nothing was written to prod. SYMPTOM (dev, on the QA account): the shopping list shows 114 separate rows, and each row carries a code in its name, e.g. \"Tomato (Raw) 60b984a49095\", so the same food appears many times and its quantities are never added up (the screenshot shows the Nutrition Shopping List pop-up; every row ends in the code; the whole list sits in one OTHER group). CAUSE (inspected, not run): plan_generator.py:3427-3429 creates a NEW Ingredient row for every food in every meal (\"Always create a new ingredient with exact macros for this food\", name = food name + uuid4 hex[:12], category \"other\"). The shopping-list endpoint merges only rows whose ingredient.name matches exactly (backend.py:9311-9333), and no two of these names match, so nothing merges and the code leaks into the visible name. NOT MEASURED: how many of the 114 live rows would merge by base name. That needs one GET of /diet/shopping-list on the QA account (this card will get the number once a session exists: rows -> distinct base name + unit). WHICH FIX: display-side (strip a trailing 12-hex token in nutrition.service normalizeShoppingList and sum by base name + unit) repairs the pop-up and /shopping-list at once, but checkedItems is keyed by ingredient_id (Nutrition.tsx, Set<number>) and the cost estimate posts per-item ids, so the merged row needs a stable id and the estimate must use the merged quantity. Backend-side (aggregate on the base name in backend.py:9311, strip the token) fixes every client and every EXISTING plan in one place and is the smaller change; stopping the per-plan copies at plan_generator.py:3427 only fixes plans generated after the change. Suggested: backend aggregation now, then stop appending the token to the stored name (keep a separate unique column if one is needed). Also note category is \"other\" for all generated copies, so the grouping by category in the pop-up is lost.",
+      "thread": [
+        {
+          "at": "2026-10-26T10:48:44.482Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed live in nyu_backend 702adb24 (deployed 26 Oct 10:44:59 UTC, health 200, 0 errors since restart). Cause: the plan generator gives every food in every generated meal its own ingredient row named '<food> <12 hex>' (it must: each row carries that serving's exact macros), and GET /diet/shopping-list merged only identical names, so nothing merged and the suffix showed. Fix (endpoint, read time, so existing and new plans both): rows group on the suffix-stripped name + unit, mixed units stay separate rows, quantities are summed, ingredient_id is the smallest merged source id (stable) plus ingredient_ids, and a real DB category wins over 'other'. Generation is unchanged on purpose (reusing one row per name would mix per-serving macros). No DB edit. Live QA account, same plan before/after: This Week 108 rows / 10 foods -> 10 rows, every total equal to the sum of the old rows (Onion (Raw) 600 g, Tomato (Raw) 600 g, MCT Oil 90 g, Fish 2310 g, Chicken 840 g, Palak Saag 750 g, Okra/Bhindi (Cooked) 720 g, Rice Flour 660 g, Wheat Flour/Atta 390 g, Oats 210 g); Today 18 -> 10 rows; 0 names with a hex suffix. Tests: tests/test_shopping_list_merge.py + test_shopping_list_numbers.py 6/6 on 702adb24 in the land; full suite on the same change 9372 passed, 22 skipped, 0 failed. Prod regex check (qa, read-only): all 97,711 matching ingredient names are generated rows (category other), no real catalog name matches. Screens: before 08:29 UTC, after 10:48 UTC.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261025-focus-calendar-all-missed",
