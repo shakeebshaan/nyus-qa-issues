@@ -23,10 +23,46 @@
         "99fbba26a3c0d6a63e22d1c0b389d28c9a4c9872"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Independent QA of 33937442 (off main be9662c6), 390x844, real pages with mocked API (QA session revoked). Shopping Sheet: sweep of all 20 rows, main 29 hits on nav/coach button vs branch 0; real taps on Carrot (last row) and Tomato tick. Morning-ledger takeover covers the nav on the branch, main lets the nav show through. Pull-to-refresh identical on all 7 pages (indicator only in the gap, refresh fires, short pull snaps back). First-meal reminder sheet and milestone overlay are mounted globally and render above the nav on both. Full unit suite 583 files / 8761 tests pass, build ok.",
+        "imagePath": "images/i-20261026-shopping-list-modal-under-nav-and-coach-fab-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261026-shopping-list-modal-under-nav-and-coach-fab-fix-r1.png",
+          "images/i-20261026-shopping-list-modal-under-nav-and-coach-fab-fix-r1-2.png",
+          "images/i-20261026-shopping-list-modal-under-nav-and-coach-fab-fix-r1-3.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "0f72951c1ade94aa13eab0b96d57cbdf85739e5e",
+        "imageCommits": [
+          "0f72951c1ade94aa13eab0b96d57cbdf85739e5e",
+          "05b7d50b8c96941078e004ec2a6a229c891a868c",
+          "ff6ea2fabf6789b241ad9bbd284dc14f0db4769f"
+        ],
+        "fixedAt": "2026-10-26T07:14:06.179Z",
+        "by": "shakeebshaan",
+        "appCommit": "33937442",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 93,
+          "bar": 90,
+          "note": "Independent QA at 390x844 main vs branch, mocked API: shopping sheet 29 blocked hits -> 0, Carrot/Tomato tap; ledger takeover covers nav (main: nav shows through); PTR identical on 7 pages; reminder/celebration global, unchanged; full unit 8761 pass, build ok"
+        }
+      },
       "history": [],
-      "description": "[P2 / content unreachable] Reproduced 26 Oct 2026 in the web build of app main (C:/tmp/qa-app-dist-p2, 390 x 844 at 2x, seeded Edge) with EVERY /api call answered locally: the 114 rows are MOCK data shaped like the real ones (base name + a 12-character code, quantity as a string), not the QA account. The live QA account could not be read: its saved login now answers 401 \"Token has been revoked\" on GET /auth/me and on GET /diet/shopping-list, and a fresh session needs Shaan's yes (ops/qa_mint_session.py). Nothing was written to prod. REPRO: Nutrition -> the ... menu -> Shopping list, scroll the list to the end. RESULT at 390 x 844: the bottom sheet runs to y 844, but the bottom nav (top y 766) and the coach button (the \"Chat with <coach name>\" circle, y 676-732, right edge) are painted OVER it. At the end of the list the last two rows are under the nav (rows at y 737-782 and 782-827, nav from 766): the final row is not visible at all and cannot be ticked, and the coach button covers the quantity of the two rows above (quantities of the 3rd and 4th from last). So with this list the hidden items are the last two, \"Egg (Boiled)\" and \"Oats\" in the mock; on any list it is whatever the last two rows are, 78 px of the sheet (about 1.7 rows) is lost. CAUSE (inspected + measured): the pop-up overlay is z-50 and the button is z-30 (FloatingCoachButton.tsx:36-38 says it must stay below sheets), but RefreshableScreen.tsx:45 gives the whole page a stacking context (relative z-[1]), so the overlay competes inside that z-1 context while the button and the nav are root-level siblings above it. Measured ancestors of the pop-up: overlay fixed z-50 -> \"bg-background relative z-[1]\". Expect the same for every other sheet opened from a RefreshableScreen page (not tested). FIX options: render the pop-up through a portal at body level (best, also covers the other sheets), or drop the z-[1] on RefreshableScreen, or hide the coach button and nav while a sheet is open; and add bottom padding to the list equal to the nav height + safe area so the last row can be scrolled clear."
+      "description": "[P2 / content unreachable] Reproduced 26 Oct 2026 in the web build of app main (C:/tmp/qa-app-dist-p2, 390 x 844 at 2x, seeded Edge) with EVERY /api call answered locally: the 114 rows are MOCK data shaped like the real ones (base name + a 12-character code, quantity as a string), not the QA account. The live QA account could not be read: its saved login now answers 401 \"Token has been revoked\" on GET /auth/me and on GET /diet/shopping-list, and a fresh session needs Shaan's yes (ops/qa_mint_session.py). Nothing was written to prod. REPRO: Nutrition -> the ... menu -> Shopping list, scroll the list to the end. RESULT at 390 x 844: the bottom sheet runs to y 844, but the bottom nav (top y 766) and the coach button (the \"Chat with <coach name>\" circle, y 676-732, right edge) are painted OVER it. At the end of the list the last two rows are under the nav (rows at y 737-782 and 782-827, nav from 766): the final row is not visible at all and cannot be ticked, and the coach button covers the quantity of the two rows above (quantities of the 3rd and 4th from last). So with this list the hidden items are the last two, \"Egg (Boiled)\" and \"Oats\" in the mock; on any list it is whatever the last two rows are, 78 px of the sheet (about 1.7 rows) is lost. CAUSE (inspected + measured): the pop-up overlay is z-50 and the button is z-30 (FloatingCoachButton.tsx:36-38 says it must stay below sheets), but RefreshableScreen.tsx:45 gives the whole page a stacking context (relative z-[1]), so the overlay competes inside that z-1 context while the button and the nav are root-level siblings above it. Measured ancestors of the pop-up: overlay fixed z-50 -> \"bg-background relative z-[1]\". Expect the same for every other sheet opened from a RefreshableScreen page (not tested). FIX options: render the pop-up through a portal at body level (best, also covers the other sheets), or drop the z-[1] on RefreshableScreen, or hide the coach button and nav while a sheet is open; and add bottom padding to the list equal to the nav height + safe area so the last row can be scrolled clear.",
+      "thread": [
+        {
+          "at": "2026-10-26T07:14:06.179Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Independent QA of 33937442 (off main be9662c6), 390x844, real pages with mocked API (QA session revoked). Shopping Sheet: sweep of all 20 rows, main 29 hits on nav/coach button vs branch 0; real taps on Carrot (last row) and Tomato tick. Morning-ledger takeover covers the nav on the branch, main lets the nav show through. Pull-to-refresh identical on all 7 pages (indicator only in the gap, refresh fires, short pull snaps back). First-meal reminder sheet and milestone overlay are mounted globally and render above the nav on both. Full unit suite 583 files / 8761 tests pass, build ok.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261026-shopping-list-duplicate-ingredient-rows",
