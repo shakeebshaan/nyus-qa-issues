@@ -75,11 +75,43 @@
         "aac6962eccaee00a09883a9eccb6841ba4ddc046"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED (app main be9662c6, commits 86599ad3 + be9662c6). Cause: GET /diet/shopping-list sends every quantity as a string (\"140.00\", Decimal column); formatQty called qty.toFixed. nutrition.service now coerces every numeric field at the boundary (normalizeShoppingList / normalizeGroceryCosts). Proof [executed, 26 Oct 02:2x UTC]: local web build of be9662c6 vs prod API, QA account (qa.flow.mira.r20261025t), 390 px - before: 'This page couldn't load', console 'qty.toFixed is not a function'; after: 114 rows render with the weekly cost '≈ ₹690–₹1,194' (images: after, before). Tests: test/shopping-list.api-numbers.test.tsx (real service on the real string payload), CI gate 89 files / 1,172 passed. Backend also serializes numbers on nyu_backend fix/shopping-list-numeric-quantity (and stops a 500 when a re-portioned ingredient meets a recipe Decimal) - waiting for its land. Reaches users with the next Play build / OTA.",
+        "imagePath": "images/i-20261025-shopping-list-route-crash-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-shopping-list-route-crash-fix-r1.png",
+          "images/i-20261025-shopping-list-route-crash-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "9496f5c57a5ba36111cec5c934cc564e34c68ba7",
+        "imageCommits": [
+          "9496f5c57a5ba36111cec5c934cc564e34c68ba7",
+          "f9643fb2acc984eae9118053edfc3afe37e77eab"
+        ],
+        "fixedAt": "2026-10-26T02:31:40.056Z",
+        "by": "shakeebshaan",
+        "appCommit": "86599ad3",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Reproduced and fixed on a local build vs prod API; backend half on a branch"
+        }
+      },
       "history": [],
       "description": "[P2 / crash, reproduced on prod data] Found 25 Oct 2026 in the board sweep, web build of app main 236b0908 against the PROD API, QA account, every write answered locally, 390 px, en and hi. REPRO: open /shopping-list (the Shopping list button on Weekly meal plan, or the coach's view-grocery action). Result: \"This page couldn't load\" (RouteErrorBoundary). Console: TypeError \"t.toFixed is not a function\" at ShoppingList chunk (formatQty). CAUSE (executed + inspected): GET /api/v1/diet/shopping-list?days=7&start_date=... returns each quantity as a STRING (\"quantity\":\"140.00\", Decimal serialized as text) while ShoppingList.tsx:80-81 types it as a number (types/api.ts:553) and calls qty.toFixed(1). The Nutrition screen's Shopping list MODAL is fine because ShoppingListModal.tsx:60 wraps Number(item.quantity). Knock-on: the weekly rupee cost estimate that i-20260717-gbc1 asked for is built on this page (ShoppingList.tsx:104-112) and is unreachable while it crashes. FIX: coerce Number(i.quantity) at the service boundary (nutrition.service getShoppingList) or in formatQty/toQuantityGrams, and keep the type honest (number | string); add a test whose fixture uses the string form the API really sends.",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-26T02:31:40.056Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED (app main be9662c6, commits 86599ad3 + be9662c6). Cause: GET /diet/shopping-list sends every quantity as a string (\"140.00\", Decimal column); formatQty called qty.toFixed. nutrition.service now coerces every numeric field at the boundary (normalizeShoppingList / normalizeGroceryCosts). Proof [executed, 26 Oct 02:2x UTC]: local web build of be9662c6 vs prod API, QA account (qa.flow.mira.r20261025t), 390 px - before: 'This page couldn't load', console 'qty.toFixed is not a function'; after: 114 rows render with the weekly cost '≈ ₹690–₹1,194' (images: after, before). Tests: test/shopping-list.api-numbers.test.tsx (real service on the real string payload), CI gate 89 files / 1,172 passed. Backend also serializes numbers on nyu_backend fix/shopping-list-numeric-quantity (and stops a 500 when a re-portioned ingredient meets a recipe Decimal) - waiting for its land. Reaches users with the next Play build / OTA.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
