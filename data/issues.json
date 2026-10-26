@@ -290,8 +290,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED (app main be9662c6, commit 49683057). Same class as the shopping-list crash: an API number that is not a number. The builder copied /ai/suggest-activity-targets' answer field by field; an answer without daily_steps_goal (empty AI reply, or a draft missing the field) left it undefined and ActivityTargetCard's toLocaleString crashed the route. Now lib/activity-targets.withActivityDefaults keeps the current value for any field that is not a real number (AI answer, prefill, restored draft) and the card never trusts a field. Proof [executed, 26 Oct 02:1x UTC]: local web build vs prod API, QA account, 390 px, /customize/workout opened directly with the AI answer stubbed as {} (the state that crashed: reproduced before the fix, 'Cannot read properties of undefined (reading toLocaleString)' at ActivityTargetCard): renders 'Build your workout', 8,000 steps (image). Tests: test/activity-targets.test.tsx + 2 builder tests in fe-builders-workout (empty answer, draft without a step goal). Reaches users with the next Play build / OTA.",
+        "imagePath": "images/i-20261025-customize-workout-direct-open-crash-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-customize-workout-direct-open-crash-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "d3fe1c5f22702c40e730ac30bbd874a25da6b9bc",
+        "imageCommits": [
+          "d3fe1c5f22702c40e730ac30bbd874a25da6b9bc"
+        ],
+        "fixedAt": "2026-10-26T02:32:19.505Z",
+        "by": "shakeebshaan",
+        "appCommit": "49683057",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Exact crash reproduced (empty AI answer) and gone; the real-world trigger is inferred"
+        }
+      },
       "history": [
         {
           "at": "2026-10-25T22:40:00.000Z",
@@ -301,7 +323,15 @@
         }
       ],
       "description": "[P4 / crash, no in-app link] Found 25 Oct 2026 in a web build of app main 8bf83230 (same code as Play build 316), QA store account, prod API read-only, 390 px. REPRO: signed in, open /customize/workout directly (URL or deep link; nothing in the app links to it, grep finds only the route in App.tsx:859). ACTUAL: the route error screen \"This page couldn't load\" (hi: \"यह पेज लोड नहीं हो पाया\"); console: TypeError: Cannot read properties of undefined (reading 'toLocaleString') from ActivityTargetCard.tsx:40 (value.daily_steps_goal.toLocaleString(), no guard) inside CustomWorkoutBuilder; RouteErrorBoundary logs \"Customize Workout Error\". The in-app path works: Activity > Change workout plan opens /ai/create-workout-plan (\"Build your workout, Day 1 of 7 · 7 built\", 10,500 steps). EXPECTED: the builder, or a redirect to /ai/create-workout-plan; at least no crash when activity_targets is missing from the seed.\n\nImpact is low only because no screen links to the route; any future link or a deep link would crash. HOW TO FIX: guard value.daily_steps_goal (and the other activity_targets fields) in ActivityTargetCard, or redirect the standalone route.",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-26T02:32:19.505Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED (app main be9662c6, commit 49683057). Same class as the shopping-list crash: an API number that is not a number. The builder copied /ai/suggest-activity-targets' answer field by field; an answer without daily_steps_goal (empty AI reply, or a draft missing the field) left it undefined and ActivityTargetCard's toLocaleString crashed the route. Now lib/activity-targets.withActivityDefaults keeps the current value for any field that is not a real number (AI answer, prefill, restored draft) and the card never trusts a field. Proof [executed, 26 Oct 02:1x UTC]: local web build vs prod API, QA account, 390 px, /customize/workout opened directly with the AI answer stubbed as {} (the state that crashed: reproduced before the fix, 'Cannot read properties of undefined (reading toLocaleString)' at ActivityTargetCard): renders 'Build your workout', 8,000 steps (image). Tests: test/activity-targets.test.tsx + 2 builder tests in fe-builders-workout (empty answer, draft without a step goal). Reaches users with the next Play build / OTA.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
