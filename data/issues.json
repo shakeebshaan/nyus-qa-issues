@@ -15599,8 +15599,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Verified by QA 26 Oct 2026 on the build Play serves. Play API read-only: closed track alpha = 317 (1.10.28) completed. aapt2 dump permissions on Play's own universal APK for 317: 49 permission lines, com.google.android.gms.permission.AD_ID = 0 and android.permission.ACCESS_ADSERVICES_* = 0, 11 health permissions kept, no WRITE_EXERCISE. Merged manifest carries google_analytics_adid_collection_enabled=false. The release AAB for 316 gives the same result (46 permissions, none of the five). Source: AndroidManifest.xml:130-134 tools:node=remove for AD_ID and the four ACCESS_ADSERVICES permissions (dc80ba17, an ancestor of the 317 release commit 51a1579f). Console side (Shaan, nyus-797703, done): screenshots show Advertising ID = No saved and Publishing overview Changes in review: Advertising ID declaration updated; nyus.in/privacy (live, 25 Oct) says the app does not request the advertising ID and Firebase Analytics is set not to read it. Tests: no code changed by this check; the app gate for 317 was 8,706 passed / 0 failed (dev, LAUNCH_TODO B152) [reported, not re-run by QA]. Not a permission: uses-library android.ext.adservices (required=false) and the play-services-ads-identifier library stay in the bundle.",
+        "imagePath": "images/i-20261023-a3-ad-id-permission-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-a3-ad-id-permission-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "179606e4a05065639a8218020b5dbe1c2d9a9176",
+        "imageCommits": [
+          "179606e4a05065639a8218020b5dbe1c2d9a9176"
+        ],
+        "fixedAt": "2026-10-26T12:52:08.708Z",
+        "by": "shakeebshaan",
+        "appCommit": "51a1579f",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Build side proven by execution on the Play-served 317 and every closing condition in the card is met; the Console No is seen only in Shaan's screenshots and was still in Play review, not confirmed published."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -15616,15 +15638,20 @@
         }
       ],
       "description": "[P2 / Play production access, found in the A3 walk 23 Oct 07:50 UTC, 6 days before the earliest apply] The Play-served build 309 (1.10.20) requests com.google.android.gms.permission.AD_ID and four android.permission.ACCESS_ADSERVICES_* permissions. They are not in the repo manifest: they are merged in by com.google.firebase:firebase-analytics (android/app/build.gradle:100). The store listing says no ads and the privacy page says Health Connect data is never used for advertising, and it names a Firebase Analytics app-instance ID but not the Advertising ID. A Console Advertising ID declaration of No while the bundle carries AD_ID can block a release; Yes needs the Data safety form to match. Executed: aapt2 dump permissions on the universal APK Play generates for versionCode 309. FIX (decide first): either declare Yes for analytics in Console App content > Advertising ID and mention it in Data safety and the privacy page, or add tools:node=remove entries for AD_ID and the four ACCESS_ADSERVICES permissions to AndroidManifest.xml, ship a new closed-track build and re-run aapt2. Owner: Shaan (Console answer), NYUS employee (manifest and build). Evidence table: docs/PLAY_PRODUCTION_ACCESS.md section 4 (23 Oct rows) and 5b R3 on branch qa/a3-checklist-oct23.",
-      "needsReview": true,
-      "reviewReason": "Not duplicated: the Console side is Shaan's list item nyus-797703 (App content > Advertising ID = No, Data safety Device IDs without an ad purpose). Build side: builds 310+ strip AD_ID and the 4 ACCESS_ADSERVICES_* (app dc80ba17; aapt2 on the 310 bundle). This card closes when aapt2 on the next Play-served build (generatedApks) shows no AD_ID and nyus-797703 is done.",
-      "reviewedAt": "2026-10-23T23:44:20.613Z",
+      "needsReview": false,
       "thread": [
         {
           "at": "2026-10-23T23:44:20.613Z",
           "who": "claude",
           "kind": "review",
           "text": "Not duplicated: the Console side is Shaan's list item nyus-797703 (App content > Advertising ID = No, Data safety Device IDs without an ad purpose). Build side: builds 310+ strip AD_ID and the 4 ACCESS_ADSERVICES_* (app dc80ba17; aapt2 on the 310 bundle). This card closes when aapt2 on the next Play-served build (generatedApks) shows no AD_ID and nyus-797703 is done."
+        },
+        {
+          "at": "2026-10-26T12:52:08.708Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Verified by QA 26 Oct 2026 on the build Play serves. Play API read-only: closed track alpha = 317 (1.10.28) completed. aapt2 dump permissions on Play's own universal APK for 317: 49 permission lines, com.google.android.gms.permission.AD_ID = 0 and android.permission.ACCESS_ADSERVICES_* = 0, 11 health permissions kept, no WRITE_EXERCISE. Merged manifest carries google_analytics_adid_collection_enabled=false. The release AAB for 316 gives the same result (46 permissions, none of the five). Source: AndroidManifest.xml:130-134 tools:node=remove for AD_ID and the four ACCESS_ADSERVICES permissions (dc80ba17, an ancestor of the 317 release commit 51a1579f). Console side (Shaan, nyus-797703, done): screenshots show Advertising ID = No saved and Publishing overview Changes in review: Advertising ID declaration updated; nyus.in/privacy (live, 25 Oct) says the app does not request the advertising ID and Firebase Analytics is set not to read it. Tests: no code changed by this check; the app gate for 317 was 8,706 passed / 0 failed (dev, LAUNCH_TODO B152) [reported, not re-run by QA]. Not a permission: uses-library android.ext.adservices (required=false) and the play-services-ads-identifier library stay in the bundle.",
+          "by": "shakeebshaan"
         }
       ]
     },
