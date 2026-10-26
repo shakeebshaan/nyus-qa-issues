@@ -109,11 +109,41 @@
         "087fbe0c79487e010dc7b0444fb6f95c560d4f7c"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "FIXED in nyu_backend e020ccbf (calendar_days built from the streaks' source dates). Verified live after the watcher deployed it (07:37:48 UTC, health 200, 0 errors, no rollback): GET /focus/2026/10 for the QA account with activity streak 4 now returns activity_only for 15, 21, 22, 24 and 25 Oct (was missed for every day); Sept shows 12 Sep. Read-only in-process call, 0 commits. Targeted tests incl. test_focus_calendar_source.py passed in the land run.",
+        "imagePath": "images/i-20261025-focus-calendar-all-missed-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-focus-calendar-all-missed-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f652724fc196f76047a51260c002aa11f6ef6e2d",
+        "imageCommits": [
+          "f652724fc196f76047a51260c002aa11f6ef6e2d"
+        ],
+        "fixedAt": "2026-10-26T08:08:44.307Z",
+        "by": "shakeebshaan",
+        "appCommit": "e020ccbf",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Live read-only check on prod after auto-deploy: calendar_days now matches the streak source dates; no write"
+        }
+      },
       "history": [],
       "description": "[P2 / calendar contradicts the streak rings] Found 25 Oct 2026 while proving the Daily Focus FAB card, web build of app main 236b0908 against the PROD API, QA account, 390 px. REPRO: open /daily-focus. The ring row says ACTIVITY 4 day streak, but the month calendar underneath shows no logged day at all and the caption reads 'No logged days yet this month - tap below to start.' Prod API: GET /focus/2026/10 returns streaks.activity.current = 4 and calendar_days status 'missed' for every day from 2026-10-01 to 2026-10-25 (the account logged workouts on 21, 24 and 25 Oct and ate planned meals on 21 and 22 Oct; GET /dashboard/overview?day=2026-10-25 shows logged_activity_count 3). ROOT CAUSE (code read, nyu_backend origin/main b74c9d4a): the streaks were moved to source data in 26dc8028 (_source_diet_dates / _source_activity_dates), but calendar_days is still built from DailyLog.diet_completed / activity_completed via get_calendar_day_status (backend.py:7254-7276). Nothing writes those flags except PUT /daily-logs (backend.py:18624-18637), which the app does not call, so for a real user every past day is 'missed'. Same class as i-20260714-dfdc, whose fix did not cover calendar_days. EXPECTED: day status from the same source dates as the streaks (both / diet only / activity only / missed). FIX IDEA: in DailyFocusResource.get compute diet_dates = _source_diet_dates(user_id, first_day, last_day) and activity_dates likewise, and derive status from set membership (keep breaks if the DailyLog row says is_*_break).",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-26T08:08:44.307Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "FIXED in nyu_backend e020ccbf (calendar_days built from the streaks' source dates). Verified live after the watcher deployed it (07:37:48 UTC, health 200, 0 errors, no rollback): GET /focus/2026/10 for the QA account with activity streak 4 now returns activity_only for 15, 21, 22, 24 and 25 Oct (was missed for every day); Sept shows 12 Sep. Read-only in-process call, 0 commits. Targeted tests incl. test_focus_calendar_source.py passed in the land run.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
