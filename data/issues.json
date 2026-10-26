@@ -2,6 +2,54 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261026-new-users-auto-paused-day-one",
+      "createdAt": "2026-10-26T21:35:13.000Z",
+      "author": "qa",
+      "tags": [
+        "retention",
+        "notifications",
+        "first-week",
+        "p2",
+        "backend"
+      ],
+      "route": "nyu_backend app/services/notification_service.py:489-513 update_auto_pause (3 unopened logs in 48h, no account-age guard); app/services/notification_jobs.py:341 auto_pause_sweep (nightly); notification_service.py:390-392 (scheduled pushes then suppressed); reset only via backend.py:5445 <- backend.py:17236 /notifications/<id>/track-open <- app src/pages/Notifications.tsx:212",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / retention, found 26 Oct 2026 in the real-user first-week check, prod DB read-only] New accounts lose their scheduled reminders about one day after signup. Real accounts ever created: 10; auto-paused: 4. All 4 were paused 25.3 to 28.2 hours after signup (ids 4049929e, 8b943a09, be17f978, e9e9c8a9) [executed, notification_preferences.auto_paused_at vs users.created_at]. In the last 7 days both new real accounts (4049929e, be17f978) were paused at 18:45 UTC the next day and then had 8 scheduled pushes suppressed with reason auto_paused (be17f978); neither came back after signup day (last_active within 1 h of signup, 0 meals ticked, 0 workouts). e9e9c8a9 did return after being paused and is STILL paused (the reset only happens from track-open).\n\nRoot cause [inspected nyu_backend main 0bc4fb32]: update_auto_pause pauses a user when their last 3 non-suppressed notification_logs in 48 h all have opened_at NULL (notification_service.py:500-506). Three notifications (achievement, breakfast reminder, mental-health check-in) exist in the first day, and opened_at is only written by POST /notifications/<id>/track-open, which the app calls only when the user taps a row in the in-app Notifications list (src/pages/Notifications.tsx:212). Tapping the push itself, or opening the app, never counts: opened_at is set for only 2 users in the whole table (5 rows of 1,193 logs) [executed]. The nightly sweep (notification_jobs.py:341) then flips auto_paused and Check 3 suppresses every scheduled push (notification_service.py:390-392). This cancels B190 (first-3-days push priority, 0bc4fb32): the 2 daily slots are reserved for a user who is paused on day 2.\n\nFix options (dev decides): (a) no auto-pause for an account younger than 7 days, in update_auto_pause; (b) count app opens (users.last_active) and notifications.read_at as engagement, not only opened_at; (c) call track-open / reset_auto_pause when a push is tapped and on app open. Test: a fixture with 3 unopened logs on a 30-hour-old account must stay unpaused; a paused user who opens the app is unpaused. Aggregates and short internal ids only; no personal data.",
+      "thread": [],
+      "needsReview": false
+    },
+    {
+      "id": "i-20261026-deferred-reminders-never-sent",
+      "createdAt": "2026-10-26T21:35:13.000Z",
+      "author": "qa",
+      "tags": [
+        "retention",
+        "notifications",
+        "reminders",
+        "p2",
+        "backend"
+      ],
+      "route": "nyu_backend app/services/notification_service.py:411-427 (Check 7 send-time optimization sets suppressed=True with reason send_time_deferred_to_<h>h) and :280 should_defer_scheduled_notification; no job re-sends a deferred notification",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P2 / reminders that never fire, found 26 Oct 2026 in the real-user first-week check, prod DB read-only] A scheduled notification that send-time optimization 'defers' is recorded as suppressed and never sent. Last 30 days, all accounts: 95 notifications suppressed with send_time_deferred_to_18h (87) or _20h (8); for 0 of them did a push of the same type get accepted within the next 26 hours [executed: notification_logs suppressed=1 joined to notifications, then a same-user same-type push_sent=1 within 26 h]. By type: reminder 66, health_score_quiz_reminder 13, streak_update 8, weekly_report 8. Real accounts affected in the last 14 days: a89ce183 (9 rows), be17f978 (1), 4049929e (1); the notifications rows exist with push_sent=0 and an empty push_error, so the user sees them only if they open the in-app list.\n\nRoot cause [inspected nyu_backend main 0bc4fb32]: Check 7 in send_notification (notification_service.py:411-427) sets suppressed=True and suppression_reason='send_time_deferred_to_<optimal_hour>h' for scheduled notifications. The word deferred implies a later send, but nothing re-sends it (grep of app/ finds the string only at this line; the scheduled jobs run at their fixed times and do not retry). Fix options: (a) treat deferral as a real deferral: queue the push with a send_at and have a job send it at that hour; (b) remove Check 7 for reminder and first-3-days types and send at the scheduled time; (c) at least log it as dropped, not 'deferred'. Test: a deferred reminder is delivered at the optimal hour (or sent now when the check is off) and push_sent becomes 1. Aggregates and short internal ids only; no personal data.",
+      "thread": [],
+      "needsReview": false
+    },
+    {
       "id": "i-20261026-shopping-list-modal-under-nav-and-coach-fab",
       "createdAt": "2026-10-26T03:05:24.027Z",
       "author": "qa",
