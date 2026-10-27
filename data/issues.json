@@ -18,11 +18,40 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed and live: nyu_backend dd91ac4e, deployed 27 Oct 15:29 UTC (health 200, 0 errors). generate_diet_plan now checks every AI reply for all 7 days and the profile's meals_per_day. A short reply is retried once with a note naming the gaps. If it is still short, a ValueError is raised before the week's rows are deleted, so callers keep the old week. Tests: full suite 9,468 passed, 0 failed; targeted diet set 1,106 passed. Live check on prod, one real AI build on the QA plan, rolled back: the first reply was missing day 7, the check caught it and retried, and the retry gave 21 meals over 7 days (3 per day); the week kept its 21 original rows.",
+        "imagePath": "images/i-20261026-llm-diet-week-saved-with-missing-days-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261026-llm-diet-week-saved-with-missing-days-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "f8372556846010f693fe376622100f16f8eec790",
+        "imageCommits": [
+          "f8372556846010f693fe376622100f16f8eec790"
+        ],
+        "fixedAt": "2026-10-27T15:36:26.246Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root cause fixed and proven live on a real truncated reply. Not covered: the raise path on prod (both attempts short) was proven only in tests, since the live retry succeeded."
+        }
+      },
       "history": [],
       "description": "[P2 / diet plan incomplete week, found 26 Oct 2026 22:3x UTC in the independent B189 live check] The LLM diet-week generator saves whatever days the model returns and never checks that the week is complete. Executed on prod with the DEPLOYED code (nyu_backend main ccfb29e7, VM HEAD) on a QA plan (plan 208, QA account, week number 91), inside one transaction that was rolled back afterwards (db.session.commit patched to flush; after rollback the plan had the same 0 rows in scratch weeks and the profile was unchanged): for the non-veg profile (target 1,851 kcal, 4 meals a day) generate_diet_plan returned 16 rows = days 1-4 only. Days 5, 6 and 7 do not exist, no error was raised, no retry happened, and the call returned normally. The veg (28 rows) and under-1,400 kcal (target 1,200, 28 rows) builds were complete. So a real user's rolled-over week can have empty days (days 5-7 of the week show no meals).\n\nCause [inspected]: B189 added a retry only for 'every food at 0 g' days (_zero_gram_days) and for invalid JSON. After that, the loop `for raw_day in plan_data['days']: day = _validate_day(raw_day); if day is None: ... continue` silently skips an invalid day, and a reply with fewer than 7 days (or days with fewer meals than meals_per_day) is accepted as is. The caller only falls back to repeating the previous week (_carry_week_forward in scheduler_jobs.py) when generation RAISES, so a short week is saved and the old week is not carried.\n\nFix (dev decides): after the day loop, require 7 distinct days and meals_per_day meals on each; if not, retry once (like the 0 g path) and if still short raise ValueError so the caller keeps the previous week. Test: a mocked reply with 4 days must raise (or be retried), a complete reply must pass, and a day with 2 of 4 meals must be rejected. Related: the B189 check itself passed: 0 zero-kcal / 0 g meals in all three builds (see the B189 live-check report).",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-27T15:36:26.246Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed and live: nyu_backend dd91ac4e, deployed 27 Oct 15:29 UTC (health 200, 0 errors). generate_diet_plan now checks every AI reply for all 7 days and the profile's meals_per_day. A short reply is retried once with a note naming the gaps. If it is still short, a ValueError is raised before the week's rows are deleted, so callers keep the old week. Tests: full suite 9,468 passed, 0 failed; targeted diet set 1,106 passed. Live check on prod, one real AI build on the QA plan, rolled back: the first reply was missing day 7, the check caught it and retried, and the retry gave 21 meals over 7 days (3 per day); the week kept its 21 original rows.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
