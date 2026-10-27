@@ -100,7 +100,13 @@
       "history": [],
       "description": "[P2 / reminders that never fire, found 26 Oct 2026 in the real-user first-week check, prod DB read-only] A scheduled notification that send-time optimization 'defers' is recorded as suppressed and never sent. Last 30 days, all accounts: 95 notifications suppressed with send_time_deferred_to_18h (87) or _20h (8); for 0 of them did a push of the same type get accepted within the next 26 hours [executed: notification_logs suppressed=1 joined to notifications, then a same-user same-type push_sent=1 within 26 h]. By type: reminder 66, health_score_quiz_reminder 13, streak_update 8, weekly_report 8. Real accounts affected in the last 14 days: a89ce183 (9 rows), be17f978 (1), 4049929e (1); the notifications rows exist with push_sent=0 and an empty push_error, so the user sees them only if they open the in-app list.\n\nRoot cause [inspected nyu_backend main 0bc4fb32]: Check 7 in send_notification (notification_service.py:411-427) sets suppressed=True and suppression_reason='send_time_deferred_to_<optimal_hour>h' for scheduled notifications. The word deferred implies a later send, but nothing re-sends it (grep of app/ finds the string only at this line; the scheduled jobs run at their fixed times and do not retry). Fix options: (a) treat deferral as a real deferral: queue the push with a send_at and have a job send it at that hour; (b) remove Check 7 for reminder and first-3-days types and send at the scheduled time; (c) at least log it as dropped, not 'deferred'. Test: a deferred reminder is delivered at the optimal hour (or sent now when the check is off) and push_sent becomes 1. Aggregates and short internal ids only; no personal data.",
       "thread": [],
-      "needsReview": false
+      "needsReview": false,
+      "claim": {
+        "by": "shakeebshaan",
+        "at": "2026-10-27T12:02:49.373Z",
+        "expiresAt": "2026-10-28T15:02:49.373Z",
+        "note": "Fix live: nyu_backend 26423e3e, DEPLOYED e429ad6b -> 26423e3e 27 Oct 12:01:36 UTC (health 200, 0 errors). Deferred reminders now go out at their hour, once, through a 15-min job. Tests: full suite 9,464 passed; land run 643 passed. Baseline at deploy time: 0 deferred, 0 pushed, 0 waiting, 0 stuck in deferred_sending. Next-day check 28 Oct 13:00 UTC: pass = its own row pushed > 0 and 0 deferred_sending; resolve only after that pass."
+      }
     },
     {
       "id": "i-20261026-shopping-list-modal-under-nav-and-coach-fab",
