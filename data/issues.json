@@ -42,11 +42,40 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed and live: nyu_backend e429ad6b (deployed 27 Oct 09:45 UTC, health 200, 0 errors). Accounts under 7 days old are never auto-paused, and an app open after the oldest of the 3 pushes counts as engagement. Opening the app also lifts an existing pause. Tests: the full suite on 908b8589 had 9,411 passed and 0 failed, and the land run of the 5 notification test files had 91 passed. The new test file test_auto_pause_new_and_engaged.py has 10 cases. Still pending: the 7 accounts the old rule paused stay paused until the owner's yes on the one-shot unpause (a read-only dry run listed exactly 7). App commit cb15d202 (a push tap records track-open) ships with the next app build.",
+        "imagePath": "images/i-20261026-new-users-auto-paused-day-one-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261026-new-users-auto-paused-day-one-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "fbfcc43fc5f1d6fd4f95522a16c87627ebcc6b67",
+        "imageCommits": [
+          "fbfcc43fc5f1d6fd4f95522a16c87627ebcc6b67"
+        ],
+        "fixedAt": "2026-10-27T09:47:23.272Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Root cause fixed and live with tests. Two follow-ups are behind gates: the unpause of the 7 already-paused accounts waits on the owner's yes, and the app push-tap track-open waits for the next app build."
+        }
+      },
       "history": [],
       "description": "[P2 / retention, found 26 Oct 2026 in the real-user first-week check, prod DB read-only] New accounts lose their scheduled reminders about one day after signup. Real accounts ever created: 10; auto-paused: 4. All 4 were paused 25.3 to 28.2 hours after signup (ids 4049929e, 8b943a09, be17f978, e9e9c8a9) [executed, notification_preferences.auto_paused_at vs users.created_at]. In the last 7 days both new real accounts (4049929e, be17f978) were paused at 18:45 UTC the next day and then had 8 scheduled pushes suppressed with reason auto_paused (be17f978); neither came back after signup day (last_active within 1 h of signup, 0 meals ticked, 0 workouts). e9e9c8a9 did return after being paused and is STILL paused (the reset only happens from track-open).\n\nRoot cause [inspected nyu_backend main 0bc4fb32]: update_auto_pause pauses a user when their last 3 non-suppressed notification_logs in 48 h all have opened_at NULL (notification_service.py:500-506). Three notifications (achievement, breakfast reminder, mental-health check-in) exist in the first day, and opened_at is only written by POST /notifications/<id>/track-open, which the app calls only when the user taps a row in the in-app Notifications list (src/pages/Notifications.tsx:212). Tapping the push itself, or opening the app, never counts: opened_at is set for only 2 users in the whole table (5 rows of 1,193 logs) [executed]. The nightly sweep (notification_jobs.py:341) then flips auto_paused and Check 3 suppresses every scheduled push (notification_service.py:390-392). This cancels B190 (first-3-days push priority, 0bc4fb32): the 2 daily slots are reserved for a user who is paused on day 2.\n\nFix options (dev decides): (a) no auto-pause for an account younger than 7 days, in update_auto_pause; (b) count app opens (users.last_active) and notifications.read_at as engagement, not only opened_at; (c) call track-open / reset_auto_pause when a push is tapped and on app open. Test: a fixture with 3 unopened logs on a 30-hour-old account must stay unpaused; a paused user who opens the app is unpaused. Aggregates and short internal ids only; no personal data.",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-10-27T09:47:23.272Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed and live: nyu_backend e429ad6b (deployed 27 Oct 09:45 UTC, health 200, 0 errors). Accounts under 7 days old are never auto-paused, and an app open after the oldest of the 3 pushes counts as engagement. Opening the app also lifts an existing pause. Tests: the full suite on 908b8589 had 9,411 passed and 0 failed, and the land run of the 5 notification test files had 91 passed. The new test file test_auto_pause_new_and_engaged.py has 10 cases. Still pending: the 7 accounts the old rule paused stay paused until the owner's yes on the one-shot unpause (a read-only dry run listed exactly 7). App commit cb15d202 (a push tap records track-open) ships with the next app build.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
