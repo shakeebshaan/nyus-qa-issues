@@ -16874,10 +16874,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed and live: nyu_backend ee8b1adf, deployed 28 Oct 04:55 UTC (watcher DEPLOYED 1c2d73ca -> ee8b1adf, no rollback; VM HEAD = origin/main; health 200; 0 ERROR/Traceback in the 15 min after restart). update_auto_pause now counts a log toward the 3 unopened only if its notification has push_sent true, and auto_pause_sweep passes the Notification model, so a push-budget-blocked log (push_sent 0) never counts as an ignored push. Tests: full suite 9,556 passed, 0 failed, 22 skipped through the guarded runner; 4 new integration cases cover a budget-blocked log. Read-only dry run on prod at 04:56 UTC, old rule vs fixed rule over every account with logs in 48 h: 0 accounts would be paused under either rule right now. Existing pauses unchanged: newest pause 26 Oct 18:45 UTC, none added or lifted.",
+        "imagePath": "images/i-20261028-auto-pause-counts-budget-blocked-pushes-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261028-auto-pause-counts-budget-blocked-pushes-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "a02a1252e2bfcaf20c7a08274a0b72cd0081fbed",
+        "imageCommits": [
+          "a02a1252e2bfcaf20c7a08274a0b72cd0081fbed"
+        ],
+        "fixedAt": "2026-10-28T05:11:05.618Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Live and tested; the 18:45 UTC sweep itself has not run on the new code yet, the dry run is a read-only replay of the rule at 04:56 UTC"
+        }
+      },
       "history": [],
-      "description": "[P2 / auto-pause can pause an account for reminders that never reached the phone, found 28 Oct 2026 02:32 UTC by qa, prod read-only] update_auto_pause takes the 3 newest notification_logs with suppressed == False in the last 48 h and pauses the account when none has opened_at (and the app was not opened after the oldest). It does not check push_sent, so a log the push budget blocked (push_sent 0, push_error push_budget:*) counts as an ignored push although the person never got it. Since 23 Oct, 11 of 30 unsuppressed real-user logs were budget-blocked this way. An account older than AUTO_PAUSE_MIN_ACCOUNT_AGE_DAYS (7 days) with three such logs in 48 h is paused at the next 18:45 UTC sweep; one 18-day-old real account with a push token is exposed tonight. Fix: count only logs that were actually pushed (push_sent true) toward the unopened threshold, with a unit test for a budget-blocked log. The 4 existing pauses are not changed by this card. Code [inspected] on main a4216cbc."
+      "description": "[P2 / auto-pause can pause an account for reminders that never reached the phone, found 28 Oct 2026 02:32 UTC by qa, prod read-only] update_auto_pause takes the 3 newest notification_logs with suppressed == False in the last 48 h and pauses the account when none has opened_at (and the app was not opened after the oldest). It does not check push_sent, so a log the push budget blocked (push_sent 0, push_error push_budget:*) counts as an ignored push although the person never got it. Since 23 Oct, 11 of 30 unsuppressed real-user logs were budget-blocked this way. An account older than AUTO_PAUSE_MIN_ACCOUNT_AGE_DAYS (7 days) with three such logs in 48 h is paused at the next 18:45 UTC sweep; one 18-day-old real account with a push token is exposed tonight. Fix: count only logs that were actually pushed (push_sent true) toward the unopened threshold, with a unit test for a budget-blocked log. The 4 existing pauses are not changed by this card. Code [inspected] on main a4216cbc.",
+      "thread": [
+        {
+          "at": "2026-10-28T05:11:05.618Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed and live: nyu_backend ee8b1adf, deployed 28 Oct 04:55 UTC (watcher DEPLOYED 1c2d73ca -> ee8b1adf, no rollback; VM HEAD = origin/main; health 200; 0 ERROR/Traceback in the 15 min after restart). update_auto_pause now counts a log toward the 3 unopened only if its notification has push_sent true, and auto_pause_sweep passes the Notification model, so a push-budget-blocked log (push_sent 0) never counts as an ignored push. Tests: full suite 9,556 passed, 0 failed, 22 skipped through the guarded runner; 4 new integration cases cover a budget-blocked log. Read-only dry run on prod at 04:56 UTC, old rule vs fixed rule over every account with logs in 48 h: 0 accounts would be paused under either rule right now. Existing pauses unchanged: newest pause 26 Oct 18:45 UTC, none added or lifted.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     }
   ]
 }
