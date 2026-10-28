@@ -131,10 +131,11 @@
       "thread": [],
       "needsReview": false,
       "claim": {
-        "by": "shakeebshaan",
-        "at": "2026-10-27T12:02:49.373Z",
-        "expiresAt": "2026-10-28T15:02:49.373Z",
-        "note": "Fix live: nyu_backend 26423e3e, DEPLOYED e429ad6b -> 26423e3e 27 Oct 12:01:36 UTC (health 200, 0 errors). Deferred reminders now go out at their hour, once, through a 15-min job. Tests: full suite 9,464 passed; land run 643 passed. Baseline at deploy time: 0 deferred, 0 pushed, 0 waiting, 0 stuck in deferred_sending. Next-day check 28 Oct 13:00 UTC: pass = its own row pushed > 0 and 0 deferred_sending; resolve only after that pass."
+        "by": "agent",
+        "at": "2026-10-28T13:02:04.505Z",
+        "expiresAt": "2026-10-29T16:02:04.505Z",
+        "note": "Day 1 (28 Oct 13:00 UTC): not yet proven, no bug. 4 reminders deferred since the 26423e3e deploy, 0 pushed, 0 stuck in deferred_sending; the delivery job ran at the due hour (12:40 UTC) and gave each the right outcome: 3 skipped no FCM token (test accounts), 1 skipped by the daily push cap (2 pushes already that day). Re-check scheduled 29 Oct 13:00 UTC; resolve when a deferred reminder is actually pushed.",
+        "tookOverFrom": "shakeebshaan"
       }
     },
     {
