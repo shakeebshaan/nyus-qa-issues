@@ -2,6 +2,28 @@
   "version": 1,
   "issues": [
     {
+      "id": "i-20261028-diet-plan-past-day-empty-after-rebridge",
+      "createdAt": "2026-10-28T23:37:36.034Z",
+      "author": "qa",
+      "tags": [
+        "diet",
+        "nutrition",
+        "history",
+        "backend",
+        "p3"
+      ],
+      "route": "nyu_backend backend.py DietPlanResource.get (/diet/plan, past-day guard ~:8133 on 77b65ddb) vs DietHistoryResource (/diet/history) and plan_generator.diet_meal_counts (dashboard)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [],
+      "description": "[P3 / two endpoints disagree, found by qa 28 Oct 22:37 UTC in the review of fix/overlapping-diet-plans b86e2620] After a delayed Monday re-bridge (weekly_review re-bridges the week from Monday on a later day), this week's earlier days live on the new active plan as RE-CREATED rows (created after the day ended, eaten marks copied by date + slot). /diet/plan for such a past day applies its historical-integrity guard (keep only rows created before the day ended, on the newest active plan) and shows an EMPTY diary, while /diet/history and the dashboard meal counts read those rows. FIX on branch fix/diet-plan-past-day-matches-history (dev): one rule for all three endpoints, plan_generator.diet_rows_by_date: per date, among plans with an ACTIVE (never superseded) meal that day, rows that existed on that day win (the guard's intent: what the user saw and ate), then an active plan, then the newest; a day whose only rows were re-created shows them instead of an empty diary. Test tests/test_diet_plan_past_day_matches_history.py through the real backend.py (fails on 77b65ddb: /diet/plan [] vs history 3 rows)."
+    },
+    {
       "id": "i-20261026-llm-diet-week-saved-with-missing-days",
       "createdAt": "2026-10-26T22:51:07.000Z",
       "author": "qa",
