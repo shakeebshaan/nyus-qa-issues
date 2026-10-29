@@ -17118,6 +17118,35 @@
         }
       ],
       "description": "[P2 / backend] Food names ground on an unrelated catalogue row or a 0 kcal row, so the meal builder and food logger show wrong calories (brown eggs as Brown Sugar 380, jeera aloo as cumin 375, egg curry at 0 kcal, sweet potatoes as a babyfood row ...). Wanted: each name takes a row that is that food or goes unmatched to the AI estimate; never a wrong row, never a 0 kcal row for a real food. Done = branch with a test per name, qa-be's 89-name export probe showing no other change, QA PASS."
+    },
+    {
+      "id": "i-20261029-nova-pill-overlaps-meal-row",
+      "createdAt": "2026-10-29T15:48:36.766Z",
+      "author": "nyus-employee",
+      "tags": [
+        "nutrition",
+        "meal-row",
+        "coach-fab",
+        "p3",
+        "layout"
+      ],
+      "route": "/nutrition (Meals card: NutritionMealCard row vs the floating Nova coach pill)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-29T15:48:36.766Z",
+          "event": "created",
+          "by": "nyus-employee",
+          "note": "Seen by qa during the B204 meal-rows QA (stamp 9f4ba88b, 29 Oct): at 390 px with the Nova pill showing its nudge, document.elementFromPoint at the right edge of a meal row hit the pill (its Dismiss nudge control), not the row. Low priority, not blocking B204; logged on the Governor 15:40 UTC note."
+        }
+      ],
+      "description": "[P3 / app] The floating Nova coach pill, when it shows its nudge, overlaps the right edge of a meal row on the Diet tab, so a tap there lands on the pill (Dismiss nudge) instead of opening the meal. Seen at 390 px in QA on 29 Oct (B204 meal rows). Wanted: the expanded pill keeps clear of the meal rows lane (B204 #11 already reserves 64 px for the resting button via src/lib/coach-fab-geometry.ts), or the row tap target ends before it."
     }
   ]
 }
