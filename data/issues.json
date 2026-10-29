@@ -16938,6 +16938,36 @@
         }
       ],
       "needsReview": false
+    },
+    {
+      "id": "i-20261029-canon-macros-guard-qa",
+      "createdAt": "2026-10-29T05:37:37.374Z",
+      "author": "qa",
+      "tags": [
+        "diet",
+        "catalog",
+        "canon-macros",
+        "ingredient-copies",
+        "backend",
+        "p3"
+      ],
+      "route": "nyu_backend app/services/fast_plan_assembler.py _canonical_macro_map, app/services/catalog_source_guard.py; branch fix/canon-macros-guard e11e049e",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-29T05:37:37.374Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA PASS 29 Oct 2026 (guarded canon-macros, nyu_backend fix/canon-macros-guard @ e11e049e; merge tip 753d5e66 on origin/main 38c1d16e; NOT landed). [executed, own worktrees, pytest through the shared lock at BelowNormal] (1) merges onto 38c1d16e with no conflict (4 files: catalog_source_guard.py new, fast_plan_assembler.py, 2 test files; no repair script, no prod write). (2) The two guard test files on 42250f41: 5 failed, 1 passed (Fish still 76 not 130, guard module missing); on the merge they pass inside the 60-file run. (3) 12-name probe, real prod catalog export (C:/tmp/ingfix2/catalog.json, read-only, loaded into SQLite, real _canonical_macro_map): old 42250f41 -> Fish 76 kcal (id 37), Paneer 200 (id 1), Olive Oil 793; merge -> Fish none (no override, copy keeps its own numbers), Paneer none, Olive Oil none, Chicken Breast (cooked) 165/31/0/3.6, Paneer (Indian Cottage Cheese) 265/18.3/1.2/20.8 (id 82), Olive Oil (Extra Virgin) 884, Tofu (Silken) 55, Moong Dal (Dry) 347, Cinnamon 247 kept (fibre rule), Greek Yogurt (Plain, Low-Fat) 59; skipped sources ids 1, 23, 37 (excluded_id) + weight_in_name rows. Note: a skipped name means NO override, not a sound row: Paneer/Fish/Olive Oil copies keep the generator numbers until the catalog rows are corrected. (4) 60-file related suite on the merge: 2311 passed, 1 skipped (LLM eval off), 0 failed, 157 s. (5) no INSERT/UPDATE/DELETE/commit in the guard or the diff; nothing pushed."
+        }
+      ],
+      "description": "[P3 / backend, QA verdict card] Guarded canonical-macros fix for per-plan ingredient copies (42250f41 + source guard 5be4c63f + generic-row fallback a2cc415b + tests). Replaces the HELD unguarded 42250f41 (Fish exact match took catalog id 37 = 76 kcal with macros implying ~130). Verdict: QA PASS, see history. Still open: catalog ids 1 Paneer, 23 Olive Oil, 37 Fish are wrong on prod (correction script is a separate prod write, Shaan call)."
     }
   ]
 }
