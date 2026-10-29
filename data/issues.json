@@ -17026,6 +17026,35 @@
         }
       ],
       "description": "[P3 / backend, QA verdict card] B201 fix/b201-recipe-qualifiers @ ea6faeaf: QA PASS (see history). Not landed."
+    },
+    {
+      "id": "i-20261029-b204-diet-coach-line-qa",
+      "createdAt": "2026-10-29T06:07:49.416Z",
+      "author": "qa",
+      "tags": [
+        "diet",
+        "coach-line",
+        "b204",
+        "frontend",
+        "p3"
+      ],
+      "route": "nyus-well-tracker src/hooks/useMoments.ts, src/lib/moment-meals.ts, i18n moments.after_meal.skipped_headline; branch fix/b204-diet-coach-line 2cd9c0b2",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-29T06:07:49.416Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA PASS 29 Oct 2026, nyus-well-tracker fix/b204-diet-coach-line @ 2cd9c0b2 (one commit on origin/main 92025b79, no merge needed). [executed, own worktree, BelowNormal] #1: pickMomentMeals now takes the last plan meal acted on (eaten OR skipped) and marks skipped:true; afterMealMoment uses moments.after_meal.skipped_headline, so a skipped dinner reads \"Roti sabzi skipped.\" + \"500 kcal left in today's target.\" and never \"That is every planned meal\"; skipped lunch at 13:30 reads \"Dal chawal skipped.\" + \"Next: Chana (Snack).\"; an eaten meal after an earlier skip is the one named; the fresh (2 h) food log still wins (fresh ?? ...). Key exists in en (\"{{meal}} skipped.\"), hi (\"{{meal}} छोड़ दिया।\" - natural), hinglish (\"{{meal}} skip kiya.\" - natural), xx-AE (pseudo-loc, placeholder kept); locale parity test passes; Hindi render test \"पोहा छोड़ दिया।\". The Today card reads the same pickMomentMeals/afterMealMoment (useTodayMomentMeals), so it matches. #10: with a plan and nothing logged useNutritionMoment returns \"Next: Dal chawal (Lunch).\" at 13:30 (breakfast slot ended) and \"Next: Poha (Breakfast).\" earlier; order kept: fasting, first-day welcome, afterMeal and the behind-on-meals tip all come before it; no plan -> the generic pool tip (test). Tests: 6 moment test files 47 passed; the branch test file on origin/main: 8 failed (so the tests bite); node scripts/ci-local.mjs: typecheck delta clean, 390 files / 5343 tests passed, \"local CI passed\" 492.9 s (log C:/tmp/nyus-gate-logs/20261029T055919Z-2cd9c0b2.log). Diff read: only useMoments.ts, moment-meals.ts, 4 locale files, 1 test; no other moment touched. Minor note (no defect): a skip now outranks an older (>2 h) custom food log as the named meal."
+        }
+      ],
+      "description": "[P3 / frontend, QA verdict card] B204 #1 and #10 (Diet-tab coach line): QA PASS on fix/b204-diet-coach-line @ 2cd9c0b2, see history. Not landed."
     }
   ]
 }
