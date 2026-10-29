@@ -16968,6 +16968,64 @@
         }
       ],
       "description": "[P3 / backend, QA verdict card] Guarded canonical-macros fix for per-plan ingredient copies (42250f41 + source guard 5be4c63f + generic-row fallback a2cc415b + tests). Replaces the HELD unguarded 42250f41 (Fish exact match took catalog id 37 = 76 kcal with macros implying ~130). Verdict: QA PASS, see history. Still open: catalog ids 1 Paneer, 23 Olive Oil, 37 Fish are wrong on prod (correction script is a separate prod write, Shaan call)."
+    },
+    {
+      "id": "i-20261029-b186c-breakfast-plate-qa",
+      "createdAt": "2026-10-29T05:57:47.713Z",
+      "author": "qa",
+      "tags": [
+        "diet",
+        "meal-ideas",
+        "b186c",
+        "backend",
+        "p3"
+      ],
+      "route": "nyu_backend llm_prompts.py slot_plate_line; branch fix/b186c-breakfast-plate ad5b61e5",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-29T05:57:47.713Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA PASS 29 Oct 2026, nyu_backend fix/b186c-breakfast-plate @ ad5b61e5 (2 files: llm_prompts.py, tests/test_be_onboarding_profile_prompts.py). [executed, own worktrees, pytest through the shared lock at BelowNormal] Merges onto origin/main 38c1d16e with no conflict (merge abab06ca). Own probe, slot_plate_line on main vs the merge, 8 diet values x 5 slots x caps 150-1100: 308 of 1560 lines change, ALL breakfast (lunch, dinner, snack, dessert identical). Breakfast sum of every printed choice combination over caps 300-800: veg/vegetarian/jain OLD 0.72-0.97x of the cap (47 combos out of 0.85-0.95), NEW 0.87-0.92x (0); egg_only/non_veg/None OLD 0.73-1.08 (21 out), NEW 0.87-0.92 (0); vegan OLD 0.86-0.96 (1 out), NEW 0.87-0.92 (0); vegan has no milk, no egg in veg. Example veg cap 725: curd 250 g + 180 ml milk fills the shortfall, total 658 (0.91x) vs 652 before; printed total is the real sum. Tests: related set (21 files + meal_ideas guards) 358 passed, 10 skipped, 0 failed on the merge; the branch new/changed test file on main: 7 failed, 11 passed. Not run: node scripts/ci-local.mjs (app-repo script; these are backend branches). Measure after landing = the 1 Nov B186a re-run (per LAUNCH_TODO)."
+        }
+      ],
+      "description": "[P3 / backend, QA verdict card] B186c fix/b186c-breakfast-plate @ ad5b61e5: QA PASS (see history). Not landed."
+    },
+    {
+      "id": "i-20261029-b201-recipe-qualifiers-qa",
+      "createdAt": "2026-10-29T05:57:47.713Z",
+      "author": "qa",
+      "tags": [
+        "recipe",
+        "ingredient-names",
+        "b201",
+        "backend",
+        "p3"
+      ],
+      "route": "nyu_backend backend.py RecipeDetailResource._clean_name; branch fix/b201-recipe-qualifiers ea6faeaf",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-29T05:57:47.713Z",
+          "event": "retested",
+          "by": "qa",
+          "note": "QA PASS 29 Oct 2026, nyu_backend fix/b201-recipe-qualifiers @ ea6faeaf (backend.py 1 regex, tests/test_ing_hash_suffix_call_sites.py). [executed, own worktrees, shared lock, BelowNormal] Merges onto origin/main 38c1d16e with no conflict (merge 3f4a6da9, auto-merge of backend.py). The regex now strips a trailing bracket group only when it has a digit or colon (lookahead), so (boiled) (cooked) (Raw) (roasted) (low-fat) (rolled) stay and (abc12:x9) (a1b2c3) (id:abcde) go; the hash suffix rule is unchanged and the older bracket skip in test_recipe_detail_clean_name_uses_the_shared_rule is removed. Tests: 6 files + test_ing_hash_suffix.py = 262 passed, 0 failed on the merge; the branch test file on main: 6 failed, 29 passed (Egg White (boiled) etc. dropped). Not run: node scripts/ci-local.mjs (app-repo script; backend branch). Residual: a real qualifier with a digit and 5+ chars inside brackets (e.g. (type2)) is still treated as id-like, as before; prod count of 225 affected names has 3 id-like ones only."
+        }
+      ],
+      "description": "[P3 / backend, QA verdict card] B201 fix/b201-recipe-qualifiers @ ea6faeaf: QA PASS (see history). Not landed."
     }
   ]
 }
