@@ -17061,6 +17061,35 @@
         }
       ],
       "description": "[P3 / frontend, QA verdict card] B204 #1 and #10 (Diet-tab coach line): QA PASS on fix/b204-diet-coach-line @ 2cd9c0b2, see history. Not landed."
+    },
+    {
+      "id": "i-20261029-single-food-modifier-word-unmatched",
+      "createdAt": "2026-10-29T08:53:43.533Z",
+      "author": "nyus-employee",
+      "tags": [
+        "grounding",
+        "meal-builder",
+        "backend",
+        "p3",
+        "follow-up"
+      ],
+      "route": "nyu_backend app/routes/plan_builder_routes.py _ground_food_name (dish-not-staple rule from fix/grounding-dish-not-staple 1498301c)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-29T08:53:43.533Z",
+          "event": "created",
+          "by": "nyus-employee",
+          "note": "Opened from the non-blocking follow-up in qa-be's 29 Oct 08:08 UTC PASS of 1498301c (Governor 08:40 UTC: its own item, not part of that land). Evidence [executed by qa-be; re-read by the NYUS employee from its main vs branch results, 89 names, prod catalog rows exported read-only into SQLite]: these real single foods grounded on main 38c1d16e and are unmatched on 1498301c, so the app falls back to the AI estimate: two boiled eggs (was Whole Egg (Boiled) 155 kcal/100 g), desi eggs (same), baby potatoes (Potato (Boiled) 87), cauliflower florets (Cauliflower (Cooked) 23), sugar 1 tsp (White Sugar 387), coconut grated / coconut (grated) / coconut pieces (were Coconut Water 19, wrong anyway; Coconut (Fresh Meat) 354 is the right row), sauteed mushrooms and oyster mushroom (White Button raw 22). Intended and NOT part of this item: real dishes now unmatched instead of a plain-ingredient row (coconut rice, masala dosa + sambar + coconut chutney, brinjal curry, mushroom masala, gobi manchurian, cauliflower rice, coconut sugar)."
+        }
+      ],
+      "description": "[P3 / backend follow-up] After the dish-not-staple grounding fix (1498301c), a single food with one extra word (a count, a size, a prep word like grated/sauteed/florets, or a unit like 1 tsp) no longer finds its staple row and falls to the AI estimate. Wanted: strip counts, units and prep words before the staple lookup so these ground to their plain row again, while real dish names (curry, masala, rice, manchurian, chutney combos) still do not. Done = a branch with tests for the names above (each grounds to its plain row) and the dish names (still unmatched), qa-be's 89-name export check showing no other change, QA PASS."
     }
   ]
 }
