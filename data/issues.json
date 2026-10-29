@@ -17090,6 +17090,35 @@
         }
       ],
       "description": "[P3 / backend follow-up] After the dish-not-staple grounding fix (1498301c), a single food with one extra word (a count, a size, a prep word like grated/sauteed/florets, or a unit like 1 tsp) no longer finds its staple row and falls to the AI estimate. Wanted: strip counts, units and prep words before the staple lookup so these ground to their plain row again, while real dish names (curry, masala, rice, manchurian, chutney combos) still do not. Done = a branch with tests for the names above (each grounds to its plain row) and the dish names (still unmatched), qa-be's 89-name export check showing no other change, QA PASS."
+    },
+    {
+      "id": "i-20261029-grounding-longest-word-wrong-row",
+      "createdAt": "2026-10-29T11:09:28.083Z",
+      "author": "nyus-employee/dev",
+      "tags": [
+        "grounding",
+        "meal-builder",
+        "backend",
+        "p2",
+        "wrong-calories"
+      ],
+      "route": "nyu_backend app/routes/plan_builder_routes.py _ground_food_name fallback (~:1960-2080)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "fix": null,
+      "history": [
+        {
+          "at": "2026-10-29T11:09:28.083Z",
+          "event": "created",
+          "by": "nyus-employee/dev",
+          "note": "Found by qa-be (Governor 29 Oct 08:25 UTC) with the real _ground_food_name against the prod catalog export (read-only, SQLite). Already on nyu_backend main 38c1d16e. Wrong rows users see: brown eggs -> Brown Sugar 380 kcal/100 g; jeera aloo -> Cumin (jeera) 375; aloo sabzi -> methi sabzi 200; multigrain atta -> Multigrain Bread 260; ragi atta -> '2 ragi roti' 300; sweet potatoes -> 'Babyfood, corn and sweet potatoes, strained' 68; mashed potatoes -> 'Turkey, stuffing, mashed potatoes w/gravy, ...' 128; egg curry -> South Indian Egg Curry 0 kcal; egg fried rice -> Chinese Asian Egg Fried Rice 0 kcal; egg bhurji -> Egg Bhurji Cups 27. Cause [executed, term trace]: (1) the single-word fallback tries the longest word first and takes any row holding it (the modifier wins: brown, jeera, sabzi, multigrain, ragi); (2) full-name substring matches accept composite reference rows (babyfood, 'w/' platters), product rows (Cups) and broken 0 kcal recipe rows; (3) the dish-staple fallback turns 'egg fried rice' into plain rice. Fix on branch fix/grounding-longest-word-wrong-row (dev), stacked on fix/grounding-staple-form-words 9dffce9f (on fix/grounding-dish-not-staple 1498301c; neither landed yet)."
+        }
+      ],
+      "description": "[P2 / backend] Food names ground on an unrelated catalogue row or a 0 kcal row, so the meal builder and food logger show wrong calories (brown eggs as Brown Sugar 380, jeera aloo as cumin 375, egg curry at 0 kcal, sweet potatoes as a babyfood row ...). Wanted: each name takes a row that is that food or goes unmatched to the AI estimate; never a wrong row, never a 0 kcal row for a real food. Done = branch with a test per name, qa-be's 89-name export probe showing no other change, QA PASS."
     }
   ]
 }
