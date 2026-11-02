@@ -146,18 +146,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed by nyu_backend 26423e3e (live 27 Oct 2026 12:01:36 UTC): a deferred reminder is now queued and a 15-minute job (deliver_deferred_reminders) delivers it at the user's optimal hour, claiming each row once so it can never be pushed twice. Live evidence, read-only prod checks 28 Oct-2 Nov (counts only): 24 deferred rows since the deploy, all 24 processed at their due hour (20 no phone token, 2 daily push budget, 2 weekly cap), 0 left waiting, 0 stuck claims, 0 push failures, 0 expired. Before the fix 95 in 30 days were never picked up. Not yet seen live: an actual push from this path, because few accounts hold a phone token and most are auto-paused; that branch passes the integration tests (full backend suite 9,464 passed before the land) and uses the same push helper create_notification uses every day. Resolved on the Governor's rule A (29 Oct). A weekly read-only tripwire (Mondays 13:00 UTC) raises a task on the first real deferred push (then checks suppressed=0, sent_at = push time, exactly one push, and notes it here) and on any failed, expired, stuck or unprocessed row; the card is reopened if the fix is at fault.",
+        "imagePath": "images/i-20261026-deferred-reminders-never-sent-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261026-deferred-reminders-never-sent-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "51874387655e76fc074e49cad76bbd4ed058f42d",
+        "imageCommits": [
+          "51874387655e76fc074e49cad76bbd4ed058f42d"
+        ],
+        "fixedAt": "2026-11-02T16:14:54.557Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "Every step that live data reached is proven: 24 of 24 deferred rows processed at their due hour, 22 through the claim + outcome write, 0 stuck, 0 failed. Gap: no live deferred_sent yet (only a handful of token holders, most auto-paused); the pushed branch is covered by integration tests and the shared push helper. Weekly tripwire raises the first deferred_sent for a one-time check."
+        }
+      },
       "history": [],
       "description": "[P2 / reminders that never fire, found 26 Oct 2026 in the real-user first-week check, prod DB read-only] A scheduled notification that send-time optimization 'defers' is recorded as suppressed and never sent. Last 30 days, all accounts: 95 notifications suppressed with send_time_deferred_to_18h (87) or _20h (8); for 0 of them did a push of the same type get accepted within the next 26 hours [executed: notification_logs suppressed=1 joined to notifications, then a same-user same-type push_sent=1 within 26 h]. By type: reminder 66, health_score_quiz_reminder 13, streak_update 8, weekly_report 8. Real accounts affected in the last 14 days: a89ce183 (9 rows), be17f978 (1), 4049929e (1); the notifications rows exist with push_sent=0 and an empty push_error, so the user sees them only if they open the in-app list.\n\nRoot cause [inspected nyu_backend main 0bc4fb32]: Check 7 in send_notification (notification_service.py:411-427) sets suppressed=True and suppression_reason='send_time_deferred_to_<optimal_hour>h' for scheduled notifications. The word deferred implies a later send, but nothing re-sends it (grep of app/ finds the string only at this line; the scheduled jobs run at their fixed times and do not retry). Fix options: (a) treat deferral as a real deferral: queue the push with a send_at and have a job send it at that hour; (b) remove Check 7 for reminder and first-3-days types and send at the scheduled time; (c) at least log it as dropped, not 'deferred'. Test: a deferred reminder is delivered at the optimal hour (or sent now when the check is off) and push_sent becomes 1. Aggregates and short internal ids only; no personal data.",
-      "thread": [],
-      "needsReview": false,
-      "claim": {
-        "by": "agent",
-        "at": "2026-10-29T13:06:02.839Z",
-        "expiresAt": "2026-11-02T14:06:02.839Z",
-        "note": "Day-2 check 29 Oct 13:00 UTC: 7 deferred since the 26423e3e deploy, 0 pushed, 0 deferred_sending, 0 failures; all correct skips (6 QA accounts without a phone token, 1 tester at the daily push cap); job runs at the due hour. No real phone user has reached the push path yet (5 of 8 phone users auto-paused). Daily read-only re-check 30 Oct-2 Nov 13:00 UTC; resolve on the first real push."
-      }
+      "thread": [
+        {
+          "at": "2026-11-02T16:14:54.557Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed by nyu_backend 26423e3e (live 27 Oct 2026 12:01:36 UTC): a deferred reminder is now queued and a 15-minute job (deliver_deferred_reminders) delivers it at the user's optimal hour, claiming each row once so it can never be pushed twice. Live evidence, read-only prod checks 28 Oct-2 Nov (counts only): 24 deferred rows since the deploy, all 24 processed at their due hour (20 no phone token, 2 daily push budget, 2 weekly cap), 0 left waiting, 0 stuck claims, 0 push failures, 0 expired. Before the fix 95 in 30 days were never picked up. Not yet seen live: an actual push from this path, because few accounts hold a phone token and most are auto-paused; that branch passes the integration tests (full backend suite 9,464 passed before the land) and uses the same push helper create_notification uses every day. Resolved on the Governor's rule A (29 Oct). A weekly read-only tripwire (Mondays 13:00 UTC) raises a task on the first real deferred push (then checks suppressed=0, sent_at = push time, exactly one push, and notes it here) and on any failed, expired, stuck or unprocessed row; the card is reopened if the fix is at fault.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261026-shopping-list-modal-under-nav-and-coach-fab",
