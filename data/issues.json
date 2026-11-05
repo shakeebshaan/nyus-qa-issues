@@ -17221,8 +17221,32 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main e7373b84 (fix/nova-pill-meal-row-nov05 cb7eebc8; qa PASS 5 Nov 19:19 UTC with one green full nyus-vitest.sh run on that exact SHA). On the Diet tab the coach button stays a plain circle (no 'Ask Nova' label, no dismiss-X), so a tap on a meal row's right edge opens the meal; the circle still opens coach chat. Other tabs unchanged. Screens: 360x640, unscrolled Diet tab and a tap on the right edge of a meal row. Reaches users with the next Play build.",
+        "imagePath": "images/i-20261029-nova-pill-overlaps-meal-row-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261029-nova-pill-overlaps-meal-row-fix-r1.png",
+          "images/i-20261029-nova-pill-overlaps-meal-row-fix-r1-2.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "5e2dc0d9f8be8d3bff556a16e6c1acf02d8dd25d",
+        "imageCommits": [
+          "5e2dc0d9f8be8d3bff556a16e6c1acf02d8dd25d",
+          "ca3d1a72718a6c0b665e9bb4135e57c2e564be4d"
+        ],
+        "fixedAt": "2026-11-05T21:20:15.021Z",
+        "by": "shakeebshaan",
+        "appCommit": "e7373b8403e236f0f1ece3d74620a9b563c7c223",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Root cause removed (no label pill/X on /nutrition), red/green unit test, before/after screenshots at 360 and 390 px incl. an edge tap; not yet seen on a physical phone (ships in the next Play build)."
+        }
+      },
       "history": [
         {
           "at": "2026-10-29T15:48:36.766Z",
@@ -17231,7 +17255,17 @@
           "note": "Seen by qa during the B204 meal-rows QA (stamp 9f4ba88b, 29 Oct): at 390 px with the Nova pill showing its nudge, document.elementFromPoint at the right edge of a meal row hit the pill (its Dismiss nudge control), not the row. Low priority, not blocking B204; logged on the Governor 15:40 UTC note."
         }
       ],
-      "description": "[P3 / app] The floating Nova coach pill, when it shows its nudge, overlaps the right edge of a meal row on the Diet tab, so a tap there lands on the pill (Dismiss nudge) instead of opening the meal. Seen at 390 px in QA on 29 Oct (B204 meal rows). Wanted: the expanded pill keeps clear of the meal rows lane (B204 #11 already reserves 64 px for the resting button via src/lib/coach-fab-geometry.ts), or the row tap target ends before it."
+      "description": "[P3 / app] The floating Nova coach pill, when it shows its nudge, overlaps the right edge of a meal row on the Diet tab, so a tap there lands on the pill (Dismiss nudge) instead of opening the meal. Seen at 390 px in QA on 29 Oct (B204 meal rows). Wanted: the expanded pill keeps clear of the meal rows lane (B204 #11 already reserves 64 px for the resting button via src/lib/coach-fab-geometry.ts), or the row tap target ends before it.",
+      "thread": [
+        {
+          "at": "2026-11-05T21:20:15.021Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main e7373b84 (fix/nova-pill-meal-row-nov05 cb7eebc8; qa PASS 5 Nov 19:19 UTC with one green full nyus-vitest.sh run on that exact SHA). On the Diet tab the coach button stays a plain circle (no 'Ask Nova' label, no dismiss-X), so a tap on a meal row's right edge opens the meal; the circle still opens coach chat. Other tabs unchanged. Screens: 360x640, unscrolled Diet tab and a tap on the right edge of a meal row. Reaches users with the next Play build.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     }
   ]
 }
