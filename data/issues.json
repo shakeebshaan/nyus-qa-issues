@@ -627,11 +627,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Already fixed on app main by 4dec49ed (3 Nov): src/lib/weightTrend.ts divides the EMA change by the days between the two points (date_iso), not by the number of weigh-ins; LogWeight.tsx:518 feeds it to the chart caption and Goal ETA. Executed on origin/main f4221b5b (10 Nov): test/weightTrend.test.ts 7/7 pass, incl. the issue's every-3-days example (-0.80/wk, was -2.41). Closed by dev (Governor 10 Nov 04:30 UTC).",
+        "imagePath": "images/i-20261025-log-weight-rate-per-point-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-log-weight-rate-per-point-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ff487055ef5df109b472da7de1236135d9fc8b55",
+        "imageCommits": [
+          "ff487055ef5df109b472da7de1236135d9fc8b55"
+        ],
+        "fixedAt": "2026-11-10T04:36:53.364Z",
+        "by": "shakeebshaan",
+        "appCommit": "4dec49ed",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "Pure calculation; the fix's unit tests run green on current main, incl. the exact case in the issue. Not re-checked on a live screen (QA account weighs in daily)."
+        }
+      },
       "history": [],
       "description": "[P3 / calculation, inspected on app main 236b0908, NOT reproduced live: the QA account weighs in daily] After i-20260803-4f7d (carry-forward days now filtered with logged !== false, correct) the weekly rate is still computed per weigh-in, not per day: weightTrend takes the real weigh-ins as consecutive steps, lookback = min(entries - 1, 7) and ratePerWeek = (ema[last] - ema[last - lookback]) / lookback * 7 (LogWeight.tsx:497-500), so each real weigh-in counts as ONE day. A user who weighs in every 3 days (80.0, 79.0, 78.0 on days 1, 4, 7) gets a rate about 3x too high (the 6 real days are treated as 2), so the Goal ETA is projected too early; weigh-ins a week apart are about 7x. Found by reading the code while verifying the card above. FIX: divide by the elapsed days between the two EMA points (date_iso is in the payload), not by the number of points; add a test with unevenly spaced weigh-ins.",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-11-10T04:36:53.364Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Already fixed on app main by 4dec49ed (3 Nov): src/lib/weightTrend.ts divides the EMA change by the days between the two points (date_iso), not by the number of weigh-ins; LogWeight.tsx:518 feeds it to the chart caption and Goal ETA. Executed on origin/main f4221b5b (10 Nov): test/weightTrend.test.ts 7/7 pass, incl. the issue's every-3-days example (-0.80/wk, was -2.41). Closed by dev (Governor 10 Nov 04:30 UTC).",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
