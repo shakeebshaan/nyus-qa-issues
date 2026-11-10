@@ -16617,8 +16617,30 @@
         "dd151f4f02996e9aaed9c77ed84fd58fa91fc51a"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Verified fixed on app origin/main 0588fd8d. c63f4239 (3 Nov, git log -S 'undo' on CustomDietBuilder.tsx, names this item) is an ancestor of origin/main; CustomDietBuilder.tsx:652-683 records what each target held and the toast carries an Undo ToastAction (copy-diet-day.ts undoCopyDayMeals). Tests test/copy-diet-day.test.ts + test/fe-builders-diet.test.tsx + test/TodaysTargetsCard.test.tsx: Test Files 3 passed (3), Tests 59 passed (59). Production build on main, seeded Edge 360 px, fresh QA account: /customize/diet, Repeat mode > Vary by day, Day 2 empty > 'Copy Day 1's meals' -> toast 'Copied Day 1's meals to Day 2 / Each day is its own copy, so edits stay on that day.' with an Undo button (shot). Not re-clicked Undo live (covered by the unit tests). Separate small finding in the same capture: on Day 2 the 'Copy from another day' link overlaps the trash icon of 'Remove all meals from Day 2' at 360 px; not part of this card.",
+        "imagePath": "images/i-20261023-copyday-no-undo-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261023-copyday-no-undo-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "e49eac297667e364a0842ce5abdc1e37fb994375",
+        "imageCommits": [
+          "e49eac297667e364a0842ce5abdc1e37fb994375"
+        ],
+        "fixedAt": "2026-11-10T03:53:38.812Z",
+        "by": "shakeebshaan",
+        "appCommit": "c63f4239",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 91,
+          "bar": 90,
+          "note": "Executed tests 59/59 plus a live capture of the toast with Undo on the main build; Undo click itself covered by unit tests only."
+        }
+      },
       "history": [
         {
           "at": "2026-10-23T23:27:30.778Z",
@@ -16633,7 +16655,17 @@
           "note": "QA board sweep 25 Oct 2026 22:3x UTC (app main 236b0908, nyu_backend b74c9d4a = prod VM HEAD). VERDICT: STILL BROKEN [code read on current main, not run]. Current main src/components/plan-builder/CopyDayMeals.tsx has no Undo / ToastAction (grep: 0 matches), so the copy toast still cannot be undone."
         }
       ],
-      "description": "[P4 / copy-a-day, no undo] After 'Copy Monday's meals' or 'Copy to <day>' the toast reads \"Copied Monday's meals to Tuesday. Each day is its own copy, so edits stay on that day.\" and has no Undo button. Replacing a day that has food asks first (\"Replace Tuesday's meals? Tuesday's meals will be replaced with a copy of Monday's.\") but does not show what will be lost, and once confirmed the old meals cannot be brought back except by re-entering them. 'Copy to all 5 empty days' has no confirm (fine) but also no Undo for a week of wrong copies. Delete afterwards works (Remove <ingredient> per row, Remove <day> tab). Steps: Vary by day, build Monday (poha + chana dal), Tuesday: Copy Monday's meals; Wednesday: Copy from another day > Tuesday > Copy to Wednesday; Friday (has food): Copy from another day > Tuesday > Copy to Friday > Replace. Fix idea: add Undo to the toast for 6 s (the copy is a pure state transform, so restoring the previous days array is trivial) and list the day's current kcal in the replace dialog. Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes."
+      "description": "[P4 / copy-a-day, no undo] After 'Copy Monday's meals' or 'Copy to <day>' the toast reads \"Copied Monday's meals to Tuesday. Each day is its own copy, so edits stay on that day.\" and has no Undo button. Replacing a day that has food asks first (\"Replace Tuesday's meals? Tuesday's meals will be replaced with a copy of Monday's.\") but does not show what will be lost, and once confirmed the old meals cannot be brought back except by re-entering them. 'Copy to all 5 empty days' has no confirm (fine) but also no Undo for a week of wrong copies. Delete afterwards works (Remove <ingredient> per row, Remove <day> tab). Steps: Vary by day, build Monday (poha + chana dal), Tuesday: Copy Monday's meals; Wednesday: Copy from another day > Tuesday > Copy to Wednesday; Friday (has food): Copy from another day > Tuesday > Copy to Friday > Replace. Fix idea: add Undo to the toast for 6 s (the copy is a pure state transform, so restoring the previous days array is trivial) and list the day's current kcal in the replace dialog. Method [executed 23 Oct 2026 ~13:50 UTC]: web build of nyus-well-tracker origin/main 07d5d52c (app code of build 311, release commit 4b627c9c, no app change since) against a LOCAL nyu_backend origin/main 6c03a789 (in-memory sqlite), account qa.local@example.test, route /customize/diet, Repeat mode: Vary by day. The production API leg could not be run: the QA account tokens in _qa_creds.json are revoked (GET /auth/me 401, POST /auth/refresh 401 'Token has been revoked'); a fresh mint needs Shaan's yes.",
+      "thread": [
+        {
+          "at": "2026-11-10T03:53:38.812Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Verified fixed on app origin/main 0588fd8d. c63f4239 (3 Nov, git log -S 'undo' on CustomDietBuilder.tsx, names this item) is an ancestor of origin/main; CustomDietBuilder.tsx:652-683 records what each target held and the toast carries an Undo ToastAction (copy-diet-day.ts undoCopyDayMeals). Tests test/copy-diet-day.test.ts + test/fe-builders-diet.test.tsx + test/TodaysTargetsCard.test.tsx: Test Files 3 passed (3), Tests 59 passed (59). Production build on main, seeded Edge 360 px, fresh QA account: /customize/diet, Repeat mode > Vary by day, Day 2 empty > 'Copy Day 1's meals' -> toast 'Copied Day 1's meals to Day 2 / Each day is its own copy, so edits stay on that day.' with an Undo button (shot). Not re-clicked Undo live (covered by the unit tests). Separate small finding in the same capture: on Day 2 the 'Copy from another day' link overlaps the trash icon of 'Remove all meals from Day 2' at 360 px; not part of this card.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261023-copyday-empty-days-become-monday",
