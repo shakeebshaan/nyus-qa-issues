@@ -16217,7 +16217,8 @@
       "author": "qa",
       "tags": [
         "owner-decision",
-        "hindi"
+        "hindi",
+        "owner-held"
       ],
       "route": "/onboarding/flow in Hindi: Body step, workout builder; Home sleep card",
       "imagePath": null,
@@ -16259,9 +16260,8 @@
       "reportPath": "reports/i-20261023-d1-hi-onboarding-english-sleep.html",
       "reportLabel": "24 Oct status + live sleep card",
       "needsReview": true,
-      "reviewReason": "Sleep-card part FIXED and live: app 229c68a4 (main 02c13694, release 314 on the Play closed track); slider ends read '4 घंटे' / '10 घंटे' in the release web build against prod (24 Oct 02:55 UTC, picture in the attached report). 'Coach River can build दिन 1' was fixed earlier (423674cf). HELD for an owner decision: the pregnancy safety sentence and 'Answer the pregnancy question to continue' stay English in hi/hinglish by the medical-safety copy rule (test/i18n-launch-copy.test.ts pins them); translating needs Shaan to reverse that rule. The Governor has put the decide item on Shaan's list. Close this card when he decides.",
-      "reviewedAt": "2026-10-24T02:50:18.031Z",
-      "reviewedBy": "shakeebshaan",
+      "reviewReason": "OWNER-HELD EXCEPTION (spot 1 only): the Body-step pregnancy safety copy stays English for launch by owner decision. Shaan's 24 Oct yes to translating it required a native Hindi read first (list item nyus-f84785); he dropped that read on 2 Nov. Translations wait on nyus-well-tracker origin/fix/hindi-safety-copy 5d488644 (HOLD, not on main); test/i18n-launch-copy.test.ts pins the English. Spots 2 and 3 are FIXED on main 0588fd8d (see the history note). Governor 10 Nov 02:15 UTC: no new ask to Shaan.",
+      "reviewedAt": "2026-11-10T02:17:44.666Z",
       "thread": [
         {
           "at": "2026-10-24T02:50:18.031Z",
@@ -16269,6 +16269,12 @@
           "kind": "review",
           "text": "Sleep-card part FIXED and live: app 229c68a4 (main 02c13694, release 314 on the Play closed track); slider ends read '4 घंटे' / '10 घंटे' in the release web build against prod (24 Oct 02:55 UTC, picture in the attached report). 'Coach River can build दिन 1' was fixed earlier (423674cf). HELD for an owner decision: the pregnancy safety sentence and 'Answer the pregnancy question to continue' stay English in hi/hinglish by the medical-safety copy rule (test/i18n-launch-copy.test.ts pins them); translating needs Shaan to reverse that rule. The Governor has put the decide item on Shaan's list. Close this card when he decides.",
           "by": "shakeebshaan"
+        },
+        {
+          "at": "2026-11-10T02:17:44.666Z",
+          "who": "claude",
+          "kind": "review",
+          "text": "OWNER-HELD EXCEPTION (spot 1 only): the Body-step pregnancy safety copy stays English for launch by owner decision. Shaan's 24 Oct yes to translating it required a native Hindi read first (list item nyus-f84785); he dropped that read on 2 Nov. Translations wait on nyus-well-tracker origin/fix/hindi-safety-copy 5d488644 (HOLD, not on main); test/i18n-launch-copy.test.ts pins the English. Spots 2 and 3 are FIXED on main 0588fd8d (see the history note). Governor 10 Nov 02:15 UTC: no new ask to Shaan."
         }
       ],
       "status_note": "fixed-pending-native-read (spot 1)"
