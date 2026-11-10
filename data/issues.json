@@ -17430,6 +17430,75 @@
         }
       ],
       "needsReview": false
+    },
+    {
+      "id": "i-20261110-hi-first-log-hint-wrong-button",
+      "createdAt": "2026-11-10T13:19:45.392Z",
+      "author": "qa",
+      "tags": [
+        "i18n",
+        "hindi",
+        "onboarding",
+        "post-plan-tour",
+        "p3"
+      ],
+      "route": "post-plan tour (first screen after the plan), Hindi",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "needsReview": false,
+      "description": "Launch walk 10 Nov (app main 74d36e4f, web 390px, hi). The tour's first-meal hint tells Hindi users to tap 'खा लिया' (src/i18n/locales/hi.json:4591, post_plan_tour.cta.first_log_hint, rendered at src/pages/onboarding/PostPlanTour.tsx:472), but the button on the Diet tab reads 'टिक करें' (hi.json:3516 mark_eaten_cue; EN says 'Mark eaten' on both, so EN matches). The same string ends 'डैशबोर्ड Home में है' with the English word Home while the Hindi nav tab reads 'होम'. Severity P3: every Hindi launch user who finishes the tour sees one line that names a button that does not exist; the plan meals still carry the right button so first meal is not blocked. Fix: use 'टिक करें' and 'होम' in hi.json:4591.",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20261110-plan-card-ai-limit-contradiction",
+      "createdAt": "2026-11-10T13:19:45.392Z",
+      "author": "qa",
+      "tags": [
+        "copy",
+        "choose-plan",
+        "paywall",
+        "en",
+        "hindi",
+        "p2"
+      ],
+      "route": "/choose-plan (Elite and Core feature rows), en + hi",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "needsReview": false,
+      "description": "Launch walk 10 Nov (app main 74d36e4f, 390px). The Elite plan row reads '2x daily AI request limits (daily AI usage cap same on every plan)' and Core '1.5x ...(same cap)' (src/i18n/locales/en.json:5254-5255; Hindi hi.json:5254-5255, the same contradiction). One line says the limit is higher and the same on every plan. Seen by every user who opens the plan screen, right at the Rs 499 / 1,299 / 2,499 decision (and in the recommended Elite card). Severity P2 (trust at the paying step, no crash). Fix: say plainly what Elite changes, or drop the multiplier line if the cap is the same.",
+      "fix": null,
+      "history": []
+    },
+    {
+      "id": "i-20261110-hi-food-search-no-match-keyword",
+      "createdAt": "2026-11-10T13:19:45.392Z",
+      "author": "qa",
+      "tags": [
+        "nutrition",
+        "search",
+        "hindi",
+        "p3"
+      ],
+      "route": "/nutrition > Add a meal sheet, search 'केला' (hi)",
+      "imagePath": null,
+      "imageCommit": null,
+      "imagePaths": [],
+      "imageCommits": [],
+      "imagePrivate": false,
+      "status": "open",
+      "needsReview": false,
+      "description": "Launch walk 10 Nov (app main 74d36e4f, prod API, hi). Typing the Devanagari word 'केला' (banana) in the Add a meal search gives no catalog rows; the sheet says 'कोई मैच नहीं - भोजन लॉग करें दबाएँ' (hi.json:3162, shown at src/components/nutrition/CustomMealModal.tsx:1496) and the AI estimate fallback works. The same sheet in English finds 'Banana, 107 kcal' and logs it (POST /logs/meal 201). Observed on one term only, root cause (catalog names English-only vs missing Hindi aliases) not isolated. Severity P3 for the Hindi share of launch users who search by name instead of typing a sentence; first-meal text logging is unaffected (hi '2 रोटी दाल' -> 200 in 3.3 s).",
+      "fix": null,
+      "history": []
     }
   ]
 }
