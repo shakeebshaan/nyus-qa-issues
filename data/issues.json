@@ -43,10 +43,41 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Already fixed on nyu_backend main: merge 3b5051f6 (fix/diet-plan-past-day-matches-history 831d64d6, QA PASS 28 Oct 23:37, 662 passed). /diet/plan, /diet/history and the dashboard counts share plan_generator.diet_rows_by_date. Executed 10 Nov 04:44 UTC on origin/main bd3ea172: tests/test_diet_plan_past_day_matches_history.py + test_diet_plan_historical_guard.py green (9 passed with the builder-save test). Closed by dev (Governor 10 Nov 04:30 UTC).",
+        "imagePath": "images/i-20261028-diet-plan-past-day-empty-after-rebridge-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261028-diet-plan-past-day-empty-after-rebridge-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "b62e992d5d61f73955c7092c48c07bd11a527426",
+        "imageCommits": [
+          "b62e992d5d61f73955c7092c48c07bd11a527426"
+        ],
+        "fixedAt": "2026-11-10T04:45:24.606Z",
+        "by": "shakeebshaan",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "QA PASS on the exact fix SHA; the repro test (empty /diet/plan vs 3 history rows) passes on current main. Not re-run against a live prod account."
+        }
+      },
       "history": [],
-      "description": "[P3 / two endpoints disagree, found by qa 28 Oct 22:37 UTC in the review of fix/overlapping-diet-plans b86e2620] After a delayed Monday re-bridge (weekly_review re-bridges the week from Monday on a later day), this week's earlier days live on the new active plan as RE-CREATED rows (created after the day ended, eaten marks copied by date + slot). /diet/plan for such a past day applies its historical-integrity guard (keep only rows created before the day ended, on the newest active plan) and shows an EMPTY diary, while /diet/history and the dashboard meal counts read those rows. FIX on branch fix/diet-plan-past-day-matches-history (dev): one rule for all three endpoints, plan_generator.diet_rows_by_date: per date, among plans with an ACTIVE (never superseded) meal that day, rows that existed on that day win (the guard's intent: what the user saw and ate), then an active plan, then the newest; a day whose only rows were re-created shows them instead of an empty diary. Test tests/test_diet_plan_past_day_matches_history.py through the real backend.py (fails on 77b65ddb: /diet/plan [] vs history 3 rows)."
+      "description": "[P3 / two endpoints disagree, found by qa 28 Oct 22:37 UTC in the review of fix/overlapping-diet-plans b86e2620] After a delayed Monday re-bridge (weekly_review re-bridges the week from Monday on a later day), this week's earlier days live on the new active plan as RE-CREATED rows (created after the day ended, eaten marks copied by date + slot). /diet/plan for such a past day applies its historical-integrity guard (keep only rows created before the day ended, on the newest active plan) and shows an EMPTY diary, while /diet/history and the dashboard meal counts read those rows. FIX on branch fix/diet-plan-past-day-matches-history (dev): one rule for all three endpoints, plan_generator.diet_rows_by_date: per date, among plans with an ACTIVE (never superseded) meal that day, rows that existed on that day win (the guard's intent: what the user saw and ate), then an active plan, then the newest; a day whose only rows were re-created shows them instead of an empty diary. Test tests/test_diet_plan_past_day_matches_history.py through the real backend.py (fails on 77b65ddb: /diet/plan [] vs history 3 rows).",
+      "thread": [
+        {
+          "at": "2026-11-10T04:45:24.606Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Already fixed on nyu_backend main: merge 3b5051f6 (fix/diet-plan-past-day-matches-history 831d64d6, QA PASS 28 Oct 23:37, 662 passed). /diet/plan, /diet/history and the dashboard counts share plan_generator.diet_rows_by_date. Executed 10 Nov 04:44 UTC on origin/main bd3ea172: tests/test_diet_plan_past_day_matches_history.py + test_diet_plan_historical_guard.py green (9 passed with the builder-save test). Closed by dev (Governor 10 Nov 04:30 UTC).",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261026-llm-diet-week-saved-with-missing-days",
