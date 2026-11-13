@@ -21,10 +21,42 @@
         "0f65b262ac9aab43b43bba5562ee332a8a61a69e"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main by 2a1c7fb6 (a1e74180, qa PASS 10 Nov): a past-day tick toast offers the same Undo as today (useNutritionData.tsx:396). 390 px hi shot: Thu 12 Nov, 'वापस लें'.",
+        "imagePath": "images/i-20261102-past-day-meal-tick-toast-no-undo-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261102-past-day-meal-tick-toast-no-undo-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "968b3852e1d24d5cfd39cd1dc4536ad4a4599f17",
+        "imageCommits": [
+          "968b3852e1d24d5cfd39cd1dc4536ad4a4599f17"
+        ],
+        "fixedAt": "2026-11-13T04:09:26.987Z",
+        "by": "shakeebshaan",
+        "appCommit": "7208f397",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "fix on main with a qa PASS; en + hi 390 px shots"
+        }
+      },
       "history": [],
-      "description": "[P3 / inconsistent + no recovery] Found by dev while re-capturing the nutrition-day flow (r3) on app main 6f584eab, 2 Nov 2026 (web build, 390 x 844 at 2x, QA account; steps on branch qa/nutrition-day-recapture-nov02, commit f441dbae, all 6 steps pass). REPRO: Diet -> go to a past day (screenshot: Sun 1 Nov) -> tick a meal. RESULT: a \"Meal logged\" toast with the meal name and only an X; it closes after 3 s. Ticking a meal on TODAY shows the same title with an Undo button for 5 s. So a mis-tap on a past day can only be fixed by finding the meal again and un-ticking it. CAUSE (inspected): the past-day mutation onSuccess in useNutritionData.tsx:397-401 calls toast() with no action; useTodayMealLog.tsx:53-60 passes action: <ToastAction> Undo that calls logMealMutation.mutate with the flipped was_eaten. FIX: give the past-day toast the same ToastAction (undo = mutate with was_eaten flipped, same date) and the same 5000 ms duration; reuse the nutrition.toast.undo key (exists en + hi). SIDE NOTE for a real-phone check (not a defect yet): in headless Edge \"Fish Roti Sabzi\" draws its last letter oddly (\"Sabzì\" in the screenshot) although the API name is plain ASCII, so it is likely the font in headless Edge only; confirm on a phone before filing."
+      "description": "[P3 / inconsistent + no recovery] Found by dev while re-capturing the nutrition-day flow (r3) on app main 6f584eab, 2 Nov 2026 (web build, 390 x 844 at 2x, QA account; steps on branch qa/nutrition-day-recapture-nov02, commit f441dbae, all 6 steps pass). REPRO: Diet -> go to a past day (screenshot: Sun 1 Nov) -> tick a meal. RESULT: a \"Meal logged\" toast with the meal name and only an X; it closes after 3 s. Ticking a meal on TODAY shows the same title with an Undo button for 5 s. So a mis-tap on a past day can only be fixed by finding the meal again and un-ticking it. CAUSE (inspected): the past-day mutation onSuccess in useNutritionData.tsx:397-401 calls toast() with no action; useTodayMealLog.tsx:53-60 passes action: <ToastAction> Undo that calls logMealMutation.mutate with the flipped was_eaten. FIX: give the past-day toast the same ToastAction (undo = mutate with was_eaten flipped, same date) and the same 5000 ms duration; reuse the nutrition.toast.undo key (exists en + hi). SIDE NOTE for a real-phone check (not a defect yet): in headless Edge \"Fish Roti Sabzi\" draws its last letter oddly (\"Sabzì\" in the screenshot) although the API name is plain ASCII, so it is likely the font in headless Edge only; confirm on a phone before filing.",
+      "thread": [
+        {
+          "at": "2026-11-13T04:09:26.987Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main by 2a1c7fb6 (a1e74180, qa PASS 10 Nov): a past-day tick toast offers the same Undo as today (useNutritionData.tsx:396). 390 px hi shot: Thu 12 Nov, 'वापस लें'.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261028-diet-plan-past-day-empty-after-rebridge",
