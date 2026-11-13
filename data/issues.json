@@ -17334,8 +17334,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Landed: ad5b61e5 is on origin/main.",
+        "imagePath": "images/i-20261029-b186c-breakfast-plate-qa-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261029-b186c-breakfast-plate-qa-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2c556f63dd09f902d4062a479ba5b71d4a84af69",
+        "imageCommits": [
+          "2c556f63dd09f902d4062a479ba5b71d4a84af69"
+        ],
+        "fixedAt": "2026-11-13T11:34:59.653Z",
+        "by": "shakeebshaan",
+        "appCommit": "ad5b61e5",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "verdict card; SHA on origin/main"
+        }
+      },
       "history": [
         {
           "at": "2026-10-29T05:57:47.713Z",
@@ -17344,7 +17366,17 @@
           "note": "QA PASS 29 Oct 2026, nyu_backend fix/b186c-breakfast-plate @ ad5b61e5 (2 files: llm_prompts.py, tests/test_be_onboarding_profile_prompts.py). [executed, own worktrees, pytest through the shared lock at BelowNormal] Merges onto origin/main 38c1d16e with no conflict (merge abab06ca). Own probe, slot_plate_line on main vs the merge, 8 diet values x 5 slots x caps 150-1100: 308 of 1560 lines change, ALL breakfast (lunch, dinner, snack, dessert identical). Breakfast sum of every printed choice combination over caps 300-800: veg/vegetarian/jain OLD 0.72-0.97x of the cap (47 combos out of 0.85-0.95), NEW 0.87-0.92x (0); egg_only/non_veg/None OLD 0.73-1.08 (21 out), NEW 0.87-0.92 (0); vegan OLD 0.86-0.96 (1 out), NEW 0.87-0.92 (0); vegan has no milk, no egg in veg. Example veg cap 725: curd 250 g + 180 ml milk fills the shortfall, total 658 (0.91x) vs 652 before; printed total is the real sum. Tests: related set (21 files + meal_ideas guards) 358 passed, 10 skipped, 0 failed on the merge; the branch new/changed test file on main: 7 failed, 11 passed. Not run: node scripts/ci-local.mjs (app-repo script; these are backend branches). Measure after landing = the 1 Nov B186a re-run (per LAUNCH_TODO)."
         }
       ],
-      "description": "[P3 / backend, QA verdict card] B186c fix/b186c-breakfast-plate @ ad5b61e5: QA PASS (see history). Not landed."
+      "description": "[P3 / backend, QA verdict card] B186c fix/b186c-breakfast-plate @ ad5b61e5: QA PASS (see history). Not landed.",
+      "thread": [
+        {
+          "at": "2026-11-13T11:34:59.653Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Landed: ad5b61e5 is on origin/main.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261029-b201-recipe-qualifiers-qa",
