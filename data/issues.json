@@ -17363,8 +17363,30 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Landed: ea6faeaf is on origin/main.",
+        "imagePath": "images/i-20261029-b201-recipe-qualifiers-qa-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261029-b201-recipe-qualifiers-qa-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "2ffe53c373447ea74d6178048fe35a74f07d9846",
+        "imageCommits": [
+          "2ffe53c373447ea74d6178048fe35a74f07d9846"
+        ],
+        "fixedAt": "2026-11-13T11:34:54.393Z",
+        "by": "shakeebshaan",
+        "appCommit": "ea6faeaf",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "verdict card; SHA on origin/main"
+        }
+      },
       "history": [
         {
           "at": "2026-10-29T05:57:47.713Z",
@@ -17373,7 +17395,17 @@
           "note": "QA PASS 29 Oct 2026, nyu_backend fix/b201-recipe-qualifiers @ ea6faeaf (backend.py 1 regex, tests/test_ing_hash_suffix_call_sites.py). [executed, own worktrees, shared lock, BelowNormal] Merges onto origin/main 38c1d16e with no conflict (merge 3f4a6da9, auto-merge of backend.py). The regex now strips a trailing bracket group only when it has a digit or colon (lookahead), so (boiled) (cooked) (Raw) (roasted) (low-fat) (rolled) stay and (abc12:x9) (a1b2c3) (id:abcde) go; the hash suffix rule is unchanged and the older bracket skip in test_recipe_detail_clean_name_uses_the_shared_rule is removed. Tests: 6 files + test_ing_hash_suffix.py = 262 passed, 0 failed on the merge; the branch test file on main: 6 failed, 29 passed (Egg White (boiled) etc. dropped). Not run: node scripts/ci-local.mjs (app-repo script; backend branch). Residual: a real qualifier with a digit and 5+ chars inside brackets (e.g. (type2)) is still treated as id-like, as before; prod count of 225 affected names has 3 id-like ones only."
         }
       ],
-      "description": "[P3 / backend, QA verdict card] B201 fix/b201-recipe-qualifiers @ ea6faeaf: QA PASS (see history). Not landed."
+      "description": "[P3 / backend, QA verdict card] B201 fix/b201-recipe-qualifiers @ ea6faeaf: QA PASS (see history). Not landed.",
+      "thread": [
+        {
+          "at": "2026-11-13T11:34:54.393Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Landed: ea6faeaf is on origin/main.",
+          "by": "shakeebshaan"
+        }
+      ],
+      "needsReview": false
     },
     {
       "id": "i-20261029-b204-diet-coach-line-qa",
