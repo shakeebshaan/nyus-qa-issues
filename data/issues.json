@@ -556,11 +556,41 @@
         "aac6962eccaee00a09883a9eccb6841ba4ddc046"
       ],
       "imagePrivate": false,
-      "status": "open",
-      "fix": null,
+      "status": "fixed",
+      "fix": {
+        "description": "Fixed on app main (481eecb0, QuietChip): the current pill is white on teal, computed contrast 4.74:1 (was 1.54:1). 390 px shot.",
+        "imagePath": "images/i-20261025-plan-timeline-active-pill-unreadable-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261025-plan-timeline-active-pill-unreadable-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "78928143bcc68dd2376bef5753286cee45451a5b",
+        "imageCommits": [
+          "78928143bcc68dd2376bef5753286cee45451a5b"
+        ],
+        "fixedAt": "2026-11-13T04:09:36.413Z",
+        "by": "shakeebshaan",
+        "appCommit": "7208f397",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 92,
+          "bar": 90,
+          "note": "contrast measured in the browser 4.74:1 (AA)"
+        }
+      },
       "history": [],
       "description": "[P3 / contrast] Found 25 Oct 2026 in the board sweep, web build of app main 236b0908, QA account, 390 px. The lifecycle pill row (Draft > Active > Paused > Resumed > Completed) paints the CURRENT state as a teal pill with dark grey-green text: computed color rgb(73, 90, 86) on background rgb(23, 130, 105), contrast ratio 1.54:1 (WCAG AA needs 4.5:1). In the screenshot the word \"Active\" is almost invisible. The other pills are fine (same text on the page background). Probably the current-state class sets the fill but not the text colour. FIX: use the on-primary token for the current pill's text and add a test that asserts the computed contrast of the current pill.",
-      "thread": [],
+      "thread": [
+        {
+          "at": "2026-11-13T04:09:36.413Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed on app main (481eecb0, QuietChip): the current pill is white on teal, computed contrast 4.74:1 (was 1.54:1). 390 px shot.",
+          "by": "shakeebshaan"
+        }
+      ],
       "needsReview": false
     },
     {
