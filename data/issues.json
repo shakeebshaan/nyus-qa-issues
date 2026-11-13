@@ -17650,11 +17650,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
+      "status": "fixed",
       "needsReview": false,
       "description": "Launch walk 10 Nov (app main 74d36e4f, prod API, hi). Typing the Devanagari word 'केला' (banana) in the Add a meal search gives no catalog rows; the sheet says 'कोई मैच नहीं - भोजन लॉग करें दबाएँ' (hi.json:3162, shown at src/components/nutrition/CustomMealModal.tsx:1496) and the AI estimate fallback works. The same sheet in English finds 'Banana, 107 kcal' and logs it (POST /logs/meal 201). Observed on one term only, root cause (catalog names English-only vs missing Hindi aliases) not isolated. Severity P3 for the Hindi share of launch users who search by name instead of typing a sentence; first-meal text logging is unaffected (hi '2 रोटी दाल' -> 200 in 3.3 s).",
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Fixed live by nyu_backend 69c77e94: 'केला' -> Banana; 22/25 Devanagari foods found (C:/tmp/nyus-dev/hi-search-nov13.md). Catalog follow-up (romanized Hindi names) routed to devbe.",
+        "imagePath": "images/i-20261110-hi-food-search-no-match-keyword-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261110-hi-food-search-no-match-keyword-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "ad65279e4d835e96dd1a7be30396628f9ea30845",
+        "imageCommits": [
+          "ad65279e4d835e96dd1a7be30396628f9ea30845"
+        ],
+        "fixedAt": "2026-11-13T04:09:46.308Z",
+        "by": "shakeebshaan",
+        "appCommit": "7208f397",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "the reported keyword (kela) finds Banana live; the 3 other Devanagari misses are a separate catalog item (devbe 32)"
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-11-13T04:09:46.308Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed live by nyu_backend 69c77e94: 'केला' -> Banana; 22/25 Devanagari foods found (C:/tmp/nyus-dev/hi-search-nov13.md). Catalog follow-up (romanized Hindi names) routed to devbe.",
+          "by": "shakeebshaan"
+        }
+      ]
     }
   ]
 }
