@@ -17597,11 +17597,42 @@
       "imagePaths": [],
       "imageCommits": [],
       "imagePrivate": false,
-      "status": "open",
+      "status": "fixed",
       "needsReview": false,
       "description": "Launch walk 10 Nov (app main 74d36e4f, 390px). The Elite plan row reads '2x daily AI request limits (daily AI usage cap same on every plan)' and Core '1.5x ...(same cap)' (src/i18n/locales/en.json:5254-5255; Hindi hi.json:5254-5255, the same contradiction). One line says the limit is higher and the same on every plan. Seen by every user who opens the plan screen, right at the Rs 499 / 1,299 / 2,499 decision (and in the recommended Elite card). Severity P2 (trust at the paying step, no crash). Fix: say plainly what Elite changes, or drop the multiplier line if the cap is the same.",
-      "fix": null,
-      "history": []
+      "fix": {
+        "description": "Fixed: app af19a016 + backend plan copy (live /plans: 'AI coach chat within a daily fair-use limit'); /choose-plan en + hi show no multiplier line (live, 13 Nov).",
+        "imagePath": "images/i-20261110-plan-card-ai-limit-contradiction-fix-r1.png",
+        "imagePaths": [
+          "images/i-20261110-plan-card-ai-limit-contradiction-fix-r1.png"
+        ],
+        "imagePrivate": true,
+        "imageCommit": "27bd90427e6afb4ea31f63eefdb67328707e0266",
+        "imageCommits": [
+          "27bd90427e6afb4ea31f63eefdb67328707e0266"
+        ],
+        "fixedAt": "2026-11-13T04:09:41.027Z",
+        "by": "shakeebshaan",
+        "appCommit": "7208f397",
+        "tests": {
+          "passed": true
+        },
+        "judge": {
+          "score": 90,
+          "bar": 90,
+          "note": "live copy read on /plans and /choose-plan en + hi"
+        }
+      },
+      "history": [],
+      "thread": [
+        {
+          "at": "2026-11-13T04:09:41.027Z",
+          "who": "claude",
+          "kind": "resolve",
+          "text": "Fixed: app af19a016 + backend plan copy (live /plans: 'AI coach chat within a daily fair-use limit'); /choose-plan en + hi show no multiplier line (live, 13 Nov).",
+          "by": "shakeebshaan"
+        }
+      ]
     },
     {
       "id": "i-20261110-hi-food-search-no-match-keyword",
